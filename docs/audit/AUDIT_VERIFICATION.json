@@ -1,0 +1,36 @@
+{
+  "auditDate": "2026-09-29",
+  "frozenCommit": "5a6c0c542603cdb2a72bcdb2a91958ef3b6f12ab",
+  "tag": "prototype-v0",
+  "tagUnchanged": true,
+  "scope": "Documentation integrity and Git boundary checks only; not an application test or build.",
+  "applicationSourceChangedSinceFreeze": false,
+  "allowedChangedPaths": "AGENTS.md, README.md, docs/**",
+  "canonicalDocumentsPresent": [
+    "PRODUCT.md",
+    "ARCHITECTURE.md",
+    "DESIGN_SYSTEM.md",
+    "PRIVACY.md",
+    "SECURITY.md",
+    "TESTING.md",
+    "ANALYTICS.md",
+    "MONETIZATION.md",
+    "DECISIONS.md"
+  ],
+  "documentsWithLinksChecked": 17,
+  "localFileLinksChecked": 161,
+  "missingFileLinks": [],
+  "auditJsonParse": "passed",
+  "gitDiffWhitespace": "passed",
+  "directManifestVersionMatches": 39,
+  "applicationTestsRun": false,
+  "applicationBuildsRun": false,
+  "runtimeOrProviderCallsRun": false,
+  "oldReferenceAccessed": false,
+  "documentationChangesOnly": true,
+  "limits": [
+    "Link check confirms target files exist; URL fragments and every source line claim were not automatically validated.",
+    "Git source snapshot excludes ignored local credentials, dependencies, build outputs and running in-memory sessions.",
+    "Historical results are reported with source/platform qualifications and were not rerun."
+  ]
+}

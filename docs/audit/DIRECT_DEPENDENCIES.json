@@ -1,0 +1,360 @@
+{
+  "source": "prototype-v0 package.json and current installed package manifests; no install or package scripts executed",
+  "packageManagerDeclaration": null,
+  "enginesDeclaration": null,
+  "directRuntime": 32,
+  "directDevelopment": 7,
+  "entries": [
+    {
+      "name": "@ai-sdk/openai",
+      "kind": "runtime",
+      "pinned": "4.0.78",
+      "installed": "4.0.78",
+      "license": "Apache-2.0",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "@assistant-ui/react-native",
+      "kind": "runtime",
+      "pinned": "0.1.44",
+      "installed": "0.1.44",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "@expo/metro-runtime",
+      "kind": "runtime",
+      "pinned": "57.0.16",
+      "installed": "57.0.16",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "@radix-ui/react-dialog",
+      "kind": "runtime",
+      "pinned": "1.1.23",
+      "installed": "1.1.23",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "@radix-ui/react-slot",
+      "kind": "runtime",
+      "pinned": "1.3.3",
+      "installed": "1.3.3",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "@tesseract.js-data/eng",
+      "kind": "runtime",
+      "pinned": "1.0.0",
+      "installed": "1.0.0",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "ai",
+      "kind": "runtime",
+      "pinned": "7.0.118",
+      "installed": "7.0.118",
+      "license": "Apache-2.0",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "ajv",
+      "kind": "runtime",
+      "pinned": "8.20.0",
+      "installed": "8.20.0",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "class-variance-authority",
+      "kind": "runtime",
+      "pinned": "0.7.1",
+      "installed": "0.7.1",
+      "license": "Apache-2.0",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "clsx",
+      "kind": "runtime",
+      "pinned": "2.1.1",
+      "installed": "2.1.1",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "expo",
+      "kind": "runtime",
+      "pinned": "57.0.25",
+      "installed": "57.0.25",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "expo-asset",
+      "kind": "runtime",
+      "pinned": "57.0.18",
+      "installed": "57.0.18",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "expo-clipboard",
+      "kind": "runtime",
+      "pinned": "57.0.2",
+      "installed": "57.0.2",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "expo-crypto",
+      "kind": "runtime",
+      "pinned": "57.0.3",
+      "installed": "57.0.3",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "expo-document-picker",
+      "kind": "runtime",
+      "pinned": "57.0.2",
+      "installed": "57.0.2",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "expo-file-system",
+      "kind": "runtime",
+      "pinned": "57.0.7",
+      "installed": "57.0.7",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "expo-sharing",
+      "kind": "runtime",
+      "pinned": "57.0.22",
+      "installed": "57.0.22",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "lucide-react",
+      "kind": "runtime",
+      "pinned": "1.48.0",
+      "installed": "1.48.0",
+      "license": "ISC",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "lucide-react-native",
+      "kind": "runtime",
+      "pinned": "1.48.0",
+      "installed": "1.48.0",
+      "license": "ISC",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "next",
+      "kind": "runtime",
+      "pinned": "16.3.6",
+      "installed": "16.3.6",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "pdf-lib",
+      "kind": "runtime",
+      "pinned": "1.17.1",
+      "installed": "1.17.1",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "pdfjs-dist",
+      "kind": "runtime",
+      "pinned": "6.3.289",
+      "installed": "6.3.289",
+      "license": "Apache-2.0",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "react",
+      "kind": "runtime",
+      "pinned": "19.2.3",
+      "installed": "19.2.3",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "react-dom",
+      "kind": "runtime",
+      "pinned": "19.2.3",
+      "installed": "19.2.3",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "react-native",
+      "kind": "runtime",
+      "pinned": "0.86.3",
+      "installed": "0.86.3",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "react-native-safe-area-context",
+      "kind": "runtime",
+      "pinned": "5.10.0",
+      "installed": "5.10.0",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "react-native-svg",
+      "kind": "runtime",
+      "pinned": "15.15.4",
+      "installed": "15.15.4",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "react-native-web",
+      "kind": "runtime",
+      "pinned": "0.21.3",
+      "installed": "0.21.3",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "tailwind-merge",
+      "kind": "runtime",
+      "pinned": "3.7.0",
+      "installed": "3.7.0",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "tailwindcss",
+      "kind": "runtime",
+      "pinned": "4.3.3",
+      "installed": "4.3.3",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "tesseract.js",
+      "kind": "runtime",
+      "pinned": "7.0.0",
+      "installed": "7.0.0",
+      "license": "Apache-2.0",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "uniwind",
+      "kind": "runtime",
+      "pinned": "1.12.0",
+      "installed": "1.12.0",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "@playwright/test",
+      "kind": "development",
+      "pinned": "1.63.0",
+      "installed": "1.63.0",
+      "license": "Apache-2.0",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "@tailwindcss/postcss",
+      "kind": "development",
+      "pinned": "4.3.3",
+      "installed": "4.3.3",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "@types/node",
+      "kind": "development",
+      "pinned": "26.6.3",
+      "installed": "26.6.3",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "@types/react",
+      "kind": "development",
+      "pinned": "19.3.0",
+      "installed": "19.3.0",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "esbuild",
+      "kind": "development",
+      "pinned": "0.28.2",
+      "installed": "0.28.2",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "tsx",
+      "kind": "development",
+      "pinned": "4.23.15",
+      "installed": "4.23.15",
+      "license": "MIT",
+      "match": true,
+      "manifestReadable": true
+    },
+    {
+      "name": "typescript",
+      "kind": "development",
+      "pinned": "7.0.2",
+      "installed": "7.0.2",
+      "license": "Apache-2.0",
+      "match": true,
+      "manifestReadable": true
+    }
+  ]
+}

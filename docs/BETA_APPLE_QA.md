@@ -83,3 +83,11 @@ Planner UI tests use `tests/native/planner/server.ts` on isolated localhost:3212
 Backgrounding is not documented as automatic cancellation. Session persistence is not implemented; a full relaunch should show a fresh workspace and require pairing again. Tomorrow's physical-device checks remain separate from simulator evidence.
 
 No old-project source, scripts or runtime were used during this QA pass. New work is limited to the existing atepdf repository. Physical-device and deferred Mac interactive acceptance remain separate.
+
+## 29 September bounded animation-wait diagnosis
+
+The original strict accessibility-large landscape test on final production source `7935daa` was rerun twice using unchanged immutable products and normal XCTest synchronization. Both passed, in 51.365 and 49.603 seconds, with no idle warning. The original 169.564-second run with two approximately 60-second animation waits remains valid evidence. [Diagnostic record](evidence/native/ux-idle-diagnostic.json) binds exact source/installed hashes, original and repeat traces, baseline samples, restored settings and exited processes.
+
+The cause remains unresolved. Queries were responsive before the original first wait, and its Close event had not yet been delivered. Baseline process samples from the clean repeat cannot prove responsiveness during the missing failure window. [Read-only source review](evidence/native/animation-review-20260929.md) records keyboard/layout animation, spinner recycling and historical pulse hypotheses with their limitations. No production change, private quiescence bypass, reduced-motion workaround or assertion relaxation was made. Stop repeated identical runs; on recurrence capture the exact app/runner stacks during the wait, then use the recorded public keyboard/rotation comparison.
+
+The separate public iPhone software-keyboard probe could not reach Touch/AssistiveTouch in this simulator's actual Settings page. It made no setting changes; [iPhone QA](BETA_IPHONE_QA.md) records the unavailable environment separately from app correctness. No current Mac interaction, physical-device proof or paid request was added.

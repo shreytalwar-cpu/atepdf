@@ -1,0 +1,40 @@
+{
+  "recordedAt": "2026-09-28T21:00:31.596691+00:00",
+  "device": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+  "bundleIdentifier": "dev.atepdf.fresh",
+  "action": "Public simctl install of original preserved full-workflow-tested Release app",
+  "artifact": "/Users/shrey/Documents/ChatGPT/atepdf/.build/ux-discovery-final-products/Release-iphonesimulator/atepdf.app",
+  "verifiedBeforeInstallAgainst": "ux-discovery-final-installed-proof.json",
+  "sourceCommit": "7935daa9ec3af260b65650a97ef719fe1001db42",
+  "expectedSHA256": {
+    "atepdf": "79793194cd48220a61c131ee95358d54797b70d2af56efb9ed7899f4a4b81912",
+    "main.jsbundle": "c24835f44e7158232b8ced127af979323307947b0b27853462f9cc3f55b1830b",
+    "Info.plist": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c"
+  },
+  "before": {
+    "path": "/Users/shrey/Library/Developer/CoreSimulator/Devices/D68C4547-67D3-4960-AAB9-D85FD786D6FC/data/Containers/Bundle/Application/FDB7E04C-5E5A-477F-8B9E-2FE7E07B0D5C/atepdf.app",
+    "hashes": {
+      "atepdf": "3843354a16d2caf13585d0d3b8fe4ee4b3d86d4290030332648c739267096a2b",
+      "main.jsbundle": "089d8a108ff0617c6f499640a144041fb2cf6415ef8f952a239033ffaad2c782",
+      "Info.plist": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c"
+    }
+  },
+  "after": {
+    "path": "/Users/shrey/Library/Developer/CoreSimulator/Devices/D68C4547-67D3-4960-AAB9-D85FD786D6FC/data/Containers/Bundle/Application/EFEB418E-595C-43D7-BBDD-F8E400BB562C/atepdf.app",
+    "hashes": {
+      "atepdf": "79793194cd48220a61c131ee95358d54797b70d2af56efb9ed7899f4a4b81912",
+      "main.jsbundle": "c24835f44e7158232b8ced127af979323307947b0b27853462f9cc3f55b1830b",
+      "Info.plist": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c"
+    }
+  },
+  "installedMatchesOriginalImmutableProduct": true,
+  "uninstalled": false,
+  "dataErased": false,
+  "launched": false,
+  "testsRun": false,
+  "PDFJobsRun": 0,
+  "settingsChanged": false,
+  "iPadTouched": false,
+  "preservedProbeEvidence": "ux-keyboard-settings-result.json and .build/ux-keyboard-settings-products remain intact",
+  "scope": "Restores the known tested binary only. No new runtime, keyboard, or physical-device acceptance."
+}

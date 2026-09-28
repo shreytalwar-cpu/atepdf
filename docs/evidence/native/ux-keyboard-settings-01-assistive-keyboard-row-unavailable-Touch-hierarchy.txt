@@ -1,0 +1,176 @@
+Attributes: Application, 0x112d743c0, pid: 59348, label: 'Settings'
+Element subtree:
+ →Application, 0x112d743c0, pid: 59348, label: 'Settings'
+    Window (Main), 0x112d75e00, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x112d74140, {{0.0, 0.0}, {402.0, 874.0}}
+        Other, 0x112d75b80, {{0.0, 0.0}, {402.0, 874.0}}
+          Other, 0x112d75cc0, {{0.0, 0.0}, {402.0, 874.0}}
+            Other, 0x112d76e40, {{0.0, 0.0}, {402.0, 874.0}}
+              Other, 0x112d75f40, {{0.0, 0.0}, {402.0, 874.0}}
+                Other, 0x112d766c0, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x112d770c0, {{0.0, 0.0}, {402.0, 874.0}}
+                    Other, 0x112d76940, {{0.0, 0.0}, {402.0, 874.0}}
+                      Other, 0x112d74f00, {{0.0, 0.0}, {402.0, 874.0}}
+                        NavigationBar, 0x112d75040, {{0.0, 62.0}, {402.0, 54.0}}, identifier: 'Accessibility'
+                          Button, 0x112d75180, {{16.0, 62.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Settings'
+                          StaticText, 0x112d752c0, {{150.7, 71.7}, {100.3, 24.7}}, label: 'Accessibility'
+                        Other, 0x112d75400, {{0.0, 0.0}, {402.0, 874.0}}
+                          Other, 0x112d75540, {{0.0, 0.0}, {402.0, 874.0}}
+                            Other, 0x112d75680, {{0.0, 0.0}, {402.0, 874.0}}
+                              Other, 0x112d757c0, {{0.0, 0.0}, {402.0, 874.0}}
+                                Other, 0x112d75900, {{0.0, 116.0}, {402.0, 724.0}}, identifier: 'AccessibilitySettingsControllerView'
+                                  Table, 0x112d75a40, {{0.0, 0.0}, {402.0, 874.0}}
+                                    Other, 0x112d74000, {{0.0, -117.0}, {402.0, 17.7}}
+                                    Cell, 0x112d76080, {{20.0, -344.0}, {362.0, 244.7}}, identifier: 'ACCESSIBILITY_PLACARD'
+                                      Other, 0x112d74280, {{0.0, -361.7}, {362.0, 244.7}}
+                                        Other, 0x112d76580, {{0.0, -361.7}, {362.0, 244.7}}
+                                      Other, 0x112d74500, {{0.0, -361.7}, {362.0, 1.0}}
+                                      Other, 0x112d76800, {{0.0, -361.7}, {362.0, 244.7}}
+                                        Other, 0x112d77200, {{0.0, -361.7}, {362.0, 244.7}}
+                                          StaticText, 0x112d77340, {{0.0, 0.0}, {0.0, 0.0}}, label: 'Personalise iPhone in ways that work best for you with accessibility features for vision, mobility, hearing, speech and cognition. Learn more…'
+                                            Link, 0x112d77480, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'learn-more://open?id=accessibility', label: 'Learn more…'
+                                          StaticText, 0x112d775c0, {{0.0, 0.0}, {0.0, 0.0}}, label: 'Accessibility'
+                                          Image, 0x112d77700, {{0.0, 0.0}, {0.0, 0.0}}
+                                    Other, 0x112d74640, {{0.0, -99.3}, {402.0, 17.3}}
+                                    Other, 0x112d74780, {{0.0, 116.0}, {402.0, 38.0}}
+                                      Other, 0x112d748c0, {{0.0, 116.0}, {402.0, 38.0}}
+                                    Cell, 0x112d74a00, {{20.0, -44.0}, {362.0, 57.0}}, identifier: 'VOICEOVER_TITLE', label: 'VoiceOver, Off'
+                                      Other, 0x112d74b40, {{20.0, -44.0}, {362.0, 57.0}}
+                                        Other, 0x112d74c80, {{20.0, -44.0}, {362.0, 57.0}}
+                                      Other, 0x112d761c0, {{76.0, 12.0}, {290.0, 1.0}}
+                                      Button, 0x112d77840, {{351.7, -22.3}, {10.3, 14.0}}, label: 'chevron', Disabled
+                                      Other, 0x112d77980, {{20.0, -44.0}, {331.7, 57.0}}
+                                        Other, 0x112d76a80, {{20.0, -44.0}, {331.7, 57.0}}
+                                          Button, 0x112d76bc0, {{34.0, -29.3}, {309.7, 28.0}}, identifier: 'VOICEOVER_TITLE', label: 'VoiceOver, Off'
+                                            Image, 0x112d76d00, {{34.0, -29.3}, {28.0, 28.0}}
+                                            StaticText, 0x112d76f80, {{76.0, -27.7}, {78.7, 24.3}}, label: 'VoiceOver'
+                                            StaticText, 0x112d77ac0, {{319.3, -27.7}, {24.3, 24.3}}, label: 'Off'
+                                    Cell, 0x112d77c00, {{20.0, 13.0}, {362.0, 57.0}}, identifier: 'HOVERTEXT_TITLE', label: 'Hover Text, Off'
+                                      Other, 0x112d77d40, {{20.0, 13.0}, {331.7, 57.0}}
+                                        Other, 0x112d77e80, {{20.0, 13.0}, {331.7, 57.0}}
+                                          Button, 0x10663f200, {{34.0, 27.7}, {309.7, 28.0}}, identifier: 'HOVERTEXT_TITLE', label: 'Hover Text, Off'
+                                            Image, 0x10663f700, {{34.0, 27.7}, {28.0, 28.0}}
+                                            StaticText, 0x10663f840, {{76.0, 29.3}, {81.7, 24.3}}, label: 'Hover Text'
+                                            StaticText, 0x10663f980, {{319.3, 29.3}, {24.3, 24.3}}, label: 'Off'
+                                      Other, 0x10663fac0, {{20.0, 13.0}, {362.0, 57.0}}
+                                        Other, 0x10663fd40, {{20.0, 13.0}, {362.0, 57.0}}
+                                      Other, 0x10663fc00, {{76.0, 69.0}, {290.0, 1.0}}
+                                      Button, 0x10663d400, {{351.7, 34.7}, {10.3, 14.0}}, label: 'chevron', Disabled
+                                    Cell, 0x10663d540, {{20.0, 70.0}, {362.0, 57.0}}, identifier: 'DISPLAY_AND_TEXT', label: 'Display & Text Size'
+                                      Other, 0x109484dc0, {{20.0, 70.0}, {331.7, 57.0}}
+                                        Other, 0x109485cc0, {{20.0, 70.0}, {331.7, 57.0}}
+                                          Button, 0x109485400, {{34.0, 84.7}, {186.0, 28.0}}, identifier: 'DISPLAY_AND_TEXT', label: 'Display & Text Size'
+                                            Image, 0x109485180, {{34.0, 84.7}, {28.0, 28.0}}
+                                            StaticText, 0x109485a40, {{34.0, 84.7}, {186.0, 28.0}}, label: 'Display & Text Size'
+                                      Other, 0x109485540, {{20.0, 70.0}, {362.0, 57.0}}
+                                        Other, 0x109485b80, {{20.0, 70.0}, {362.0, 57.0}}
+                                      Other, 0x109487700, {{76.0, 126.0}, {290.0, 1.0}}
+                                      Button, 0x109487ac0, {{351.7, 91.7}, {10.3, 14.0}}, label: 'chevron', Disabled
+                                    Cell, 0x109487c00, {{20.0, 127.0}, {362.0, 57.0}}, identifier: 'MOTION_TITLE', label: 'Motion'
+                                      Other, 0x109487980, {{20.0, 127.0}, {331.7, 57.0}}
+                                        Other, 0x109487d40, {{20.0, 127.0}, {331.7, 57.0}}
+                                          Button, 0x109484b40, {{34.0, 141.7}, {94.7, 28.0}}, identifier: 'MOTION_TITLE', label: 'Motion'
+                                            Image, 0x109484640, {{34.0, 141.7}, {28.0, 28.0}}
+                                            StaticText, 0x109487e80, {{34.0, 141.7}, {94.7, 28.0}}, label: 'Motion'
+                                      Other, 0x109487480, {{20.0, 127.0}, {362.0, 57.0}}
+                                        Other, 0x109487840, {{20.0, 127.0}, {362.0, 57.0}}
+                                      Other, 0x1094875c0, {{76.0, 183.0}, {290.0, 1.0}}
+                                      Button, 0x109486440, {{351.7, 148.7}, {10.3, 14.0}}, label: 'chevron', Disabled
+                                    Cell, 0x109486bc0, {{20.0, 184.0}, {362.0, 57.0}}, identifier: 'SPEECH_TITLE', label: 'Spoken Content'
+                                      Other, 0x109486d00, {{20.0, 184.0}, {331.7, 57.0}}
+                                        Other, 0x109486a80, {{20.0, 184.0}, {331.7, 57.0}}
+                                          Button, 0x109486e40, {{34.0, 198.7}, {164.7, 28.0}}, identifier: 'SPEECH_TITLE', label: 'Spoken Content'
+                                            Image, 0x109487340, {{34.0, 198.7}, {28.0, 28.0}}
+                                            StaticText, 0x109486f80, {{34.0, 198.7}, {164.7, 28.0}}, label: 'Spoken Content'
+                                      Other, 0x109487200, {{20.0, 184.0}, {362.0, 57.0}}
+                                        Other, 0x1094870c0, {{20.0, 184.0}, {362.0, 57.0}}
+                                      Other, 0x109486580, {{20.0, 240.0}, {362.0, 1.0}}
+                                      Button, 0x109486940, {{351.7, 205.7}, {10.3, 14.0}}, label: 'chevron', Disabled
+                                    Other, 0x109486300, {{0.0, 241.0}, {402.0, 17.3}}
+                                    Other, 0x1094866c0, {{0.0, 258.3}, {402.0, 38.0}}, identifier: 'Physical and Motor'
+                                      Other, 0x109486080, {{20.0, 258.3}, {362.0, 38.0}}, label: 'Physical and Motor'
+                                    Cell, 0x109485f40, {{20.0, 296.3}, {362.0, 57.0}}, identifier: 'FACE_ID', label: 'Face ID & Attention'
+                                      Other, 0x1094861c0, {{20.0, 296.3}, {331.7, 57.0}}
+                                        Other, 0x109485e00, {{20.0, 296.3}, {331.7, 57.0}}
+                                          Button, 0x109485040, {{34.0, 311.0}, {188.3, 28.0}}, identifier: 'FACE_ID', label: 'Face ID & Attention'
+                                            StaticText, 0x1094852c0, {{34.0, 311.0}, {188.3, 28.0}}, label: 'Face ID & Attention'
+                                            Image, 0x10a5c8000, {{34.0, 311.0}, {28.0, 28.0}}
+                                      Other, 0x10a5c8140, {{20.0, 296.3}, {362.0, 57.0}}
+                                        Other, 0x10a5c8280, {{20.0, 296.3}, {362.0, 57.0}}
+                                      Other, 0x10a5c83c0, {{76.0, 352.3}, {290.0, 1.0}}
+                                      Button, 0x10a5c8500, {{351.7, 318.0}, {10.3, 14.0}}, label: 'chevron', Disabled
+                                    Cell, 0x10a5c8640, {{20.0, 353.3}, {362.0, 57.0}}, identifier: 'CONTROL_NEARBY_DEVICES', label: 'Control Nearby Devices'
+                                      Other, 0x10a5c8780, {{20.0, 353.3}, {331.7, 57.0}}
+                                        Other, 0x10a5c88c0, {{20.0, 353.3}, {331.7, 57.0}}
+                                          Button, 0x10a5c8a00, {{34.0, 368.0}, {222.0, 28.0}}, identifier: 'CONTROL_NEARBY_DEVICES', label: 'Control Nearby Devices'
+                                            StaticText, 0x10a5c8b40, {{34.0, 368.0}, {222.0, 28.0}}, label: 'Control Nearby Devices'
+                                            Image, 0x10a5c8c80, {{34.0, 368.0}, {28.0, 28.0}}
+                                      Other, 0x10a5c8dc0, {{20.0, 353.3}, {362.0, 57.0}}
+                                        Other, 0x10a5c8f00, {{20.0, 353.3}, {362.0, 57.0}}
+                                      Other, 0x10a5c9040, {{20.0, 409.3}, {362.0, 1.0}}
+                                      Button, 0x10a5c9180, {{351.7, 375.0}, {10.3, 14.0}}, label: 'chevron', Disabled
+                                    Other, 0x10a5c92c0, {{0.0, 410.3}, {402.0, 17.3}}
+                                    Other, 0x10a5c9400, {{0.0, 427.7}, {402.0, 38.0}}, identifier: 'Hearing'
+                                      StaticText, 0x10a5c9540, {{0.0, 427.7}, {402.0, 38.0}}, label: 'Hearing'
+                                    Cell, 0x10a5c9680, {{20.0, 465.7}, {362.0, 57.0}}, identifier: 'SUBTITLES_CAPTIONING', label: 'Subtitles & Captioning'
+                                      Other, 0x10a5c97c0, {{20.0, 465.7}, {331.7, 57.0}}
+                                        Other, 0x10a5c9900, {{20.0, 465.7}, {331.7, 57.0}}
+                                          Button, 0x10a5c9a40, {{34.0, 480.3}, {211.7, 28.0}}, identifier: 'SUBTITLES_CAPTIONING', label: 'Subtitles & Captioning'
+                                            Image, 0x10a5c9b80, {{34.0, 480.3}, {28.0, 28.0}}
+                                            StaticText, 0x10a5c9cc0, {{34.0, 480.3}, {211.7, 28.0}}, label: 'Subtitles & Captioning'
+                                      Other, 0x10a5c9e00, {{20.0, 465.7}, {362.0, 57.0}}
+                                        Other, 0x10a5c9f40, {{20.0, 465.7}, {362.0, 57.0}}
+                                      Other, 0x10a5ca080, {{20.0, 521.7}, {362.0, 1.0}}
+                                      Button, 0x10a5ca1c0, {{351.7, 487.3}, {10.3, 14.0}}, label: 'chevron', Disabled
+                                    Other, 0x10a5ca300, {{0.0, 522.7}, {402.0, 17.3}}
+                                    Other, 0x10a5ca440, {{0.0, 540.0}, {402.0, 38.0}}, identifier: 'Speech'
+                                      StaticText, 0x10a5ca580, {{0.0, 540.0}, {402.0, 38.0}}, label: 'Speech'
+                                    Cell, 0x10a5ca6c0, {{20.0, 578.0}, {362.0, 57.0}}, identifier: 'LIVE_SPEECH_TITLE', label: 'Live Speech, Off'
+                                      Other, 0x10a5ca800, {{20.0, 578.0}, {331.7, 57.0}}
+                                        Other, 0x10a5ca940, {{20.0, 578.0}, {331.7, 57.0}}
+                                          Button, 0x10a5caa80, {{34.0, 592.7}, {309.7, 28.0}}, identifier: 'LIVE_SPEECH_TITLE', label: 'Live Speech, Off'
+                                            Image, 0x10a5cabc0, {{34.0, 592.7}, {28.0, 28.0}}
+                                            StaticText, 0x10a5cad00, {{76.0, 594.3}, {92.7, 24.3}}, label: 'Live Speech'
+                                            StaticText, 0x10a5cae40, {{319.3, 594.3}, {24.3, 24.3}}, label: 'Off'
+                                      Other, 0x10a5caf80, {{20.0, 578.0}, {362.0, 57.0}}
+                                        Other, 0x10a5cb0c0, {{20.0, 578.0}, {362.0, 57.0}}
+                                      Other, 0x10a5cb200, {{20.0, 634.0}, {362.0, 1.0}}
+                                      Button, 0x10a5cb340, {{351.7, 599.7}, {10.3, 14.0}}, label: 'chevron', Disabled
+                                    Other, 0x10a5cb480, {{0.0, 635.0}, {402.0, 17.3}}
+                                    Other, 0x10a5cb5c0, {{0.0, 652.3}, {402.0, 38.0}}, identifier: 'Accessories'
+                                      StaticText, 0x10a5cb700, {{0.0, 652.3}, {402.0, 38.0}}, label: 'Accessories'
+                                    Cell, 0x10a5cb840, {{20.0, 690.3}, {362.0, 57.0}}, identifier: 'KEYBOARDS', label: 'Keyboards & Typing'
+                                      Other, 0x10a5cb980, {{20.0, 690.3}, {331.7, 57.0}}
+                                        Other, 0x10a5cbac0, {{20.0, 690.3}, {331.7, 57.0}}
+                                          Button, 0x10a5cbc00, {{34.0, 705.0}, {194.7, 28.0}}, identifier: 'KEYBOARDS', label: 'Keyboards & Typing'
+                                            StaticText, 0x10a5cbd40, {{34.0, 705.0}, {194.7, 28.0}}, label: 'Keyboards & Typing'
+                                            Image, 0x10a5cbe80, {{34.0, 705.0}, {28.0, 28.0}}
+                                      Other, 0x10a5bc000, {{20.0, 690.3}, {362.0, 57.0}}
+                                        Other, 0x10a5bc140, {{20.0, 690.3}, {362.0, 57.0}}
+                                      Other, 0x10a5bc280, {{20.0, 746.3}, {362.0, 1.0}}
+                                      Button, 0x10a5bc3c0, {{351.7, 712.0}, {10.3, 14.0}}, label: 'chevron', Disabled
+                                    Other, 0x10a5bc500, {{0.0, 747.3}, {402.0, 17.3}}
+                                    Other, 0x10a5bc640, {{0.0, 764.7}, {402.0, 38.0}}, identifier: 'General'
+                                      StaticText, 0x10a5bc780, {{0.0, 764.7}, {402.0, 38.0}}, label: 'General'
+                                    Other, 0x10a5bc8c0, {{0.0, 802.7}, {402.0, 17.3}}
+                                    Other, 0x10a5bca00, {{369.0, 116.0}, {30.0, 696.0}}, label: 'Vertical scroll bar, 2 pages', value: 100%
+                                      Other, 0x10a5bcb40, {{396.0, 363.0}, {3.0, 446.0}}
+                                    Other, 0x10a5bcc80, {{62.0, 841.0}, {278.0, 30.0}}, label: 'Horizontal scroll bar, 1 page', value: 0%
+                                      Other, 0x10a5bcdc0, {{65.0, 868.0}, {272.0, 3.0}}
+                                    Other, 0x10a5bcf00, {{20.0, 427.7}, {362.0, 38.0}}, label: 'Hearing'
+                                    Other, 0x10a5bd040, {{20.0, 540.0}, {362.0, 38.0}}, label: 'Speech'
+                                    Other, 0x10a5bd180, {{20.0, 652.3}, {362.0, 38.0}}, label: 'Accessories'
+                                    Other, 0x10a5bd2c0, {{20.0, 764.7}, {362.0, 38.0}}, label: 'General'
+                        Toolbar, 0x10a5bd400, {{0.0, 0.0}, {402.0, 874.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                          Other, 0x10a5bd540, {{0.0, 0.0}, {402.0, 874.0}}
+                    Toolbar, 0x10a5bd680, {{0.0, 0.0}, {402.0, 874.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                      Other, 0x10a5bd7c0, {{0.0, 0.0}, {402.0, 874.0}}
+                Other, 0x10a5bd900, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x10a5bda40, {{0.0, 0.0}, {402.0, 874.0}}
+Path to element:
+ →Application, 0x112d743c0, pid: 59348, label: 'Settings'
+Query chain:
+ →Find: Application 'com.apple.Preferences'
+  Output: {
+    Application, 0x10a5bdb80, pid: 59348, label: 'Settings'
+  }

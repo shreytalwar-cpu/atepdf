@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-09-28T20:57:53.343Z",
+  "qa": {
+    "state": "stopped",
+    "id": "f5b666a5-4699-4e5a-b6ae-93f22feca0cc"
+  },
+  "owner": {
+    "state": "running",
+    "url": "http://localhost:3211",
+    "buildChanged": false,
+    "indexSha256": "5ec45aca75671f84d502dd74c5ecd0bbebb5c9ecdafd9562f6767e12a51133bc",
+    "planner": {
+      "connected": true,
+      "enabled": true,
+      "remaining": 18
+    }
+  },
+  "paidCallsThisPass": 0
+}

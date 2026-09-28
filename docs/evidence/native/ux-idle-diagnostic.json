@@ -1,0 +1,114 @@
+{
+  "recordedAt": "2026-09-28T20:46:41.983545+00:00",
+  "result": "Intermittent XCTest animation-idle wait remains unresolved; no production fix claimed.",
+  "sourceCommit": "7935daa9ec3af260b65650a97ef719fe1001db42",
+  "sourceUnchanged": true,
+  "keySourceSHA256": {
+    "apps/universal/App.tsx": "1e0b24c3a8b28b969b72a42df923dfddf6c5baaaeca73eb96e18af7347c95d5f",
+    "apps/universal/src/components/assistant-ui/elements/thread.aui.tsx": "d4267d8cb147789f26e18d1bc8b45e3ad73c939f76edad3d810b16a8a996309e",
+    "apps/universal/src/platform/Preview.native.tsx": "edaf33b82e2510cac8a268aa9eef361a354aa0914818a0c49b64a0254339aa33",
+    "apps/universal/src/components/JobActivity.tsx": "6ae21f532174538fad63dd80b7c6ee55aa37a90043bec931e32919e53a863404",
+    "tests/native/ios/AtepdfWorkflowUITests.swift": "5a35b9a133d7ade3bc6409f3ba5fdc5871d39f20e895d5e43fc6b2c2890d6f4c"
+  },
+  "allAppleRelevantCapturedHashesStillMatch": 113,
+  "immutableProducts": ".build/ux-discovery-final-products",
+  "installedProductSHA256": {
+    "atepdf": "79793194cd48220a61c131ee95358d54797b70d2af56efb9ed7899f4a4b81912",
+    "main.jsbundle": "c24835f44e7158232b8ced127af979323307947b0b27853462f9cc3f55b1830b",
+    "Info.plist": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c"
+  },
+  "device": "526CAD4B-89C5-49C1-8CEE-F65602AA0DEE",
+  "runtime": "iOS27.0 simulator24A434 on macOS27.0",
+  "observations": [
+    {
+      "case": "Original final AX-landscape",
+      "seconds": 169.564,
+      "functionalResult": "passed",
+      "idleWarnings": 2,
+      "waitApproximateSecondsEach": 60,
+      "sourceEvidence": "ux-discovery-final-ipad-ax-landscape-test.log",
+      "details": "First idle wait at46.13s before Close tap synthesized106.39s; second wait106.70s through166.73s. Geometry, navigation and final Close assertions passed."
+    },
+    {
+      "case": "Unchanged reproduction01",
+      "seconds": 51.365,
+      "functionalResult": "passed",
+      "idleWarnings": 0,
+      "sourceEvidence": "ux-idle-01-test.log",
+      "details": "Same compiled original strict test and accessibility-large setting. Close pre-idle48.39s resolved immediately; post-event48.76s followed assertion49.82s."
+    },
+    {
+      "case": "Unchanged reproduction02",
+      "seconds": 49.603,
+      "functionalResult": "passed",
+      "idleWarnings": 0,
+      "sourceEvidence": "ux-idle-02-test.log",
+      "details": "Automatic observer armed from launch; no>5s stalled Close window, so no wait-window samples were taken."
+    }
+  ],
+  "samples": {
+    "ux-idle-01-app-baseline.sample.txt": {
+      "path": "docs/evidence/native/ux-idle-01-app-baseline.sample.txt",
+      "sha256": "f395652f45d8e184539d831cba53e473cd6bacaaadf09b5c2d81b88967428013",
+      "scope": "Two-second baseline during normal preview navigation; not during any 60-second wait."
+    },
+    "ux-idle-01-runner-baseline.sample.txt": {
+      "path": "docs/evidence/native/ux-idle-01-runner-baseline.sample.txt",
+      "sha256": "2e660e087c4e838fbf99e3e25b71746d74ee6d9f1c523975b79f140ed0a74a8a",
+      "scope": "Two-second baseline during normal preview navigation; not during any 60-second wait."
+    }
+  },
+  "limits": [
+    "Two clean repetitions establish intermittency; they do not remove the original failure-mode evidence or prove a fix.",
+    "No process sample captured the original169.564s run or a reproduced wait in this batch. Baseline samples cannot establish app responsiveness during that wait.",
+    "Close unmount cannot explain the first original delay because event synthesis occurred after the wait.",
+    "No private XCTest quiescence override, app patch, reduced-motion workaround or assertion relaxation was used.",
+    "No physical-device or production latency acceptance is claimed."
+  ],
+  "settings": {
+    "originalTextSize": "large",
+    "testTextSize": "accessibility-large",
+    "restoredAfterEach": true,
+    "finalPublicReadback": "large",
+    "portraitRestoredByEachTestTeardown": true,
+    "reduceMotionNotModified": true
+  },
+  "ownProcesses": [
+    {
+      "pid": 52325,
+      "running": false
+    },
+    {
+      "pid": 52340,
+      "running": false
+    },
+    {
+      "pid": 52402,
+      "running": false
+    },
+    {
+      "pid": 53058,
+      "running": false
+    },
+    {
+      "pid": 53115,
+      "running": false
+    },
+    {
+      "pid": 53129,
+      "running": false
+    }
+  ],
+  "nextDiagnosticIfItRecurs": {
+    "scope": "Public test-only matrix, production unchanged, original strict test retained",
+    "cases": [
+      "Real merge/remove with keyboard focused; rotate landscape to portrait without opening preview.",
+      "Same real preview second page; tap the already observed public Hide keyboard control, verify actual dismissal, then rotate to portrait."
+    ],
+    "requiredProof": "Keep preserved-result/exact-typing/visible-control assertions, capture AX geometry around rotation, capture exact app+runner process samples during a reproduced wait. Compare normal XCTest behavior; do not disable idle tracking."
+  },
+  "noBuildsThisBatch": true,
+  "paidCalls": 0,
+  "macUIUsed": false,
+  "oldSourceAccessed": false
+}

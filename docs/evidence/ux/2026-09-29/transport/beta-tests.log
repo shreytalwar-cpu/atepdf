@@ -1,0 +1,24 @@
+✔ detached browser launch survives its caller, reuses its own process, and stops only itself (476.111583ms)
+✔ management rejects a browser context and an incorrect ownership token (212.490542ms)
+✔ malformed non-ASCII management authorization is rejected without crashing the server (210.117375ms)
+✔ occupied port leaves the unrelated server running (94.214166ms)
+✔ an IPv6-only localhost owner prevents a conflicting IPv4 beta launch (98.213625ms)
+✔ stale launch metadata never authorizes stopping the new owner of that port (205.053167ms)
+✔ local-only mode cannot save keys or reserve a paid planning request (209.373542ms)
+✔ normal launch reuses private local settings without replenishing allowance or exposing the key (214.080708ms)
+✔ static serving blocks symlink escapes and rejects foreign Host headers (214.424167ms)
+✔ static scripts and styles negotiate gzip without changing bytes or the privacy policy (266.592291ms)
+✔ changed builds fail closed instead of mixing old gateway and new browser assets (229.653084ms)
+✔ unsafe private directory and substituted state file are rejected without changing permissions (225.462667ms)
+✔ device sharing rejects public and wildcard addresses before starting anything (2.707584ms)
+✔ missing build reports the next action without installing or creating a server (2.663125ms)
+✔ TLS startup failure closes the new browser listener instead of reporting a partial launch (103.323333ms)
+✔ real device-sharing launcher pairs over trusted loopback TLS and renews privately on restart (688.829375ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3497.632292

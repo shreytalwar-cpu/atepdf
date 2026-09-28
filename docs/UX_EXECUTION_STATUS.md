@@ -17,6 +17,9 @@ Source baseline: `8d71ac0` on `codex/atepdf-chat-workflows`. Working candidates 
 
 ## Verification checkpoints
 
+- Host source **30d98d0**: [static delivery confirmation](evidence/ux/2026-09-29/transport/README.md), **16/16** launcher checks and **2/2** existing real PDF workflows passed on unchanged candidate10. Entry gzip response is 486,133 bytes versus 2,240,317 raw; actual decoded hashes match. Constrained first-control visibility is 12.320 → 3.342 seconds in one pair, while a separate complete-artwork observation is 7.131 seconds. Ordinary loopback 156 → 183 ms. These are bounded laboratory observations, not production performance acceptance or a new application build.
+- [Native wait diagnosis](evidence/native/ux-idle-diagnostic.json): the same original strict AX-large test passed twice without waits (51.365 / 49.603 seconds). The original two long waits remain unresolved and retained; no speculative production change. A separate public iPhone Settings probe found Touch/AssistiveTouch unavailable before any setting mutation, leaving visible phone-keyboard acceptance open.
+
 - Final native source `7935daa`: [4/4 functional simulator checks](evidence/native/ux-discovery-final-result.json), actual Release build, installed identity checks, and [Catalyst build/local signature](evidence/native/ux-discovery-final-mac-build.json) passed. AX-large recorded two 60-second XCTest animation waits; smooth interaction/latency remains unverified. Mac app was not launched.
 
 - Final source `7935daa`: [candidate10 browser suite](evidence/ux/2026-09-29/candidate10/browser-results-10.json) **35/35**, no failures/skips/flaky cases, 51.2 seconds. Expo export passed. Web/universal TypeScript passed. Candidate9's 34/35 and compact-title regression remain preserved; the final web-only spacing correction passes the unchanged assertion.
@@ -43,4 +46,4 @@ Owner beta 3211, credentials and the remaining 18 approved requests are preserve
 
 Preserve prior failures and distinguish product defects, test defects and unavailable environments. No relaxation of PDF integrity/privacy assertions to obtain a green result. Record detector false positives against concrete source/visual evidence. Do not hide findings by removing intended functionality or suppressing a rule solely to raise a score.
 
-Full plan completion awaits actual participants and remaining platform/accessibility gates; release/commercial tasks retain their existing IDs. Existing owner beta, local credentials, allowance and unrelated untracked work remain preserved. New generated files and reports belong to this repository or its isolated scratch directories.
+Full plan completion awaits actual participants and remaining platform/accessibility gates; release/commercial tasks retain their existing IDs. Existing owner beta, local credentials, allowance and unrelated untracked work remain preserved. Latest [environment verification](evidence/ux/2026-09-29/transport/final-environment.json): QA3213 stopped, owner3211 unchanged and enabled with 18 remaining requests. New generated files and reports belong to this repository or its isolated scratch directories.

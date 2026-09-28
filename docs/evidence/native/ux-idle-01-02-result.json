@@ -1,0 +1,43 @@
+{
+  "at": "2026-09-28T20:45:02.891205+00:00",
+  "sourceCommit": "7935daa9ec3af260b65650a97ef719fe1001db42",
+  "sourceRuntimeUnchanged": true,
+  "immutableProducts": ".build/ux-discovery-final-products",
+  "installedAppPath": "/Users/shrey/Library/Developer/CoreSimulator/Devices/526CAD4B-89C5-49C1-8CEE-F65602AA0DEE/data/Containers/Bundle/Application/9C507112-8D33-4D5C-9A0F-937687ADCE61/atepdf.app",
+  "installedHashesMatchImmutableProducts": {
+    "atepdf": "79793194cd48220a61c131ee95358d54797b70d2af56efb9ed7899f4a4b81912",
+    "main.jsbundle": "c24835f44e7158232b8ced127af979323307947b0b27853462f9cc3f55b1830b",
+    "Info.plist": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c"
+  },
+  "originalFailure": "ux-discovery-final-ipad-ax-landscape-test.log",
+  "reproductions": [
+    {
+      "id": "ux-idle-01",
+      "method": "testIPadLandscapeKeyboardAndPreview",
+      "textSize": "accessibility-large",
+      "durationSeconds": 51.365,
+      "result": "passed",
+      "animationWarnings": 0,
+      "samples": "app+runner baseline during normal preview navigation only; no stalled window occurred"
+    },
+    {
+      "id": "ux-idle-02",
+      "method": "testIPadLandscapeKeyboardAndPreview",
+      "textSize": "accessibility-large",
+      "durationSeconds": 49.603,
+      "result": "passed",
+      "animationWarnings": 0,
+      "samples": "observer armed from launch; no >5s stalled Close wait, no process samples needed"
+    }
+  ],
+  "findings": [
+    "Original first60s idle warning occurs before Close event synthesis; Close unmount cannot cause that first warning.",
+    "Two unchanged repeats passed normally, so the original delay is intermittent and these passes are not evidence of a correction.",
+    "No failure-window process sample yet; baseline sample must not be described as a deadlock diagnosis."
+  ],
+  "originalTextSizeRestoredAfterEach": "large",
+  "runtimeChanges": false,
+  "testChanges": false,
+  "paidCalls": 0,
+  "nextDiscriminator": "Test-only keyboard-open rotation without preview versus preview-open rotation with deliberate public keyboard dismissal before portrait, preserving XCTest idle checks and data assertions."
+}

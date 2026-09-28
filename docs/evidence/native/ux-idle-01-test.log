@@ -1,0 +1,284 @@
+Command line invocation:
+    /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild test-without-building -xctestrun .build/ux-discovery-final-products/atepdfUI_iphonesimulator27.0-arm64.xctestrun -destination "platform=iOS Simulator,id=526CAD4B-89C5-49C1-8CEE-F65602AA0DEE" -parallel-testing-enabled NO "-only-testing:atepdfUITests/AtepdfWorkflowUITests/testIPadLandscapeKeyboardAndPreview" -resultBundlePath .build/ux-idle-01.xcresult
+
+Writing result bundle at path:
+	/Users/shrey/Documents/ChatGPT/atepdf/.build/ux-idle-01.xcresult
+
+2026-09-29 02:11:22.255570+0530 atepdfUITests-Runner[52340:2755153] [Default] Running tests...
+2026-09-29 02:11:22.786983+0530 atepdfUITests-Runner[52340:2755153] [UIKit App Config] Update the Info.plist: Launch screens will soon be required.
+    t =      nans Interface orientation changed to Portrait
+Test Suite 'Selected tests' started at 2026-09-29 02:11:26.179.
+Test Suite 'atepdfUITests.xctest' started at 2026-09-29 02:11:26.180.
+Test Suite 'AtepdfWorkflowUITests' started at 2026-09-29 02:11:26.180.
+Test Case '-[atepdfUITests.AtepdfWorkflowUITests testIPadLandscapeKeyboardAndPreview]' started.
+    t =     0.00s Start Test at 2026-09-29 02:11:26.184
+    t =     0.06s Set Up
+    t =     0.06s     Setting device orientation to Portrait
+    t =     0.13s         Wait for com.apple.springboard to idle
+    t =     0.13s     Open dev.atepdf.fresh
+    t =     0.13s         Launch dev.atepdf.fresh
+2026-09-29 02:11:26.517 xcodebuild[52325:2754862] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-09-29 02:11:26.517 xcodebuild[52325:2754862] [MT] IDELaunchParametersSnapshot: no debugger version
+objc[52340]: Class UIAccessibilityLoaderWebShared is implemented in both /private/var/run/com.apple.security.cryptexd/mnt/com.apple.iPhoneOS.SimulatorRuntime-v24.1.434.0.ino3Vu/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebKit.axbundle/WebKit (0x10a63c398) and /private/var/run/com.apple.security.cryptexd/mnt/com.apple.iPhoneOS.SimulatorRuntime-v24.1.434.0.ino3Vu/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebCore.axbundle/WebCore (0x10a76c310). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+    t =     0.92s             Setting up automation session
+    t =     2.52s             Wait for dev.atepdf.fresh to idle
+    t =     3.82s     Added attachment named 'simulator-accessibility-configuration'
+    t =     4.87s Checking `Expect predicate `exists == 1` for object "Try the two sample PDFs" Button`
+    t =     4.87s     Checking existence of `"Try the two sample PDFs" Button`
+    t =     4.97s Find the ScrollView (First Match)
+    t =     4.98s Find the "Try the two sample PDFs" Button
+    t =     4.99s Find the "Try the two sample PDFs" Button
+    t =     5.02s Find the "Try the two sample PDFs" Button
+    t =     5.03s Find the ScrollView at {{33.0, 108.0}, {768.0, 789.5}}
+    t =     5.05s Find the "Try the two sample PDFs" Button
+    t =     5.06s Find the "Try the two sample PDFs" Button
+    t =     6.12s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Try the two sample PDFs" Button`
+    t =     6.12s     Checking existence of `"Try the two sample PDFs" Button`
+    t =     6.14s     Find the "Try the two sample PDFs" Button
+    t =     6.16s     Find the "Try the two sample PDFs" Button
+    t =     6.17s Tap "Try the two sample PDFs" Button
+    t =     6.17s     Wait for dev.atepdf.fresh to idle
+    t =     6.18s     Find the "Try the two sample PDFs" Button
+    t =     6.19s     Check for interrupting elements affecting "Try the two sample PDFs" Button
+    t =     6.20s         Wait for com.apple.springboard to idle
+    t =     6.28s     Synthesize event
+    t =     6.58s     Wait for dev.atepdf.fresh to idle
+    t =     7.63s Checking `Expect predicate `exists == 1` for object StaticText (First Match)`
+    t =     7.64s     Checking existence of `StaticText (First Match)`
+    t =     8.72s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Merge" Button`
+    t =     8.72s     Checking existence of `"Merge" Button`
+    t =     8.73s     Find the "Merge" Button
+    t =     8.75s     Find the "Merge" Button
+    t =     8.77s Tap "Merge" Button
+    t =     8.77s     Wait for dev.atepdf.fresh to idle
+    t =     8.77s     Find the "Merge" Button
+    t =     8.78s     Check for interrupting elements affecting "Merge" Button
+    t =     8.79s         Wait for com.apple.springboard to idle
+    t =     8.81s     Synthesize event
+    t =     9.09s     Wait for dev.atepdf.fresh to idle
+    t =    10.13s Checking `Expect predicate `exists == 1 AND label BEGINSWITH "3 pages"` for object "result-facts" StaticText`
+    t =    10.14s     Checking existence of `"result-facts" StaticText`
+    t =    10.17s     Find the "result-facts" StaticText
+    t =    10.22s Find the Target Application 'dev.atepdf.fresh'
+    t =    10.23s Find the Target Application 'dev.atepdf.fresh'
+    t =    10.24s Checking existence of `Keyboard (First Match)`
+    t =    10.28s Find the "current-context" StaticText
+    t =    10.30s Find the "current-context" StaticText
+    t =    10.32s Setting device orientation to Landscape Left
+    t =    10.32s     Device orientation changed to Landscape Left
+    t =    10.42s     Interface orientation changed to Landscape Right
+    t =    10.42s     Wait for dev.atepdf.fresh to idle
+    t =    10.45s     Wait for com.apple.springboard to idle
+    t =    12.20s Find the Target Application 'dev.atepdf.fresh'
+    t =    12.24s Find the Target Application 'dev.atepdf.fresh'
+    t =    13.32s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object TextView (First Match)`
+    t =    13.32s     Checking existence of `TextView (First Match)`
+    t =    13.35s     Find the TextView (First Match)
+    t =    13.37s     Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    13.39s Tap "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    13.39s     Wait for dev.atepdf.fresh to idle
+    t =    13.39s     Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    13.40s     Check for interrupting elements affecting "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    13.42s         Wait for com.apple.springboard to idle
+    t =    13.43s     Synthesize event
+    t =    13.72s     Wait for dev.atepdf.fresh to idle
+    t =    15.06s Checking `Expect predicate `exists == 1` for object Keyboard (First Match)`
+    t =    15.06s     Checking existence of `Keyboard (First Match)`
+    t =    15.07s Type 'remove page 2' into "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    15.07s     Wait for dev.atepdf.fresh to idle
+    t =    15.07s     Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    15.11s     Check for interrupting elements affecting "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    15.13s         Wait for com.apple.springboard to idle
+    t =    15.15s     Synthesize event
+    t =    15.57s     Wait for dev.atepdf.fresh to idle
+    t =    16.63s Checking `Expect predicate `value == "remove page 2"` for object "Tell atepdf what to do Tell atepdf what to do…" TextView`
+    t =    16.64s     Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    16.69s Find the "Tell atepdf what to do" TextView
+    t =    16.72s Find the Keyboard (First Match)
+    t =    16.73s Find the Keyboard (First Match)
+    t =    16.74s Find the Target Application 'dev.atepdf.fresh'
+    t =    16.76s Find the "Send message" Button
+    t =    16.79s Find the Keyboard (First Match)
+    t =    16.79s Find the ScrollView (First Match)
+    t =    16.83s Checking existence of `"Merge" Button`
+    t =    16.85s Checking existence of `"current-context" StaticText`
+    t =    16.88s Find the "Send message" Button
+    t =    17.00s Added attachment named 'ipad-landscape-keyboard-command'
+    t =    18.05s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Send message" Button`
+    t =    18.05s     Checking existence of `"Send message" Button`
+    t =    18.11s     Find the "Send message" Button
+    t =    18.14s     Find the "Send message" Button
+    t =    18.17s Tap "Send message" Button
+    t =    18.17s     Wait for dev.atepdf.fresh to idle
+    t =    18.17s     Find the "Send message" Button
+    t =    18.20s     Check for interrupting elements affecting "Send message" Button
+    t =    18.23s         Wait for com.apple.springboard to idle
+    t =    18.24s     Synthesize event
+    t =    18.52s     Wait for dev.atepdf.fresh to idle
+    t =    19.58s Checking `Expect predicate `value == nil OR value == ""` for object "Tell atepdf what to do" TextView`
+    t =    19.59s     Find the "Tell atepdf what to do" TextView
+    t =    19.64s     Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    20.72s Checking `Expect predicate `exists == 1 AND label BEGINSWITH "2 pages"` for object "result-facts" StaticText`
+    t =    20.72s     Checking existence of `"result-facts" StaticText`
+    t =    20.78s     Find the "result-facts" StaticText
+    t =    20.81s Find the Target Application 'dev.atepdf.fresh'
+    t =    20.83s Find the Target Application 'dev.atepdf.fresh'
+    t =    20.85s Checking existence of `Keyboard (First Match)`
+    t =    20.86s Checking existence of `"current-context" StaticText`
+    t =    21.93s Checking `Expect predicate `exists == 1 AND enabled == 0` for object "Send message" Button`
+    t =    21.94s     Checking existence of `"Send message" Button`
+    t =    22.00s     Find the "Send message" Button
+    t =    22.03s Checking existence of `"Latest message" Button`
+    t =    22.06s Get number of matches for: Elements matching predicate '"Preview" IN identifiers'
+    t =    22.09s Get number of matches for: Elements matching predicate '"Preview" IN identifiers'
+    t =    23.17s Checking `Expect predicate `exists == 1` for object "Preview" Button`
+    t =    23.17s     Checking existence of `"Preview" Button`
+    t =    24.28s Checking `Expect predicate `exists == 1` for object ScrollView (First Match)`
+    t =    24.29s     Checking existence of `ScrollView (First Match)`
+    t =    24.35s Find the ScrollView (First Match)
+    t =    24.39s Find the "Preview" Button
+    t =    24.42s Find the "Preview" Button
+    t =    25.52s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Preview" Button`
+    t =    25.52s     Checking existence of `"Preview" Button`
+    t =    25.58s     Find the "Preview" Button
+    t =    25.62s     Find the "Preview" Button
+    t =    25.65s Tap "Preview" Button
+    t =    25.65s     Wait for dev.atepdf.fresh to idle
+    t =    25.65s     Find the "Preview" Button
+    t =    25.68s     Check for interrupting elements affecting "Preview" Button
+    t =    25.71s         Wait for com.apple.springboard to idle
+    t =    25.72s     Synthesize event
+    t =    26.01s     Wait for dev.atepdf.fresh to idle
+    t =    27.05s Checking `Expect predicate `exists == 1` for object "PDF page 1" Image`
+    t =    27.05s     Checking existence of `"PDF page 1" Image`
+    t =    28.40s Checking `Expect predicate `exists == 1` for object "Next page" Button`
+    t =    28.40s     Checking existence of `"Next page" Button`
+    t =    29.60s Checking `Expect predicate `exists == 1` for object ScrollView (First Match)`
+    t =    29.60s     Checking existence of `ScrollView (First Match)`
+    t =    29.74s Find the ScrollView (First Match)
+    t =    29.79s Find the "Next page" Button
+    t =    29.83s Find the "Next page" Button
+    t =    30.92s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Next page" Button`
+    t =    30.92s     Checking existence of `"Next page" Button`
+    t =    30.96s     Find the "Next page" Button
+    t =    31.00s     Find the "Next page" Button
+    t =    31.04s Tap "Next page" Button
+    t =    31.04s     Wait for dev.atepdf.fresh to idle
+    t =    31.04s     Find the "Next page" Button
+    t =    31.08s     Check for interrupting elements affecting "Next page" Button
+    t =    31.11s         Wait for com.apple.springboard to idle
+    t =    31.13s     Synthesize event
+    t =    31.42s     Wait for dev.atepdf.fresh to idle
+    t =    32.47s Checking `Expect predicate `exists == 1` for object "PDF page 2" Image`
+    t =    32.47s     Checking existence of `"PDF page 2" Image`
+    t =    33.59s Checking `Expect predicate `exists == 1` for object "PDF page 2" Image`
+    t =    33.59s     Checking existence of `"PDF page 2" Image`
+    t =    34.72s Checking `Expect predicate `exists == 1` for object ScrollView (First Match)`
+    t =    34.72s     Checking existence of `ScrollView (First Match)`
+    t =    34.78s Find the ScrollView (First Match)
+    t =    34.81s Find the "PDF page 2" Image
+    t =    34.85s Find the "PDF page 2" Image
+    t =    35.92s Checking `Expect predicate `exists == 1` for object "Next page" Button`
+    t =    35.92s     Checking existence of `"Next page" Button`
+    t =    37.02s Checking `Expect predicate `exists == 1` for object ScrollView (First Match)`
+    t =    37.02s     Checking existence of `ScrollView (First Match)`
+    t =    37.08s Find the ScrollView (First Match)
+    t =    37.12s Find the "Next page" Button
+    t =    37.15s Find the "Next page" Button
+    t =    37.19s Find the ScrollView (First Match)
+    t =    37.22s Find the "PDF page 2" Image
+    t =    37.26s Find the "Next page" Button
+    t =    38.35s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Tell atepdf what to do Tell atepdf what to do…" TextView`
+    t =    38.35s     Checking existence of `"Tell atepdf what to do Tell atepdf what to do…" TextView`
+    t =    38.39s     Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    38.42s     Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    38.45s Tap "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    38.45s     Wait for dev.atepdf.fresh to idle
+    t =    38.46s     Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    38.49s     Check for interrupting elements affecting "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    38.51s         Wait for com.apple.springboard to idle
+    t =    38.53s     Synthesize event
+    t =    38.82s     Wait for dev.atepdf.fresh to idle
+    t =    40.03s Find the ScrollView (First Match)
+    t =    40.08s Checking existence of `Keyboard (First Match)`
+    t =    40.09s Find the Keyboard (First Match)
+    t =    40.10s Find the Target Application 'dev.atepdf.fresh'
+    t =    41.05s Find the ScrollView (First Match)
+    t =    41.13s Checking existence of `Keyboard (First Match)`
+    t =    41.14s Find the Keyboard (First Match)
+    t =    41.15s Find the Target Application 'dev.atepdf.fresh'
+    t =    41.17s Find the ScrollView (First Match)
+    t =    41.22s Find the Keyboard (First Match)
+    t =    41.23s Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    41.27s Find the "Send message" Button
+    t =    41.30s Find the "Next page" Button
+    t =    41.34s Find the "PDF page 2" Image
+    t =    41.37s Find the Target Application 'dev.atepdf.fresh'
+    t =    41.40s Added attachment named 'ipad-landscape-simultaneous-preview-keyboard-frames'
+    t =    41.49s Added attachment named 'ipad-landscape-simultaneous-preview-keyboard'
+    t =    41.49s Find the Target Application 'dev.atepdf.fresh'
+    t =    41.52s Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    41.55s Find the "Send message" Button
+    t =    41.59s Find the "Next page" Button
+    t =    41.63s Checking existence of `"Page 2 of 2" StaticText`
+    t =    41.75s Added attachment named 'ipad-landscape-preview-second-page'
+    t =    41.75s Setting device orientation to Portrait
+    t =    41.75s     Device orientation changed to Portrait
+    t =    41.81s     Interface orientation changed to Portrait
+    t =    41.81s     Wait for dev.atepdf.fresh to idle
+    t =    41.88s     Wait for com.apple.springboard to idle
+    t =    43.60s Find the Target Application 'dev.atepdf.fresh'
+    t =    43.63s Find the Target Application 'dev.atepdf.fresh'
+    t =    44.68s Checking `Expect predicate `exists == 1 AND label BEGINSWITH "2 pages"` for object "result-facts" StaticText`
+    t =    44.69s     Checking existence of `"result-facts" StaticText`
+    t =    44.75s     Find the "result-facts" StaticText
+    t =    44.79s Find the Target Application 'dev.atepdf.fresh'
+    t =    44.81s Find the Target Application 'dev.atepdf.fresh'
+    t =    44.83s Checking existence of `Keyboard (First Match)`
+    t =    44.84s Checking existence of `"current-context" StaticText`
+    t =    45.91s Checking `Expect predicate `exists == 1` for object "Close preview" Button`
+    t =    45.91s     Checking existence of `"Close preview" Button`
+    t =    47.02s Checking `Expect predicate `exists == 1` for object ScrollView (First Match)`
+    t =    47.02s     Checking existence of `ScrollView (First Match)`
+    t =    47.08s Find the ScrollView (First Match)
+    t =    47.12s Find the "Close preview" Button
+    t =    47.15s Find the "Close preview" Button
+    t =    48.25s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Close preview" Button`
+    t =    48.25s     Checking existence of `"Close preview" Button`
+    t =    48.31s     Find the "Close preview" Button
+    t =    48.36s     Find the "Close preview" Button
+    t =    48.39s Tap "Close preview" Button
+    t =    48.39s     Wait for dev.atepdf.fresh to idle
+    t =    48.39s     Find the "Close preview" Button
+    t =    48.43s     Check for interrupting elements affecting "Close preview" Button
+    t =    48.46s         Wait for com.apple.springboard to idle
+    t =    48.47s     Synthesize event
+    t =    48.76s     Wait for dev.atepdf.fresh to idle
+    t =    49.82s Checking `Expect predicate `exists == 0` for object "Close preview" Button`
+    t =    49.82s     Checking existence of `"Close preview" Button`
+    t =    49.94s Added attachment named 'ipad-portrait-after-rotation'
+    t =    49.94s Tear Down
+    t =    49.94s     Requesting snapshot of accessibility hierarchy for app with pid 52402
+    t =    50.10s     Requesting snapshot of accessibility hierarchy for app with pid 52402
+    t =    50.14s     Added attachment named 'final-accessibility-hierarchy'
+    t =    50.23s     Added attachment named 'final-screen'
+    t =    50.23s     Terminate dev.atepdf.fresh:52402
+    t =    51.29s     Setting device orientation to Portrait
+    t =    51.30s         Wait for com.apple.springboard to idle
+Test Case '-[atepdfUITests.AtepdfWorkflowUITests testIPadLandscapeKeyboardAndPreview]' passed (51.365 seconds).
+Test Suite 'AtepdfWorkflowUITests' passed at 2026-09-29 02:12:17.550.
+	 Executed 1 test, with 0 failures (0 unexpected) in 51.365 (51.370) seconds
+Test Suite 'atepdfUITests.xctest' passed at 2026-09-29 02:12:17.552.
+	 Executed 1 test, with 0 failures (0 unexpected) in 51.365 (51.373) seconds
+Test Suite 'Selected tests' passed at 2026-09-29 02:12:17.552.
+	 Executed 1 test, with 0 failures (0 unexpected) in 51.365 (51.373) seconds
+2026-09-29 02:12:17.838 xcodebuild[52325:2754862] [MT] IDETestOperationsObserverDebug: 57.892 elapsed -- Testing started completed.
+2026-09-29 02:12:17.838 xcodebuild[52325:2754862] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-09-29 02:12:17.838 xcodebuild[52325:2754862] [MT] IDETestOperationsObserverDebug: 57.892 sec, +57.892 sec -- end
+
+Test session results, code coverage, and logs:
+	/Users/shrey/Documents/ChatGPT/atepdf/.build/ux-idle-01.xcresult
+
+** TEST EXECUTE SUCCEEDED **
+
+Testing started

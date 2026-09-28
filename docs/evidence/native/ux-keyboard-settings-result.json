@@ -1,0 +1,87 @@
+{
+  "recordedAt": "2026-09-28T20:58:40.536952+00:00",
+  "result": "Public Settings route unavailable on this iPhone simulator; probe stopped before mutation.",
+  "productionSourceCommit": "7935daa9ec3af260b65650a97ef719fe1001db42",
+  "productionChanged": false,
+  "actualReleaseBuild": "TEST BUILD SUCCEEDED",
+  "buildProof": "ux-keyboard-settings-build.json",
+  "sourceSnapshot": "ux-keyboard-settings-source.json",
+  "executedProbeSource": "ux-keyboard-settings-01-executed.swift",
+  "executedProbeSHA256": "ce40490283d832fb60c8ff51ec1eac14a46d2205a6e310a9f593c50f72afecc0",
+  "test": "testIPhoneAssistiveTouchKeyboardMergeAndRemove",
+  "resultSummary": "ux-keyboard-settings-01-summary.json",
+  "methodDurationSeconds": 21.914,
+  "runnerDurationSeconds": 42.172,
+  "testResult": "failed1/1: required public Touch navigation row unavailable",
+  "device": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+  "runtime": "iOS27.0 Simulator24A434",
+  "installedAppHashes": {
+    "atepdf": "3843354a16d2caf13585d0d3b8fe4ee4b3d86d4290030332648c739267096a2b",
+    "main.jsbundle": "089d8a108ff0617c6f499640a144041fb2cf6415ef8f952a239033ffaad2c782",
+    "Info.plist": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c"
+  },
+  "installedMatchesCapturedProduct": true,
+  "navigationEvidence": {
+    "initialPage": "Settings root",
+    "tap": "Real Accessibility Cell at(16,360,370,56); not a navigation Back button",
+    "resultingNavigationBar": "Accessibility, BackButton label Settings",
+    "observedPhysicalAndMotorRows": [
+      "FACE_ID: Face ID & Attention",
+      "CONTROL_NEARBY_DEVICES: Control Nearby Devices"
+    ],
+    "missing": "Touch row; AssistiveTouch and Show Onscreen Keyboard not reached",
+    "screenshot": "ux-keyboard-settings-01-assistive-keyboard-row-unavailable-Touch.png",
+    "hierarchy": "ux-keyboard-settings-01-assistive-keyboard-row-unavailable-Touch-hierarchy.txt"
+  },
+  "settings": {
+    "originalValues": "Not obtainable: stopped before either switch became reachable",
+    "switchMutationsAttempted": 0,
+    "restorationRequired": false,
+    "teardownEvidence": "ux-keyboard-settings-01-assistive-keyboard-no-settings-mutated.txt",
+    "hostPreferencesChanged": false,
+    "reduceMotionChanged": false,
+    "textSizeChanged": false,
+    "orientation": "portrait retained"
+  },
+  "notClaimed": [
+    "AssistiveTouch-configured keyboard clearance",
+    "Default software-keyboard clearance",
+    "Physical-device success",
+    "App keyboard bug proven"
+  ],
+  "calls": {
+    "paid": 0,
+    "planner": 0,
+    "PDFJobs": 0
+  },
+  "processes": {
+    "xcodebuild59233": "exited",
+    "runner59253": "exited",
+    "atepdf": "terminated by probe before Settings navigation"
+  },
+  "noRerun": "No concrete navigation fault found; stopped as authorized. Raw attachments including screen recording remain in .build/ux-keyboard-settings-01-attachments and xcresult.",
+  "next": "Use an available supported DeviceHub keyboard setting when desktop UI is authorized, or physical iPhone acceptance. Preserve the unchanged strict software-keyboard gate.",
+  "reusableTestSourceRestored": {
+    "path": "tests/native/ios/AtepdfWorkflowUITests.swift",
+    "SHA256": "5a35b9a133d7ade3bc6409f3ba5fdc5871d39f20e895d5e43fc6b2c2890d6f4c",
+    "matchesOriginal7935daa": true,
+    "oneOffProbePreserved": "ux-keyboard-settings-01-executed.swift"
+  },
+  "currentInstalledIdentityComparedWithPriorFinal": {
+    "priorImmutableProduct": ".build/ux-discovery-final-products/Release-iphonesimulator/atepdf.app",
+    "priorHashes": {
+      "atepdf": "79793194cd48220a61c131ee95358d54797b70d2af56efb9ed7899f4a4b81912",
+      "main.jsbundle": "c24835f44e7158232b8ced127af979323307947b0b27853462f9cc3f55b1830b",
+      "Info.plist": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c"
+    },
+    "currentImmutableProduct": ".build/ux-keyboard-settings-products/Release-iphonesimulator/atepdf.app",
+    "currentHashes": {
+      "atepdf": "3843354a16d2caf13585d0d3b8fe4ee4b3d86d4290030332648c739267096a2b",
+      "main.jsbundle": "089d8a108ff0617c6f499640a144041fb2cf6415ef8f952a239033ffaad2c782",
+      "Info.plist": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c"
+    },
+    "binaryMatchesPrior": false,
+    "bundleMatchesPrior": false,
+    "note": "The installed app is the fresh Release build used by this probe. Its binary and JS bundle differ from the previous captured product, while captured production source remained unchanged. No reinstall or rollback attempted."
+  }
+}

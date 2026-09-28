@@ -1,0 +1,26 @@
+{
+  "scope": "Additional full-artwork screenshot under constrained network; separate from paired first-control metric.",
+  "errors": [],
+  "controlMs": 3188,
+  "imagesCompleteMs": 7131,
+  "images": [
+    {
+      "src": "/assets/assets/approved-8-mark-source-crop.8b708587521942c4118f8e6a3c3f84f8.png",
+      "width": 167,
+      "height": 218,
+      "complete": true
+    },
+    {
+      "src": "/assets/assets/approved-atepdf-wordmark-source-crop.e129a61b59d2f9c2fdcb1f1b2521e212.png",
+      "width": 305,
+      "height": 90,
+      "complete": true
+    },
+    {
+      "src": "/assets/assets/paper.1cb2ca1d4826879d6316a24bfbeecd07.png",
+      "width": 1305,
+      "height": 1206,
+      "complete": true
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "device": "526CAD4B-89C5-49C1-8CEE-F65602AA0DEE",
+  "originalTextSize": "large",
+  "startedAt": "2026-09-28T20:43:01.346446+00:00",
+  "product": ".build/ux-discovery-final-products/atepdfUI_iphonesimulator27.0-arm64.xctestrun",
+  "purpose": "One unchanged AX-landscape reproduction with process sampling during any idle wait",
+  "sourceCommit": "7935daa9ec3af260b65650a97ef719fe1001db42",
+  "xcodebuildPID": 53058,
+  "exitCode": 0,
+  "restoredTextSize": "large",
+  "finishedAt": "2026-09-28T20:43:55.488164+00:00"
+}

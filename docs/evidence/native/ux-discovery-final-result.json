@@ -1,0 +1,110 @@
+{
+  "recordedAt": "2026-09-28T20:34:50.224673+00:00",
+  "sourceCommit": "7935daa9ec3af260b65650a97ef719fe1001db42",
+  "sourceSnapshot": "docs/evidence/native/ux-discovery-final-source.json",
+  "commitBinding": "docs/evidence/native/ux-discovery-final-commit-binding.json",
+  "sourceAppSHA256": "1e0b24c3a8b28b969b72a42df923dfddf6c5baaaeca73eb96e18af7347c95d5f",
+  "build": {
+    "actualReleaseBuildForTesting": "passed",
+    "proof": "docs/evidence/native/ux-discovery-final-build-proof.json",
+    "immutableProducts": ".build/ux-discovery-final-products",
+    "installedIdentityProof": "docs/evidence/native/ux-discovery-final-installed-proof.json"
+  },
+  "tests": [
+    {
+      "device": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+      "name": "testHardwareKeyboardBundledMergePreviewRemovalUndoAndShareDismissal",
+      "result": "passed",
+      "durationSeconds": 67.347,
+      "summary": "ux-discovery-final-iphone-summary.json",
+      "scope": "Real local bundled import, validated merge, preview navigation, exact typed page removal, undo and share dismissal. Explicit hardware-keyboard variant with zero software-keyboard intersection; no visible software-keyboard clearance claim."
+    },
+    {
+      "device": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+      "name": "testNativeComposerPreservesFastTypingAndBackspace",
+      "result": "passed",
+      "durationSeconds": 10.987,
+      "summary": "ux-discovery-final-iphone-summary.json"
+    },
+    {
+      "device": "526CAD4B-89C5-49C1-8CEE-F65602AA0DEE",
+      "name": "testIPadLandscapeKeyboardAndPreview",
+      "textSize": "large (original)",
+      "result": "passed",
+      "durationSeconds": 50.74,
+      "summary": "ux-discovery-final-ipad-landscape-summary.json",
+      "visibleRasterHeightPoints": 108,
+      "conversationHeightPoints": 176,
+      "actualSoftwareKeyboardVisible": true
+    },
+    {
+      "device": "526CAD4B-89C5-49C1-8CEE-F65602AA0DEE",
+      "name": "testIPadLandscapeKeyboardAndPreview",
+      "textSize": "accessibility-large",
+      "result": "passed",
+      "durationSeconds": 169.564,
+      "summary": "ux-discovery-final-ipad-ax-landscape-summary.json",
+      "visibleRasterHeightPoints": 88,
+      "conversationHeightPoints": 156.5,
+      "actualSoftwareKeyboardVisible": true,
+      "timingQualification": "Two 60-second XCTest animation-complete notification waits around final Close preview. All strict geometry/navigation/Close assertions passed. This is not a smooth-interaction or latency-acceptance claim; the wait also occurred in this unpaired local workflow."
+    }
+  ],
+  "functionalAssertions": "4/4 passed",
+  "timingLimitation": {
+    "status": "open",
+    "evidence": "ux-discovery-final-ipad-ax-landscape-test.log",
+    "warningsAtTestSeconds": [
+      106.17,
+      166.73
+    ],
+    "message": "App animations complete notification not received, will attempt to continue.",
+    "noPrivateQuiescenceOverride": true,
+    "notClaimed": [
+      "Smooth native interaction",
+      "Latency acceptance",
+      "Cause isolated to activity pulse",
+      "Production deadlock"
+    ]
+  },
+  "visualInspection": {
+    "iphone": "ux-discovery-final-iphone-workflow-04-follow-up-two-pages.png",
+    "iPadAccessibilityLarge": "ux-discovery-final-ipad-ax-landscape-workflow-ipad-landscape-simultaneous-preview-keyboard.png",
+    "observed": "Readable current result and Help footer on iPhone. AX-large iPad shows compact whole-control toolbar, real second-page raster and composer above actual onscreen keyboard."
+  },
+  "settings": {
+    "proof": "ux-discovery-final-setting-restore.json",
+    "textSizeRestored": "large",
+    "portraitRestoredByTestTeardown": true
+  },
+  "catalyst": {
+    "actualBuildAndLocalSignature": "passed",
+    "proof": "ux-discovery-final-mac-build.json",
+    "launched": false
+  },
+  "preservedPriorSaveProof": "ux-refined-final-export-result.json and ux-refined-final-export-independent-reader.json remain source-bound to candidate5, prior to preview/icon/Help-only updates; not rerun in this batch.",
+  "boundaries": [
+    "No old-source access",
+    "No paid planner calls",
+    "No Mac desktop control or launch",
+    "No physical-device acceptance",
+    "No production signing, installation, publication or distribution proof",
+    "No claim of iPhone visible software-keyboard clearance",
+    "No production source or reusable test changes in this final batch"
+  ],
+  "allowedPostCaptureDrift": [
+    {
+      "path": "apps/universal/DESIGN.md",
+      "captured": "595c5849a481751a06340d16c8132b7c75f430c31098ad2f8bf7443e880d2224",
+      "current": "1b3eebb51bb982dd338d7b316709cd8cca2a3d664686fdf6bedd2545a1d80081",
+      "reason": "Documentation only, not a runtime/build input"
+    },
+    {
+      "path": "apps/universal/src/platform/workspace.css",
+      "captured": "e0efd6390caa8a9b4591b9bd2b38a53fad718d0a4d9b42ecda582857851715d5",
+      "current": "49f4478c047ecd33a77adc35d8217d2446ce7d978084e5e7b5b6037f56028f70",
+      "reason": "Imported only by DropSurface.web.tsx, not a native build input"
+    }
+  ],
+  "nextExecutableTask": "Isolate the recorded native XCTest animation-idle latency separately, then physical iPhone/iPad acceptance under the approved development-signing workflow."
+}

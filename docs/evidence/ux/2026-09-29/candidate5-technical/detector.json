@@ -1,0 +1,141 @@
+[
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/Users/shrey/Documents/ChatGPT/atepdf/apps/universal/App.tsx",
+    "line": 292,
+    "snippet": "Undocumented color #aa405e is outside DESIGN.md colors",
+    "advisory": true,
+    "ignoreValue": "#aa405e"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/Users/shrey/Documents/ChatGPT/atepdf/apps/universal/App.tsx",
+    "line": 295,
+    "snippet": "text-[…] class: 11px is off the DESIGN.md type ramp",
+    "advisory": true,
+    "ignoreValue": "11px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/Users/shrey/Documents/ChatGPT/atepdf/apps/universal/src/components/JobActivity.tsx",
+    "line": 42,
+    "snippet": "text-[…] class: 15px is off the DESIGN.md type ramp",
+    "advisory": true,
+    "ignoreValue": "15px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/Users/shrey/Documents/ChatGPT/atepdf/apps/universal/src/components/assistant-ui/elements/surfaces.tsx",
+    "line": 24,
+    "snippet": "text-[…] class: 11px is off the DESIGN.md type ramp",
+    "advisory": true,
+    "ignoreValue": "11px",
+    "importedBy": [
+      "JobActivity.tsx",
+      "typing-indicator.tsx"
+    ]
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/Users/shrey/Documents/ChatGPT/atepdf/apps/universal/src/components/assistant-ui/elements/thread.aui.tsx",
+    "line": 666,
+    "snippet": "text-[…] class: 13px is off the DESIGN.md type ramp",
+    "advisory": true,
+    "ignoreValue": "13px"
+  },
+  {
+    "antipattern": "design-system-radius",
+    "name": "Radius outside DESIGN.md",
+    "description": "A border-radius value is outside the DESIGN.md rounded scale. Use a documented radius token or update the design system if the new shape is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/Users/shrey/Documents/ChatGPT/atepdf/apps/universal/src/platform/preview.css",
+    "line": 1,
+    "snippet": "border-radius: 14px is outside the DESIGN.md rounded scale",
+    "advisory": true,
+    "ignoreValue": "14px",
+    "importedBy": [
+      "Preview.web.tsx"
+    ]
+  },
+  {
+    "antipattern": "design-system-radius",
+    "name": "Radius outside DESIGN.md",
+    "description": "A border-radius value is outside the DESIGN.md rounded scale. Use a documented radius token or update the design system if the new shape is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/Users/shrey/Documents/ChatGPT/atepdf/apps/universal/src/platform/preview.css",
+    "line": 4,
+    "snippet": "border-radius: 9px is outside the DESIGN.md rounded scale",
+    "advisory": true,
+    "ignoreValue": "9px",
+    "importedBy": [
+      "Preview.web.tsx"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/Users/shrey/Documents/ChatGPT/atepdf/apps/universal/src/platform/preview.css",
+    "line": 8,
+    "snippet": "Undocumented color #267bff is outside DESIGN.md colors",
+    "advisory": true,
+    "ignoreValue": "#267bff",
+    "importedBy": [
+      "Preview.web.tsx"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/Users/shrey/Documents/ChatGPT/atepdf/apps/universal/src/platform/preview.css",
+    "line": 16,
+    "snippet": "Undocumented color #637089 is outside DESIGN.md colors",
+    "advisory": true,
+    "ignoreValue": "#637089",
+    "importedBy": [
+      "Preview.web.tsx"
+    ]
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/Users/shrey/Documents/ChatGPT/atepdf/apps/universal/src/platform/preview.css",
+    "line": 18,
+    "snippet": "Undocumented color #267bff is outside DESIGN.md colors",
+    "advisory": true,
+    "ignoreValue": "#267bff",
+    "importedBy": [
+      "Preview.web.tsx"
+    ]
+  }
+]

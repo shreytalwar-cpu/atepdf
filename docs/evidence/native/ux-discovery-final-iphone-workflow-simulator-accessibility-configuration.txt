@@ -1,0 +1,2 @@
+preferredContentSizeCategory=UICTContentSizeCategoryL
+reduceMotion=false

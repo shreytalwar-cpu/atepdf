@@ -1,0 +1,48 @@
+{
+  "recordedAt": "2026-09-28T19:43:12.408017+00:00",
+  "candidate": "UI candidate5 frozen production snapshot",
+  "sourceSnapshot": "docs/evidence/native/ux-refined-final-source.json",
+  "buildProof": "docs/evidence/native/ux-refined-final-build-proof.json",
+  "testSummary": "docs/evidence/native/ux-refined-final-iphone-summary.json",
+  "testLog": "docs/evidence/native/ux-refined-final-iphone-test.log",
+  "resultBundle": ".build/ux-refined-final-iphone.xcresult",
+  "device": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+  "parallelTesting": false,
+  "result": "2/2 passed; TEST EXECUTE SUCCEEDED; exit0",
+  "methods": [
+    {
+      "method": "testHardwareKeyboardBundledMergePreviewRemovalUndoAndShareDismissal",
+      "seconds": 66.705
+    },
+    {
+      "method": "testNativeComposerPreservesFastTypingAndBackspace",
+      "seconds": 10.974
+    }
+  ],
+  "observedWorkflow": [
+    "Bundled brief.pdf + appendix.pdf imported",
+    "Actual local merge produced3pages",
+    "Native inline preview A2 raster, Next/Close visible and working",
+    "Exact remove page2 draft, appended x and backspace preserved expected value",
+    "Submit produced2pages; blank composer and disabled Send verified",
+    "Typed undo restored3pages; blank composer and disabled Send verified",
+    "SavePDF presented real system share sheet; dismissal retained3pages and honest closed-sheet receipt"
+  ],
+  "inputConfiguration": {
+    "mode": "Hardware keyboard, no visible software keyboard",
+    "keyboardFrame": "(0,918,402,226)",
+    "visibleKeyboardHeight": 0,
+    "conversationHeight": 484,
+    "composerFrame": "(25,631,352,48)",
+    "sendFrame": "(333,683,44,44)",
+    "requiredChecks": "Composer and Send fully within app frame and hittable; conversation>100pt; exact draft preserved",
+    "softwareKeyboardClearance": "Not proven. Original strict test retained separately; prior candidate3 failure preserved."
+  },
+  "visualInspection": "Actual two-page current result and restored three-page card readable; current title/count footer correct; no result Copyrow; actual A2 preview raster visible. Share receipt does not falsely claim saved destination.",
+  "limits": [
+    "Simulator only; no physical device/signing/distribution proof",
+    "This run dismissed share sheet; destination export handled by separate final export test",
+    "No hosted planner or paidcalls; only bundled synthetic PDFs"
+  ],
+  "followup": "Run retained actual Save-to-Files/restart/systemPreview test using same frozen products."
+}

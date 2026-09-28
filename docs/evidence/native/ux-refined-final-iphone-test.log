@@ -1,0 +1,420 @@
+Command line invocation:
+    /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild test-without-building -xctestrun .build/ux-refined-final-products/atepdfUI_iphonesimulator27.0-arm64.xctestrun -destination "platform=iOS Simulator,id=D68C4547-67D3-4960-AAB9-D85FD786D6FC" -parallel-testing-enabled NO "-only-testing:atepdfUITests/AtepdfWorkflowUITests/testNativeComposerPreservesFastTypingAndBackspace" "-only-testing:atepdfUITests/AtepdfWorkflowUITests/testHardwareKeyboardBundledMergePreviewRemovalUndoAndShareDismissal" -resultBundlePath .build/ux-refined-final-iphone.xcresult
+
+Writing result bundle at path:
+	/Users/shrey/Documents/ChatGPT/atepdf/.build/ux-refined-final-iphone.xcresult
+
+2026-09-29 01:10:33.294112+0530 atepdfUITests-Runner[32216:2620893] [Default] Running tests...
+    t =      nans Interface orientation changed to Portrait
+Test Suite 'Selected tests' started at 2026-09-29 01:10:36.958.
+Test Suite 'atepdfUITests.xctest' started at 2026-09-29 01:10:36.958.
+Test Suite 'AtepdfWorkflowUITests' started at 2026-09-29 01:10:36.958.
+Test Case '-[atepdfUITests.AtepdfWorkflowUITests testHardwareKeyboardBundledMergePreviewRemovalUndoAndShareDismissal]' started.
+    t =     0.00s Start Test at 2026-09-29 01:10:36.960
+    t =     0.05s Set Up
+    t =     0.05s     Setting device orientation to Portrait
+    t =     0.08s         Wait for com.apple.springboard to idle
+    t =     0.09s     Open dev.atepdf.fresh
+    t =     0.09s         Launch dev.atepdf.fresh
+2026-09-29 01:10:37.231 xcodebuild[32208:2620592] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-09-29 01:10:37.231 xcodebuild[32208:2620592] [MT] IDELaunchParametersSnapshot: no debugger version
+objc[32216]: Class UIAccessibilityLoaderWebShared is implemented in both /private/var/run/com.apple.security.cryptexd/mnt/com.apple.iPhoneOS.SimulatorRuntime-v24.1.434.0.ino3Vu/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebKit.axbundle/WebKit (0x108074398) and /private/var/run/com.apple.security.cryptexd/mnt/com.apple.iPhoneOS.SimulatorRuntime-v24.1.434.0.ino3Vu/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebCore.axbundle/WebCore (0x1081ac310). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+    t =     0.79s             Setting up automation session
+    t =     2.31s             Wait for dev.atepdf.fresh to idle
+    t =     3.59s     Added attachment named 'simulator-accessibility-configuration'
+    t =     4.64s Checking `Expect predicate `exists == 1` for object "Try the two sample PDFs" Button`
+    t =     4.64s     Checking existence of `"Try the two sample PDFs" Button`
+    t =     4.70s Find the ScrollView (First Match)
+    t =     4.72s Find the "Try the two sample PDFs" Button
+    t =     4.73s Find the "Try the two sample PDFs" Button
+    t =     4.76s Find the "Try the two sample PDFs" Button
+    t =     4.77s Find the ScrollView at {{0.0, 138.0}, {402.0, 472.0}}
+    t =     4.79s Find the "Try the two sample PDFs" Button
+    t =     4.80s Find the "Try the two sample PDFs" Button
+    t =     5.86s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Try the two sample PDFs" Button`
+    t =     5.86s     Checking existence of `"Try the two sample PDFs" Button`
+    t =     5.88s     Find the "Try the two sample PDFs" Button
+    t =     5.91s     Find the "Try the two sample PDFs" Button
+    t =     5.92s Tap "Try the two sample PDFs" Button
+    t =     5.92s     Wait for dev.atepdf.fresh to idle
+    t =     5.92s     Find the "Try the two sample PDFs" Button
+    t =     5.93s     Check for interrupting elements affecting "Try the two sample PDFs" Button
+    t =     5.95s     Synthesize event
+    t =     6.24s     Wait for dev.atepdf.fresh to idle
+    t =     7.29s Checking `Expect predicate `exists == 1` for object StaticText (First Match)`
+    t =     7.29s     Checking existence of `StaticText (First Match)`
+    t =     7.33s Checking existence of `"brief.pdf" StaticText`
+    t =     7.35s Checking existence of `"appendix.pdf" StaticText`
+    t =     7.43s Added attachment named '01-bundled-originals'
+    t =     8.49s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Merge" Button`
+    t =     8.49s     Checking existence of `"Merge" Button`
+    t =     8.52s     Find the "Merge" Button
+    t =     8.54s     Find the "Merge" Button
+    t =     8.56s Tap "Merge" Button
+    t =     8.56s     Wait for dev.atepdf.fresh to idle
+    t =     8.56s     Find the "Merge" Button
+    t =     8.58s     Check for interrupting elements affecting "Merge" Button
+    t =     8.59s     Synthesize event
+    t =     8.87s     Wait for dev.atepdf.fresh to idle
+    t =     9.92s Checking `Expect predicate `exists == 1 AND label BEGINSWITH "3 pages"` for object "result-facts" StaticText`
+    t =     9.92s     Checking existence of `"result-facts" StaticText`
+    t =     9.96s     Find the "result-facts" StaticText
+    t =    10.00s Find the Target Application 'dev.atepdf.fresh'
+    t =    10.02s Find the Target Application 'dev.atepdf.fresh'
+    t =    10.03s Find the "current-context" StaticText
+    t =    10.05s Find the "current-context" StaticText
+    t =    10.12s Added attachment named '02-merged-three-pages'
+    t =    10.12s Get number of matches for: Elements matching predicate '"Preview" IN identifiers'
+    t =    10.14s Get number of matches for: Elements matching predicate '"Preview" IN identifiers'
+    t =    11.20s Checking `Expect predicate `exists == 1` for object "Preview" Button`
+    t =    11.20s     Checking existence of `"Preview" Button`
+    t =    12.28s Checking `Expect predicate `exists == 1` for object ScrollView (First Match)`
+    t =    12.28s     Checking existence of `ScrollView (First Match)`
+    t =    12.30s Find the ScrollView (First Match)
+    t =    12.31s Find the "Preview" Button
+    t =    12.34s Find the "Preview" Button
+    t =    13.40s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Preview" Button`
+    t =    13.40s     Checking existence of `"Preview" Button`
+    t =    13.44s     Find the "Preview" Button
+    t =    13.47s     Find the "Preview" Button
+    t =    13.49s Tap "Preview" Button
+    t =    13.49s     Wait for dev.atepdf.fresh to idle
+    t =    13.50s     Find the "Preview" Button
+    t =    13.51s     Check for interrupting elements affecting "Preview" Button
+    t =    13.53s     Synthesize event
+    t =    13.81s     Wait for dev.atepdf.fresh to idle
+    t =    14.85s Checking `Expect predicate `exists == 1` for object "PDF page 1" Image`
+    t =    14.85s     Checking existence of `"PDF page 1" Image`
+    t =    15.95s Checking `Expect predicate `exists == 1` for object "PDF page 1" Image`
+    t =    15.95s     Checking existence of `"PDF page 1" Image`
+    t =    17.05s Checking `Expect predicate `exists == 1` for object ScrollView (First Match)`
+    t =    17.05s     Checking existence of `ScrollView (First Match)`
+    t =    17.08s Find the ScrollView (First Match)
+    t =    17.11s Find the "PDF page 1" Image
+    t =    17.13s Find the "PDF page 1" Image
+    t =    17.16s Find the ScrollView (First Match)
+    t =    17.18s Find the "PDF page 1" Image
+    t =    17.20s Find the "PDF page 1" Image
+    t =    17.22s Reveal PDF page 1: target y=654.0, viewport y=138.0, drag=-0.45
+    t =    17.22s     Press ScrollView (First Match)[0.50, 0.75] for 0.1 seconds, then drag to ScrollView (First Match)[0.50, 0.30] with velocity of 250.00 pixels per second, and then hold for 0.1 seconds 
+    t =    17.22s         Wait for dev.atepdf.fresh to idle
+    t =    17.22s         Find the ScrollView (First Match)
+    t =    17.24s         Check for interrupting elements affecting ScrollView
+    t =    17.26s         Synthesize event
+    t =    17.26s             Find the ScrollView at {{0.0, 138.0}, {402.0, 484.0}}
+    t =    17.27s             Find the ScrollView at {{0.0, 138.0}, {402.0, 484.0}}
+    t =    17.29s             Find the ScrollView (First Match)
+    t =    17.31s             Find the ScrollView at {{0.0, 138.0}, {402.0, 484.0}}
+    t =    17.32s             Find the ScrollView at {{0.0, 138.0}, {402.0, 484.0}}
+    t =    18.62s         Wait for dev.atepdf.fresh to idle
+    t =    18.62s Find the ScrollView (First Match)
+    t =    18.65s Find the "PDF page 1" Image
+    t =    18.68s Find the "PDF page 1" Image
+    t =    18.71s Checking existence of `"Page 1 of 3" StaticText`
+    t =    19.79s Checking `Expect predicate `exists == 1` for object "Next page" Button`
+    t =    19.79s     Checking existence of `"Next page" Button`
+    t =    20.90s Checking `Expect predicate `exists == 1` for object ScrollView (First Match)`
+    t =    20.90s     Checking existence of `ScrollView (First Match)`
+    t =    20.93s Find the ScrollView (First Match)
+    t =    20.95s Find the "Next page" Button
+    t =    20.98s Find the "Next page" Button
+    t =    22.05s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Next page" Button`
+    t =    22.06s     Checking existence of `"Next page" Button`
+    t =    22.09s     Find the "Next page" Button
+    t =    22.12s     Find the "Next page" Button
+    t =    22.15s Tap "Next page" Button
+    t =    22.15s     Wait for dev.atepdf.fresh to idle
+    t =    22.15s     Find the "Next page" Button
+    t =    22.17s     Check for interrupting elements affecting "Next page" Button
+    t =    22.19s     Synthesize event
+    t =    22.48s     Wait for dev.atepdf.fresh to idle
+    t =    23.54s Checking `Expect predicate `exists == 1` for object "PDF page 2" Image`
+    t =    23.54s     Checking existence of `"PDF page 2" Image`
+    t =    24.62s Checking `Expect predicate `exists == 1` for object "PDF page 2" Image`
+    t =    24.62s     Checking existence of `"PDF page 2" Image`
+    t =    25.72s Checking `Expect predicate `exists == 1` for object ScrollView (First Match)`
+    t =    25.72s     Checking existence of `ScrollView (First Match)`
+    t =    25.76s Find the ScrollView (First Match)
+    t =    25.78s Find the "PDF page 2" Image
+    t =    25.81s Find the "PDF page 2" Image
+    t =    26.89s Checking `Expect predicate `exists == 1` for object "Next page" Button`
+    t =    26.89s     Checking existence of `"Next page" Button`
+    t =    27.99s Checking `Expect predicate `exists == 1` for object ScrollView (First Match)`
+    t =    27.99s     Checking existence of `ScrollView (First Match)`
+    t =    28.02s Find the ScrollView (First Match)
+    t =    28.04s Find the "Next page" Button
+    t =    28.07s Find the "Next page" Button
+    t =    28.09s Find the "PDF page 2" Image
+    t =    28.12s Find the ScrollView (First Match)
+    t =    28.13s Find the ScrollView (First Match)
+    t =    28.15s Find the "Next page" Button
+    t =    28.17s Find the "Next page" Button
+    t =    28.20s Checking existence of `"Page 2 of 3" StaticText`
+    t =    28.28s Added attachment named '03-inline-preview-second-page'
+    t =    29.32s Checking `Expect predicate `exists == 1` for object "Close preview" Button`
+    t =    29.32s     Checking existence of `"Close preview" Button`
+    t =    30.39s Checking `Expect predicate `exists == 1` for object ScrollView (First Match)`
+    t =    30.39s     Checking existence of `ScrollView (First Match)`
+    t =    30.42s Find the ScrollView (First Match)
+    t =    30.44s Find the "Close preview" Button
+    t =    30.47s Find the "Close preview" Button
+    t =    31.54s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Close preview" Button`
+    t =    31.54s     Checking existence of `"Close preview" Button`
+    t =    31.59s     Find the "Close preview" Button
+    t =    31.62s     Find the "Close preview" Button
+    t =    31.65s Tap "Close preview" Button
+    t =    31.65s     Wait for dev.atepdf.fresh to idle
+    t =    31.65s     Find the "Close preview" Button
+    t =    31.67s     Check for interrupting elements affecting "Close preview" Button
+    t =    31.69s     Synthesize event
+    t =    31.99s     Wait for dev.atepdf.fresh to idle
+    t =    33.05s Checking `Expect predicate `exists == 0` for object "Close preview" Button`
+    t =    33.05s     Checking existence of `"Close preview" Button`
+    t =    34.14s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object TextView (First Match)`
+    t =    34.14s     Checking existence of `TextView (First Match)`
+    t =    34.16s     Find the TextView (First Match)
+    t =    34.19s     Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    34.21s Tap "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    34.21s     Wait for dev.atepdf.fresh to idle
+    t =    34.21s     Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    34.22s     Check for interrupting elements affecting "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    34.24s     Synthesize event
+    t =    34.52s     Wait for dev.atepdf.fresh to idle
+    t =    35.92s Checking `Expect predicate `exists == 1` for object Keyboard (First Match)`
+    t =    35.92s     Checking existence of `Keyboard (First Match)`
+    t =    35.94s Type 'remove page 2' into "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    35.94s     Wait for dev.atepdf.fresh to idle
+    t =    35.95s     Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    35.99s     Check for interrupting elements affecting "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    36.01s     Synthesize event
+    t =    36.44s     Wait for dev.atepdf.fresh to idle
+    t =    37.50s Checking `Expect predicate `value == "remove page 2"` for object "Tell atepdf what to do Tell atepdf what to do…" TextView`
+    t =    37.51s     Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    37.56s Type 'x' into "Tell atepdf what to do" TextView
+    t =    37.56s     Wait for dev.atepdf.fresh to idle
+    t =    37.56s     Find the "Tell atepdf what to do" TextView
+    t =    37.59s     Check for interrupting elements affecting "Tell atepdf what to do" TextView
+    t =    37.61s     Synthesize event
+    t =    37.83s     Wait for dev.atepdf.fresh to idle
+    t =    38.89s Checking `Expect predicate `value == "remove page 2x"` for object "Tell atepdf what to do" TextView`
+    t =    38.89s     Find the "Tell atepdf what to do" TextView
+    t =    38.95s Type '' into "Tell atepdf what to do" TextView
+    t =    38.95s     Wait for dev.atepdf.fresh to idle
+    t =    38.95s     Find the "Tell atepdf what to do" TextView
+    t =    38.98s     Check for interrupting elements affecting "Tell atepdf what to do" TextView
+    t =    39.00s     Synthesize event
+    t =    39.21s     Wait for dev.atepdf.fresh to idle
+    t =    40.27s Checking `Expect predicate `value == "remove page 2"` for object "Tell atepdf what to do" TextView`
+    t =    40.27s     Find the "Tell atepdf what to do" TextView
+    t =    40.32s Find the ScrollView (First Match)
+    t =    40.36s Find the "Tell atepdf what to do" TextView
+    t =    40.39s Find the "Send message" Button
+    t =    40.41s Find the Keyboard (First Match)
+    t =    40.42s Find the Keyboard (First Match)
+    t =    40.43s Find the Target Application 'dev.atepdf.fresh'
+    t =    40.44s Added attachment named 'keyboard-workspace-geometry'
+    t =    40.44s Find the ScrollView (First Match)
+    t =    40.48s Find the Keyboard (First Match)
+    t =    40.48s Find the Target Application 'dev.atepdf.fresh'
+    t =    40.50s Find the Target Application 'dev.atepdf.fresh'
+    t =    40.52s Find the "Tell atepdf what to do" TextView
+    t =    40.54s Find the Target Application 'dev.atepdf.fresh'
+    t =    40.56s Find the "Send message" Button
+    t =    40.58s Find the "Tell atepdf what to do" TextView
+    t =    40.61s Find the "Send message" Button
+    t =    40.70s Added attachment named '04-command-ready'
+    t =    41.75s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Send message" Button`
+    t =    41.76s     Checking existence of `"Send message" Button`
+    t =    41.81s     Find the "Send message" Button
+    t =    41.84s     Find the "Send message" Button
+    t =    41.87s Tap "Send message" Button
+    t =    41.87s     Wait for dev.atepdf.fresh to idle
+    t =    41.87s     Find the "Send message" Button
+    t =    41.89s     Check for interrupting elements affecting "Send message" Button
+    t =    41.92s     Synthesize event
+    t =    42.21s     Wait for dev.atepdf.fresh to idle
+    t =    43.25s Checking `Expect predicate `value == nil OR value == ""` for object "Tell atepdf what to do" TextView`
+    t =    43.26s     Find the "Tell atepdf what to do" TextView
+    t =    43.31s     Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    44.37s Checking `Expect predicate `exists == 1 AND label BEGINSWITH "2 pages"` for object "result-facts" StaticText`
+    t =    44.37s     Checking existence of `"result-facts" StaticText`
+    t =    44.43s     Find the "result-facts" StaticText
+    t =    44.47s Find the Target Application 'dev.atepdf.fresh'
+    t =    44.49s Find the Target Application 'dev.atepdf.fresh'
+    t =    44.50s Find the "current-context" StaticText
+    t =    44.53s Find the "current-context" StaticText
+    t =    45.62s Checking `Expect predicate `exists == 1 AND enabled == 0` for object "Send message" Button`
+    t =    45.62s     Checking existence of `"Send message" Button`
+    t =    45.67s     Find the "Send message" Button
+    t =    45.75s Added attachment named '04-follow-up-two-pages'
+    t =    46.80s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Tell atepdf what to do Tell atepdf what to do…" TextView`
+    t =    46.80s     Checking existence of `"Tell atepdf what to do Tell atepdf what to do…" TextView`
+    t =    46.85s     Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    46.89s     Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    46.92s Tap "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    46.92s     Wait for dev.atepdf.fresh to idle
+    t =    46.92s     Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    46.95s     Check for interrupting elements affecting "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    46.97s     Synthesize event
+    t =    47.26s     Wait for dev.atepdf.fresh to idle
+    t =    47.85s Type 'undo' into "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    47.85s     Wait for dev.atepdf.fresh to idle
+    t =    47.85s     Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    47.91s     Check for interrupting elements affecting "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    47.94s     Synthesize event
+    t =    48.21s     Wait for dev.atepdf.fresh to idle
+    t =    49.45s Checking `Expect predicate `value == "undo"` for object "Tell atepdf what to do Tell atepdf what to do…" TextView`
+    t =    49.46s     Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    50.56s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Send message" Button`
+    t =    50.56s     Checking existence of `"Send message" Button`
+    t =    50.62s     Find the "Send message" Button
+    t =    50.66s     Find the "Send message" Button
+    t =    50.69s Tap "Send message" Button
+    t =    50.69s     Wait for dev.atepdf.fresh to idle
+    t =    50.69s     Find the "Send message" Button
+    t =    50.72s     Check for interrupting elements affecting "Send message" Button
+    t =    50.75s     Synthesize event
+    t =    51.04s     Wait for dev.atepdf.fresh to idle
+    t =    52.10s Checking `Expect predicate `value == nil OR value == ""` for object "Tell atepdf what to do" TextView`
+    t =    52.11s     Find the "Tell atepdf what to do" TextView
+    t =    52.14s     Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =    53.19s Checking `Expect predicate `exists == 1 AND label BEGINSWITH "3 pages"` for object "result-facts" StaticText`
+    t =    53.19s     Checking existence of `"result-facts" StaticText`
+    t =    53.25s     Find the "result-facts" StaticText
+    t =    53.29s Find the Target Application 'dev.atepdf.fresh'
+    t =    53.31s Find the Target Application 'dev.atepdf.fresh'
+    t =    53.33s Find the "current-context" StaticText
+    t =    53.36s Find the "current-context" StaticText
+    t =    54.45s Checking `Expect predicate `exists == 1 AND enabled == 0` for object "Send message" Button`
+    t =    54.46s     Checking existence of `"Send message" Button`
+    t =    54.50s     Find the "Send message" Button
+    t =    54.59s Added attachment named '05-undo-restores-three-pages'
+    t =    54.59s Checking existence of `"Latest message" Button`
+    t =    54.62s Get number of matches for: Elements matching predicate '"Save PDF" IN identifiers'
+    t =    54.65s Get number of matches for: Elements matching predicate '"Save PDF" IN identifiers'
+    t =    55.73s Checking `Expect predicate `exists == 1` for object "Save PDF" Button`
+    t =    55.73s     Checking existence of `"Save PDF" Button`
+    t =    56.82s Checking `Expect predicate `exists == 1` for object ScrollView (First Match)`
+    t =    56.82s     Checking existence of `ScrollView (First Match)`
+    t =    56.86s Find the ScrollView (First Match)
+    t =    56.89s Find the "Save PDF" Button
+    t =    56.93s Find the "Save PDF" Button
+    t =    58.00s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Save PDF" Button`
+    t =    58.01s     Checking existence of `"Save PDF" Button`
+    t =    58.05s     Find the "Save PDF" Button
+    t =    58.09s     Find the "Save PDF" Button
+    t =    58.12s Tap "Save PDF" Button
+    t =    58.12s     Wait for dev.atepdf.fresh to idle
+    t =    58.12s     Find the "Save PDF" Button
+    t =    58.15s     Check for interrupting elements affecting "Save PDF" Button
+    t =    58.18s     Synthesize event
+    t =    58.47s     Wait for dev.atepdf.fresh to idle
+    t =    59.65s Checking `Expect predicate `exists == 1` for object "ActivityListView" Other`
+    t =    59.66s     Checking existence of `"ActivityListView" Other`
+    t =    59.76s Checking existence of `"PopoverDismissRegion" Other`
+    t =    60.85s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "PopoverDismissRegion" Other`
+    t =    60.86s     Checking existence of `"PopoverDismissRegion" Other`
+    t =    60.95s     Find the "PopoverDismissRegion" Other
+    t =    61.01s     Find the "PopoverDismissRegion" Other
+    t =    61.06s Tap "PopoverDismissRegion" Other
+    t =    61.06s     Wait for dev.atepdf.fresh to idle
+    t =    61.06s     Find the "PopoverDismissRegion" Other
+    t =    61.12s     Check for interrupting elements affecting "PopoverDismissRegion" Other
+    t =    61.15s     Synthesize event
+    t =    61.44s     Wait for dev.atepdf.fresh to idle
+    t =    62.88s Checking `Expect predicate `exists == 0` for object "ActivityListView" Other`
+    t =    62.88s     Checking existence of `"ActivityListView" Other`
+    t =    63.97s Checking `Expect predicate `exists == 1` for object "Share sheet closed · check the destination you chose" StaticText`
+    t =    63.97s     Checking existence of `"Share sheet closed · check the destination you chose" StaticText`
+    t =    65.02s Checking `Expect predicate `exists == 1 AND label BEGINSWITH "3 pages"` for object "result-facts" StaticText`
+    t =    65.02s     Checking existence of `"result-facts" StaticText`
+    t =    65.08s     Find the "result-facts" StaticText
+    t =    65.12s Find the Target Application 'dev.atepdf.fresh'
+    t =    65.14s Find the Target Application 'dev.atepdf.fresh'
+    t =    65.16s Find the "current-context" StaticText
+    t =    65.19s Find the "current-context" StaticText
+    t =    65.23s Checking existence of `"Saved to your device" StaticText`
+    t =    65.32s Added attachment named '06-share-dismissed-with-honest-receipt'
+    t =    65.32s Tear Down
+    t =    65.32s     Requesting snapshot of accessibility hierarchy for app with pid 32234
+    t =    65.49s     Requesting snapshot of accessibility hierarchy for app with pid 32234
+    t =    65.53s     Added attachment named 'final-accessibility-hierarchy'
+    t =    65.59s     Added attachment named 'final-screen'
+    t =    65.59s     Terminate dev.atepdf.fresh:32234
+    t =    66.65s     Setting device orientation to Portrait
+    t =    66.66s         Wait for com.apple.springboard to idle
+Test Case '-[atepdfUITests.AtepdfWorkflowUITests testHardwareKeyboardBundledMergePreviewRemovalUndoAndShareDismissal]' passed (66.705 seconds).
+Test Case '-[atepdfUITests.AtepdfWorkflowUITests testNativeComposerPreservesFastTypingAndBackspace]' started.
+    t =     0.00s Start Test at 2026-09-29 01:11:43.666
+    t =     0.02s Set Up
+    t =     0.02s     Setting device orientation to Portrait
+    t =     0.02s         Wait for com.apple.springboard to idle
+    t =     0.03s     Open dev.atepdf.fresh
+    t =     0.03s         Launch dev.atepdf.fresh
+2026-09-29 01:11:43.695 xcodebuild[32208:2620592] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-09-29 01:11:43.695 xcodebuild[32208:2620592] [MT] IDELaunchParametersSnapshot: no debugger version
+    t =     0.24s             Setting up automation session
+    t =     1.65s             Wait for dev.atepdf.fresh to idle
+    t =     2.81s     Added attachment named 'simulator-accessibility-configuration'
+    t =     3.87s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object TextView (First Match)`
+    t =     3.87s     Checking existence of `TextView (First Match)`
+    t =     3.92s     Find the TextView (First Match)
+    t =     3.94s     Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =     3.95s Tap "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =     3.95s     Wait for dev.atepdf.fresh to idle
+    t =     3.96s     Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =     3.97s     Check for interrupting elements affecting "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =     3.98s     Synthesize event
+    t =     4.26s     Wait for dev.atepdf.fresh to idle
+    t =     5.32s Checking `Expect predicate `exists == 1` for object Keyboard (First Match)`
+    t =     5.32s     Checking existence of `Keyboard (First Match)`
+    t =     5.34s Type 'remove page 2' into "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =     5.35s     Wait for dev.atepdf.fresh to idle
+    t =     5.35s     Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =     5.39s     Check for interrupting elements affecting "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =     5.41s     Synthesize event
+    t =     5.83s     Wait for dev.atepdf.fresh to idle
+    t =     6.89s Checking `Expect predicate `value == "remove page 2"` for object "Tell atepdf what to do Tell atepdf what to do…" TextView`
+    t =     6.89s     Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =     6.93s Type 'x' into "Tell atepdf what to do" TextView
+    t =     6.93s     Wait for dev.atepdf.fresh to idle
+    t =     6.93s     Find the "Tell atepdf what to do" TextView
+    t =     6.95s     Check for interrupting elements affecting "Tell atepdf what to do" TextView
+    t =     6.97s     Synthesize event
+    t =     7.18s     Wait for dev.atepdf.fresh to idle
+    t =     8.23s Checking `Expect predicate `value == "remove page 2x"` for object "Tell atepdf what to do" TextView`
+    t =     8.23s     Find the "Tell atepdf what to do" TextView
+    t =     8.28s Type '' into "Tell atepdf what to do" TextView
+    t =     8.28s     Wait for dev.atepdf.fresh to idle
+    t =     8.28s     Find the "Tell atepdf what to do" TextView
+    t =     8.31s     Check for interrupting elements affecting "Tell atepdf what to do" TextView
+    t =     8.33s     Synthesize event
+    t =     8.55s     Wait for dev.atepdf.fresh to idle
+    t =     9.60s Checking `Expect predicate `value == "remove page 2"` for object "Tell atepdf what to do" TextView`
+    t =     9.60s     Find the "Tell atepdf what to do" TextView
+    t =     9.72s Added attachment named 'native-exact-fast-input-and-backspace'
+    t =     9.72s Tear Down
+    t =     9.72s     Requesting snapshot of accessibility hierarchy for app with pid 32398
+    t =     9.82s     Requesting snapshot of accessibility hierarchy for app with pid 32398
+    t =     9.84s     Added attachment named 'final-accessibility-hierarchy'
+    t =     9.90s     Added attachment named 'final-screen'
+    t =     9.90s     Terminate dev.atepdf.fresh:32398
+    t =    10.95s     Setting device orientation to Portrait
+    t =    10.96s         Wait for com.apple.springboard to idle
+Test Case '-[atepdfUITests.AtepdfWorkflowUITests testNativeComposerPreservesFastTypingAndBackspace]' passed (10.974 seconds).
+Test Suite 'AtepdfWorkflowUITests' passed at 2026-09-29 01:11:54.640.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 77.679 (77.681) seconds
+Test Suite 'atepdfUITests.xctest' passed at 2026-09-29 01:11:54.642.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 77.679 (77.684) seconds
+Test Suite 'Selected tests' passed at 2026-09-29 01:11:54.642.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 77.679 (77.685) seconds
+2026-09-29 01:11:54.933 xcodebuild[32208:2620592] [MT] IDETestOperationsObserverDebug: 84.878 elapsed -- Testing started completed.
+2026-09-29 01:11:54.933 xcodebuild[32208:2620592] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-09-29 01:11:54.933 xcodebuild[32208:2620592] [MT] IDETestOperationsObserverDebug: 84.878 sec, +84.878 sec -- end
+
+Test session results, code coverage, and logs:
+	/Users/shrey/Documents/ChatGPT/atepdf/.build/ux-refined-final-iphone.xcresult
+
+** TEST EXECUTE SUCCEEDED **
+
+Testing started

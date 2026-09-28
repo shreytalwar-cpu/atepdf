@@ -1,0 +1,364 @@
+{
+  "target": "apps/universal/App.tsx",
+  "baseline": "8d71ac0",
+  "targetSlug": "apps-universal-app-tsx",
+  "assessment": "B",
+  "independence": "No Assessment A output read; findings withheld from parent until explicit request after A completion.",
+  "cli": {
+    "command": "impeccable detect --json apps/universal/App.tsx apps/universal/src",
+    "exitCode": 0,
+    "raw": "detector.json",
+    "primaryFindingCount": 0,
+    "byRule": {},
+    "locations": [],
+    "markupFiles": [
+      "apps/universal/App.tsx",
+      "apps/universal/src/components/assistant-ui/elements/icon-button.tsx",
+      "apps/universal/src/components/assistant-ui/elements/typing-indicator.tsx",
+      "apps/universal/src/components/assistant-ui/elements/surfaces.tsx",
+      "apps/universal/src/components/assistant-ui/elements/thread.aui.tsx",
+      "apps/universal/src/components/ui/icon.tsx",
+      "apps/universal/src/components/JobActivity.tsx",
+      "apps/universal/src/platform/ComposerInput.native.tsx",
+      "apps/universal/src/platform/DropSurface.web.tsx",
+      "apps/universal/src/platform/Preview.web.tsx",
+      "apps/universal/src/platform/DropSurface.tsx",
+      "apps/universal/src/platform/DropSurface.native.tsx",
+      "apps/universal/src/platform/Preview.native.tsx",
+      "apps/universal/src/platform/Preview.tsx",
+      "apps/universal/src/platform/ComposerInput.tsx"
+    ],
+    "interpretation": "Zero deterministic findings is a regex source-scan result, not proof of visual/accessibility quality.",
+    "falsePositives": []
+  },
+  "browser": {
+    "summary": [
+      {
+        "name": "desktop-empty",
+        "width": 1440,
+        "height": 1000,
+        "horizontalOverflow": false,
+        "visibleButtonsBelow44": [],
+        "fields": [
+          {
+            "type": "textarea",
+            "label": "Tell atepdf what to do",
+            "placeholder": "Tell atepdf what to do\u2026",
+            "rect": {
+              "x": 361,
+              "y": 779,
+              "width": 718,
+              "height": 48
+            }
+          },
+          {
+            "type": "file",
+            "label": "Choose PDF files",
+            "placeholder": null,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "desktop-imported",
+        "width": 1440,
+        "height": 1000,
+        "horizontalOverflow": false,
+        "visibleButtonsBelow44": [],
+        "fields": [
+          {
+            "type": "textarea",
+            "label": "Tell atepdf what to do",
+            "placeholder": "Tell atepdf what to do\u2026",
+            "rect": {
+              "x": 361,
+              "y": 791,
+              "width": 718,
+              "height": 48
+            }
+          },
+          {
+            "type": "file",
+            "label": "Choose PDF files",
+            "placeholder": null,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "desktop-result",
+        "width": 1440,
+        "height": 1000,
+        "horizontalOverflow": false,
+        "visibleButtonsBelow44": [],
+        "fields": [
+          {
+            "type": "textarea",
+            "label": "Tell atepdf what to do",
+            "placeholder": "Tell atepdf what to do\u2026",
+            "rect": {
+              "x": 361,
+              "y": 791,
+              "width": 718,
+              "height": 48
+            }
+          },
+          {
+            "type": "file",
+            "label": "Choose PDF files",
+            "placeholder": null,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "desktop-preview",
+        "width": 1440,
+        "height": 1000,
+        "horizontalOverflow": false,
+        "visibleButtonsBelow44": [],
+        "fields": [
+          {
+            "type": "textarea",
+            "label": "Tell atepdf what to do",
+            "placeholder": "Tell atepdf what to do\u2026",
+            "rect": {
+              "x": 361,
+              "y": 791,
+              "width": 718,
+              "height": 48
+            }
+          },
+          {
+            "type": "file",
+            "label": "Choose PDF files",
+            "placeholder": null,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "phone-empty",
+        "width": 390,
+        "height": 844,
+        "horizontalOverflow": false,
+        "visibleButtonsBelow44": [],
+        "fields": [
+          {
+            "type": "textarea",
+            "label": "Tell atepdf what to do",
+            "placeholder": "Tell atepdf what to do\u2026",
+            "rect": {
+              "x": 25,
+              "y": 623,
+              "width": 340,
+              "height": 48
+            }
+          },
+          {
+            "type": "file",
+            "label": "Choose PDF files",
+            "placeholder": null,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "phone-imported",
+        "width": 390,
+        "height": 844,
+        "horizontalOverflow": false,
+        "visibleButtonsBelow44": [],
+        "fields": [
+          {
+            "type": "textarea",
+            "label": "Tell atepdf what to do",
+            "placeholder": "Tell atepdf what to do\u2026",
+            "rect": {
+              "x": 25,
+              "y": 635,
+              "width": 340,
+              "height": 48
+            }
+          },
+          {
+            "type": "file",
+            "label": "Choose PDF files",
+            "placeholder": null,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "phone-result",
+        "width": 390,
+        "height": 844,
+        "horizontalOverflow": false,
+        "visibleButtonsBelow44": [],
+        "fields": [
+          {
+            "type": "textarea",
+            "label": "Tell atepdf what to do",
+            "placeholder": "Tell atepdf what to do\u2026",
+            "rect": {
+              "x": 25,
+              "y": 635,
+              "width": 340,
+              "height": 48
+            }
+          },
+          {
+            "type": "file",
+            "label": "Choose PDF files",
+            "placeholder": null,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "phone-preview",
+        "width": 390,
+        "height": 844,
+        "horizontalOverflow": false,
+        "visibleButtonsBelow44": [],
+        "fields": [
+          {
+            "type": "textarea",
+            "label": "Tell atepdf what to do",
+            "placeholder": "Tell atepdf what to do\u2026",
+            "rect": {
+              "x": 25,
+              "y": 635,
+              "width": 340,
+              "height": 48
+            }
+          },
+          {
+            "type": "file",
+            "label": "Choose PDF files",
+            "placeholder": null,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          }
+        ]
+      }
+    ],
+    "actualWorkflow": "Fresh contexts at 1440\u00d71000 and 390\u00d7844; actual local import of brief.pdf and appendix.pdf, Merge, browser-download save and read-only Preview.",
+    "savedPDFIndependentValidation": [
+      {
+        "viewport": "desktop",
+        "pageCount": 3,
+        "expectedOrder": [
+          "A1",
+          "A2",
+          "B1"
+        ],
+        "orderVerified": true,
+        "syntheticPageText": [
+          "ATTENLO PDF / SYNTHETIC TEST INPUT  Project brief  Page marker: A1  This document has two digitally generated text pages. Merge this file before appendix.pdf. Expected merged order: A1, A2, B1. The next instruction removes physical page 2. After removal, the result should contain A1 and B1. Undo must restore the previous three-page result.  LOCAL NETWORK TEST CANARY:  ATTENLO_LOCAL_ONLY_CANARY_A1_7C82  Synthetic content. No customer data. Do not upload document contents.",
+          "ATTENLO PDF / SYNTHETIC TEST INPUT  Working notes  Page marker: A2  This is the second page of the brief. This page is intentionally removed in the follow-up test. Do not delete or overwrite either original input file. A successful output must reopen in an independent reader. File sizes must come from actual bytes, not generated prose.  LOCAL NETWORK TEST CANARY:  ATTENLO_LOCAL_ONLY_CANARY_A2_9B14  Synthetic content. No customer data. Do not upload document contents.",
+          "ATTENLO PDF / SYNTHETIC TEST INPUT  Appendix  Page marker: B1  This is the one-page appendix. It follows both pages of brief.pdf in the merge test. It remains after removing physical page 2. The sample can be used without a customer document. This file is small and is not a compression benchmark.  LOCAL NETWORK TEST CANARY:  ATTENLO_LOCAL_ONLY_CANARY_B1_3A65  Synthetic content. No customer data. Do not upload document contents."
+        ]
+      },
+      {
+        "viewport": "phone",
+        "pageCount": 3,
+        "expectedOrder": [
+          "A1",
+          "A2",
+          "B1"
+        ],
+        "orderVerified": true,
+        "syntheticPageText": [
+          "ATTENLO PDF / SYNTHETIC TEST INPUT  Project brief  Page marker: A1  This document has two digitally generated text pages. Merge this file before appendix.pdf. Expected merged order: A1, A2, B1. The next instruction removes physical page 2. After removal, the result should contain A1 and B1. Undo must restore the previous three-page result.  LOCAL NETWORK TEST CANARY:  ATTENLO_LOCAL_ONLY_CANARY_A1_7C82  Synthetic content. No customer data. Do not upload document contents.",
+          "ATTENLO PDF / SYNTHETIC TEST INPUT  Working notes  Page marker: A2  This is the second page of the brief. This page is intentionally removed in the follow-up test. Do not delete or overwrite either original input file. A successful output must reopen in an independent reader. File sizes must come from actual bytes, not generated prose.  LOCAL NETWORK TEST CANARY:  ATTENLO_LOCAL_ONLY_CANARY_A2_9B14  Synthetic content. No customer data. Do not upload document contents.",
+          "ATTENLO PDF / SYNTHETIC TEST INPUT  Appendix  Page marker: B1  This is the one-page appendix. It follows both pages of brief.pdf in the merge test. It remains after removing physical page 2. The sample can be used without a customer document. This file is small and is not a compression benchmark.  LOCAL NETWORK TEST CANARY:  ATTENLO_LOCAL_ONLY_CANARY_B1_3A65  Synthetic content. No customer data. Do not upload document contents."
+        ]
+      }
+    ],
+    "network": {
+      "requests": 50,
+      "nonGET": 0,
+      "nonLocalApp": 0,
+      "blocked": [],
+      "providerCalls": 0,
+      "scope": "Browser network and guarded local preview only; no physical device or release evidence."
+    },
+    "pageErrors": [],
+    "console": []
+  },
+  "overlay": {
+    "preflight": {
+      "title": "[Human] atepdf critique",
+      "scriptTagPresent": true,
+      "scriptExecuted": true
+    },
+    "helper": {
+      "started": false,
+      "error": "Error: Command failed: /usr/bin/sandbox-exec -p (version 1)(allow default)(deny file-write*)(allow file-write* (literal \"/dev/null\"))(allow file-write* (subpath \"/Users/shrey/Documents/ChatGPT/atepdf/.build/ux-20260929/assessment-b\")) /Users/shrey/.codex/plugins/cache/openai-curated-remote/impeccable/4.3.1/skills/impeccable/scripts/impeccable live-server --background\nTimed out waiting for live server to start.\n",
+      "stderr": "Timed out waiting for live server to start.\n"
+    },
+    "actualDetectorInjected": false,
+    "detectorConsoleFindings": null,
+    "userVisible": false,
+    "reason": "Official live-server --background was attempted from evidence directory under a write restriction to that directory. It timed out starting; no external detector script was injected and no runtime overlay result exists. Existing app CSP also restricts script origins to self; it was not weakened.",
+    "fallback": "CLI source detection plus actual Playwright screenshots and DOM measurements.",
+    "attempts": "Initial sandbox attempt denied /dev/null; one corrected attempt allowed /dev/null and still timed out. Both failure records retained."
+  },
+  "cleanup": {
+    "browserContextsClosed": true,
+    "browserClosed": true,
+    "helperStartupReported": false,
+    "helperProcessCheck": "No Impeccable live-server process remained at cleanup.",
+    "appServer": "Parent-owned isolated 3213 server untouched; owner 3211 untouched.",
+    "temporaryArtifacts": "All review scripts, screenshots, PDFs, reports and failure logs intentionally retained under .build/ux-20260929/assessment-b; no app-source writes."
+  },
+  "limits": [
+    "Native platforms, real mobile browser keyboard, screen reader, persistent history, paid planner and release readiness not assessed.",
+    "Initial browser-download probe timed out because showSaveFilePicker existed in headless Chrome. Final pass disabled that API as in project tests to exercise browser-download fallback; native save-picker behavior is not validated."
+  ],
+  "memory": {
+    "file": "MEMORY.md",
+    "lines": "1-4",
+    "use": "Orientation to active fresh atePDF workspace; actual findings gathered live."
+  }
+}

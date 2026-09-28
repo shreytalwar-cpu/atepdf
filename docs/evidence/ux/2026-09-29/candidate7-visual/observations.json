@@ -1,0 +1,70 @@
+{
+  "candidate": 7,
+  "indexSha256": "0054b8192566df7108bf418b0fc965b6d951f490361bd6505f766fd7ca024f45",
+  "observations": [
+    {
+      "label": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "rootTextPercent": 100,
+      "conversation": {
+        "x": 336,
+        "y": 76,
+        "width": 768,
+        "height": 706
+      },
+      "page": "Page 2 of 3",
+      "horizontalOverflow": 0
+    },
+    {
+      "label": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rootTextPercent": 100,
+      "conversation": {
+        "x": 0,
+        "y": 60,
+        "width": 390,
+        "height": 566
+      },
+      "page": "Page 2 of 3",
+      "horizontalOverflow": 0
+    },
+    {
+      "label": "compact",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "rootTextPercent": 100,
+      "conversation": {
+        "x": 0,
+        "y": 60,
+        "width": 320,
+        "height": 302
+      },
+      "page": "Page 2 of 3",
+      "horizontalOverflow": 0
+    },
+    {
+      "label": "short-large-text",
+      "viewport": {
+        "width": 720,
+        "height": 500
+      },
+      "rootTextPercent": 200,
+      "conversation": {
+        "x": 0,
+        "y": 60,
+        "width": 720,
+        "height": 208
+      },
+      "page": "Page 2 of 3",
+      "horizontalOverflow": 0
+    }
+  ]
+}

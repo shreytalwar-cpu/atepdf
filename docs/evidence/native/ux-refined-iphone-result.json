@@ -1,0 +1,46 @@
+{
+  "recordedAt": "2026-09-28T19:39:04.431006+00:00",
+  "candidate": "refined UI candidate3; root subsequently changed shared thread/web UI, so this is not final-source evidence",
+  "sourceSnapshot": "docs/evidence/native/ux-refined-source.json",
+  "buildProof": "docs/evidence/native/ux-refined-build-proof.json",
+  "testSummary": "docs/evidence/native/ux-refined-iphone-summary.json",
+  "testLog": "docs/evidence/native/ux-refined-iphone-test.log",
+  "resultBundle": ".build/ux-refined-iphone.xcresult",
+  "device": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+  "parallelTesting": false,
+  "result": "1 passed, 1 failed",
+  "passed": [
+    "Exact fast typing remove page 2, append x, backspace returns exact draft (10.889s)"
+  ],
+  "partialWorkflow": [
+    "Bundled originals imported",
+    "Actual local merge produced three pages and current result",
+    "Inline native preview rendered second page A2 with working Next and Close",
+    "Exact remove page 2 typing and backspace succeeded"
+  ],
+  "failure": {
+    "stage": "before sending remove page 2",
+    "reason": "Strict software keyboard visibility assertion: visible keyboard intersection0pt, required>100pt",
+    "keyboardFrame": "(0,918,402,226)",
+    "appFrame": "(0,0,402,874)",
+    "conversationFrame": "(0,138,402,484)",
+    "composerFrame": "(25,631,352,48)",
+    "sendFrame": "(333,683,44,44)"
+  },
+  "notReached": [
+    "page removal execution",
+    "undo execution",
+    "share presentation/dismissal"
+  ],
+  "visualInspection": {
+    "mergedResult": "Compact Merged PDF card with3pages/3.1kB/current badge, SavePDF and Preview; no result Copyrow",
+    "preview": "Rendered A2 Working notes page in inline read-only preview; page2of3 controls and normal full-width synthetic header visible"
+  },
+  "diagnostics": {
+    "testsFinishedNormally": true,
+    "testCaseDurationSeconds": 51.632,
+    "xcodebuildExitCode": 65,
+    "optionalCollectorStopped": "Only child simctl diagnose PID29578 was sent SIGTERM after~5minutes post-test gathering; no test or app was interrupted. Full simulator diagnostics incomplete; xcresult test outcomes and attachments finalized successfully."
+  },
+  "next": "Separate hardware-keyboard full-flow test added without weakening original; wait for final source freeze before build. No visible software-keyboard clearance or physical-device claim."
+}

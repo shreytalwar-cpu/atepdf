@@ -1,0 +1,123 @@
+Attributes: Application, 0x113848140, pid: 35477, label: 'atepdf'
+Element subtree:
+ →Application, 0x113848140, pid: 35477, label: 'atepdf'
+    Window (Main), 0x113852f80, {{0.0, 0.0}, {834.0, 1210.0}}
+      Other, 0x1138530c0, {{0.0, 0.0}, {834.0, 1210.0}}
+        Other, 0x113853200, {{0.0, 0.0}, {834.0, 1210.0}}
+          Other, 0x113853340, {{0.0, 0.0}, {834.0, 1210.0}}
+            Other, 0x113853480, {{0.0, 0.0}, {834.0, 1210.0}}
+              Other, 0x1138535c0, {{0.0, 0.0}, {834.0, 1210.0}}
+                Other, 0x113853700, {{0.0, 0.0}, {834.0, 1210.0}}
+                  Other, 0x113853840, {{0.0, 0.0}, {834.0, 1210.0}}
+                    Other, 0x113853980, {{32.0, 51.5}, {28.0, 37.0}}
+                      Image, 0x113853d40, {{32.0, 51.5}, {28.0, 37.0}}, identifier: 'assets/assets/approved-8-mark-source-crop.png'
+                    Other, 0x113853e80, {{68.0, 55.0}, {90.0, 30.0}}
+                      Image, 0x113853ac0, {{68.0, 55.0}, {90.0, 30.0}}, identifier: 'assets/assets/approved-atepdf-wordmark-source-crop.png', label: 'atepdf'
+                    Button, 0x113853c00, {{376.0, 48.0}, {330.0, 44.0}}, label: 'Processed on your device'
+                    Button, 0x114238000, {{710.0, 48.0}, {44.0, 44.0}}, label: 'AI connection'
+                    Button, 0x114238140, {{758.0, 48.0}, {44.0, 44.0}}, label: 'Start over'
+                    Other, 0x114238280, {{0.0, 108.0}, {834.0, 1102.0}}
+                    Other, 0x1142383c0, {{33.0, 108.0}, {768.0, 811.0}}, identifier: 'conversation'
+                      ScrollView, 0x114238500, {{33.0, 108.0}, {768.0, 811.0}}
+                        Other, 0x114238640, {{33.0, -230.5}, {768.0, 1149.5}}
+                          Other, 0x114238780, {{33.0, -230.5}, {768.0, 1149.5}}
+                            Other, 0x1142388c0, {{49.0, -206.5}, {736.0, 306.5}}
+                              Other, 0x114238a00, {{49.0, -206.5}, {736.0, 306.5}}, identifier: 'user-message'
+                              Other, 0x114238b40, {{510.0, -206.5}, {267.0, 107.5}}
+                              StaticText, 0x114238c80, {{562.0, -193.5}, {198.0, 43.0}}, label: 'brief.pdf'
+                                StaticText, 0x114238dc0, {{562.0, -193.5}, {198.0, 43.0}}, label: 'brief.pdf'
+                              Other, 0x114238f00, {{527.0, -164.0}, {23.0, 23.0}}
+                                Other, 0x114239040, {{529.9, -163.0}, {17.3, 21.1}}
+                                  Other, 0x114239180, {{529.9, -163.0}, {17.3, 21.1}}
+                                  Other, 0x1142392c0, {{533.7, -156.3}, {3.8, 1.9}}
+                                  Other, 0x114239400, {{533.7, -152.5}, {9.6, 1.9}}
+                                  Other, 0x114239540, {{539.5, -163.0}, {7.7, 7.7}}
+                                  Other, 0x114239680, {{533.7, -148.7}, {9.6, 1.9}}
+                              StaticText, 0x1142397c0, {{562.0, -146.5}, {198.0, 34.5}}, label: '3.1 kB · Original · 1'
+                                StaticText, 0x114239900, {{562.0, -146.5}, {198.0, 34.5}}, label: '3.1 kB · Original · 1'
+                              Other, 0x114239a40, {{507.0, -91.0}, {270.0, 107.5}}
+                              StaticText, 0x114239b80, {{559.0, -78.0}, {201.0, 43.0}}, label: 'appendix.pdf'
+                                StaticText, 0x114239cc0, {{559.0, -78.0}, {201.0, 43.0}}, label: 'appendix.pdf'
+                              Other, 0x114239e00, {{524.0, -48.5}, {23.0, 23.0}}
+                                Other, 0x114239f40, {{526.9, -47.5}, {17.3, 21.1}}
+                                  Other, 0x11423a080, {{526.9, -47.5}, {17.3, 21.1}}
+                                  Other, 0x11423a1c0, {{530.7, -40.8}, {3.8, 1.9}}
+                                  Other, 0x11423a300, {{530.7, -37.0}, {9.6, 1.9}}
+                                  Other, 0x11423a440, {{536.5, -47.5}, {7.7, 7.7}}
+                                  Other, 0x11423a580, {{530.7, -33.2}, {9.6, 1.9}}
+                              StaticText, 0x11423a6c0, {{559.0, -31.0}, {201.0, 34.5}}, label: '2.1 kB · Original · 2'
+                                StaticText, 0x11423a800, {{559.0, -31.0}, {201.0, 34.5}}, label: '2.1 kB · Original · 2'
+                              Other, 0x11423a940, {{473.0, 24.5}, {304.0, 67.5}}
+                              StaticText, 0x11423aa80, {{489.0, 32.5}, {272.0, 51.5}}, label: 'I’ve added 2 PDFs.'
+                                StaticText, 0x11423abc0, {{489.0, 32.5}, {272.0, 51.5}}, label: 'I’ve added 2 PDFs.'
+                            Other, 0x11423ad00, {{49.0, 124.0}, {736.0, 204.5}}
+                              Other, 0x11423ae40, {{49.0, 124.0}, {736.0, 204.5}}, identifier: 'assistant-message'
+                              StaticText, 0x11423af80, {{57.0, 124.0}, {720.0, 154.5}}, label: 'Your 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.'
+                                StaticText, 0x11423b0c0, {{57.0, 124.0}, {720.0, 154.5}}, label: 'Your 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.'
+                              Button, 0x11423b200, {{53.0, 284.5}, {44.0, 44.0}}, label: 'Copy'
+                            Other, 0x11423b340, {{49.0, 352.5}, {736.0, 75.5}}
+                              Other, 0x11423b480, {{49.0, 352.5}, {736.0, 75.5}}, identifier: 'user-message'
+                              Other, 0x11423b5c0, {{505.0, 352.5}, {272.0, 67.5}}
+                              StaticText, 0x11423b700, {{521.0, 360.5}, {240.0, 51.5}}, label: 'Merge my PDFs.'
+                                StaticText, 0x11423b840, {{521.0, 360.5}, {240.0, 51.5}}, label: 'Merge my PDFs.'
+                            Other, 0x11423b980, {{49.0, 452.0}, {736.0, 443.0}}
+                              Other, 0x11423bac0, {{49.0, 452.0}, {736.0, 443.0}}, identifier: 'assistant-message'
+                              StaticText, 0x11423bc00, {{57.0, 452.0}, {720.0, 103.0}}, label: 'I merged your PDFs in the order added. Here’s your PDF.'
+                                StaticText, 0x11423bd40, {{57.0, 452.0}, {720.0, 103.0}}, label: 'I merged your PDFs in the order added. Here’s your PDF.'
+                              Other, 0x11423be80, {{57.0, 567.0}, {720.0, 328.0}}, identifier: 'current-result'
+                              StaticText, 0x11423c000, {{134.0, 588.0}, {592.0, 51.5}}, label: 'Merged PDF'
+                                StaticText, 0x11423c140, {{134.0, 588.0}, {592.0, 51.5}}, label: 'Merged PDF'
+                              Other, 0x11423c280, {{78.0, 634.5}, {44.0, 44.0}}
+                              Other, 0x11423c3c0, {{88.5, 645.0}, {23.0, 23.0}}
+                                Other, 0x11423c500, {{91.4, 646.0}, {17.3, 21.1}}
+                                  Other, 0x11423c640, {{91.4, 646.0}, {17.3, 21.1}}
+                                  Other, 0x11423c780, {{95.2, 652.7}, {3.8, 1.9}}
+                                  Other, 0x11423c8c0, {{95.2, 656.5}, {9.6, 1.9}}
+                                  Other, 0x11423ca00, {{101.0, 646.0}, {7.7, 7.7}}
+                                  Other, 0x11423cb40, {{95.2, 660.3}, {9.6, 1.9}}
+                              StaticText, 0x11423cc80, {{134.0, 643.5}, {592.0, 43.0}}, identifier: 'result-facts', label: '3 pages · 3.1 kB'
+                                StaticText, 0x11423cdc0, {{134.0, 643.5}, {592.0, 43.0}}, label: '3 pages · 3.1 kB'
+                              Other, 0x11423cf00, {{738.0, 647.5}, {18.0, 18.0}}, label: 'Validated'
+                                Other, 0x11423d040, {{740.2, 651.2}, {13.5, 9.8}}
+                                  Other, 0x11423d180, {{740.2, 651.2}, {13.5, 9.8}}, label: 'Validated'
+                              StaticText, 0x11423d2c0, {{134.0, 690.5}, {592.0, 34.5}}, label: 'Current result'
+                                StaticText, 0x11423d400, {{134.0, 690.5}, {592.0, 34.5}}, label: 'Current result'
+                              Button, 0x11423d540, {{78.0, 742.0}, {176.0, 59.0}}, label: 'Save PDF'
+                              Button, 0x11423d680, {{262.0, 741.0}, {155.0, 61.0}}, label: 'Preview'
+                              StaticText, 0x11423d7c0, {{78.0, 818.0}, {678.0, 56.0}}, label: 'Tell me what you’d like to do next.'
+                                StaticText, 0x11423d900, {{78.0, 818.0}, {678.0, 56.0}}, label: 'Tell me what you’d like to do next.'
+                        Other, 0x11423da40, {{33.0, 886.0}, {768.0, 30.0}}, label: 'Horizontal scroll bar, 1 page', value: 0%
+                          Other, 0x11423db80, {{36.0, 913.0}, {759.0, 3.0}}
+                        Other, 0x11423dcc0, {{33.0, 886.0}, {768.0, 30.0}}, label: 'Horizontal scroll bar, 1 page', value: 0%
+                          Other, 0x11423de00, {{36.0, 913.0}, {759.0, 3.0}}
+                    Other, 0x11423df40, {{49.0, 919.0}, {736.0, 133.5}}
+                    Other, 0x11423e080, {{58.0, 928.0}, {718.0, 67.5}}
+                      TextView, 0x11423e1c0, {{58.0, 928.0}, {718.0, 67.5}}, label: 'Tell atepdf what to do Tell atepdf what to do…'
+                        Other, 0x11423e300, {{743.0, 928.0}, {30.0, 67.5}}, label: 'Vertical scroll bar, 2 pages', value: 0%
+                          Other, 0x11423e440, {{770.0, 946.5}, {3.0, 46.0}}
+                        Other, 0x11423e580, {{58.0, 962.5}, {718.0, 30.0}}, label: 'Horizontal scroll bar, 1 page', value: 0%
+                          Other, 0x11423e6c0, {{61.0, 989.5}, {712.0, 3.0}}
+                    Button, 0x11423e800, {{58.0, 999.5}, {44.0, 44.0}}, label: 'Add files'
+                    Button, 0x11423e940, {{732.0, 999.5}, {44.0, 44.0}}, label: 'Send message', Disabled
+                    Button, 0x11423ea80, {{49.0, 1064.5}, {240.0, 71.0}}, label: 'Merge'
+                    Button, 0x11423ebc0, {{297.0, 1064.5}, {240.0, 71.0}}, label: 'Compress'
+                    Button, 0x11423ed00, {{545.0, 1064.5}, {240.0, 71.0}}, label: 'Make searchable'
+                    Other, 0x11423ee40, {{238.5, 1155.0}, {12.0, 12.0}}
+                      Other, 0x11423ef80, {{240.0, 1155.5}, {9.0, 11.0}}
+                        Other, 0x11423f0c0, {{240.0, 1155.5}, {9.0, 11.0}}
+                        Other, 0x11423f200, {{242.0, 1159.0}, {2.0, 1.0}}
+                        Other, 0x11423f340, {{242.0, 1161.0}, {5.0, 1.0}}
+                        Other, 0x11423f480, {{242.0, 1163.0}, {5.0, 1.0}}
+                        Other, 0x11423f5c0, {{245.0, 1155.5}, {4.0, 4.0}}
+                    StaticText, 0x11423f700, {{256.0, 1143.5}, {339.5, 34.5}}, identifier: 'current-context', label: 'Current: Merged PDF · 3 pages'
+                      StaticText, 0x11423f840, {{256.0, 1143.5}, {339.5, 34.5}}, label: 'Current: Merged PDF · 3 pages'
+    Window, 0x11423f980, {{0.0, 0.0}, {834.0, 1210.0}}
+      Other, 0x11423fac0, {{0.0, 0.0}, {834.0, 1210.0}}
+        Other, 0x11423fc00, {{0.0, 0.0}, {834.0, 1210.0}}
+Path to element:
+ →Application, 0x113848140, pid: 35477, label: 'atepdf'
+Query chain:
+ →Find: Target Application 'dev.atepdf.fresh'
+  Output: {
+    Application, 0x11423fd40, pid: 35477, label: 'atepdf'
+  }

@@ -1,0 +1,178 @@
+{
+  "base": "http://localhost:3213",
+  "startedAt": "2026-09-28T19:12:44.735Z",
+  "browser": "Playwright Chromium, new isolated context per viewport",
+  "states": [
+    {
+      "name": "desktop-empty",
+      "screenshot": "desktop-empty.png",
+      "dom": "desktop-empty.json"
+    },
+    {
+      "name": "desktop-imported",
+      "screenshot": "desktop-imported.png",
+      "dom": "desktop-imported.json"
+    },
+    {
+      "name": "desktop-result",
+      "screenshot": "desktop-result.png",
+      "dom": "desktop-result.json"
+    }
+  ],
+  "requests": [
+    {
+      "viewport": "desktop",
+      "url": "http://localhost:3213/",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "viewport": "desktop",
+      "url": "http://localhost:3213/_expo/static/css/global-ee2824bfe5e0dfde670f2b2b3636f997.css",
+      "method": "GET",
+      "type": "stylesheet"
+    },
+    {
+      "viewport": "desktop",
+      "url": "http://localhost:3213/_expo/static/css/preview-a1cf6af13c563d19213b9f25f6f9251d.css",
+      "method": "GET",
+      "type": "stylesheet"
+    },
+    {
+      "viewport": "desktop",
+      "url": "http://localhost:3213/_expo/static/js/web/index-5de477d3eea88c1ff3981dd6340825aa.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "viewport": "desktop",
+      "url": "http://localhost:3213/assets/assets/approved-8-mark-source-crop.8b708587521942c4118f8e6a3c3f84f8.png",
+      "method": "GET",
+      "type": "image"
+    },
+    {
+      "viewport": "desktop",
+      "url": "http://localhost:3213/assets/assets/approved-atepdf-wordmark-source-crop.e129a61b59d2f9c2fdcb1f1b2521e212.png",
+      "method": "GET",
+      "type": "image"
+    },
+    {
+      "viewport": "desktop",
+      "url": "http://localhost:3213/assets/assets/paper.1cb2ca1d4826879d6316a24bfbeecd07.png",
+      "method": "GET",
+      "type": "image"
+    },
+    {
+      "viewport": "desktop",
+      "url": "http://localhost:3213/engines/atepdf.worker.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "viewport": "desktop",
+      "url": "http://localhost:3213/_expo/static/js/web/pdf-6c360a0f82f065a844b8bf2609a9c02e.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "viewport": "desktop",
+      "url": "http://localhost:3213/engines/pdf.worker.min.mjs",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "viewport": "desktop",
+      "url": "http://localhost:3213/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "viewport": "desktop",
+      "url": "http://localhost:3213/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "viewport": "desktop",
+      "url": "http://localhost:3213/engines/atepdf.worker.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "viewport": "desktop",
+      "url": "http://localhost:3213/engines/pdf.worker.min.mjs",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "viewport": "desktop",
+      "url": "http://localhost:3213/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "viewport": "desktop",
+      "url": "http://localhost:3213/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "viewport": "desktop",
+      "url": "http://localhost:3213/api/planner/status",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "viewport": "desktop",
+      "url": "http://localhost:3213/engines/atepdf.worker.js",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "viewport": "desktop",
+      "url": "http://localhost:3213/engines/pdf.worker.min.mjs",
+      "method": "GET",
+      "type": "script"
+    },
+    {
+      "viewport": "desktop",
+      "url": "http://localhost:3213/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "viewport": "desktop",
+      "url": "http://localhost:3213/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "viewport": "desktop",
+      "url": "http://localhost:3213/api/planner/status",
+      "method": "GET",
+      "type": "fetch"
+    }
+  ],
+  "console": [],
+  "pageErrors": [],
+  "blocked": [],
+  "overlay": {
+    "preflight": {
+      "title": "[Human] atepdf critique",
+      "scriptTagPresent": true,
+      "scriptExecuted": true
+    },
+    "visibility": "Headless isolated browser; no user-visible browser presentation requested or claimed"
+  },
+  "helper": {
+    "started": false,
+    "error": "Error: Command failed: /usr/bin/sandbox-exec -p (version 1)(allow default)(deny file-write*)(allow file-write* (subpath \"/Users/shrey/Documents/ChatGPT/atepdf/.build/ux-20260929/assessment-b\")) /Users/shrey/.codex/plugins/cache/openai-curated-remote/impeccable/4.3.1/skills/impeccable/scripts/impeccable live-server --background\n/Users/shrey/.codex/plugins/cache/openai-curated-remote/impeccable/4.3.1/skills/impeccable/scripts/impeccable: line 45: /dev/null: Operation not permitted\n/Users/shrey/.codex/plugins/cache/openai-curated-remote/impeccable/4.3.1/skills/impeccable/scripts/impeccable: line 51: /dev/null: Operation not permitted\nTimed out waiting for live server to start.\n",
+    "stderr": "/Users/shrey/.codex/plugins/cache/openai-curated-remote/impeccable/4.3.1/skills/impeccable/scripts/impeccable: line 45: /dev/null: Operation not permitted\n/Users/shrey/.codex/plugins/cache/openai-curated-remote/impeccable/4.3.1/skills/impeccable/scripts/impeccable: line 51: /dev/null: Operation not permitted\nTimed out waiting for live server to start.\n"
+  },
+  "desktop": {
+    "status": 200,
+    "csp": "default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; font-src 'self'; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'"
+  },
+  "error": "TimeoutError: page.waitForEvent: Timeout 30000ms exceeded while waiting for event \"download\"\n=========================== logs ===========================\nwaiting for event \"download\"\n============================================================",
+  "finishedAt": "2026-09-28T19:13:17.348Z"
+}

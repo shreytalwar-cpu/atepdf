@@ -1,0 +1,12 @@
+{
+  "source": "8d71ac0 + UI refinement diff 5",
+  "url": "http://localhost:3213",
+  "scratch": "/private/tmp/atepdf-ux-tDVWpF",
+  "build": {
+    "site": "/private/tmp/atepdf-ux-tDVWpF/apps/universal/dist-web",
+    "indexSha256": "b7dd9337fc5a30f055ed74b0f66684e1c1341580697d677d2c5019a43904667a",
+    "indexMtimeMs": 1790624278323.872,
+    "gatewaySha256": "acdb4c34b50e0ca57d28d7cdf0398906faf375c3bfc4f18f4533a2ab274ae0a5"
+  },
+  "localOnly": true
+}

@@ -1,0 +1,18 @@
+{
+  "temporaryServer": {
+    "state": "stopped",
+    "id": "6f648559-1193-4d1d-9aaa-9e9b0ca1bb4d"
+  },
+  "owner": {
+    "state": "running",
+    "buildChanged": false,
+    "localOnly": false,
+    "planner": {
+      "connected": true,
+      "enabled": true,
+      "remaining": 18
+    }
+  },
+  "paidCallsMade": 0,
+  "ownerRestartApproval": "pending"
+}

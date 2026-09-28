@@ -1,0 +1,31 @@
+- img "atepdf"
+- button "Processed on your device":
+  - img
+  - text: Processed on your device
+- button "OpenAI connection":
+  - img
+- button "Start over":
+  - img
+- img
+- text: brief.pdf 3.1 kB · Original · 1
+- img
+- text: appendix.pdf 2.1 kB · Original · 2 I’ve added 2 PDFs. Your 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.
+- button "Copy":
+  - img
+- textbox "Tell atepdf what to do":
+  - /placeholder: Tell atepdf what to do…
+- button "Add files":
+  - img
+- button "Send message" [disabled]:
+  - img
+- button "Merge":
+  - img
+  - text: Merge
+- button "Compress":
+  - img
+  - text: Compress
+- button "Make searchable":
+  - img
+  - text: Make searchable
+- text: 2 originals in this chat
+- button "Choose PDF files"

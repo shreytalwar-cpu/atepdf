@@ -1,0 +1,4 @@
+- dialog "Processed on your device":
+  - heading "Processed on your device" [level=1]
+  - text: PDF files, previews and recognised text stay on this device. PDF operations run in local engines. When AI is enabled, chat requests and quick actions send your instruction and anonymous file references, page counts and sizes for planning. Filenames, passwords, paths, checksums and document contents are excluded. Your OpenAI key stays in the local server, outside the app. Save before closing. Chat and files stay in this session. Saving to a cloud folder or sharing through a chosen provider may transfer the saved file outside atepdf.
+  - button "Got it"

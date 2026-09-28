@@ -1,0 +1,85 @@
+{
+  "kind": "targeted candidate-9 live CSS diagnostic; after is not an exported build",
+  "css": ".aui-message-group [data-testid=current-result],.aui-message-group [data-testid=previous-result] {padding-block:12px;row-gap:8px}",
+  "before": {
+    "conversation": {
+      "x": 0,
+      "y": 60,
+      "width": 320,
+      "height": 280,
+      "bottom": 340
+    },
+    "heading": {
+      "x": 97,
+      "y": 54,
+      "width": 152,
+      "height": 48,
+      "bottom": 102
+    },
+    "save": {
+      "x": 41,
+      "y": 158,
+      "width": 110.4375,
+      "height": 44,
+      "bottom": 202
+    },
+    "card": {
+      "x": 24,
+      "y": 37,
+      "width": 272,
+      "height": 279,
+      "bottom": 316
+    },
+    "paddingTop": "16px",
+    "paddingBottom": "16px",
+    "rowGap": "12px",
+    "footer": {
+      "x": 0,
+      "y": 340,
+      "width": 320,
+      "height": 228,
+      "bottom": 568
+    }
+  },
+  "after": {
+    "conversation": {
+      "x": 0,
+      "y": 60,
+      "width": 320,
+      "height": 280,
+      "bottom": 340
+    },
+    "heading": {
+      "x": 97,
+      "y": 66,
+      "width": 152,
+      "height": 48,
+      "bottom": 114
+    },
+    "save": {
+      "x": 41,
+      "y": 166,
+      "width": 110.4375,
+      "height": 44,
+      "bottom": 210
+    },
+    "card": {
+      "x": 24,
+      "y": 53,
+      "width": 272,
+      "height": 263,
+      "bottom": 316
+    },
+    "paddingTop": "12px",
+    "paddingBottom": "12px",
+    "rowGap": "8px",
+    "footer": {
+      "x": 0,
+      "y": 340,
+      "width": 320,
+      "height": 228,
+      "bottom": 568
+    }
+  },
+  "browserClosed": true
+}

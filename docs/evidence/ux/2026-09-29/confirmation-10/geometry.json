@@ -1,0 +1,447 @@
+{
+  "time": "2026-09-28T20:30:10.624Z",
+  "url": "http://localhost:3213",
+  "htmlSha": "e9c07d03c77cab35ab9e9c3732a94aa7e07999cb5c8e4d5ff288deb9faf82c47",
+  "cssSha": "49f4478c047ecd33a77adc35d8217d2446ce7d978084e5e7b5b6037f56028f70",
+  "states": [
+    {
+      "name": "compact",
+      "state": "removal-result",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "rootFont": "16px",
+      "documentWidth": 320,
+      "conversation": {
+        "x": 0,
+        "y": 60,
+        "width": 320,
+        "height": 280,
+        "right": 320,
+        "bottom": 340
+      },
+      "welcome": null,
+      "heading": {
+        "x": 97,
+        "y": 66,
+        "width": 152,
+        "height": 48,
+        "right": 249,
+        "bottom": 114
+      },
+      "save": {
+        "x": 41,
+        "y": 166,
+        "width": 110.4375,
+        "height": 44,
+        "right": 151.4375,
+        "bottom": 210
+      },
+      "choose": null,
+      "chooseLabelFont": null,
+      "help": {
+        "x": 253.875,
+        "y": 516,
+        "width": 50.125,
+        "height": 44,
+        "right": 304,
+        "bottom": 560
+      },
+      "preview": null,
+      "paper": null,
+      "pageHost": null,
+      "facts": "2 pages · 2.3 kB",
+      "bodyText": "brief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nMerged PDF\n3 pages · 3.1 kB\nEarlier result\nSave PDF\nPreview\nRemove physical page 2 from the merged result.\nI removed page 2. Here’s the new copy.\nPDF with page 2 removed\n2 pages · 2.3 kB\nCurrent result\nSave PDF\nPreview\nUndo\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent: PDF with page 2 removed · 2 pages\nHelp"
+    },
+    {
+      "name": "compact",
+      "state": "fitted-preview",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "rootFont": "16px",
+      "documentWidth": 320,
+      "conversation": {
+        "x": 0,
+        "y": 60,
+        "width": 320,
+        "height": 280,
+        "right": 320,
+        "bottom": 340
+      },
+      "welcome": null,
+      "heading": {
+        "x": 97,
+        "y": -160,
+        "width": 152,
+        "height": 48,
+        "right": 249,
+        "bottom": -112
+      },
+      "save": {
+        "x": 41,
+        "y": -60,
+        "width": 110.4375,
+        "height": 44,
+        "right": 151.4375,
+        "bottom": -16
+      },
+      "choose": null,
+      "chooseLabelFont": null,
+      "help": {
+        "x": 253.875,
+        "y": 516,
+        "width": 50.125,
+        "height": 44,
+        "right": 304,
+        "bottom": 560
+      },
+      "preview": {
+        "x": 41,
+        "y": 60,
+        "width": 238,
+        "height": 272,
+        "right": 279,
+        "bottom": 332
+      },
+      "paper": {
+        "x": 124.5,
+        "y": 219,
+        "width": 71,
+        "height": 100,
+        "right": 195.5,
+        "bottom": 319
+      },
+      "pageHost": {
+        "x": 42,
+        "y": 207,
+        "width": 236,
+        "height": 124,
+        "right": 278,
+        "bottom": 331
+      },
+      "facts": "2 pages · 2.3 kB",
+      "bodyText": "brief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nMerged PDF\n3 pages · 3.1 kB\nEarlier result\nSave PDF\nPreview\nRemove physical page 2 from the merged result.\nI removed page 2. Here’s the new copy.\nPDF with page 2 removed\n2 pages · 2.3 kB\nCurrent result\nSave PDF\nHide preview\nUndo\nRead-only preview\nFit\nPage 1 of 2\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent: PDF with page 2 removed · 2 pages\nHelp"
+    },
+    {
+      "name": "large-text",
+      "state": "initial-choose",
+      "viewport": {
+        "width": 720,
+        "height": 500
+      },
+      "rootFont": "32px",
+      "documentWidth": 720,
+      "conversation": null,
+      "welcome": {
+        "x": 0,
+        "y": 60,
+        "width": 720,
+        "height": 200,
+        "right": 720,
+        "bottom": 260
+      },
+      "heading": null,
+      "save": null,
+      "choose": {
+        "x": 247.296875,
+        "y": 123,
+        "width": 225.390625,
+        "height": 56,
+        "right": 472.6875,
+        "bottom": 179
+      },
+      "chooseLabelFont": "28px",
+      "help": {
+        "x": 463.890625,
+        "y": 436,
+        "width": 88,
+        "height": 48,
+        "right": 551.890625,
+        "bottom": 484
+      },
+      "preview": null,
+      "paper": null,
+      "pageHost": null,
+      "bodyText": "Processed on your device\nDrop files here\nChoose files\nThen tell me what you’d like to do.\nTry the two sample PDFs\nMerge\nCompress\nMake searchable\nYour files stay on this device\nHelp"
+    }
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/css/global-418e89804c5c99244db2be82f33419f6.css",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/css/preview-4a592c39668f775437665576652be491.css",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/css/workspace-9ca8942114a70307784c156bddc23a49.css",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/js/web/index-630012e833bbef46f5441d9899bb7fda.js",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/assets/assets/approved-8-mark-source-crop.8b708587521942c4118f8e6a3c3f84f8.png",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/assets/assets/approved-atepdf-wordmark-source-crop.e129a61b59d2f9c2fdcb1f1b2521e212.png",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/fixtures/brief.pdf",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/fixtures/appendix.pdf",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/atepdf.worker.js",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/js/web/pdf-50f2ec8e34576162255929524f6e72b4.js",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/pdf.worker.min.mjs",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/atepdf.worker.js",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/pdf.worker.min.mjs",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/api/planner/status",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/atepdf.worker.js",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/pdf.worker.min.mjs",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/api/planner/status",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/pdf.worker.min.mjs",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/pdf.worker.min.mjs",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/api/planner/status",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/atepdf.worker.js",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/pdf.worker.min.mjs",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/api/planner/status",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/pdf.worker.min.mjs",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/pdf.worker.min.mjs",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/css/global-418e89804c5c99244db2be82f33419f6.css",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/css/preview-4a592c39668f775437665576652be491.css",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/css/workspace-9ca8942114a70307784c156bddc23a49.css",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/js/web/index-630012e833bbef46f5441d9899bb7fda.js",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/assets/assets/approved-8-mark-source-crop.8b708587521942c4118f8e6a3c3f84f8.png",
+      "allowed": true
+    },
+    {
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/assets/assets/approved-atepdf-wordmark-source-crop.e129a61b59d2f9c2fdcb1f1b2521e212.png",
+      "allowed": true
+    }
+  ],
+  "errors": [],
+  "failures": [],
+  "browserVersion": "154.0.8037.58",
+  "browserClosed": true
+}

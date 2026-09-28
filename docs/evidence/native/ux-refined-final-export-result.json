@@ -1,0 +1,44 @@
+{
+  "recordedAt": "2026-09-28T19:45:25.661027+00:00",
+  "candidate": "UI candidate5 frozen production snapshot",
+  "sourceSnapshot": "docs/evidence/native/ux-refined-final-source.json",
+  "buildProof": "docs/evidence/native/ux-refined-final-build-proof.json",
+  "testSource": "tests/native/ios/AtepdfExportUITests.swift",
+  "testSourceSha256": "2da4f82c5352ba1dc76a25f33f811a867b4f6571916d91aa16311154367abf88",
+  "method": "testSaveToLocalFilesAndReopenAfterRestart",
+  "result": "1/1 passed; TEST EXECUTE SUCCEEDED; exit0",
+  "testSeconds": 82.201,
+  "runnerSeconds": 85.113,
+  "testSummary": "docs/evidence/native/ux-refined-final-export-summary.json",
+  "testLog": "docs/evidence/native/ux-refined-final-export-test.log",
+  "resultBundle": ".build/ux-refined-final-export.xcresult",
+  "device": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+  "parallelTesting": false,
+  "installedAfterExportSha256": {
+    "atepdf": "873e98d4e51d8a5adee1ae22662f9de34f8e8a9401cd4855df4beb8502e99265",
+    "main.jsbundle": "1b921a5852449ecfcbfa6bc9b793c882721d563f209803810eba7ef09a856c84",
+    "Info.plist": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c"
+  },
+  "installedBytesMatchCapturedBuild": true,
+  "localDestination": "On My iPhone/atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89",
+  "filename": "0a61a723-b1fe-4e68-95ce-79e5b4b4bf89.pdf",
+  "actualProviderPath": "/Users/shrey/Library/Developer/CoreSimulator/Devices/D68C4547-67D3-4960-AAB9-D85FD786D6FC/data/Containers/Shared/AppGroup/C444E40E-2C13-4DF8-8E32-5984E1BC7336/File Provider Storage/atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89/0a61a723-b1fe-4e68-95ce-79e5b4b4bf89.pdf",
+  "matchingCopiesInDeviceContainers": 1,
+  "bytes": 3099,
+  "sha256": "74985ce760d67041a56c014bb39fdeb5670877a474b4690e13147825efeb3008",
+  "appRestartedBeforeReopen": true,
+  "viewer": "com.apple.Preview",
+  "visualInspection": "Viewed actual saved-copy screenshot: exact UUID title prefix with full exact title in AX hierarchy,1of3 badge, fully rendered Project brief A1 and Working notes A2 below. Source selected from exact fresh local Files folder after atepdf restart.",
+  "screenshots": [
+    "ux-refined-final-export-new-folder-at-local-root.png",
+    "ux-refined-final-export-local-destination-before-save.png",
+    "ux-refined-final-export-after-atepdf-restart.png",
+    "ux-refined-final-export-independent-reopen.png"
+  ],
+  "preservedOutput": true,
+  "independentPDFjs": "Passed: docs/evidence/native/ux-refined-final-export-independent-reader.json; exact saved provider bytes,3 pages A1/A2/B1.",
+  "limits": [
+    "iPhone Simulator only; no physical-device or distribution claim",
+    "No new runtime app changes, paidcalls, network PDFprocessing, old-source access or unrelated Files changes"
+  ]
+}

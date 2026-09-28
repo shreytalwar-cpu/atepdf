@@ -1,0 +1,8 @@
+{
+  "recordedAt": "2026-09-28T19:49:17.884Z",
+  "compiler": "installed uniwind1.12.0 compileTailwind + compileNativeCSS",
+  "change": "@media web -> @media screen in apps/universal/global.css",
+  "before": "8d44b9a3bd2899d780f44f45a78c4203de1790a5dfc9868c7b0c8219268da07d",
+  "after": "8d44b9a3bd2899d780f44f45a78c4203de1790a5dfc9868c7b0c8219268da07d",
+  "identical": true
+}

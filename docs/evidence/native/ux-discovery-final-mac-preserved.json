@@ -1,0 +1,16 @@
+{
+  "recordedAt": "2026-09-28T20:38:21.936964+00:00",
+  "sourceCommit": "7935daa9ec3af260b65650a97ef719fe1001db42",
+  "preservedApp": "/Users/shrey/Documents/ChatGPT/atepdf/.build/internal-beta-7935daa/atepdf.app",
+  "originalApp": "/private/tmp/atepdf-mac-q1y4ostq/atepdf.app",
+  "firstCopyVerification": "failed: resource fork, Finder information, or similar detritus not allowed",
+  "repair": "Removed extended metadata only from new generated copy; original untouched; no resigning",
+  "strictSignatureAfterCopy": "passed",
+  "verificationError": "",
+  "launched": false,
+  "installed": false,
+  "scope": "Local internal-beta artifact; not notarized or distribution-ready.",
+  "binarySha256": "155e791ec6b3275fc164b3a4def8e34cf07e3b4247c2c61cbed0e028efe3645f",
+  "bundleSha256": "ed7b014441749538693e77f6a1779c7a160563e55358d475bad84892b2bd9fd9",
+  "matchesVerifiedBuild": true
+}

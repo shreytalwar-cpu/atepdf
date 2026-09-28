@@ -1,0 +1,32 @@
+[
+  {
+    "viewport": "desktop",
+    "pageCount": 3,
+    "expectedOrder": [
+      "A1",
+      "A2",
+      "B1"
+    ],
+    "orderVerified": true,
+    "syntheticPageText": [
+      "ATTENLO PDF / SYNTHETIC TEST INPUT  Project brief  Page marker: A1  This document has two digitally generated text pages. Merge this file before appendix.pdf. Expected merged order: A1, A2, B1. The next instruction removes physical page 2. After removal, the result should contain A1 and B1. Undo must restore the previous three-page result.  LOCAL NETWORK TEST CANARY:  ATTENLO_LOCAL_ONLY_CANARY_A1_7C82  Synthetic content. No customer data. Do not upload document contents.",
+      "ATTENLO PDF / SYNTHETIC TEST INPUT  Working notes  Page marker: A2  This is the second page of the brief. This page is intentionally removed in the follow-up test. Do not delete or overwrite either original input file. A successful output must reopen in an independent reader. File sizes must come from actual bytes, not generated prose.  LOCAL NETWORK TEST CANARY:  ATTENLO_LOCAL_ONLY_CANARY_A2_9B14  Synthetic content. No customer data. Do not upload document contents.",
+      "ATTENLO PDF / SYNTHETIC TEST INPUT  Appendix  Page marker: B1  This is the one-page appendix. It follows both pages of brief.pdf in the merge test. It remains after removing physical page 2. The sample can be used without a customer document. This file is small and is not a compression benchmark.  LOCAL NETWORK TEST CANARY:  ATTENLO_LOCAL_ONLY_CANARY_B1_3A65  Synthetic content. No customer data. Do not upload document contents."
+    ]
+  },
+  {
+    "viewport": "phone",
+    "pageCount": 3,
+    "expectedOrder": [
+      "A1",
+      "A2",
+      "B1"
+    ],
+    "orderVerified": true,
+    "syntheticPageText": [
+      "ATTENLO PDF / SYNTHETIC TEST INPUT  Project brief  Page marker: A1  This document has two digitally generated text pages. Merge this file before appendix.pdf. Expected merged order: A1, A2, B1. The next instruction removes physical page 2. After removal, the result should contain A1 and B1. Undo must restore the previous three-page result.  LOCAL NETWORK TEST CANARY:  ATTENLO_LOCAL_ONLY_CANARY_A1_7C82  Synthetic content. No customer data. Do not upload document contents.",
+      "ATTENLO PDF / SYNTHETIC TEST INPUT  Working notes  Page marker: A2  This is the second page of the brief. This page is intentionally removed in the follow-up test. Do not delete or overwrite either original input file. A successful output must reopen in an independent reader. File sizes must come from actual bytes, not generated prose.  LOCAL NETWORK TEST CANARY:  ATTENLO_LOCAL_ONLY_CANARY_A2_9B14  Synthetic content. No customer data. Do not upload document contents.",
+      "ATTENLO PDF / SYNTHETIC TEST INPUT  Appendix  Page marker: B1  This is the one-page appendix. It follows both pages of brief.pdf in the merge test. It remains after removing physical page 2. The sample can be used without a customer document. This file is small and is not a compression benchmark.  LOCAL NETWORK TEST CANARY:  ATTENLO_LOCAL_ONLY_CANARY_B1_3A65  Synthetic content. No customer data. Do not upload document contents."
+    ]
+  }
+]

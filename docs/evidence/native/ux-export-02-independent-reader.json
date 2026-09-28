@@ -1,0 +1,18 @@
+{
+  "recordedAt": "2026-09-28T19:19:03.952Z",
+  "input": "/Users/shrey/Library/Developer/CoreSimulator/Devices/D68C4547-67D3-4960-AAB9-D85FD786D6FC/data/Containers/Shared/AppGroup/C444E40E-2C13-4DF8-8E32-5984E1BC7336/File Provider Storage/atepdf-beta-8169e178-718f-4acb-80c8-725a73b91632/8169e178-718f-4acb-80c8-725a73b91632.pdf",
+  "kind": "Exact Save to Files provider copy, read after atepdf restart and system Preview reopen",
+  "reader": "PDF.js 6.3.289, independent reader of the shared pdf-lib output; native preview used PDFKit",
+  "sizeBytes": 3099,
+  "sha256": "9e8985b73841adbcaa7c6ded39cebe18d08aa85e01b700a3f2bf707e07eb0095",
+  "pageCount": 3,
+  "markers": [
+    "A1",
+    "A2",
+    "B1"
+  ],
+  "passed": true,
+  "scope": "iPhone simulator synthetic output; not a physical-device or distribution claim",
+  "cleanup": "loading task destroyed successfully",
+  "harnessNote": "First inspection read successfully but used an obsolete reader cleanup method; corrected to loadingTask.destroy and reran this exact saved copy."
+}

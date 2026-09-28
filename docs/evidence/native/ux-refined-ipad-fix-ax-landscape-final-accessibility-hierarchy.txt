@@ -1,0 +1,229 @@
+Attributes: Application, 0x1134943c0, pid: 39640, label: 'atepdf'
+Element subtree:
+ →Application, 0x1134943c0, pid: 39640, label: 'atepdf'
+    Window (Main), 0x113494dc0, {{0.0, 0.0}, {834.0, 1210.0}}
+      Other, 0x113496940, {{0.0, 0.0}, {834.0, 1210.0}}
+        Other, 0x113496440, {{0.0, 0.0}, {834.0, 1210.0}}
+          Other, 0x113496580, {{0.0, 0.0}, {834.0, 1210.0}}
+            Other, 0x1134966c0, {{0.0, 0.0}, {834.0, 1210.0}}
+              Other, 0x113496a80, {{0.0, 0.0}, {834.0, 1210.0}}
+                Other, 0x113496bc0, {{0.0, 0.0}, {834.0, 1210.0}}
+                  Other, 0x113494000, {{0.0, 0.0}, {834.0, 1210.0}}
+                    Other, 0x1134948c0, {{32.0, 51.5}, {28.0, 37.0}}
+                      Image, 0x113496800, {{32.0, 51.5}, {28.0, 37.0}}, identifier: 'assets/assets/approved-8-mark-source-crop.png'
+                    Other, 0x113494640, {{68.0, 55.0}, {90.0, 30.0}}
+                      Image, 0x113495040, {{68.0, 55.0}, {90.0, 30.0}}, identifier: 'assets/assets/approved-atepdf-wordmark-source-crop.png', label: 'atepdf'
+                    Button, 0x113497200, {{376.0, 48.0}, {330.0, 44.0}}, label: 'Processed on your device'
+                    Button, 0x113495680, {{710.0, 48.0}, {44.0, 44.0}}, label: 'AI connection'
+                    Button, 0x113495180, {{758.0, 48.0}, {44.0, 44.0}}, label: 'Start over'
+                    Other, 0x1134957c0, {{0.0, 108.0}, {834.0, 1102.0}}
+                    Other, 0x113494140, {{33.0, 108.0}, {768.0, 620.5}}, identifier: 'conversation'
+                      ScrollView, 0x113495900, {{33.0, 108.0}, {768.0, 620.5}}
+                        Other, 0x113494780, {{33.0, -864.0}, {768.0, 1592.5}}
+                          Other, 0x113494500, {{33.0, -864.0}, {768.0, 1592.5}}
+                            Other, 0x113497c00, {{49.0, -840.0}, {736.0, 306.5}}
+                              Other, 0x113497ac0, {{49.0, -840.0}, {736.0, 306.5}}, identifier: 'user-message'
+                              Other, 0x113494280, {{510.0, -840.0}, {267.0, 107.5}}
+                              StaticText, 0x113496d00, {{562.0, -827.0}, {198.0, 43.0}}, label: 'brief.pdf'
+                                StaticText, 0x113496e40, {{562.0, -827.0}, {198.0, 43.0}}, label: 'brief.pdf'
+                              Other, 0x113496f80, {{527.0, -797.5}, {23.0, 23.0}}
+                                Other, 0x1134970c0, {{529.9, -796.5}, {17.3, 21.1}}
+                                  Other, 0x113497340, {{529.9, -796.5}, {17.3, 21.1}}
+                                  Other, 0x113495540, {{533.7, -789.8}, {3.8, 1.9}}
+                                  Other, 0x113495cc0, {{533.7, -786.0}, {9.6, 1.9}}
+                                  Other, 0x1134975c0, {{539.5, -796.5}, {7.7, 7.7}}
+                                  Other, 0x113496300, {{533.7, -782.2}, {9.6, 1.9}}
+                              StaticText, 0x113494a00, {{562.0, -780.0}, {198.0, 34.5}}, label: '3.1 kB · Original · 1'
+                                StaticText, 0x113494b40, {{562.0, -780.0}, {198.0, 34.5}}, label: '3.1 kB · Original · 1'
+                              Other, 0x113495a40, {{507.0, -724.5}, {270.0, 107.5}}
+                              StaticText, 0x113495b80, {{559.0, -711.5}, {201.0, 43.0}}, label: 'appendix.pdf'
+                                StaticText, 0x113495e00, {{559.0, -711.5}, {201.0, 43.0}}, label: 'appendix.pdf'
+                              Other, 0x113495f40, {{524.0, -682.0}, {23.0, 23.0}}
+                                Other, 0x113494c80, {{526.9, -681.0}, {17.3, 21.1}}
+                                  Other, 0x113496080, {{526.9, -681.0}, {17.3, 21.1}}
+                                  Other, 0x1134961c0, {{530.7, -674.3}, {3.8, 1.9}}
+                                  Other, 0x113497980, {{530.7, -670.5}, {9.6, 1.9}}
+                                  Other, 0x1134952c0, {{536.5, -681.0}, {7.7, 7.7}}
+                                  Other, 0x113495400, {{530.7, -666.7}, {9.6, 1.9}}
+                              StaticText, 0x113497480, {{559.0, -664.5}, {201.0, 34.5}}, label: '2.1 kB · Original · 2'
+                                StaticText, 0x113497700, {{559.0, -664.5}, {201.0, 34.5}}, label: '2.1 kB · Original · 2'
+                              Other, 0x113497840, {{473.0, -609.0}, {304.0, 67.5}}
+                              StaticText, 0x113497d40, {{489.0, -601.0}, {272.0, 51.5}}, label: 'I’ve added 2 PDFs.'
+                                StaticText, 0x113497e80, {{489.0, -601.0}, {272.0, 51.5}}, label: 'I’ve added 2 PDFs.'
+                            Other, 0x106e1b700, {{49.0, -509.5}, {736.0, 204.5}}
+                              Other, 0x106e19540, {{49.0, -509.5}, {736.0, 204.5}}, identifier: 'assistant-message'
+                              StaticText, 0x106e1b0c0, {{57.0, -509.5}, {720.0, 154.5}}, label: 'Your 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.'
+                                StaticText, 0x106e1bd40, {{57.0, -509.5}, {720.0, 154.5}}, label: 'Your 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.'
+                              Button, 0x106e1bac0, {{53.0, -349.0}, {44.0, 44.0}}, label: 'Copy'
+                            Other, 0x106e19400, {{49.0, -281.0}, {736.0, 75.5}}
+                              Other, 0x106e1b480, {{49.0, -281.0}, {736.0, 75.5}}, identifier: 'user-message'
+                              Other, 0x106e1bc00, {{505.0, -281.0}, {272.0, 67.5}}
+                              StaticText, 0x109c7d7c0, {{521.0, -273.0}, {240.0, 51.5}}, label: 'Merge my PDFs.'
+                                StaticText, 0x109c7d680, {{521.0, -273.0}, {240.0, 51.5}}, label: 'Merge my PDFs.'
+                            Other, 0x109c7d540, {{49.0, -181.5}, {736.0, 371.0}}
+                              Other, 0x109c7ef80, {{49.0, -181.5}, {736.0, 371.0}}, identifier: 'assistant-message'
+                              StaticText, 0x109c7ebc0, {{57.0, -181.5}, {720.0, 103.0}}, label: 'I merged your PDFs in the order added. Here’s your PDF.'
+                                StaticText, 0x109c7fd40, {{57.0, -181.5}, {720.0, 103.0}}, label: 'I merged your PDFs in the order added. Here’s your PDF.'
+                              Other, 0x109c7fe80, {{57.0, -66.5}, {720.0, 256.0}}, identifier: 'previous-result'
+                              StaticText, 0x109c7fc00, {{134.0, -45.5}, {592.0, 51.5}}, label: 'Merged PDF'
+                                StaticText, 0x109c7c8c0, {{134.0, -45.5}, {592.0, 51.5}}, label: 'Merged PDF'
+                              Other, 0x109c7f340, {{78.0, 1.0}, {44.0, 44.0}}
+                              Other, 0x109c7f700, {{88.5, 11.5}, {23.0, 23.0}}
+                                Other, 0x109c7f980, {{91.4, 12.5}, {17.3, 21.1}}
+                                  Other, 0x109c7e940, {{91.4, 12.5}, {17.3, 21.1}}
+                                  Other, 0x109c7dcc0, {{95.2, 19.2}, {3.8, 1.9}}
+                                  Other, 0x109c7e080, {{95.2, 23.0}, {9.6, 1.9}}
+                                  Other, 0x109c7f5c0, {{101.0, 12.5}, {7.7, 7.7}}
+                                  Other, 0x109c7f480, {{95.2, 26.8}, {9.6, 1.9}}
+                              StaticText, 0x109c7e580, {{134.0, 10.0}, {592.0, 43.0}}, label: '3 pages · 3.1 kB'
+                                StaticText, 0x109c7df40, {{134.0, 10.0}, {592.0, 43.0}}, label: '3 pages · 3.1 kB'
+                              Other, 0x109c7f0c0, {{738.0, 14.0}, {18.0, 18.0}}, label: 'Validated'
+                                Other, 0x109c7fac0, {{740.2, 17.8}, {13.5, 9.8}}
+                                  Other, 0x109c7e440, {{740.2, 17.8}, {13.5, 9.8}}, label: 'Validated'
+                              StaticText, 0x109c7e800, {{134.0, 57.0}, {592.0, 34.5}}, label: 'Earlier result'
+                                StaticText, 0x109c7cdc0, {{134.0, 57.0}, {592.0, 34.5}}, label: 'Earlier result'
+                              Button, 0x109c7d040, {{78.0, 107.5}, {178.0, 61.0}}, label: 'Save PDF'
+                              Button, 0x109c7e6c0, {{264.0, 107.5}, {155.0, 61.0}}, label: 'Preview'
+                            Other, 0x109c7d2c0, {{49.0, 213.5}, {736.0, 75.5}}
+                              Other, 0x109c7d400, {{49.0, 213.5}, {736.0, 75.5}}, identifier: 'user-message'
+                              Other, 0x109c7e1c0, {{528.0, 213.5}, {249.0, 67.5}}
+                              StaticText, 0x109c7f840, {{544.0, 221.5}, {217.0, 51.5}}, label: 'remove page 2'
+                                StaticText, 0x109c7de00, {{544.0, 221.5}, {217.0, 51.5}}, label: 'remove page 2'
+                            Other, 0x109c7ee40, {{49.0, 313.0}, {736.0, 391.5}}
+                              Other, 0x109c7ea80, {{49.0, 313.0}, {736.0, 391.5}}, identifier: 'assistant-message'
+                              StaticText, 0x109c7ed00, {{57.0, 313.0}, {720.0, 51.5}}, label: 'I removed page 2. Here’s the new copy.'
+                                StaticText, 0x109c7db80, {{57.0, 313.0}, {720.0, 51.5}}, label: 'I removed page 2. Here’s the new copy.'
+                              Other, 0x1138ec000, {{57.0, 376.5}, {720.0, 328.0}}, identifier: 'current-result'
+                              StaticText, 0x1138ec140, {{134.0, 397.5}, {592.0, 51.5}}, label: 'PDF with page 2 removed'
+                                StaticText, 0x1138ec280, {{134.0, 397.5}, {592.0, 51.5}}, label: 'PDF with page 2 removed'
+                              Other, 0x1138ec3c0, {{78.0, 444.0}, {44.0, 44.0}}
+                              Other, 0x1138ec500, {{88.5, 454.5}, {23.0, 23.0}}
+                                Other, 0x1138ec640, {{91.4, 455.5}, {17.3, 21.1}}
+                                  Other, 0x1138ec780, {{91.4, 455.5}, {17.3, 21.1}}
+                                  Other, 0x1138ec8c0, {{95.2, 462.2}, {3.8, 1.9}}
+                                  Other, 0x1138eca00, {{95.2, 466.0}, {9.6, 1.9}}
+                                  Other, 0x1138ecb40, {{101.0, 455.5}, {7.7, 7.7}}
+                                  Other, 0x1138ecc80, {{95.2, 469.8}, {9.6, 1.9}}
+                              StaticText, 0x1138ecdc0, {{134.0, 453.0}, {592.0, 43.0}}, identifier: 'result-facts', label: '2 pages · 2.3 kB'
+                                StaticText, 0x1138ecf00, {{134.0, 453.0}, {592.0, 43.0}}, label: '2 pages · 2.3 kB'
+                              Other, 0x1138ed040, {{738.0, 457.0}, {18.0, 18.0}}, label: 'Validated'
+                                Other, 0x1138ed180, {{740.2, 460.8}, {13.5, 9.8}}
+                                  Other, 0x1138ed2c0, {{740.2, 460.8}, {13.5, 9.8}}, label: 'Validated'
+                              StaticText, 0x1138ed400, {{134.0, 500.0}, {592.0, 34.5}}, label: 'Current result'
+                                StaticText, 0x1138ed540, {{134.0, 500.0}, {592.0, 34.5}}, label: 'Current result'
+                              Button, 0x1138ed680, {{78.0, 551.5}, {176.0, 59.0}}, label: 'Save PDF'
+                              Button, 0x1138ed7c0, {{262.0, 550.5}, {155.0, 61.0}}, label: 'Preview'
+                              Button, 0x1138ed900, {{425.0, 551.5}, {120.5, 59.0}}, label: 'Undo'
+                              StaticText, 0x1138eda40, {{78.0, 627.5}, {678.0, 56.0}}, label: 'Tell me what you’d like to do next.'
+                                StaticText, 0x1138edb80, {{78.0, 627.5}, {678.0, 56.0}}, label: 'Tell me what you’d like to do next.'
+                        Other, 0x1138edcc0, {{33.0, 695.5}, {768.0, 30.0}}, label: 'Horizontal scroll bar, 1 page', value: 0%
+                          Other, 0x1138ede00, {{36.0, 722.5}, {759.0, 3.0}}
+                        Other, 0x1138edf40, {{33.0, 695.5}, {768.0, 30.0}}, label: 'Horizontal scroll bar, 1 page', value: 0%
+                          Other, 0x1138ee080, {{36.0, 722.5}, {759.0, 3.0}}
+                    Other, 0x1138ee1c0, {{49.0, 728.5}, {736.0, 133.5}}
+                    Other, 0x1138ee300, {{58.0, 737.5}, {718.0, 67.5}}
+                      TextView, 0x1138ee440, {{58.0, 737.5}, {718.0, 67.5}}, label: 'Tell atepdf what to do Tell atepdf what to do…', Keyboard Focused, Focused
+                        Other, 0x1138ee580, {{58.0, 737.5}, {0.0, 0.0}}, identifier: '_UITextSelectionRangeAdjustmentContainerView'
+                          Other, 0x1138ee6c0, {{58.0, 737.5}, {0.0, 0.0}}, identifier: 'com.apple.text.grabber.leading'
+                            Other, 0x1138ee800, {{50.8, 724.0}, {16.5, 16.5}}
+                            Other, 0x1138ee940, {{58.0, 737.5}, {2.0, 0.0}}
+                          Other, 0x1138eea80, {{58.0, 737.5}, {0.0, 0.0}}, identifier: 'com.apple.text.grabber.leading'
+                            Other, 0x1138eebc0, {{50.8, 724.0}, {16.5, 16.5}}
+                            Other, 0x1138eed00, {{58.0, 737.5}, {2.0, 0.0}}
+                        Other, 0x1138eee40, {{743.0, 737.5}, {30.0, 67.5}}, label: 'Vertical scroll bar, 2 pages', value: 0%
+                          Other, 0x1138eef80, {{770.0, 740.5}, {3.0, 61.0}}
+                        Other, 0x1138ef0c0, {{58.0, 772.0}, {718.0, 30.0}}, label: 'Horizontal scroll bar, 1 page', value: 0%
+                          Other, 0x1138ef200, {{61.0, 799.0}, {712.0, 3.0}}
+                    Button, 0x1138ef340, {{58.0, 809.0}, {44.0, 44.0}}, label: 'Add files'
+                    Button, 0x1138ef480, {{732.0, 809.0}, {44.0, 44.0}}, label: 'Send message', Disabled
+    Window, 0x1138ef5c0, {{0.0, 0.0}, {834.0, 1210.0}}
+      Other, 0x1138ef700, {{0.0, 0.0}, {834.0, 1210.0}}
+        Other, 0x1138ef840, {{0.0, 0.0}, {834.0, 1210.0}}
+        Other, 0x1138ef980, {{0.0, 870.0}, {834.0, 340.0}}
+          Other, 0x1138efac0, {{0.0, 870.0}, {834.0, 340.0}}, identifier: 'inputView'
+    Window, 0x1138efc00, {{0.0, 0.0}, {834.0, 1210.0}}
+      Other, 0x1138efd40, {{0.0, 0.0}, {834.0, 1210.0}}
+        Other, 0x1138efe80, {{0.0, 870.0}, {834.0, 340.0}}
+          Other, 0x113900000, {{0.0, 870.0}, {834.0, 55.0}}, identifier: 'SystemInputAssistantView'
+            Other, 0x113900140, {{0.0, 870.0}, {834.0, 55.0}}
+              Other, 0x113900280, {{0.0, 870.0}, {185.0, 49.0}}, identifier: 'LeftButtonBar'
+                Other, 0x1139003c0, {{28.0, 870.0}, {157.0, 49.0}}
+                  Other, 0x113900500, {{28.0, 871.0}, {114.0, 49.0}}
+                    Other, 0x113900640, {{28.0, 871.0}, {22.0, 49.0}}
+                      Button, 0x113900780, {{28.0, 871.0}, {22.0, 49.0}}, identifier: 'assistantUndo', label: 'undo', Disabled
+                    Other, 0x1139008c0, {{74.0, 871.0}, {22.0, 49.0}}
+                      Button, 0x113900a00, {{74.0, 871.0}, {22.0, 49.0}}, identifier: 'assistantRedo', label: 'Redo', Disabled
+                    Other, 0x113900b40, {{120.0, 871.0}, {22.0, 49.0}}
+                      Button, 0x113900c80, {{120.0, 871.0}, {22.0, 49.0}}, identifier: 'assistantPaste:forEvent:', label: 'Paste', Disabled
+              Other, 0x113900dc0, {{185.0, 876.0}, {464.0, 49.0}}, identifier: 'CenterPageView'
+                Other, 0x113900f00, {{185.0, 276.0}, {464.0, 1249.0}}
+                  ScrollView, 0x113901040, {{185.0, 876.0}, {464.0, 49.0}}
+                Other, 0x113901180, {{185.0, 876.0}, {464.0, 49.0}}
+                  Other, 0x1139012c0, {{185.0, 876.0}, {464.0, 49.0}}
+                    Button, 0x113901400, {{185.0, 876.0}, {44.0, 49.0}}, Disabled
+                      StaticText, 0x113901540, {{185.0, 876.0}, {0.0, 0.0}}
+                    Other, 0x113901680, {{229.0, 876.0}, {372.0, 49.0}}
+                      Other, 0x1139017c0, {{229.0, 876.0}, {372.0, 49.0}}, label: 'Typing Predictions'
+                        Other, 0x113901900, {{229.0, 876.0}, {372.0, 49.0}}
+                          Other, 0x113901a40, {{229.0, 876.0}, {372.0, 49.0}}
+                            Button, 0x113901b80, {{229.0, 876.0}, {124.0, 49.0}}, label: 'Main'
+                            Button, 0x113901cc0, {{353.0, 876.0}, {124.0, 49.0}}, label: 'Aap'
+                            Button, 0x113901e00, {{477.0, 876.0}, {124.0, 49.0}}, label: 'Kya'
+                    Button, 0x113901f40, {{601.0, 876.0}, {48.0, 49.0}}
+                      StaticText, 0x113902080, {{601.0, 876.0}, {0.0, 0.0}}
+              Other, 0x1139021c0, {{649.0, 870.0}, {185.0, 49.0}}, identifier: 'RightButtonBar'
+                Other, 0x113902300, {{649.0, 870.0}, {157.0, 49.0}}
+          Other, 0x113902440, {{0.0, 870.0}, {834.0, 341.0}}
+            Other, 0x113902580, {{0.0, 870.0}, {834.0, 341.0}}
+              Other, 0x1139026c0, {{0.0, 870.0}, {834.0, 341.0}}
+          Other, 0x113902800, {{0.0, 925.0}, {834.0, 282.0}}
+            Keyboard, 0x113902940, {{0.0, 925.0}, {834.0, 282.0}}
+              Other, 0x113902a80, {{0.0, 925.0}, {834.0, 282.0}}
+                Other, 0x113902bc0, {{0.0, 925.0}, {834.0, 282.0}}, identifier: 'UIKeyboardLayoutStar Preview'
+                  Button, 0x113902d00, {{6.0, 932.0}, {82.5, 64.5}}, identifier: 'tab', label: 'Tab'
+                  Key, 0x113902e40, {{88.5, 932.0}, {66.0, 64.5}}, label: 'Q'
+                  Key, 0x113902f80, {{154.5, 932.0}, {66.5, 64.5}}, label: 'W'
+                  Key, 0x1139030c0, {{221.0, 932.0}, {66.0, 64.5}}, label: 'E'
+                  Key, 0x113903200, {{287.0, 932.0}, {66.0, 64.5}}, label: 'R'
+                  Key, 0x113903340, {{353.0, 932.0}, {66.0, 64.5}}, label: 'T'
+                  Key, 0x113903480, {{419.0, 932.0}, {66.0, 64.5}}, label: 'Y'
+                  Key, 0x1139035c0, {{485.0, 932.0}, {66.0, 64.5}}, label: 'U'
+                  Key, 0x113903700, {{551.0, 932.0}, {66.0, 64.5}}, label: 'I'
+                  Key, 0x113903840, {{617.0, 932.0}, {66.5, 64.5}}, label: 'O'
+                  Key, 0x113903980, {{683.5, 932.0}, {66.0, 64.5}}, label: 'P'
+                  Key, 0x113903ac0, {{749.5, 932.0}, {82.5, 64.5}}, identifier: 'delete', label: 'delete'
+                  Key, 0x113903c00, {{6.0, 996.5}, {102.5, 64.5}}, label: 'Switch from Roman keys'
+                  Key, 0x113903d40, {{108.5, 996.5}, {66.0, 64.5}}, label: 'A'
+                  Key, 0x113903e80, {{174.5, 996.5}, {66.0, 64.5}}, label: 'S'
+                  Key, 0x113904000, {{240.5, 996.5}, {66.0, 64.5}}, label: 'D'
+                  Key, 0x113904140, {{306.5, 996.5}, {66.0, 64.5}}, label: 'F'
+                  Key, 0x113904280, {{372.5, 996.5}, {66.5, 64.5}}, label: 'G'
+                  Key, 0x1139043c0, {{439.0, 996.5}, {66.0, 64.5}}, label: 'H'
+                  Key, 0x113904500, {{505.0, 996.5}, {66.0, 64.5}}, label: 'J'
+                  Key, 0x113904640, {{571.0, 996.5}, {66.0, 64.5}}, label: 'K'
+                  Key, 0x113904780, {{637.0, 996.5}, {66.0, 64.5}}, label: 'L'
+                  Button, 0x1139048c0, {{703.0, 996.5}, {129.0, 64.5}}, identifier: 'Return', label: 'return'
+                  Button, 0x113904a00, {{6.0, 1061.0}, {132.0, 64.5}}, identifier: 'shift', label: 'shift', Selected
+                  Key, 0x113904b40, {{138.0, 1061.0}, {66.0, 64.5}}, label: 'Z'
+                  Key, 0x113904c80, {{204.0, 1061.0}, {66.5, 64.5}}, label: 'X'
+                  Key, 0x113904dc0, {{270.5, 1061.0}, {66.0, 64.5}}, label: 'C'
+                  Key, 0x113904f00, {{336.5, 1061.0}, {66.0, 64.5}}, label: 'V'
+                  Key, 0x113905040, {{402.5, 1061.0}, {66.0, 64.5}}, label: 'B'
+                  Key, 0x113905180, {{468.5, 1061.0}, {66.0, 64.5}}, label: 'N'
+                  Key, 0x1139052c0, {{534.5, 1061.0}, {66.0, 64.5}}, label: 'M'
+                  Key, 0x113905400, {{600.5, 1061.0}, {66.5, 64.5}}, label: ','
+                  Key, 0x113905540, {{667.0, 1061.0}, {66.0, 64.5}}, label: '.'
+                  Key, 0x113905680, {{733.0, 1061.0}, {99.0, 64.5}}, label: 'shift', Selected
+                  Button, 0x1139057c0, {{6.0, 1125.5}, {69.5, 64.5}}, identifier: 'emoji', label: 'Emoji'
+                  Key, 0x113905900, {{75.5, 1125.5}, {70.0, 64.5}}, identifier: 'more', label: 'numbers'
+                  Button, 0x113905a40, {{145.5, 1125.5}, {69.5, 64.5}}, identifier: 'dictation', label: 'Dictate'
+                  Key, 0x113905b80, {{215.0, 1125.5}, {419.0, 64.5}}, label: 'space'
+                  Key, 0x113905cc0, {{634.0, 1125.5}, {99.0, 64.5}}, identifier: 'more', label: 'numbers'
+                  Button, 0x113905e00, {{733.0, 1125.5}, {99.0, 64.5}}, label: 'Hide keyboard'
+Path to element:
+ →Application, 0x1134943c0, pid: 39640, label: 'atepdf'
+Query chain:
+ →Find: Target Application 'dev.atepdf.fresh'
+  Output: {
+    Application, 0x113905f40, pid: 39640, label: 'atepdf'
+  }

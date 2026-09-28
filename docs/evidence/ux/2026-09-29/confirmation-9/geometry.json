@@ -1,0 +1,6038 @@
+{
+  "time": "2026-09-28T20:25:08.756Z",
+  "url": "http://localhost:3213",
+  "htmlSha": "66de4e2bf16d6b109360e4ff82b774b7186346261afebe9b4f2c47254303b961",
+  "sources": {
+    "apps/universal/App.tsx": "1e0b24c3a8b28b969b72a42df923dfddf6c5baaaeca73eb96e18af7347c95d5f",
+    "apps/universal/src/platform/workspace.css": "e0efd6390caa8a9b4591b9bd2b38a53fad718d0a4d9b42ecda582857851715d5",
+    "apps/universal/src/platform/Preview.web.tsx": "6d3b224621297e9e6fd37d0584972368313a16a6c5441b4ccfb4bc3c8185466f",
+    "apps/universal/src/platform/preview.css": "41bdb5c064e9fd740de1cdb10870fac80502d8852473ba94dc94db5f99679196"
+  },
+  "states": [
+    {
+      "name": "desktop",
+      "state": "empty",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "rootFontSize": "16px",
+      "documentWidth": 1440,
+      "bodyText": "Processed on your device\nDrop files here\nThen tell me what you’d like to do.\nChoose files\nTry the two sample PDFs\nMerge\nCompress\nMake searchable\nYour files stay on this device\nHelp",
+      "controls": [
+        {
+          "label": "Processed on your device",
+          "x": 1167.328125,
+          "y": 16,
+          "width": 192.671875,
+          "height": 44,
+          "right": 1360,
+          "bottom": 60,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": false
+        },
+        {
+          "label": "OpenAI connection",
+          "x": 1364,
+          "y": 16,
+          "width": 44,
+          "height": 44,
+          "right": 1408,
+          "bottom": 60,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": false
+        },
+        {
+          "label": "Choose files",
+          "x": 655.28125,
+          "y": 474,
+          "width": 129.421875,
+          "height": 44,
+          "right": 784.703125,
+          "bottom": 518,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 336,
+            "top": 76,
+            "right": 1104,
+            "bottom": 754
+          },
+          "disabled": false
+        },
+        {
+          "label": "Try the two sample PDFs",
+          "x": 627.9375,
+          "y": 530,
+          "width": 184.125,
+          "height": 44,
+          "right": 812.0625,
+          "bottom": 574,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 336,
+            "top": 76,
+            "right": 1104,
+            "bottom": 754
+          },
+          "disabled": false
+        },
+        {
+          "label": "Tell atepdf what to do",
+          "x": 361,
+          "y": 763,
+          "width": 718,
+          "height": 48,
+          "right": 1079,
+          "bottom": 811,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": false
+        },
+        {
+          "label": "Add files",
+          "x": 361,
+          "y": 815,
+          "width": 44,
+          "height": 44,
+          "right": 405,
+          "bottom": 859,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": false
+        },
+        {
+          "label": "Send message",
+          "x": 1035,
+          "y": 815,
+          "width": 44,
+          "height": 44,
+          "right": 1079,
+          "bottom": 859,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": true
+        },
+        {
+          "label": "Merge",
+          "x": 533.78125,
+          "y": 880,
+          "width": 91.90625,
+          "height": 44,
+          "right": 625.6875,
+          "bottom": 924,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": false
+        },
+        {
+          "label": "Compress",
+          "x": 633.6875,
+          "y": 880,
+          "width": 113.140625,
+          "height": 44,
+          "right": 746.828125,
+          "bottom": 924,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": false
+        },
+        {
+          "label": "Make searchable",
+          "x": 754.828125,
+          "y": 880,
+          "width": 151.375,
+          "height": 44,
+          "right": 906.203125,
+          "bottom": 924,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": false
+        },
+        {
+          "label": "Help",
+          "x": 782.640625,
+          "y": 932,
+          "width": 44,
+          "height": 44,
+          "right": 826.640625,
+          "bottom": 976,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": false
+        }
+      ],
+      "welcome": {
+        "x": 336,
+        "y": 76,
+        "width": 768,
+        "height": 678,
+        "right": 1104,
+        "bottom": 754,
+        "fullyVisible": true,
+        "fontSize": "16px",
+        "clip": {
+          "left": 0,
+          "top": 0,
+          "right": 1440,
+          "bottom": 1000
+        }
+      },
+      "conversation": null,
+      "preview": null,
+      "paper": null,
+      "pageHost": null,
+      "shortcuts": [
+        {
+          "name": "Merge",
+          "button": {
+            "x": 533.78125,
+            "y": 880,
+            "width": 91.90625,
+            "height": 44,
+            "right": 625.6875,
+            "bottom": 924,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 1440,
+              "bottom": 1000
+            }
+          },
+          "icon": {
+            "x": 550.78125,
+            "y": 894,
+            "width": 16,
+            "height": 16,
+            "right": 566.78125,
+            "bottom": 910,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 1440,
+              "bottom": 1000
+            }
+          },
+          "labelFontSize": "12px"
+        },
+        {
+          "name": "Compress",
+          "button": {
+            "x": 633.6875,
+            "y": 880,
+            "width": 113.140625,
+            "height": 44,
+            "right": 746.828125,
+            "bottom": 924,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 1440,
+              "bottom": 1000
+            }
+          },
+          "icon": {
+            "x": 650.6875,
+            "y": 894,
+            "width": 16,
+            "height": 16,
+            "right": 666.6875,
+            "bottom": 910,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 1440,
+              "bottom": 1000
+            }
+          },
+          "labelFontSize": "12px"
+        },
+        {
+          "name": "Make searchable",
+          "button": {
+            "x": 754.828125,
+            "y": 880,
+            "width": 151.375,
+            "height": 44,
+            "right": 906.203125,
+            "bottom": 924,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 1440,
+              "bottom": 1000
+            }
+          },
+          "icon": {
+            "x": 771.828125,
+            "y": 894,
+            "width": 16,
+            "height": 16,
+            "right": 787.828125,
+            "bottom": 910,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 1440,
+              "bottom": 1000
+            }
+          },
+          "labelFontSize": "12px"
+        }
+      ]
+    },
+    {
+      "name": "desktop",
+      "state": "result",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "rootFontSize": "16px",
+      "documentWidth": 1440,
+      "bodyText": "Processed on your device\nbrief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nMerged PDF\n3 pages · 3.1 kB\nCurrent result\nSave PDF\nPreview\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent: Merged PDF · 3 pages\nHelp",
+      "controls": [
+        {
+          "label": "Processed on your device",
+          "x": 1119.328125,
+          "y": 16,
+          "width": 192.671875,
+          "height": 44,
+          "right": 1312,
+          "bottom": 60,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": false
+        },
+        {
+          "label": "OpenAI connection",
+          "x": 1316,
+          "y": 16,
+          "width": 44,
+          "height": 44,
+          "right": 1360,
+          "bottom": 60,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": false
+        },
+        {
+          "label": "Start over",
+          "x": 1364,
+          "y": 16,
+          "width": 44,
+          "height": 44,
+          "right": 1408,
+          "bottom": 60,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": false
+        },
+        {
+          "label": "Copy",
+          "x": 356,
+          "y": 347,
+          "width": 44,
+          "height": 44,
+          "right": 400,
+          "bottom": 391,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 336,
+            "top": 76,
+            "right": 1104,
+            "bottom": 766
+          },
+          "disabled": false
+        },
+        {
+          "label": "Save PDF",
+          "x": 381,
+          "y": 628,
+          "width": 110.4375,
+          "height": 44,
+          "right": 491.4375,
+          "bottom": 672,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 336,
+            "top": 76,
+            "right": 1104,
+            "bottom": 766
+          },
+          "disabled": false
+        },
+        {
+          "label": "Preview",
+          "x": 499.4375,
+          "y": 628,
+          "width": 102.09375,
+          "height": 44,
+          "right": 601.53125,
+          "bottom": 672,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 336,
+            "top": 76,
+            "right": 1104,
+            "bottom": 766
+          },
+          "disabled": false
+        },
+        {
+          "label": "Tell atepdf what to do",
+          "x": 361,
+          "y": 775,
+          "width": 718,
+          "height": 48,
+          "right": 1079,
+          "bottom": 823,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": false
+        },
+        {
+          "label": "Add files",
+          "x": 361,
+          "y": 827,
+          "width": 44,
+          "height": 44,
+          "right": 405,
+          "bottom": 871,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": false
+        },
+        {
+          "label": "Send message",
+          "x": 1035,
+          "y": 827,
+          "width": 44,
+          "height": 44,
+          "right": 1079,
+          "bottom": 871,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": true
+        },
+        {
+          "label": "Merge",
+          "x": 533.78125,
+          "y": 892,
+          "width": 91.90625,
+          "height": 44,
+          "right": 625.6875,
+          "bottom": 936,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": false
+        },
+        {
+          "label": "Compress",
+          "x": 633.6875,
+          "y": 892,
+          "width": 113.140625,
+          "height": 44,
+          "right": 746.828125,
+          "bottom": 936,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": false
+        },
+        {
+          "label": "Make searchable",
+          "x": 754.828125,
+          "y": 892,
+          "width": 151.375,
+          "height": 44,
+          "right": 906.203125,
+          "bottom": 936,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": false
+        },
+        {
+          "label": "Help",
+          "x": 798.640625,
+          "y": 944,
+          "width": 44,
+          "height": 44,
+          "right": 842.640625,
+          "bottom": 988,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": false
+        }
+      ],
+      "welcome": null,
+      "conversation": {
+        "x": 336,
+        "y": 76,
+        "width": 768,
+        "height": 690,
+        "right": 1104,
+        "bottom": 766,
+        "fullyVisible": true,
+        "fontSize": "16px",
+        "clip": {
+          "left": 0,
+          "top": 0,
+          "right": 1440,
+          "bottom": 1000
+        }
+      },
+      "preview": null,
+      "paper": null,
+      "pageHost": null,
+      "shortcuts": [
+        {
+          "name": "Merge",
+          "button": {
+            "x": 533.78125,
+            "y": 892,
+            "width": 91.90625,
+            "height": 44,
+            "right": 625.6875,
+            "bottom": 936,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 1440,
+              "bottom": 1000
+            }
+          },
+          "icon": {
+            "x": 550.78125,
+            "y": 906,
+            "width": 16,
+            "height": 16,
+            "right": 566.78125,
+            "bottom": 922,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 1440,
+              "bottom": 1000
+            }
+          },
+          "labelFontSize": "12px"
+        },
+        {
+          "name": "Compress",
+          "button": {
+            "x": 633.6875,
+            "y": 892,
+            "width": 113.140625,
+            "height": 44,
+            "right": 746.828125,
+            "bottom": 936,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 1440,
+              "bottom": 1000
+            }
+          },
+          "icon": {
+            "x": 650.6875,
+            "y": 906,
+            "width": 16,
+            "height": 16,
+            "right": 666.6875,
+            "bottom": 922,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 1440,
+              "bottom": 1000
+            }
+          },
+          "labelFontSize": "12px"
+        },
+        {
+          "name": "Make searchable",
+          "button": {
+            "x": 754.828125,
+            "y": 892,
+            "width": 151.375,
+            "height": 44,
+            "right": 906.203125,
+            "bottom": 936,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 1440,
+              "bottom": 1000
+            }
+          },
+          "icon": {
+            "x": 771.828125,
+            "y": 906,
+            "width": 16,
+            "height": 16,
+            "right": 787.828125,
+            "bottom": 922,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 1440,
+              "bottom": 1000
+            }
+          },
+          "labelFontSize": "12px"
+        }
+      ]
+    },
+    {
+      "name": "desktop",
+      "state": "help",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "rootFontSize": "16px",
+      "documentWidth": 1440,
+      "bodyText": "Processed on your device\nbrief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nMerged PDF\n3 pages · 3.1 kB\nCurrent result\nSave PDF\nPreview\nTell me what you’d like to do next.\nWhat can I do with my PDFs?\nI can merge PDFs, remove pages, make scanned English PDFs searchable, and compress supported images inside a PDF. Add PDFs, then use a quick action or type “remove page 2”. Type “undo” to restore the previous result.\n\nThese tasks work without an AI connection. Connecting AI is optional for more flexible requests.\nMerge\nCompress\nMake searchable\nCurrent: Merged PDF · 3 pages\nHelp",
+      "controls": [
+        {
+          "label": "Processed on your device",
+          "x": 1119.328125,
+          "y": 16,
+          "width": 192.671875,
+          "height": 44,
+          "right": 1312,
+          "bottom": 60,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": false
+        },
+        {
+          "label": "OpenAI connection",
+          "x": 1316,
+          "y": 16,
+          "width": 44,
+          "height": 44,
+          "right": 1360,
+          "bottom": 60,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": false
+        },
+        {
+          "label": "Start over",
+          "x": 1364,
+          "y": 16,
+          "width": 44,
+          "height": 44,
+          "right": 1408,
+          "bottom": 60,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": false
+        },
+        {
+          "label": "Copy",
+          "x": 356,
+          "y": 81,
+          "width": 44,
+          "height": 44,
+          "right": 400,
+          "bottom": 125,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 336,
+            "top": 76,
+            "right": 1104,
+            "bottom": 766
+          },
+          "disabled": false
+        },
+        {
+          "label": "Save PDF",
+          "x": 381,
+          "y": 362,
+          "width": 110.4375,
+          "height": 44,
+          "right": 491.4375,
+          "bottom": 406,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 336,
+            "top": 76,
+            "right": 1104,
+            "bottom": 766
+          },
+          "disabled": false
+        },
+        {
+          "label": "Preview",
+          "x": 499.4375,
+          "y": 362,
+          "width": 102.09375,
+          "height": 44,
+          "right": 601.53125,
+          "bottom": 406,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 336,
+            "top": 76,
+            "right": 1104,
+            "bottom": 766
+          },
+          "disabled": false
+        },
+        {
+          "label": "Copy",
+          "x": 356,
+          "y": 698,
+          "width": 44,
+          "height": 44,
+          "right": 400,
+          "bottom": 742,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 336,
+            "top": 76,
+            "right": 1104,
+            "bottom": 766
+          },
+          "disabled": false
+        },
+        {
+          "label": "Tell atepdf what to do",
+          "x": 361,
+          "y": 775,
+          "width": 718,
+          "height": 48,
+          "right": 1079,
+          "bottom": 823,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": false
+        },
+        {
+          "label": "Add files",
+          "x": 361,
+          "y": 827,
+          "width": 44,
+          "height": 44,
+          "right": 405,
+          "bottom": 871,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": false
+        },
+        {
+          "label": "Send message",
+          "x": 1035,
+          "y": 827,
+          "width": 44,
+          "height": 44,
+          "right": 1079,
+          "bottom": 871,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": true
+        },
+        {
+          "label": "Merge",
+          "x": 533.78125,
+          "y": 892,
+          "width": 91.90625,
+          "height": 44,
+          "right": 625.6875,
+          "bottom": 936,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": false
+        },
+        {
+          "label": "Compress",
+          "x": 633.6875,
+          "y": 892,
+          "width": 113.140625,
+          "height": 44,
+          "right": 746.828125,
+          "bottom": 936,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": false
+        },
+        {
+          "label": "Make searchable",
+          "x": 754.828125,
+          "y": 892,
+          "width": 151.375,
+          "height": 44,
+          "right": 906.203125,
+          "bottom": 936,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": false
+        },
+        {
+          "label": "Help",
+          "x": 798.640625,
+          "y": 944,
+          "width": 44,
+          "height": 44,
+          "right": 842.640625,
+          "bottom": 988,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 1440,
+            "bottom": 1000
+          },
+          "disabled": false
+        }
+      ],
+      "welcome": null,
+      "conversation": {
+        "x": 336,
+        "y": 76,
+        "width": 768,
+        "height": 690,
+        "right": 1104,
+        "bottom": 766,
+        "fullyVisible": true,
+        "fontSize": "16px",
+        "clip": {
+          "left": 0,
+          "top": 0,
+          "right": 1440,
+          "bottom": 1000
+        }
+      },
+      "preview": null,
+      "paper": null,
+      "pageHost": null,
+      "shortcuts": [
+        {
+          "name": "Merge",
+          "button": {
+            "x": 533.78125,
+            "y": 892,
+            "width": 91.90625,
+            "height": 44,
+            "right": 625.6875,
+            "bottom": 936,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 1440,
+              "bottom": 1000
+            }
+          },
+          "icon": {
+            "x": 550.78125,
+            "y": 906,
+            "width": 16,
+            "height": 16,
+            "right": 566.78125,
+            "bottom": 922,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 1440,
+              "bottom": 1000
+            }
+          },
+          "labelFontSize": "12px"
+        },
+        {
+          "name": "Compress",
+          "button": {
+            "x": 633.6875,
+            "y": 892,
+            "width": 113.140625,
+            "height": 44,
+            "right": 746.828125,
+            "bottom": 936,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 1440,
+              "bottom": 1000
+            }
+          },
+          "icon": {
+            "x": 650.6875,
+            "y": 906,
+            "width": 16,
+            "height": 16,
+            "right": 666.6875,
+            "bottom": 922,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 1440,
+              "bottom": 1000
+            }
+          },
+          "labelFontSize": "12px"
+        },
+        {
+          "name": "Make searchable",
+          "button": {
+            "x": 754.828125,
+            "y": 892,
+            "width": 151.375,
+            "height": 44,
+            "right": 906.203125,
+            "bottom": 936,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 1440,
+              "bottom": 1000
+            }
+          },
+          "icon": {
+            "x": 771.828125,
+            "y": 906,
+            "width": 16,
+            "height": 16,
+            "right": 787.828125,
+            "bottom": 922,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 1440,
+              "bottom": 1000
+            }
+          },
+          "labelFontSize": "12px"
+        }
+      ]
+    },
+    {
+      "name": "phone",
+      "state": "result",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rootFontSize": "16px",
+      "documentWidth": 390,
+      "bodyText": "brief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nMerged PDF\n3 pages · 3.1 kB\nCurrent result\nSave PDF\nPreview\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent: Merged PDF · 3 pages\nHelp",
+      "controls": [
+        {
+          "label": "Processed on your device",
+          "x": 234,
+          "y": 8,
+          "width": 44,
+          "height": 44,
+          "right": 278,
+          "bottom": 52,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844
+          },
+          "disabled": false
+        },
+        {
+          "label": "OpenAI connection",
+          "x": 282,
+          "y": 8,
+          "width": 44,
+          "height": 44,
+          "right": 326,
+          "bottom": 52,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844
+          },
+          "disabled": false
+        },
+        {
+          "label": "Start over",
+          "x": 330,
+          "y": 8,
+          "width": 44,
+          "height": 44,
+          "right": 374,
+          "bottom": 52,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844
+          },
+          "disabled": false
+        },
+        {
+          "label": "Copy",
+          "x": 20,
+          "y": 183,
+          "width": 44,
+          "height": 44,
+          "right": 64,
+          "bottom": 227,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 60,
+            "right": 390,
+            "bottom": 610
+          },
+          "disabled": false
+        },
+        {
+          "label": "Save PDF",
+          "x": 41,
+          "y": 480,
+          "width": 110.4375,
+          "height": 44,
+          "right": 151.4375,
+          "bottom": 524,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 60,
+            "right": 390,
+            "bottom": 610
+          },
+          "disabled": false
+        },
+        {
+          "label": "Preview",
+          "x": 159.4375,
+          "y": 480,
+          "width": 102.09375,
+          "height": 44,
+          "right": 261.53125,
+          "bottom": 524,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 60,
+            "right": 390,
+            "bottom": 610
+          },
+          "disabled": false
+        },
+        {
+          "label": "Tell atepdf what to do",
+          "x": 25,
+          "y": 619,
+          "width": 340,
+          "height": 48,
+          "right": 365,
+          "bottom": 667,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844
+          },
+          "disabled": false
+        },
+        {
+          "label": "Add files",
+          "x": 25,
+          "y": 671,
+          "width": 44,
+          "height": 44,
+          "right": 69,
+          "bottom": 715,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844
+          },
+          "disabled": false
+        },
+        {
+          "label": "Send message",
+          "x": 321,
+          "y": 671,
+          "width": 44,
+          "height": 44,
+          "right": 365,
+          "bottom": 715,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844
+          },
+          "disabled": true
+        },
+        {
+          "label": "Merge",
+          "x": 16,
+          "y": 736,
+          "width": 114,
+          "height": 44,
+          "right": 130,
+          "bottom": 780,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844
+          },
+          "disabled": false
+        },
+        {
+          "label": "Compress",
+          "x": 138,
+          "y": 736,
+          "width": 114,
+          "height": 44,
+          "right": 252,
+          "bottom": 780,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844
+          },
+          "disabled": false
+        },
+        {
+          "label": "Make searchable",
+          "x": 260,
+          "y": 736,
+          "width": 114,
+          "height": 44,
+          "right": 374,
+          "bottom": 780,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844
+          },
+          "disabled": false
+        },
+        {
+          "label": "Help",
+          "x": 273.640625,
+          "y": 788,
+          "width": 44,
+          "height": 44,
+          "right": 317.640625,
+          "bottom": 832,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844
+          },
+          "disabled": false
+        }
+      ],
+      "welcome": null,
+      "conversation": {
+        "x": 0,
+        "y": 60,
+        "width": 390,
+        "height": 550,
+        "right": 390,
+        "bottom": 610,
+        "fullyVisible": true,
+        "fontSize": "16px",
+        "clip": {
+          "left": 0,
+          "top": 0,
+          "right": 390,
+          "bottom": 844
+        }
+      },
+      "preview": null,
+      "paper": null,
+      "pageHost": null,
+      "shortcuts": [
+        {
+          "name": "Merge",
+          "button": {
+            "x": 16,
+            "y": 736,
+            "width": 114,
+            "height": 44,
+            "right": 130,
+            "bottom": 780,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 390,
+              "bottom": 844
+            }
+          },
+          "icon": {
+            "x": 44.046875,
+            "y": 750,
+            "width": 16,
+            "height": 16,
+            "right": 60.046875,
+            "bottom": 766,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 390,
+              "bottom": 844
+            }
+          },
+          "labelFontSize": "12px"
+        },
+        {
+          "name": "Compress",
+          "button": {
+            "x": 138,
+            "y": 736,
+            "width": 114,
+            "height": 44,
+            "right": 252,
+            "bottom": 780,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 390,
+              "bottom": 844
+            }
+          },
+          "icon": {
+            "x": 155.421875,
+            "y": 750,
+            "width": 16,
+            "height": 16,
+            "right": 171.421875,
+            "bottom": 766,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 390,
+              "bottom": 844
+            }
+          },
+          "labelFontSize": "12px"
+        },
+        {
+          "name": "Make searchable",
+          "button": {
+            "x": 260,
+            "y": 736,
+            "width": 114,
+            "height": 44,
+            "right": 374,
+            "bottom": 780,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 390,
+              "bottom": 844
+            }
+          },
+          "icon": {
+            "x": 269,
+            "y": 750,
+            "width": 16,
+            "height": 16,
+            "right": 285,
+            "bottom": 766,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 390,
+              "bottom": 844
+            }
+          },
+          "labelFontSize": "12px"
+        }
+      ]
+    },
+    {
+      "name": "phone",
+      "state": "help",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rootFontSize": "16px",
+      "documentWidth": 390,
+      "bodyText": "brief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nMerged PDF\n3 pages · 3.1 kB\nCurrent result\nSave PDF\nPreview\nTell me what you’d like to do next.\nWhat can I do with my PDFs?\nI can merge PDFs, remove pages, make scanned English PDFs searchable, and compress supported images inside a PDF. Add PDFs, then use a quick action or type “remove page 2”. Type “undo” to restore the previous result.\n\nThese tasks work without an AI connection. Connecting AI is optional for more flexible requests.\nMerge\nCompress\nMake searchable\nCurrent: Merged PDF · 3 pages\nHelp",
+      "controls": [
+        {
+          "label": "Processed on your device",
+          "x": 234,
+          "y": 8,
+          "width": 44,
+          "height": 44,
+          "right": 278,
+          "bottom": 52,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844
+          },
+          "disabled": false
+        },
+        {
+          "label": "OpenAI connection",
+          "x": 282,
+          "y": 8,
+          "width": 44,
+          "height": 44,
+          "right": 326,
+          "bottom": 52,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844
+          },
+          "disabled": false
+        },
+        {
+          "label": "Start over",
+          "x": 330,
+          "y": 8,
+          "width": 44,
+          "height": 44,
+          "right": 374,
+          "bottom": 52,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844
+          },
+          "disabled": false
+        },
+        {
+          "label": "Copy",
+          "x": 20,
+          "y": -203,
+          "width": 44,
+          "height": 44,
+          "right": 64,
+          "bottom": -159,
+          "fullyVisible": false,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 60,
+            "right": 390,
+            "bottom": 610
+          },
+          "disabled": false
+        },
+        {
+          "label": "Save PDF",
+          "x": 41,
+          "y": 94,
+          "width": 110.4375,
+          "height": 44,
+          "right": 151.4375,
+          "bottom": 138,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 60,
+            "right": 390,
+            "bottom": 610
+          },
+          "disabled": false
+        },
+        {
+          "label": "Preview",
+          "x": 159.4375,
+          "y": 94,
+          "width": 102.09375,
+          "height": 44,
+          "right": 261.53125,
+          "bottom": 138,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 60,
+            "right": 390,
+            "bottom": 610
+          },
+          "disabled": false
+        },
+        {
+          "label": "Copy",
+          "x": 20,
+          "y": 542,
+          "width": 44,
+          "height": 44,
+          "right": 64,
+          "bottom": 586,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 60,
+            "right": 390,
+            "bottom": 610
+          },
+          "disabled": false
+        },
+        {
+          "label": "Tell atepdf what to do",
+          "x": 25,
+          "y": 619,
+          "width": 340,
+          "height": 48,
+          "right": 365,
+          "bottom": 667,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844
+          },
+          "disabled": false
+        },
+        {
+          "label": "Add files",
+          "x": 25,
+          "y": 671,
+          "width": 44,
+          "height": 44,
+          "right": 69,
+          "bottom": 715,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844
+          },
+          "disabled": false
+        },
+        {
+          "label": "Send message",
+          "x": 321,
+          "y": 671,
+          "width": 44,
+          "height": 44,
+          "right": 365,
+          "bottom": 715,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844
+          },
+          "disabled": true
+        },
+        {
+          "label": "Merge",
+          "x": 16,
+          "y": 736,
+          "width": 114,
+          "height": 44,
+          "right": 130,
+          "bottom": 780,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844
+          },
+          "disabled": false
+        },
+        {
+          "label": "Compress",
+          "x": 138,
+          "y": 736,
+          "width": 114,
+          "height": 44,
+          "right": 252,
+          "bottom": 780,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844
+          },
+          "disabled": false
+        },
+        {
+          "label": "Make searchable",
+          "x": 260,
+          "y": 736,
+          "width": 114,
+          "height": 44,
+          "right": 374,
+          "bottom": 780,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844
+          },
+          "disabled": false
+        },
+        {
+          "label": "Help",
+          "x": 273.640625,
+          "y": 788,
+          "width": 44,
+          "height": 44,
+          "right": 317.640625,
+          "bottom": 832,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844
+          },
+          "disabled": false
+        }
+      ],
+      "welcome": null,
+      "conversation": {
+        "x": 0,
+        "y": 60,
+        "width": 390,
+        "height": 550,
+        "right": 390,
+        "bottom": 610,
+        "fullyVisible": true,
+        "fontSize": "16px",
+        "clip": {
+          "left": 0,
+          "top": 0,
+          "right": 390,
+          "bottom": 844
+        }
+      },
+      "preview": null,
+      "paper": null,
+      "pageHost": null,
+      "shortcuts": [
+        {
+          "name": "Merge",
+          "button": {
+            "x": 16,
+            "y": 736,
+            "width": 114,
+            "height": 44,
+            "right": 130,
+            "bottom": 780,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 390,
+              "bottom": 844
+            }
+          },
+          "icon": {
+            "x": 44.046875,
+            "y": 750,
+            "width": 16,
+            "height": 16,
+            "right": 60.046875,
+            "bottom": 766,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 390,
+              "bottom": 844
+            }
+          },
+          "labelFontSize": "12px"
+        },
+        {
+          "name": "Compress",
+          "button": {
+            "x": 138,
+            "y": 736,
+            "width": 114,
+            "height": 44,
+            "right": 252,
+            "bottom": 780,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 390,
+              "bottom": 844
+            }
+          },
+          "icon": {
+            "x": 155.421875,
+            "y": 750,
+            "width": 16,
+            "height": 16,
+            "right": 171.421875,
+            "bottom": 766,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 390,
+              "bottom": 844
+            }
+          },
+          "labelFontSize": "12px"
+        },
+        {
+          "name": "Make searchable",
+          "button": {
+            "x": 260,
+            "y": 736,
+            "width": 114,
+            "height": 44,
+            "right": 374,
+            "bottom": 780,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 390,
+              "bottom": 844
+            }
+          },
+          "icon": {
+            "x": 269,
+            "y": 750,
+            "width": 16,
+            "height": 16,
+            "right": 285,
+            "bottom": 766,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 390,
+              "bottom": 844
+            }
+          },
+          "labelFontSize": "12px"
+        }
+      ]
+    },
+    {
+      "name": "compact",
+      "state": "empty",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "rootFontSize": "16px",
+      "documentWidth": 320,
+      "bodyText": "Add your files\nChoose files\nThen tell me what you’d like to do.\nTry the two sample PDFs\nMerge\nCompress\nMake searchable\nYour files stay on this device\nHelp",
+      "controls": [
+        {
+          "label": "Processed on your device",
+          "x": 212,
+          "y": 8,
+          "width": 44,
+          "height": 44,
+          "right": 256,
+          "bottom": 52,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "OpenAI connection",
+          "x": 260,
+          "y": 8,
+          "width": 44,
+          "height": 44,
+          "right": 304,
+          "bottom": 52,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Choose files",
+          "x": 95.28125,
+          "y": 123,
+          "width": 129.421875,
+          "height": 44,
+          "right": 224.703125,
+          "bottom": 167,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 60,
+            "right": 320,
+            "bottom": 332
+          },
+          "disabled": false
+        },
+        {
+          "label": "Try the two sample PDFs",
+          "x": 67.9375,
+          "y": 203,
+          "width": 184.125,
+          "height": 44,
+          "right": 252.0625,
+          "bottom": 247,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 60,
+            "right": 320,
+            "bottom": 332
+          },
+          "disabled": false
+        },
+        {
+          "label": "Tell atepdf what to do",
+          "x": 25,
+          "y": 341,
+          "width": 270,
+          "height": 48,
+          "right": 295,
+          "bottom": 389,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Add files",
+          "x": 25,
+          "y": 393,
+          "width": 44,
+          "height": 44,
+          "right": 69,
+          "bottom": 437,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Send message",
+          "x": 251,
+          "y": 393,
+          "width": 44,
+          "height": 44,
+          "right": 295,
+          "bottom": 437,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": true
+        },
+        {
+          "label": "Merge",
+          "x": 16,
+          "y": 454,
+          "width": 90.65625,
+          "height": 50,
+          "right": 106.65625,
+          "bottom": 504,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Compress",
+          "x": 114.65625,
+          "y": 454,
+          "width": 90.671875,
+          "height": 50,
+          "right": 205.328125,
+          "bottom": 504,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Make searchable",
+          "x": 213.328125,
+          "y": 454,
+          "width": 90.671875,
+          "height": 50,
+          "right": 304,
+          "bottom": 504,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Help",
+          "x": 218.578125,
+          "y": 508,
+          "width": 50.125,
+          "height": 44,
+          "right": 268.703125,
+          "bottom": 552,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        }
+      ],
+      "welcome": {
+        "x": 0,
+        "y": 60,
+        "width": 320,
+        "height": 272,
+        "right": 320,
+        "bottom": 332,
+        "fullyVisible": true,
+        "fontSize": "16px",
+        "clip": {
+          "left": 0,
+          "top": 0,
+          "right": 320,
+          "bottom": 568
+        }
+      },
+      "conversation": null,
+      "preview": null,
+      "paper": null,
+      "pageHost": null,
+      "shortcuts": [
+        {
+          "name": "Merge",
+          "button": {
+            "x": 16,
+            "y": 454,
+            "width": 90.65625,
+            "height": 50,
+            "right": 106.65625,
+            "bottom": 504,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "icon": {
+            "x": 32.375,
+            "y": 471,
+            "width": 16,
+            "height": 16,
+            "right": 48.375,
+            "bottom": 487,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "labelFontSize": "12px"
+        },
+        {
+          "name": "Compress",
+          "button": {
+            "x": 114.65625,
+            "y": 454,
+            "width": 90.671875,
+            "height": 50,
+            "right": 205.328125,
+            "bottom": 504,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "icon": {
+            "x": 120.421875,
+            "y": 471,
+            "width": 16,
+            "height": 16,
+            "right": 136.421875,
+            "bottom": 487,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "labelFontSize": "12px"
+        },
+        {
+          "name": "Make searchable",
+          "button": {
+            "x": 213.328125,
+            "y": 454,
+            "width": 90.671875,
+            "height": 50,
+            "right": 304,
+            "bottom": 504,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "icon": {
+            "x": 216.765625,
+            "y": 471,
+            "width": 16,
+            "height": 16,
+            "right": 232.765625,
+            "bottom": 487,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "labelFontSize": "12px"
+        }
+      ]
+    },
+    {
+      "name": "compact",
+      "state": "preview-page1",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "rootFontSize": "16px",
+      "documentWidth": 320,
+      "bodyText": "brief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nMerged PDF\n3 pages · 3.1 kB\nCurrent result\nSave PDF\nHide preview\nRead-only preview\nFit\nPage 1 of 3\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent: Merged PDF · 3 pages\nHelp",
+      "controls": [
+        {
+          "label": "Processed on your device",
+          "x": 164,
+          "y": 8,
+          "width": 44,
+          "height": 44,
+          "right": 208,
+          "bottom": 52,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "OpenAI connection",
+          "x": 212,
+          "y": 8,
+          "width": 44,
+          "height": 44,
+          "right": 256,
+          "bottom": 52,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Start over",
+          "x": 260,
+          "y": 8,
+          "width": 44,
+          "height": 44,
+          "right": 304,
+          "bottom": 52,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Copy",
+          "x": 20,
+          "y": -361,
+          "width": 44,
+          "height": 44,
+          "right": 64,
+          "bottom": -317,
+          "fullyVisible": false,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 60,
+            "right": 320,
+            "bottom": 340
+          },
+          "disabled": false
+        },
+        {
+          "label": "Save PDF",
+          "x": 41,
+          "y": -64,
+          "width": 110.4375,
+          "height": 44,
+          "right": 151.4375,
+          "bottom": -20,
+          "fullyVisible": false,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 60,
+            "right": 320,
+            "bottom": 340
+          },
+          "disabled": false
+        },
+        {
+          "label": "Hide preview",
+          "x": 41,
+          "y": -12,
+          "width": 135.9375,
+          "height": 44,
+          "right": 176.9375,
+          "bottom": 32,
+          "fullyVisible": false,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 60,
+            "right": 320,
+            "bottom": 340
+          },
+          "disabled": false
+        },
+        {
+          "label": "Fit page",
+          "x": 182,
+          "y": 63,
+          "width": 44,
+          "height": 44,
+          "right": 226,
+          "bottom": 107,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 41,
+            "top": 60,
+            "right": 279,
+            "bottom": 332
+          },
+          "disabled": false
+        },
+        {
+          "label": "Close preview",
+          "x": 230,
+          "y": 63,
+          "width": 44,
+          "height": 44,
+          "right": 274,
+          "bottom": 107,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 41,
+            "top": 60,
+            "right": 279,
+            "bottom": 332
+          },
+          "disabled": false
+        },
+        {
+          "label": "Previous page",
+          "x": 46,
+          "y": 112,
+          "width": 44,
+          "height": 44,
+          "right": 90,
+          "bottom": 156,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 41,
+            "top": 60,
+            "right": 279,
+            "bottom": 332
+          },
+          "disabled": true
+        },
+        {
+          "label": "Next page",
+          "x": 230,
+          "y": 112,
+          "width": 44,
+          "height": 44,
+          "right": 274,
+          "bottom": 156,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 41,
+            "top": 60,
+            "right": 279,
+            "bottom": 332
+          },
+          "disabled": false
+        },
+        {
+          "label": "Zoom out",
+          "x": 114,
+          "y": 160,
+          "width": 44,
+          "height": 44,
+          "right": 158,
+          "bottom": 204,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 41,
+            "top": 60,
+            "right": 279,
+            "bottom": 332
+          },
+          "disabled": true
+        },
+        {
+          "label": "Zoom in",
+          "x": 162,
+          "y": 160,
+          "width": 44,
+          "height": 44,
+          "right": 206,
+          "bottom": 204,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 41,
+            "top": 60,
+            "right": 279,
+            "bottom": 332
+          },
+          "disabled": false
+        },
+        {
+          "label": "Tell atepdf what to do",
+          "x": 25,
+          "y": 349,
+          "width": 270,
+          "height": 48,
+          "right": 295,
+          "bottom": 397,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Add files",
+          "x": 25,
+          "y": 401,
+          "width": 44,
+          "height": 44,
+          "right": 69,
+          "bottom": 445,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Send message",
+          "x": 251,
+          "y": 401,
+          "width": 44,
+          "height": 44,
+          "right": 295,
+          "bottom": 445,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": true
+        },
+        {
+          "label": "Merge",
+          "x": 16,
+          "y": 462,
+          "width": 90.65625,
+          "height": 50,
+          "right": 106.65625,
+          "bottom": 512,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Compress",
+          "x": 114.65625,
+          "y": 462,
+          "width": 90.671875,
+          "height": 50,
+          "right": 205.328125,
+          "bottom": 512,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Make searchable",
+          "x": 213.328125,
+          "y": 462,
+          "width": 90.671875,
+          "height": 50,
+          "right": 304,
+          "bottom": 512,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Help",
+          "x": 234.578125,
+          "y": 516,
+          "width": 50.125,
+          "height": 44,
+          "right": 284.703125,
+          "bottom": 560,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        }
+      ],
+      "welcome": null,
+      "conversation": {
+        "x": 0,
+        "y": 60,
+        "width": 320,
+        "height": 280,
+        "right": 320,
+        "bottom": 340,
+        "fullyVisible": true,
+        "fontSize": "16px",
+        "clip": {
+          "left": 0,
+          "top": 0,
+          "right": 320,
+          "bottom": 568
+        }
+      },
+      "preview": {
+        "x": 41,
+        "y": 60,
+        "width": 238,
+        "height": 272,
+        "right": 279,
+        "bottom": 332,
+        "fullyVisible": true,
+        "fontSize": "16px",
+        "clip": {
+          "left": 0,
+          "top": 60,
+          "right": 320,
+          "bottom": 340
+        }
+      },
+      "paper": {
+        "x": 124.5,
+        "y": 219,
+        "width": 71,
+        "height": 100,
+        "right": 195.5,
+        "bottom": 319,
+        "fullyVisible": true,
+        "fontSize": "16px",
+        "clip": {
+          "left": 42,
+          "top": 207,
+          "right": 278,
+          "bottom": 331
+        },
+        "pixels": {
+          "width": 71,
+          "height": 100
+        },
+        "label": "PDF page 1"
+      },
+      "pageHost": {
+        "x": 42,
+        "y": 207,
+        "width": 236,
+        "height": 124,
+        "right": 278,
+        "bottom": 331,
+        "fullyVisible": true,
+        "fontSize": "16px",
+        "clip": {
+          "left": 41,
+          "top": 60,
+          "right": 279,
+          "bottom": 332
+        },
+        "scrollTop": 0,
+        "scrollLeft": 0
+      },
+      "shortcuts": [
+        {
+          "name": "Merge",
+          "button": {
+            "x": 16,
+            "y": 462,
+            "width": 90.65625,
+            "height": 50,
+            "right": 106.65625,
+            "bottom": 512,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "icon": {
+            "x": 32.375,
+            "y": 479,
+            "width": 16,
+            "height": 16,
+            "right": 48.375,
+            "bottom": 495,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "labelFontSize": "12px"
+        },
+        {
+          "name": "Compress",
+          "button": {
+            "x": 114.65625,
+            "y": 462,
+            "width": 90.671875,
+            "height": 50,
+            "right": 205.328125,
+            "bottom": 512,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "icon": {
+            "x": 120.421875,
+            "y": 479,
+            "width": 16,
+            "height": 16,
+            "right": 136.421875,
+            "bottom": 495,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "labelFontSize": "12px"
+        },
+        {
+          "name": "Make searchable",
+          "button": {
+            "x": 213.328125,
+            "y": 462,
+            "width": 90.671875,
+            "height": 50,
+            "right": 304,
+            "bottom": 512,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "icon": {
+            "x": 216.765625,
+            "y": 479,
+            "width": 16,
+            "height": 16,
+            "right": 232.765625,
+            "bottom": 495,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "labelFontSize": "12px"
+        }
+      ]
+    },
+    {
+      "name": "compact",
+      "state": "preview-next",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "rootFontSize": "16px",
+      "documentWidth": 320,
+      "bodyText": "brief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nMerged PDF\n3 pages · 3.1 kB\nCurrent result\nSave PDF\nHide preview\nRead-only preview\nFit\nPage 2 of 3\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent: Merged PDF · 3 pages\nHelp",
+      "controls": [
+        {
+          "label": "Processed on your device",
+          "x": 164,
+          "y": 8,
+          "width": 44,
+          "height": 44,
+          "right": 208,
+          "bottom": 52,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "OpenAI connection",
+          "x": 212,
+          "y": 8,
+          "width": 44,
+          "height": 44,
+          "right": 256,
+          "bottom": 52,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Start over",
+          "x": 260,
+          "y": 8,
+          "width": 44,
+          "height": 44,
+          "right": 304,
+          "bottom": 52,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Copy",
+          "x": 20,
+          "y": -361,
+          "width": 44,
+          "height": 44,
+          "right": 64,
+          "bottom": -317,
+          "fullyVisible": false,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 60,
+            "right": 320,
+            "bottom": 340
+          },
+          "disabled": false
+        },
+        {
+          "label": "Save PDF",
+          "x": 41,
+          "y": -64,
+          "width": 110.4375,
+          "height": 44,
+          "right": 151.4375,
+          "bottom": -20,
+          "fullyVisible": false,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 60,
+            "right": 320,
+            "bottom": 340
+          },
+          "disabled": false
+        },
+        {
+          "label": "Hide preview",
+          "x": 41,
+          "y": -12,
+          "width": 135.9375,
+          "height": 44,
+          "right": 176.9375,
+          "bottom": 32,
+          "fullyVisible": false,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 60,
+            "right": 320,
+            "bottom": 340
+          },
+          "disabled": false
+        },
+        {
+          "label": "Fit page",
+          "x": 182,
+          "y": 63,
+          "width": 44,
+          "height": 44,
+          "right": 226,
+          "bottom": 107,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 41,
+            "top": 60,
+            "right": 279,
+            "bottom": 332
+          },
+          "disabled": false
+        },
+        {
+          "label": "Close preview",
+          "x": 230,
+          "y": 63,
+          "width": 44,
+          "height": 44,
+          "right": 274,
+          "bottom": 107,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 41,
+            "top": 60,
+            "right": 279,
+            "bottom": 332
+          },
+          "disabled": false
+        },
+        {
+          "label": "Previous page",
+          "x": 46,
+          "y": 112,
+          "width": 44,
+          "height": 44,
+          "right": 90,
+          "bottom": 156,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 41,
+            "top": 60,
+            "right": 279,
+            "bottom": 332
+          },
+          "disabled": false
+        },
+        {
+          "label": "Next page",
+          "x": 230,
+          "y": 112,
+          "width": 44,
+          "height": 44,
+          "right": 274,
+          "bottom": 156,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 41,
+            "top": 60,
+            "right": 279,
+            "bottom": 332
+          },
+          "disabled": false
+        },
+        {
+          "label": "Zoom out",
+          "x": 114,
+          "y": 160,
+          "width": 44,
+          "height": 44,
+          "right": 158,
+          "bottom": 204,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 41,
+            "top": 60,
+            "right": 279,
+            "bottom": 332
+          },
+          "disabled": true
+        },
+        {
+          "label": "Zoom in",
+          "x": 162,
+          "y": 160,
+          "width": 44,
+          "height": 44,
+          "right": 206,
+          "bottom": 204,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 41,
+            "top": 60,
+            "right": 279,
+            "bottom": 332
+          },
+          "disabled": false
+        },
+        {
+          "label": "Tell atepdf what to do",
+          "x": 25,
+          "y": 349,
+          "width": 270,
+          "height": 48,
+          "right": 295,
+          "bottom": 397,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Add files",
+          "x": 25,
+          "y": 401,
+          "width": 44,
+          "height": 44,
+          "right": 69,
+          "bottom": 445,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Send message",
+          "x": 251,
+          "y": 401,
+          "width": 44,
+          "height": 44,
+          "right": 295,
+          "bottom": 445,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": true
+        },
+        {
+          "label": "Merge",
+          "x": 16,
+          "y": 462,
+          "width": 90.65625,
+          "height": 50,
+          "right": 106.65625,
+          "bottom": 512,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Compress",
+          "x": 114.65625,
+          "y": 462,
+          "width": 90.671875,
+          "height": 50,
+          "right": 205.328125,
+          "bottom": 512,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Make searchable",
+          "x": 213.328125,
+          "y": 462,
+          "width": 90.671875,
+          "height": 50,
+          "right": 304,
+          "bottom": 512,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Help",
+          "x": 234.578125,
+          "y": 516,
+          "width": 50.125,
+          "height": 44,
+          "right": 284.703125,
+          "bottom": 560,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        }
+      ],
+      "welcome": null,
+      "conversation": {
+        "x": 0,
+        "y": 60,
+        "width": 320,
+        "height": 280,
+        "right": 320,
+        "bottom": 340,
+        "fullyVisible": true,
+        "fontSize": "16px",
+        "clip": {
+          "left": 0,
+          "top": 0,
+          "right": 320,
+          "bottom": 568
+        }
+      },
+      "preview": {
+        "x": 41,
+        "y": 60,
+        "width": 238,
+        "height": 272,
+        "right": 279,
+        "bottom": 332,
+        "fullyVisible": true,
+        "fontSize": "16px",
+        "clip": {
+          "left": 0,
+          "top": 60,
+          "right": 320,
+          "bottom": 340
+        }
+      },
+      "paper": {
+        "x": 124.5,
+        "y": 219,
+        "width": 71,
+        "height": 100,
+        "right": 195.5,
+        "bottom": 319,
+        "fullyVisible": true,
+        "fontSize": "16px",
+        "clip": {
+          "left": 42,
+          "top": 207,
+          "right": 278,
+          "bottom": 331
+        },
+        "pixels": {
+          "width": 71,
+          "height": 100
+        },
+        "label": "PDF page 2"
+      },
+      "pageHost": {
+        "x": 42,
+        "y": 207,
+        "width": 236,
+        "height": 124,
+        "right": 278,
+        "bottom": 331,
+        "fullyVisible": true,
+        "fontSize": "16px",
+        "clip": {
+          "left": 41,
+          "top": 60,
+          "right": 279,
+          "bottom": 332
+        },
+        "scrollTop": 0,
+        "scrollLeft": 0
+      },
+      "shortcuts": [
+        {
+          "name": "Merge",
+          "button": {
+            "x": 16,
+            "y": 462,
+            "width": 90.65625,
+            "height": 50,
+            "right": 106.65625,
+            "bottom": 512,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "icon": {
+            "x": 32.375,
+            "y": 479,
+            "width": 16,
+            "height": 16,
+            "right": 48.375,
+            "bottom": 495,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "labelFontSize": "12px"
+        },
+        {
+          "name": "Compress",
+          "button": {
+            "x": 114.65625,
+            "y": 462,
+            "width": 90.671875,
+            "height": 50,
+            "right": 205.328125,
+            "bottom": 512,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "icon": {
+            "x": 120.421875,
+            "y": 479,
+            "width": 16,
+            "height": 16,
+            "right": 136.421875,
+            "bottom": 495,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "labelFontSize": "12px"
+        },
+        {
+          "name": "Make searchable",
+          "button": {
+            "x": 213.328125,
+            "y": 462,
+            "width": 90.671875,
+            "height": 50,
+            "right": 304,
+            "bottom": 512,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "icon": {
+            "x": 216.765625,
+            "y": 479,
+            "width": 16,
+            "height": 16,
+            "right": 232.765625,
+            "bottom": 495,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "labelFontSize": "12px"
+        }
+      ]
+    },
+    {
+      "name": "compact",
+      "state": "preview-zoom",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "rootFontSize": "16px",
+      "documentWidth": 320,
+      "bodyText": "brief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nMerged PDF\n3 pages · 3.1 kB\nCurrent result\nSave PDF\nHide preview\nRead-only preview\nFit\nPage 2 of 3\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent: Merged PDF · 3 pages\nHelp",
+      "controls": [
+        {
+          "label": "Processed on your device",
+          "x": 164,
+          "y": 8,
+          "width": 44,
+          "height": 44,
+          "right": 208,
+          "bottom": 52,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "OpenAI connection",
+          "x": 212,
+          "y": 8,
+          "width": 44,
+          "height": 44,
+          "right": 256,
+          "bottom": 52,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Start over",
+          "x": 260,
+          "y": 8,
+          "width": 44,
+          "height": 44,
+          "right": 304,
+          "bottom": 52,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Copy",
+          "x": 20,
+          "y": -361,
+          "width": 44,
+          "height": 44,
+          "right": 64,
+          "bottom": -317,
+          "fullyVisible": false,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 60,
+            "right": 320,
+            "bottom": 340
+          },
+          "disabled": false
+        },
+        {
+          "label": "Save PDF",
+          "x": 41,
+          "y": -64,
+          "width": 110.4375,
+          "height": 44,
+          "right": 151.4375,
+          "bottom": -20,
+          "fullyVisible": false,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 60,
+            "right": 320,
+            "bottom": 340
+          },
+          "disabled": false
+        },
+        {
+          "label": "Hide preview",
+          "x": 41,
+          "y": -12,
+          "width": 135.9375,
+          "height": 44,
+          "right": 176.9375,
+          "bottom": 32,
+          "fullyVisible": false,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 60,
+            "right": 320,
+            "bottom": 340
+          },
+          "disabled": false
+        },
+        {
+          "label": "Fit page",
+          "x": 182,
+          "y": 63,
+          "width": 44,
+          "height": 44,
+          "right": 226,
+          "bottom": 107,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 41,
+            "top": 60,
+            "right": 279,
+            "bottom": 332
+          },
+          "disabled": false
+        },
+        {
+          "label": "Close preview",
+          "x": 230,
+          "y": 63,
+          "width": 44,
+          "height": 44,
+          "right": 274,
+          "bottom": 107,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 41,
+            "top": 60,
+            "right": 279,
+            "bottom": 332
+          },
+          "disabled": false
+        },
+        {
+          "label": "Previous page",
+          "x": 46,
+          "y": 112,
+          "width": 44,
+          "height": 44,
+          "right": 90,
+          "bottom": 156,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 41,
+            "top": 60,
+            "right": 279,
+            "bottom": 332
+          },
+          "disabled": false
+        },
+        {
+          "label": "Next page",
+          "x": 230,
+          "y": 112,
+          "width": 44,
+          "height": 44,
+          "right": 274,
+          "bottom": 156,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 41,
+            "top": 60,
+            "right": 279,
+            "bottom": 332
+          },
+          "disabled": false
+        },
+        {
+          "label": "Zoom out",
+          "x": 114,
+          "y": 160,
+          "width": 44,
+          "height": 44,
+          "right": 158,
+          "bottom": 204,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 41,
+            "top": 60,
+            "right": 279,
+            "bottom": 332
+          },
+          "disabled": false
+        },
+        {
+          "label": "Zoom in",
+          "x": 162,
+          "y": 160,
+          "width": 44,
+          "height": 44,
+          "right": 206,
+          "bottom": 204,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 41,
+            "top": 60,
+            "right": 279,
+            "bottom": 332
+          },
+          "disabled": false
+        },
+        {
+          "label": "Tell atepdf what to do",
+          "x": 25,
+          "y": 349,
+          "width": 270,
+          "height": 48,
+          "right": 295,
+          "bottom": 397,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Add files",
+          "x": 25,
+          "y": 401,
+          "width": 44,
+          "height": 44,
+          "right": 69,
+          "bottom": 445,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Send message",
+          "x": 251,
+          "y": 401,
+          "width": 44,
+          "height": 44,
+          "right": 295,
+          "bottom": 445,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": true
+        },
+        {
+          "label": "Merge",
+          "x": 16,
+          "y": 462,
+          "width": 90.65625,
+          "height": 50,
+          "right": 106.65625,
+          "bottom": 512,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Compress",
+          "x": 114.65625,
+          "y": 462,
+          "width": 90.671875,
+          "height": 50,
+          "right": 205.328125,
+          "bottom": 512,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Make searchable",
+          "x": 213.328125,
+          "y": 462,
+          "width": 90.671875,
+          "height": 50,
+          "right": 304,
+          "bottom": 512,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Help",
+          "x": 234.578125,
+          "y": 516,
+          "width": 50.125,
+          "height": 44,
+          "right": 284.703125,
+          "bottom": 560,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        }
+      ],
+      "welcome": null,
+      "conversation": {
+        "x": 0,
+        "y": 60,
+        "width": 320,
+        "height": 280,
+        "right": 320,
+        "bottom": 340,
+        "fullyVisible": true,
+        "fontSize": "16px",
+        "clip": {
+          "left": 0,
+          "top": 0,
+          "right": 320,
+          "bottom": 568
+        }
+      },
+      "preview": {
+        "x": 41,
+        "y": 60,
+        "width": 238,
+        "height": 272,
+        "right": 279,
+        "bottom": 332,
+        "fullyVisible": true,
+        "fontSize": "16px",
+        "clip": {
+          "left": 0,
+          "top": 60,
+          "right": 320,
+          "bottom": 340
+        }
+      },
+      "paper": {
+        "x": 106.5,
+        "y": 219,
+        "width": 107,
+        "height": 150,
+        "right": 213.5,
+        "bottom": 369,
+        "fullyVisible": false,
+        "fontSize": "16px",
+        "clip": {
+          "left": 42,
+          "top": 207,
+          "right": 278,
+          "bottom": 331
+        },
+        "pixels": {
+          "width": 107,
+          "height": 150
+        },
+        "label": "PDF page 2"
+      },
+      "pageHost": {
+        "x": 42,
+        "y": 207,
+        "width": 236,
+        "height": 124,
+        "right": 278,
+        "bottom": 331,
+        "fullyVisible": true,
+        "fontSize": "16px",
+        "clip": {
+          "left": 41,
+          "top": 60,
+          "right": 279,
+          "bottom": 332
+        },
+        "scrollTop": 0,
+        "scrollLeft": 0
+      },
+      "shortcuts": [
+        {
+          "name": "Merge",
+          "button": {
+            "x": 16,
+            "y": 462,
+            "width": 90.65625,
+            "height": 50,
+            "right": 106.65625,
+            "bottom": 512,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "icon": {
+            "x": 32.375,
+            "y": 479,
+            "width": 16,
+            "height": 16,
+            "right": 48.375,
+            "bottom": 495,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "labelFontSize": "12px"
+        },
+        {
+          "name": "Compress",
+          "button": {
+            "x": 114.65625,
+            "y": 462,
+            "width": 90.671875,
+            "height": 50,
+            "right": 205.328125,
+            "bottom": 512,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "icon": {
+            "x": 120.421875,
+            "y": 479,
+            "width": 16,
+            "height": 16,
+            "right": 136.421875,
+            "bottom": 495,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "labelFontSize": "12px"
+        },
+        {
+          "name": "Make searchable",
+          "button": {
+            "x": 213.328125,
+            "y": 462,
+            "width": 90.671875,
+            "height": 50,
+            "right": 304,
+            "bottom": 512,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "icon": {
+            "x": 216.765625,
+            "y": 479,
+            "width": 16,
+            "height": 16,
+            "right": 232.765625,
+            "bottom": 495,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "labelFontSize": "12px"
+        }
+      ]
+    },
+    {
+      "name": "compact",
+      "state": "preview-fit",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "rootFontSize": "16px",
+      "documentWidth": 320,
+      "bodyText": "brief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nMerged PDF\n3 pages · 3.1 kB\nCurrent result\nSave PDF\nHide preview\nRead-only preview\nFit\nPage 2 of 3\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent: Merged PDF · 3 pages\nHelp",
+      "controls": [
+        {
+          "label": "Processed on your device",
+          "x": 164,
+          "y": 8,
+          "width": 44,
+          "height": 44,
+          "right": 208,
+          "bottom": 52,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "OpenAI connection",
+          "x": 212,
+          "y": 8,
+          "width": 44,
+          "height": 44,
+          "right": 256,
+          "bottom": 52,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Start over",
+          "x": 260,
+          "y": 8,
+          "width": 44,
+          "height": 44,
+          "right": 304,
+          "bottom": 52,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Copy",
+          "x": 20,
+          "y": -361,
+          "width": 44,
+          "height": 44,
+          "right": 64,
+          "bottom": -317,
+          "fullyVisible": false,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 60,
+            "right": 320,
+            "bottom": 340
+          },
+          "disabled": false
+        },
+        {
+          "label": "Save PDF",
+          "x": 41,
+          "y": -64,
+          "width": 110.4375,
+          "height": 44,
+          "right": 151.4375,
+          "bottom": -20,
+          "fullyVisible": false,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 60,
+            "right": 320,
+            "bottom": 340
+          },
+          "disabled": false
+        },
+        {
+          "label": "Hide preview",
+          "x": 41,
+          "y": -12,
+          "width": 135.9375,
+          "height": 44,
+          "right": 176.9375,
+          "bottom": 32,
+          "fullyVisible": false,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 60,
+            "right": 320,
+            "bottom": 340
+          },
+          "disabled": false
+        },
+        {
+          "label": "Fit page",
+          "x": 182,
+          "y": 63,
+          "width": 44,
+          "height": 44,
+          "right": 226,
+          "bottom": 107,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 41,
+            "top": 60,
+            "right": 279,
+            "bottom": 332
+          },
+          "disabled": false
+        },
+        {
+          "label": "Close preview",
+          "x": 230,
+          "y": 63,
+          "width": 44,
+          "height": 44,
+          "right": 274,
+          "bottom": 107,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 41,
+            "top": 60,
+            "right": 279,
+            "bottom": 332
+          },
+          "disabled": false
+        },
+        {
+          "label": "Previous page",
+          "x": 46,
+          "y": 112,
+          "width": 44,
+          "height": 44,
+          "right": 90,
+          "bottom": 156,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 41,
+            "top": 60,
+            "right": 279,
+            "bottom": 332
+          },
+          "disabled": false
+        },
+        {
+          "label": "Next page",
+          "x": 230,
+          "y": 112,
+          "width": 44,
+          "height": 44,
+          "right": 274,
+          "bottom": 156,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 41,
+            "top": 60,
+            "right": 279,
+            "bottom": 332
+          },
+          "disabled": false
+        },
+        {
+          "label": "Zoom out",
+          "x": 114,
+          "y": 160,
+          "width": 44,
+          "height": 44,
+          "right": 158,
+          "bottom": 204,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 41,
+            "top": 60,
+            "right": 279,
+            "bottom": 332
+          },
+          "disabled": true
+        },
+        {
+          "label": "Zoom in",
+          "x": 162,
+          "y": 160,
+          "width": 44,
+          "height": 44,
+          "right": 206,
+          "bottom": 204,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 41,
+            "top": 60,
+            "right": 279,
+            "bottom": 332
+          },
+          "disabled": false
+        },
+        {
+          "label": "Tell atepdf what to do",
+          "x": 25,
+          "y": 349,
+          "width": 270,
+          "height": 48,
+          "right": 295,
+          "bottom": 397,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Add files",
+          "x": 25,
+          "y": 401,
+          "width": 44,
+          "height": 44,
+          "right": 69,
+          "bottom": 445,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Send message",
+          "x": 251,
+          "y": 401,
+          "width": 44,
+          "height": 44,
+          "right": 295,
+          "bottom": 445,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": true
+        },
+        {
+          "label": "Merge",
+          "x": 16,
+          "y": 462,
+          "width": 90.65625,
+          "height": 50,
+          "right": 106.65625,
+          "bottom": 512,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Compress",
+          "x": 114.65625,
+          "y": 462,
+          "width": 90.671875,
+          "height": 50,
+          "right": 205.328125,
+          "bottom": 512,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Make searchable",
+          "x": 213.328125,
+          "y": 462,
+          "width": 90.671875,
+          "height": 50,
+          "right": 304,
+          "bottom": 512,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        },
+        {
+          "label": "Help",
+          "x": 234.578125,
+          "y": 516,
+          "width": 50.125,
+          "height": 44,
+          "right": 284.703125,
+          "bottom": 560,
+          "fullyVisible": true,
+          "fontSize": "16px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 320,
+            "bottom": 568
+          },
+          "disabled": false
+        }
+      ],
+      "welcome": null,
+      "conversation": {
+        "x": 0,
+        "y": 60,
+        "width": 320,
+        "height": 280,
+        "right": 320,
+        "bottom": 340,
+        "fullyVisible": true,
+        "fontSize": "16px",
+        "clip": {
+          "left": 0,
+          "top": 0,
+          "right": 320,
+          "bottom": 568
+        }
+      },
+      "preview": {
+        "x": 41,
+        "y": 60,
+        "width": 238,
+        "height": 272,
+        "right": 279,
+        "bottom": 332,
+        "fullyVisible": true,
+        "fontSize": "16px",
+        "clip": {
+          "left": 0,
+          "top": 60,
+          "right": 320,
+          "bottom": 340
+        }
+      },
+      "paper": {
+        "x": 124.5,
+        "y": 219,
+        "width": 71,
+        "height": 100,
+        "right": 195.5,
+        "bottom": 319,
+        "fullyVisible": true,
+        "fontSize": "16px",
+        "clip": {
+          "left": 42,
+          "top": 207,
+          "right": 278,
+          "bottom": 331
+        },
+        "pixels": {
+          "width": 71,
+          "height": 100
+        },
+        "label": "PDF page 2"
+      },
+      "pageHost": {
+        "x": 42,
+        "y": 207,
+        "width": 236,
+        "height": 124,
+        "right": 278,
+        "bottom": 331,
+        "fullyVisible": true,
+        "fontSize": "16px",
+        "clip": {
+          "left": 41,
+          "top": 60,
+          "right": 279,
+          "bottom": 332
+        },
+        "scrollTop": 0,
+        "scrollLeft": 0
+      },
+      "shortcuts": [
+        {
+          "name": "Merge",
+          "button": {
+            "x": 16,
+            "y": 462,
+            "width": 90.65625,
+            "height": 50,
+            "right": 106.65625,
+            "bottom": 512,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "icon": {
+            "x": 32.375,
+            "y": 479,
+            "width": 16,
+            "height": 16,
+            "right": 48.375,
+            "bottom": 495,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "labelFontSize": "12px"
+        },
+        {
+          "name": "Compress",
+          "button": {
+            "x": 114.65625,
+            "y": 462,
+            "width": 90.671875,
+            "height": 50,
+            "right": 205.328125,
+            "bottom": 512,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "icon": {
+            "x": 120.421875,
+            "y": 479,
+            "width": 16,
+            "height": 16,
+            "right": 136.421875,
+            "bottom": 495,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "labelFontSize": "12px"
+        },
+        {
+          "name": "Make searchable",
+          "button": {
+            "x": 213.328125,
+            "y": 462,
+            "width": 90.671875,
+            "height": 50,
+            "right": 304,
+            "bottom": 512,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "icon": {
+            "x": 216.765625,
+            "y": 479,
+            "width": 16,
+            "height": 16,
+            "right": 232.765625,
+            "bottom": 495,
+            "fullyVisible": true,
+            "fontSize": "16px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 320,
+              "bottom": 568
+            }
+          },
+          "labelFontSize": "12px"
+        }
+      ]
+    },
+    {
+      "name": "large-text",
+      "state": "empty",
+      "viewport": {
+        "width": 720,
+        "height": 500
+      },
+      "rootFontSize": "32px",
+      "documentWidth": 720,
+      "bodyText": "Processed on your device\nDrop files here\nChoose files\nThen tell me what you’d like to do.\nTry the two sample PDFs\nMerge\nCompress\nMake searchable\nYour files stay on this device\nHelp",
+      "controls": [
+        {
+          "label": "Processed on your device",
+          "x": 309.109375,
+          "y": 8,
+          "width": 342.890625,
+          "height": 44,
+          "right": 652,
+          "bottom": 52,
+          "fullyVisible": true,
+          "fontSize": "32px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 720,
+            "bottom": 500
+          },
+          "disabled": false
+        },
+        {
+          "label": "OpenAI connection",
+          "x": 660,
+          "y": 8,
+          "width": 44,
+          "height": 44,
+          "right": 704,
+          "bottom": 52,
+          "fullyVisible": true,
+          "fontSize": "32px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 720,
+            "bottom": 500
+          },
+          "disabled": false
+        },
+        {
+          "label": "Choose files",
+          "x": 247.296875,
+          "y": 123,
+          "width": 225.390625,
+          "height": 56,
+          "right": 472.6875,
+          "bottom": 179,
+          "fullyVisible": true,
+          "fontSize": "32px",
+          "clip": {
+            "left": 0,
+            "top": 60,
+            "right": 720,
+            "bottom": 260
+          },
+          "disabled": false
+        },
+        {
+          "label": "Try the two sample PDFs",
+          "x": 199.828125,
+          "y": 235,
+          "width": 320.34375,
+          "height": 56,
+          "right": 520.171875,
+          "bottom": 291,
+          "fullyVisible": false,
+          "fontSize": "32px",
+          "clip": {
+            "left": 0,
+            "top": 60,
+            "right": 720,
+            "bottom": 260
+          },
+          "disabled": false
+        },
+        {
+          "label": "Tell atepdf what to do",
+          "x": 25,
+          "y": 269,
+          "width": 670,
+          "height": 48,
+          "right": 695,
+          "bottom": 317,
+          "fullyVisible": true,
+          "fontSize": "32px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 720,
+            "bottom": 500
+          },
+          "disabled": false
+        },
+        {
+          "label": "Add files",
+          "x": 25,
+          "y": 321,
+          "width": 44,
+          "height": 44,
+          "right": 69,
+          "bottom": 365,
+          "fullyVisible": true,
+          "fontSize": "32px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 720,
+            "bottom": 500
+          },
+          "disabled": false
+        },
+        {
+          "label": "Send message",
+          "x": 651,
+          "y": 321,
+          "width": 44,
+          "height": 44,
+          "right": 695,
+          "bottom": 365,
+          "fullyVisible": true,
+          "fontSize": "32px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 720,
+            "bottom": 500
+          },
+          "disabled": true
+        },
+        {
+          "label": "Merge",
+          "x": 89.734375,
+          "y": 382,
+          "width": 120.203125,
+          "height": 50,
+          "right": 209.9375,
+          "bottom": 432,
+          "fullyVisible": true,
+          "fontSize": "32px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 720,
+            "bottom": 500
+          },
+          "disabled": false
+        },
+        {
+          "label": "Compress",
+          "x": 225.9375,
+          "y": 382,
+          "width": 159.703125,
+          "height": 50,
+          "right": 385.640625,
+          "bottom": 432,
+          "fullyVisible": true,
+          "fontSize": "32px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 720,
+            "bottom": 500
+          },
+          "disabled": false
+        },
+        {
+          "label": "Make searchable",
+          "x": 401.640625,
+          "y": 382,
+          "width": 228.625,
+          "height": 50,
+          "right": 630.265625,
+          "bottom": 432,
+          "fullyVisible": true,
+          "fontSize": "32px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 720,
+            "bottom": 500
+          },
+          "disabled": false
+        },
+        {
+          "label": "Help",
+          "x": 463.890625,
+          "y": 436,
+          "width": 88,
+          "height": 48,
+          "right": 551.890625,
+          "bottom": 484,
+          "fullyVisible": true,
+          "fontSize": "32px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 720,
+            "bottom": 500
+          },
+          "disabled": false
+        }
+      ],
+      "welcome": {
+        "x": 0,
+        "y": 60,
+        "width": 720,
+        "height": 200,
+        "right": 720,
+        "bottom": 260,
+        "fullyVisible": true,
+        "fontSize": "32px",
+        "clip": {
+          "left": 0,
+          "top": 0,
+          "right": 720,
+          "bottom": 500
+        }
+      },
+      "conversation": null,
+      "preview": null,
+      "paper": null,
+      "pageHost": null,
+      "shortcuts": [
+        {
+          "name": "Merge",
+          "button": {
+            "x": 89.734375,
+            "y": 382,
+            "width": 120.203125,
+            "height": 50,
+            "right": 209.9375,
+            "bottom": 432,
+            "fullyVisible": true,
+            "fontSize": "32px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 720,
+              "bottom": 500
+            }
+          },
+          "icon": {
+            "x": 102.734375,
+            "y": 399,
+            "width": 16,
+            "height": 16,
+            "right": 118.734375,
+            "bottom": 415,
+            "fullyVisible": true,
+            "fontSize": "32px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 720,
+              "bottom": 500
+            }
+          },
+          "labelFontSize": "24px"
+        },
+        {
+          "name": "Compress",
+          "button": {
+            "x": 225.9375,
+            "y": 382,
+            "width": 159.703125,
+            "height": 50,
+            "right": 385.640625,
+            "bottom": 432,
+            "fullyVisible": true,
+            "fontSize": "32px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 720,
+              "bottom": 500
+            }
+          },
+          "icon": {
+            "x": 238.9375,
+            "y": 399,
+            "width": 16,
+            "height": 16,
+            "right": 254.9375,
+            "bottom": 415,
+            "fullyVisible": true,
+            "fontSize": "32px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 720,
+              "bottom": 500
+            }
+          },
+          "labelFontSize": "24px"
+        },
+        {
+          "name": "Make searchable",
+          "button": {
+            "x": 401.640625,
+            "y": 382,
+            "width": 228.625,
+            "height": 50,
+            "right": 630.265625,
+            "bottom": 432,
+            "fullyVisible": true,
+            "fontSize": "32px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 720,
+              "bottom": 500
+            }
+          },
+          "icon": {
+            "x": 414.640625,
+            "y": 399,
+            "width": 16,
+            "height": 16,
+            "right": 430.640625,
+            "bottom": 415,
+            "fullyVisible": true,
+            "fontSize": "32px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 720,
+              "bottom": 500
+            }
+          },
+          "labelFontSize": "24px"
+        }
+      ]
+    },
+    {
+      "name": "large-text",
+      "state": "preview-page1",
+      "viewport": {
+        "width": 720,
+        "height": 500
+      },
+      "rootFontSize": "32px",
+      "documentWidth": 720,
+      "bodyText": "Processed on your device\nbrief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nMerged PDF\n3 pages · 3.1 kB\nCurrent result\nSave PDF\nHide preview\nRead-only preview\nFit\nPage 1 of 3\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent: Merged PDF · 3 pages\nHelp",
+      "controls": [
+        {
+          "label": "Processed on your device",
+          "x": 257.109375,
+          "y": 8,
+          "width": 342.890625,
+          "height": 44,
+          "right": 600,
+          "bottom": 52,
+          "fullyVisible": true,
+          "fontSize": "32px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 720,
+            "bottom": 500
+          },
+          "disabled": false
+        },
+        {
+          "label": "OpenAI connection",
+          "x": 608,
+          "y": 8,
+          "width": 44,
+          "height": 44,
+          "right": 652,
+          "bottom": 52,
+          "fullyVisible": true,
+          "fontSize": "32px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 720,
+            "bottom": 500
+          },
+          "disabled": false
+        },
+        {
+          "label": "Start over",
+          "x": 660,
+          "y": 8,
+          "width": 44,
+          "height": 44,
+          "right": 704,
+          "bottom": 52,
+          "fullyVisible": true,
+          "fontSize": "32px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 720,
+            "bottom": 500
+          },
+          "disabled": false
+        },
+        {
+          "label": "Copy",
+          "x": 40,
+          "y": -685,
+          "width": 88,
+          "height": 88,
+          "right": 128,
+          "bottom": -597,
+          "fullyVisible": false,
+          "fontSize": "32px",
+          "clip": {
+            "left": 0,
+            "top": 60,
+            "right": 720,
+            "bottom": 268
+          },
+          "disabled": false
+        },
+        {
+          "label": "Save PDF",
+          "x": 89,
+          "y": -76,
+          "width": 215.03125,
+          "height": 88,
+          "right": 304.03125,
+          "bottom": 12,
+          "fullyVisible": false,
+          "fontSize": "32px",
+          "clip": {
+            "left": 0,
+            "top": 60,
+            "right": 720,
+            "bottom": 268
+          },
+          "disabled": false
+        },
+        {
+          "label": "Hide preview",
+          "x": 320.03125,
+          "y": -76,
+          "width": 258.875,
+          "height": 88,
+          "right": 578.90625,
+          "bottom": 12,
+          "fullyVisible": false,
+          "fontSize": "32px",
+          "clip": {
+            "left": 0,
+            "top": 60,
+            "right": 720,
+            "bottom": 268
+          },
+          "disabled": false
+        },
+        {
+          "label": "Fit page",
+          "x": 534,
+          "y": 63,
+          "width": 44,
+          "height": 44,
+          "right": 578,
+          "bottom": 107,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 89,
+            "top": 60,
+            "right": 631,
+            "bottom": 260
+          },
+          "disabled": false
+        },
+        {
+          "label": "Close preview",
+          "x": 582,
+          "y": 63,
+          "width": 44,
+          "height": 44,
+          "right": 626,
+          "bottom": 107,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 89,
+            "top": 60,
+            "right": 631,
+            "bottom": 260
+          },
+          "disabled": false
+        },
+        {
+          "label": "Previous page",
+          "x": 94,
+          "y": 112,
+          "width": 44,
+          "height": 44,
+          "right": 138,
+          "bottom": 156,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 89,
+            "top": 60,
+            "right": 631,
+            "bottom": 260
+          },
+          "disabled": true
+        },
+        {
+          "label": "Next page",
+          "x": 486,
+          "y": 112,
+          "width": 44,
+          "height": 44,
+          "right": 530,
+          "bottom": 156,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 89,
+            "top": 60,
+            "right": 631,
+            "bottom": 260
+          },
+          "disabled": false
+        },
+        {
+          "label": "Zoom out",
+          "x": 534,
+          "y": 112,
+          "width": 44,
+          "height": 44,
+          "right": 578,
+          "bottom": 156,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 89,
+            "top": 60,
+            "right": 631,
+            "bottom": 260
+          },
+          "disabled": true
+        },
+        {
+          "label": "Zoom in",
+          "x": 582,
+          "y": 112,
+          "width": 44,
+          "height": 44,
+          "right": 626,
+          "bottom": 156,
+          "fullyVisible": true,
+          "fontSize": "13px",
+          "clip": {
+            "left": 89,
+            "top": 60,
+            "right": 631,
+            "bottom": 260
+          },
+          "disabled": false
+        },
+        {
+          "label": "Latest message",
+          "x": 656,
+          "y": 212,
+          "width": 44,
+          "height": 44,
+          "right": 700,
+          "bottom": 256,
+          "fullyVisible": true,
+          "fontSize": "32px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 720,
+            "bottom": 500
+          },
+          "disabled": false
+        },
+        {
+          "label": "Tell atepdf what to do",
+          "x": 25,
+          "y": 277,
+          "width": 670,
+          "height": 48,
+          "right": 695,
+          "bottom": 325,
+          "fullyVisible": true,
+          "fontSize": "32px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 720,
+            "bottom": 500
+          },
+          "disabled": false
+        },
+        {
+          "label": "Add files",
+          "x": 25,
+          "y": 329,
+          "width": 44,
+          "height": 44,
+          "right": 69,
+          "bottom": 373,
+          "fullyVisible": true,
+          "fontSize": "32px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 720,
+            "bottom": 500
+          },
+          "disabled": false
+        },
+        {
+          "label": "Send message",
+          "x": 651,
+          "y": 329,
+          "width": 44,
+          "height": 44,
+          "right": 695,
+          "bottom": 373,
+          "fullyVisible": true,
+          "fontSize": "32px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 720,
+            "bottom": 500
+          },
+          "disabled": true
+        },
+        {
+          "label": "Merge",
+          "x": 89.734375,
+          "y": 390,
+          "width": 120.203125,
+          "height": 50,
+          "right": 209.9375,
+          "bottom": 440,
+          "fullyVisible": true,
+          "fontSize": "32px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 720,
+            "bottom": 500
+          },
+          "disabled": false
+        },
+        {
+          "label": "Compress",
+          "x": 225.9375,
+          "y": 390,
+          "width": 159.703125,
+          "height": 50,
+          "right": 385.640625,
+          "bottom": 440,
+          "fullyVisible": true,
+          "fontSize": "32px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 720,
+            "bottom": 500
+          },
+          "disabled": false
+        },
+        {
+          "label": "Make searchable",
+          "x": 401.640625,
+          "y": 390,
+          "width": 228.625,
+          "height": 50,
+          "right": 630.265625,
+          "bottom": 440,
+          "fullyVisible": true,
+          "fontSize": "32px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 720,
+            "bottom": 500
+          },
+          "disabled": false
+        },
+        {
+          "label": "Help",
+          "x": 489.53125,
+          "y": 444,
+          "width": 88,
+          "height": 48,
+          "right": 577.53125,
+          "bottom": 492,
+          "fullyVisible": true,
+          "fontSize": "32px",
+          "clip": {
+            "left": 0,
+            "top": 0,
+            "right": 720,
+            "bottom": 500
+          },
+          "disabled": false
+        }
+      ],
+      "welcome": null,
+      "conversation": {
+        "x": 0,
+        "y": 60,
+        "width": 720,
+        "height": 208,
+        "right": 720,
+        "bottom": 268,
+        "fullyVisible": true,
+        "fontSize": "32px",
+        "clip": {
+          "left": 0,
+          "top": 0,
+          "right": 720,
+          "bottom": 500
+        }
+      },
+      "preview": {
+        "x": 89,
+        "y": 60,
+        "width": 542,
+        "height": 200,
+        "right": 631,
+        "bottom": 260,
+        "fullyVisible": true,
+        "fontSize": "32px",
+        "clip": {
+          "left": 0,
+          "top": 60,
+          "right": 720,
+          "bottom": 268
+        }
+      },
+      "paper": {
+        "x": 333,
+        "y": 171,
+        "width": 54,
+        "height": 76,
+        "right": 387,
+        "bottom": 247,
+        "fullyVisible": true,
+        "fontSize": "32px",
+        "clip": {
+          "left": 90,
+          "top": 159,
+          "right": 630,
+          "bottom": 259
+        },
+        "pixels": {
+          "width": 54,
+          "height": 76
+        },
+        "label": "PDF page 1"
+      },
+      "pageHost": {
+        "x": 90,
+        "y": 159,
+        "width": 540,
+        "height": 100,
+        "right": 630,
+        "bottom": 259,
+        "fullyVisible": true,
+        "fontSize": "32px",
+        "clip": {
+          "left": 89,
+          "top": 60,
+          "right": 631,
+          "bottom": 260
+        },
+        "scrollTop": 0,
+        "scrollLeft": 0
+      },
+      "shortcuts": [
+        {
+          "name": "Merge",
+          "button": {
+            "x": 89.734375,
+            "y": 390,
+            "width": 120.203125,
+            "height": 50,
+            "right": 209.9375,
+            "bottom": 440,
+            "fullyVisible": true,
+            "fontSize": "32px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 720,
+              "bottom": 500
+            }
+          },
+          "icon": {
+            "x": 102.734375,
+            "y": 407,
+            "width": 16,
+            "height": 16,
+            "right": 118.734375,
+            "bottom": 423,
+            "fullyVisible": true,
+            "fontSize": "32px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 720,
+              "bottom": 500
+            }
+          },
+          "labelFontSize": "24px"
+        },
+        {
+          "name": "Compress",
+          "button": {
+            "x": 225.9375,
+            "y": 390,
+            "width": 159.703125,
+            "height": 50,
+            "right": 385.640625,
+            "bottom": 440,
+            "fullyVisible": true,
+            "fontSize": "32px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 720,
+              "bottom": 500
+            }
+          },
+          "icon": {
+            "x": 238.9375,
+            "y": 407,
+            "width": 16,
+            "height": 16,
+            "right": 254.9375,
+            "bottom": 423,
+            "fullyVisible": true,
+            "fontSize": "32px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 720,
+              "bottom": 500
+            }
+          },
+          "labelFontSize": "24px"
+        },
+        {
+          "name": "Make searchable",
+          "button": {
+            "x": 401.640625,
+            "y": 390,
+            "width": 228.625,
+            "height": 50,
+            "right": 630.265625,
+            "bottom": 440,
+            "fullyVisible": true,
+            "fontSize": "32px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 720,
+              "bottom": 500
+            }
+          },
+          "icon": {
+            "x": 414.640625,
+            "y": 407,
+            "width": 16,
+            "height": 16,
+            "right": 430.640625,
+            "bottom": 423,
+            "fullyVisible": true,
+            "fontSize": "32px",
+            "clip": {
+              "left": 0,
+              "top": 0,
+              "right": 720,
+              "bottom": 500
+            }
+          },
+          "labelFontSize": "24px"
+        }
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "viewport": "desktop",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/",
+      "allowed": true
+    },
+    {
+      "viewport": "desktop",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/css/global-418e89804c5c99244db2be82f33419f6.css",
+      "allowed": true
+    },
+    {
+      "viewport": "desktop",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/css/preview-4a592c39668f775437665576652be491.css",
+      "allowed": true
+    },
+    {
+      "viewport": "desktop",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/css/workspace-56224bde220f19bf10d0db39a0c31bba.css",
+      "allowed": true
+    },
+    {
+      "viewport": "desktop",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/js/web/index-630012e833bbef46f5441d9899bb7fda.js",
+      "allowed": true
+    },
+    {
+      "viewport": "desktop",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/assets/assets/approved-8-mark-source-crop.8b708587521942c4118f8e6a3c3f84f8.png",
+      "allowed": true
+    },
+    {
+      "viewport": "desktop",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/assets/assets/approved-atepdf-wordmark-source-crop.e129a61b59d2f9c2fdcb1f1b2521e212.png",
+      "allowed": true
+    },
+    {
+      "viewport": "desktop",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/assets/assets/paper.1cb2ca1d4826879d6316a24bfbeecd07.png",
+      "allowed": true
+    },
+    {
+      "viewport": "desktop",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/atepdf.worker.js",
+      "allowed": true
+    },
+    {
+      "viewport": "desktop",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/js/web/pdf-50f2ec8e34576162255929524f6e72b4.js",
+      "allowed": true
+    },
+    {
+      "viewport": "desktop",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/pdf.worker.min.mjs",
+      "allowed": true
+    },
+    {
+      "viewport": "desktop",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "desktop",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "desktop",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/atepdf.worker.js",
+      "allowed": true
+    },
+    {
+      "viewport": "desktop",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/pdf.worker.min.mjs",
+      "allowed": true
+    },
+    {
+      "viewport": "desktop",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "desktop",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "desktop",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/api/planner/status",
+      "allowed": true
+    },
+    {
+      "viewport": "desktop",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/atepdf.worker.js",
+      "allowed": true
+    },
+    {
+      "viewport": "desktop",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/pdf.worker.min.mjs",
+      "allowed": true
+    },
+    {
+      "viewport": "desktop",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "desktop",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "desktop",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/api/planner/status",
+      "allowed": true
+    },
+    {
+      "viewport": "phone",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/",
+      "allowed": true
+    },
+    {
+      "viewport": "phone",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/css/global-418e89804c5c99244db2be82f33419f6.css",
+      "allowed": true
+    },
+    {
+      "viewport": "phone",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/css/preview-4a592c39668f775437665576652be491.css",
+      "allowed": true
+    },
+    {
+      "viewport": "phone",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/css/workspace-56224bde220f19bf10d0db39a0c31bba.css",
+      "allowed": true
+    },
+    {
+      "viewport": "phone",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/js/web/index-630012e833bbef46f5441d9899bb7fda.js",
+      "allowed": true
+    },
+    {
+      "viewport": "phone",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/assets/assets/approved-8-mark-source-crop.8b708587521942c4118f8e6a3c3f84f8.png",
+      "allowed": true
+    },
+    {
+      "viewport": "phone",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/assets/assets/approved-atepdf-wordmark-source-crop.e129a61b59d2f9c2fdcb1f1b2521e212.png",
+      "allowed": true
+    },
+    {
+      "viewport": "phone",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/assets/assets/paper.1cb2ca1d4826879d6316a24bfbeecd07.png",
+      "allowed": true
+    },
+    {
+      "viewport": "phone",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/atepdf.worker.js",
+      "allowed": true
+    },
+    {
+      "viewport": "phone",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/js/web/pdf-50f2ec8e34576162255929524f6e72b4.js",
+      "allowed": true
+    },
+    {
+      "viewport": "phone",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/pdf.worker.min.mjs",
+      "allowed": true
+    },
+    {
+      "viewport": "phone",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "phone",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "phone",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/atepdf.worker.js",
+      "allowed": true
+    },
+    {
+      "viewport": "phone",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/pdf.worker.min.mjs",
+      "allowed": true
+    },
+    {
+      "viewport": "phone",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "phone",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "phone",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/api/planner/status",
+      "allowed": true
+    },
+    {
+      "viewport": "phone",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/atepdf.worker.js",
+      "allowed": true
+    },
+    {
+      "viewport": "phone",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/pdf.worker.min.mjs",
+      "allowed": true
+    },
+    {
+      "viewport": "phone",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "phone",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "phone",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/api/planner/status",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/css/global-418e89804c5c99244db2be82f33419f6.css",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/css/preview-4a592c39668f775437665576652be491.css",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/css/workspace-56224bde220f19bf10d0db39a0c31bba.css",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/js/web/index-630012e833bbef46f5441d9899bb7fda.js",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/assets/assets/approved-8-mark-source-crop.8b708587521942c4118f8e6a3c3f84f8.png",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/assets/assets/approved-atepdf-wordmark-source-crop.e129a61b59d2f9c2fdcb1f1b2521e212.png",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/atepdf.worker.js",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/js/web/pdf-50f2ec8e34576162255929524f6e72b4.js",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/pdf.worker.min.mjs",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/atepdf.worker.js",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/pdf.worker.min.mjs",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/api/planner/status",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/atepdf.worker.js",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/pdf.worker.min.mjs",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/api/planner/status",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/pdf.worker.min.mjs",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/pdf.worker.min.mjs",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/pdf.worker.min.mjs",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/pdf.worker.min.mjs",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/pdf.worker.min.mjs",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "compact",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "large-text",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/",
+      "allowed": true
+    },
+    {
+      "viewport": "large-text",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/css/global-418e89804c5c99244db2be82f33419f6.css",
+      "allowed": true
+    },
+    {
+      "viewport": "large-text",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/css/preview-4a592c39668f775437665576652be491.css",
+      "allowed": true
+    },
+    {
+      "viewport": "large-text",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/css/workspace-56224bde220f19bf10d0db39a0c31bba.css",
+      "allowed": true
+    },
+    {
+      "viewport": "large-text",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/js/web/index-630012e833bbef46f5441d9899bb7fda.js",
+      "allowed": true
+    },
+    {
+      "viewport": "large-text",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/assets/assets/approved-8-mark-source-crop.8b708587521942c4118f8e6a3c3f84f8.png",
+      "allowed": true
+    },
+    {
+      "viewport": "large-text",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/assets/assets/approved-atepdf-wordmark-source-crop.e129a61b59d2f9c2fdcb1f1b2521e212.png",
+      "allowed": true
+    },
+    {
+      "viewport": "large-text",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/atepdf.worker.js",
+      "allowed": true
+    },
+    {
+      "viewport": "large-text",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/_expo/static/js/web/pdf-50f2ec8e34576162255929524f6e72b4.js",
+      "allowed": true
+    },
+    {
+      "viewport": "large-text",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/pdf.worker.min.mjs",
+      "allowed": true
+    },
+    {
+      "viewport": "large-text",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "large-text",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "large-text",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/atepdf.worker.js",
+      "allowed": true
+    },
+    {
+      "viewport": "large-text",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/pdf.worker.min.mjs",
+      "allowed": true
+    },
+    {
+      "viewport": "large-text",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "large-text",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "large-text",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/api/planner/status",
+      "allowed": true
+    },
+    {
+      "viewport": "large-text",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/atepdf.worker.js",
+      "allowed": true
+    },
+    {
+      "viewport": "large-text",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/pdf.worker.min.mjs",
+      "allowed": true
+    },
+    {
+      "viewport": "large-text",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "large-text",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "large-text",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/api/planner/status",
+      "allowed": true
+    },
+    {
+      "viewport": "large-text",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/pdf.worker.min.mjs",
+      "allowed": true
+    },
+    {
+      "viewport": "large-text",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/pdf.worker.min.mjs",
+      "allowed": true
+    },
+    {
+      "viewport": "large-text",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "allowed": true
+    },
+    {
+      "viewport": "large-text",
+      "method": "GET",
+      "origin": "http://localhost:3213",
+      "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "allowed": true
+    }
+  ],
+  "errors": [],
+  "failures": [],
+  "browserVersion": "154.0.8037.58",
+  "browserClosed": true
+}

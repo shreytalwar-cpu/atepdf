@@ -1,0 +1,18 @@
+{
+  "capturedAt": "2026-09-28T20:23:32.011747+00:00",
+  "sourceSnapshot": "docs/evidence/native/ux-discovery-final-source.json",
+  "nativeSourceHashesUnchangedThroughBuild": true,
+  "nativeSourceFileCount": 154,
+  "webOnlyChangesWhileBuilding": [],
+  "buildResult": "TEST BUILD SUCCEEDED",
+  "buildLog": ".build/ux-discovery-final-build.log",
+  "frozenProducts": ".build/ux-discovery-final-products",
+  "configuration": "Release",
+  "scheme": "atepdfUI",
+  "buildSha256": {
+    "atepdf": "79793194cd48220a61c131ee95358d54797b70d2af56efb9ed7899f4a4b81912",
+    "main.jsbundle": "c24835f44e7158232b8ced127af979323307947b0b27853462f9cc3f55b1830b",
+    "Info.plist": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c"
+  },
+  "testExecutableSha256": "5e705365a52065578ec62df3239042710e24ff099d166a295c521b2a88a28839"
+}

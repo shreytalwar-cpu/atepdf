@@ -1,0 +1,38 @@
+Already up to date
+Done in 150ms using pnpm v11.19.0
+Starting Metro Bundler
+
+| (node:38802) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:38802) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:38802) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:38802) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:38802) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:38802) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:38802) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+Web Bundled 5929ms index.ts (1083 modules)
+
+› Assets (3):
+assets/approved-8-mark-source-crop.8b708587521942c4118f8e6a3c3f84f8.png (35KB)
+assets/approved-atepdf-wordmark-source-crop.e129a61b59d2f9c2fdcb1f1b2521e212.png (34KB)
+assets/paper.1cb2ca1d4826879d6316a24bfbeecd07.png (688KB)
+
+› web bundles (6):
+_expo/static/css/global-d4d6ccab383182f1e451d3012f50f781.css (24KB)
+_expo/static/css/preview-4a592c39668f775437665576652be491.css (2.5KB)
+_expo/static/css/workspace-c17f37c0ecb0dbf51a256a1d688e0128.css (1.1KB)
+_expo/static/js/web/index-45f456014a6f8445aedaebf457840518.js (2.2MB)
+_expo/static/js/web/index-be4d2202abae16af36bb2dbeab74683f.js (18KB)
+_expo/static/js/web/pdf-50f2ec8e34576162255929524f6e72b4.js (549KB)
+
+› Files (2):
+index.html (1.8KB)
+metadata.json (49B)
+
+Exported: ../../.build/ux-20260929/candidate-web-8

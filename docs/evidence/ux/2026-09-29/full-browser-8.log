@@ -1,0 +1,41 @@
+Already up to date
+Done in 139ms using pnpm v11.19.0
+
+Running 31 tests using 1 worker
+
+(node:39369) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/31] tests/e2e/large-files.spec.ts:7:5 › large local PDFs: import → >40 MB merge → preview/save → remove → undo without egress
+[2/31] tests/e2e/planner.spec.ts:11:5 › mocked planner transport: Send → redacted complete plan → real local result → follow-up
+[3/31] tests/e2e/planner.spec.ts:22:5 › AI-enabled quick PDF action uses planner, while a product question replies in chat without changing files
+[4/31] tests/e2e/planner.spec.ts:33:5 › direct planner cancellation ignores a late complete plan and keeps local quick actions usable
+[5/31] tests/e2e/planner.spec.ts:49:5 › cancelling direct planner setup prevents any later model request
+[6/31] tests/e2e/planner.spec.ts:67:7 › direct planner incomplete response never changes a committed result
+[7/31] tests/e2e/planner.spec.ts:67:7 › direct planner stale response never changes a committed result
+[8/31] tests/e2e/planner.spec.ts:67:7 › direct planner truncated JSON response never changes a committed result
+[9/31] tests/e2e/planner.spec.ts:86:5 › direct balanced-compression plan retains its image-quality choice before local execution
+[10/31] tests/e2e/planner.spec.ts:94:5 › privacy rejection happens before transport, unknown instruction with no key stays honest
+[11/31] tests/e2e/planner.spec.ts:101:5 › masked local key setup keeps the key outside chat and model transport
+[12/31] tests/e2e/planner.spec.ts:108:5 › native pairing code stays in a masked setup control and makes no model request
+[13/31] tests/e2e/ux-focus.spec.ts:3:5 › closing the inline PDF preview returns keyboard focus to its trigger
+[14/31] tests/e2e/ux-focus.spec.ts:24:5 › compact preview reveals its header and wraps every viewer control within the conversation
+[15/31] tests/e2e/ux-focus.spec.ts:47:5 › compact privacy explanation scrolls to a complete dismissal control and restores focus
+[16/31] tests/e2e/ux-focus.spec.ts:66:5 › keyboard users can see focus on the composer in the built web app
+[17/31] tests/e2e/ux-focus.spec.ts:78:5 › larger text and a short web viewport keep the actual PDF workflow reachable
+[18/31] tests/e2e/ux-journey.spec.ts:71:5 › compact explicit submissions reveal the new result, including after closing preview
+[19/31] tests/e2e/ux-journey.spec.ts:89:5 › result titles, current status and Undo reflect the actual output history
+[20/31] tests/e2e/ux-journey.spec.ts:118:5 › invalid physical page reply gives the valid range and preserves the saved current PDF
+[21/31] tests/e2e/ux-journey.spec.ts:132:5 › disconnected product help explains local actions and offers inline AI connection without a model call
+[22/31] tests/e2e/ux-journey.spec.ts:152:5 › scrolling upward during delayed synthetic planning preserves the reading position when the real result arrives
+[23/31] tests/e2e/ux-journey.spec.ts:193:7 › long synthetic filenames stay inside the 320px workspace before and after merge
+[24/31] tests/e2e/ux-journey.spec.ts:193:7 › long synthetic filenames stay inside the 390px workspace before and after merge
+[25/31] tests/e2e/workflow.spec.ts:8:5 › real merge → preview/save → remove physical page 2 → undo; local-only network
+[26/31] tests/e2e/workflow.spec.ts:23:5 › responsive workspace, keyboard height, privacy and save cancellation
+[27/31] tests/e2e/workflow.spec.ts:30:5 › real merge → OCR → compression preserves text and produces a measured smaller PDF without egress
+[28/31] tests/e2e/workflow.spec.ts:41:5 › chat clarification, cancellation and discard guard keep committed results intact
+[29/31] tests/e2e/workflow.spec.ts:85:5 › PDF drag feedback clears on leave and actual drop imports locally
+[30/31] tests/e2e/workflow.spec.ts:111:5 › keyboard composer and Latest message keep current results reachable
+[31/31] tests/e2e/workflow.spec.ts:142:5 › one chat recipe commits only the final merge → OCR → compression result
+  31 passed (50.4s)

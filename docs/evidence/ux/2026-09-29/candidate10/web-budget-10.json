@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "directory": "/Users/shrey/Documents/ChatGPT/atepdf/.build/ux-20260929/candidate-web-10",
+  "limits": {
+    "bytes": 2500000,
+    "gzipBytes": 500000
+  },
+  "totals": {
+    "bytes": 2240317,
+    "gzipBytes": 483456
+  },
+  "scripts": [
+    {
+      "path": "_expo/static/js/web/index-630012e833bbef46f5441d9899bb7fda.js",
+      "bytes": 2240317,
+      "gzipBytes": 483456,
+      "sha256": "1689e2e2cdd9a47626f15c477509e41f9b3d4d58aa5b8d83d04bd08893b166d1"
+    }
+  ],
+  "note": "Gzip is a computed artifact size, not a claim that the server sends compressed responses."
+}

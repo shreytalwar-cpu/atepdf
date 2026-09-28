@@ -1,0 +1,445 @@
+Command line invocation:
+    /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild test-without-building -xctestrun .build/ux-refined-final-products/atepdfUI_iphonesimulator27.0-arm64.xctestrun -destination "platform=iOS Simulator,id=D68C4547-67D3-4960-AAB9-D85FD786D6FC" -parallel-testing-enabled NO "-only-testing:atepdfUITests/AtepdfExportUITests/testSaveToLocalFilesAndReopenAfterRestart" -resultBundlePath .build/ux-refined-final-export.xcresult
+
+Writing result bundle at path:
+	/Users/shrey/Documents/ChatGPT/atepdf/.build/ux-refined-final-export.xcresult
+
+2026-09-29 01:12:46.631658+0530 atepdfUITests-Runner[32654:2626304] [Default] Running tests...
+    t =      nans Interface orientation changed to Portrait
+Test Suite 'Selected tests' started at 2026-09-29 01:12:48.328.
+Test Suite 'atepdfUITests.xctest' started at 2026-09-29 01:12:48.328.
+Test Suite 'AtepdfExportUITests' started at 2026-09-29 01:12:48.328.
+Test Case '-[atepdfUITests.AtepdfExportUITests testSaveToLocalFilesAndReopenAfterRestart]' started.
+    t =     0.00s Start Test at 2026-09-29 01:12:48.330
+    t =     0.02s Set Up
+    t =     0.02s     Setting device orientation to Portrait
+    t =     0.03s         Wait for com.apple.springboard to idle
+    t =     0.03s     Open dev.atepdf.fresh
+    t =     0.03s         Launch dev.atepdf.fresh
+2026-09-29 01:12:48.412 xcodebuild[32652:2626066] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-09-29 01:12:48.412 xcodebuild[32652:2626066] [MT] IDELaunchParametersSnapshot: no debugger version
+    t =     0.49s             Setting up automation session
+objc[32654]: Class UIAccessibilityLoaderWebShared is implemented in both /private/var/run/com.apple.security.cryptexd/mnt/com.apple.iPhoneOS.SimulatorRuntime-v24.1.434.0.ino3Vu/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebKit.axbundle/WebKit (0x102910398) and /private/var/run/com.apple.security.cryptexd/mnt/com.apple.iPhoneOS.SimulatorRuntime-v24.1.434.0.ino3Vu/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebCore.axbundle/WebCore (0x1037ac310). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+    t =     1.92s             Wait for dev.atepdf.fresh to idle
+    t =     4.15s Checking `Expect predicate `exists == 1` for object "Try the two sample PDFs" Button`
+    t =     4.15s     Checking existence of `"Try the two sample PDFs" Button`
+    t =     5.23s Checking `Expect predicate `exists == 1` for object ScrollView (First Match)`
+    t =     5.24s     Checking existence of `ScrollView (First Match)`
+    t =     5.26s Find the ScrollView (First Match)
+    t =     5.28s Find the "Try the two sample PDFs" Button
+    t =     5.29s Find the "Try the two sample PDFs" Button
+    t =     6.38s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Try the two sample PDFs" Button`
+    t =     6.39s     Checking existence of `"Try the two sample PDFs" Button`
+    t =     6.41s     Find the "Try the two sample PDFs" Button
+    t =     6.44s     Find the "Try the two sample PDFs" Button
+    t =     6.45s Tap "Try the two sample PDFs" Button
+    t =     6.45s     Wait for dev.atepdf.fresh to idle
+    t =     6.45s     Find the "Try the two sample PDFs" Button
+    t =     6.46s     Check for interrupting elements affecting "Try the two sample PDFs" Button
+    t =     6.47s     Synthesize event
+    t =     6.76s     Wait for dev.atepdf.fresh to idle
+    t =     7.82s Checking `Expect predicate `exists == 1` for object StaticText (First Match)`
+    t =     7.82s     Checking existence of `StaticText (First Match)`
+    t =     8.92s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Merge" Button`
+    t =     8.92s     Checking existence of `"Merge" Button`
+    t =     8.95s     Find the "Merge" Button
+    t =     8.98s     Find the "Merge" Button
+    t =     9.00s Tap "Merge" Button
+    t =     9.00s     Wait for dev.atepdf.fresh to idle
+    t =     9.00s     Find the "Merge" Button
+    t =     9.01s     Check for interrupting elements affecting "Merge" Button
+    t =     9.03s     Synthesize event
+    t =     9.31s     Wait for dev.atepdf.fresh to idle
+    t =    10.37s Checking `Expect predicate `exists == 1 AND label BEGINSWITH "3 pages"` for object "result-facts" StaticText`
+    t =    10.37s     Checking existence of `"result-facts" StaticText`
+    t =    10.39s     Find the "result-facts" StaticText
+    t =    11.45s Checking `Expect predicate `exists == 1` for object "Save PDF" Button`
+    t =    11.45s     Checking existence of `"Save PDF" Button`
+    t =    12.53s Checking `Expect predicate `exists == 1` for object ScrollView (First Match)`
+    t =    12.53s     Checking existence of `ScrollView (First Match)`
+    t =    12.57s Find the ScrollView (First Match)
+    t =    12.59s Find the "Save PDF" Button
+    t =    12.62s Find the "Save PDF" Button
+    t =    13.68s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Save PDF" Button`
+    t =    13.69s     Checking existence of `"Save PDF" Button`
+    t =    13.72s     Find the "Save PDF" Button
+    t =    13.75s     Find the "Save PDF" Button
+    t =    13.77s Tap "Save PDF" Button
+    t =    13.77s     Wait for dev.atepdf.fresh to idle
+    t =    13.78s     Find the "Save PDF" Button
+    t =    13.79s     Check for interrupting elements affecting "Save PDF" Button
+    t =    13.81s     Synthesize event
+    t =    14.10s     Wait for dev.atepdf.fresh to idle
+    t =    15.20s Checking `Expect predicate `exists == 1` for object "ActivityListView" Other`
+    t =    15.20s     Checking existence of `"ActivityListView" Other`
+    t =    16.33s Checking `Expect predicate `exists == 1` for object "LP.CaptionBar.TopCaption" Other`
+    t =    16.34s     Checking existence of `"LP.CaptionBar.TopCaption" Other`
+    t =    16.40s Find the "LP.CaptionBar.TopCaption" Other
+    t =    16.45s Find the "LP.CaptionBar.TopCaption" Other
+    t =    16.50s Added attachment named 'export-source-identity'
+    t =    16.50s Requesting snapshot of accessibility hierarchy for app with pid 32663
+    t =    16.67s Requesting snapshot of accessibility hierarchy for app with pid 32663
+    t =    16.71s Added attachment named 'export-share-before-save-hierarchy'
+    t =    16.78s Added attachment named 'export-share-before-save'
+    t =    17.82s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object Cell (First Match)`
+    t =    17.82s     Checking existence of `Cell (First Match)`
+    t =    17.90s     Find the Cell (First Match)
+    t =    17.97s     Find the "actionGroupCell" Cell
+    t =    18.03s Tap "actionGroupCell" Cell
+    t =    18.03s     Wait for dev.atepdf.fresh to idle
+    t =    18.03s     Find the "actionGroupCell" Cell
+    t =    18.08s     Check for interrupting elements affecting "actionGroupCell" Cell
+    t =    18.11s     Synthesize event
+    t =    18.40s     Wait for dev.atepdf.fresh to idle
+    t =    19.47s Checking `Expect predicate `exists == 0 OR hittable == 0` for object "actionGroupCell" Cell`
+    t =    19.47s     Checking existence of `"actionGroupCell" Cell`
+    t =    19.52s     Find the "actionGroupCell" Cell
+    t =    19.59s     Capturing element debug description
+    t =    19.69s         Requesting snapshot of accessibility hierarchy for app with pid 32663
+    t =    19.73s         Requesting snapshot of accessibility hierarchy for app with pid 32663
+    t =    19.77s         Find: Descendants matching type Cell
+    t =    19.77s         Find: Elements matching predicate 'identifier == "actionGroupCell" AND label == "Save to Files"'
+    t =    19.77s         Requesting snapshot of accessibility hierarchy for app with pid 32663
+    t =    19.81s         Find: Descendants matching type Cell
+    t =    19.81s         Requesting snapshot of accessibility hierarchy for app with pid 32663
+    t =    20.48s Checking `Expect predicate `exists == 0 OR hittable == 0` for object "actionGroupCell" Cell`
+    t =    20.49s     Checking existence of `"actionGroupCell" Cell`
+    t =    20.54s     Find the "actionGroupCell" Cell
+    t =    20.61s     Capturing element debug description
+    t =    20.72s         Requesting snapshot of accessibility hierarchy for app with pid 32663
+    t =    20.76s         Requesting snapshot of accessibility hierarchy for app with pid 32663
+    t =    20.80s         Find: Descendants matching type Cell
+    t =    20.80s         Find: Elements matching predicate 'identifier == "actionGroupCell" AND label == "Save to Files"'
+    t =    20.81s         Requesting snapshot of accessibility hierarchy for app with pid 32663
+    t =    20.85s         Find: Descendants matching type Cell
+    t =    20.85s         Requesting snapshot of accessibility hierarchy for app with pid 32663
+    t =    21.45s Checking `Expect predicate `exists == 0 OR hittable == 0` for object "actionGroupCell" Cell`
+    t =    21.45s     Checking existence of `"actionGroupCell" Cell`
+    t =    23.03s     Find the "actionGroupCell" Cell
+    t =    23.11s Requesting snapshot of accessibility hierarchy for app with pid 32663
+    t =    23.36s Requesting snapshot of accessibility hierarchy for app with pid 32663
+    t =    23.43s Added attachment named 'export-system-save-picker-hierarchy'
+    t =    23.50s Added attachment named 'export-system-save-picker'
+    t =    24.55s Checking `Expect predicate `exists == 1` for object "FullDocumentManagerViewControllerNavigationBar" NavigationBar`
+    t =    24.55s     Checking existence of `"FullDocumentManagerViewControllerNavigationBar" NavigationBar`
+    t =    24.63s Get all elements bound by index for: Elements matching predicate '"FullDocumentManagerViewControllerNavigationBar" IN identifiers'
+    t =    24.68s Checking existence of `"FullDocumentManagerViewControllerNavigationBar" NavigationBar`
+    t =    24.72s Find the "FullDocumentManagerViewControllerNavigationBar" NavigationBar
+    t =    24.78s Find the "FullDocumentManagerViewControllerNavigationBar" NavigationBar
+    t =    24.83s Get all elements bound by index for: Elements matching predicate 'label == "On My iPhone"'
+    t =    24.87s Get all elements bound by index for: Elements matching predicate 'label ENDSWITH ", Actions Menu"'
+    t =    24.92s Checking existence of `Button (Element at index 0)`
+    t =    24.96s Find the Button (Element at index 0)
+    t =    25.02s Find the "atepdf-beta-8169e178-718f-4acb-80c8-725a73b91632, Actions Menu" Button
+    t =    25.06s Requesting snapshot of accessibility hierarchy for app with pid 32663
+    t =    25.31s Requesting snapshot of accessibility hierarchy for app with pid 32663
+    t =    25.37s Added attachment named 'export-picker-parent-atepdf-beta-8169e178-718f-4acb-80c8-725a73b91632-hierarchy'
+    t =    25.44s Added attachment named 'export-picker-parent-atepdf-beta-8169e178-718f-4acb-80c8-725a73b91632'
+    t =    25.44s Get all elements bound by index for: Elements matching predicate '"BackButton" IN identifiers'
+    t =    25.55s Checking existence of `"BackButton" Button`
+    t =    25.59s Find the "BackButton" Button
+    t =    25.65s Find the "BackButton" Button
+    t =    26.75s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "BackButton" Button`
+    t =    26.75s     Checking existence of `"BackButton" Button`
+    t =    26.83s     Find the "BackButton" Button
+    t =    26.90s     Find the "BackButton" Button
+    t =    26.95s Tap "BackButton" Button
+    t =    26.95s     Wait for dev.atepdf.fresh to idle
+    t =    26.95s     Find the "BackButton" Button
+    t =    27.00s     Check for interrupting elements affecting "BackButton" Button
+    t =    27.04s     Synthesize event
+    t =    27.34s     Wait for dev.atepdf.fresh to idle
+    t =    28.40s Checking `Expect predicate `exists == 0 OR hittable == 0` for object Any (First Match)`
+    t =    28.40s     Checking existence of `Any (First Match)`
+    t =    28.52s Get all elements bound by index for: Elements matching predicate '"FullDocumentManagerViewControllerNavigationBar" IN identifiers'
+    t =    28.58s Checking existence of `"FullDocumentManagerViewControllerNavigationBar" NavigationBar`
+    t =    28.64s Find the "FullDocumentManagerViewControllerNavigationBar" NavigationBar
+    t =    28.71s Find the "FullDocumentManagerViewControllerNavigationBar" NavigationBar
+    t =    28.77s Get all elements bound by index for: Elements matching predicate 'label == "On My iPhone"'
+    t =    28.83s Get all elements bound by index for: Elements matching predicate 'label ENDSWITH ", Actions Menu"'
+    t =    28.89s Checking existence of `StaticText (Element at index 0)`
+    t =    28.95s Find the StaticText (Element at index 0)
+    t =    29.02s Find the "On My iPhone" StaticText
+    t =    29.08s Get all elements bound by index for: Elements matching predicate '"FullDocumentManagerViewControllerNavigationBar" IN identifiers'
+    t =    29.14s Checking existence of `"FullDocumentManagerViewControllerNavigationBar" NavigationBar`
+    t =    29.20s Find the "FullDocumentManagerViewControllerNavigationBar" NavigationBar
+    t =    29.27s Find the "FullDocumentManagerViewControllerNavigationBar" NavigationBar
+    t =    29.33s Get all elements bound by index for: Elements matching predicate 'label == "On My iPhone"'
+    t =    29.39s Get all elements bound by index for: Elements matching predicate 'label ENDSWITH ", Actions Menu"'
+    t =    29.45s Checking existence of `StaticText (Element at index 0)`
+    t =    29.50s Find the StaticText (Element at index 0)
+    t =    29.57s Find the "On My iPhone" StaticText
+    t =    29.63s Get all elements bound by index for: Elements matching predicate '"FullDocumentManagerViewControllerNavigationBar" IN identifiers'
+    t =    29.69s Checking existence of `"FullDocumentManagerViewControllerNavigationBar" NavigationBar`
+    t =    29.75s Find the "FullDocumentManagerViewControllerNavigationBar" NavigationBar
+    t =    29.82s Find the "FullDocumentManagerViewControllerNavigationBar" NavigationBar
+    t =    29.88s Get all elements bound by index for: Elements matching predicate 'label == "On My iPhone"'
+    t =    29.94s Get all elements bound by index for: Elements matching predicate 'label ENDSWITH ", Actions Menu"'
+    t =    30.00s Checking existence of `StaticText (Element at index 0)`
+    t =    30.06s Find the StaticText (Element at index 0)
+    t =    30.13s Find the "On My iPhone" StaticText
+    t =    31.23s Checking `Expect predicate `exists == 1` for object "DOC.browsingRoot Source: com.apple.FileProvider.LocalStorage, Title: On My iPhone" Other`
+    t =    31.24s     Checking existence of `"DOC.browsingRoot Source: com.apple.FileProvider.LocalStorage, Title: On My iPhone" Other`
+    t =    32.41s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "OverflowBarButtonItem" Button`
+    t =    32.41s     Checking existence of `"OverflowBarButtonItem" Button`
+    t =    32.50s     Find the "OverflowBarButtonItem" Button
+    t =    32.58s     Find the "OverflowBarButtonItem" Button
+    t =    32.65s Tap "OverflowBarButtonItem" Button
+    t =    32.65s     Wait for dev.atepdf.fresh to idle
+    t =    32.65s     Find the "OverflowBarButtonItem" Button
+    t =    32.71s     Check for interrupting elements affecting "OverflowBarButtonItem" Button
+    t =    32.76s     Synthesize event
+    t =    33.06s     Wait for dev.atepdf.fresh to idle
+    t =    33.06s Requesting snapshot of accessibility hierarchy for app with pid 32663
+    t =    33.30s Requesting snapshot of accessibility hierarchy for app with pid 32663
+    t =    33.36s Added attachment named 'export-system-save-folder-actions-hierarchy'
+    t =    33.43s Added attachment named 'export-system-save-folder-actions'
+    t =    34.49s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "New Folder" Button`
+    t =    34.49s     Checking existence of `"New Folder" Button`
+    t =    34.53s     Find the "New Folder" Button
+    t =    34.58s     Find the "New Folder" Button
+    t =    34.63s Tap "New Folder" Button
+    t =    34.63s     Wait for dev.atepdf.fresh to idle
+    t =    34.63s     Find the "New Folder" Button
+    t =    34.67s     Check for interrupting elements affecting "New Folder" Button
+    t =    34.70s     Synthesize event
+    t =    35.00s     Wait for dev.atepdf.fresh to idle
+    t =    36.03s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "DOC.inlineRenameField" TextView`
+    t =    36.03s     Checking existence of `"DOC.inlineRenameField" TextView`
+    t =    36.48s     Find the "DOC.inlineRenameField" TextView
+    t =    36.56s     Find the "DOC.inlineRenameField" TextView
+    t =    36.64s Requesting snapshot of accessibility hierarchy for app with pid 32663
+    t =    37.02s Requesting snapshot of accessibility hierarchy for app with pid 32663
+    t =    37.11s Added attachment named 'export-system-new-folder-editor-hierarchy'
+    t =    37.18s Added attachment named 'export-system-new-folder-editor'
+    t =    37.18s Find the "DOC.inlineRenameField" TextView
+    t =    37.24s Type 'a...' into "DOC.inlineRenameField" TextView
+    t =    37.24s     Wait for dev.atepdf.fresh to idle
+    t =    37.24s     Find the "DOC.inlineRenameField" TextView
+    t =    37.31s     Check for interrupting elements affecting "DOC.inlineRenameField" TextView
+    t =    37.37s     Synthesize event
+    t =    38.69s     Wait for dev.atepdf.fresh to idle
+    t =    39.72s Checking `Expect predicate `exists == 0 OR hittable == 0` for object "DOC.inlineRenameField" TextView`
+    t =    39.72s     Checking existence of `"DOC.inlineRenameField" TextView`
+    t =    40.90s Checking `Expect predicate `exists == 1` for object "DOC.browsingRoot Source: com.apple.FileProvider.LocalStorage, Title: atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89" Other`
+    t =    40.90s     Checking existence of `"DOC.browsingRoot Source: com.apple.FileProvider.LocalStorage, Title: atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89" Other`
+    t =    40.97s Get all elements bound by index for: Elements matching predicate '"FullDocumentManagerViewControllerNavigationBar" IN identifiers'
+    t =    41.02s Checking existence of `"FullDocumentManagerViewControllerNavigationBar" NavigationBar`
+    t =    41.06s Find the "FullDocumentManagerViewControllerNavigationBar" NavigationBar
+    t =    41.12s Find the "FullDocumentManagerViewControllerNavigationBar" NavigationBar
+    t =    41.16s Get all elements bound by index for: Elements matching predicate 'label == "On My iPhone"'
+    t =    41.21s Get all elements bound by index for: Elements matching predicate 'label ENDSWITH ", Actions Menu"'
+    t =    41.26s Checking existence of `Button (Element at index 0)`
+    t =    41.30s Find the Button (Element at index 0)
+    t =    41.35s Find the "atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, Actions Menu" Button
+    t =    41.40s Get all elements bound by index for: Elements matching predicate '"BackButton" IN identifiers'
+    t =    41.45s Checking existence of `"BackButton" Button`
+    t =    41.49s Find the "BackButton" Button
+    t =    41.55s Find the "BackButton" Button
+    t =    42.65s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "BackButton" Button`
+    t =    42.65s     Checking existence of `"BackButton" Button`
+    t =    42.73s     Find the "BackButton" Button
+    t =    42.80s     Find the "BackButton" Button
+    t =    42.86s Tap "BackButton" Button
+    t =    42.86s     Wait for dev.atepdf.fresh to idle
+    t =    42.86s     Find the "BackButton" Button
+    t =    42.90s     Check for interrupting elements affecting "BackButton" Button
+    t =    42.95s     Synthesize event
+    t =    43.25s     Wait for dev.atepdf.fresh to idle
+    t =    44.29s Checking `Expect predicate `exists == 0 OR hittable == 0` for object Any (First Match)`
+    t =    44.29s     Checking existence of `Any (First Match)`
+    t =    44.40s Get all elements bound by index for: Elements matching predicate '"FullDocumentManagerViewControllerNavigationBar" IN identifiers'
+    t =    44.46s Checking existence of `"FullDocumentManagerViewControllerNavigationBar" NavigationBar`
+    t =    44.52s Find the "FullDocumentManagerViewControllerNavigationBar" NavigationBar
+    t =    44.59s Find the "FullDocumentManagerViewControllerNavigationBar" NavigationBar
+    t =    44.65s Get all elements bound by index for: Elements matching predicate 'label == "On My iPhone"'
+    t =    44.71s Get all elements bound by index for: Elements matching predicate 'label ENDSWITH ", Actions Menu"'
+    t =    44.77s Checking existence of `StaticText (Element at index 0)`
+    t =    44.83s Find the StaticText (Element at index 0)
+    t =    44.90s Find the "On My iPhone" StaticText
+    t =    44.97s Get all elements bound by index for: Elements matching predicate '"FullDocumentManagerViewControllerNavigationBar" IN identifiers'
+    t =    45.03s Checking existence of `"FullDocumentManagerViewControllerNavigationBar" NavigationBar`
+    t =    45.09s Find the "FullDocumentManagerViewControllerNavigationBar" NavigationBar
+    t =    45.16s Find the "FullDocumentManagerViewControllerNavigationBar" NavigationBar
+    t =    45.23s Get all elements bound by index for: Elements matching predicate 'label == "On My iPhone"'
+    t =    45.30s Get all elements bound by index for: Elements matching predicate 'label ENDSWITH ", Actions Menu"'
+    t =    45.39s Checking existence of `StaticText (Element at index 0)`
+    t =    45.46s Find the StaticText (Element at index 0)
+    t =    45.53s Find the "On My iPhone" StaticText
+    t =    46.65s Checking `Expect predicate `exists == 1` for object "atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, Folder" Cell`
+    t =    46.65s     Checking existence of `"atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, Folder" Cell`
+    t =    47.77s Checking `Expect predicate `exists == 1` for object "File View" CollectionView`
+    t =    47.77s     Checking existence of `"File View" CollectionView`
+    t =    47.86s Find the "File View" CollectionView
+    t =    47.92s Find the "atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, Folder" Cell
+    t =    47.98s Find the "atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, Folder" Cell
+    t =    48.04s Requesting snapshot of accessibility hierarchy for app with pid 32663
+    t =    48.39s Requesting snapshot of accessibility hierarchy for app with pid 32663
+    t =    48.47s Added attachment named 'export-new-folder-at-local-root-hierarchy'
+    t =    48.54s Added attachment named 'export-new-folder-at-local-root'
+    t =    49.60s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, Folder" Cell`
+    t =    49.60s     Checking existence of `"atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, Folder" Cell`
+    t =    49.69s     Find the "atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, Folder" Cell
+    t =    49.77s     Find the "atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, Folder" Cell
+    t =    49.84s Tap "atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, Folder" Cell
+    t =    49.84s     Wait for dev.atepdf.fresh to idle
+    t =    49.84s     Find the "atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, Folder" Cell
+    t =    49.90s     Check for interrupting elements affecting "atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, Folder" Cell
+    t =    49.96s     Synthesize event
+    t =    50.25s     Wait for dev.atepdf.fresh to idle
+    t =    50.25s Get all elements bound by index for: Elements matching predicate '"FullDocumentManagerViewControllerNavigationBar" IN identifiers'
+    t =    50.54s Checking existence of `"FullDocumentManagerViewControllerNavigationBar" NavigationBar`
+    t =    50.60s Find the "FullDocumentManagerViewControllerNavigationBar" NavigationBar
+    t =    50.67s Find the "FullDocumentManagerViewControllerNavigationBar" NavigationBar
+    t =    50.74s Get all elements bound by index for: Elements matching predicate 'label == "On My iPhone"'
+    t =    50.80s Get all elements bound by index for: Elements matching predicate 'label ENDSWITH ", Actions Menu"'
+    t =    50.88s Checking existence of `Button (Element at index 0)`
+    t =    50.92s Find the Button (Element at index 0)
+    t =    50.98s Find the "atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, Actions Menu" Button
+    t =    51.03s Requesting snapshot of accessibility hierarchy for app with pid 32663
+    t =    51.29s Requesting snapshot of accessibility hierarchy for app with pid 32663
+    t =    51.36s Added attachment named 'export-local-destination-before-save-hierarchy'
+    t =    51.42s Added attachment named 'export-local-destination-before-save'
+    t =    52.47s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "DOCPicker.actionButton" Button`
+    t =    52.47s     Checking existence of `"DOCPicker.actionButton" Button`
+    t =    52.55s     Find the "DOCPicker.actionButton" Button
+    t =    52.61s     Find the "DOCPicker.actionButton" Button
+    t =    52.67s Tap "DOCPicker.actionButton" Button
+    t =    52.67s     Wait for dev.atepdf.fresh to idle
+    t =    52.67s     Find the "DOCPicker.actionButton" Button
+    t =    52.72s     Check for interrupting elements affecting "DOCPicker.actionButton" Button
+    t =    52.76s     Synthesize event
+    t =    53.06s     Wait for dev.atepdf.fresh to idle
+    t =    54.08s Checking `Expect predicate `exists == 1` for object "Share sheet closed · check the destination you chose" StaticText`
+    t =    54.08s     Checking existence of `"Share sheet closed · check the destination you chose" StaticText`
+    t =    54.12s Requesting snapshot of accessibility hierarchy for app with pid 32663
+    t =    54.21s Requesting snapshot of accessibility hierarchy for app with pid 32663
+    t =    54.23s Added attachment named 'export-share-completed-hierarchy'
+    t =    54.29s Added attachment named 'export-share-completed'
+    t =    54.29s Terminate dev.atepdf.fresh:32663
+    t =    55.32s Open dev.atepdf.fresh
+    t =    55.32s     Launch dev.atepdf.fresh
+2026-09-29 01:13:43.654 xcodebuild[32652:2626066] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-09-29 01:13:43.654 xcodebuild[32652:2626066] [MT] IDELaunchParametersSnapshot: no debugger version
+    t =    55.53s         Setting up automation session
+    t =    56.97s         Wait for dev.atepdf.fresh to idle
+    t =    59.12s Checking `Expect predicate `exists == 1` for object "Try the two sample PDFs" Button`
+    t =    59.12s     Checking existence of `"Try the two sample PDFs" Button`
+    t =    59.18s Checking existence of `"result-facts" StaticText`
+    t =    59.19s Requesting snapshot of accessibility hierarchy for app with pid 32843
+    t =    59.25s Requesting snapshot of accessibility hierarchy for app with pid 32843
+    t =    59.26s Added attachment named 'export-after-atepdf-restart-hierarchy'
+    t =    59.32s Added attachment named 'export-after-atepdf-restart'
+    t =    59.32s Open com.apple.DocumentsApp
+    t =    59.32s     Launch com.apple.DocumentsApp
+    t =    59.32s         Terminate com.apple.DocumentsApp:23763
+    t =    60.38s         Setting up automation session
+    t =    61.87s         Wait for com.apple.DocumentsApp to idle
+    t =    64.61s Requesting snapshot of accessibility hierarchy for app with pid 32855
+    t =    64.79s Requesting snapshot of accessibility hierarchy for app with pid 32855
+    t =    64.83s Added attachment named 'export-files-initial-hierarchy'
+    t =    64.89s Added attachment named 'export-files-initial'
+    t =    65.92s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Browse" Button`
+    t =    65.92s     Checking existence of `"Browse" Button`
+    t =    65.96s     Find the "Browse" Button
+    t =    66.00s     Find the "Browse" Button
+    t =    66.02s Tap "Browse" Button
+    t =    66.02s     Wait for com.apple.DocumentsApp to idle
+    t =    66.02s     Find the "Browse" Button
+    t =    66.04s     Check for interrupting elements affecting "Browse" Button
+    t =    66.06s     Synthesize event
+    t =    66.35s     Wait for com.apple.DocumentsApp to idle
+    t =    67.09s Checking existence of `"DOC.sidebar.item.On My iPhone" Cell`
+    t =    67.15s Find the "DOC.sidebar.item.On My iPhone" Cell
+    t =    67.18s Requesting snapshot of accessibility hierarchy for app with pid 32855
+    t =    67.38s Requesting snapshot of accessibility hierarchy for app with pid 32855
+    t =    67.42s Added attachment named 'export-files-browse-hierarchy'
+    t =    67.48s Added attachment named 'export-files-browse'
+    t =    68.52s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "DOC.sidebar.item.On My iPhone" Cell`
+    t =    68.52s     Checking existence of `"DOC.sidebar.item.On My iPhone" Cell`
+    t =    69.05s     Find the "DOC.sidebar.item.On My iPhone" Cell
+    t =    69.19s     Find the "DOC.sidebar.item.On My iPhone" Cell
+    t =    69.23s Tap "DOC.sidebar.item.On My iPhone" Cell
+    t =    69.23s     Wait for com.apple.DocumentsApp to idle
+    t =    69.23s     Find the "DOC.sidebar.item.On My iPhone" Cell
+    t =    69.26s     Check for interrupting elements affecting "DOC.sidebar.item.On My iPhone" Cell
+    t =    69.28s     Synthesize event
+    t =    69.57s     Wait for com.apple.DocumentsApp to idle
+    t =    71.02s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "File View" CollectionView`
+    t =    71.02s     Checking existence of `"File View" CollectionView`
+    t =    71.09s     Find the "File View" CollectionView
+    t =    71.14s     Find the "File View" CollectionView
+    t =    71.17s Requesting snapshot of accessibility hierarchy for app with pid 32855
+    t =    71.38s Requesting snapshot of accessibility hierarchy for app with pid 32855
+    t =    71.43s Added attachment named 'export-files-local-root-hierarchy'
+    t =    71.49s Added attachment named 'export-files-local-root'
+    t =    72.52s Checking `Expect predicate `exists == 1` for object "atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, Folder" Cell`
+    t =    72.52s     Checking existence of `"atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, Folder" Cell`
+    t =    73.59s Checking `Expect predicate `exists == 1` for object "File View" CollectionView`
+    t =    73.59s     Checking existence of `"File View" CollectionView`
+    t =    73.63s Find the "File View" CollectionView
+    t =    73.66s Find the "atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, Folder" Cell
+    t =    73.69s Find the "atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, Folder" Cell
+    t =    74.75s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, Folder" Cell`
+    t =    74.75s     Checking existence of `"atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, Folder" Cell`
+    t =    74.80s     Find the "atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, Folder" Cell
+    t =    74.85s     Find the "atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, Folder" Cell
+    t =    74.88s Tap "atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, Folder" Cell
+    t =    74.88s     Wait for com.apple.DocumentsApp to idle
+    t =    74.88s     Find the "atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, Folder" Cell
+    t =    74.91s     Check for interrupting elements affecting "atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, Folder" Cell
+    t =    74.94s     Synthesize event
+    t =    75.23s     Wait for com.apple.DocumentsApp to idle
+    t =    76.92s Checking `Expect predicate `exists == 1` for object "DOC.browsingRoot Source: com.apple.FileProvider.LocalStorage, Title: atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89" Other`
+    t =    76.92s     Checking existence of `"DOC.browsingRoot Source: com.apple.FileProvider.LocalStorage, Title: atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89" Other`
+    t =    76.97s Requesting snapshot of accessibility hierarchy for app with pid 32855
+    t =    77.08s Requesting snapshot of accessibility hierarchy for app with pid 32855
+    t =    77.11s Added attachment named 'export-files-folder-atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89-hierarchy'
+    t =    77.17s Added attachment named 'export-files-folder-atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89'
+    t =    77.17s Get all elements bound by index for: Elements matching predicate 'identifier == "0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, pdf" OR identifier == "0a61a723-b1fe-4e68-95ce-79e5b4b4bf89.pdf, pdf" OR label == "0a61a723-b1fe-4e68-95ce-79e5b4b4bf89" OR label == "0a61a723-b1fe-4e68-95ce-79e5b4b4bf89.pdf"'
+    t =    77.19s Checking existence of `Cell (Element at index 0)`
+    t =    77.21s Find the Cell (Element at index 0)
+    t =    77.23s Find the "0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, pdf" Cell
+    t =    78.29s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, pdf" Cell`
+    t =    78.29s     Checking existence of `"0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, pdf" Cell`
+    t =    78.33s     Find the "0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, pdf" Cell
+    t =    78.36s     Find the "0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, pdf" Cell
+    t =    78.39s Tap "0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, pdf" Cell
+    t =    78.39s     Wait for com.apple.DocumentsApp to idle
+    t =    78.39s     Find the "0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, pdf" Cell
+    t =    78.41s     Check for interrupting elements affecting "0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, pdf" Cell
+    t =    78.43s     Synthesize event
+    t =    78.72s     Wait for com.apple.DocumentsApp to idle
+    t =    79.13s Wait for com.apple.Preview to become Running Foreground
+    t =    80.15s Checking `Expect predicate `exists == 1` for object Any (First Match)`
+    t =    80.15s     Checking existence of `Any (First Match)`
+    t =    80.18s Requesting snapshot of accessibility hierarchy for app with pid 11918
+    t =    80.45s Requesting snapshot of accessibility hierarchy for app with pid 11918
+    t =    80.52s Added attachment named 'export-independent-reopen-hierarchy'
+    t =    80.58s Added attachment named 'export-independent-reopen'
+    t =    80.58s Added attachment named 'export-saved-identity'
+    t =    80.59s Tear Down
+    t =    80.59s     Requesting snapshot of accessibility hierarchy for app with pid 32843
+    t =    80.83s     Requesting snapshot of accessibility hierarchy for app with pid 32843
+    t =    80.84s     Added attachment named 'export-final-state-hierarchy'
+    t =    80.91s     Added attachment named 'export-final-state'
+    t =    80.91s     Terminate dev.atepdf.fresh:32843
+    t =    81.92s     Setting device orientation to Portrait
+    t =    81.92s         Wait for com.apple.Preview to idle
+Test Case '-[atepdfUITests.AtepdfExportUITests testSaveToLocalFilesAndReopenAfterRestart]' passed (82.201 seconds).
+Test Suite 'AtepdfExportUITests' passed at 2026-09-29 01:14:10.531.
+	 Executed 1 test, with 0 failures (0 unexpected) in 82.201 (82.203) seconds
+Test Suite 'atepdfUITests.xctest' passed at 2026-09-29 01:14:10.532.
+	 Executed 1 test, with 0 failures (0 unexpected) in 82.201 (82.204) seconds
+Test Suite 'Selected tests' passed at 2026-09-29 01:14:10.533.
+	 Executed 1 test, with 0 failures (0 unexpected) in 82.201 (82.205) seconds
+2026-09-29 01:14:10.841 xcodebuild[32652:2626066] [MT] IDETestOperationsObserverDebug: 85.113 elapsed -- Testing started completed.
+2026-09-29 01:14:10.841 xcodebuild[32652:2626066] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-09-29 01:14:10.841 xcodebuild[32652:2626066] [MT] IDETestOperationsObserverDebug: 85.113 sec, +85.113 sec -- end
+
+Test session results, code coverage, and logs:
+	/Users/shrey/Documents/ChatGPT/atepdf/.build/ux-refined-final-export.xcresult
+
+** TEST EXECUTE SUCCEEDED **
+
+Testing started

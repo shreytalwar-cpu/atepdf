@@ -2,6 +2,10 @@
 
 The first captured Release application passed the two ordinary local-only iPhone UI tests. A refreshed app then passed exact typing at accessibility-large size and completed import, merge and preview before correctly failing the visible-software-keyboard gate. The final focused accessibility-large test passed page navigation, zoom, fit and close after correcting the clipped toolbar. This is Simulator evidence, not physical-device or distribution acceptance. The initial QA reused captured products. Later test-only builds and actual saved-copy acceptance are recorded separately below. No planner request, owner credential access or old-project access occurred in this iPhone QA pass.
 
+## Final UX source — 29 September, `7935daa`
+
+The latest [Release build and source-matched result](evidence/native/ux-discovery-final-result.json) passes the actual local import/merge/preview/removal/Undo/share-dismissal workflow (67.347s) and fast typing/backspace (10.987s). The current-result title, Save, Undo and new Help footer were visually inspected. This remains the explicitly named hardware-input test: the software keyboard is offscreen, so visible iPhone keyboard clearance is still unverified. The actual destination-save/restart/Preview proof below remains bound to its earlier captured binary; it is not relabelled as a rerun on the new build.
+
 ## Tested application
 
 - Device: iPhone 17 Pro, iOS Simulator 27.0 (24A434), arm64, `D68C4547-67D3-4960-AAB9-D85FD786D6FC`.

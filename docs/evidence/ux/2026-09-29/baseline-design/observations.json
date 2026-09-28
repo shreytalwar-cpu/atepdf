@@ -1,0 +1,2738 @@
+[
+  {
+    "size": "desktop",
+    "state": "01-empty",
+    "text": "Processed on your device\nDrop files here\nThen tell me what you’d like to do.\nChoose files\nTry the two sample PDFs\nMerge\nCompress\nMake searchable\nYour files stay on this device",
+    "buttons": [
+      {
+        "label": "Processed on your device",
+        "disabled": null,
+        "x": 1167.328125,
+        "y": 16,
+        "w": 192.671875,
+        "h": 44
+      },
+      {
+        "label": "OpenAI connection",
+        "disabled": null,
+        "x": 1364,
+        "y": 16,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Choose files",
+        "disabled": null,
+        "x": 655.28125,
+        "y": 482,
+        "w": 129.421875,
+        "h": 44
+      },
+      {
+        "label": "Try the two sample PDFs",
+        "disabled": null,
+        "x": 627.9375,
+        "y": 538,
+        "w": 184.125,
+        "h": 44
+      },
+      {
+        "label": "Add files",
+        "disabled": null,
+        "x": 361,
+        "y": 831,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Send message",
+        "disabled": true,
+        "x": 1035,
+        "y": 831,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Merge",
+        "disabled": null,
+        "x": 533.78125,
+        "y": 896,
+        "w": 91.90625,
+        "h": 44
+      },
+      {
+        "label": "Compress",
+        "disabled": null,
+        "x": 633.6875,
+        "y": 896,
+        "w": 113.140625,
+        "h": 44
+      },
+      {
+        "label": "Make searchable",
+        "disabled": null,
+        "x": 754.828125,
+        "y": 896,
+        "w": 151.375,
+        "h": 44
+      },
+      {
+        "label": "Choose PDF files",
+        "disabled": null,
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 1
+      }
+    ],
+    "overflow": {
+      "document": 1440,
+      "viewport": 1440
+    },
+    "consoleErrors": []
+  },
+  {
+    "size": "desktop",
+    "state": "02-imported",
+    "text": "Processed on your device\nbrief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge\nCompress\nMake searchable\n2 originals in this chat",
+    "buttons": [
+      {
+        "label": "Processed on your device",
+        "disabled": null,
+        "x": 1119.328125,
+        "y": 16,
+        "w": 192.671875,
+        "h": 44
+      },
+      {
+        "label": "OpenAI connection",
+        "disabled": null,
+        "x": 1316,
+        "y": 16,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Start over",
+        "disabled": null,
+        "x": 1364,
+        "y": 16,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": 374,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Add files",
+        "disabled": null,
+        "x": 361,
+        "y": 843,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Send message",
+        "disabled": true,
+        "x": 1035,
+        "y": 843,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Merge",
+        "disabled": null,
+        "x": 533.78125,
+        "y": 908,
+        "w": 91.90625,
+        "h": 44
+      },
+      {
+        "label": "Compress",
+        "disabled": null,
+        "x": 633.6875,
+        "y": 908,
+        "w": 113.140625,
+        "h": 44
+      },
+      {
+        "label": "Make searchable",
+        "disabled": null,
+        "x": 754.828125,
+        "y": 908,
+        "w": 151.375,
+        "h": 44
+      },
+      {
+        "label": "Choose PDF files",
+        "disabled": null,
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 1
+      }
+    ],
+    "overflow": {
+      "document": 1440,
+      "viewport": 1440
+    },
+    "consoleErrors": []
+  },
+  {
+    "size": "desktop",
+    "state": "03-merged",
+    "text": "Processed on your device\nbrief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nYour PDF is ready\n3 pages · 3.1 kB\nSave PDF\nPreview\nUndo\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent result · 3 pages",
+    "buttons": [
+      {
+        "label": "Processed on your device",
+        "disabled": null,
+        "x": 1119.328125,
+        "y": 16,
+        "w": 192.671875,
+        "h": 44
+      },
+      {
+        "label": "OpenAI connection",
+        "disabled": null,
+        "x": 1316,
+        "y": 16,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Start over",
+        "disabled": null,
+        "x": 1364,
+        "y": 16,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": 333,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 381,
+        "y": 594,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 499.4375,
+        "y": 594,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Undo",
+        "disabled": true,
+        "x": 609.53125,
+        "y": 594,
+        "w": 83.390625,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": 714,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Add files",
+        "disabled": null,
+        "x": 361,
+        "y": 843,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Send message",
+        "disabled": true,
+        "x": 1035,
+        "y": 843,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Merge",
+        "disabled": null,
+        "x": 533.78125,
+        "y": 908,
+        "w": 91.90625,
+        "h": 44
+      },
+      {
+        "label": "Compress",
+        "disabled": null,
+        "x": 633.6875,
+        "y": 908,
+        "w": 113.140625,
+        "h": 44
+      },
+      {
+        "label": "Make searchable",
+        "disabled": null,
+        "x": 754.828125,
+        "y": 908,
+        "w": 151.375,
+        "h": 44
+      },
+      {
+        "label": "Choose PDF files",
+        "disabled": null,
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 1
+      }
+    ],
+    "overflow": {
+      "document": 1440,
+      "viewport": 1440
+    },
+    "consoleErrors": []
+  },
+  {
+    "size": "desktop",
+    "state": "04-preview",
+    "text": "Processed on your device\nbrief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nYour PDF is ready\n3 pages · 3.1 kB\nSave PDF\nHide preview\nUndo\nRead-only preview\nFit\nPage 1 of 3\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent result · 3 pages",
+    "buttons": [
+      {
+        "label": "Processed on your device",
+        "disabled": null,
+        "x": 1119.328125,
+        "y": 16,
+        "w": 192.671875,
+        "h": 44
+      },
+      {
+        "label": "OpenAI connection",
+        "disabled": null,
+        "x": 1316,
+        "y": 16,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Start over",
+        "disabled": null,
+        "x": 1364,
+        "y": 16,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": -199,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 381,
+        "y": 62,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Hide preview",
+        "disabled": null,
+        "x": 499.4375,
+        "y": 62,
+        "w": 135.9375,
+        "h": 44
+      },
+      {
+        "label": "Undo",
+        "disabled": true,
+        "x": 643.375,
+        "y": 62,
+        "w": 83.390625,
+        "h": 44
+      },
+      {
+        "label": "Fit page",
+        "disabled": null,
+        "x": 962,
+        "y": 141,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Close preview",
+        "disabled": null,
+        "x": 1010,
+        "y": 141,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Previous page",
+        "disabled": true,
+        "x": 386,
+        "y": 190,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Next page",
+        "disabled": null,
+        "x": 664.875,
+        "y": 190,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Zoom out",
+        "disabled": true,
+        "x": 883.296875,
+        "y": 190,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Zoom in",
+        "disabled": null,
+        "x": 1010,
+        "y": 190,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": 714,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Add files",
+        "disabled": null,
+        "x": 361,
+        "y": 843,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Send message",
+        "disabled": true,
+        "x": 1035,
+        "y": 843,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Merge",
+        "disabled": null,
+        "x": 533.78125,
+        "y": 908,
+        "w": 91.90625,
+        "h": 44
+      },
+      {
+        "label": "Compress",
+        "disabled": null,
+        "x": 633.6875,
+        "y": 908,
+        "w": 113.140625,
+        "h": 44
+      },
+      {
+        "label": "Make searchable",
+        "disabled": null,
+        "x": 754.828125,
+        "y": 908,
+        "w": 151.375,
+        "h": 44
+      },
+      {
+        "label": "Choose PDF files",
+        "disabled": null,
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 1
+      }
+    ],
+    "overflow": {
+      "document": 1440,
+      "viewport": 1440
+    },
+    "consoleErrors": []
+  },
+  {
+    "size": "desktop",
+    "state": "05-removed",
+    "text": "Processed on your device\nbrief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nYour PDF is ready\n3 pages · 3.1 kB\nSave PDF\nPreview\nRemove page 2\nI removed physical page 2. Here’s the new copy.\nYour PDF is ready\n2 pages · 2.3 kB\nSave PDF\nPreview\nUndo\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent result · 2 pages",
+    "buttons": [
+      {
+        "label": "Processed on your device",
+        "disabled": null,
+        "x": 1119.328125,
+        "y": 16,
+        "w": 192.671875,
+        "h": 44
+      },
+      {
+        "label": "OpenAI connection",
+        "disabled": null,
+        "x": 1316,
+        "y": 16,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Start over",
+        "disabled": null,
+        "x": 1364,
+        "y": 16,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": 1,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 381,
+        "y": 262,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 499.4375,
+        "y": 262,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": 333,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 381,
+        "y": 594,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 499.4375,
+        "y": 594,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Undo",
+        "disabled": null,
+        "x": 609.53125,
+        "y": 594,
+        "w": 83.390625,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": 714,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Add files",
+        "disabled": null,
+        "x": 361,
+        "y": 843,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Send message",
+        "disabled": true,
+        "x": 1035,
+        "y": 843,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Merge",
+        "disabled": null,
+        "x": 533.78125,
+        "y": 908,
+        "w": 91.90625,
+        "h": 44
+      },
+      {
+        "label": "Compress",
+        "disabled": null,
+        "x": 633.6875,
+        "y": 908,
+        "w": 113.140625,
+        "h": 44
+      },
+      {
+        "label": "Make searchable",
+        "disabled": null,
+        "x": 754.828125,
+        "y": 908,
+        "w": 151.375,
+        "h": 44
+      },
+      {
+        "label": "Choose PDF files",
+        "disabled": null,
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 1
+      }
+    ],
+    "overflow": {
+      "document": 1440,
+      "viewport": 1440
+    },
+    "consoleErrors": []
+  },
+  {
+    "size": "desktop",
+    "state": "06-undo",
+    "text": "Processed on your device\nbrief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nYour PDF is ready\n3 pages · 3.1 kB\nSave PDF\nPreview\nRemove page 2\nI removed physical page 2. Here’s the new copy.\nYour PDF is ready\n2 pages · 2.3 kB\nSave PDF\nPreview\nUndo the last change.\nI restored your previous result. Your original files are unchanged.\nYour PDF is ready\n3 pages · 3.1 kB\nSave PDF\nPreview\nUndo\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent result · 3 pages",
+    "buttons": [
+      {
+        "label": "Processed on your device",
+        "disabled": null,
+        "x": 1119.328125,
+        "y": 16,
+        "w": 192.671875,
+        "h": 44
+      },
+      {
+        "label": "OpenAI connection",
+        "disabled": null,
+        "x": 1316,
+        "y": 16,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Start over",
+        "disabled": null,
+        "x": 1364,
+        "y": 16,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": -331,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 381,
+        "y": -70,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 499.4375,
+        "y": -70,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": 1,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 381,
+        "y": 262,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 499.4375,
+        "y": 262,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": 333,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 381,
+        "y": 594,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 499.4375,
+        "y": 594,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Undo",
+        "disabled": true,
+        "x": 609.53125,
+        "y": 594,
+        "w": 83.390625,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": 714,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Add files",
+        "disabled": null,
+        "x": 361,
+        "y": 843,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Send message",
+        "disabled": true,
+        "x": 1035,
+        "y": 843,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Merge",
+        "disabled": null,
+        "x": 533.78125,
+        "y": 908,
+        "w": 91.90625,
+        "h": 44
+      },
+      {
+        "label": "Compress",
+        "disabled": null,
+        "x": 633.6875,
+        "y": 908,
+        "w": 113.140625,
+        "h": 44
+      },
+      {
+        "label": "Make searchable",
+        "disabled": null,
+        "x": 754.828125,
+        "y": 908,
+        "w": 151.375,
+        "h": 44
+      },
+      {
+        "label": "Choose PDF files",
+        "disabled": null,
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 1
+      }
+    ],
+    "overflow": {
+      "document": 1440,
+      "viewport": 1440
+    },
+    "consoleErrors": []
+  },
+  {
+    "size": "desktop",
+    "state": "07-error",
+    "text": "Processed on your device\nbrief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nYour PDF is ready\n3 pages · 3.1 kB\nSave PDF\nPreview\nRemove page 2\nI removed physical page 2. Here’s the new copy.\nYour PDF is ready\n2 pages · 2.3 kB\nSave PDF\nPreview\nUndo the last change.\nI restored your previous result. Your original files are unchanged.\nYour PDF is ready\n3 pages · 3.1 kB\nSave PDF\nPreview\nUndo\nTell me what you’d like to do next.\nRemove page 99\nThat physical page does not exist.\nMerge\nCompress\nMake searchable\nCurrent result · 3 pages",
+    "buttons": [
+      {
+        "label": "Processed on your device",
+        "disabled": null,
+        "x": 1119.328125,
+        "y": 16,
+        "w": 192.671875,
+        "h": 44
+      },
+      {
+        "label": "OpenAI connection",
+        "disabled": null,
+        "x": 1316,
+        "y": 16,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Start over",
+        "disabled": null,
+        "x": 1364,
+        "y": 16,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": -501,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 381,
+        "y": -240,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 499.4375,
+        "y": -240,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": -169,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 381,
+        "y": 92,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 499.4375,
+        "y": 92,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": 163,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 381,
+        "y": 424,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 499.4375,
+        "y": 424,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Undo",
+        "disabled": true,
+        "x": 609.53125,
+        "y": 424,
+        "w": 83.390625,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": 544,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": 714,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Add files",
+        "disabled": null,
+        "x": 361,
+        "y": 843,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Send message",
+        "disabled": true,
+        "x": 1035,
+        "y": 843,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Merge",
+        "disabled": null,
+        "x": 533.78125,
+        "y": 908,
+        "w": 91.90625,
+        "h": 44
+      },
+      {
+        "label": "Compress",
+        "disabled": null,
+        "x": 633.6875,
+        "y": 908,
+        "w": 113.140625,
+        "h": 44
+      },
+      {
+        "label": "Make searchable",
+        "disabled": null,
+        "x": 754.828125,
+        "y": 908,
+        "w": 151.375,
+        "h": 44
+      },
+      {
+        "label": "Choose PDF files",
+        "disabled": null,
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 1
+      }
+    ],
+    "overflow": {
+      "document": 1440,
+      "viewport": 1440
+    },
+    "consoleErrors": []
+  },
+  {
+    "size": "desktop",
+    "state": "08-unavailable",
+    "text": "Processed on your device\nbrief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nYour PDF is ready\n3 pages · 3.1 kB\nSave PDF\nPreview\nRemove page 2\nI removed physical page 2. Here’s the new copy.\nYour PDF is ready\n2 pages · 2.3 kB\nSave PDF\nPreview\nUndo the last change.\nI restored your previous result. Your original files are unchanged.\nYour PDF is ready\n3 pages · 3.1 kB\nSave PDF\nPreview\nUndo\nTell me what you’d like to do next.\nRemove page 99\nThat physical page does not exist.\nWhat can you do?\nOpenAI is not connected yet.\nMerge\nCompress\nMake searchable\nCurrent result · 3 pages",
+    "buttons": [
+      {
+        "label": "Processed on your device",
+        "disabled": null,
+        "x": 1119.328125,
+        "y": 16,
+        "w": 192.671875,
+        "h": 44
+      },
+      {
+        "label": "OpenAI connection",
+        "disabled": null,
+        "x": 1316,
+        "y": 16,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Start over",
+        "disabled": null,
+        "x": 1364,
+        "y": 16,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": -671,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 381,
+        "y": -410,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 499.4375,
+        "y": -410,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": -339,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 381,
+        "y": -78,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 499.4375,
+        "y": -78,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": -7,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 381,
+        "y": 254,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 499.4375,
+        "y": 254,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Undo",
+        "disabled": true,
+        "x": 609.53125,
+        "y": 254,
+        "w": 83.390625,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": 374,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": 544,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": 714,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Add files",
+        "disabled": null,
+        "x": 361,
+        "y": 843,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Send message",
+        "disabled": true,
+        "x": 1035,
+        "y": 843,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Merge",
+        "disabled": null,
+        "x": 533.78125,
+        "y": 908,
+        "w": 91.90625,
+        "h": 44
+      },
+      {
+        "label": "Compress",
+        "disabled": null,
+        "x": 633.6875,
+        "y": 908,
+        "w": 113.140625,
+        "h": 44
+      },
+      {
+        "label": "Make searchable",
+        "disabled": null,
+        "x": 754.828125,
+        "y": 908,
+        "w": 151.375,
+        "h": 44
+      },
+      {
+        "label": "Choose PDF files",
+        "disabled": null,
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 1
+      }
+    ],
+    "overflow": {
+      "document": 1440,
+      "viewport": 1440
+    },
+    "consoleErrors": []
+  },
+  {
+    "size": "desktop",
+    "state": "09-privacy",
+    "text": "Processed on your device\nbrief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nYour PDF is ready\n3 pages · 3.1 kB\nSave PDF\nPreview\nRemove page 2\nI removed physical page 2. Here’s the new copy.\nYour PDF is ready\n2 pages · 2.3 kB\nSave PDF\nPreview\nUndo the last change.\nI restored your previous result. Your original files are unchanged.\nYour PDF is ready\n3 pages · 3.1 kB\nSave PDF\nPreview\nUndo\nTell me what you’d like to do next.\nRemove page 99\nThat physical page does not exist.\nWhat can you do?\nOpenAI is not connected yet.\nMerge\nCompress\nMake searchable\nCurrent result · 3 pages\nProcessed on your device\nPDF files, previews and recognised text stay on this device. PDF operations run in local engines.\nWhen AI is enabled, chat requests and quick actions send your instruction and anonymous file references, page counts and sizes for planning. Filenames, passwords, paths, checksums and document contents are excluded. Your OpenAI key stays in the local server, outside the app.\nSave before closing. Chat and files stay in this session. Saving to a cloud folder or sharing through a chosen provider may transfer the saved file outside atepdf.\nGot it",
+    "buttons": [
+      {
+        "label": "Processed on your device",
+        "disabled": null,
+        "x": 1119.328125,
+        "y": 16,
+        "w": 192.671875,
+        "h": 44
+      },
+      {
+        "label": "OpenAI connection",
+        "disabled": null,
+        "x": 1316,
+        "y": 16,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Start over",
+        "disabled": null,
+        "x": 1364,
+        "y": 16,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": -671,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 381,
+        "y": -410,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 499.4375,
+        "y": -410,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": -339,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 381,
+        "y": -78,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 499.4375,
+        "y": -78,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": -7,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 381,
+        "y": 254,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 499.4375,
+        "y": 254,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Undo",
+        "disabled": true,
+        "x": 609.53125,
+        "y": 254,
+        "w": 83.390625,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": 374,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": 544,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 356,
+        "y": 714,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Add files",
+        "disabled": null,
+        "x": 361,
+        "y": 843,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Send message",
+        "disabled": true,
+        "x": 1035,
+        "y": 843,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Merge",
+        "disabled": null,
+        "x": 533.78125,
+        "y": 908,
+        "w": 91.90625,
+        "h": 44
+      },
+      {
+        "label": "Compress",
+        "disabled": null,
+        "x": 633.6875,
+        "y": 908,
+        "w": 113.140625,
+        "h": 44
+      },
+      {
+        "label": "Make searchable",
+        "disabled": null,
+        "x": 754.828125,
+        "y": 908,
+        "w": 151.375,
+        "h": 44
+      },
+      {
+        "label": "Choose PDF files",
+        "disabled": null,
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 1
+      },
+      {
+        "label": "Got it",
+        "disabled": null,
+        "x": 488,
+        "y": 644,
+        "w": 464,
+        "h": 44
+      }
+    ],
+    "overflow": {
+      "document": 1440,
+      "viewport": 1440
+    },
+    "consoleErrors": []
+  },
+  {
+    "size": "compact",
+    "state": "01-empty",
+    "text": "Add your files\nThen tell me what you’d like to do.\nChoose files\nTry the two sample PDFs\nMerge\nCompress\nMake searchable\nYour files stay on this device",
+    "buttons": [
+      {
+        "label": "Processed on your device",
+        "disabled": null,
+        "x": 282,
+        "y": 8,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "OpenAI connection",
+        "disabled": null,
+        "x": 330,
+        "y": 8,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Choose files",
+        "disabled": null,
+        "x": 130.28125,
+        "y": 396,
+        "w": 129.421875,
+        "h": 44
+      },
+      {
+        "label": "Try the two sample PDFs",
+        "disabled": null,
+        "x": 102.9375,
+        "y": 452,
+        "w": 184.125,
+        "h": 44
+      },
+      {
+        "label": "Add files",
+        "disabled": null,
+        "x": 25,
+        "y": 675,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Send message",
+        "disabled": true,
+        "x": 321,
+        "y": 675,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Merge",
+        "disabled": null,
+        "x": 16,
+        "y": 740,
+        "w": 114,
+        "h": 44
+      },
+      {
+        "label": "Compress",
+        "disabled": null,
+        "x": 138,
+        "y": 740,
+        "w": 114,
+        "h": 44
+      },
+      {
+        "label": "Make searchable",
+        "disabled": null,
+        "x": 260,
+        "y": 740,
+        "w": 114,
+        "h": 44
+      },
+      {
+        "label": "Choose PDF files",
+        "disabled": null,
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 1
+      }
+    ],
+    "overflow": {
+      "document": 390,
+      "viewport": 390
+    },
+    "consoleErrors": []
+  },
+  {
+    "size": "compact",
+    "state": "02-imported",
+    "text": "brief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge\nCompress\nMake searchable\n2 originals in this chat",
+    "buttons": [
+      {
+        "label": "Processed on your device",
+        "disabled": null,
+        "x": 234,
+        "y": 8,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "OpenAI connection",
+        "disabled": null,
+        "x": 282,
+        "y": 8,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Start over",
+        "disabled": null,
+        "x": 330,
+        "y": 8,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": 382,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Add files",
+        "disabled": null,
+        "x": 25,
+        "y": 687,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Send message",
+        "disabled": true,
+        "x": 321,
+        "y": 687,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Merge",
+        "disabled": null,
+        "x": 16,
+        "y": 752,
+        "w": 114,
+        "h": 44
+      },
+      {
+        "label": "Compress",
+        "disabled": null,
+        "x": 138,
+        "y": 752,
+        "w": 114,
+        "h": 44
+      },
+      {
+        "label": "Make searchable",
+        "disabled": null,
+        "x": 260,
+        "y": 752,
+        "w": 114,
+        "h": 44
+      },
+      {
+        "label": "Choose PDF files",
+        "disabled": null,
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 1
+      }
+    ],
+    "overflow": {
+      "document": 390,
+      "viewport": 390
+    },
+    "consoleErrors": []
+  },
+  {
+    "size": "compact",
+    "state": "03-merged",
+    "text": "brief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nYour PDF is ready\n3 pages · 3.1 kB\nSave PDF\nPreview\nUndo\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent result · 3 pages",
+    "buttons": [
+      {
+        "label": "Processed on your device",
+        "disabled": null,
+        "x": 234,
+        "y": 8,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "OpenAI connection",
+        "disabled": null,
+        "x": 282,
+        "y": 8,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Start over",
+        "disabled": null,
+        "x": 330,
+        "y": 8,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": 109,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 41,
+        "y": 390,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 159.4375,
+        "y": 390,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Undo",
+        "disabled": true,
+        "x": 41,
+        "y": 442,
+        "w": 83.390625,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": 558,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Add files",
+        "disabled": null,
+        "x": 25,
+        "y": 687,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Send message",
+        "disabled": true,
+        "x": 321,
+        "y": 687,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Merge",
+        "disabled": null,
+        "x": 16,
+        "y": 752,
+        "w": 114,
+        "h": 44
+      },
+      {
+        "label": "Compress",
+        "disabled": null,
+        "x": 138,
+        "y": 752,
+        "w": 114,
+        "h": 44
+      },
+      {
+        "label": "Make searchable",
+        "disabled": null,
+        "x": 260,
+        "y": 752,
+        "w": 114,
+        "h": 44
+      },
+      {
+        "label": "Choose PDF files",
+        "disabled": null,
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 1
+      }
+    ],
+    "overflow": {
+      "document": 390,
+      "viewport": 390
+    },
+    "consoleErrors": []
+  },
+  {
+    "size": "compact",
+    "state": "04-preview",
+    "text": "brief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nYour PDF is ready\n3 pages · 3.1 kB\nSave PDF\nHide preview\nUndo\nRead-only preview\nFit\nPage 1 of 3\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent result · 3 pages",
+    "buttons": [
+      {
+        "label": "Processed on your device",
+        "disabled": null,
+        "x": 234,
+        "y": 8,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "OpenAI connection",
+        "disabled": null,
+        "x": 282,
+        "y": 8,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Start over",
+        "disabled": null,
+        "x": 330,
+        "y": 8,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": -349,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 41,
+        "y": -68,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Hide preview",
+        "disabled": null,
+        "x": 159.4375,
+        "y": -68,
+        "w": 135.9375,
+        "h": 44
+      },
+      {
+        "label": "Undo",
+        "disabled": true,
+        "x": 41,
+        "y": -16,
+        "w": 83.390625,
+        "h": 44
+      },
+      {
+        "label": "Fit page",
+        "disabled": null,
+        "x": 252,
+        "y": 63,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Close preview",
+        "disabled": null,
+        "x": 300,
+        "y": 63,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Previous page",
+        "disabled": true,
+        "x": 46,
+        "y": 112,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Next page",
+        "disabled": null,
+        "x": 176.875,
+        "y": 112,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Zoom out",
+        "disabled": true,
+        "x": 247.296875,
+        "y": 112,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Zoom in",
+        "disabled": null,
+        "x": 300,
+        "y": 112,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": 569.59375,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Add files",
+        "disabled": null,
+        "x": 25,
+        "y": 687,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Send message",
+        "disabled": true,
+        "x": 321,
+        "y": 687,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Merge",
+        "disabled": null,
+        "x": 16,
+        "y": 752,
+        "w": 114,
+        "h": 44
+      },
+      {
+        "label": "Compress",
+        "disabled": null,
+        "x": 138,
+        "y": 752,
+        "w": 114,
+        "h": 44
+      },
+      {
+        "label": "Make searchable",
+        "disabled": null,
+        "x": 260,
+        "y": 752,
+        "w": 114,
+        "h": 44
+      },
+      {
+        "label": "Choose PDF files",
+        "disabled": null,
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 1
+      }
+    ],
+    "overflow": {
+      "document": 390,
+      "viewport": 390
+    },
+    "consoleErrors": []
+  },
+  {
+    "size": "compact",
+    "state": "05-removed",
+    "text": "brief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nYour PDF is ready\n3 pages · 3.1 kB\nSave PDF\nPreview\nRemove page 2\nI removed physical page 2. Here’s the new copy.\nYour PDF is ready\n2 pages · 2.3 kB\nSave PDF\nPreview\nUndo\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent result · 2 pages",
+    "buttons": [
+      {
+        "label": "Processed on your device",
+        "disabled": null,
+        "x": 234,
+        "y": 8,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "OpenAI connection",
+        "disabled": null,
+        "x": 282,
+        "y": 8,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Start over",
+        "disabled": null,
+        "x": 330,
+        "y": 8,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": 121,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 41,
+        "y": 402,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 159.4375,
+        "y": 402,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": 469,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 41,
+        "y": 750,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 159.4375,
+        "y": 750,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Undo",
+        "disabled": null,
+        "x": 41,
+        "y": 802,
+        "w": 83.390625,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": 918,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Latest message",
+        "disabled": null,
+        "x": 326,
+        "y": 570,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Add files",
+        "disabled": null,
+        "x": 25,
+        "y": 687,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Send message",
+        "disabled": true,
+        "x": 321,
+        "y": 687,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Merge",
+        "disabled": null,
+        "x": 16,
+        "y": 752,
+        "w": 114,
+        "h": 44
+      },
+      {
+        "label": "Compress",
+        "disabled": null,
+        "x": 138,
+        "y": 752,
+        "w": 114,
+        "h": 44
+      },
+      {
+        "label": "Make searchable",
+        "disabled": null,
+        "x": 260,
+        "y": 752,
+        "w": 114,
+        "h": 44
+      },
+      {
+        "label": "Choose PDF files",
+        "disabled": null,
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 1
+      }
+    ],
+    "overflow": {
+      "document": 390,
+      "viewport": 390
+    },
+    "consoleErrors": []
+  },
+  {
+    "size": "compact",
+    "state": "06-undo",
+    "text": "brief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nYour PDF is ready\n3 pages · 3.1 kB\nSave PDF\nPreview\nRemove page 2\nI removed physical page 2. Here’s the new copy.\nYour PDF is ready\n2 pages · 2.3 kB\nSave PDF\nPreview\nUndo the last change.\nI restored your previous result. Your original files are unchanged.\nYour PDF is ready\n3 pages · 3.1 kB\nSave PDF\nPreview\nUndo\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent result · 3 pages",
+    "buttons": [
+      {
+        "label": "Processed on your device",
+        "disabled": null,
+        "x": 234,
+        "y": 8,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "OpenAI connection",
+        "disabled": null,
+        "x": 282,
+        "y": 8,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Start over",
+        "disabled": null,
+        "x": 330,
+        "y": 8,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": -587,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 41,
+        "y": -306,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 159.4375,
+        "y": -306,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": -239,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 41,
+        "y": 42,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 159.4375,
+        "y": 42,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": 109,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 41,
+        "y": 390,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 159.4375,
+        "y": 390,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Undo",
+        "disabled": true,
+        "x": 41,
+        "y": 442,
+        "w": 83.390625,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": 558,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Add files",
+        "disabled": null,
+        "x": 25,
+        "y": 687,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Send message",
+        "disabled": true,
+        "x": 321,
+        "y": 687,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Merge",
+        "disabled": null,
+        "x": 16,
+        "y": 752,
+        "w": 114,
+        "h": 44
+      },
+      {
+        "label": "Compress",
+        "disabled": null,
+        "x": 138,
+        "y": 752,
+        "w": 114,
+        "h": 44
+      },
+      {
+        "label": "Make searchable",
+        "disabled": null,
+        "x": 260,
+        "y": 752,
+        "w": 114,
+        "h": 44
+      },
+      {
+        "label": "Choose PDF files",
+        "disabled": null,
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 1
+      }
+    ],
+    "overflow": {
+      "document": 390,
+      "viewport": 390
+    },
+    "consoleErrors": []
+  },
+  {
+    "size": "compact",
+    "state": "07-error",
+    "text": "brief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nYour PDF is ready\n3 pages · 3.1 kB\nSave PDF\nPreview\nRemove page 2\nI removed physical page 2. Here’s the new copy.\nYour PDF is ready\n2 pages · 2.3 kB\nSave PDF\nPreview\nUndo the last change.\nI restored your previous result. Your original files are unchanged.\nYour PDF is ready\n3 pages · 3.1 kB\nSave PDF\nPreview\nUndo\nTell me what you’d like to do next.\nRemove page 99\nThat physical page does not exist.\nMerge\nCompress\nMake searchable\nCurrent result · 3 pages",
+    "buttons": [
+      {
+        "label": "Processed on your device",
+        "disabled": null,
+        "x": 234,
+        "y": 8,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "OpenAI connection",
+        "disabled": null,
+        "x": 282,
+        "y": 8,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Start over",
+        "disabled": null,
+        "x": 330,
+        "y": 8,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": -757,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 41,
+        "y": -476,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 159.4375,
+        "y": -476,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": -409,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 41,
+        "y": -128,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 159.4375,
+        "y": -128,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": -61,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 41,
+        "y": 220,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 159.4375,
+        "y": 220,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Undo",
+        "disabled": true,
+        "x": 41,
+        "y": 272,
+        "w": 83.390625,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": 388,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": 558,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Add files",
+        "disabled": null,
+        "x": 25,
+        "y": 687,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Send message",
+        "disabled": true,
+        "x": 321,
+        "y": 687,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Merge",
+        "disabled": null,
+        "x": 16,
+        "y": 752,
+        "w": 114,
+        "h": 44
+      },
+      {
+        "label": "Compress",
+        "disabled": null,
+        "x": 138,
+        "y": 752,
+        "w": 114,
+        "h": 44
+      },
+      {
+        "label": "Make searchable",
+        "disabled": null,
+        "x": 260,
+        "y": 752,
+        "w": 114,
+        "h": 44
+      },
+      {
+        "label": "Choose PDF files",
+        "disabled": null,
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 1
+      }
+    ],
+    "overflow": {
+      "document": 390,
+      "viewport": 390
+    },
+    "consoleErrors": []
+  },
+  {
+    "size": "compact",
+    "state": "08-unavailable",
+    "text": "brief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nYour PDF is ready\n3 pages · 3.1 kB\nSave PDF\nPreview\nRemove page 2\nI removed physical page 2. Here’s the new copy.\nYour PDF is ready\n2 pages · 2.3 kB\nSave PDF\nPreview\nUndo the last change.\nI restored your previous result. Your original files are unchanged.\nYour PDF is ready\n3 pages · 3.1 kB\nSave PDF\nPreview\nUndo\nTell me what you’d like to do next.\nRemove page 99\nThat physical page does not exist.\nWhat can you do?\nOpenAI is not connected yet.\nMerge\nCompress\nMake searchable\nCurrent result · 3 pages",
+    "buttons": [
+      {
+        "label": "Processed on your device",
+        "disabled": null,
+        "x": 234,
+        "y": 8,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "OpenAI connection",
+        "disabled": null,
+        "x": 282,
+        "y": 8,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Start over",
+        "disabled": null,
+        "x": 330,
+        "y": 8,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": -927,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 41,
+        "y": -646,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 159.4375,
+        "y": -646,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": -579,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 41,
+        "y": -298,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 159.4375,
+        "y": -298,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": -231,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 41,
+        "y": 50,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 159.4375,
+        "y": 50,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Undo",
+        "disabled": true,
+        "x": 41,
+        "y": 102,
+        "w": 83.390625,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": 218,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": 388,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": 558,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Add files",
+        "disabled": null,
+        "x": 25,
+        "y": 687,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Send message",
+        "disabled": true,
+        "x": 321,
+        "y": 687,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Merge",
+        "disabled": null,
+        "x": 16,
+        "y": 752,
+        "w": 114,
+        "h": 44
+      },
+      {
+        "label": "Compress",
+        "disabled": null,
+        "x": 138,
+        "y": 752,
+        "w": 114,
+        "h": 44
+      },
+      {
+        "label": "Make searchable",
+        "disabled": null,
+        "x": 260,
+        "y": 752,
+        "w": 114,
+        "h": 44
+      },
+      {
+        "label": "Choose PDF files",
+        "disabled": null,
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 1
+      }
+    ],
+    "overflow": {
+      "document": 390,
+      "viewport": 390
+    },
+    "consoleErrors": []
+  },
+  {
+    "size": "compact",
+    "state": "09-privacy",
+    "text": "brief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nYour PDF is ready\n3 pages · 3.1 kB\nSave PDF\nPreview\nRemove page 2\nI removed physical page 2. Here’s the new copy.\nYour PDF is ready\n2 pages · 2.3 kB\nSave PDF\nPreview\nUndo the last change.\nI restored your previous result. Your original files are unchanged.\nYour PDF is ready\n3 pages · 3.1 kB\nSave PDF\nPreview\nUndo\nTell me what you’d like to do next.\nRemove page 99\nThat physical page does not exist.\nWhat can you do?\nOpenAI is not connected yet.\nMerge\nCompress\nMake searchable\nCurrent result · 3 pages\nProcessed on your device\nPDF files, previews and recognised text stay on this device. PDF operations run in local engines.\nWhen AI is enabled, chat requests and quick actions send your instruction and anonymous file references, page counts and sizes for planning. Filenames, passwords, paths, checksums and document contents are excluded. Your OpenAI key stays in the local server, outside the app.\nSave before closing. Chat and files stay in this session. Saving to a cloud folder or sharing through a chosen provider may transfer the saved file outside atepdf.\nGot it",
+    "buttons": [
+      {
+        "label": "Processed on your device",
+        "disabled": null,
+        "x": 234,
+        "y": 8,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "OpenAI connection",
+        "disabled": null,
+        "x": 282,
+        "y": 8,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Start over",
+        "disabled": null,
+        "x": 330,
+        "y": 8,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": -927,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 41,
+        "y": -646,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 159.4375,
+        "y": -646,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": -579,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 41,
+        "y": -298,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 159.4375,
+        "y": -298,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": -231,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Save PDF",
+        "disabled": null,
+        "x": 41,
+        "y": 50,
+        "w": 110.4375,
+        "h": 44
+      },
+      {
+        "label": "Preview",
+        "disabled": null,
+        "x": 159.4375,
+        "y": 50,
+        "w": 102.09375,
+        "h": 44
+      },
+      {
+        "label": "Undo",
+        "disabled": true,
+        "x": 41,
+        "y": 102,
+        "w": 83.390625,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": 218,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": 388,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Copy",
+        "disabled": null,
+        "x": 20,
+        "y": 558,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Add files",
+        "disabled": null,
+        "x": 25,
+        "y": 687,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Send message",
+        "disabled": true,
+        "x": 321,
+        "y": 687,
+        "w": 44,
+        "h": 44
+      },
+      {
+        "label": "Merge",
+        "disabled": null,
+        "x": 16,
+        "y": 752,
+        "w": 114,
+        "h": 44
+      },
+      {
+        "label": "Compress",
+        "disabled": null,
+        "x": 138,
+        "y": 752,
+        "w": 114,
+        "h": 44
+      },
+      {
+        "label": "Make searchable",
+        "disabled": null,
+        "x": 260,
+        "y": 752,
+        "w": 114,
+        "h": 44
+      },
+      {
+        "label": "Choose PDF files",
+        "disabled": null,
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 1
+      },
+      {
+        "label": "Got it",
+        "disabled": null,
+        "x": 44,
+        "y": 614,
+        "w": 302,
+        "h": 44
+      }
+    ],
+    "overflow": {
+      "document": 390,
+      "viewport": 390
+    },
+    "consoleErrors": []
+  }
+]

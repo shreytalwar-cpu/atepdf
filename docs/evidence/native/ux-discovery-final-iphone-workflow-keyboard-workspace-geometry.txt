@@ -1,0 +1,6 @@
+expectedInputConfiguration=hardware-keyboard-no-software-clearance-claim
+conversation=(0.0, 138.0, 402.0, 468.0)
+composer=(25.0, 615.0, 352.0, 48.0)
+send=(333.0, 667.0, 44.0, 44.0)
+keyboard=(0.0, 918.0, 402.0, 226.0)
+visibleKeyboard=(inf, inf, 0.0, 0.0)

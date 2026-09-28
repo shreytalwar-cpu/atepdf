@@ -1,0 +1,242 @@
+[
+  {
+    "url": "http://localhost:3213/",
+    "method": "GET",
+    "body": null,
+    "type": "document"
+  },
+  {
+    "url": "http://localhost:3213/_expo/static/css/global-418e89804c5c99244db2be82f33419f6.css",
+    "method": "GET",
+    "body": null,
+    "type": "stylesheet"
+  },
+  {
+    "url": "http://localhost:3213/_expo/static/css/preview-4a592c39668f775437665576652be491.css",
+    "method": "GET",
+    "body": null,
+    "type": "stylesheet"
+  },
+  {
+    "url": "http://localhost:3213/_expo/static/css/workspace-9ca8942114a70307784c156bddc23a49.css",
+    "method": "GET",
+    "body": null,
+    "type": "stylesheet"
+  },
+  {
+    "url": "http://localhost:3213/_expo/static/js/web/index-630012e833bbef46f5441d9899bb7fda.js",
+    "method": "GET",
+    "body": null,
+    "type": "script"
+  },
+  {
+    "url": "http://localhost:3213/assets/assets/approved-8-mark-source-crop.8b708587521942c4118f8e6a3c3f84f8.png",
+    "method": "GET",
+    "body": null,
+    "type": "image"
+  },
+  {
+    "url": "http://localhost:3213/assets/assets/approved-atepdf-wordmark-source-crop.e129a61b59d2f9c2fdcb1f1b2521e212.png",
+    "method": "GET",
+    "body": null,
+    "type": "image"
+  },
+  {
+    "url": "http://localhost:3213/assets/assets/paper.1cb2ca1d4826879d6316a24bfbeecd07.png",
+    "method": "GET",
+    "body": null,
+    "type": "image"
+  },
+  {
+    "url": "http://localhost:3213/fixtures/brief.pdf",
+    "method": "GET",
+    "body": null,
+    "type": "fetch"
+  },
+  {
+    "url": "http://localhost:3213/fixtures/appendix.pdf",
+    "method": "GET",
+    "body": null,
+    "type": "fetch"
+  },
+  {
+    "url": "http://localhost:3213/engines/atepdf.worker.js",
+    "method": "GET",
+    "body": null,
+    "type": "script"
+  },
+  {
+    "url": "http://localhost:3213/_expo/static/js/web/pdf-50f2ec8e34576162255929524f6e72b4.js",
+    "method": "GET",
+    "body": null,
+    "type": "script"
+  },
+  {
+    "url": "http://localhost:3213/engines/pdf.worker.min.mjs",
+    "method": "GET",
+    "body": null,
+    "type": "script"
+  },
+  {
+    "url": "http://localhost:3213/engines/standard_fonts/LiberationSans-Regular.ttf",
+    "method": "GET",
+    "body": null,
+    "type": "fetch"
+  },
+  {
+    "url": "http://localhost:3213/engines/standard_fonts/LiberationSans-Bold.ttf",
+    "method": "GET",
+    "body": null,
+    "type": "fetch"
+  },
+  {
+    "url": "http://localhost:3213/engines/atepdf.worker.js",
+    "method": "GET",
+    "body": null,
+    "type": "script"
+  },
+  {
+    "url": "http://localhost:3213/engines/pdf.worker.min.mjs",
+    "method": "GET",
+    "body": null,
+    "type": "script"
+  },
+  {
+    "url": "http://localhost:3213/engines/standard_fonts/LiberationSans-Regular.ttf",
+    "method": "GET",
+    "body": null,
+    "type": "fetch"
+  },
+  {
+    "url": "http://localhost:3213/engines/standard_fonts/LiberationSans-Bold.ttf",
+    "method": "GET",
+    "body": null,
+    "type": "fetch"
+  },
+  {
+    "url": "http://localhost:3213/api/planner/status",
+    "method": "GET",
+    "body": null,
+    "type": "fetch"
+  },
+  {
+    "url": "http://localhost:3213/engines/atepdf.worker.js",
+    "method": "GET",
+    "body": null,
+    "type": "script"
+  },
+  {
+    "url": "http://localhost:3213/engines/pdf.worker.min.mjs",
+    "method": "GET",
+    "body": null,
+    "type": "script"
+  },
+  {
+    "url": "http://localhost:3213/engines/standard_fonts/LiberationSans-Regular.ttf",
+    "method": "GET",
+    "body": null,
+    "type": "fetch"
+  },
+  {
+    "url": "http://localhost:3213/engines/standard_fonts/LiberationSans-Bold.ttf",
+    "method": "GET",
+    "body": null,
+    "type": "fetch"
+  },
+  {
+    "url": "http://localhost:3213/api/planner/status",
+    "method": "GET",
+    "body": null,
+    "type": "fetch"
+  },
+  {
+    "url": "http://localhost:3213/engines/pdf.worker.min.mjs",
+    "method": "GET",
+    "body": null,
+    "type": "script"
+  },
+  {
+    "url": "http://localhost:3213/engines/standard_fonts/LiberationSans-Regular.ttf",
+    "method": "GET",
+    "body": null,
+    "type": "fetch"
+  },
+  {
+    "url": "http://localhost:3213/engines/standard_fonts/LiberationSans-Bold.ttf",
+    "method": "GET",
+    "body": null,
+    "type": "fetch"
+  },
+  {
+    "url": "http://localhost:3213/engines/pdf.worker.min.mjs",
+    "method": "GET",
+    "body": null,
+    "type": "script"
+  },
+  {
+    "url": "http://localhost:3213/engines/standard_fonts/LiberationSans-Regular.ttf",
+    "method": "GET",
+    "body": null,
+    "type": "fetch"
+  },
+  {
+    "url": "http://localhost:3213/engines/standard_fonts/LiberationSans-Bold.ttf",
+    "method": "GET",
+    "body": null,
+    "type": "fetch"
+  },
+  {
+    "url": "http://localhost:3213/engines/pdf.worker.min.mjs",
+    "method": "GET",
+    "body": null,
+    "type": "script"
+  },
+  {
+    "url": "http://localhost:3213/engines/standard_fonts/LiberationSans-Regular.ttf",
+    "method": "GET",
+    "body": null,
+    "type": "fetch"
+  },
+  {
+    "url": "http://localhost:3213/engines/standard_fonts/LiberationSans-Bold.ttf",
+    "method": "GET",
+    "body": null,
+    "type": "fetch"
+  },
+  {
+    "url": "http://localhost:3213/api/planner/status",
+    "method": "GET",
+    "body": null,
+    "type": "fetch"
+  },
+  {
+    "url": "http://localhost:3213/engines/atepdf.worker.js",
+    "method": "GET",
+    "body": null,
+    "type": "script"
+  },
+  {
+    "url": "http://localhost:3213/engines/pdf.worker.min.mjs",
+    "method": "GET",
+    "body": null,
+    "type": "script"
+  },
+  {
+    "url": "http://localhost:3213/engines/standard_fonts/LiberationSans-Regular.ttf",
+    "method": "GET",
+    "body": null,
+    "type": "fetch"
+  },
+  {
+    "url": "http://localhost:3213/engines/standard_fonts/LiberationSans-Bold.ttf",
+    "method": "GET",
+    "body": null,
+    "type": "fetch"
+  },
+  {
+    "url": "http://localhost:3213/api/planner/status",
+    "method": "GET",
+    "body": null,
+    "type": "fetch"
+  }
+]

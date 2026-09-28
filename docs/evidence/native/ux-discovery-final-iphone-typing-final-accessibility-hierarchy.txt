@@ -1,0 +1,131 @@
+Attributes: Application, 0x10ab3fc00, pid: 45985, label: 'atepdf'
+Element subtree:
+ →Application, 0x10ab3fc00, pid: 45985, label: 'atepdf'
+    Window (Main), 0x10ab3fd40, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x10ab3fe80, {{0.0, 0.0}, {402.0, 874.0}}
+        Other, 0x10af94280, {{0.0, 0.0}, {402.0, 874.0}}
+          Other, 0x10ab6c000, {{0.0, 0.0}, {402.0, 874.0}}
+            Other, 0x10ab6c140, {{0.0, 0.0}, {402.0, 874.0}}
+              Other, 0x10ab6c280, {{0.0, 0.0}, {402.0, 874.0}}
+                Other, 0x10ab6c3c0, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x10ab6c500, {{0.0, 0.0}, {402.0, 874.0}}
+                    Other, 0x10ab6c640, {{16.0, 81.7}, {28.0, 37.0}}
+                      Image, 0x10ab6c780, {{16.0, 81.7}, {28.0, 37.0}}, identifier: 'assets/assets/approved-8-mark-source-crop.png'
+                    Other, 0x10ab6c8c0, {{52.0, 85.3}, {90.0, 30.0}}
+                      Image, 0x10ab6ca00, {{52.0, 85.3}, {90.0, 30.0}}, identifier: 'assets/assets/approved-atepdf-wordmark-source-crop.png', label: 'atepdf'
+                    Button, 0x10ab6cb40, {{294.0, 78.0}, {44.0, 44.0}}, label: 'Processed on your device'
+                    Button, 0x10ab6cc80, {{342.0, 78.0}, {44.0, 44.0}}, label: 'AI connection'
+                    Other, 0x10ab6cdc0, {{0.0, 138.0}, {402.0, 468.0}}, identifier: 'welcome'
+                      ScrollView, 0x10ab6cf00, {{0.0, 138.0}, {402.0, 468.0}}
+                        Other, 0x10ab6d040, {{0.0, 138.0}, {402.0, 468.0}}
+                          Other, 0x10ab6d180, {{0.0, 138.0}, {402.0, 468.0}}
+                            Other, 0x10ab6d2c0, {{20.0, 183.3}, {362.0, 377.3}}
+                            Other, 0x10ab6d400, {{109.0, 212.3}, {184.0, 132.0}}
+                              Image, 0x10ab6d540, {{109.0, 212.3}, {184.0, 132.0}}, identifier: 'assets/assets/paper.png'
+                            StaticText, 0x10ab6d680, {{125.0, 356.3}, {152.0, 31.3}}, label: 'Add your files'
+                              StaticText, 0x10ab6d7c0, {{125.0, 356.3}, {152.0, 31.3}}, label: 'Add your files'
+                            StaticText, 0x10ab6d900, {{91.0, 399.7}, {220.0, 20.0}}, label: 'Then tell me what you’d like to do.'
+                              StaticText, 0x10ab6da40, {{91.0, 399.7}, {220.0, 20.0}}, label: 'Then tell me what you’d like to do.'
+                            Button, 0x10ab6db80, {{136.3, 431.7}, {129.7, 44.0}}, label: 'Choose files'
+                            Button, 0x10ab6dcc0, {{109.0, 487.7}, {184.3, 44.0}}, label: 'Try the two sample PDFs'
+                        Other, 0x10ab6de00, {{369.0, 138.0}, {30.0, 468.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                          Other, 0x10ab6df40, {{396.0, 141.0}, {3.0, 512.0}}
+                        Other, 0x10ab6e080, {{0.0, 573.0}, {402.0, 30.0}}, label: 'Horizontal scroll bar, 1 page', value: 0%
+                          Other, 0x10ab6e1c0, {{3.0, 600.0}, {396.0, 3.0}}
+                        Other, 0x10ab6e300, {{369.0, 138.0}, {30.0, 468.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                          Other, 0x10ab6e440, {{396.0, 141.0}, {3.0, 512.0}}
+                        Other, 0x10ab6e580, {{0.0, 573.0}, {402.0, 30.0}}, label: 'Horizontal scroll bar, 1 page', value: 0%
+                          Other, 0x10ab6e6c0, {{3.0, 600.0}, {396.0, 3.0}}
+                    Other, 0x10ab6e800, {{0.0, 138.0}, {402.0, 736.0}}
+                    Other, 0x10ab6e940, {{16.0, 606.0}, {370.0, 114.0}}
+                    Other, 0x10ab6ea80, {{25.0, 615.0}, {352.0, 48.0}}
+                      TextView, 0x10ab6ebc0, {{25.0, 615.0}, {352.0, 48.0}}, label: 'Tell atepdf what to do', value: remove page 2, Keyboard Focused
+                        Other, 0x10ab6ed00, {{25.0, 615.0}, {0.0, 0.0}}, identifier: '_UITextSelectionRangeAdjustmentContainerView'
+                          Other, 0x10ab6ee40, {{25.0, 615.0}, {0.0, 0.0}}, identifier: 'com.apple.text.grabber.leading'
+                            Other, 0x10ab6ef80, {{17.8, 601.5}, {16.5, 16.5}}
+                            Other, 0x10ab6f0c0, {{25.0, 615.0}, {2.0, 0.0}}
+                          Other, 0x10ab6f200, {{25.0, 615.0}, {0.0, 0.0}}, identifier: 'com.apple.text.grabber.leading'
+                            Other, 0x10ab6f340, {{17.8, 601.5}, {16.5, 16.5}}
+                            Other, 0x10ab6f480, {{25.0, 615.0}, {2.0, 0.0}}
+                        Other, 0x10ab6f5c0, {{344.0, 615.0}, {30.0, 48.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                          Other, 0x10ab6f700, {{371.0, 652.0}, {3.0, 8.0}}
+                        Other, 0x10ab6f840, {{25.0, 636.0}, {352.0, 24.0}}, label: 'Horizontal scroll bar, 1 page', value: 0%
+                          Other, 0x10ab6f980, {{28.0, 657.0}, {346.0, 3.0}}
+                    Button, 0x10ab6fac0, {{25.0, 667.0}, {44.0, 44.0}}, label: 'Add files'
+                    Button, 0x10ab6fc00, {{333.0, 667.0}, {44.0, 44.0}}, label: 'Send message'
+                    Button, 0x10ab6fd40, {{16.0, 732.0}, {118.0, 44.0}}, label: 'Merge'
+                    Button, 0x10ab6fe80, {{142.0, 732.0}, {118.0, 44.0}}, label: 'Compress'
+                    Button, 0x10abd4000, {{268.0, 732.0}, {118.0, 44.0}}, label: 'Make searchable'
+                    Button, 0x10abd4140, {{263.7, 784.0}, {44.0, 44.0}}, label: 'Help'
+                    StaticText, 0x10abd4280, {{94.3, 798.0}, {161.3, 16.0}}, identifier: 'current-context', label: 'Your files stay on this device'
+                      StaticText, 0x10abd43c0, {{94.3, 798.0}, {161.3, 16.0}}, label: 'Your files stay on this device'
+    Window, 0x10abd4500, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x10abd4640, {{0.0, 0.0}, {402.0, 874.0}}
+        Other, 0x10abd4780, {{0.0, 0.0}, {402.0, 874.0}}
+    Window, 0x10abd48c0, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x10abd4a00, {{0.0, 0.0}, {402.0, 874.0}}
+        Other, 0x10abd4b40, {{0.0, 874.0}, {402.0, 270.0}}
+          Other, 0x10abd4c80, {{0.0, 874.0}, {402.0, 44.0}}, identifier: 'SystemInputAssistantView'
+            Other, 0x10abd4dc0, {{0.0, 874.0}, {402.0, 44.0}}
+              Other, 0x10abd4f00, {{0.0, 874.0}, {402.0, 10.0}}, identifier: 'CenterPageView'
+                Other, 0x10abd5040, {{0.0, 274.0}, {402.0, 1210.0}}
+                  ScrollView, 0x10abd5180, {{0.0, 874.0}, {402.0, 10.0}}
+                Other, 0x10abd52c0, {{0.0, 874.0}, {402.0, 10.0}}
+                  Other, 0x10abd5400, {{0.0, 874.0}, {402.0, 10.0}}
+                    Other, 0x10abd5540, {{0.0, 874.0}, {402.0, 10.0}}, label: 'Typing Predictions'
+                      Other, 0x10abd5680, {{0.0, 874.0}, {402.0, 10.0}}
+                        Other, 0x10abd57c0, {{0.0, 874.0}, {402.0, 10.0}}
+                          Button, 0x10abd5900, {{0.0, 874.0}, {134.0, 10.0}}, label: '“2”'
+                          Button, 0x10abd5a40, {{134.0, 874.0}, {134.0, 10.0}}
+                          Button, 0x10abd5b80, {{268.0, 874.0}, {134.0, 10.0}}
+          Other, 0x10abd5cc0, {{0.0, 874.0}, {402.0, 271.0}}
+            Other, 0x10abd5e00, {{0.0, 874.0}, {402.0, 271.0}}
+              Other, 0x10abd5f40, {{0.0, 874.0}, {402.0, 271.0}}
+          Other, 0x10abd6080, {{0.0, 918.0}, {402.0, 226.0}}
+            Keyboard, 0x10abd61c0, {{0.0, 918.0}, {402.0, 226.0}}
+              Other, 0x10abd6300, {{0.0, 918.0}, {402.0, 226.0}}
+                Other, 0x10abd6440, {{0.0, 918.0}, {402.0, 226.0}}, identifier: 'UIKeyboardLayoutStar Preview'
+                  Key, 0x10abd6580, {{0.0, 918.0}, {0.0, 0.0}}, label: 'Padding-Left'
+                  Key, 0x10abd66c0, {{0.0, 918.0}, {0.0, 0.0}}, label: 'Padding-Right'
+                  Key, 0x10abd6800, {{0.0, 918.0}, {0.0, 0.0}}, label: 'Padding-Left'
+                  Key, 0x10abd6940, {{0.0, 918.0}, {0.0, 0.0}}, label: 'Padding-Right'
+                  Key, 0x10abd6a80, {{0.0, 918.0}, {0.0, 0.0}}, label: 'Padding-Left'
+                  Key, 0x10abd6bc0, {{0.0, 918.0}, {0.0, 0.0}}, label: 'Padding-Right'
+                  Key, 0x10abd6d00, {{4.7, 925.0}, {39.3, 54.0}}, label: 'q'
+                  Key, 0x10abd6e40, {{44.0, 925.0}, {39.7, 54.0}}, label: 'w'
+                  Key, 0x10abd6f80, {{83.7, 925.0}, {39.3, 54.0}}, label: 'e'
+                  Key, 0x10abd70c0, {{123.0, 925.0}, {39.7, 54.0}}, label: 'r'
+                  Key, 0x10abd7200, {{162.7, 925.0}, {39.3, 54.0}}, label: 't'
+                  Key, 0x10abd7340, {{202.0, 925.0}, {39.7, 54.0}}, label: 'y'
+                  Key, 0x10abd7480, {{241.7, 925.0}, {39.3, 54.0}}, label: 'u'
+                  Key, 0x10abd75c0, {{281.0, 925.0}, {39.7, 54.0}}, label: 'i'
+                  Key, 0x10abd7700, {{320.7, 925.0}, {39.3, 54.0}}, label: 'o'
+                  Key, 0x10abd7840, {{360.0, 925.0}, {39.7, 54.0}}, label: 'p'
+                  Key, 0x10abd7980, {{24.3, 979.0}, {39.3, 54.0}}, label: 'a'
+                  Key, 0x10abd7ac0, {{63.7, 979.0}, {39.7, 54.0}}, label: 's'
+                  Key, 0x10abd7c00, {{103.3, 979.0}, {39.3, 54.0}}, label: 'd'
+                  Key, 0x10abd7d40, {{142.7, 979.0}, {39.7, 54.0}}, label: 'f'
+                  Key, 0x10abd7e80, {{182.3, 979.0}, {39.3, 54.0}}, label: 'g'
+                  Key, 0x10abd8000, {{221.7, 979.0}, {39.7, 54.0}}, label: 'h'
+                  Key, 0x10abd8140, {{261.3, 979.0}, {39.3, 54.0}}, label: 'j'
+                  Key, 0x10abd8280, {{300.7, 979.0}, {39.7, 54.0}}, label: 'k'
+                  Key, 0x10abd83c0, {{340.3, 979.0}, {39.3, 54.0}}, label: 'l'
+                  Button, 0x10abd8500, {{4.7, 1033.0}, {51.3, 54.0}}, identifier: 'shift', label: 'shift'
+                  Key, 0x10abd8640, {{63.7, 1033.0}, {39.7, 54.0}}, label: 'z'
+                  Key, 0x10abd8780, {{103.3, 1033.0}, {39.3, 54.0}}, label: 'x'
+                  Key, 0x10abd88c0, {{142.7, 1033.0}, {39.7, 54.0}}, label: 'c'
+                  Key, 0x10abd8a00, {{182.3, 1033.0}, {39.3, 54.0}}, label: 'v'
+                  Key, 0x10abd8b40, {{221.7, 1033.0}, {39.7, 54.0}}, label: 'b'
+                  Key, 0x10abd8c80, {{261.3, 1033.0}, {39.3, 54.0}}, label: 'n'
+                  Key, 0x10abd8dc0, {{300.7, 1033.0}, {39.7, 54.0}}, label: 'm'
+                  Key, 0x10abd8f00, {{348.0, 1033.0}, {51.7, 54.0}}, identifier: 'delete', label: 'delete'
+                  Key, 0x10abd9040, {{4.7, 1087.0}, {98.7, 54.0}}, identifier: 'more', label: 'numbers'
+                  Key, 0x10abd9180, {{103.3, 1087.0}, {197.3, 54.0}}, identifier: 'space', label: 'space'
+                  Button, 0x10abd92c0, {{300.7, 1087.0}, {99.0, 54.0}}, identifier: 'Return', label: 'return'
+Path to element:
+ →Application, 0x10ab3fc00, pid: 45985, label: 'atepdf'
+Query chain:
+ →Find: Target Application 'dev.atepdf.fresh'
+  Output: {
+    Application, 0x10abd9400, pid: 45985, label: 'atepdf'
+  }

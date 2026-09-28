@@ -1,0 +1,44 @@
+{
+  "capturedAt": "2026-09-28T19:17:38.900376+00:00",
+  "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+  "configuration": "Release / iOS27 Simulator arm64 / signing disabled",
+  "headAtCapture": "8d71ac04c9ea2ccc56ea0837456c7342ecad7ae0",
+  "sourceSnapshot": "docs/evidence/native/ux-export-02-source.json",
+  "builtAppPath": ".build/ux-export-original-products/Release-iphonesimulator/atepdf.app",
+  "installedAppPath": "/Users/shrey/Library/Developer/CoreSimulator/Devices/D68C4547-67D3-4960-AAB9-D85FD786D6FC/data/Containers/Bundle/Application/03DDEF7E-C561-4B1E-AF16-2572CDDE2500/atepdf.app",
+  "builtFiles": {
+    "atepdf": {
+      "sha256": "b37c996656c4456d5e7b76ef2dd3707c40bf764d403e8644cfb401a2e3b999cc",
+      "bytes": 8213592
+    },
+    "main.jsbundle": {
+      "sha256": "4f6dbd404ca33f51b89f833437cb8f2631bd32b10b04957c1447a675eadbcd21",
+      "bytes": 6916959
+    },
+    "Info.plist": {
+      "sha256": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c",
+      "bytes": 2215
+    }
+  },
+  "installedFiles": {
+    "atepdf": {
+      "sha256": "b37c996656c4456d5e7b76ef2dd3707c40bf764d403e8644cfb401a2e3b999cc",
+      "bytes": 8213592
+    },
+    "main.jsbundle": {
+      "sha256": "4f6dbd404ca33f51b89f833437cb8f2631bd32b10b04957c1447a675eadbcd21",
+      "bytes": 6916959
+    },
+    "Info.plist": {
+      "sha256": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c",
+      "bytes": 2215
+    }
+  },
+  "installedMatchesCapturedProducts": true,
+  "compiledTestBundle": ".build/ux-export-original-products/Release-iphonesimulator/atepdfUITests-Runner.app/PlugIns/atepdfUITests.xctest/atepdfUITests",
+  "compiledTestBundleSha256": "36049f0c2414daa2785a4a59ef92181f92ec36e93791e95e0e0da68790f93507",
+  "testSourceSha256": "2da4f82c5352ba1dc76a25f33f811a867b4f6571916d91aa16311154367abf88",
+  "buildResult": "TEST BUILD SUCCEEDED",
+  "buildLog": ".build/ux-export-02-build.log",
+  "productionSourceQualification": "Captured before subsequent owner-coordinated frontend changes; runtime used frozen original-source products, never live source."
+}

@@ -1,0 +1,1 @@
+No .impeccable/critique/ignore.md exists

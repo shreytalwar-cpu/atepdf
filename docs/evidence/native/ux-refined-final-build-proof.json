@@ -1,0 +1,25 @@
+{
+  "capturedAt": "2026-09-28T19:40:15.677635+00:00",
+  "sourceSnapshot": "docs/evidence/native/ux-refined-final-source.json",
+  "sourceHashesUnchangedThroughBuild": true,
+  "buildResult": "TEST BUILD SUCCEEDED",
+  "buildLog": ".build/ux-refined-final-build.log",
+  "frozenProducts": ".build/ux-refined-final-products",
+  "device": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+  "configuration": "Release",
+  "scheme": "atepdfUI",
+  "buildSha256": {
+    "atepdf": "873e98d4e51d8a5adee1ae22662f9de34f8e8a9401cd4855df4beb8502e99265",
+    "main.jsbundle": "1b921a5852449ecfcbfa6bc9b793c882721d563f209803810eba7ef09a856c84",
+    "Info.plist": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c"
+  },
+  "testExecutableSha256": "5e705365a52065578ec62df3239042710e24ff099d166a295c521b2a88a28839",
+  "installedAppPath": "/Users/shrey/Library/Developer/CoreSimulator/Devices/D68C4547-67D3-4960-AAB9-D85FD786D6FC/data/Containers/Bundle/Application/C21D225D-5920-4A3C-8BA6-19A09B6B12E8/atepdf.app",
+  "installedSha256": {
+    "atepdf": "873e98d4e51d8a5adee1ae22662f9de34f8e8a9401cd4855df4beb8502e99265",
+    "main.jsbundle": "1b921a5852449ecfcbfa6bc9b793c882721d563f209803810eba7ef09a856c84",
+    "Info.plist": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c"
+  },
+  "installedBytesMatchCapturedBuild": true,
+  "installedVerifiedAt": "2026-09-28T19:42:26.261491+00:00"
+}

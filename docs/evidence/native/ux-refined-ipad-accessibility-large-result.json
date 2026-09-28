@@ -1,0 +1,44 @@
+{
+  "recordedAt": "2026-09-28T20:02:21.446078+00:00",
+  "device": "526CAD4B-89C5-49C1-8CEE-F65602AA0DEE",
+  "result": "2/2 passed; TEST EXECUTE SUCCEEDED; exit0",
+  "methodResults": [
+    {
+      "method": "testNativeComposerPreservesFastTypingAndBackspace",
+      "seconds": 11.461
+    },
+    {
+      "method": "testPreviewToolbarControlsRemainReachableAtCurrentTextSize",
+      "seconds": 51.122
+    }
+  ],
+  "sourceSnapshot": "docs/evidence/native/ux-refined-final-source.json",
+  "testSummary": "docs/evidence/native/ux-refined-ipad-accessibility-large-summary.json",
+  "testLog": "docs/evidence/native/ux-refined-ipad-ax-large-test.log",
+  "frozenProducts": ".build/ux-refined-final-products",
+  "noNewBuild": true,
+  "installedAppPath": "/Users/shrey/Library/Developer/CoreSimulator/Devices/526CAD4B-89C5-49C1-8CEE-F65602AA0DEE/data/Containers/Bundle/Application/385BF1ED-0B58-49E7-8EF3-8E1C7F14E8B1/atepdf.app",
+  "installedSha256": {
+    "atepdf": "873e98d4e51d8a5adee1ae22662f9de34f8e8a9401cd4855df4beb8502e99265",
+    "main.jsbundle": "1b921a5852449ecfcbfa6bc9b793c882721d563f209803810eba7ef09a856c84",
+    "Info.plist": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c"
+  },
+  "installedBytesMatchCapturedBuild": true,
+  "textSize": "UICTContentSizeCategoryAccessibilityL",
+  "reduceMotion": false,
+  "restoration": "docs/evidence/native/ux-refined-ipad-setting-restore.json",
+  "portraitTypingObservedFrames": {
+    "app": "834x1210",
+    "welcomeViewport": "(33,108,768,620.5)",
+    "composer": "(58,737.5,718,67.5)",
+    "send": "(732,809,44,44)",
+    "keyboard": "(0,925,834,282)"
+  },
+  "typingVisualInspection": "Exact remove page2 text displayed; software keyboard visible, composer and Send remain above it, large labels readable. These frames are measured from captured AX hierarchy, not assertions added after running.",
+  "previewAssertions": "Actual Next/Previous, Zoom in/out, Fit enabled-state reset and Close passed; minimum44pt targets and horizontal viewport containment unchanged.",
+  "limits": [
+    "Separate portrait typing and preview checks; does not establish simultaneous preview+keyboard visibility in AX-large landscape",
+    "Simulator only, no physical-device proof",
+    "No paidcalls, planner requests, source edits or save/export repeated during this adaptation probe"
+  ]
+}

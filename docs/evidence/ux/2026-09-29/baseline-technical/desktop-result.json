@@ -1,0 +1,207 @@
+{
+  "title": "[Human] atepdf critique",
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "document": {
+    "scrollWidth": 1440,
+    "scrollHeight": 1000
+  },
+  "text": "Processed on your device\nbrief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nYour PDF is ready\n3 pages · 3.1 kB\nSave PDF\nPreview\nUndo\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent result · 3 pages",
+  "buttons": [
+    {
+      "name": "Processed on your device",
+      "disabled": false,
+      "rect": {
+        "x": 1119.328125,
+        "y": 16,
+        "width": 192.671875,
+        "height": 44
+      },
+      "color": "rgb(0, 0, 0)",
+      "background": "rgb(237, 249, 244)",
+      "fontSize": "16px"
+    },
+    {
+      "name": "OpenAI connection",
+      "disabled": false,
+      "rect": {
+        "x": 1316,
+        "y": 16,
+        "width": 44,
+        "height": 44
+      },
+      "color": "rgb(0, 0, 0)",
+      "background": "rgba(0, 0, 0, 0)",
+      "fontSize": "16px"
+    },
+    {
+      "name": "Start over",
+      "disabled": false,
+      "rect": {
+        "x": 1364,
+        "y": 16,
+        "width": 44,
+        "height": 44
+      },
+      "color": "rgb(0, 0, 0)",
+      "background": "rgba(0, 0, 0, 0)",
+      "fontSize": "16px"
+    },
+    {
+      "name": "Copy",
+      "disabled": false,
+      "rect": {
+        "x": 356,
+        "y": 333,
+        "width": 44,
+        "height": 44
+      },
+      "color": "rgb(0, 0, 0)",
+      "background": "rgba(0, 0, 0, 0)",
+      "fontSize": "16px"
+    },
+    {
+      "name": "Save PDF",
+      "disabled": false,
+      "rect": {
+        "x": 381,
+        "y": 594,
+        "width": 110.4375,
+        "height": 44
+      },
+      "color": "rgb(0, 0, 0)",
+      "background": "rgb(23, 105, 223)",
+      "fontSize": "16px"
+    },
+    {
+      "name": "Preview",
+      "disabled": false,
+      "rect": {
+        "x": 499.4375,
+        "y": 594,
+        "width": 102.09375,
+        "height": 44
+      },
+      "color": "rgb(0, 0, 0)",
+      "background": "rgb(255, 255, 255)",
+      "fontSize": "16px"
+    },
+    {
+      "name": "Undo",
+      "disabled": true,
+      "rect": {
+        "x": 609.53125,
+        "y": 594,
+        "width": 83.390625,
+        "height": 44
+      },
+      "color": "rgb(0, 0, 0)",
+      "background": "rgba(0, 0, 0, 0)",
+      "fontSize": "16px"
+    },
+    {
+      "name": "Copy",
+      "disabled": false,
+      "rect": {
+        "x": 356,
+        "y": 714,
+        "width": 44,
+        "height": 44
+      },
+      "color": "rgb(0, 0, 0)",
+      "background": "rgba(0, 0, 0, 0)",
+      "fontSize": "16px"
+    },
+    {
+      "name": "Add files",
+      "disabled": false,
+      "rect": {
+        "x": 361,
+        "y": 843,
+        "width": 44,
+        "height": 44
+      },
+      "color": "rgb(0, 0, 0)",
+      "background": "rgba(0, 0, 0, 0)",
+      "fontSize": "16px"
+    },
+    {
+      "name": "Send message",
+      "disabled": true,
+      "rect": {
+        "x": 1035,
+        "y": 843,
+        "width": 44,
+        "height": 44
+      },
+      "color": "rgb(0, 0, 0)",
+      "background": "rgb(23, 105, 223)",
+      "fontSize": "16px"
+    },
+    {
+      "name": "Merge",
+      "disabled": false,
+      "rect": {
+        "x": 533.78125,
+        "y": 908,
+        "width": 91.90625,
+        "height": 44
+      },
+      "color": "rgb(0, 0, 0)",
+      "background": "rgba(0, 0, 0, 0)",
+      "fontSize": "16px"
+    },
+    {
+      "name": "Compress",
+      "disabled": false,
+      "rect": {
+        "x": 633.6875,
+        "y": 908,
+        "width": 113.140625,
+        "height": 44
+      },
+      "color": "rgb(0, 0, 0)",
+      "background": "rgba(0, 0, 0, 0)",
+      "fontSize": "16px"
+    },
+    {
+      "name": "Make searchable",
+      "disabled": false,
+      "rect": {
+        "x": 754.828125,
+        "y": 908,
+        "width": 151.375,
+        "height": 44
+      },
+      "color": "rgb(0, 0, 0)",
+      "background": "rgba(0, 0, 0, 0)",
+      "fontSize": "16px"
+    }
+  ],
+  "fields": [
+    {
+      "type": "textarea",
+      "label": "Tell atepdf what to do",
+      "placeholder": "Tell atepdf what to do…",
+      "rect": {
+        "x": 361,
+        "y": 791,
+        "width": 718,
+        "height": 48
+      }
+    },
+    {
+      "type": "file",
+      "label": "Choose PDF files",
+      "placeholder": null,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1
+      }
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+Ignoring --strip-bitcode because --sign was not passed
+
+PruneExplicitPrecompiledModules /Users/shrey/Documents/ChatGPT/atepdf/.build/mac/SDKExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules /Users/shrey/Documents/ChatGPT/atepdf/.build/mac/Build/Intermediates.noindex/ExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules /Users/shrey/Documents/ChatGPT/atepdf/.build/mac/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+
+** BUILD SUCCEEDED **

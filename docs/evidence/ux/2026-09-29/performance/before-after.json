@@ -1,0 +1,24 @@
+{
+  "before": {
+    "sha256": "b2251413e45e5bce229fda1c6b9dc1b25ebaf3be712bd41b9d966ac270983f5d",
+    "bytes": 6795614,
+    "modules": 4752,
+    "icons": 3708,
+    "iconModuleBytes": 3080751,
+    "barrelBytes": 1481895,
+    "gzip9": 917364,
+    "brotli11": 573142
+  },
+  "after": {
+    "sha256": "0af20a4d1ec8015573521f78e045bb30ca06943f0f102adcb1f270288f76db29",
+    "bytes": 2238893,
+    "modules": 1060,
+    "icons": 31,
+    "iconModuleBytes": 23249,
+    "barrelBytes": 0,
+    "gzip9": 482977,
+    "brotli11": 374494
+  },
+  "savedBytes": 4556721,
+  "reductionPercent": 67.05385267615259
+}

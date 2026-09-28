@@ -1,0 +1,6 @@
+simulatorUDID=D68C4547-67D3-4960-AAB9-D85FD786D6FC
+sourceBasename=8169e178-718f-4acb-80c8-725a73b91632
+expectedFileName=8169e178-718f-4acb-80c8-725a73b91632.pdf
+expectedPageMarkers=A1,A2,B1
+requiredDestination=On My iPhone/atepdf-beta-8169e178-718f-4acb-80c8-725a73b91632
+status=prepared; not saved

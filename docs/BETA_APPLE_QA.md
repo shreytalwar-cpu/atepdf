@@ -4,6 +4,14 @@ Recorded Release iPad simulator runs passed the real local PDF workflow, exact n
 
 The initial production checkpoint is `2cb0c83`. Later QA found large-text phone footer labels wrapping midword and a clipped preview zoom control. The parent corrected the native footer and narrow preview toolbar in `afa15b5`; the final Release build source is captured in [final source snapshot](evidence/native/beta-ipad-final-source.json). Application/native files were frozen within each recorded build/run. UI-test additions and evidence have their own recorded source snapshots. Reused Release test products are actual compiled applications installed and launched on the simulator; reusing them is not another application build.
 
+## Final UX source — 29 September, `7935daa`
+
+The [source-matched final result](evidence/native/ux-discovery-final-result.json) records **4/4 functional checks**: iPhone hardware-input core flow and rapid typing, plus iPad landscape with the software keyboard at normal and accessibility-large text. The iPad simultaneous preview/navigation/keyboard geometry now passes unchanged strict assertions (108pt and 88pt visible raster). Exact captured and installed source/binary identities are recorded; earlier failures below remain historical evidence.
+
+The accessibility-large run took 169.564 seconds and logged **two 60-second XCTest animation-completion waits around Close preview**. The test eventually passed its functional assertions. Smooth interaction and latency are not accepted by that result, and an app deadlock is not established. This occurred during unpaired local work as well as the historical paired case; isolate the automation/animation cause before treating it as resolved. Settings were restored to the original Large text and portrait orientation.
+
+An actual [Mac Catalyst Release build and strict local ad-hoc signature verification](evidence/native/ux-discovery-final-mac-build.json) passed for the same source. The original staging app is `/private/tmp/atepdf-mac-q1y4ostq/atepdf.app`; a [verified durable copy](evidence/native/ux-discovery-final-mac-preserved.json) is `.build/internal-beta-7935daa/atepdf.app`, independent identity `dev.atepdf.fresh.mac`. It was not launched or installed; Mac interactive checks remain owner-deferred. Physical-device, VoiceOver, iPhone visible software-keyboard and distribution acceptance remain open. No paid calls or old-project access occurred.
+
 ## Baseline evidence
 
 - Device: iPad Pro 11-inch (M5), iOS 27 simulator, arm64; `atepdfUI` scheme, Release, unsigned. No physical device was available today.

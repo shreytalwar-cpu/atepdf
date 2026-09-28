@@ -1,0 +1,369 @@
+Command line invocation:
+    /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild test-without-building -xctestrun .build/ux-refined-final-products/atepdfUI_iphonesimulator27.0-arm64.xctestrun -destination "platform=iOS Simulator,id=526CAD4B-89C5-49C1-8CEE-F65602AA0DEE" -parallel-testing-enabled NO "-only-testing:atepdfUITests/AtepdfWorkflowUITests/testPreviewToolbarControlsRemainReachableAtCurrentTextSize" "-only-testing:atepdfUITests/AtepdfWorkflowUITests/testNativeComposerPreservesFastTypingAndBackspace" -resultBundlePath .build/ux-refined-ipad-accessibility-large.xcresult
+
+Writing result bundle at path:
+	/Users/shrey/Documents/ChatGPT/atepdf/.build/ux-refined-ipad-accessibility-large.xcresult
+
+2026-09-29 01:25:45.624164+0530 atepdfUITests-Runner[35425:2648350] [Default] Running tests...
+2026-09-29 01:25:45.659878+0530 atepdfUITests-Runner[35425:2648350] [UIKit App Config] Update the Info.plist: Launch screens will soon be required.
+    t =      nans Interface orientation changed to Portrait
+Test Suite 'Selected tests' started at 2026-09-29 01:25:47.401.
+Test Suite 'atepdfUITests.xctest' started at 2026-09-29 01:25:47.402.
+Test Suite 'AtepdfWorkflowUITests' started at 2026-09-29 01:25:47.402.
+Test Case '-[atepdfUITests.AtepdfWorkflowUITests testNativeComposerPreservesFastTypingAndBackspace]' started.
+    t =     0.00s Start Test at 2026-09-29 01:25:47.404
+    t =     0.02s Set Up
+    t =     0.02s     Setting device orientation to Portrait
+    t =     0.02s         Wait for com.apple.springboard to idle
+    t =     0.02s     Open dev.atepdf.fresh
+    t =     0.02s         Launch dev.atepdf.fresh
+2026-09-29 01:25:47.484 xcodebuild[35417:2648124] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-09-29 01:25:47.484 xcodebuild[35417:2648124] [MT] IDELaunchParametersSnapshot: no debugger version
+    t =     0.49s             Setting up automation session
+objc[35425]: Class UIAccessibilityLoaderWebShared is implemented in both /private/var/run/com.apple.security.cryptexd/mnt/com.apple.iPhoneOS.SimulatorRuntime-v24.1.434.0.ino3Vu/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebKit.axbundle/WebKit (0x10a1ec398) and /private/var/run/com.apple.security.cryptexd/mnt/com.apple.iPhoneOS.SimulatorRuntime-v24.1.434.0.ino3Vu/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebCore.axbundle/WebCore (0x10a31c310). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+    t =     1.89s             Wait for dev.atepdf.fresh to idle
+    t =     3.06s     Added attachment named 'simulator-accessibility-configuration'
+    t =     4.08s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object TextView (First Match)`
+    t =     4.08s     Checking existence of `TextView (First Match)`
+    t =     4.11s     Find the TextView (First Match)
+    t =     4.13s     Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =     4.14s Tap "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =     4.14s     Wait for dev.atepdf.fresh to idle
+    t =     4.14s     Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =     4.15s     Check for interrupting elements affecting "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =     4.16s         Wait for com.apple.springboard to idle
+    t =     4.17s     Synthesize event
+    t =     4.46s     Wait for dev.atepdf.fresh to idle
+    t =     5.58s Checking `Expect predicate `exists == 1` for object Keyboard (First Match)`
+    t =     5.58s     Checking existence of `Keyboard (First Match)`
+    t =     5.59s Type 'remove page 2' into "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =     5.59s     Wait for dev.atepdf.fresh to idle
+    t =     5.59s     Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =     5.62s     Check for interrupting elements affecting "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =     5.64s         Wait for com.apple.springboard to idle
+    t =     5.66s     Synthesize event
+    t =     6.07s     Wait for dev.atepdf.fresh to idle
+    t =     7.12s Checking `Expect predicate `value == "remove page 2"` for object "Tell atepdf what to do Tell atepdf what to do…" TextView`
+    t =     7.12s     Find the "Tell atepdf what to do Tell atepdf what to do…" TextView
+    t =     7.17s Type 'x' into "Tell atepdf what to do" TextView
+    t =     7.17s     Wait for dev.atepdf.fresh to idle
+    t =     7.17s     Find the "Tell atepdf what to do" TextView
+    t =     7.21s     Check for interrupting elements affecting "Tell atepdf what to do" TextView
+    t =     7.22s         Wait for com.apple.springboard to idle
+    t =     7.24s     Synthesize event
+    t =     7.45s     Wait for dev.atepdf.fresh to idle
+    t =     8.52s Checking `Expect predicate `value == "remove page 2x"` for object "Tell atepdf what to do" TextView`
+    t =     8.52s     Find the "Tell atepdf what to do" TextView
+    t =     8.55s Type '' into "Tell atepdf what to do" TextView
+    t =     8.55s     Wait for dev.atepdf.fresh to idle
+    t =     8.55s     Find the "Tell atepdf what to do" TextView
+    t =     8.60s     Check for interrupting elements affecting "Tell atepdf what to do" TextView
+    t =     8.62s         Wait for com.apple.springboard to idle
+    t =     8.63s     Synthesize event
+    t =     8.85s     Wait for dev.atepdf.fresh to idle
+    t =     9.92s Checking `Expect predicate `value == "remove page 2"` for object "Tell atepdf what to do" TextView`
+    t =     9.92s     Find the "Tell atepdf what to do" TextView
+    t =    10.07s Added attachment named 'native-exact-fast-input-and-backspace'
+    t =    10.07s Tear Down
+    t =    10.07s     Requesting snapshot of accessibility hierarchy for app with pid 35438
+    t =    10.25s     Requesting snapshot of accessibility hierarchy for app with pid 35438
+    t =    10.28s     Added attachment named 'final-accessibility-hierarchy'
+    t =    10.36s     Added attachment named 'final-screen'
+    t =    10.36s     Terminate dev.atepdf.fresh:35438
+    t =    11.43s     Setting device orientation to Portrait
+    t =    11.44s         Wait for com.apple.springboard to idle
+Test Case '-[atepdfUITests.AtepdfWorkflowUITests testNativeComposerPreservesFastTypingAndBackspace]' passed (11.461 seconds).
+Test Case '-[atepdfUITests.AtepdfWorkflowUITests testPreviewToolbarControlsRemainReachableAtCurrentTextSize]' started.
+    t =     0.00s Start Test at 2026-09-29 01:25:58.865
+    t =     0.01s Set Up
+    t =     0.01s     Setting device orientation to Portrait
+    t =     0.01s         Wait for com.apple.springboard to idle
+    t =     0.02s     Open dev.atepdf.fresh
+    t =     0.02s         Launch dev.atepdf.fresh
+2026-09-29 01:25:58.882 xcodebuild[35417:2648124] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-09-29 01:25:58.882 xcodebuild[35417:2648124] [MT] IDELaunchParametersSnapshot: no debugger version
+    t =     0.22s             Setting up automation session
+    t =     1.68s             Wait for dev.atepdf.fresh to idle
+    t =     2.88s     Added attachment named 'simulator-accessibility-configuration'
+    t =     3.95s Checking `Expect predicate `exists == 1` for object "Try the two sample PDFs" Button`
+    t =     3.95s     Checking existence of `"Try the two sample PDFs" Button`
+    t =     4.01s Find the ScrollView (First Match)
+    t =     4.02s Find the "Try the two sample PDFs" Button
+    t =     4.04s Find the "Try the two sample PDFs" Button
+    t =     4.05s Find the "Try the two sample PDFs" Button
+    t =     4.06s Find the ScrollView at {{33.0, 108.0}, {768.0, 799.0}}
+    t =     4.07s Find the "Try the two sample PDFs" Button
+    t =     4.09s Find the "Try the two sample PDFs" Button
+    t =     5.15s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Try the two sample PDFs" Button`
+    t =     5.15s     Checking existence of `"Try the two sample PDFs" Button`
+    t =     5.16s     Find the "Try the two sample PDFs" Button
+    t =     5.17s     Find the "Try the two sample PDFs" Button
+    t =     5.18s Tap "Try the two sample PDFs" Button
+    t =     5.19s     Wait for dev.atepdf.fresh to idle
+    t =     5.19s     Find the "Try the two sample PDFs" Button
+    t =     5.20s     Check for interrupting elements affecting "Try the two sample PDFs" Button
+    t =     5.21s         Wait for com.apple.springboard to idle
+    t =     5.22s     Synthesize event
+    t =     5.50s     Wait for dev.atepdf.fresh to idle
+    t =     6.56s Checking `Expect predicate `exists == 1` for object StaticText (First Match)`
+    t =     6.56s     Checking existence of `StaticText (First Match)`
+    t =     7.63s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Merge" Button`
+    t =     7.63s     Checking existence of `"Merge" Button`
+    t =     7.67s     Find the "Merge" Button
+    t =     7.69s     Find the "Merge" Button
+    t =     7.71s Tap "Merge" Button
+    t =     7.71s     Wait for dev.atepdf.fresh to idle
+    t =     7.71s     Find the "Merge" Button
+    t =     7.72s     Check for interrupting elements affecting "Merge" Button
+    t =     7.74s         Wait for com.apple.springboard to idle
+    t =     7.75s     Synthesize event
+    t =     8.04s     Wait for dev.atepdf.fresh to idle
+    t =     9.08s Checking `Expect predicate `exists == 1 AND label BEGINSWITH "3 pages"` for object "result-facts" StaticText`
+    t =     9.08s     Checking existence of `"result-facts" StaticText`
+    t =     9.13s     Find the "result-facts" StaticText
+    t =     9.15s Find the Target Application 'dev.atepdf.fresh'
+    t =     9.16s Find the Target Application 'dev.atepdf.fresh'
+    t =     9.18s Checking existence of `Keyboard (First Match)`
+    t =     9.21s Find the "current-context" StaticText
+    t =     9.23s Find the "current-context" StaticText
+    t =     9.24s Get number of matches for: Elements matching predicate '"Preview" IN identifiers'
+    t =     9.26s Get number of matches for: Elements matching predicate '"Preview" IN identifiers'
+    t =    10.33s Checking `Expect predicate `exists == 1` for object "Preview" Button`
+    t =    10.33s     Checking existence of `"Preview" Button`
+    t =    11.40s Checking `Expect predicate `exists == 1` for object ScrollView (First Match)`
+    t =    11.40s     Checking existence of `ScrollView (First Match)`
+    t =    11.43s Find the ScrollView (First Match)
+    t =    11.45s Find the "Preview" Button
+    t =    11.48s Find the "Preview" Button
+    t =    12.54s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Preview" Button`
+    t =    12.54s     Checking existence of `"Preview" Button`
+    t =    12.58s     Find the "Preview" Button
+    t =    12.61s     Find the "Preview" Button
+    t =    12.63s Tap "Preview" Button
+    t =    12.63s     Wait for dev.atepdf.fresh to idle
+    t =    12.63s     Find the "Preview" Button
+    t =    12.65s     Check for interrupting elements affecting "Preview" Button
+    t =    12.66s         Wait for com.apple.springboard to idle
+    t =    12.68s     Synthesize event
+    t =    12.95s     Wait for dev.atepdf.fresh to idle
+    t =    14.02s Checking `Expect predicate `exists == 1` for object "PDF page 1" Image`
+    t =    14.02s     Checking existence of `"PDF page 1" Image`
+    t =    15.11s Checking `Expect predicate `exists == 1` for object "Next page" Button`
+    t =    15.11s     Checking existence of `"Next page" Button`
+    t =    16.22s Checking `Expect predicate `exists == 1` for object ScrollView (First Match)`
+    t =    16.22s     Checking existence of `ScrollView (First Match)`
+    t =    16.24s Find the ScrollView (First Match)
+    t =    16.26s Find the "Next page" Button
+    t =    16.29s Find the "Next page" Button
+    t =    17.37s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Next page" Button`
+    t =    17.37s     Checking existence of `"Next page" Button`
+    t =    17.40s     Find the "Next page" Button
+    t =    17.43s     Find the "Next page" Button
+    t =    17.45s Tap "Next page" Button
+    t =    17.45s     Wait for dev.atepdf.fresh to idle
+    t =    17.45s     Find the "Next page" Button
+    t =    17.47s     Check for interrupting elements affecting "Next page" Button
+    t =    17.49s         Wait for com.apple.springboard to idle
+    t =    17.50s     Synthesize event
+    t =    17.79s     Wait for dev.atepdf.fresh to idle
+    t =    18.85s Checking `Expect predicate `exists == 1` for object "PDF page 2" Image`
+    t =    18.85s     Checking existence of `"PDF page 2" Image`
+    t =    19.93s Checking `Expect predicate `exists == 1` for object "Zoom in" Button`
+    t =    19.94s     Checking existence of `"Zoom in" Button`
+    t =    21.02s Checking `Expect predicate `exists == 1` for object ScrollView (First Match)`
+    t =    21.02s     Checking existence of `ScrollView (First Match)`
+    t =    21.05s Find the ScrollView (First Match)
+    t =    21.07s Find the "Zoom in" Button
+    t =    21.10s Find the "Zoom in" Button
+    t =    21.13s Find the "Zoom in" Button
+    t =    21.15s Find the "Zoom in" Button
+    t =    21.17s Find the "Zoom in" Button
+    t =    21.19s Find the ScrollView (First Match)
+    t =    21.21s Find the "Zoom in" Button
+    t =    21.23s Find the ScrollView (First Match)
+    t =    22.28s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Zoom in" Button`
+    t =    22.28s     Checking existence of `"Zoom in" Button`
+    t =    22.33s     Find the "Zoom in" Button
+    t =    22.37s     Find the "Zoom in" Button
+    t =    22.39s Tap "Zoom in" Button
+    t =    22.39s     Wait for dev.atepdf.fresh to idle
+    t =    22.39s     Find the "Zoom in" Button
+    t =    22.42s     Check for interrupting elements affecting "Zoom in" Button
+    t =    22.44s         Wait for com.apple.springboard to idle
+    t =    22.45s     Synthesize event
+    t =    22.73s     Wait for dev.atepdf.fresh to idle
+    t =    23.76s Checking `Expect predicate `exists == 1 AND enabled == 1` for object "Zoom out" Button`
+    t =    23.76s     Checking existence of `"Zoom out" Button`
+    t =    23.78s     Find the "Zoom out" Button
+    t =    24.85s Checking `Expect predicate `exists == 1` for object "Zoom out" Button`
+    t =    24.85s     Checking existence of `"Zoom out" Button`
+    t =    25.95s Checking `Expect predicate `exists == 1` for object ScrollView (First Match)`
+    t =    25.95s     Checking existence of `ScrollView (First Match)`
+    t =    25.98s Find the ScrollView (First Match)
+    t =    26.00s Find the "Zoom out" Button
+    t =    26.03s Find the "Zoom out" Button
+    t =    26.06s Find the "Zoom out" Button
+    t =    26.08s Find the "Zoom out" Button
+    t =    26.10s Find the "Zoom out" Button
+    t =    26.12s Find the ScrollView (First Match)
+    t =    26.14s Find the "Zoom out" Button
+    t =    26.16s Find the ScrollView (First Match)
+    t =    27.22s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Zoom out" Button`
+    t =    27.22s     Checking existence of `"Zoom out" Button`
+    t =    27.24s     Find the "Zoom out" Button
+    t =    27.27s     Find the "Zoom out" Button
+    t =    27.29s Tap "Zoom out" Button
+    t =    27.29s     Wait for dev.atepdf.fresh to idle
+    t =    27.29s     Find the "Zoom out" Button
+    t =    27.32s     Check for interrupting elements affecting "Zoom out" Button
+    t =    27.34s         Wait for com.apple.springboard to idle
+    t =    27.35s     Synthesize event
+    t =    27.64s     Wait for dev.atepdf.fresh to idle
+    t =    28.68s Checking `Expect predicate `exists == 1 AND enabled == 0` for object "Zoom out" Button`
+    t =    28.68s     Checking existence of `"Zoom out" Button`
+    t =    28.71s     Find the "Zoom out" Button
+    t =    29.76s Checking `Expect predicate `exists == 1` for object "Zoom in" Button`
+    t =    29.76s     Checking existence of `"Zoom in" Button`
+    t =    30.84s Checking `Expect predicate `exists == 1` for object ScrollView (First Match)`
+    t =    30.84s     Checking existence of `ScrollView (First Match)`
+    t =    30.86s Find the ScrollView (First Match)
+    t =    30.88s Find the "Zoom in" Button
+    t =    30.91s Find the "Zoom in" Button
+    t =    30.93s Find the "Zoom in" Button
+    t =    30.96s Find the "Zoom in" Button
+    t =    30.98s Find the "Zoom in" Button
+    t =    31.00s Find the ScrollView (First Match)
+    t =    31.02s Find the "Zoom in" Button
+    t =    31.04s Find the ScrollView (First Match)
+    t =    32.10s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Zoom in" Button`
+    t =    32.10s     Checking existence of `"Zoom in" Button`
+    t =    32.12s     Find the "Zoom in" Button
+    t =    32.15s     Find the "Zoom in" Button
+    t =    32.17s Tap "Zoom in" Button
+    t =    32.17s     Wait for dev.atepdf.fresh to idle
+    t =    32.17s     Find the "Zoom in" Button
+    t =    32.19s     Check for interrupting elements affecting "Zoom in" Button
+    t =    32.22s         Wait for com.apple.springboard to idle
+    t =    32.23s     Synthesize event
+    t =    32.51s     Wait for dev.atepdf.fresh to idle
+    t =    33.57s Checking `Expect predicate `exists == 1` for object "Fit page" Button`
+    t =    33.57s     Checking existence of `"Fit page" Button`
+    t =    34.65s Checking `Expect predicate `exists == 1` for object ScrollView (First Match)`
+    t =    34.65s     Checking existence of `ScrollView (First Match)`
+    t =    34.67s Find the ScrollView (First Match)
+    t =    34.68s Find the "Fit page" Button
+    t =    34.70s Find the "Fit page" Button
+    t =    34.73s Find the "Fit page" Button
+    t =    34.75s Find the "Fit page" Button
+    t =    34.78s Find the "Fit page" Button
+    t =    34.80s Find the ScrollView (First Match)
+    t =    34.81s Find the "Fit page" Button
+    t =    34.84s Find the ScrollView (First Match)
+    t =    35.88s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Fit page" Button`
+    t =    35.88s     Checking existence of `"Fit page" Button`
+    t =    35.91s     Find the "Fit page" Button
+    t =    35.94s     Find the "Fit page" Button
+    t =    35.96s Tap "Fit page" Button
+    t =    35.96s     Wait for dev.atepdf.fresh to idle
+    t =    35.97s     Find the "Fit page" Button
+    t =    35.99s     Check for interrupting elements affecting "Fit page" Button
+    t =    36.01s         Wait for com.apple.springboard to idle
+    t =    36.02s     Synthesize event
+    t =    36.30s     Wait for dev.atepdf.fresh to idle
+    t =    37.36s Checking `Expect predicate `exists == 1 AND enabled == 0` for object "Zoom out" Button`
+    t =    37.36s     Checking existence of `"Zoom out" Button`
+    t =    37.38s     Find the "Zoom out" Button
+    t =    38.46s Checking `Expect predicate `exists == 1` for object "Previous page" Button`
+    t =    38.46s     Checking existence of `"Previous page" Button`
+    t =    39.55s Checking `Expect predicate `exists == 1` for object ScrollView (First Match)`
+    t =    39.55s     Checking existence of `ScrollView (First Match)`
+    t =    39.58s Find the ScrollView (First Match)
+    t =    39.60s Find the "Previous page" Button
+    t =    39.63s Find the "Previous page" Button
+    t =    39.66s Find the "Previous page" Button
+    t =    39.68s Find the "Previous page" Button
+    t =    39.70s Find the "Previous page" Button
+    t =    39.72s Find the ScrollView (First Match)
+    t =    39.74s Find the "Previous page" Button
+    t =    39.76s Find the ScrollView (First Match)
+    t =    40.82s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Previous page" Button`
+    t =    40.82s     Checking existence of `"Previous page" Button`
+    t =    40.87s     Find the "Previous page" Button
+    t =    40.90s     Find the "Previous page" Button
+    t =    40.93s Tap "Previous page" Button
+    t =    40.93s     Wait for dev.atepdf.fresh to idle
+    t =    40.93s     Find the "Previous page" Button
+    t =    40.95s     Check for interrupting elements affecting "Previous page" Button
+    t =    40.97s         Wait for com.apple.springboard to idle
+    t =    40.98s     Synthesize event
+    t =    41.27s     Wait for dev.atepdf.fresh to idle
+    t =    42.32s Checking `Expect predicate `exists == 1` for object "PDF page 1" Image`
+    t =    42.32s     Checking existence of `"PDF page 1" Image`
+    t =    43.40s Checking `Expect predicate `exists == 1` for object "Zoom in" Button`
+    t =    43.40s     Checking existence of `"Zoom in" Button`
+    t =    44.46s Checking `Expect predicate `exists == 1` for object ScrollView (First Match)`
+    t =    44.46s     Checking existence of `ScrollView (First Match)`
+    t =    44.49s Find the ScrollView (First Match)
+    t =    44.51s Find the "Zoom in" Button
+    t =    44.54s Find the "Zoom in" Button
+    t =    44.57s Find the "Zoom in" Button
+    t =    44.59s Find the "Zoom in" Button
+    t =    44.61s Find the "Zoom in" Button
+    t =    44.63s Find the ScrollView (First Match)
+    t =    44.65s Find the "Zoom in" Button
+    t =    44.67s Find the ScrollView (First Match)
+    t =    44.69s Requesting snapshot of accessibility hierarchy for app with pid 35477
+    t =    44.80s Requesting snapshot of accessibility hierarchy for app with pid 35477
+    t =    44.83s Added attachment named 'preview-controls-at-current-text-size'
+    t =    44.91s Added attachment named 'native-preview-controls-at-current-text-size'
+    t =    45.95s Checking `Expect predicate `exists == 1` for object "Close preview" Button`
+    t =    45.95s     Checking existence of `"Close preview" Button`
+    t =    47.05s Checking `Expect predicate `exists == 1` for object ScrollView (First Match)`
+    t =    47.05s     Checking existence of `ScrollView (First Match)`
+    t =    47.09s Find the ScrollView (First Match)
+    t =    47.11s Find the "Close preview" Button
+    t =    47.13s Find the "Close preview" Button
+    t =    47.16s Find the "Close preview" Button
+    t =    47.18s Find the "Close preview" Button
+    t =    47.20s Find the "Close preview" Button
+    t =    47.23s Find the ScrollView (First Match)
+    t =    47.24s Find the "Close preview" Button
+    t =    47.26s Find the ScrollView (First Match)
+    t =    48.32s Checking `Expect predicate `exists == 1 AND hittable == 1 AND enabled == 1` for object "Close preview" Button`
+    t =    48.32s     Checking existence of `"Close preview" Button`
+    t =    48.37s     Find the "Close preview" Button
+    t =    48.41s     Find the "Close preview" Button
+    t =    48.44s Tap "Close preview" Button
+    t =    48.44s     Wait for dev.atepdf.fresh to idle
+    t =    48.44s     Find the "Close preview" Button
+    t =    48.46s     Check for interrupting elements affecting "Close preview" Button
+    t =    48.48s         Wait for com.apple.springboard to idle
+    t =    48.49s     Synthesize event
+    t =    48.78s     Wait for dev.atepdf.fresh to idle
+    t =    49.82s Checking `Expect predicate `exists == 0` for object "Close preview" Button`
+    t =    49.82s     Checking existence of `"Close preview" Button`
+    t =    49.86s Tear Down
+    t =    49.86s     Requesting snapshot of accessibility hierarchy for app with pid 35477
+    t =    49.96s     Requesting snapshot of accessibility hierarchy for app with pid 35477
+    t =    49.98s     Added attachment named 'final-accessibility-hierarchy'
+    t =    50.05s     Added attachment named 'final-screen'
+    t =    50.05s     Terminate dev.atepdf.fresh:35477
+    t =    51.10s     Setting device orientation to Portrait
+    t =    51.11s         Wait for com.apple.springboard to idle
+Test Case '-[atepdfUITests.AtepdfWorkflowUITests testPreviewToolbarControlsRemainReachableAtCurrentTextSize]' passed (51.122 seconds).
+Test Suite 'AtepdfWorkflowUITests' passed at 2026-09-29 01:26:49.988.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 62.584 (62.586) seconds
+Test Suite 'atepdfUITests.xctest' passed at 2026-09-29 01:26:49.988.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 62.584 (62.586) seconds
+Test Suite 'Selected tests' passed at 2026-09-29 01:26:49.988.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 62.584 (62.587) seconds
+2026-09-29 01:26:50.273 xcodebuild[35417:2648124] [MT] IDETestOperationsObserverDebug: 65.546 elapsed -- Testing started completed.
+2026-09-29 01:26:50.273 xcodebuild[35417:2648124] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-09-29 01:26:50.273 xcodebuild[35417:2648124] [MT] IDETestOperationsObserverDebug: 65.546 sec, +65.546 sec -- end
+
+Test session results, code coverage, and logs:
+	/Users/shrey/Documents/ChatGPT/atepdf/.build/ux-refined-ipad-accessibility-large.xcresult
+
+** TEST EXECUTE SUCCEEDED **
+
+Testing started

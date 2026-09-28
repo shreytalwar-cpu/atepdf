@@ -1,0 +1,286 @@
+{
+  "scope": "One cold desktop Chrome navigation; 1440x1000; CPU 4x slowdown; 1.6 Mbps download, 0.75 Mbps upload, 150 ms latency; local preview server; not physical mobile or production CDN.",
+  "requests": [
+    {
+      "path": "/",
+      "status": 200,
+      "encoding": null
+    },
+    {
+      "path": "/_expo/static/css/preview-4a592c39668f775437665576652be491.css",
+      "status": 200,
+      "encoding": null
+    },
+    {
+      "path": "/_expo/static/css/workspace-c6f57ae66ccf92ad62601b485fa4e58a.css",
+      "status": 200,
+      "encoding": null
+    },
+    {
+      "path": "/_expo/static/css/global-d4d6ccab383182f1e451d3012f50f781.css",
+      "status": 200,
+      "encoding": null
+    },
+    {
+      "path": "/_expo/static/js/web/index-356409ae3ac271b0e3724cec6263d3e7.js",
+      "status": 200,
+      "encoding": null
+    },
+    {
+      "path": "/assets/assets/approved-8-mark-source-crop.8b708587521942c4118f8e6a3c3f84f8.png",
+      "status": 200,
+      "encoding": null
+    },
+    {
+      "path": "/assets/assets/approved-atepdf-wordmark-source-crop.e129a61b59d2f9c2fdcb1f1b2521e212.png",
+      "status": 200,
+      "encoding": null
+    },
+    {
+      "path": "/assets/assets/paper.1cb2ca1d4826879d6316a24bfbeecd07.png",
+      "status": 200,
+      "encoding": null
+    }
+  ],
+  "errors": [],
+  "browser": "154.0.8037.58",
+  "htmlSHA256": "0054b8192566df7108bf418b0fc965b6d951f490361bd6505f766fd7ca024f45",
+  "interactiveControlMs": 12197,
+  "respondedToClickMs": 12293,
+  "metrics": {
+    "navigation": [
+      {
+        "domContentLoaded": 11905.20000000298,
+        "load": 11907.59999999404,
+        "responseEnd": 169.29999999701977,
+        "encodedBodySize": 1760,
+        "transferSize": 2060
+      }
+    ],
+    "resources": [
+      {
+        "path": "/_expo/static/css/global-d4d6ccab383182f1e451d3012f50f781.css",
+        "encoded": 24056,
+        "decoded": 24056,
+        "transfer": 24356,
+        "duration": 441.70000000298023
+      },
+      {
+        "path": "/_expo/static/css/workspace-c6f57ae66ccf92ad62601b485fa4e58a.css",
+        "encoded": 971,
+        "decoded": 971,
+        "transfer": 1271,
+        "duration": 201.70000000298023
+      },
+      {
+        "path": "/_expo/static/css/preview-4a592c39668f775437665576652be491.css",
+        "encoded": 2503,
+        "decoded": 2503,
+        "transfer": 2803,
+        "duration": 226.70000000298023
+      },
+      {
+        "path": "/_expo/static/js/web/index-356409ae3ac271b0e3724cec6263d3e7.js",
+        "encoded": 2238893,
+        "decoded": 2238893,
+        "transfer": 2239193,
+        "duration": 11521.90000000596
+      },
+      {
+        "path": "/favicon.ico",
+        "encoded": 0,
+        "decoded": 0,
+        "transfer": 0,
+        "duration": 0.7000000029802322
+      }
+    ],
+    "paint": [
+      {
+        "name": "first-paint",
+        "time": 12196
+      },
+      {
+        "name": "first-contentful-paint",
+        "time": 12196
+      }
+    ],
+    "longTasks": [
+      {
+        "start": 11700.70000000298,
+        "duration": 205
+      },
+      {
+        "start": 11907.70000000298,
+        "duration": 141
+      },
+      {
+        "start": 12077.20000000298,
+        "duration": 100
+      }
+    ],
+    "lcp": [
+      {
+        "start": 12196,
+        "size": 4860,
+        "tag": "H1"
+      }
+    ]
+  },
+  "cpu": {
+    "metrics": [
+      {
+        "name": "Timestamp",
+        "value": 74427.883451
+      },
+      {
+        "name": "AudioHandlers",
+        "value": 0
+      },
+      {
+        "name": "AudioWorkletProcessors",
+        "value": 0
+      },
+      {
+        "name": "Documents",
+        "value": 4
+      },
+      {
+        "name": "Frames",
+        "value": 4
+      },
+      {
+        "name": "JSEventListeners",
+        "value": 431
+      },
+      {
+        "name": "LayoutObjects",
+        "value": 137
+      },
+      {
+        "name": "MediaKeySessions",
+        "value": 0
+      },
+      {
+        "name": "MediaKeys",
+        "value": 0
+      },
+      {
+        "name": "Nodes",
+        "value": 210
+      },
+      {
+        "name": "Resources",
+        "value": 8
+      },
+      {
+        "name": "ContextLifecycleStateObservers",
+        "value": 12
+      },
+      {
+        "name": "V8PerContextDatas",
+        "value": 4
+      },
+      {
+        "name": "WorkerGlobalScopes",
+        "value": 0
+      },
+      {
+        "name": "UACSSResources",
+        "value": 0
+      },
+      {
+        "name": "RTCPeerConnections",
+        "value": 0
+      },
+      {
+        "name": "ResourceFetchers",
+        "value": 4
+      },
+      {
+        "name": "AdSubframes",
+        "value": 0
+      },
+      {
+        "name": "DetachedScriptStates",
+        "value": 2
+      },
+      {
+        "name": "ArrayBufferContents",
+        "value": 0
+      },
+      {
+        "name": "LayoutCount",
+        "value": 10
+      },
+      {
+        "name": "RecalcStyleCount",
+        "value": 23
+      },
+      {
+        "name": "LayoutDuration",
+        "value": 0.022748
+      },
+      {
+        "name": "RecalcStyleDuration",
+        "value": 0.009276
+      },
+      {
+        "name": "DevToolsCommandDuration",
+        "value": 0.178417
+      },
+      {
+        "name": "ScriptDuration",
+        "value": 0.403322
+      },
+      {
+        "name": "V8CompileDuration",
+        "value": 0.053517
+      },
+      {
+        "name": "TaskDuration",
+        "value": 0.604713
+      },
+      {
+        "name": "TaskOtherDuration",
+        "value": -0.062567
+      },
+      {
+        "name": "ThreadTime",
+        "value": 9.360058
+      },
+      {
+        "name": "ProcessTime",
+        "value": 9.818115
+      },
+      {
+        "name": "JSHeapUsedSize",
+        "value": 11178896
+      },
+      {
+        "name": "JSHeapTotalSize",
+        "value": 18153472
+      },
+      {
+        "name": "FirstMeaningfulPaint",
+        "value": 0
+      },
+      {
+        "name": "DomContentLoaded",
+        "value": 74427.441676
+      },
+      {
+        "name": "NavigationStart",
+        "value": 74415.536492
+      }
+    ]
+  },
+  "coverage": [
+    {
+      "path": "/_expo/static/js/web/index-356409ae3ac271b0e3724cec6263d3e7.js",
+      "totalChars": 2238892,
+      "functions": 9044
+    }
+  ],
+  "entrySHA256": "0af20a4d1ec8015573521f78e045bb30ca06943f0f102adcb1f270288f76db29",
+  "closed": true
+}

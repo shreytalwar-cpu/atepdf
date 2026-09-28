@@ -1,0 +1,24 @@
+{
+  "recordedAt": "2026-09-28T19:53:35.638622+00:00",
+  "device": "526CAD4B-89C5-49C1-8CEE-F65602AA0DEE",
+  "name": "iPad Pro11-inch M5",
+  "os": "iOS27.0 simulator",
+  "frozenProducts": ".build/ux-refined-final-products",
+  "sourceSnapshot": "docs/evidence/native/ux-refined-final-source.json",
+  "originalContentSize": "large",
+  "settingsMethod": "public simctl ui content_size; restore to original readback after probe",
+  "methods": [
+    "testIPadLandscapeKeyboardAndPreview at large",
+    "testPreviewToolbarControlsRemainReachableAtCurrentTextSize at accessibility-large",
+    "testNativeComposerPreservesFastTypingAndBackspace at accessibility-large"
+  ],
+  "priorEvidenceReviewed": [
+    "docs/BETA_APPLE_QA.md",
+    "docs/BETA_IPHONE_QA.md",
+    "docs/evidence/native/beta-ipad-landscape-simultaneous-result.json"
+  ],
+  "knownGapNotBlindlyRepeated": "Previous AX-large landscape refocus put earlier preview outside conversation; default landscape and independent AX-large preview reachability chosen for bounded adaptation check.",
+  "noBuild": true,
+  "noAppSourceEdits": true,
+  "noPlannerCalls": true
+}

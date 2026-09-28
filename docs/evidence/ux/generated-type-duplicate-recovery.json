@@ -1,0 +1,90 @@
+{
+  "recordedAt": "2026-09-28T19:59:40.381804+00:00",
+  "scope": "Only byte-identical numbered files inside new-app ignored Next generated types; application source and prior cache artifacts preserved",
+  "files": [
+    {
+      "source": "apps/web/.next/types/app/api/native/[...path]/route 3.ts",
+      "sha256": "9e64032d7880e0ba9233b9666f2d4fe452cbcc9d5d3d9dbc031db495dd787cc8",
+      "canonical": "apps/web/.next/types/app/api/native/[...path]/route.ts",
+      "action": "quarantined exact duplicate generated cache; no deletion",
+      "backup": ".build/ux-20260929/generated-type-duplicates/app/api/native/[...path]/route 3.ts"
+    },
+    {
+      "source": "apps/web/.next/types/app/api/planner/key/route 3.ts",
+      "sha256": "a448b8bd7f7be971b8bca5ffc09a9fc356c011263966376168e8c7ae7962b527",
+      "canonical": "apps/web/.next/types/app/api/planner/key/route.ts",
+      "action": "quarantined exact duplicate generated cache; no deletion",
+      "backup": ".build/ux-20260929/generated-type-duplicates/app/api/planner/key/route 3.ts"
+    },
+    {
+      "source": "apps/web/.next/types/app/api/planner/pairing/route 3.ts",
+      "sha256": "5c3220ac5fa205f249f0a76d8dae93a6a83aba3ccec72667f215b0f3453de5e6",
+      "canonical": "apps/web/.next/types/app/api/planner/pairing/route.ts",
+      "action": "quarantined exact duplicate generated cache; no deletion",
+      "backup": ".build/ux-20260929/generated-type-duplicates/app/api/planner/pairing/route 3.ts"
+    },
+    {
+      "source": "apps/web/.next/types/app/api/planner/route 3.ts",
+      "sha256": "59c205db47bd86f8803e274bfb76a82c1a11bf13cc64d56be9f04e7a582f1a51",
+      "canonical": "apps/web/.next/types/app/api/planner/route.ts",
+      "action": "quarantined exact duplicate generated cache; no deletion",
+      "backup": ".build/ux-20260929/generated-type-duplicates/app/api/planner/route 3.ts"
+    },
+    {
+      "source": "apps/web/.next/types/app/api/planner/status/route 3.ts",
+      "sha256": "2fc484b2b6609e456758313155145c499a7c665e49ea239d679b7b8ec1073167",
+      "canonical": "apps/web/.next/types/app/api/planner/status/route.ts",
+      "action": "quarantined exact duplicate generated cache; no deletion",
+      "backup": ".build/ux-20260929/generated-type-duplicates/app/api/planner/status/route 3.ts"
+    },
+    {
+      "source": "apps/web/.next/types/app/layout 3.ts",
+      "sha256": "3437a8212580bd35974067a03a0f5a5d88ce70872bec3b25f6e266fb5b975d85",
+      "canonical": "apps/web/.next/types/app/layout.ts",
+      "action": "quarantined exact duplicate generated cache; no deletion",
+      "backup": ".build/ux-20260929/generated-type-duplicates/app/layout 3.ts"
+    },
+    {
+      "source": "apps/web/.next/types/app/route 3.ts",
+      "sha256": "86c218f4a2a16759b3b25e1d5f6da6f75c913d7c61694123fc11ea1abf860db5",
+      "canonical": "apps/web/.next/types/app/route.ts",
+      "action": "quarantined exact duplicate generated cache; no deletion",
+      "backup": ".build/ux-20260929/generated-type-duplicates/app/route 3.ts"
+    },
+    {
+      "source": "apps/web/.next/types/cache-life.d 2.ts",
+      "sha256": "4f984436b10cfb43ccf7fc3114dcb851cbefa4d58b7d8ae741aaae0f6e330129",
+      "canonical": "apps/web/.next/types/cache-life.d.ts",
+      "action": "quarantined exact duplicate generated cache; no deletion",
+      "backup": ".build/ux-20260929/generated-type-duplicates/cache-life.d 2.ts"
+    },
+    {
+      "source": "apps/web/.next/types/package 2.json",
+      "sha256": "e3d5a4a2d8551aa52c5a01d2a0efb2e06a2d9711b4f5c5f1d20de6e21807e2cd",
+      "canonical": "apps/web/.next/types/package.json",
+      "action": "quarantined exact duplicate generated cache; no deletion",
+      "backup": ".build/ux-20260929/generated-type-duplicates/package 2.json"
+    },
+    {
+      "source": "apps/web/.next/types/root-params.d 2.ts",
+      "sha256": "f3387dd7800eec3c34273f7a8efad13e864598c7e8f788d321e407390989bb59",
+      "canonical": "apps/web/.next/types/root-params.d.ts",
+      "action": "quarantined exact duplicate generated cache; no deletion",
+      "backup": ".build/ux-20260929/generated-type-duplicates/root-params.d 2.ts"
+    },
+    {
+      "source": "apps/web/.next/types/routes.d 2.ts",
+      "sha256": "9c283e0a90157e729e93fadfa5f7408a235f730593583ccb651872405ba5fae2",
+      "canonical": "apps/web/.next/types/routes.d.ts",
+      "action": "quarantined exact duplicate generated cache; no deletion",
+      "backup": ".build/ux-20260929/generated-type-duplicates/routes.d 2.ts"
+    },
+    {
+      "source": "apps/web/.next/types/validator 2.ts",
+      "sha256": "757bc31f4910f2f0c2a11415d80670ec922b763666de594a53bea07615516089",
+      "canonical": "apps/web/.next/types/validator.ts",
+      "action": "quarantined exact duplicate generated cache; no deletion",
+      "backup": ".build/ux-20260929/generated-type-duplicates/validator 2.ts"
+    }
+  ]
+}

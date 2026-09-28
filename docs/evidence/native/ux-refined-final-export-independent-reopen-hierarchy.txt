@@ -1,0 +1,210 @@
+Attributes: Application, 0x111a3c780, pid: 11918, label: 'Preview'
+Element subtree:
+ →Application, 0x111a3c780, pid: 11918, label: 'Preview'
+    Window (Main), 0x111a1d400, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x111a1f200, {{0.0, 0.0}, {402.0, 874.0}}
+        Other, 0x111a1de00, {{0.0, 0.0}, {402.0, 874.0}}
+          Other, 0x111a1dcc0, {{0.0, 0.0}, {402.0, 874.0}}
+            Other, 0x111a1fd40, {{0.0, 0.0}, {402.0, 874.0}}
+              Other, 0x111bdd7c0, {{0.0, 0.0}, {402.0, 874.0}}
+                Other, 0x111bdf480, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x111bde6c0, {{0.0, 0.0}, {402.0, 874.0}}
+                    Other, 0x111bdf340, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x111bdf5c0, {{0.0, 0.0}, {402.0, 874.0}}
+                    Other, 0x111bdfe80, {{0.0, 0.0}, {402.0, 874.0}}
+                      Other, 0x111bdfd40, {{0.0, 0.0}, {402.0, 874.0}}
+                        Other, 0x111bdf700, {{0.0, 0.0}, {402.0, 874.0}}
+                          Other, 0x111bdf980, {{0.0, 0.0}, {402.0, 874.0}}
+                            Other, 0x111bde300, {{0.0, 0.0}, {402.0, 874.0}}
+                              Other, 0x111bdebc0, {{0.0, 0.0}, {402.0, 874.0}}
+                                Other, 0x111bded00, {{0.0, 0.0}, {402.0, 874.0}}
+                                  Other, 0x111bdf840, {{0.0, 0.0}, {402.0, 874.0}}
+                                    Other, 0x111bdf0c0, {{0.0, 0.0}, {402.0, 874.0}}
+                                      Other, 0x111bde940, {{0.0, 0.0}, {402.0, 874.0}}
+                                        Other, 0x111bdfc00, {{0.0, 0.0}, {402.0, 874.0}}
+                                          Other, 0x111bdd900, {{0.0, 0.0}, {402.0, 874.0}}
+                                            NavigationBar, 0x111bdd400, {{0.0, 62.0}, {402.0, 54.0}}, identifier: '0a61a723-b1fe-4e68-95ce-79e5b4b4bf89'
+                                              Button, 0x111bdea80, {{72.0, 62.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Back'
+                                              Button, 0x111bde580, {{20.0, 66.0}, {36.0, 36.0}}, label: 'Show Sidebar'
+                                              Button, 0x111bdef80, {{128.0, 71.7}, {176.0, 24.7}}, label: '0a61a723-b1fe-4e68-95ce-79e5b4b4bf89, Actions Menu'
+                                              Button, 0x111bde800, {{346.0, 66.0}, {36.0, 36.0}}, identifier: 'OverflowBarButtonItem', label: 'More'
+                                            Other, 0x111bddb80, {{0.0, 0.0}, {402.0, 874.0}}
+                                              Other, 0x111bdd680, {{0.0, 0.0}, {402.0, 874.0}}
+                                                Other, 0x111bdd2c0, {{0.0, 0.0}, {402.0, 874.0}}
+                                                  Other, 0x111bdd180, {{0.0, 0.0}, {402.0, 874.0}}
+                                                    Other, 0x111bdf200, {{0.0, 0.0}, {402.0, 874.0}}
+                                                      Other, 0x111bdee40, {{0.0, 0.0}, {402.0, 874.0}}
+                                                        Other, 0x111bdfac0, {{0.0, 0.0}, {402.0, 874.0}}
+                                                          Other, 0x111bde440, {{0.0, 0.0}, {402.0, 874.0}}
+                                                            Other, 0x111bdd540, {{0.0, 0.0}, {402.0, 874.0}}
+                                                              Other, 0x111bdde00, {{0.0, 0.0}, {402.0, 874.0}}
+                                                                ScrollView, 0x111bddcc0, {{0.0, 0.0}, {402.0, 874.0}}, identifier: 'PDFScrollView'
+                                                                  Other, 0x111bde1c0, {{0.0, 0.0}, {402.0, 874.0}}
+                                                                    Other, 0x111bdda40, {{0.0, 0.0}, {402.0, 156.0}}
+                                                                    Other, 0x111bde080, {{0.0, 748.0}, {402.0, 126.0}}
+                                                                  Other, 0x111bddf40, {{0.0, 0.0}, {402.0, 874.0}}, identifier: 'com.apple.pencilkit.tiledView'
+                                                                    Other, 0x111a18000, {{0.0, 0.0}, {402.0, 874.0}}
+                                                                    Other, 0x111a188c0, {{0.0, 0.0}, {402.0, 874.0}}
+                                                                  Other, 0x111a18a00, {{0.0, 0.0}, {402.0, 874.0}}
+                                                                    Other, 0x111a0bd40, {{0.0, 748.0}, {402.0, 126.0}}
+                                                                  TextView, 0x111a0be80, {{0.0, 116.0}, {402.0, 1700.5}}, value: ATTENLO PDF / SYNT...
+                                                                    Other, 0x111a0bc00, {{2.7, 119.2}, {396.2, 560.3}}
+                                                                      Other, 0x111a0b980, {{31.9, 138.3}, {191.1, 513.9}}
+                                                                        Other, 0x111a0b840, {{31.9, 138.3}, {191.1, 513.9}}
+                                                                          Other, 0x111a0bac0, {{31.9, 138.3}, {156.6, 8.0}}
+                                                                            Other, 0x1119eb980, {{31.9, 138.3}, {156.6, 8.0}}, label: 'ATTENLO PDF / SYNTHETIC TEST INPUT'
+                                                                              StaticText, 0x1119eaf80, {{31.9, 138.3}, {156.6, 8.0}}, label: 'ATTENLO PDF / SYNTHETIC TEST INPUT'
+                                                                          Other, 0x1119eb0c0, {{31.9, 187.0}, {101.0, 17.3}}
+                                                                            Other, 0x1119ebac0, {{31.9, 187.0}, {101.0, 17.3}}, label: 'Project brief'
+                                                                              StaticText, 0x111a070c0, {{31.9, 187.0}, {101.0, 17.3}}, label: 'Project brief'
+                                                                          Other, 0x111a06e40, {{31.9, 220.0}, {78.8, 10.0}}
+                                                                            Other, 0x111a06d00, {{31.9, 220.0}, {78.8, 10.0}}, label: 'Page marker: A1'
+                                                                              StaticText, 0x111a07340, {{31.9, 220.0}, {78.8, 10.0}}, label: 'Page marker: A1'
+                                                                          Other, 0x111a06f80, {{31.9, 250.8}, {190.4, 84.5}}
+                                                                            Other, 0x111a07480, {{31.9, 250.8}, {190.4, 8.0}}, label: 'This document has two digitally generated text pages.'
+                                                                              StaticText, 0x111a075c0, {{31.9, 250.8}, {190.4, 8.0}}, label: 'This document has two digitally generated text pages.'
+                                                                            Other, 0x111a07200, {{31.9, 266.1}, {124.7, 8.0}}, label: 'Merge this file before appendix.pdf.'
+                                                                              StaticText, 0x111a06bc0, {{31.9, 266.1}, {124.7, 8.0}}, label: 'Merge this file before appendix.pdf.'
+                                                                            Other, 0x111a34000, {{31.9, 281.4}, {128.3, 8.0}}, label: 'Expected merged order: A1, A2, B1.'
+                                                                              StaticText, 0x111a2c8c0, {{31.9, 281.4}, {128.3, 8.0}}, label: 'Expected merged order: A1, A2, B1.'
+                                                                            Other, 0x111a2d180, {{31.9, 296.7}, {162.5, 8.0}}, label: 'The next instruction removes physical page 2.'
+                                                                              StaticText, 0x111a2e300, {{31.9, 296.7}, {162.5, 8.0}}, label: 'The next instruction removes physical page 2.'
+                                                                            Other, 0x111a2d400, {{31.9, 312.0}, {180.2, 8.0}}, label: 'After removal, the result should contain A1 and B1.'
+                                                                              StaticText, 0x111a2ea80, {{31.9, 312.0}, {180.2, 8.0}}, label: 'After removal, the result should contain A1 and B1.'
+                                                                            Other, 0x111a2c3c0, {{31.9, 327.3}, {176.2, 8.0}}, label: 'Undo must restore the previous three-page result.'
+                                                                              StaticText, 0x111a2d7c0, {{31.9, 327.3}, {176.2, 8.0}}, label: 'Undo must restore the previous three-page result.'
+                                                                          Other, 0x111a2c640, {{31.9, 615.8}, {191.1, 36.5}}
+                                                                            Other, 0x111a2d2c0, {{31.9, 615.8}, {108.0, 6.7}}, label: 'LOCAL NETWORK TEST CANARY:'
+                                                                              StaticText, 0x111a2d900, {{31.9, 615.8}, {108.0, 6.7}}, label: 'LOCAL NETWORK TEST CANARY:'
+                                                                            Other, 0x111a2cdc0, {{31.9, 627.8}, {144.2, 6.7}}, label: 'ATTENLO_LOCAL_ONLY_CANARY_A1_7C82'
+                                                                              StaticText, 0x111a2c780, {{31.9, 627.8}, {144.2, 6.7}}, label: 'ATTENLO_LOCAL_ONLY_CANARY_A1_7C82'
+                                                                            Other, 0x111a2ca00, {{31.9, 646.3}, {191.1, 6.0}}, label: 'Synthetic content. No customer data. Do not upload document contents.'
+                                                                              StaticText, 0x111a2e440, {{31.9, 646.3}, {191.1, 6.0}}, label: 'Synthetic content. No customer data. Do not upload document contents.'
+                                                                    Other, 0x111a2e080, {{2.7, 685.8}, {396.2, 560.3}}
+                                                                      Other, 0x111a2da40, {{31.9, 705.0}, {215.7, 513.9}}
+                                                                        Other, 0x111a2c140, {{31.9, 705.0}, {215.7, 513.9}}
+                                                                          Other, 0x111a2e6c0, {{31.9, 705.0}, {156.6, 8.0}}
+                                                                            Other, 0x111a2e800, {{31.9, 705.0}, {156.6, 8.0}}, label: 'ATTENLO PDF / SYNTHETIC TEST INPUT'
+                                                                              StaticText, 0x111a2e940, {{31.9, 705.0}, {156.6, 8.0}}, label: 'ATTENLO PDF / SYNTHETIC TEST INPUT'
+                                                                          Other, 0x111a2dcc0, {{31.9, 753.7}, {120.2, 17.3}}
+                                                                            Other, 0x111a2de00, {{31.9, 753.7}, {120.2, 17.3}}, label: 'Working notes'
+                                                                              StaticText, 0x111a2cc80, {{31.9, 753.7}, {120.2, 17.3}}, label: 'Working notes'
+                                                                          Other, 0x111a2c500, {{31.9, 786.6}, {78.8, 10.0}}
+                                                                            Other, 0x111a2c000, {{31.9, 786.6}, {78.8, 10.0}}, label: 'Page marker: A2'
+                                                                              StaticText, 0x111a2c280, {{31.9, 786.6}, {78.8, 10.0}}, label: 'Page marker: A2'
+                                                                          Other, 0x111a2e580, {{31.9, 817.4}, {215.7, 69.2}}
+                                                                            Other, 0x111a2e1c0, {{31.9, 817.4}, {126.5, 8.0}}, label: 'This is the second page of the brief.'
+                                                                              StaticText, 0x111a2ebc0, {{31.9, 817.4}, {126.5, 8.0}}, label: 'This is the second page of the brief.'
+                                                                            Other, 0x111a2d540, {{31.9, 832.7}, {194.0, 8.0}}, label: 'This page is intentionally removed in the follow-up test.'
+                                                                              StaticText, 0x111a2cf00, {{31.9, 832.7}, {194.0, 8.0}}, label: 'This page is intentionally removed in the follow-up test.'
+                                                                            Other, 0x111a2d040, {{31.9, 848.1}, {175.8, 8.0}}, label: 'Do not delete or overwrite either original input file.'
+                                                                              StaticText, 0x111a2d680, {{31.9, 848.1}, {175.8, 8.0}}, label: 'Do not delete or overwrite either original input file.'
+                                                                            Other, 0x111a2db80, {{31.9, 863.4}, {209.1, 8.0}}, label: 'A successful output must reopen in an independent reader.'
+                                                                              StaticText, 0x111a2cb40, {{31.9, 863.4}, {209.1, 8.0}}, label: 'A successful output must reopen in an independent reader.'
+                                                                            Other, 0x111a69540, {{31.9, 878.7}, {215.7, 8.0}}, label: 'File sizes must come from actual bytes, not generated prose.'
+                                                                              StaticText, 0x111a6a940, {{31.9, 878.7}, {215.7, 8.0}}, label: 'File sizes must come from actual bytes, not generated prose.'
+                                                                          Other, 0x111a68280, {{31.9, 1182.5}, {191.1, 36.5}}
+                                                                            Other, 0x111a6aa80, {{31.9, 1182.5}, {108.0, 6.7}}, label: 'LOCAL NETWORK TEST CANARY:'
+                                                                              StaticText, 0x111a6abc0, {{31.9, 1182.5}, {108.0, 6.7}}, label: 'LOCAL NETWORK TEST CANARY:'
+                                                                            Other, 0x111a6af80, {{31.9, 1194.4}, {144.2, 6.7}}, label: 'ATTENLO_LOCAL_ONLY_CANARY_A2_9B14'
+                                                                              StaticText, 0x111a688c0, {{31.9, 1194.4}, {144.2, 6.7}}, label: 'ATTENLO_LOCAL_ONLY_CANARY_A2_9B14'
+                                                                            Other, 0x111a68a00, {{31.9, 1212.9}, {191.1, 6.0}}, label: 'Synthetic content. No customer data. Do not upload document contents.'
+                                                                              StaticText, 0x111a69900, {{31.9, 1212.9}, {191.1, 6.0}}, label: 'Synthetic content. No customer data. Do not upload document contents.'
+                                                                    Other, 0x111a69040, {{2.7, 1252.5}, {396.2, 560.3}}
+                                                                      Other, 0x111a68500, {{31.9, 1271.6}, {196.2, 513.9}}
+                                                                        Other, 0x111a683c0, {{31.9, 1271.6}, {196.2, 513.9}}
+                                                                          Other, 0x111a68b40, {{31.9, 1271.6}, {156.6, 8.0}}
+                                                                            Other, 0x111a697c0, {{31.9, 1271.6}, {156.6, 8.0}}, label: 'ATTENLO PDF / SYNTHETIC TEST INPUT'
+                                                                              StaticText, 0x111a68c80, {{31.9, 1271.6}, {156.6, 8.0}}, label: 'ATTENLO PDF / SYNTHETIC TEST INPUT'
+                                                                          Other, 0x111a69180, {{31.9, 1320.3}, {78.8, 17.3}}
+                                                                            Other, 0x111a68780, {{31.9, 1320.3}, {78.8, 17.3}}, label: 'Appendix'
+                                                                              StaticText, 0x111a6a800, {{31.9, 1320.3}, {78.8, 17.3}}, label: 'Appendix'
+                                                                          Other, 0x111a68f00, {{31.9, 1353.3}, {78.8, 10.0}}
+                                                                            Other, 0x111a6b0c0, {{31.9, 1353.3}, {78.8, 10.0}}, label: 'Page marker: B1'
+                                                                              StaticText, 0x111a6ae40, {{31.9, 1353.3}, {78.8, 10.0}}, label: 'Page marker: B1'
+                                                                          Other, 0x111a6a440, {{31.9, 1384.1}, {196.2, 69.2}}
+                                                                            Other, 0x111a68dc0, {{31.9, 1384.1}, {109.2, 8.0}}, label: 'This is the one-page appendix.'
+                                                                              StaticText, 0x111a69f40, {{31.9, 1384.1}, {109.2, 8.0}}, label: 'This is the one-page appendix.'
+                                                                            Other, 0x111be4000, {{31.9, 1399.4}, {176.7, 8.0}}, label: 'It follows both pages of brief.pdf in the merge test.'
+                                                                              StaticText, 0x111be4140, {{31.9, 1399.4}, {176.7, 8.0}}, label: 'It follows both pages of brief.pdf in the merge test.'
+                                                                            Other, 0x111be4280, {{31.9, 1414.7}, {148.3, 8.0}}, label: 'It remains after removing physical page 2.'
+                                                                              StaticText, 0x111be43c0, {{31.9, 1414.7}, {148.3, 8.0}}, label: 'It remains after removing physical page 2.'
+                                                                            Other, 0x111be4500, {{31.9, 1430.0}, {196.2, 8.0}}, label: 'The sample can be used without a customer document.'
+                                                                              StaticText, 0x111be4640, {{31.9, 1430.0}, {196.2, 8.0}}, label: 'The sample can be used without a customer document.'
+                                                                            Other, 0x111be4780, {{31.9, 1445.3}, {191.3, 8.0}}, label: 'This file is small and is not a compression benchmark.'
+                                                                              StaticText, 0x111be48c0, {{31.9, 1445.3}, {191.3, 8.0}}, label: 'This file is small and is not a compression benchmark.'
+                                                                          Other, 0x111be4a00, {{31.9, 1749.1}, {191.1, 36.5}}
+                                                                            Other, 0x111be4b40, {{31.9, 1749.1}, {108.0, 6.7}}, label: 'LOCAL NETWORK TEST CANARY:'
+                                                                              StaticText, 0x111be4c80, {{31.9, 1749.1}, {108.0, 6.7}}, label: 'LOCAL NETWORK TEST CANARY:'
+                                                                            Other, 0x111be4dc0, {{31.9, 1761.1}, {144.2, 6.7}}, label: 'ATTENLO_LOCAL_ONLY_CANARY_B1_3A65'
+                                                                              StaticText, 0x111be4f00, {{31.9, 1761.1}, {144.2, 6.7}}, label: 'ATTENLO_LOCAL_ONLY_CANARY_B1_3A65'
+                                                                            Other, 0x111be5040, {{31.9, 1779.6}, {191.1, 6.0}}, label: 'Synthetic content. No customer data. Do not upload document contents.'
+                                                                              StaticText, 0x111be5180, {{31.9, 1779.6}, {191.1, 6.0}}, label: 'Synthetic content. No customer data. Do not upload document contents.'
+                                                                  Other, 0x111be52c0, {{2.7, 119.2}, {396.2, 560.3}}
+                                                                  Other, 0x111be5400, {{2.7, 119.2}, {396.2, 560.3}}, identifier: 'com.apple.paper.canvasElementResizeView'
+                                                                  TextView, 0x111be5540, {{2.7, 119.2}, {396.2, 560.3}}
+                                                                  Other, 0x111be5680, {{2.7, 685.8}, {396.2, 560.3}}
+                                                                  Other, 0x111be57c0, {{2.7, 685.8}, {396.2, 560.3}}, identifier: 'com.apple.paper.canvasElementResizeView'
+                                                                  TextView, 0x111be5900, {{2.7, 685.8}, {396.2, 560.3}}
+                                                                  Other, 0x111be5a40, {{2.7, 1252.5}, {396.2, 560.3}}
+                                                                  Other, 0x111be5b80, {{2.7, 1252.5}, {396.2, 560.3}}, identifier: 'com.apple.paper.canvasElementResizeView'
+                                                                  TextView, 0x111be5cc0, {{2.7, 1252.5}, {396.2, 560.3}}
+                                                                  Other, 0x111be5e00, {{369.0, 116.0}, {30.0, 696.0}}, label: 'Vertical scroll bar, 3 pages', value: 0%
+                                                                    Other, 0x111be5f40, {{396.0, 119.0}, {3.0, 319.0}}
+                                                                  Other, 0x111be6080, {{369.0, 116.0}, {30.0, 696.0}}, label: 'Vertical scroll bar, 3 pages', value: 0%
+                                                                    Other, 0x111be61c0, {{396.0, 119.0}, {3.0, 319.0}}
+                                                                Button, 0x111be6300, {{20.0, 132.0}, {78.7, 44.3}}, label: 'Page Label', value: 1 of 3
+                                            Toolbar, 0x111be6440, {{0.0, 0.0}, {402.0, 874.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                              Other, 0x111be6580, {{0.0, 0.0}, {402.0, 874.0}}
+                                        Toolbar, 0x111be66c0, {{0.0, 0.0}, {402.0, 874.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                          Other, 0x111be6800, {{0.0, 0.0}, {402.0, 874.0}}
+                                            Other, 0x111be6940, {{0.0, 62.0}, {402.0, 812.0}}
+                                              Other, 0x111be6a80, {{0.0, 62.0}, {402.0, 812.0}}
+                                                Other, 0x111be6bc0, {{0.0, 62.0}, {0.0, 0.0}}
+                                                  Other, 0x111be6d00, {{27.7, 798.0}, {176.7, 48.0}}
+                                                    Other, 0x111be6e40, {{27.7, 798.0}, {52.0, 48.0}}
+                                                      Other, 0x111be6f80, {{32.7, 803.0}, {42.0, 38.0}}
+                                                        Other, 0x111be70c0, {{32.7, 803.0}, {42.0, 38.0}}
+                                                          Button, 0x111be7200, {{32.7, 803.0}, {42.0, 38.0}}, label: 'Markup'
+                                                    Other, 0x111be7340, {{83.7, 798.0}, {60.0, 48.0}}
+                                                      Other, 0x111be7480, {{88.7, 803.0}, {50.0, 38.0}}
+                                                        Other, 0x111be75c0, {{88.7, 803.0}, {50.0, 38.0}}
+                                                          Button, 0x111be7700, {{88.7, 803.0}, {50.0, 38.0}}, label: 'Form Filling'
+                                                    Other, 0x111be7840, {{147.7, 798.0}, {56.7, 48.0}}
+                                                      Other, 0x111be7980, {{152.7, 803.0}, {46.7, 38.0}}
+                                                        Other, 0x111be7ac0, {{152.7, 803.0}, {46.7, 38.0}}
+                                                          Button, 0x111be7c00, {{152.7, 803.0}, {46.7, 38.0}}, label: 'Selection'
+                                                  Other, 0x111be7d40, {{216.3, 798.0}, {158.3, 48.0}}
+                                                    Other, 0x111be7e80, {{216.3, 798.0}, {48.0, 48.0}}
+                                                      Other, 0x111be0000, {{221.3, 803.0}, {38.0, 38.0}}
+                                                        Other, 0x111be0140, {{221.3, 803.0}, {38.0, 38.0}}
+                                                          Button, 0x111be0280, {{221.3, 803.0}, {38.0, 38.0}}, label: 'Info'
+                                                    Other, 0x111be03c0, {{268.3, 798.0}, {50.7, 48.0}}
+                                                      Other, 0x111be0500, {{273.3, 803.0}, {40.7, 38.0}}
+                                                        Other, 0x111be0640, {{273.3, 803.0}, {40.7, 38.0}}
+                                                          Button, 0x111be0780, {{273.3, 803.0}, {40.7, 38.0}}, label: 'Share'
+                                                    Other, 0x111be08c0, {{323.0, 798.0}, {51.7, 48.0}}
+                                                      Other, 0x111be0a00, {{328.0, 803.0}, {41.7, 38.0}}
+                                                        Other, 0x111be0b40, {{328.0, 803.0}, {41.7, 38.0}}
+                                                          Button, 0x111be0c80, {{328.0, 803.0}, {41.7, 38.0}}, label: 'Search'
+                                      Other, 0x111be0dc0, {{0.0, 0.0}, {402.0, 874.0}}
+                                        Toolbar, 0x111be0f00, {{0.0, 0.0}, {402.0, 874.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                          Other, 0x111be1040, {{0.0, 0.0}, {402.0, 874.0}}
+                                    Other, 0x111be1180, {{0.0, 0.0}, {402.0, 874.0}}
+                                      Other, 0x111be12c0, {{0.0, 0.0}, {402.0, 874.0}}
+                            Toolbar, 0x111be1400, {{0.0, 0.0}, {402.0, 874.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x111be1540, {{0.0, 0.0}, {402.0, 874.0}}
+                        Other, 0x111be1680, {{0.0, 0.0}, {402.0, 874.0}}
+                          Other, 0x111be17c0, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x111be1900, {{0.0, 0.0}, {402.0, 874.0}}
+              Other, 0x111be1a40, {{0.0, 62.0}, {402.0, 778.0}}
+    Window, 0x111be1b80, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x111be1cc0, {{0.0, 0.0}, {402.0, 874.0}}
+        Other, 0x111be1e00, {{0.0, 0.0}, {402.0, 874.0}}
+Path to element:
+ →Application, 0x111a3c780, pid: 11918, label: 'Preview'
+Query chain:
+ →Find: Application 'com.apple.Preview'
+  Output: {
+    Application, 0x111be1f40, pid: 11918, label: 'Preview'
+  }

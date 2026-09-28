@@ -1,0 +1,35 @@
+{
+  "capturedAt": "2026-09-28T20:02:52.814945+00:00",
+  "sourceSnapshot": "docs/evidence/native/ux-refined-ipad-fix-source.json",
+  "sourceHashesUnchangedThroughBuild": true,
+  "buildResult": "TEST BUILD SUCCEEDED",
+  "buildLog": ".build/ux-refined-ipad-fix-build.log",
+  "frozenProducts": ".build/ux-refined-ipad-fix-products",
+  "configuration": "Release",
+  "scheme": "atepdfUI",
+  "buildSha256": {
+    "atepdf": "873e98d4e51d8a5adee1ae22662f9de34f8e8a9401cd4855df4beb8502e99265",
+    "main.jsbundle": "93bc158f2ae193993fd8a71acc5e35217f9360c8dd0c741a257f55bf87aeb125",
+    "Info.plist": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c"
+  },
+  "installedIPad": {
+    "device": "526CAD4B-89C5-49C1-8CEE-F65602AA0DEE",
+    "path": "/Users/shrey/Library/Developer/CoreSimulator/Devices/526CAD4B-89C5-49C1-8CEE-F65602AA0DEE/data/Containers/Bundle/Application/F2116C5E-3D0B-43A3-A5A3-FD90FCF8A6A4/atepdf.app",
+    "sha256": {
+      "atepdf": "873e98d4e51d8a5adee1ae22662f9de34f8e8a9401cd4855df4beb8502e99265",
+      "main.jsbundle": "93bc158f2ae193993fd8a71acc5e35217f9360c8dd0c741a257f55bf87aeb125",
+      "Info.plist": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c"
+    },
+    "matchesCapturedBuild": true
+  },
+  "installedIPhone": {
+    "device": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+    "path": "/Users/shrey/Library/Developer/CoreSimulator/Devices/D68C4547-67D3-4960-AAB9-D85FD786D6FC/data/Containers/Bundle/Application/57B0BE69-5C8A-4454-8CD3-7B47F20817F2/atepdf.app",
+    "sha256": {
+      "atepdf": "873e98d4e51d8a5adee1ae22662f9de34f8e8a9401cd4855df4beb8502e99265",
+      "main.jsbundle": "93bc158f2ae193993fd8a71acc5e35217f9360c8dd0c741a257f55bf87aeb125",
+      "Info.plist": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c"
+    },
+    "matchesCapturedBuild": true
+  }
+}

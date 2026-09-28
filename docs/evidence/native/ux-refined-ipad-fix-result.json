@@ -1,0 +1,87 @@
+{
+  "recordedAt": "2026-09-28T20:08:36.876285+00:00",
+  "status": "Scoped native layout fix accepted by unchanged simulator regressions",
+  "sourceSnapshot": "docs/evidence/native/ux-refined-ipad-fix-source.json",
+  "buildProof": "docs/evidence/native/ux-refined-ipad-fix-build-proof.json",
+  "frozenProducts": ".build/ux-refined-ipad-fix-products",
+  "sourceHashes": {
+    "apps/universal/src/platform/Preview.native.tsx": "edaf33b82e2510cac8a268aa9eef361a354aa0914818a0c49b64a0254339aa33",
+    "apps/universal/src/components/assistant-ui/elements/thread.aui.tsx": "d4267d8cb147789f26e18d1bc8b45e3ad73c939f76edad3d810b16a8a996309e",
+    "tests/native/ios/AtepdfWorkflowUITests.swift": "5a35b9a133d7ade3bc6409f3ba5fdc5871d39f20e895d5e43fc6b2c2890d6f4c"
+  },
+  "sourceStillMatchesTestedBuild": true,
+  "implementation": [
+    "Wide native preview uses one44pt control row only with visible keyboard and measured conversation under260pt",
+    "Raster area uses measured remaining conversation height; existing zoom/page/render contracts preserved",
+    "Native-only ThreadViewport measured-region reveal after two layout frames keeps opened preview controls and raster in view after keyboard resize",
+    "No changes to web follow handlers, native uncontrolled composer, PDF engines, store, planner or app identities"
+  ],
+  "validation": {
+    "nativeTypeScript": "passed using bundled Node; first shell pnpm invocation failed only because node was absent from PATH",
+    "webTypeScript": "passed",
+    "releaseApplicationBuild": "TEST BUILD SUCCEEDED",
+    "iPadDefaultLandscape": {
+      "result": "1/1 passed",
+      "seconds": 50.347,
+      "summary": "ux-refined-ipad-fix-landscape-summary.json",
+      "conversationHeight": 176,
+      "keyboardHeight": 370,
+      "rasterVisibleHeight": 108,
+      "navigation": "y112,h44 within viewport y108..284",
+      "screenshot": "ux-refined-ipad-fix-landscape-ipad-landscape-simultaneous-preview-keyboard.png"
+    },
+    "iPadAccessibilityLargeLandscape": {
+      "result": "1/1 passed",
+      "seconds": 51.256,
+      "summary": "ux-refined-ipad-fix-ax-landscape-summary.json",
+      "conversationHeight": 156.5,
+      "keyboardHeight": 370,
+      "rasterVisibleHeight": 88,
+      "navigation": "y112.5,h44 within viewport y108..264.5",
+      "screenshot": "ux-refined-ipad-fix-ax-landscape-ipad-landscape-simultaneous-preview-keyboard.png"
+    },
+    "iPhoneCoreSmoke": {
+      "result": "2/2 passed",
+      "seconds": 76.842,
+      "summary": "ux-refined-ipad-fix-iphone-summary.json",
+      "methods": [
+        {
+          "method": "testHardwareKeyboardBundledMergePreviewRemovalUndoAndShareDismissal",
+          "seconds": 65.907
+        },
+        {
+          "method": "testNativeComposerPreservesFastTypingAndBackspace",
+          "seconds": 10.935
+        }
+      ],
+      "workflow": "Actual bundled merge, native preview, exact typed page removal, undo, system share presentation/dismissal, exact typing/backspace",
+      "inputConfiguration": "Hardware input with0pt visible software keyboard; original software-keyboard strict test unchanged"
+    }
+  },
+  "regressionAssertions": "Existing>80pt visible raster, actual>100pt software keyboard, navigation visibility, composer/Send clearance and hittability, portrait return and Close all unchanged for both iPad passes. No private idle bypass.",
+  "settingsRestoration": "ux-refined-ipad-fix-setting-restore.json; original large restored/read back, test teardown portrait",
+  "priorFailure": "ux-refined-ipad-landscape-result.json preserves pre-fix69pt raster and offscreen navigation failure",
+  "limits": [
+    "Simulator acceptance only; physical-device/signing/distribution remain separate",
+    "iPhone software-keyboard clearance remains unavailable in current simulator input configuration",
+    "Prior candidate5 exact save/restart/reopen and independent PDF.js remain valid for that recorded binary; scoped final layout build smoke exercised share dismissal without another destination export",
+    "Parent owns final shared-thread web regression results"
+  ],
+  "noOldSourceAccess": true,
+  "paidCalls": 0,
+  "next": "Parent final web regression and evidence consolidation; no additional native runtime work needed for this scoped fix.",
+  "implementationCommit": "8ba3a5b68227077c67cab75af36df6e7832c8887",
+  "commitBinding": {
+    "verifiedAt": "2026-09-28T20:09:04.722127+00:00",
+    "allCapturedFileHashesStillMatch": 155,
+    "trackedDiffAgainstImplementationCommit": "empty for all captured sources",
+    "agentCreatedCommit": false,
+    "parentCommittedImplementation": true
+  },
+  "parentReportedChecks": {
+    "webCandidate8": "31/31 passed50.4s",
+    "core": "72 passed",
+    "NextAndExpoTypeScript": "passed",
+    "scope": "Reported by parent; separate evidence is retained by parent."
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "checkedAt": "2026-09-28T20:33:59.550318+00:00",
+  "immutableProduct": "/Users/shrey/Documents/ChatGPT/atepdf/.build/ux-discovery-final-products/Release-iphonesimulator/atepdf.app",
+  "devices": {
+    "D68C4547-67D3-4960-AAB9-D85FD786D6FC": {
+      "appPath": "/Users/shrey/Library/Developer/CoreSimulator/Devices/D68C4547-67D3-4960-AAB9-D85FD786D6FC/data/Containers/Bundle/Application/FF619E4F-C510-4D16-9C63-783B18B84D25/atepdf.app",
+      "files": {
+        "atepdf": {
+          "SHA256": "79793194cd48220a61c131ee95358d54797b70d2af56efb9ed7899f4a4b81912",
+          "matchesCapturedProduct": true
+        },
+        "main.jsbundle": {
+          "SHA256": "c24835f44e7158232b8ced127af979323307947b0b27853462f9cc3f55b1830b",
+          "matchesCapturedProduct": true
+        },
+        "Info.plist": {
+          "SHA256": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c",
+          "matchesCapturedProduct": true
+        }
+      }
+    },
+    "526CAD4B-89C5-49C1-8CEE-F65602AA0DEE": {
+      "appPath": "/Users/shrey/Library/Developer/CoreSimulator/Devices/526CAD4B-89C5-49C1-8CEE-F65602AA0DEE/data/Containers/Bundle/Application/B6EEB5B3-1110-46FF-A2F8-C71E30332F1E/atepdf.app",
+      "files": {
+        "atepdf": {
+          "SHA256": "79793194cd48220a61c131ee95358d54797b70d2af56efb9ed7899f4a4b81912",
+          "matchesCapturedProduct": true
+        },
+        "main.jsbundle": {
+          "SHA256": "c24835f44e7158232b8ced127af979323307947b0b27853462f9cc3f55b1830b",
+          "matchesCapturedProduct": true
+        },
+        "Info.plist": {
+          "SHA256": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c",
+          "matchesCapturedProduct": true
+        }
+      }
+    }
+  }
+}

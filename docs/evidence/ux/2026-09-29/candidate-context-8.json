@@ -1,0 +1,24 @@
+{
+  "id": "ae644026-0959-4aef-801b-a7db84776776",
+  "protocol": "atepdf-beta-v1",
+  "state": "running",
+  "pid": 39356,
+  "localOnly": true,
+  "shareWithDevices": null,
+  "buildChanged": false,
+  "build": {
+    "site": "/private/tmp/atepdf-ux-tDVWpF/apps/universal/dist-web",
+    "indexSha256": "c7b1daae9a9523f885b1b9a06c1e44eaeb8ffa25fd27591674cbc05d36507af1",
+    "indexMtimeMs": 1790625856637.1716,
+    "gatewaySha256": "acdb4c34b50e0ca57d28d7cdf0398906faf375c3bfc4f18f4533a2ab274ae0a5"
+  },
+  "planner": {
+    "connected": false,
+    "enabled": false,
+    "remaining": 0
+  },
+  "url": "http://localhost:3213",
+  "log": "/private/tmp/atepdf-ux-tDVWpF/.local/beta/ae644026-0959-4aef-801b-a7db84776776/server.log",
+  "startedAt": "2026-09-28T20:04:17.020Z",
+  "reused": false
+}

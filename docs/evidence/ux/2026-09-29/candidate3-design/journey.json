@@ -1,0 +1,227 @@
+[
+  {
+    "viewport": {
+      "name": "desktop",
+      "width": 1440,
+      "height": 1000
+    },
+    "state": "empty",
+    "screenshot": "desktop-empty.png",
+    "text": "Processed on your device\nDrop files here\nThen tell me what you’d like to do.\nChoose files\nTry the two sample PDFs\nMerge\nCompress\nMake searchable\nYour files stay on this device"
+  },
+  {
+    "viewport": {
+      "name": "desktop",
+      "width": 1440,
+      "height": 1000
+    },
+    "state": "import",
+    "screenshot": "desktop-import.png",
+    "text": "Processed on your device\nbrief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge\nCompress\nMake searchable\n2 originals in this chat"
+  },
+  {
+    "viewport": {
+      "name": "desktop",
+      "width": 1440,
+      "height": 1000
+    },
+    "state": "merge",
+    "screenshot": "desktop-merge.png",
+    "text": "Processed on your device\nbrief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nMerged PDF\n3 pages · 3.1 kB\nCurrent result\nSave PDF\nPreview\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent: Merged PDF · 3 pages"
+  },
+  {
+    "viewport": {
+      "name": "desktop",
+      "width": 1440,
+      "height": 1000
+    },
+    "state": "preview",
+    "screenshot": "desktop-preview.png",
+    "text": "Processed on your device\nbrief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nMerged PDF\n3 pages · 3.1 kB\nCurrent result\nSave PDF\nHide preview\nRead-only preview\nFit\nPage 1 of 3\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent: Merged PDF · 3 pages"
+  },
+  {
+    "viewport": "desktop",
+    "state": "preview-next",
+    "page": "Page 2 of 3"
+  },
+  {
+    "viewport": {
+      "name": "desktop",
+      "width": 1440,
+      "height": 1000
+    },
+    "state": "remove",
+    "screenshot": "desktop-remove.png",
+    "text": "Processed on your device\nbrief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nMerged PDF\n3 pages · 3.1 kB\nEarlier result\nSave PDF\nPreview\nRemove page 2\nI removed page 2. Here’s the new copy.\nPDF with page 2 removed\n2 pages · 2.3 kB\nCurrent result\nSave PDF\nPreview\nUndo\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent: PDF with page 2 removed · 2 pages"
+  },
+  {
+    "viewport": {
+      "name": "desktop",
+      "width": 1440,
+      "height": 1000
+    },
+    "state": "undo",
+    "screenshot": "desktop-undo.png",
+    "text": "Processed on your device\nbrief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nMerged PDF\n3 pages · 3.1 kB\nEarlier result\nSave PDF\nPreview\nRemove page 2\nI removed page 2. Here’s the new copy.\nPDF with page 2 removed\n2 pages · 2.3 kB\nEarlier result\nSave PDF\nPreview\nUndo the last change.\nI restored your previous result. Your original files are unchanged.\nMerged PDF\n3 pages · 3.1 kB\nCurrent result\nSave PDF\nPreview\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent: Merged PDF · 3 pages"
+  },
+  {
+    "viewport": {
+      "name": "desktop",
+      "width": 1440,
+      "height": 1000
+    },
+    "state": "page-error",
+    "screenshot": "desktop-page-error.png",
+    "text": "Processed on your device\nbrief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nMerged PDF\n3 pages · 3.1 kB\nEarlier result\nSave PDF\nPreview\nRemove page 2\nI removed page 2. Here’s the new copy.\nPDF with page 2 removed\n2 pages · 2.3 kB\nEarlier result\nSave PDF\nPreview\nUndo the last change.\nI restored your previous result. Your original files are unchanged.\nMerged PDF\n3 pages · 3.1 kB\nCurrent result\nSave PDF\nPreview\nTell me what you’d like to do next.\nRemove page 99\nThis PDF has 3 pages. Choose a page from 1 to 3. Your files are unchanged.\nMerge\nCompress\nMake searchable\nCurrent: Merged PDF · 3 pages"
+  },
+  {
+    "viewport": {
+      "name": "desktop",
+      "width": 1440,
+      "height": 1000
+    },
+    "state": "no-ai-help",
+    "screenshot": "desktop-no-ai-help.png",
+    "text": "Processed on your device\nbrief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nMerged PDF\n3 pages · 3.1 kB\nEarlier result\nSave PDF\nPreview\nRemove page 2\nI removed page 2. Here’s the new copy.\nPDF with page 2 removed\n2 pages · 2.3 kB\nEarlier result\nSave PDF\nPreview\nUndo the last change.\nI restored your previous result. Your original files are unchanged.\nMerged PDF\n3 pages · 3.1 kB\nCurrent result\nSave PDF\nPreview\nTell me what you’d like to do next.\nRemove page 99\nThis PDF has 3 pages. Choose a page from 1 to 3. Your files are unchanged.\nWhat can you do?\nI can merge PDFs, remove pages, make scanned English PDFs searchable, and compress supported images inside a PDF. Add PDFs, then use the quick actions or type a request such as “remove page 2”.\n\nOpenAI is not connected yet. You can connect it here for conversational help.\nAI connection\nMerge\nCompress\nMake searchable\nCurrent: Merged PDF · 3 pages"
+  },
+  {
+    "viewport": {
+      "name": "phone",
+      "width": 390,
+      "height": 844
+    },
+    "state": "empty",
+    "screenshot": "phone-empty.png",
+    "text": "Add your files\nThen tell me what you’d like to do.\nChoose files\nTry the two sample PDFs\nMerge\nCompress\nMake searchable\nYour files stay on this device"
+  },
+  {
+    "viewport": {
+      "name": "phone",
+      "width": 390,
+      "height": 844
+    },
+    "state": "merge",
+    "screenshot": "phone-merge.png",
+    "text": "brief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nMerged PDF\n3 pages · 3.1 kB\nCurrent result\nSave PDF\nPreview\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent: Merged PDF · 3 pages"
+  },
+  {
+    "viewport": {
+      "name": "phone",
+      "width": 390,
+      "height": 844
+    },
+    "state": "preview",
+    "screenshot": "phone-preview.png",
+    "text": "brief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nMerged PDF\n3 pages · 3.1 kB\nCurrent result\nSave PDF\nHide preview\nRead-only preview\nFit\nPage 1 of 3\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent: Merged PDF · 3 pages"
+  },
+  {
+    "viewport": "phone",
+    "state": "preview-next",
+    "page": "Page 2 of 3"
+  },
+  {
+    "viewport": {
+      "name": "phone",
+      "width": 390,
+      "height": 844
+    },
+    "state": "remove",
+    "screenshot": "phone-remove.png",
+    "text": "brief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nMerged PDF\n3 pages · 3.1 kB\nEarlier result\nSave PDF\nPreview\nRemove page 2\nI removed page 2. Here’s the new copy.\nPDF with page 2 removed\n2 pages · 2.3 kB\nCurrent result\nSave PDF\nPreview\nUndo\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent: PDF with page 2 removed · 2 pages"
+  },
+  {
+    "viewport": {
+      "name": "phone",
+      "width": 390,
+      "height": 844
+    },
+    "state": "undo",
+    "screenshot": "phone-undo.png",
+    "text": "brief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nMerged PDF\n3 pages · 3.1 kB\nEarlier result\nSave PDF\nPreview\nRemove page 2\nI removed page 2. Here’s the new copy.\nPDF with page 2 removed\n2 pages · 2.3 kB\nEarlier result\nSave PDF\nPreview\nUndo the last change.\nI restored your previous result. Your original files are unchanged.\nMerged PDF\n3 pages · 3.1 kB\nCurrent result\nSave PDF\nPreview\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent: Merged PDF · 3 pages"
+  },
+  {
+    "viewport": {
+      "name": "phone",
+      "width": 390,
+      "height": 844
+    },
+    "state": "page-error",
+    "screenshot": "phone-page-error.png",
+    "text": "brief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nMerged PDF\n3 pages · 3.1 kB\nEarlier result\nSave PDF\nPreview\nRemove page 2\nI removed page 2. Here’s the new copy.\nPDF with page 2 removed\n2 pages · 2.3 kB\nEarlier result\nSave PDF\nPreview\nUndo the last change.\nI restored your previous result. Your original files are unchanged.\nMerged PDF\n3 pages · 3.1 kB\nCurrent result\nSave PDF\nPreview\nTell me what you’d like to do next.\nRemove page 99\nThis PDF has 3 pages. Choose a page from 1 to 3. Your files are unchanged.\nMerge\nCompress\nMake searchable\nCurrent: Merged PDF · 3 pages"
+  },
+  {
+    "viewport": {
+      "name": "phone",
+      "width": 390,
+      "height": 844
+    },
+    "state": "no-ai-help",
+    "screenshot": "phone-no-ai-help.png",
+    "text": "brief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nMerged PDF\n3 pages · 3.1 kB\nEarlier result\nSave PDF\nPreview\nRemove page 2\nI removed page 2. Here’s the new copy.\nPDF with page 2 removed\n2 pages · 2.3 kB\nEarlier result\nSave PDF\nPreview\nUndo the last change.\nI restored your previous result. Your original files are unchanged.\nMerged PDF\n3 pages · 3.1 kB\nCurrent result\nSave PDF\nPreview\nTell me what you’d like to do next.\nRemove page 99\nThis PDF has 3 pages. Choose a page from 1 to 3. Your files are unchanged.\nWhat can you do?\nI can merge PDFs, remove pages, make scanned English PDFs searchable, and compress supported images inside a PDF. Add PDFs, then use the quick actions or type a request such as “remove page 2”.\n\nOpenAI is not connected yet. You can connect it here for conversational help.\nAI connection\nMerge\nCompress\nMake searchable\nCurrent: Merged PDF · 3 pages"
+  },
+  {
+    "viewport": {
+      "name": "compact",
+      "width": 320,
+      "height": 568
+    },
+    "state": "empty",
+    "screenshot": "compact-empty.png",
+    "text": "Add your files\nThen tell me what you’d like to do.\nChoose files\nTry the two sample PDFs\nMerge\nCompress\nMake searchable\nYour files stay on this device"
+  },
+  {
+    "viewport": {
+      "name": "compact",
+      "width": 320,
+      "height": 568
+    },
+    "state": "merge",
+    "screenshot": "compact-merge.png",
+    "text": "brief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nMerged PDF\n3 pages · 3.1 kB\nCurrent result\nSave PDF\nPreview\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent: Merged PDF · 3 pages"
+  },
+  {
+    "viewport": {
+      "name": "compact",
+      "width": 320,
+      "height": 568
+    },
+    "state": "preview",
+    "screenshot": "compact-preview.png",
+    "text": "brief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nMerged PDF\n3 pages · 3.1 kB\nCurrent result\nSave PDF\nHide preview\nRead-only preview\nFit\nPage 1 of 3\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent: Merged PDF · 3 pages"
+  },
+  {
+    "viewport": "compact",
+    "state": "preview-next",
+    "page": "Page 2 of 3"
+  },
+  {
+    "viewport": {
+      "name": "compact",
+      "width": 320,
+      "height": 568
+    },
+    "state": "remove",
+    "screenshot": "compact-remove.png",
+    "text": "brief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nMerged PDF\n3 pages · 3.1 kB\nEarlier result\nSave PDF\nPreview\nRemove page 2\nI removed page 2. Here’s the new copy.\nPDF with page 2 removed\n2 pages · 2.3 kB\nCurrent result\nSave PDF\nPreview\nUndo\nTell me what you’d like to do next.\nMerge\nCompress\nMake searchable\nCurrent: PDF with page 2 removed · 2 pages"
+  },
+  {
+    "viewport": {
+      "name": "compact",
+      "width": 320,
+      "height": 568
+    },
+    "state": "no-ai-help",
+    "screenshot": "compact-no-ai-help.png",
+    "text": "brief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nMerged PDF\n3 pages · 3.1 kB\nEarlier result\nSave PDF\nPreview\nRemove page 2\nI removed page 2. Here’s the new copy.\nPDF with page 2 removed\n2 pages · 2.3 kB\nEarlier result\nSave PDF\nPreview\nUndo the last change.\nI restored your previous result. Your original files are unchanged.\nMerged PDF\n3 pages · 3.1 kB\nCurrent result\nSave PDF\nPreview\nTell me what you’d like to do next.\nRemove page 99\nThis PDF has 3 pages. Choose a page from 1 to 3. Your files are unchanged.\nWhat can you do?\nI can merge PDFs, remove pages, make scanned English PDFs searchable, and compress supported images inside a PDF. Add PDFs, then use the quick actions or type a request such as “remove page 2”.\n\nOpenAI is not connected yet. You can connect it here for conversational help.\nAI connection\nMerge\nCompress\nMake searchable\nCurrent: Merged PDF · 3 pages"
+  },
+  {
+    "viewport": {
+      "name": "compact",
+      "width": 320,
+      "height": 568
+    },
+    "state": "privacy",
+    "screenshot": "compact-privacy.png",
+    "text": "brief.pdf\n3.1 kB · Original · 1\nappendix.pdf\n2.1 kB · Original · 2\nI’ve added 2 PDFs.\nYour 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.\nMerge my PDFs.\nI merged your PDFs in the order added. Here’s your PDF.\nMerged PDF\n3 pages · 3.1 kB\nEarlier result\nSave PDF\nPreview\nRemove page 2\nI removed page 2. Here’s the new copy.\nPDF with page 2 removed\n2 pages · 2.3 kB\nEarlier result\nSave PDF\nPreview\nUndo the last change.\nI restored your previous result. Your original files are unchanged.\nMerged PDF\n3 pages · 3.1 kB\nCurrent result\nSave PDF\nPreview\nTell me what you’d like to do next.\nRemove page 99\nThis PDF has 3 pages. Choose a page from 1 to 3. Your files are unchanged.\nWhat can you do?\nI can merge PDFs, remove pages, make scanned English PDFs searchable, and compress supported images inside a PDF. Add PDFs, then use the quick actions or type a request such as “remove page 2”.\n\nOpenAI is not connected yet. You can connect it here for conversational help.\nAI connection\nMerge\nCompress\nMake searchable\nCurrent: Merged PDF · 3 pages\nProcessed on your device\nPDF files, previews and recognised text stay on this device. PDF operations run in local engines.\nWhen AI is enabled, chat requests and quick actions send your instruction and anonymous file references, page counts and sizes for planning. Filenames, passwords, paths, checksums and document contents are excluded. Your OpenAI key stays in the local server, outside the app.\nSave before closing. Chat and files stay in this session. Saving to a cloud folder or sharing through a chosen provider may transfer the saved file outside atepdf.\nGot it"
+  }
+]

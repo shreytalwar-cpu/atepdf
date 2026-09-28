@@ -1,0 +1,68 @@
+{
+  "recordedAt": "2026-09-28T19:17:38.901063+00:00",
+  "status": "PASS: full retained original-source Save to Files, app restart, exact Files reopen and settled system Preview rendering in one run; independent PDF.js validation of that exact saved copy also passed.",
+  "test": "AtepdfExportUITests/testSaveToLocalFilesAndReopenAfterRestart",
+  "resultBundle": ".build/ux-export-02.xcresult",
+  "log": ".build/ux-export-02.log",
+  "summary": "docs/evidence/native/ux-export-02-summary.json",
+  "buildProof": "docs/evidence/native/ux-export-02-build-proof.json",
+  "passed": 1,
+  "failed": 0,
+  "testDurationSeconds": 87.733,
+  "runnerDurationSeconds": 92.591,
+  "explicitDeviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+  "parallelTesting": false,
+  "testSourceSha256": "2da4f82c5352ba1dc76a25f33f811a867b4f6571916d91aa16311154367abf88",
+  "savedFileName": "8169e178-718f-4acb-80c8-725a73b91632.pdf",
+  "savedDestination": "On My iPhone/atepdf-beta-8169e178-718f-4acb-80c8-725a73b91632/8169e178-718f-4acb-80c8-725a73b91632.pdf",
+  "directLocalParentProvenByUI": true,
+  "atepdfRestartedBeforeReopen": true,
+  "viewer": "com.apple.Preview",
+  "settledRenderedScreenshot": "docs/evidence/native/ux-export-02-independent-reopen.png",
+  "renderObservation": [
+    "Exact generated UUID in Preview navigation title",
+    "1 of 3 shown",
+    "Project brief and Page marker A1 rendered",
+    "Working notes / Page marker A2 beginning below first page"
+  ],
+  "accessibilityMarkers": [
+    "A1",
+    "A2",
+    "B1"
+  ],
+  "independentSavedByteValidation": "docs/evidence/native/ux-export-02-independent-reader.json",
+  "iterations": [
+    {
+      "index": 1,
+      "kind": "compile only",
+      "result": "passed",
+      "note": "Code review then replaced a positional heading query with an exact observed-label query before any runtime test."
+    },
+    {
+      "index": 2,
+      "kind": "compile and retained full workflow",
+      "build": "passed",
+      "test": "1/1 passed"
+    }
+  ],
+  "previousFailureReference": "docs/evidence/native/beta-iphone-export-retained-result.json",
+  "functionalChange": "Identify visible current directory from its navigation title, permit generic Back only from a UUID-named local QA folder, require title change after each parent action, prove newly created folder directly under On My iPhone by returning to root and re-entering the exact cell.",
+  "preservation": "Original PDFs and all unrelated Files entries were preserved. Saved output retained. No production source edit, paid API call, global simulator-default change or Mac desktop interaction.",
+  "scope": "Simulator only; physical-device and distribution acceptance not implied.",
+  "artifacts": [
+    "docs/evidence/native/ux-export-02-saved-identity.txt",
+    "docs/evidence/native/ux-export-02-independent-reopen.png",
+    "docs/evidence/native/ux-export-02-independent-reopen-hierarchy.txt",
+    "docs/evidence/native/ux-export-02-after-atepdf-restart.png",
+    "docs/evidence/native/ux-export-02-after-atepdf-restart-hierarchy.txt",
+    "docs/evidence/native/ux-export-02-share-completed.png",
+    "docs/evidence/native/ux-export-02-share-completed-hierarchy.txt",
+    "docs/evidence/native/ux-export-02-local-destination-before-save.png",
+    "docs/evidence/native/ux-export-02-local-destination-before-save-hierarchy.txt",
+    "docs/evidence/native/ux-export-02-new-folder-at-local-root.png",
+    "docs/evidence/native/ux-export-02-new-folder-at-local-root-hierarchy.txt",
+    "docs/evidence/native/ux-export-02-source-identity.txt"
+  ],
+  "independentReaderStatus": "PASS: exact actual provider copy reread with PDF.js, three pages A1/A2/B1.",
+  "savedCopySha256": "9e8985b73841adbcaa7c6ded39cebe18d08aa85e01b700a3f2bf707e07eb0095"
+}

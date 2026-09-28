@@ -1,0 +1,128 @@
+{
+  "sha256": "b2251413e45e5bce229fda1c6b9dc1b25ebaf3be712bd41b9d966ac270983f5d",
+  "bytes": 6795614,
+  "gzip9": 917364,
+  "brotli11": 573142,
+  "moduleCount": 4752,
+  "iconModules": 3708,
+  "iconModuleBytes": 3080751,
+  "barrels": [
+    {
+      "id": 407,
+      "bytes": 632423,
+      "dependencies": 1857
+    },
+    {
+      "id": 2872,
+      "bytes": 633413,
+      "dependencies": 1858
+    },
+    {
+      "id": 2873,
+      "bytes": 216059,
+      "dependencies": 1854
+    }
+  ],
+  "largest": [
+    {
+      "id": 2872,
+      "bytes": 633413,
+      "sample": "__d(function(e,t,n,r,u,f,o){\"use strict\";\n/**\n   * @license lucide-react v1.48.0 - ISC\n   *\n   * This source code is licensed under the ISC license.\n   * See the LICENSE file in the root directory of this source tree.\n   */function i(e){return e&&e._"
+    },
+    {
+      "id": 407,
+      "bytes": 632423,
+      "sample": "__d(function(e,t,n,r,u,f,o){\"use strict\";function i(e){return e&&e.__esModule?e:{default:e}}Object.defineProperty(f,'__esModule',{value:!0}),Object.defineProperty(f,\"AArrowDown\",{enumerable:!0,get:function(){return a.default}}),Object.defineProperty("
+    },
+    {
+      "id": 2873,
+      "bytes": 216059,
+      "sample": "__d(function(g,r,i,a,m,_e,d){\"use strict\";function e(e){return e&&e.__esModule?e:{default:e}}Object.defineProperty(_e,'__esModule',{value:!0}),Object.defineProperty(_e,\"AArrowUp\",{enumerable:!0,get:function(){return n.default}}),Object.defineProperty"
+    },
+    {
+      "id": 2858,
+      "bytes": 186218,
+      "sample": "__d(function(e,s,t,a,r,p,i){\"use strict\";r.exports=P,r.exports.default=P;const o={$schema:\"https://json-schema.org/draft/2020-12/schema\",title:\"Attenlo planner request 1.0\",type:\"object\",properties:{schemaVersion:{const:\"1.0\"},requestId:{type:\"string"
+    },
+    {
+      "id": 37,
+      "bytes": 175442,
+      "sample": "__d(function(e,n,t,r,l,a,o){\n/**\n   * @license React\n   * react-dom-client.production.js\n   *\n   * Copyright (c) Meta Platforms, Inc. and affiliates.\n   *\n   * This source code is licensed under the MIT license found in the\n   * LICENSE file in the r"
+    },
+    {
+      "id": 2862,
+      "bytes": 167241,
+      "sample": "__d(function(e,s,t,p,r,a,i){\"use strict\";r.exports=y,r.exports.default=y;const n={$schema:\"https://json-schema.org/draft/2020-12/schema\",type:\"object\",properties:{schemaVersion:{const:\"1.0\"},requestId:{type:\"string\",pattern:\"^req_[A-Za-z0-9_]{1,80}$\""
+    },
+    {
+      "id": 4746,
+      "bytes": 152728,
+      "sample": "__d(function(e,s,t,a,p,r,i){\"use strict\";p.exports=h,p.exports.default=h;const o={$schema:\"https://json-schema.org/draft/2020-12/schema\",title:\"Attenlo planner response 1.0\",type:\"object\",properties:{schemaVersion:{const:\"1.0\"},status:{enum:[\"plan\",\""
+    },
+    {
+      "id": 2799,
+      "bytes": 30892,
+      "sample": "__d(function(g,r,_i,a,m,e,d){\"use strict\";Object.defineProperty(e,'__esModule',{value:!0}),Object.defineProperty(e,\"createTailwindMerge\",{enumerable:!0,get:function(){return W}}),Object.defineProperty(e,\"extendTailwindMerge\",{enumerable:!0,get:functi"
+    },
+    {
+      "id": 2786,
+      "bytes": 30885,
+      "sample": "__d(function(g,r,_i,_a,_m,e,d){\"use strict\";Object.defineProperty(e,'__esModule',{value:!0}),Object.defineProperty(e,\"ExternalThread\",{enumerable:!0,get:function(){return Q}});var t=r(d[0]),n=r(d[1]),o=r(d[2]),s=r(d[3]),a=r(d[4]),i=r(d[5]),c=r(d[6]),"
+    },
+    {
+      "id": 147,
+      "bytes": 28305,
+      "sample": "__d(function(g,_r,i,_a,m,_e,_d){\"use strict\";function e(e){return e&&e.__esModule?e:{default:e}}Object.defineProperty(_e,'__esModule',{value:!0}),Object.defineProperty(_e,\"default\",{enumerable:!0,get:function(){return Y}});var t=_r(_d[0]),s=e(_r(_d[1"
+    },
+    {
+      "id": 2679,
+      "bytes": 27298,
+      "sample": "__d(function(g,_r,_i3,a,m,_e,_d){\"use strict\";function e(e){return e&&e.__esModule?e:{default:e}}Object.defineProperty(_e,'__esModule',{value:!0}),Object.defineProperty(_e,\"default\",{enumerable:!0,get:function(){return A}});var t=e(_r(_d[0])),s=e(_r("
+    },
+    {
+      "id": 195,
+      "bytes": 24013,
+      "sample": "__d(function(g,r,i,a,m,_e,d){\"use strict\";function e(e){return e&&e.__esModule?e:{default:e}}Object.defineProperty(_e,'__esModule',{value:!0}),Object.defineProperty(_e,\"converter\",{enumerable:!0,get:function(){return be.default}}),Object.defineProper"
+    },
+    {
+      "id": 2662,
+      "bytes": 19052,
+      "sample": "__d(function(g,_r,i,a,_m,_e,d){\"use strict\";Object.defineProperty(_e,'__esModule',{value:!0}),Object.defineProperty(_e,\"LocalThreadRuntimeCore\",{enumerable:!0,get:function(){return b}});var t=_r(d[0]),e=_r(d[1]),s=_r(d[2]),o=_r(d[3]),n=_r(d[4]),r=_r("
+    },
+    {
+      "id": 2782,
+      "bytes": 18663,
+      "sample": "__d(function(g,r,i,a,m,e,d){\"use strict\";Object.defineProperty(e,'__esModule',{value:!0}),Object.defineProperty(e,\"RemoteThreadList\",{enumerable:!0,get:function(){return U}});var t=r(d[0]),n=r(d[1]),s=r(d[2]),o=r(d[3]),h=r(d[4]),c=r(d[5]),u=r(d[6]),l"
+    },
+    {
+      "id": 2563,
+      "bytes": 18631,
+      "sample": "__d(function(g,r,_i,a,m,e,d){\"use strict\";Object.defineProperty(e,'__esModule',{value:!0}),Object.defineProperty(e,\"RemoteThreadListThreadListRuntimeCore\",{enumerable:!0,get:function(){return G}});var t=r(d[0]),i=r(d[1]),s=r(d[2]),h=r(d[3]),n=r(d[4])"
+    },
+    {
+      "id": 2795,
+      "bytes": 18281,
+      "sample": "__d(function(g,r,i,a,m,_e,_d){\"use strict\";function e(e){return e&&e.__esModule?e:{default:e}}Object.defineProperty(_e,'__esModule',{value:!0}),Object.defineProperty(_e,\"useThreadViewport\",{enumerable:!0,get:function(){return q}}),Object.defineProper"
+    },
+    {
+      "id": 2303,
+      "bytes": 17322,
+      "sample": "__d(function(g,r,i,a,m,e,d){\"use strict\";Object.defineProperty(e,'__esModule',{value:!0}),Object.defineProperty(e,\"AssistantProviderBase\",{enumerable:!0,get:function(){return o.AssistantProviderBase}}),Object.defineProperty(e,\"AssistantRuntimeProvide"
+    },
+    {
+      "id": 2548,
+      "bytes": 17103,
+      "sample": "__d(function(g,r,i,_a,m,_e,d){\"use strict\";Object.defineProperty(_e,'__esModule',{value:!0}),Object.defineProperty(_e,\"BaseComposerRuntimeCore\",{enumerable:!0,get:function(){return u}});var t=r(d[0]),s=r(d[1]),e=r(d[2]),n=r(d[3]),a=r(d[4]),o=r(d[5]),"
+    },
+    {
+      "id": 2542,
+      "bytes": 16299,
+      "sample": "__d(function(g,r,_i,a,_m,e,d){\"use strict\";Object.defineProperty(e,'__esModule',{value:!0}),Object.defineProperty(e,\"ExternalStoreThreadRuntimeCore\",{enumerable:!0,get:function(){return M}}),Object.defineProperty(e,\"hasUpcomingMessage\",{enumerable:!0"
+    },
+    {
+      "id": 2571,
+      "bytes": 15508,
+      "sample": "__d(function(g,r,_i,a,_m,e,d){\"use strict\";Object.defineProperty(e,'__esModule',{value:!0}),Object.defineProperty(e,\"extractAuiV0\",{enumerable:!0,get:function(){return N}}),Object.defineProperty(e,\"useAssistantCloudThreadHistoryAdapter\",{enumerable:!"
+    }
+  ]
+}

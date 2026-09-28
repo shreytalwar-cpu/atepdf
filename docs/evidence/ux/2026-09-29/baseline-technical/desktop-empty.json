@@ -1,0 +1,155 @@
+{
+  "title": "atepdf",
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "document": {
+    "scrollWidth": 1440,
+    "scrollHeight": 1000
+  },
+  "text": "Processed on your device\nDrop files here\nThen tell me what you’d like to do.\nChoose files\nTry the two sample PDFs\nMerge\nCompress\nMake searchable\nYour files stay on this device",
+  "buttons": [
+    {
+      "name": "Processed on your device",
+      "disabled": false,
+      "rect": {
+        "x": 1167.328125,
+        "y": 16,
+        "width": 192.671875,
+        "height": 44
+      },
+      "color": "rgb(0, 0, 0)",
+      "background": "rgb(237, 249, 244)",
+      "fontSize": "16px"
+    },
+    {
+      "name": "OpenAI connection",
+      "disabled": false,
+      "rect": {
+        "x": 1364,
+        "y": 16,
+        "width": 44,
+        "height": 44
+      },
+      "color": "rgb(0, 0, 0)",
+      "background": "rgba(0, 0, 0, 0)",
+      "fontSize": "16px"
+    },
+    {
+      "name": "Choose files",
+      "disabled": false,
+      "rect": {
+        "x": 655.28125,
+        "y": 482,
+        "width": 129.421875,
+        "height": 44
+      },
+      "color": "rgb(0, 0, 0)",
+      "background": "rgb(23, 105, 223)",
+      "fontSize": "16px"
+    },
+    {
+      "name": "Try the two sample PDFs",
+      "disabled": false,
+      "rect": {
+        "x": 627.9375,
+        "y": 538,
+        "width": 184.125,
+        "height": 44
+      },
+      "color": "rgb(0, 0, 0)",
+      "background": "rgba(0, 0, 0, 0)",
+      "fontSize": "16px"
+    },
+    {
+      "name": "Add files",
+      "disabled": false,
+      "rect": {
+        "x": 361,
+        "y": 831,
+        "width": 44,
+        "height": 44
+      },
+      "color": "rgb(0, 0, 0)",
+      "background": "rgba(0, 0, 0, 0)",
+      "fontSize": "16px"
+    },
+    {
+      "name": "Send message",
+      "disabled": true,
+      "rect": {
+        "x": 1035,
+        "y": 831,
+        "width": 44,
+        "height": 44
+      },
+      "color": "rgb(0, 0, 0)",
+      "background": "rgb(23, 105, 223)",
+      "fontSize": "16px"
+    },
+    {
+      "name": "Merge",
+      "disabled": false,
+      "rect": {
+        "x": 533.78125,
+        "y": 896,
+        "width": 91.90625,
+        "height": 44
+      },
+      "color": "rgb(0, 0, 0)",
+      "background": "rgba(0, 0, 0, 0)",
+      "fontSize": "16px"
+    },
+    {
+      "name": "Compress",
+      "disabled": false,
+      "rect": {
+        "x": 633.6875,
+        "y": 896,
+        "width": 113.140625,
+        "height": 44
+      },
+      "color": "rgb(0, 0, 0)",
+      "background": "rgba(0, 0, 0, 0)",
+      "fontSize": "16px"
+    },
+    {
+      "name": "Make searchable",
+      "disabled": false,
+      "rect": {
+        "x": 754.828125,
+        "y": 896,
+        "width": 151.375,
+        "height": 44
+      },
+      "color": "rgb(0, 0, 0)",
+      "background": "rgba(0, 0, 0, 0)",
+      "fontSize": "16px"
+    }
+  ],
+  "fields": [
+    {
+      "type": "textarea",
+      "label": "Tell atepdf what to do",
+      "placeholder": "Tell atepdf what to do…",
+      "rect": {
+        "x": 361,
+        "y": 779,
+        "width": 718,
+        "height": 48
+      }
+    },
+    {
+      "type": "file",
+      "label": "Choose PDF files",
+      "placeholder": null,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1
+      }
+    }
+  ]
+}

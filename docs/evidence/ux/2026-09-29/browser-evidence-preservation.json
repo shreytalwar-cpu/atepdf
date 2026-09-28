@@ -1,0 +1,164 @@
+[
+  {
+    "historicalPath": "docs/evidence/cancel-after.pdf",
+    "newEvidence": "docs/evidence/ux/2026-09-29/browser/cancel-after.pdf",
+    "newSha256": "72ace96b3bc97f589265ea6a775f15d41870bc88fd9c779b45c002929e636cfd",
+    "historicalSha256Restored": "a8240152e0efa5bf73c67bd14ae4bb8d26eae0c6253c139056cc32f5c4aa247e"
+  },
+  {
+    "historicalPath": "docs/evidence/cancel-before.pdf",
+    "newEvidence": "docs/evidence/ux/2026-09-29/browser/cancel-before.pdf",
+    "newSha256": "72ace96b3bc97f589265ea6a775f15d41870bc88fd9c779b45c002929e636cfd",
+    "historicalSha256Restored": "a8240152e0efa5bf73c67bd14ae4bb8d26eae0c6253c139056cc32f5c4aa247e"
+  },
+  {
+    "historicalPath": "docs/evidence/chain-before.pdf",
+    "newEvidence": "docs/evidence/ux/2026-09-29/browser/chain-before.pdf",
+    "newSha256": "5cb2c47c9ac2b41c22a1dd28436442ef1a6966e2ff714a2534f269ce7d067cfa",
+    "historicalSha256Restored": "dac3d8befb06cc0b614da4b82afb8858e2fa1a74d11083a033e637f11cf6fd83"
+  },
+  {
+    "historicalPath": "docs/evidence/chain-final.pdf",
+    "newEvidence": "docs/evidence/ux/2026-09-29/browser/chain-final.pdf",
+    "newSha256": "45a393c607ed671d607cc91e943148aa32a6c6b70381ac611fda3a16b1621ceb",
+    "historicalSha256Restored": "99a778fed41ad900a216a6d706076cd8c460a3f574b7ba9a96dad96ca37aabaa"
+  },
+  {
+    "historicalPath": "docs/evidence/chain-measurements.json",
+    "newEvidence": "docs/evidence/ux/2026-09-29/browser/chain-measurements.json",
+    "newSha256": "6fecc364200f7870321b51156b19bc5c39ec6519e5bcdf9997e3cf7d801e1d5c",
+    "historicalSha256Restored": "3e5823b692a497e82954ee68d1eec8cc100cd8433e5791c2001300bcf164854a"
+  },
+  {
+    "historicalPath": "docs/evidence/chain-result.png",
+    "newEvidence": "docs/evidence/ux/2026-09-29/browser/chain-result.png",
+    "newSha256": "0b8e8cda16507fa2bd83bb032a08be9a7571ae6bd6ce84634273c4c8288be458",
+    "historicalSha256Restored": "e658f27dcbba4fef17eb997fd93308505f9f9cccfac7893d1bfe83b5b743dc71"
+  },
+  {
+    "historicalPath": "docs/evidence/chain-searchable.pdf",
+    "newEvidence": "docs/evidence/ux/2026-09-29/browser/chain-searchable.pdf",
+    "newSha256": "8a91bf7c63725df3eb75a143f4ad9b1bf6d484a73dcc6d0a16ac4030c2258d5d",
+    "historicalSha256Restored": "5f1c1a727c7c963a2816039b838909347a857a2a05814c1293ef3c4751cdbe9b"
+  },
+  {
+    "historicalPath": "docs/evidence/compact.png",
+    "newEvidence": "docs/evidence/ux/2026-09-29/browser/compact.png",
+    "newSha256": "5aae3f021c760a36282c845b2b48d9075da210aaac523ed9a483d4ae518a1ad4",
+    "historicalSha256Restored": "22ad681812f63f4f1e0153c47feae873507a23e089ad07963d8ded272a756d3c"
+  },
+  {
+    "historicalPath": "docs/evidence/desktop-empty.png",
+    "newEvidence": "docs/evidence/ux/2026-09-29/browser/desktop-empty.png",
+    "newSha256": "8ce4d5cac38f7c48b1fee3f9d39f6aea16770aa924fef569d7617528a47eaf70",
+    "historicalSha256Restored": "f72ced0906911856d649bbe8c3786b9238f6b8c15a034f0ad7601205d29c3a7e"
+  },
+  {
+    "historicalPath": "docs/evidence/desktop-result.png",
+    "newEvidence": "docs/evidence/ux/2026-09-29/browser/desktop-result.png",
+    "newSha256": "1224874c13269c360fdd4692fa98bfa7fc8a7642ecc5cc2ff3636477abba40d0",
+    "historicalSha256Restored": "16296ca7d915f58f69b688079d1ceef5e30d6ff7e06014831ad56a600883c01b"
+  },
+  {
+    "historicalPath": "docs/evidence/drag-feedback.png",
+    "newEvidence": "docs/evidence/ux/2026-09-29/browser/drag-feedback.png",
+    "newSha256": "2f2f48fdfe44ac01307030e6bfbb3f891857f3173cbe8775d439432f1d454032",
+    "historicalSha256Restored": "962bac3bf2e2c9a19a8d13271b4d0720485b7d8c054e9ec198644830f47ba4a4"
+  },
+  {
+    "historicalPath": "docs/evidence/keyboard.png",
+    "newEvidence": "docs/evidence/ux/2026-09-29/browser/keyboard.png",
+    "newSha256": "d6b646dd984acfe6acf61ff5aee04e20d0bf8d9c4b5609956cc837b73e2760cf",
+    "historicalSha256Restored": "8c9eee4141671e9fb7f558ee4aed06260eb4be567de7ad6af71158ae015d1119"
+  },
+  {
+    "historicalPath": "docs/evidence/latest-message-result.png",
+    "newEvidence": "docs/evidence/ux/2026-09-29/browser/latest-message-result.png",
+    "newSha256": "7abeff10d30a7236acd9bc776149bc7588709b7a1982c26e992a12031c6c45ec",
+    "historicalSha256Restored": "0307503bf390943667fff272d3dded752415abc85d6c084c28cac9709c13e949"
+  },
+  {
+    "historicalPath": "docs/evidence/local-processing-reduced-motion.png",
+    "newEvidence": "docs/evidence/ux/2026-09-29/browser/local-processing-reduced-motion.png",
+    "newSha256": "c880df27a87bd6e14d6f684a933f3fe93b5fa64551b7dcf94607fd7293c9ff1f",
+    "historicalSha256Restored": "0bd067598fa994c7f071d380e8b4b2e389cf603fa18f6b88f4d4fab72ea4b977"
+  },
+  {
+    "historicalPath": "docs/evidence/merged.pdf",
+    "newEvidence": "docs/evidence/ux/2026-09-29/browser/merged.pdf",
+    "newSha256": "3508d5417939d122aba92458c8cb2a38adaffc9a85a58e3001dddea78b752726",
+    "historicalSha256Restored": "0e1002417eee899a61e85fee1e46cd4a04abb2a3fb14b4b7fd9a4dac3851cd61"
+  },
+  {
+    "historicalPath": "docs/evidence/network-chain.json",
+    "newEvidence": "docs/evidence/ux/2026-09-29/browser/network-chain.json",
+    "newSha256": "ea494231c3efc01b6ed192e78658a28bba9ce8fa1fd935645e5bcc497dc600d8",
+    "historicalSha256Restored": "02cd2607fee9e36d3f1d4fb98fe6fbdf00c2c57eeae3286f9cdda4fb260b396b"
+  },
+  {
+    "historicalPath": "docs/evidence/network-merge.json",
+    "newEvidence": "docs/evidence/ux/2026-09-29/browser/network-merge.json",
+    "newSha256": "831a3041c78cd9949b452bb3c5843d62f20166d5bbbd14ca9e58779453cd8039",
+    "historicalSha256Restored": "78717fda201ba0dd05487f8bfd37be4016dd7a3c061b6aa0237e634d9b554d62"
+  },
+  {
+    "historicalPath": "docs/evidence/phone-result.png",
+    "newEvidence": "docs/evidence/ux/2026-09-29/browser/phone-result.png",
+    "newSha256": "c0caf439270ace4fe40d7949f9aea32dc46b32d26f0f8eb87d3502508f81a729",
+    "historicalSha256Restored": "d90d51a61ad5a0a8464a07414d9b6823ef3be8673686173fdbfb705c659d0f06"
+  },
+  {
+    "historicalPath": "docs/evidence/phone.png",
+    "newEvidence": "docs/evidence/ux/2026-09-29/browser/phone.png",
+    "newSha256": "4a4c5787dbab1539558604fc937276a67443b5efcb43d2f9e91aa431bd379755",
+    "historicalSha256Restored": "940781e64e8c6e17959d41e69357f671342bdba7db595ed7d3772a311dfc9029"
+  },
+  {
+    "historicalPath": "docs/evidence/planner/large-files.json",
+    "newEvidence": "docs/evidence/ux/2026-09-29/browser/planner/large-files.json",
+    "newSha256": "6a7791b954dc20a89fdbcd875227b435e574b33a1d93d8d13aa521e3323d2a4a",
+    "historicalSha256Restored": "cda19f616a1f8d524cb213629340ead9e77e253ed102e3cfc8da68ae22067bf9"
+  },
+  {
+    "historicalPath": "docs/evidence/planner/large-pdf-preview.png",
+    "newEvidence": "docs/evidence/ux/2026-09-29/browser/planner/large-pdf-preview.png",
+    "newSha256": "667f4f85abab2934bd867c86a28cd589895633b4282eb318af0cf24775625c1d",
+    "historicalSha256Restored": "06d4bdcf2a18cbee9055198717db15e0c74ab92bb9a2b3455e5745e87e227de7"
+  },
+  {
+    "historicalPath": "docs/evidence/preview.png",
+    "newEvidence": "docs/evidence/ux/2026-09-29/browser/preview.png",
+    "newSha256": "ec925f556220914575e7b2a70427b94df315d7855269ad3f74804aa0654011f8",
+    "historicalSha256Restored": "9ee6ffb08a793d30edc556036d6a7f6c3cfce28500fc022d7c737d486819e692"
+  },
+  {
+    "historicalPath": "docs/evidence/recipe-final.pdf",
+    "newEvidence": "docs/evidence/ux/2026-09-29/browser/recipe-final.pdf",
+    "newSha256": "9f45c16efeab694d3a6303ae6c0cc3ac544ec08b2942c742d0ed17de7ba786b4",
+    "historicalSha256Restored": "6d27352f745f30139ef5ab346fa5d0183eb7bba0206257147ce13e940fca8bc0"
+  },
+  {
+    "historicalPath": "docs/evidence/removed.pdf",
+    "newEvidence": "docs/evidence/ux/2026-09-29/browser/removed.pdf",
+    "newSha256": "ba5d9eee6352ad4fbfeb01ec0023e6e08025af1b05684f6b31212e90ae765453",
+    "historicalSha256Restored": "0ba9ac9b86e95ecd632f047d66e79bf309259eb5f0af2bafb2e6cdd005262bad"
+  },
+  {
+    "historicalPath": "docs/evidence/tablet-landscape.png",
+    "newEvidence": "docs/evidence/ux/2026-09-29/browser/tablet-landscape.png",
+    "newSha256": "30915ca9f02f7001de7b5e45099c5f39ed7b2b338c78948336d95b97d1be5177",
+    "historicalSha256Restored": "282955d8c0fdcc3de0c54b51bd9da7dea0d5ef63a5e9c61f407ac63c758cd81d"
+  },
+  {
+    "historicalPath": "docs/evidence/tablet-portrait.png",
+    "newEvidence": "docs/evidence/ux/2026-09-29/browser/tablet-portrait.png",
+    "newSha256": "1aba0cefb7d03f8d26e4976873b4502ef8b86681f1c9c22bc6078c47a5b51f0d",
+    "historicalSha256Restored": "27416e65d72bd2f655b000c6b370c37c1c9ca747ac9663349d78b0df0c0e8760"
+  },
+  {
+    "historicalPath": "docs/evidence/undo.pdf",
+    "newEvidence": "docs/evidence/ux/2026-09-29/browser/undo.pdf",
+    "newSha256": "3508d5417939d122aba92458c8cb2a38adaffc9a85a58e3001dddea78b752726",
+    "historicalSha256Restored": "0e1002417eee899a61e85fee1e46cd4a04abb2a3fb14b4b7fd9a4dac3851cd61"
+  }
+]

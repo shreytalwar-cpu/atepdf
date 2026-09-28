@@ -1,0 +1,28 @@
+- img "atepdf"
+- button "Processed on your device":
+  - img
+- button "OpenAI connection":
+  - img
+- heading "Add your files" [level=1]
+- text: Then tell me what you’d like to do.
+- button "Choose files":
+  - img
+  - text: Choose files
+- button "Try the two sample PDFs"
+- textbox "Tell atepdf what to do":
+  - /placeholder: Tell atepdf what to do…
+- button "Add files":
+  - img
+- button "Send message" [disabled]:
+  - img
+- button "Merge":
+  - img
+  - text: Merge
+- button "Compress":
+  - img
+  - text: Compress
+- button "Make searchable":
+  - img
+  - text: Make searchable
+- text: Your files stay on this device
+- button "Choose PDF files"

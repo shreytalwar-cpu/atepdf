@@ -1,0 +1,435 @@
+{
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "dpr": 1,
+    "rootFont": "16px"
+  },
+  "overflow": {
+    "root": 0,
+    "body": 0,
+    "conversation": [
+      {
+        "client": 390,
+        "scroll": 390
+      }
+    ]
+  },
+  "controls": [
+    {
+      "tag": "BUTTON",
+      "role": "button",
+      "name": "Processed on your device",
+      "disabled": false,
+      "tabIndex": 0,
+      "x": 234,
+      "y": 8,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "tag": "BUTTON",
+      "role": "button",
+      "name": "OpenAI connection",
+      "disabled": false,
+      "tabIndex": 0,
+      "x": 282,
+      "y": 8,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "tag": "BUTTON",
+      "role": "button",
+      "name": "Start over",
+      "disabled": false,
+      "tabIndex": 0,
+      "x": 330,
+      "y": 8,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "tag": "BUTTON",
+      "role": "button",
+      "name": "Copy",
+      "disabled": false,
+      "tabIndex": 0,
+      "x": 20,
+      "y": 199,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "tag": "BUTTON",
+      "role": "button",
+      "name": "Save PDF",
+      "disabled": false,
+      "tabIndex": 0,
+      "x": 41,
+      "y": 496,
+      "width": 110.4375,
+      "height": 44
+    },
+    {
+      "tag": "BUTTON",
+      "role": "button",
+      "name": "Preview",
+      "disabled": false,
+      "tabIndex": 0,
+      "x": 159.4375,
+      "y": 496,
+      "width": 102.09375,
+      "height": 44
+    },
+    {
+      "tag": "TEXTAREA",
+      "role": null,
+      "name": "Tell atepdf what to do",
+      "disabled": false,
+      "tabIndex": 0,
+      "x": 25,
+      "y": 635,
+      "width": 340,
+      "height": 48
+    },
+    {
+      "tag": "BUTTON",
+      "role": "button",
+      "name": "Add files",
+      "disabled": false,
+      "tabIndex": 0,
+      "x": 25,
+      "y": 687,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "tag": "BUTTON",
+      "role": "button",
+      "name": "Send message",
+      "disabled": true,
+      "tabIndex": -1,
+      "x": 321,
+      "y": 687,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "tag": "BUTTON",
+      "role": "button",
+      "name": "Merge",
+      "disabled": false,
+      "tabIndex": 0,
+      "x": 16,
+      "y": 752,
+      "width": 114,
+      "height": 44
+    },
+    {
+      "tag": "BUTTON",
+      "role": "button",
+      "name": "Compress",
+      "disabled": false,
+      "tabIndex": 0,
+      "x": 138,
+      "y": 752,
+      "width": 114,
+      "height": 44
+    },
+    {
+      "tag": "BUTTON",
+      "role": "button",
+      "name": "Make searchable",
+      "disabled": false,
+      "tabIndex": 0,
+      "x": 260,
+      "y": 752,
+      "width": 114,
+      "height": 44
+    },
+    {
+      "tag": "INPUT",
+      "role": null,
+      "name": "Choose PDF files",
+      "disabled": false,
+      "tabIndex": -1,
+      "x": 0,
+      "y": 0,
+      "width": 1,
+      "height": 1
+    }
+  ],
+  "contrast": [
+    {
+      "text": "brief.pdf",
+      "ratio": 15.91,
+      "fontSize": "14px",
+      "color": "rgb(24, 33, 59)",
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "opacity": 1,
+      "disabled": false,
+      "passes": true
+    },
+    {
+      "text": "3.1 kB · Original · 1",
+      "ratio": 5.53,
+      "fontSize": "12px",
+      "color": "rgb(93, 105, 128)",
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "opacity": 1,
+      "disabled": false,
+      "passes": true
+    },
+    {
+      "text": "appendix.pdf",
+      "ratio": 15.91,
+      "fontSize": "14px",
+      "color": "rgb(24, 33, 59)",
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "opacity": 1,
+      "disabled": false,
+      "passes": true
+    },
+    {
+      "text": "2.1 kB · Original · 2",
+      "ratio": 5.53,
+      "fontSize": "12px",
+      "color": "rgb(93, 105, 128)",
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "opacity": 1,
+      "disabled": false,
+      "passes": true
+    },
+    {
+      "text": "I’ve added 2 PDFs.",
+      "ratio": 14.45,
+      "fontSize": "16px",
+      "color": "rgb(24, 33, 59)",
+      "background": [
+        242,
+        244,
+        248
+      ],
+      "opacity": 1,
+      "disabled": false,
+      "passes": true
+    },
+    {
+      "text": "Your 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.",
+      "ratio": 15.91,
+      "fontSize": "16px",
+      "color": "rgb(24, 33, 59)",
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "opacity": 1,
+      "disabled": false,
+      "passes": true
+    },
+    {
+      "text": "Merge my PDFs.",
+      "ratio": 14.45,
+      "fontSize": "16px",
+      "color": "rgb(24, 33, 59)",
+      "background": [
+        242,
+        244,
+        248
+      ],
+      "opacity": 1,
+      "disabled": false,
+      "passes": true
+    },
+    {
+      "text": "I merged your PDFs in the order added. Here’s your PDF.",
+      "ratio": 15.91,
+      "fontSize": "16px",
+      "color": "rgb(24, 33, 59)",
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "opacity": 1,
+      "disabled": false,
+      "passes": true
+    },
+    {
+      "text": "Merged PDF",
+      "ratio": 15.91,
+      "fontSize": "16px",
+      "color": "rgb(24, 33, 59)",
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "opacity": 1,
+      "disabled": false,
+      "passes": true
+    },
+    {
+      "text": "3 pages · 3.1 kB",
+      "ratio": 5.53,
+      "fontSize": "14px",
+      "color": "rgb(93, 105, 128)",
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "opacity": 1,
+      "disabled": false,
+      "passes": true
+    },
+    {
+      "text": "Current result",
+      "ratio": 5.53,
+      "fontSize": "12px",
+      "color": "rgb(93, 105, 128)",
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "opacity": 1,
+      "disabled": false,
+      "passes": true
+    },
+    {
+      "text": "Save PDF",
+      "ratio": 5.09,
+      "fontSize": "14px",
+      "color": "rgb(255, 255, 255)",
+      "background": [
+        23,
+        105,
+        223
+      ],
+      "opacity": 1,
+      "disabled": false,
+      "passes": true
+    },
+    {
+      "text": "Preview",
+      "ratio": 15.91,
+      "fontSize": "14px",
+      "color": "rgb(24, 33, 59)",
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "opacity": 1,
+      "disabled": false,
+      "passes": true
+    },
+    {
+      "text": "Tell me what you’d like to do next.",
+      "ratio": 5.53,
+      "fontSize": "14px",
+      "color": "rgb(93, 105, 128)",
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "opacity": 1,
+      "disabled": false,
+      "passes": true
+    },
+    {
+      "text": "Merge",
+      "ratio": 15.91,
+      "fontSize": "11px",
+      "color": "rgb(24, 33, 59)",
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "opacity": 1,
+      "disabled": false,
+      "passes": true
+    },
+    {
+      "text": "Compress",
+      "ratio": 15.91,
+      "fontSize": "11px",
+      "color": "rgb(24, 33, 59)",
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "opacity": 1,
+      "disabled": false,
+      "passes": true
+    },
+    {
+      "text": "Make searchable",
+      "ratio": 15.91,
+      "fontSize": "11px",
+      "color": "rgb(24, 33, 59)",
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "opacity": 1,
+      "disabled": false,
+      "passes": true
+    },
+    {
+      "text": "Current: Merged PDF · 3 pages",
+      "ratio": 5.53,
+      "fontSize": "12px",
+      "color": "rgb(93, 105, 128)",
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "opacity": 1,
+      "disabled": false,
+      "passes": true
+    }
+  ],
+  "headings": [
+    {
+      "text": "Merged PDF",
+      "level": null,
+      "tag": "H1"
+    }
+  ],
+  "landmarks": [],
+  "liveRegions": [
+    {
+      "mode": "polite",
+      "text": "Your 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them."
+    },
+    {
+      "mode": "polite",
+      "text": "I merged your PDFs in the order added. Here’s your PDF."
+    }
+  ]
+}

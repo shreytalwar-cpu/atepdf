@@ -1,0 +1,273 @@
+{
+  "viewport": {
+    "width": 1440,
+    "height": 1000,
+    "dpr": 1,
+    "rootFont": "16px"
+  },
+  "overflow": {
+    "root": 0,
+    "body": 0,
+    "conversation": []
+  },
+  "controls": [
+    {
+      "tag": "BUTTON",
+      "role": "button",
+      "name": "Processed on your device",
+      "disabled": false,
+      "tabIndex": 0,
+      "x": 1167.328125,
+      "y": 16,
+      "width": 192.671875,
+      "height": 44
+    },
+    {
+      "tag": "BUTTON",
+      "role": "button",
+      "name": "OpenAI connection",
+      "disabled": false,
+      "tabIndex": 0,
+      "x": 1364,
+      "y": 16,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "tag": "BUTTON",
+      "role": "button",
+      "name": "Choose files",
+      "disabled": false,
+      "tabIndex": 0,
+      "x": 655.28125,
+      "y": 482,
+      "width": 129.421875,
+      "height": 44
+    },
+    {
+      "tag": "BUTTON",
+      "role": "button",
+      "name": "Try the two sample PDFs",
+      "disabled": false,
+      "tabIndex": 0,
+      "x": 627.9375,
+      "y": 538,
+      "width": 184.125,
+      "height": 44
+    },
+    {
+      "tag": "TEXTAREA",
+      "role": null,
+      "name": "Tell atepdf what to do",
+      "disabled": false,
+      "tabIndex": 0,
+      "x": 361,
+      "y": 779,
+      "width": 718,
+      "height": 48
+    },
+    {
+      "tag": "BUTTON",
+      "role": "button",
+      "name": "Add files",
+      "disabled": false,
+      "tabIndex": 0,
+      "x": 361,
+      "y": 831,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "tag": "BUTTON",
+      "role": "button",
+      "name": "Send message",
+      "disabled": true,
+      "tabIndex": -1,
+      "x": 1035,
+      "y": 831,
+      "width": 44,
+      "height": 44
+    },
+    {
+      "tag": "BUTTON",
+      "role": "button",
+      "name": "Merge",
+      "disabled": false,
+      "tabIndex": 0,
+      "x": 533.78125,
+      "y": 896,
+      "width": 91.90625,
+      "height": 44
+    },
+    {
+      "tag": "BUTTON",
+      "role": "button",
+      "name": "Compress",
+      "disabled": false,
+      "tabIndex": 0,
+      "x": 633.6875,
+      "y": 896,
+      "width": 113.140625,
+      "height": 44
+    },
+    {
+      "tag": "BUTTON",
+      "role": "button",
+      "name": "Make searchable",
+      "disabled": false,
+      "tabIndex": 0,
+      "x": 754.828125,
+      "y": 896,
+      "width": 151.375,
+      "height": 44
+    },
+    {
+      "tag": "INPUT",
+      "role": null,
+      "name": "Choose PDF files",
+      "disabled": false,
+      "tabIndex": -1,
+      "x": 0,
+      "y": 0,
+      "width": 1,
+      "height": 1
+    }
+  ],
+  "contrast": [
+    {
+      "text": "Processed on your device",
+      "ratio": 5.41,
+      "fontSize": "12px",
+      "color": "rgb(38, 113, 92)",
+      "background": [
+        237,
+        249,
+        244
+      ],
+      "opacity": 1,
+      "disabled": false,
+      "passes": true
+    },
+    {
+      "text": "Drop files here",
+      "ratio": 15.24,
+      "fontSize": "26px",
+      "color": "rgb(24, 33, 59)",
+      "background": [
+        248,
+        250,
+        255
+      ],
+      "opacity": 1,
+      "disabled": false,
+      "passes": true
+    },
+    {
+      "text": "Then tell me what you’d like to do.",
+      "ratio": 5.3,
+      "fontSize": "14px",
+      "color": "rgb(93, 105, 128)",
+      "background": [
+        248,
+        250,
+        255
+      ],
+      "opacity": 1,
+      "disabled": false,
+      "passes": true
+    },
+    {
+      "text": "Choose files",
+      "ratio": 5.09,
+      "fontSize": "14px",
+      "color": "rgb(255, 255, 255)",
+      "background": [
+        23,
+        105,
+        223
+      ],
+      "opacity": 1,
+      "disabled": false,
+      "passes": true
+    },
+    {
+      "text": "Try the two sample PDFs",
+      "ratio": 5.3,
+      "fontSize": "14px",
+      "color": "rgb(93, 105, 128)",
+      "background": [
+        248,
+        250,
+        255
+      ],
+      "opacity": 1,
+      "disabled": false,
+      "passes": true
+    },
+    {
+      "text": "Merge",
+      "ratio": 15.91,
+      "fontSize": "12px",
+      "color": "rgb(24, 33, 59)",
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "opacity": 1,
+      "disabled": false,
+      "passes": true
+    },
+    {
+      "text": "Compress",
+      "ratio": 15.91,
+      "fontSize": "12px",
+      "color": "rgb(24, 33, 59)",
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "opacity": 1,
+      "disabled": false,
+      "passes": true
+    },
+    {
+      "text": "Make searchable",
+      "ratio": 15.91,
+      "fontSize": "12px",
+      "color": "rgb(24, 33, 59)",
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "opacity": 1,
+      "disabled": false,
+      "passes": true
+    },
+    {
+      "text": "Your files stay on this device",
+      "ratio": 5.53,
+      "fontSize": "12px",
+      "color": "rgb(93, 105, 128)",
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "opacity": 1,
+      "disabled": false,
+      "passes": true
+    }
+  ],
+  "headings": [
+    {
+      "text": "Drop files here",
+      "level": null,
+      "tag": "H1"
+    }
+  ],
+  "landmarks": [],
+  "liveRegions": []
+}

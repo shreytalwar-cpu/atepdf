@@ -1,0 +1,42 @@
+{
+  "recordedAt": "2026-09-28T19:56:17.443117+00:00",
+  "device": "526CAD4B-89C5-49C1-8CEE-F65602AA0DEE",
+  "configuration": "Release frozen UI candidate5; reused compiled products, no new build",
+  "sourceSnapshot": "docs/evidence/native/ux-refined-final-source.json",
+  "frozenProducts": ".build/ux-refined-final-products",
+  "method": "testIPadLandscapeKeyboardAndPreview",
+  "textSize": "large",
+  "result": "1 failed,0 passed;45.424s test; exit65",
+  "summary": "docs/evidence/native/ux-refined-ipad-landscape-summary.json",
+  "testLog": "docs/evidence/native/ux-refined-ipad-landscape-test.log",
+  "resultBundle": ".build/ux-refined-ipad-landscape.xcresult",
+  "passedBeforeFailure": [
+    "Bundled import and real three-page merge",
+    "Rotate to landscape and type exact remove page2",
+    "Actual370pt software keyboard visible; composer and Send clear/hittable;176pt conversation",
+    "Secondary quick-actions/current-context hidden while landscape keyboard open",
+    "Submit produces two pages, resets draft and disables Send",
+    "Inline preview opens and navigates to second page"
+  ],
+  "failure": {
+    "stage": "Final settled simultaneous preview+keyboard assertion after refocusing composer",
+    "rasterVisibleHeight": 69,
+    "requiredRasterVisibleHeight": ">80",
+    "nextPageControlFrame": "(798,4,44,44)",
+    "conversationFrame": "(221,108,768,176)",
+    "rasterFrame": "(564.5,63,81,114)",
+    "composerFrame": "(246,293,718,48)",
+    "sendFrame": "(920,345,44,44)",
+    "keyboardFrame": "(0,461,1210,370)",
+    "interpretation": "Refocusing composer scrolls earlier preview/navigation above conversation. Genuine current positioning limitation; no engine failure or keyboard overlap with Send."
+  },
+  "visualEvidence": "docs/evidence/native/ux-refined-ipad-landscape-ipad-landscape-simultaneous-preview-keyboard.png",
+  "geometry": "docs/evidence/native/ux-refined-ipad-landscape-ipad-landscape-simultaneous-preview-keyboard-frames.txt",
+  "notReached": [
+    "Final navigation visibility assertion after raster assertion",
+    "Explicit portrait-after-rotation assertion; teardown did restore portrait"
+  ],
+  "noAssertionRelaxation": true,
+  "noPaidCalls": true,
+  "noAppSourceEdits": true
+}

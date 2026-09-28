@@ -1,0 +1,5 @@
+Command line invocation:
+    /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild build-for-testing -workspace apps/universal/ios/atepdf.xcworkspace -scheme atepdfUI -configuration Release -destination "platform=iOS Simulator,id=D68C4547-67D3-4960-AAB9-D85FD786D6FC" -derivedDataPath .build/ux-refined-native -parallel-testing-enabled NO CODE_SIGNING_ALLOWED=NO ONLY_ACTIVE_ARCH=YES ARCHS=arm64
+/Users/shrey/Documents/ChatGPT/atepdf/node_modules/.pnpm/expo-file-system@57.0.7_expo@57.0.25_react-native@0.86.3_@babel+core@7.29.7_supports-co_1a3c66ff8b8c7bba71a409e04b450391/node_modules/expo-file-system/ios/FileSystemExceptions.swift:76:22: warning: class 'DestinationAlreadyExistsException' must restate inherited '@unchecked Sendable' conformance
+    |                      `- warning: class 'DestinationAlreadyExistsException' must restate inherited '@unchecked Sendable' conformance
+** TEST BUILD SUCCEEDED **

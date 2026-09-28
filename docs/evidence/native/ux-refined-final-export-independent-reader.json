@@ -1,0 +1,20 @@
+{
+  "recordedAt": "2026-09-28T19:46:34.634Z",
+  "source": "/Users/shrey/Library/Developer/CoreSimulator/Devices/D68C4547-67D3-4960-AAB9-D85FD786D6FC/data/Containers/Shared/AppGroup/C444E40E-2C13-4DF8-8E32-5984E1BC7336/File Provider Storage/atepdf-beta-0a61a723-b1fe-4e68-95ce-79e5b4b4bf89/0a61a723-b1fe-4e68-95ce-79e5b4b4bf89.pdf",
+  "actualSavedCopy": true,
+  "reader": "pdfjs-dist 6.3.289 independently of shared pdf-lib writer and native PDFKit preview",
+  "bytes": 3099,
+  "sha256": "74985ce760d67041a56c014bb39fdeb5670877a474b4690e13147825efeb3008",
+  "pages": 3,
+  "markers": [
+    "A1",
+    "A2",
+    "B1"
+  ],
+  "pass": true,
+  "buildProof": "docs/evidence/native/ux-refined-final-build-proof.json",
+  "limits": [
+    "iPhone Simulator only",
+    "Reads the exact provider file saved through Files and reopened after app restart; no newly generated substitute"
+  ]
+}

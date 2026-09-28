@@ -1,0 +1,2278 @@
+{
+  "browser": "154.0.8037.58",
+  "started": "2026-09-28T19:42:06.233Z",
+  "cases": [
+    {
+      "label": "320",
+      "states": [
+        {
+          "name": "320-empty",
+          "overflow": {
+            "root": 0,
+            "body": 0,
+            "conversation": []
+          },
+          "lowContrast": [],
+          "smallControls": [
+            {
+              "tag": "INPUT",
+              "role": null,
+              "name": "Choose PDF files",
+              "disabled": false,
+              "tabIndex": -1,
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          ]
+        },
+        {
+          "name": "320-imported",
+          "overflow": {
+            "root": 0,
+            "body": 0,
+            "conversation": [
+              {
+                "client": 320,
+                "scroll": 320
+              }
+            ]
+          },
+          "lowContrast": [],
+          "smallControls": [
+            {
+              "tag": "INPUT",
+              "role": null,
+              "name": "Choose PDF files",
+              "disabled": false,
+              "tabIndex": -1,
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          ]
+        },
+        {
+          "name": "320-merged",
+          "overflow": {
+            "root": 0,
+            "body": 0,
+            "conversation": [
+              {
+                "client": 320,
+                "scroll": 320
+              }
+            ]
+          },
+          "lowContrast": [],
+          "smallControls": [
+            {
+              "tag": "INPUT",
+              "role": null,
+              "name": "Choose PDF files",
+              "disabled": false,
+              "tabIndex": -1,
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          ]
+        },
+        {
+          "name": "320-preview",
+          "overflow": {
+            "root": 0,
+            "body": 0,
+            "conversation": [
+              {
+                "client": 320,
+                "scroll": 320
+              }
+            ]
+          },
+          "lowContrast": [],
+          "smallControls": [
+            {
+              "tag": "INPUT",
+              "role": null,
+              "name": "Choose PDF files",
+              "disabled": false,
+              "tabIndex": -1,
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          ]
+        },
+        {
+          "name": "320-error",
+          "overflow": {
+            "root": 0,
+            "body": 0,
+            "conversation": [
+              {
+                "client": 320,
+                "scroll": 320
+              }
+            ]
+          },
+          "lowContrast": [],
+          "smallControls": [
+            {
+              "tag": "INPUT",
+              "role": null,
+              "name": "Choose PDF files",
+              "disabled": false,
+              "tabIndex": -1,
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          ]
+        }
+      ],
+      "requests": [
+        {
+          "origin": "http://localhost:3213",
+          "path": "/",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/_expo/static/css/global-b21c3e4fc8f2e90d6b28480d218ecb0e.css",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/_expo/static/css/preview-91fe9b8844909d50a6752bcd087a7138.css",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/_expo/static/js/web/index-631bb63366488d626f71905e7ccc8cbb.js",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/assets/assets/approved-8-mark-source-crop.8b708587521942c4118f8e6a3c3f84f8.png",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/assets/assets/approved-atepdf-wordmark-source-crop.e129a61b59d2f9c2fdcb1f1b2521e212.png",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/atepdf.worker.js",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/_expo/static/js/web/pdf-6c360a0f82f065a844b8bf2609a9c02e.js",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/pdf.worker.min.mjs",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/atepdf.worker.js",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/pdf.worker.min.mjs",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/api/planner/status",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/atepdf.worker.js",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/pdf.worker.min.mjs",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/api/planner/status",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/pdf.worker.min.mjs",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/pdf.worker.min.mjs",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/pdf.worker.min.mjs",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/api/planner/status",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/api/planner/status",
+          "method": "GET"
+        }
+      ],
+      "console": [],
+      "keyboard": [],
+      "timings": {
+        "readyMs": 254,
+        "mergeMs": 225,
+        "browser": {
+          "navigation": [
+            {
+              "domContentLoaded": 201.79999999701977,
+              "load": 203.29999999701977,
+              "bytes": 1861
+            }
+          ],
+          "resources": [
+            {
+              "path": "/_expo/static/css/global-b21c3e4fc8f2e90d6b28480d218ecb0e.css",
+              "transfer": 24270,
+              "duration": 7.899999991059303
+            },
+            {
+              "path": "/_expo/static/css/preview-91fe9b8844909d50a6752bcd087a7138.css",
+              "transfer": 2803,
+              "duration": 9.700000002980232
+            },
+            {
+              "path": "/_expo/static/js/web/index-631bb63366488d626f71905e7ccc8cbb.js",
+              "transfer": 6795668,
+              "duration": 39.900000005960464
+            },
+            {
+              "path": "/favicon.ico",
+              "transfer": 0,
+              "duration": 1
+            },
+            {
+              "path": "/assets/assets/approved-8-mark-source-crop.8b708587521942c4118f8e6a3c3f84f8.png",
+              "transfer": 35758,
+              "duration": 2.7000000029802322
+            },
+            {
+              "path": "/assets/assets/approved-atepdf-wordmark-source-crop.e129a61b59d2f9c2fdcb1f1b2521e212.png",
+              "transfer": 34090,
+              "duration": 3.0999999940395355
+            },
+            {
+              "path": "/engines/atepdf.worker.js",
+              "transfer": 455756,
+              "duration": -4.700000002980232
+            },
+            {
+              "path": "/_expo/static/js/web/pdf-6c360a0f82f065a844b8bf2609a9c02e.js",
+              "transfer": 549417,
+              "duration": 4.5999999940395355
+            },
+            {
+              "path": "/engines/pdf.worker.min.mjs",
+              "transfer": 1265713,
+              "duration": -1.2999999970197678
+            },
+            {
+              "path": "/engines/atepdf.worker.js",
+              "transfer": 455756,
+              "duration": -1.0999999940395355
+            },
+            {
+              "path": "/engines/pdf.worker.min.mjs",
+              "transfer": 1265713,
+              "duration": -1.2000000029802322
+            },
+            {
+              "path": "/api/planner/status",
+              "transfer": 445,
+              "duration": 9.200000002980232
+            },
+            {
+              "path": "/engines/atepdf.worker.js",
+              "transfer": 455756,
+              "duration": -2.1000000089406967
+            },
+            {
+              "path": "/engines/pdf.worker.min.mjs",
+              "transfer": 1265713,
+              "duration": -1.2000000029802322
+            },
+            {
+              "path": "/api/planner/status",
+              "transfer": 445,
+              "duration": 1.5
+            },
+            {
+              "path": "/engines/pdf.worker.min.mjs",
+              "transfer": 1265713,
+              "duration": -5.5999999940395355
+            },
+            {
+              "path": "/engines/pdf.worker.min.mjs",
+              "transfer": 1265713,
+              "duration": -1.4000000059604645
+            },
+            {
+              "path": "/engines/pdf.worker.min.mjs",
+              "transfer": 1265713,
+              "duration": -1.5
+            },
+            {
+              "path": "/api/planner/status",
+              "transfer": 445,
+              "duration": 4.399999991059303
+            },
+            {
+              "path": "/api/planner/status",
+              "transfer": 445,
+              "duration": 1.5999999940395355
+            }
+          ],
+          "longTasks": [
+            {
+              "start": 78.70000000298023,
+              "duration": 123
+            }
+          ]
+        }
+      },
+      "previewPage2": "Page 2 of 3",
+      "zoomCanvas": {
+        "width": 144,
+        "height": 203
+      },
+      "previewFocusRestored": {
+        "tag": "BUTTON",
+        "name": "Preview",
+        "focusVisible": false,
+        "outline": "rgb(0, 0, 0) none 3px",
+        "boxShadow": "none",
+        "rect": {
+          "x": 159.4375,
+          "y": 220,
+          "width": 102.09375,
+          "height": 44
+        }
+      },
+      "saved": {
+        "bytes": 3099,
+        "sha256": "e7273079ccdd91cd12d92c710b225f8a393f27e99d4b387b63e0b8bba7ebb065"
+      },
+      "errorText": "This PDF has 3 pages. Choose a page from 1 to 3. Your files are unchanged.",
+      "currentAfterError": "Merged PDF\n3 pages · 3.1 kB\nCurrent result\nSave PDF\nPreview\nDownload started · check your downloads\nTell me what you’d like to do next."
+    },
+    {
+      "label": "390",
+      "states": [
+        {
+          "name": "390-empty",
+          "overflow": {
+            "root": 0,
+            "body": 0,
+            "conversation": []
+          },
+          "lowContrast": [],
+          "smallControls": [
+            {
+              "tag": "INPUT",
+              "role": null,
+              "name": "Choose PDF files",
+              "disabled": false,
+              "tabIndex": -1,
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          ]
+        },
+        {
+          "name": "390-imported",
+          "overflow": {
+            "root": 0,
+            "body": 0,
+            "conversation": [
+              {
+                "client": 390,
+                "scroll": 390
+              }
+            ]
+          },
+          "lowContrast": [],
+          "smallControls": [
+            {
+              "tag": "INPUT",
+              "role": null,
+              "name": "Choose PDF files",
+              "disabled": false,
+              "tabIndex": -1,
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          ]
+        },
+        {
+          "name": "390-merged",
+          "overflow": {
+            "root": 0,
+            "body": 0,
+            "conversation": [
+              {
+                "client": 390,
+                "scroll": 390
+              }
+            ]
+          },
+          "lowContrast": [],
+          "smallControls": [
+            {
+              "tag": "INPUT",
+              "role": null,
+              "name": "Choose PDF files",
+              "disabled": false,
+              "tabIndex": -1,
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          ]
+        },
+        {
+          "name": "390-preview",
+          "overflow": {
+            "root": 0,
+            "body": 0,
+            "conversation": [
+              {
+                "client": 390,
+                "scroll": 390
+              }
+            ]
+          },
+          "lowContrast": [],
+          "smallControls": [
+            {
+              "tag": "INPUT",
+              "role": null,
+              "name": "Choose PDF files",
+              "disabled": false,
+              "tabIndex": -1,
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          ]
+        },
+        {
+          "name": "390-error",
+          "overflow": {
+            "root": 0,
+            "body": 0,
+            "conversation": [
+              {
+                "client": 390,
+                "scroll": 390
+              }
+            ]
+          },
+          "lowContrast": [],
+          "smallControls": [
+            {
+              "tag": "INPUT",
+              "role": null,
+              "name": "Choose PDF files",
+              "disabled": false,
+              "tabIndex": -1,
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          ]
+        }
+      ],
+      "requests": [
+        {
+          "origin": "http://localhost:3213",
+          "path": "/",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/_expo/static/css/global-b21c3e4fc8f2e90d6b28480d218ecb0e.css",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/_expo/static/css/preview-91fe9b8844909d50a6752bcd087a7138.css",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/_expo/static/js/web/index-631bb63366488d626f71905e7ccc8cbb.js",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/assets/assets/approved-8-mark-source-crop.8b708587521942c4118f8e6a3c3f84f8.png",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/assets/assets/approved-atepdf-wordmark-source-crop.e129a61b59d2f9c2fdcb1f1b2521e212.png",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/assets/assets/paper.1cb2ca1d4826879d6316a24bfbeecd07.png",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/atepdf.worker.js",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/_expo/static/js/web/pdf-6c360a0f82f065a844b8bf2609a9c02e.js",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/pdf.worker.min.mjs",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/atepdf.worker.js",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/pdf.worker.min.mjs",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/api/planner/status",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/atepdf.worker.js",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/pdf.worker.min.mjs",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/api/planner/status",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/pdf.worker.min.mjs",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/pdf.worker.min.mjs",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/pdf.worker.min.mjs",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/api/planner/status",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/api/planner/status",
+          "method": "GET"
+        }
+      ],
+      "console": [],
+      "keyboard": [],
+      "timings": {
+        "readyMs": 205,
+        "mergeMs": 202,
+        "browser": {
+          "navigation": [
+            {
+              "domContentLoaded": 167.8999999910593,
+              "load": 168.5,
+              "bytes": 1861
+            }
+          ],
+          "resources": [
+            {
+              "path": "/_expo/static/css/global-b21c3e4fc8f2e90d6b28480d218ecb0e.css",
+              "transfer": 24270,
+              "duration": 6
+            },
+            {
+              "path": "/_expo/static/css/preview-91fe9b8844909d50a6752bcd087a7138.css",
+              "transfer": 2803,
+              "duration": 5.899999991059303
+            },
+            {
+              "path": "/_expo/static/js/web/index-631bb63366488d626f71905e7ccc8cbb.js",
+              "transfer": 6795668,
+              "duration": 32.599999994039536
+            },
+            {
+              "path": "/favicon.ico",
+              "transfer": 0,
+              "duration": 1
+            },
+            {
+              "path": "/assets/assets/approved-atepdf-wordmark-source-crop.e129a61b59d2f9c2fdcb1f1b2521e212.png",
+              "transfer": 34090,
+              "duration": 2
+            },
+            {
+              "path": "/assets/assets/approved-8-mark-source-crop.8b708587521942c4118f8e6a3c3f84f8.png",
+              "transfer": 35758,
+              "duration": 2.1000000089406967
+            },
+            {
+              "path": "/assets/assets/paper.1cb2ca1d4826879d6316a24bfbeecd07.png",
+              "transfer": 688015,
+              "duration": 2.7999999970197678
+            },
+            {
+              "path": "/engines/atepdf.worker.js",
+              "transfer": 455756,
+              "duration": -1.2999999970197678
+            },
+            {
+              "path": "/_expo/static/js/web/pdf-6c360a0f82f065a844b8bf2609a9c02e.js",
+              "transfer": 549417,
+              "duration": 4.5999999940395355
+            },
+            {
+              "path": "/engines/pdf.worker.min.mjs",
+              "transfer": 1265713,
+              "duration": -1.300000011920929
+            },
+            {
+              "path": "/engines/atepdf.worker.js",
+              "transfer": 455756,
+              "duration": -1.4000000059604645
+            },
+            {
+              "path": "/engines/pdf.worker.min.mjs",
+              "transfer": 1265713,
+              "duration": -1.2000000029802322
+            },
+            {
+              "path": "/api/planner/status",
+              "transfer": 445,
+              "duration": 4
+            },
+            {
+              "path": "/engines/atepdf.worker.js",
+              "transfer": 455756,
+              "duration": -1.6000000089406967
+            },
+            {
+              "path": "/engines/pdf.worker.min.mjs",
+              "transfer": 1265713,
+              "duration": -1.2999999970197678
+            },
+            {
+              "path": "/api/planner/status",
+              "transfer": 445,
+              "duration": 1.5
+            },
+            {
+              "path": "/engines/pdf.worker.min.mjs",
+              "transfer": 1265713,
+              "duration": -1.2000000029802322
+            },
+            {
+              "path": "/engines/pdf.worker.min.mjs",
+              "transfer": 1265713,
+              "duration": -1.4000000059604645
+            },
+            {
+              "path": "/engines/pdf.worker.min.mjs",
+              "transfer": 1265713,
+              "duration": -1.4000000059604645
+            },
+            {
+              "path": "/api/planner/status",
+              "transfer": 445,
+              "duration": 4.799999997019768
+            },
+            {
+              "path": "/api/planner/status",
+              "transfer": 445,
+              "duration": 1.5
+            }
+          ],
+          "longTasks": [
+            {
+              "start": 50,
+              "duration": 118
+            }
+          ]
+        }
+      },
+      "previewPage2": "Page 2 of 3",
+      "zoomCanvas": {
+        "width": 223,
+        "height": 314
+      },
+      "previewFocusRestored": {
+        "tag": "BUTTON",
+        "name": "Preview",
+        "focusVisible": false,
+        "outline": "rgb(0, 0, 0) none 3px",
+        "boxShadow": "none",
+        "rect": {
+          "x": 159.4375,
+          "y": 496,
+          "width": 102.09375,
+          "height": 44
+        }
+      },
+      "saved": {
+        "bytes": 3099,
+        "sha256": "d9cdfe311634b83e93de0ca40e7720e3af9fb408b5cc440d7bbb89e3d5f2e301"
+      },
+      "errorText": "This PDF has 3 pages. Choose a page from 1 to 3. Your files are unchanged.",
+      "currentAfterError": "Merged PDF\n3 pages · 3.1 kB\nCurrent result\nSave PDF\nPreview\nDownload started · check your downloads\nTell me what you’d like to do next."
+    },
+    {
+      "label": "768",
+      "states": [
+        {
+          "name": "768-empty",
+          "overflow": {
+            "root": 0,
+            "body": 0,
+            "conversation": []
+          },
+          "lowContrast": [],
+          "smallControls": [
+            {
+              "tag": "INPUT",
+              "role": null,
+              "name": "Choose PDF files",
+              "disabled": false,
+              "tabIndex": -1,
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          ]
+        },
+        {
+          "name": "768-imported",
+          "overflow": {
+            "root": 0,
+            "body": 0,
+            "conversation": [
+              {
+                "client": 768,
+                "scroll": 768
+              }
+            ]
+          },
+          "lowContrast": [],
+          "smallControls": [
+            {
+              "tag": "INPUT",
+              "role": null,
+              "name": "Choose PDF files",
+              "disabled": false,
+              "tabIndex": -1,
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          ]
+        },
+        {
+          "name": "768-merged",
+          "overflow": {
+            "root": 0,
+            "body": 0,
+            "conversation": [
+              {
+                "client": 768,
+                "scroll": 768
+              }
+            ]
+          },
+          "lowContrast": [],
+          "smallControls": [
+            {
+              "tag": "INPUT",
+              "role": null,
+              "name": "Choose PDF files",
+              "disabled": false,
+              "tabIndex": -1,
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          ]
+        },
+        {
+          "name": "768-preview",
+          "overflow": {
+            "root": 0,
+            "body": 0,
+            "conversation": [
+              {
+                "client": 768,
+                "scroll": 768
+              }
+            ]
+          },
+          "lowContrast": [],
+          "smallControls": [
+            {
+              "tag": "INPUT",
+              "role": null,
+              "name": "Choose PDF files",
+              "disabled": false,
+              "tabIndex": -1,
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          ]
+        },
+        {
+          "name": "768-error",
+          "overflow": {
+            "root": 0,
+            "body": 0,
+            "conversation": [
+              {
+                "client": 768,
+                "scroll": 768
+              }
+            ]
+          },
+          "lowContrast": [],
+          "smallControls": [
+            {
+              "tag": "INPUT",
+              "role": null,
+              "name": "Choose PDF files",
+              "disabled": false,
+              "tabIndex": -1,
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          ]
+        }
+      ],
+      "requests": [
+        {
+          "origin": "http://localhost:3213",
+          "path": "/",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/_expo/static/css/global-b21c3e4fc8f2e90d6b28480d218ecb0e.css",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/_expo/static/css/preview-91fe9b8844909d50a6752bcd087a7138.css",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/_expo/static/js/web/index-631bb63366488d626f71905e7ccc8cbb.js",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/assets/assets/approved-8-mark-source-crop.8b708587521942c4118f8e6a3c3f84f8.png",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/assets/assets/approved-atepdf-wordmark-source-crop.e129a61b59d2f9c2fdcb1f1b2521e212.png",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/assets/assets/paper.1cb2ca1d4826879d6316a24bfbeecd07.png",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/atepdf.worker.js",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/_expo/static/js/web/pdf-6c360a0f82f065a844b8bf2609a9c02e.js",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/pdf.worker.min.mjs",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/atepdf.worker.js",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/pdf.worker.min.mjs",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/api/planner/status",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/atepdf.worker.js",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/pdf.worker.min.mjs",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/api/planner/status",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/pdf.worker.min.mjs",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/pdf.worker.min.mjs",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/pdf.worker.min.mjs",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/api/planner/status",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/api/planner/status",
+          "method": "GET"
+        }
+      ],
+      "console": [],
+      "keyboard": [],
+      "timings": {
+        "readyMs": 205,
+        "mergeMs": 204,
+        "browser": {
+          "navigation": [
+            {
+              "domContentLoaded": 166.79999999701977,
+              "load": 167.5,
+              "bytes": 1861
+            }
+          ],
+          "resources": [
+            {
+              "path": "/_expo/static/css/global-b21c3e4fc8f2e90d6b28480d218ecb0e.css",
+              "transfer": 24270,
+              "duration": 6.700000002980232
+            },
+            {
+              "path": "/_expo/static/css/preview-91fe9b8844909d50a6752bcd087a7138.css",
+              "transfer": 2803,
+              "duration": 8
+            },
+            {
+              "path": "/_expo/static/js/web/index-631bb63366488d626f71905e7ccc8cbb.js",
+              "transfer": 6795668,
+              "duration": 34
+            },
+            {
+              "path": "/favicon.ico",
+              "transfer": 0,
+              "duration": 0.5999999940395355
+            },
+            {
+              "path": "/assets/assets/approved-atepdf-wordmark-source-crop.e129a61b59d2f9c2fdcb1f1b2521e212.png",
+              "transfer": 34090,
+              "duration": 2.199999988079071
+            },
+            {
+              "path": "/assets/assets/approved-8-mark-source-crop.8b708587521942c4118f8e6a3c3f84f8.png",
+              "transfer": 35758,
+              "duration": 2.3999999910593033
+            },
+            {
+              "path": "/assets/assets/paper.1cb2ca1d4826879d6316a24bfbeecd07.png",
+              "transfer": 688015,
+              "duration": 2.5
+            },
+            {
+              "path": "/engines/atepdf.worker.js",
+              "transfer": 455756,
+              "duration": -1.5999999940395355
+            },
+            {
+              "path": "/_expo/static/js/web/pdf-6c360a0f82f065a844b8bf2609a9c02e.js",
+              "transfer": 549417,
+              "duration": 4.299999997019768
+            },
+            {
+              "path": "/engines/pdf.worker.min.mjs",
+              "transfer": 1265713,
+              "duration": -1.2999999970197678
+            },
+            {
+              "path": "/engines/atepdf.worker.js",
+              "transfer": 455756,
+              "duration": -1.2000000029802322
+            },
+            {
+              "path": "/engines/pdf.worker.min.mjs",
+              "transfer": 1265713,
+              "duration": -1.2000000029802322
+            },
+            {
+              "path": "/api/planner/status",
+              "transfer": 445,
+              "duration": 4
+            },
+            {
+              "path": "/engines/atepdf.worker.js",
+              "transfer": 455756,
+              "duration": -1.6000000089406967
+            },
+            {
+              "path": "/engines/pdf.worker.min.mjs",
+              "transfer": 1265713,
+              "duration": -1.0999999940395355
+            },
+            {
+              "path": "/api/planner/status",
+              "transfer": 445,
+              "duration": 1.6000000089406967
+            },
+            {
+              "path": "/engines/pdf.worker.min.mjs",
+              "transfer": 1265713,
+              "duration": -1.2999999970197678
+            },
+            {
+              "path": "/engines/pdf.worker.min.mjs",
+              "transfer": 1265713,
+              "duration": -1.5
+            },
+            {
+              "path": "/engines/pdf.worker.min.mjs",
+              "transfer": 1265713,
+              "duration": -1.4000000059604645
+            },
+            {
+              "path": "/api/planner/status",
+              "transfer": 445,
+              "duration": 4.200000002980232
+            },
+            {
+              "path": "/api/planner/status",
+              "transfer": 445,
+              "duration": 1.2999999970197678
+            }
+          ],
+          "longTasks": [
+            {
+              "start": 51,
+              "duration": 116
+            }
+          ]
+        }
+      },
+      "previewPage2": "Page 2 of 3",
+      "zoomCanvas": {
+        "width": 266,
+        "height": 376
+      },
+      "previewFocusRestored": {
+        "tag": "BUTTON",
+        "name": "Preview",
+        "focusVisible": false,
+        "outline": "rgb(0, 0, 0) none 3px",
+        "boxShadow": "none",
+        "rect": {
+          "x": 163.4375,
+          "y": 655,
+          "width": 102.09375,
+          "height": 44
+        }
+      },
+      "saved": {
+        "bytes": 3100,
+        "sha256": "c437d8735aa6d9efa2329f9d38d1a588defa8fff5fc9f1e5b04b5aa85ad4c481"
+      },
+      "errorText": "This PDF has 3 pages. Choose a page from 1 to 3. Your files are unchanged.",
+      "currentAfterError": "Merged PDF\n3 pages · 3.1 kB\nCurrent result\nSave PDF\nPreview\nDownload started · check your downloads\nTell me what you’d like to do next."
+    },
+    {
+      "label": "1440",
+      "states": [
+        {
+          "name": "1440-empty",
+          "overflow": {
+            "root": 0,
+            "body": 0,
+            "conversation": []
+          },
+          "lowContrast": [],
+          "smallControls": [
+            {
+              "tag": "INPUT",
+              "role": null,
+              "name": "Choose PDF files",
+              "disabled": false,
+              "tabIndex": -1,
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          ]
+        },
+        {
+          "name": "1440-imported",
+          "overflow": {
+            "root": 0,
+            "body": 0,
+            "conversation": [
+              {
+                "client": 768,
+                "scroll": 768
+              }
+            ]
+          },
+          "lowContrast": [],
+          "smallControls": [
+            {
+              "tag": "INPUT",
+              "role": null,
+              "name": "Choose PDF files",
+              "disabled": false,
+              "tabIndex": -1,
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          ]
+        },
+        {
+          "name": "1440-merged",
+          "overflow": {
+            "root": 0,
+            "body": 0,
+            "conversation": [
+              {
+                "client": 768,
+                "scroll": 768
+              }
+            ]
+          },
+          "lowContrast": [],
+          "smallControls": [
+            {
+              "tag": "INPUT",
+              "role": null,
+              "name": "Choose PDF files",
+              "disabled": false,
+              "tabIndex": -1,
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          ]
+        },
+        {
+          "name": "1440-preview",
+          "overflow": {
+            "root": 0,
+            "body": 0,
+            "conversation": [
+              {
+                "client": 768,
+                "scroll": 768
+              }
+            ]
+          },
+          "lowContrast": [],
+          "smallControls": [
+            {
+              "tag": "INPUT",
+              "role": null,
+              "name": "Choose PDF files",
+              "disabled": false,
+              "tabIndex": -1,
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          ]
+        },
+        {
+          "name": "1440-error",
+          "overflow": {
+            "root": 0,
+            "body": 0,
+            "conversation": [
+              {
+                "client": 768,
+                "scroll": 768
+              }
+            ]
+          },
+          "lowContrast": [],
+          "smallControls": [
+            {
+              "tag": "INPUT",
+              "role": null,
+              "name": "Choose PDF files",
+              "disabled": false,
+              "tabIndex": -1,
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          ]
+        },
+        {
+          "name": "1440-dark-preference",
+          "overflow": {
+            "root": 0,
+            "body": 0,
+            "conversation": [
+              {
+                "client": 768,
+                "scroll": 768
+              }
+            ]
+          },
+          "lowContrast": [],
+          "smallControls": [
+            {
+              "tag": "INPUT",
+              "role": null,
+              "name": "Choose PDF files",
+              "disabled": false,
+              "tabIndex": -1,
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          ]
+        }
+      ],
+      "requests": [
+        {
+          "origin": "http://localhost:3213",
+          "path": "/",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/_expo/static/css/global-b21c3e4fc8f2e90d6b28480d218ecb0e.css",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/_expo/static/css/preview-91fe9b8844909d50a6752bcd087a7138.css",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/_expo/static/js/web/index-631bb63366488d626f71905e7ccc8cbb.js",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/assets/assets/approved-8-mark-source-crop.8b708587521942c4118f8e6a3c3f84f8.png",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/assets/assets/approved-atepdf-wordmark-source-crop.e129a61b59d2f9c2fdcb1f1b2521e212.png",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/assets/assets/paper.1cb2ca1d4826879d6316a24bfbeecd07.png",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/atepdf.worker.js",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/_expo/static/js/web/pdf-6c360a0f82f065a844b8bf2609a9c02e.js",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/pdf.worker.min.mjs",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/atepdf.worker.js",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/pdf.worker.min.mjs",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/api/planner/status",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/atepdf.worker.js",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/pdf.worker.min.mjs",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/api/planner/status",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/pdf.worker.min.mjs",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/pdf.worker.min.mjs",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/pdf.worker.min.mjs",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/api/planner/status",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/api/planner/status",
+          "method": "GET"
+        }
+      ],
+      "console": [],
+      "keyboard": [
+        {
+          "tag": "BUTTON",
+          "name": "Processed on your device",
+          "focusVisible": true,
+          "outline": "rgb(0, 95, 204) auto 1px",
+          "boxShadow": "none",
+          "rect": {
+            "x": 1167.328125,
+            "y": 16,
+            "width": 192.671875,
+            "height": 44
+          }
+        },
+        {
+          "tag": "BUTTON",
+          "name": "OpenAI connection",
+          "focusVisible": true,
+          "outline": "rgb(0, 95, 204) auto 1px",
+          "boxShadow": "none",
+          "rect": {
+            "x": 1364,
+            "y": 16,
+            "width": 44,
+            "height": 44
+          }
+        },
+        {
+          "tag": "BUTTON",
+          "name": "Choose files",
+          "focusVisible": true,
+          "outline": "rgb(23, 105, 223) solid 2px",
+          "boxShadow": "none",
+          "rect": {
+            "x": 655.28125,
+            "y": 482,
+            "width": 129.421875,
+            "height": 44
+          }
+        },
+        {
+          "tag": "BUTTON",
+          "name": "Try the two sample PDFs",
+          "focusVisible": true,
+          "outline": "rgb(0, 95, 204) auto 1px",
+          "boxShadow": "none",
+          "rect": {
+            "x": 627.9375,
+            "y": 538,
+            "width": 184.125,
+            "height": 44
+          }
+        },
+        {
+          "tag": "TEXTAREA",
+          "name": "Tell atepdf what to do",
+          "focusVisible": true,
+          "outline": "rgb(0, 95, 204) none 1px",
+          "boxShadow": "none",
+          "rect": {
+            "x": 361,
+            "y": 779,
+            "width": 718,
+            "height": 48
+          }
+        },
+        {
+          "tag": "BUTTON",
+          "name": "Add files",
+          "focusVisible": true,
+          "outline": "rgb(0, 95, 204) auto 1px",
+          "boxShadow": "none",
+          "rect": {
+            "x": 361,
+            "y": 831,
+            "width": 44,
+            "height": 44
+          }
+        },
+        {
+          "tag": "BUTTON",
+          "name": "Merge",
+          "focusVisible": true,
+          "outline": "rgb(0, 95, 204) auto 1px",
+          "boxShadow": "none",
+          "rect": {
+            "x": 533.78125,
+            "y": 896,
+            "width": 91.90625,
+            "height": 44
+          }
+        },
+        {
+          "tag": "BUTTON",
+          "name": "Compress",
+          "focusVisible": true,
+          "outline": "rgb(0, 95, 204) auto 1px",
+          "boxShadow": "none",
+          "rect": {
+            "x": 633.6875,
+            "y": 896,
+            "width": 113.140625,
+            "height": 44
+          }
+        },
+        {
+          "tag": "BUTTON",
+          "name": "Make searchable",
+          "focusVisible": true,
+          "outline": "rgb(0, 95, 204) auto 1px",
+          "boxShadow": "none",
+          "rect": {
+            "x": 754.828125,
+            "y": 896,
+            "width": 151.375,
+            "height": 44
+          }
+        }
+      ],
+      "timings": {
+        "readyMs": 224,
+        "mergeMs": 218,
+        "browser": {
+          "navigation": [
+            {
+              "domContentLoaded": 183.70000000298023,
+              "load": 184.40000000596046,
+              "bytes": 1861
+            }
+          ],
+          "resources": [
+            {
+              "path": "/_expo/static/css/global-b21c3e4fc8f2e90d6b28480d218ecb0e.css",
+              "transfer": 24270,
+              "duration": 7
+            },
+            {
+              "path": "/_expo/static/css/preview-91fe9b8844909d50a6752bcd087a7138.css",
+              "transfer": 2803,
+              "duration": 7
+            },
+            {
+              "path": "/_expo/static/js/web/index-631bb63366488d626f71905e7ccc8cbb.js",
+              "transfer": 6795668,
+              "duration": 36.900000005960464
+            },
+            {
+              "path": "/favicon.ico",
+              "transfer": 0,
+              "duration": 2.2000000029802322
+            },
+            {
+              "path": "/assets/assets/approved-8-mark-source-crop.8b708587521942c4118f8e6a3c3f84f8.png",
+              "transfer": 35758,
+              "duration": 4.9000000059604645
+            },
+            {
+              "path": "/assets/assets/approved-atepdf-wordmark-source-crop.e129a61b59d2f9c2fdcb1f1b2521e212.png",
+              "transfer": 34090,
+              "duration": 4.5999999940395355
+            },
+            {
+              "path": "/assets/assets/paper.1cb2ca1d4826879d6316a24bfbeecd07.png",
+              "transfer": 688015,
+              "duration": 5.199999988079071
+            },
+            {
+              "path": "/engines/atepdf.worker.js",
+              "transfer": 455756,
+              "duration": -1.5
+            },
+            {
+              "path": "/_expo/static/js/web/pdf-6c360a0f82f065a844b8bf2609a9c02e.js",
+              "transfer": 549417,
+              "duration": 4.299999997019768
+            },
+            {
+              "path": "/engines/pdf.worker.min.mjs",
+              "transfer": 1265713,
+              "duration": -1.2000000029802322
+            },
+            {
+              "path": "/engines/atepdf.worker.js",
+              "transfer": 455756,
+              "duration": -1.1000000089406967
+            },
+            {
+              "path": "/engines/pdf.worker.min.mjs",
+              "transfer": 1265713,
+              "duration": -1.4000000059604645
+            },
+            {
+              "path": "/api/planner/status",
+              "transfer": 445,
+              "duration": 4.100000008940697
+            },
+            {
+              "path": "/engines/atepdf.worker.js",
+              "transfer": 455756,
+              "duration": -1.5999999940395355
+            },
+            {
+              "path": "/engines/pdf.worker.min.mjs",
+              "transfer": 1265713,
+              "duration": -1.2999999970197678
+            },
+            {
+              "path": "/api/planner/status",
+              "transfer": 445,
+              "duration": 1.5999999940395355
+            },
+            {
+              "path": "/engines/pdf.worker.min.mjs",
+              "transfer": 1265713,
+              "duration": -1.3999999910593033
+            },
+            {
+              "path": "/engines/pdf.worker.min.mjs",
+              "transfer": 1265713,
+              "duration": -1.2999999970197678
+            },
+            {
+              "path": "/engines/pdf.worker.min.mjs",
+              "transfer": 1265713,
+              "duration": -1.3999999910593033
+            },
+            {
+              "path": "/api/planner/status",
+              "transfer": 445,
+              "duration": 3.800000011920929
+            },
+            {
+              "path": "/api/planner/status",
+              "transfer": 445,
+              "duration": 1.2999999970197678
+            }
+          ],
+          "longTasks": [
+            {
+              "start": 58.6000000089407,
+              "duration": 125
+            }
+          ]
+        }
+      },
+      "composerUnfocused": {
+        "border": "rgb(226, 231, 238)",
+        "shadow": "none",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(0, 0, 0) none 3px",
+        "cssWebMedia": false
+      },
+      "composerFocused": {
+        "border": "rgb(226, 231, 238)",
+        "shadow": "none",
+        "background": "rgb(255, 255, 255)",
+        "outline": "rgb(0, 0, 0) none 3px",
+        "cssWebMedia": false
+      },
+      "dialogInitial": {
+        "tag": "BUTTON",
+        "name": "Got it",
+        "focusVisible": true,
+        "outline": "rgb(23, 105, 223) solid 2px",
+        "boxShadow": "none",
+        "rect": {
+          "x": 488,
+          "y": 644,
+          "width": 464,
+          "height": 44
+        }
+      },
+      "dialogTab": {
+        "tag": "BUTTON",
+        "name": "Got it",
+        "focusVisible": true,
+        "outline": "rgb(23, 105, 223) solid 2px",
+        "boxShadow": "none",
+        "rect": {
+          "x": 488,
+          "y": 644,
+          "width": 464,
+          "height": 44
+        }
+      },
+      "dialogAfterEscape": {
+        "tag": "BUTTON",
+        "name": "Processed on your device",
+        "focusVisible": true,
+        "outline": "rgb(0, 95, 204) auto 1px",
+        "boxShadow": "none",
+        "rect": {
+          "x": 1167.328125,
+          "y": 16,
+          "width": 192.671875,
+          "height": 44
+        }
+      },
+      "dialogCountAfterEscape": 0,
+      "previewPage2": "Page 2 of 3",
+      "zoomCanvas": {
+        "width": 266,
+        "height": 376
+      },
+      "previewFocusRestored": {
+        "tag": "BUTTON",
+        "name": "Preview",
+        "focusVisible": false,
+        "outline": "rgb(0, 0, 0) none 3px",
+        "boxShadow": "none",
+        "rect": {
+          "x": 499.4375,
+          "y": 644,
+          "width": 102.09375,
+          "height": 44
+        }
+      },
+      "saved": {
+        "bytes": 3100,
+        "sha256": "0025aca9de1927ab392084941d273abccfcc46bb98e501e4f012a1ac4050f08a"
+      },
+      "errorText": "This PDF has 3 pages. Choose a page from 1 to 3. Your files are unchanged.",
+      "currentAfterError": "Merged PDF\n3 pages · 3.1 kB\nCurrent result\nSave PDF\nPreview\nDownload started · check your downloads\nTell me what you’d like to do next.",
+      "darkComputed": {
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(0, 0, 0)"
+      }
+    },
+    {
+      "label": "text200-720",
+      "states": [
+        {
+          "name": "text200-720-empty",
+          "overflow": {
+            "root": 0,
+            "body": 0,
+            "conversation": []
+          },
+          "lowContrast": [],
+          "smallControls": [
+            {
+              "tag": "INPUT",
+              "role": null,
+              "name": "Choose PDF files",
+              "disabled": false,
+              "tabIndex": -1,
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          ]
+        },
+        {
+          "name": "text200-720-imported",
+          "overflow": {
+            "root": 5,
+            "body": 5,
+            "conversation": [
+              {
+                "client": 720,
+                "scroll": 720
+              }
+            ]
+          },
+          "lowContrast": [],
+          "smallControls": [
+            {
+              "tag": "INPUT",
+              "role": null,
+              "name": "Choose PDF files",
+              "disabled": false,
+              "tabIndex": -1,
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          ]
+        },
+        {
+          "name": "text200-720-merged",
+          "overflow": {
+            "root": 5,
+            "body": 5,
+            "conversation": [
+              {
+                "client": 720,
+                "scroll": 720
+              }
+            ]
+          },
+          "lowContrast": [],
+          "smallControls": [
+            {
+              "tag": "INPUT",
+              "role": null,
+              "name": "Choose PDF files",
+              "disabled": false,
+              "tabIndex": -1,
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          ]
+        },
+        {
+          "name": "text200-720-preview",
+          "overflow": {
+            "root": 5,
+            "body": 5,
+            "conversation": [
+              {
+                "client": 720,
+                "scroll": 720
+              }
+            ]
+          },
+          "lowContrast": [],
+          "smallControls": [
+            {
+              "tag": "INPUT",
+              "role": null,
+              "name": "Choose PDF files",
+              "disabled": false,
+              "tabIndex": -1,
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          ]
+        }
+      ],
+      "requests": [
+        {
+          "origin": "http://localhost:3213",
+          "path": "/",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/_expo/static/css/global-b21c3e4fc8f2e90d6b28480d218ecb0e.css",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/_expo/static/css/preview-91fe9b8844909d50a6752bcd087a7138.css",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/_expo/static/js/web/index-631bb63366488d626f71905e7ccc8cbb.js",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/assets/assets/approved-8-mark-source-crop.8b708587521942c4118f8e6a3c3f84f8.png",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/assets/assets/approved-atepdf-wordmark-source-crop.e129a61b59d2f9c2fdcb1f1b2521e212.png",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/atepdf.worker.js",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/_expo/static/js/web/pdf-6c360a0f82f065a844b8bf2609a9c02e.js",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/pdf.worker.min.mjs",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/atepdf.worker.js",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/pdf.worker.min.mjs",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/api/planner/status",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/atepdf.worker.js",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/pdf.worker.min.mjs",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/api/planner/status",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/pdf.worker.min.mjs",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Regular.ttf",
+          "method": "GET"
+        },
+        {
+          "origin": "http://localhost:3213",
+          "path": "/engines/standard_fonts/LiberationSans-Bold.ttf",
+          "method": "GET"
+        }
+      ],
+      "console": [],
+      "keyboard": [],
+      "timings": {
+        "readyMs": 217,
+        "mergeMs": 211
+      }
+    }
+  ],
+  "overlay": {
+    "preflight": {
+      "title": "[Audit B] atepdf",
+      "scriptRan": true
+    },
+    "helper": {
+      "attempt": "Timed out waiting for live server to start.",
+      "cleanup": "No running live server found.",
+      "injected": false,
+      "visible": false
+    }
+  },
+  "errors": [
+    {
+      "message": "locator.waitFor: Error: strict mode violation: getByRole('dialog') resolved to 2 elements:\n    1) <div role=\"dialog\" aria-modal=\"true\" class=\"css-g5y9jx r-1p0dtai r-1d2f490 r-1xcajam r-zchlnj r-ipm5af r-1niwhzg\">…</div> aka getByRole('dialog').first()\n    2) <div role=\"dialog\" class=\"css-g5y9jx w-full max-w-lg self-center gap-4 rounded-3xl bg-background p-6\">…</div> aka getByText('Processed on your devicePDF')\n\nCall log:\n\u001b[2m  - waiting for getByRole('dialog') to be visible\u001b[22m\n",
+      "stack": "locator.waitFor: Error: strict mode violation: getByRole('dialog') resolved to 2 elements:\n    1) <div role=\"dialog\" aria-modal=\"true\" class=\"css-g5y9jx r-1p0dtai r-1d2f490 r-1xcajam r-zchlnj r-ipm5af r-1niwhzg\">…</div> aka getByRole('dialog').first()\n    2) <div role=\"dialog\" class=\"css-g5y9jx w-full max-w-lg self-center gap-4 rounded-3xl bg-background p-6\">…</div> aka getByText('Processed on your devicePDF')\n\nCall log:\n\u001b[2m  - waiting for getByRole('dialog') to be visible\u001b[22m\n\n    at /Users/shrey/Documents/ChatGPT/atepdf/.build/ux-20260929/candidate-assessment-b/audit.mjs:42:154"
+    },
+    {
+      "message": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Got it', exact: true })\u001b[22m\n",
+      "stack": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Got it', exact: true })\u001b[22m\n\n    at /Users/shrey/Documents/ChatGPT/atepdf/.build/ux-20260929/candidate-assessment-b/audit.mjs:45:90"
+    },
+    {
+      "message": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Next page', exact: true })\u001b[22m\n\u001b[2m    - locator resolved to <button type=\"button\" aria-label=\"Next page\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <div class=\"css-g5y9jx aui-composer-shell border-border dark:border-muted-foreground/15 bg-card gap-1 rounded-[28px] border p-2\">…</div> from <div class=\"css-g5y9jx aui-thread-viewport-footer gap-3 px-4\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <button tabindex=\"0\" role=\"button\" type=\"button\" aria-label=\"Processed on your device\" class=\"css-g5y9jx r-1loqt21 r-1otgn73 atepdf-button min-h-11 min-w-11 flex-row items-center justify-center gap-2 rounded-full bg-[#edf9f4] px-3\">…</button> from <div class=\"css-g5y9jx flex-row items-center justify-between gap-3 px-4 py-2 md:px-8 md:py-4\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <div class=\"css-g5y9jx aui-composer-shell border-border dark:border-muted-foreground/15 bg-card gap-1 rounded-[28px] border p-2\">…</div> from <div class=\"css-g5y9jx aui-thread-viewport-footer gap-3 px-4\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  2 × retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <textarea rows=\"1\" dir=\"auto\" autocorrect=\"on\" autocomplete=\"on\" spellcheck=\"true\" autocapitalize=\"sentences\" virtualkeyboardpolicy=\"auto\" aria-label=\"Tell atepdf what to do\" placeholder=\"Tell atepdf what to do…\" class=\"css-11aywtz r-6taxm2 aui-composer-input text-foreground web:resize-none web:outline-none max-h-40 min-h-12 px-3 py-2 text-base leading-6\"></textarea> from <div class=\"css-g5y9jx aui-thread-viewport-footer gap-3 px-4\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  14 × retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m       - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <button tabindex=\"0\" role=\"button\" type=\"button\" aria-label=\"Processed on your device\" class=\"css-g5y9jx r-1loqt21 r-1otgn73 atepdf-button min-h-11 min-w-11 flex-row items-center justify-center gap-2 rounded-full bg-[#edf9f4] px-3\">…</button> from <div class=\"css-g5y9jx flex-row items-center justify-between gap-3 px-4 py-2 md:px-8 md:py-4\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m       - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"css-g5y9jx aui-composer-shell border-border dark:border-muted-foreground/15 bg-card gap-1 rounded-[28px] border p-2\">…</div> from <div class=\"css-g5y9jx aui-thread-viewport-footer gap-3 px-4\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m       - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <textarea rows=\"1\" dir=\"auto\" autocorrect=\"on\" autocomplete=\"on\" spellcheck=\"true\" autocapitalize=\"sentences\" virtualkeyboardpolicy=\"auto\" aria-label=\"Tell atepdf what to do\" placeholder=\"Tell atepdf what to do…\" class=\"css-11aywtz r-6taxm2 aui-composer-input text-foreground web:resize-none web:outline-none max-h-40 min-h-12 px-3 py-2 text-base leading-6\"></textarea> from <div class=\"css-g5y9jx aui-thread-viewport-footer gap-3 px-4\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m       - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <textarea rows=\"1\" dir=\"auto\" autocorrect=\"on\" autocomplete=\"on\" spellcheck=\"true\" autocapitalize=\"sentences\" virtualkeyboardpolicy=\"auto\" aria-label=\"Tell atepdf what to do\" placeholder=\"Tell atepdf what to do…\" class=\"css-11aywtz r-6taxm2 aui-composer-input text-foreground web:resize-none web:outline-none max-h-40 min-h-12 px-3 py-2 text-base leading-6\"></textarea> from <div class=\"css-g5y9jx aui-thread-viewport-footer gap-3 px-4\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <button tabindex=\"0\" role=\"button\" type=\"button\" aria-label=\"Processed on your device\" class=\"css-g5y9jx r-1loqt21 r-1otgn73 atepdf-button min-h-11 min-w-11 flex-row items-center justify-center gap-2 rounded-full bg-[#edf9f4] px-3\">…</button> from <div class=\"css-g5y9jx flex-row items-center justify-between gap-3 px-4 py-2 md:px-8 md:py-4\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n",
+      "stack": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Next page', exact: true })\u001b[22m\n\u001b[2m    - locator resolved to <button type=\"button\" aria-label=\"Next page\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <div class=\"css-g5y9jx aui-composer-shell border-border dark:border-muted-foreground/15 bg-card gap-1 rounded-[28px] border p-2\">…</div> from <div class=\"css-g5y9jx aui-thread-viewport-footer gap-3 px-4\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <button tabindex=\"0\" role=\"button\" type=\"button\" aria-label=\"Processed on your device\" class=\"css-g5y9jx r-1loqt21 r-1otgn73 atepdf-button min-h-11 min-w-11 flex-row items-center justify-center gap-2 rounded-full bg-[#edf9f4] px-3\">…</button> from <div class=\"css-g5y9jx flex-row items-center justify-between gap-3 px-4 py-2 md:px-8 md:py-4\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <div class=\"css-g5y9jx aui-composer-shell border-border dark:border-muted-foreground/15 bg-card gap-1 rounded-[28px] border p-2\">…</div> from <div class=\"css-g5y9jx aui-thread-viewport-footer gap-3 px-4\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  2 × retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <textarea rows=\"1\" dir=\"auto\" autocorrect=\"on\" autocomplete=\"on\" spellcheck=\"true\" autocapitalize=\"sentences\" virtualkeyboardpolicy=\"auto\" aria-label=\"Tell atepdf what to do\" placeholder=\"Tell atepdf what to do…\" class=\"css-11aywtz r-6taxm2 aui-composer-input text-foreground web:resize-none web:outline-none max-h-40 min-h-12 px-3 py-2 text-base leading-6\"></textarea> from <div class=\"css-g5y9jx aui-thread-viewport-footer gap-3 px-4\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  14 × retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m       - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <button tabindex=\"0\" role=\"button\" type=\"button\" aria-label=\"Processed on your device\" class=\"css-g5y9jx r-1loqt21 r-1otgn73 atepdf-button min-h-11 min-w-11 flex-row items-center justify-center gap-2 rounded-full bg-[#edf9f4] px-3\">…</button> from <div class=\"css-g5y9jx flex-row items-center justify-between gap-3 px-4 py-2 md:px-8 md:py-4\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m       - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"css-g5y9jx aui-composer-shell border-border dark:border-muted-foreground/15 bg-card gap-1 rounded-[28px] border p-2\">…</div> from <div class=\"css-g5y9jx aui-thread-viewport-footer gap-3 px-4\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m       - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <textarea rows=\"1\" dir=\"auto\" autocorrect=\"on\" autocomplete=\"on\" spellcheck=\"true\" autocapitalize=\"sentences\" virtualkeyboardpolicy=\"auto\" aria-label=\"Tell atepdf what to do\" placeholder=\"Tell atepdf what to do…\" class=\"css-11aywtz r-6taxm2 aui-composer-input text-foreground web:resize-none web:outline-none max-h-40 min-h-12 px-3 py-2 text-base leading-6\"></textarea> from <div class=\"css-g5y9jx aui-thread-viewport-footer gap-3 px-4\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m       - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <textarea rows=\"1\" dir=\"auto\" autocorrect=\"on\" autocomplete=\"on\" spellcheck=\"true\" autocapitalize=\"sentences\" virtualkeyboardpolicy=\"auto\" aria-label=\"Tell atepdf what to do\" placeholder=\"Tell atepdf what to do…\" class=\"css-11aywtz r-6taxm2 aui-composer-input text-foreground web:resize-none web:outline-none max-h-40 min-h-12 px-3 py-2 text-base leading-6\"></textarea> from <div class=\"css-g5y9jx aui-thread-viewport-footer gap-3 px-4\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <button tabindex=\"0\" role=\"button\" type=\"button\" aria-label=\"Processed on your device\" class=\"css-g5y9jx r-1loqt21 r-1otgn73 atepdf-button min-h-11 min-w-11 flex-row items-center justify-center gap-2 rounded-full bg-[#edf9f4] px-3\">…</button> from <div class=\"css-g5y9jx flex-row items-center justify-between gap-3 px-4 py-2 md:px-8 md:py-4\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n\n    at /Users/shrey/Documents/ChatGPT/atepdf/.build/ux-20260929/candidate-assessment-b/audit.mjs:52:64"
+    }
+  ],
+  "finished": "2026-09-28T19:44:06.029Z",
+  "cleanup": {
+    "browsersClosed": true,
+    "sourceEdits": false,
+    "appServerUntouched": true
+  }
+}

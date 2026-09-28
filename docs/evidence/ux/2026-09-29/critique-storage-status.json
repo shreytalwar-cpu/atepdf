@@ -1,0 +1,17 @@
+{
+  "target": "apps/universal/App.tsx",
+  "slug": "apps-universal-app-tsx",
+  "snapshot": ".impeccable/critique/2026-09-28T20-17-28Z__apps-universal-app-tsx.md",
+  "write": "success",
+  "trend": [
+    {
+      "score": 30,
+      "max": 40
+    }
+  ],
+  "temporaryBodyRemoved": true,
+  "laterLatestExit": 2,
+  "laterLatestReason": "Exact target bytes changed after candidate8; helper automatically closed stale backlog while retaining score history",
+  "finalScoreAssigned": false,
+  "rawEvidenceWhitespace": "Tool-generated frontmatter, error-context source excerpts and build logs preserve their original whitespace; application source and authored report checks pass."
+}

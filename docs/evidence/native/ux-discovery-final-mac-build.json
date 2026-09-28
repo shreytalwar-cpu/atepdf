@@ -1,0 +1,40 @@
+{
+  "builtAt": "2026-09-28T20:33:13.085765+00:00",
+  "app": "/private/tmp/atepdf-mac-q1y4ostq/atepdf.app",
+  "identifier": "dev.atepdf.fresh.mac",
+  "buildLog": "/Users/shrey/Documents/ChatGPT/atepdf/.build/mac-build-U4GhOQ",
+  "signature": "local ad-hoc, development only",
+  "hardenedRuntime": false,
+  "strictSignatureVerification": "passed",
+  "entitlements": {
+    "com.apple.security.app-sandbox": true,
+    "com.apple.security.network.client": true,
+    "com.apple.security.files.user-selected.read-write": true
+  },
+  "networkEntitlements": "outgoing only; native planner permits paired loopback or pinned private TLS endpoints",
+  "nestedCodeObjects": 14,
+  "stagedFrameworkNormalizations": [
+    {
+      "framework": "React",
+      "identicalVersionCopies": true,
+      "builtBinarySha256BeforeSigning": "ad352f81fd4a5142e136791b9b0a00183edee21aab4dc078bea5363867cf5ff1"
+    },
+    {
+      "framework": "ReactNativeDependencies",
+      "identicalVersionCopies": true,
+      "builtBinarySha256BeforeSigning": "43bcab018ca428cecb60f55bd69fe3627c1de24f808e14fdce8dac004899bf01"
+    }
+  ],
+  "binarySha256": "155e791ec6b3275fc164b3a4def8e34cf07e3b4247c2c61cbed0e028efe3645f",
+  "launchRequested": false,
+  "launchVerified": false,
+  "scope": "Local developer artifact; not notarized or distribution-ready.",
+  "sourceCommit": "7935daa9ec3af260b65650a97ef719fe1001db42",
+  "sourceBinding": "docs/evidence/native/ux-discovery-final-commit-binding.json",
+  "sourceStillMatchesAfterBuild": true,
+  "buildCommand": "scripts/native/mac-build.sh (no arguments; no launch)",
+  "actualXcodeBuildResult": "BUILD SUCCEEDED",
+  "sourceAppSHA256": "1e0b24c3a8b28b969b72a42df923dfddf6c5baaaeca73eb96e18af7347c95d5f",
+  "bundleSHA256": "ed7b014441749538693e77f6a1779c7a160563e55358d475bad84892b2bd9fd9",
+  "proofScope": "Actual Release Catalyst compilation, unique local staging, ad-hoc signature and exact sandbox entitlement verification. No launch, UI test, install, production signing or notarization."
+}

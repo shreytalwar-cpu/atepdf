@@ -1,0 +1,94 @@
+{
+  "scope": "One cold desktop Chrome navigation; 1440x1000; CPU 4x slowdown; 1.6 Mbps download, 0.75 Mbps upload, 150 ms latency; local preview server; not physical mobile or production CDN.",
+  "browser": "154.0.8037.58",
+  "html": "0054b8192566df7108bf418b0fc965b6d951f490361bd6505f766fd7ca024f45",
+  "ready": 12197,
+  "clickResponse": 12293,
+  "metrics": {
+    "navigation": [
+      {
+        "domContentLoaded": 11905.20000000298,
+        "load": 11907.59999999404,
+        "responseEnd": 169.29999999701977,
+        "encodedBodySize": 1760,
+        "transferSize": 2060
+      }
+    ],
+    "resources": [
+      {
+        "path": "/_expo/static/css/global-d4d6ccab383182f1e451d3012f50f781.css",
+        "encoded": 24056,
+        "decoded": 24056,
+        "transfer": 24356,
+        "duration": 441.70000000298023
+      },
+      {
+        "path": "/_expo/static/css/workspace-c6f57ae66ccf92ad62601b485fa4e58a.css",
+        "encoded": 971,
+        "decoded": 971,
+        "transfer": 1271,
+        "duration": 201.70000000298023
+      },
+      {
+        "path": "/_expo/static/css/preview-4a592c39668f775437665576652be491.css",
+        "encoded": 2503,
+        "decoded": 2503,
+        "transfer": 2803,
+        "duration": 226.70000000298023
+      },
+      {
+        "path": "/_expo/static/js/web/index-356409ae3ac271b0e3724cec6263d3e7.js",
+        "encoded": 2238893,
+        "decoded": 2238893,
+        "transfer": 2239193,
+        "duration": 11521.90000000596
+      },
+      {
+        "path": "/favicon.ico",
+        "encoded": 0,
+        "decoded": 0,
+        "transfer": 0,
+        "duration": 0.7000000029802322
+      }
+    ],
+    "paint": [
+      {
+        "name": "first-paint",
+        "time": 12196
+      },
+      {
+        "name": "first-contentful-paint",
+        "time": 12196
+      }
+    ],
+    "longTasks": [
+      {
+        "start": 11700.70000000298,
+        "duration": 205
+      },
+      {
+        "start": 11907.70000000298,
+        "duration": 141
+      },
+      {
+        "start": 12077.20000000298,
+        "duration": 100
+      }
+    ],
+    "lcp": [
+      {
+        "start": 12196,
+        "size": 4860,
+        "tag": "H1"
+      }
+    ]
+  },
+  "coverage": [
+    {
+      "path": "/_expo/static/js/web/index-356409ae3ac271b0e3724cec6263d3e7.js",
+      "totalChars": 2238892,
+      "functions": 9044
+    }
+  ],
+  "errors": []
+}

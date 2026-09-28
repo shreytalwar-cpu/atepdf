@@ -1,0 +1,137 @@
+[
+  {
+    "path": "docs/evidence/cancel-after.pdf",
+    "newSha256": "06958740c659e67c886fb87909e438b5c243e4b62fc0504c87164084bb95f263",
+    "restoredSha256": "a8240152e0efa5bf73c67bd14ae4bb8d26eae0c6253c139056cc32f5c4aa247e"
+  },
+  {
+    "path": "docs/evidence/cancel-before.pdf",
+    "newSha256": "06958740c659e67c886fb87909e438b5c243e4b62fc0504c87164084bb95f263",
+    "restoredSha256": "a8240152e0efa5bf73c67bd14ae4bb8d26eae0c6253c139056cc32f5c4aa247e"
+  },
+  {
+    "path": "docs/evidence/chain-before.pdf",
+    "newSha256": "88411860dc2961017f9c2cd988a2b860111216e9d8a69f4f99c38e917759905b",
+    "restoredSha256": "dac3d8befb06cc0b614da4b82afb8858e2fa1a74d11083a033e637f11cf6fd83"
+  },
+  {
+    "path": "docs/evidence/chain-final.pdf",
+    "newSha256": "c00fdd30e49c0aa3412babbcf4c408dcdfae08532599c4e262129929c4516e18",
+    "restoredSha256": "99a778fed41ad900a216a6d706076cd8c460a3f574b7ba9a96dad96ca37aabaa"
+  },
+  {
+    "path": "docs/evidence/chain-measurements.json",
+    "newSha256": "4aa69d7a1ad660b74f158d80763adbb07c2e093a8c1040357d6cb6c8850b43e7",
+    "restoredSha256": "3e5823b692a497e82954ee68d1eec8cc100cd8433e5791c2001300bcf164854a"
+  },
+  {
+    "path": "docs/evidence/chain-result.png",
+    "newSha256": "e7b9ca24c277d125099c54104353f8c7876253fb91db201482fc6cff782e2e1a",
+    "restoredSha256": "e658f27dcbba4fef17eb997fd93308505f9f9cccfac7893d1bfe83b5b743dc71"
+  },
+  {
+    "path": "docs/evidence/chain-searchable.pdf",
+    "newSha256": "b3e5049d5c9bd34335538419eb2a344077b222c8ae1b51d73332ea2315d74cf7",
+    "restoredSha256": "5f1c1a727c7c963a2816039b838909347a857a2a05814c1293ef3c4751cdbe9b"
+  },
+  {
+    "path": "docs/evidence/compact.png",
+    "newSha256": "d1b3261cc381656fa57533c63078ee35680412c982a1b3ced34beaa3731b08ab",
+    "restoredSha256": "22ad681812f63f4f1e0153c47feae873507a23e089ad07963d8ded272a756d3c"
+  },
+  {
+    "path": "docs/evidence/desktop-empty.png",
+    "newSha256": "aa29efe7fbf37959c32eb19ca76a72a656652ab5668ec7d3608d4d099e317399",
+    "restoredSha256": "f72ced0906911856d649bbe8c3786b9238f6b8c15a034f0ad7601205d29c3a7e"
+  },
+  {
+    "path": "docs/evidence/desktop-result.png",
+    "newSha256": "7fa191c387cd102b3a1e60730753be29307ecab7434de1025955aee3d909efe9",
+    "restoredSha256": "16296ca7d915f58f69b688079d1ceef5e30d6ff7e06014831ad56a600883c01b"
+  },
+  {
+    "path": "docs/evidence/drag-feedback.png",
+    "newSha256": "2bff866d89107c3cd261047cb34c1f92ad4ed9396c2139cab5656b3d9f6b8f30",
+    "restoredSha256": "962bac3bf2e2c9a19a8d13271b4d0720485b7d8c054e9ec198644830f47ba4a4"
+  },
+  {
+    "path": "docs/evidence/keyboard.png",
+    "newSha256": "97ae1c4432d295330be8d82e5e234c51b6be4c2bd98cb17b076de4280edc5ad4",
+    "restoredSha256": "8c9eee4141671e9fb7f558ee4aed06260eb4be567de7ad6af71158ae015d1119"
+  },
+  {
+    "path": "docs/evidence/latest-message-result.png",
+    "newSha256": "0a5dbeda96a8f25a7241291b69aac34f3410bc3a4d2a0e9320896fea82072888",
+    "restoredSha256": "0307503bf390943667fff272d3dded752415abc85d6c084c28cac9709c13e949"
+  },
+  {
+    "path": "docs/evidence/local-processing-reduced-motion.png",
+    "newSha256": "dadba0407139e71452dc136a2706cb227509fbbc923ec5d8292e4ea10769ff7b",
+    "restoredSha256": "0bd067598fa994c7f071d380e8b4b2e389cf603fa18f6b88f4d4fab72ea4b977"
+  },
+  {
+    "path": "docs/evidence/merged.pdf",
+    "newSha256": "273902af65917b3855b8cd99a9e4634a3eb79d968ffac88319461fd81f3a8b01",
+    "restoredSha256": "0e1002417eee899a61e85fee1e46cd4a04abb2a3fb14b4b7fd9a4dac3851cd61"
+  },
+  {
+    "path": "docs/evidence/network-chain.json",
+    "newSha256": "bfdaaf6668493200d82b5f1cb148feaa388db47e7c0cd3aa2426a8c2cf28292c",
+    "restoredSha256": "02cd2607fee9e36d3f1d4fb98fe6fbdf00c2c57eeae3286f9cdda4fb260b396b"
+  },
+  {
+    "path": "docs/evidence/network-merge.json",
+    "newSha256": "eb7456c8690ffcbc39719ffdc986b861d9f34dc11db30c26353520dc0b2ddf3d",
+    "restoredSha256": "78717fda201ba0dd05487f8bfd37be4016dd7a3c061b6aa0237e634d9b554d62"
+  },
+  {
+    "path": "docs/evidence/phone-result.png",
+    "newSha256": "43bad0fc64b1d87d0f595f15295e4eba6c1e2bddc98c393d6d911fe3002e2c97",
+    "restoredSha256": "d90d51a61ad5a0a8464a07414d9b6823ef3be8673686173fdbfb705c659d0f06"
+  },
+  {
+    "path": "docs/evidence/phone.png",
+    "newSha256": "d8446b897e561686e89b5f487dff6c1ec0cea41716483a0c4785e24cf4789732",
+    "restoredSha256": "940781e64e8c6e17959d41e69357f671342bdba7db595ed7d3772a311dfc9029"
+  },
+  {
+    "path": "docs/evidence/planner/large-files.json",
+    "newSha256": "9a59ac04e8cdc175756b1fadc4b9dbd17df50341a678fcc5e63c05dfc93f854b",
+    "restoredSha256": "cda19f616a1f8d524cb213629340ead9e77e253ed102e3cfc8da68ae22067bf9"
+  },
+  {
+    "path": "docs/evidence/planner/large-pdf-preview.png",
+    "newSha256": "0461fcdd6642eace85d6c57e404f4769957b3ace9cc291a34b3ad521914ed028",
+    "restoredSha256": "06d4bdcf2a18cbee9055198717db15e0c74ab92bb9a2b3455e5745e87e227de7"
+  },
+  {
+    "path": "docs/evidence/preview.png",
+    "newSha256": "3a93806bed26af3764f6ade97ec0baaa58751e7d4b4b8c373178d7e03418c064",
+    "restoredSha256": "9ee6ffb08a793d30edc556036d6a7f6c3cfce28500fc022d7c737d486819e692"
+  },
+  {
+    "path": "docs/evidence/recipe-final.pdf",
+    "newSha256": "7e9d0f3d0a14de271b69f035c06395cf41f874c84c435b66f271fc87b19312ac",
+    "restoredSha256": "6d27352f745f30139ef5ab346fa5d0183eb7bba0206257147ce13e940fca8bc0"
+  },
+  {
+    "path": "docs/evidence/removed.pdf",
+    "newSha256": "b79333b9fcc803436c6f59e1d0739f1acd1306c28eea15c93d6e40ba86d08ac2",
+    "restoredSha256": "0ba9ac9b86e95ecd632f047d66e79bf309259eb5f0af2bafb2e6cdd005262bad"
+  },
+  {
+    "path": "docs/evidence/tablet-landscape.png",
+    "newSha256": "9b9e2bde4e23a8eab9ab408773b96a03f41ccd39702f0f4ee27ac43a9973635d",
+    "restoredSha256": "282955d8c0fdcc3de0c54b51bd9da7dea0d5ef63a5e9c61f407ac63c758cd81d"
+  },
+  {
+    "path": "docs/evidence/tablet-portrait.png",
+    "newSha256": "ec25b9ed48f865d2947a138765156daaf2978735732d2083bf23a178ead5a65b",
+    "restoredSha256": "27416e65d72bd2f655b000c6b370c37c1c9ca747ac9663349d78b0df0c0e8760"
+  },
+  {
+    "path": "docs/evidence/undo.pdf",
+    "newSha256": "273902af65917b3855b8cd99a9e4634a3eb79d968ffac88319461fd81f3a8b01",
+    "restoredSha256": "0e1002417eee899a61e85fee1e46cd4a04abb2a3fb14b4b7fd9a4dac3851cd61"
+  }
+]

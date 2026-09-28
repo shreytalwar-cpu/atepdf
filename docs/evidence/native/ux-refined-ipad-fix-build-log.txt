@@ -1,0 +1,3 @@
+Command line invocation:
+    /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild build-for-testing -workspace apps/universal/ios/atepdf.xcworkspace -scheme atepdfUI -configuration Release -destination "platform=iOS Simulator,id=526CAD4B-89C5-49C1-8CEE-F65602AA0DEE" -derivedDataPath .build/ux-refined-native -parallel-testing-enabled NO CODE_SIGNING_ALLOWED=NO ONLY_ACTIVE_ARCH=YES ARCHS=arm64
+** TEST BUILD SUCCEEDED **

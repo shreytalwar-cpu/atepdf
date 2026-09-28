@@ -1,0 +1,272 @@
+[
+  {
+    "file": "apps/universal/App.tsx",
+    "imported": "ArrowDownToLine",
+    "local": "ArrowDownToLine",
+    "target": "lucide-react-native/icons/arrow-down-to-line"
+  },
+  {
+    "file": "apps/universal/App.tsx",
+    "imported": "Check",
+    "local": "Check",
+    "target": "lucide-react-native/icons/check"
+  },
+  {
+    "file": "apps/universal/App.tsx",
+    "imported": "FileText",
+    "local": "FileText",
+    "target": "lucide-react-native/icons/file-text"
+  },
+  {
+    "file": "apps/universal/App.tsx",
+    "imported": "FolderOpen",
+    "local": "FolderOpen",
+    "target": "lucide-react-native/icons/folder-open"
+  },
+  {
+    "file": "apps/universal/App.tsx",
+    "imported": "LockKeyhole",
+    "local": "LockKeyhole",
+    "target": "lucide-react-native/icons/lock-keyhole"
+  },
+  {
+    "file": "apps/universal/App.tsx",
+    "imported": "Plus",
+    "local": "Plus",
+    "target": "lucide-react-native/icons/plus"
+  },
+  {
+    "file": "apps/universal/App.tsx",
+    "imported": "ScanText",
+    "local": "ScanText",
+    "target": "lucide-react-native/icons/scan-text"
+  },
+  {
+    "file": "apps/universal/App.tsx",
+    "imported": "Copy",
+    "local": "Copy",
+    "target": "lucide-react-native/icons/copy"
+  },
+  {
+    "file": "apps/universal/App.tsx",
+    "imported": "Undo2",
+    "local": "Undo2",
+    "target": "lucide-react-native/icons/undo-2"
+  },
+  {
+    "file": "apps/universal/App.tsx",
+    "imported": "SquarePen",
+    "local": "SquarePen",
+    "target": "lucide-react-native/icons/square-pen"
+  },
+  {
+    "file": "apps/universal/App.tsx",
+    "imported": "SlidersHorizontal",
+    "local": "SlidersHorizontal",
+    "target": "lucide-react-native/icons/sliders-horizontal"
+  },
+  {
+    "file": "apps/universal/App.tsx",
+    "imported": "Eye",
+    "local": "Eye",
+    "target": "lucide-react-native/icons/eye"
+  },
+  {
+    "file": "apps/universal/src/components/assistant-ui/elements/thread.aui.tsx",
+    "imported": "ArrowUpIcon",
+    "local": "ArrowUpIcon",
+    "target": "lucide-react-native/icons/arrow-up"
+  },
+  {
+    "file": "apps/universal/src/components/assistant-ui/elements/thread.aui.tsx",
+    "imported": "ArrowDownIcon",
+    "local": "ArrowDownIcon",
+    "target": "lucide-react-native/icons/arrow-down"
+  },
+  {
+    "file": "apps/universal/src/components/assistant-ui/elements/thread.aui.tsx",
+    "imported": "AudioLinesIcon",
+    "local": "AudioLinesIcon",
+    "target": "lucide-react-native/icons/audio-lines"
+  },
+  {
+    "file": "apps/universal/src/components/assistant-ui/elements/thread.aui.tsx",
+    "imported": "CheckIcon",
+    "local": "CheckIcon",
+    "target": "lucide-react-native/icons/check"
+  },
+  {
+    "file": "apps/universal/src/components/assistant-ui/elements/thread.aui.tsx",
+    "imported": "ChevronLeftIcon",
+    "local": "ChevronLeftIcon",
+    "target": "lucide-react-native/icons/chevron-left"
+  },
+  {
+    "file": "apps/universal/src/components/assistant-ui/elements/thread.aui.tsx",
+    "imported": "ChevronRightIcon",
+    "local": "ChevronRightIcon",
+    "target": "lucide-react-native/icons/chevron-right"
+  },
+  {
+    "file": "apps/universal/src/components/assistant-ui/elements/thread.aui.tsx",
+    "imported": "CopyIcon",
+    "local": "CopyIcon",
+    "target": "lucide-react-native/icons/copy"
+  },
+  {
+    "file": "apps/universal/src/components/assistant-ui/elements/thread.aui.tsx",
+    "imported": "PencilIcon",
+    "local": "PencilIcon",
+    "target": "lucide-react-native/icons/pencil"
+  },
+  {
+    "file": "apps/universal/src/components/assistant-ui/elements/thread.aui.tsx",
+    "imported": "MicIcon",
+    "local": "MicIcon",
+    "target": "lucide-react-native/icons/mic"
+  },
+  {
+    "file": "apps/universal/src/components/assistant-ui/elements/thread.aui.tsx",
+    "imported": "PhoneIcon",
+    "local": "PhoneIcon",
+    "target": "lucide-react-native/icons/phone"
+  },
+  {
+    "file": "apps/universal/src/components/assistant-ui/elements/thread.aui.tsx",
+    "imported": "RefreshCwIcon",
+    "local": "RefreshCwIcon",
+    "target": "lucide-react-native/icons/refresh-cw"
+  },
+  {
+    "file": "apps/universal/src/components/JobActivity.tsx",
+    "imported": "Check",
+    "local": "Check",
+    "target": "lucide-react-native/icons/check"
+  },
+  {
+    "file": "apps/universal/src/components/JobActivity.tsx",
+    "imported": "ChevronDown",
+    "local": "ChevronDown",
+    "target": "lucide-react-native/icons/chevron-down"
+  },
+  {
+    "file": "apps/universal/src/components/JobActivity.tsx",
+    "imported": "ChevronUp",
+    "local": "ChevronUp",
+    "target": "lucide-react-native/icons/chevron-up"
+  },
+  {
+    "file": "apps/universal/src/components/JobActivity.tsx",
+    "imported": "Circle",
+    "local": "Circle",
+    "target": "lucide-react-native/icons/circle"
+  },
+  {
+    "file": "apps/universal/src/components/JobActivity.tsx",
+    "imported": "FileCheck2",
+    "local": "FileCheck2",
+    "target": "lucide-react-native/icons/file-check-corner"
+  },
+  {
+    "file": "apps/universal/src/components/JobActivity.tsx",
+    "imported": "Layers",
+    "local": "Layers",
+    "target": "lucide-react-native/icons/layers"
+  },
+  {
+    "file": "apps/universal/src/components/JobActivity.tsx",
+    "imported": "ScanText",
+    "local": "ScanText",
+    "target": "lucide-react-native/icons/scan-text"
+  },
+  {
+    "file": "apps/universal/src/components/JobActivity.tsx",
+    "imported": "Shrink",
+    "local": "Shrink",
+    "target": "lucide-react-native/icons/shrink"
+  },
+  {
+    "file": "apps/universal/src/components/JobActivity.tsx",
+    "imported": "Sparkles",
+    "local": "Sparkles",
+    "target": "lucide-react-native/icons/sparkles"
+  },
+  {
+    "file": "apps/universal/src/components/JobActivity.tsx",
+    "imported": "X",
+    "local": "X",
+    "target": "lucide-react-native/icons/x"
+  },
+  {
+    "file": "apps/universal/src/platform/Preview.web.tsx",
+    "imported": "ChevronLeft",
+    "local": "ChevronLeft",
+    "target": "lucide-react-native/icons/chevron-left"
+  },
+  {
+    "file": "apps/universal/src/platform/Preview.web.tsx",
+    "imported": "ChevronRight",
+    "local": "ChevronRight",
+    "target": "lucide-react-native/icons/chevron-right"
+  },
+  {
+    "file": "apps/universal/src/platform/Preview.web.tsx",
+    "imported": "Minus",
+    "local": "Minus",
+    "target": "lucide-react-native/icons/minus"
+  },
+  {
+    "file": "apps/universal/src/platform/Preview.web.tsx",
+    "imported": "Plus",
+    "local": "Plus",
+    "target": "lucide-react-native/icons/plus"
+  },
+  {
+    "file": "apps/universal/src/platform/Preview.web.tsx",
+    "imported": "X",
+    "local": "X",
+    "target": "lucide-react-native/icons/x"
+  },
+  {
+    "file": "apps/universal/src/platform/Preview.native.tsx",
+    "imported": "ChevronLeft",
+    "local": "ChevronLeft",
+    "target": "lucide-react-native/icons/chevron-left"
+  },
+  {
+    "file": "apps/universal/src/platform/Preview.native.tsx",
+    "imported": "ChevronRight",
+    "local": "ChevronRight",
+    "target": "lucide-react-native/icons/chevron-right"
+  },
+  {
+    "file": "apps/universal/src/platform/Preview.native.tsx",
+    "imported": "FileText",
+    "local": "FileText",
+    "target": "lucide-react-native/icons/file-text"
+  },
+  {
+    "file": "apps/universal/src/platform/Preview.native.tsx",
+    "imported": "Minus",
+    "local": "Minus",
+    "target": "lucide-react-native/icons/minus"
+  },
+  {
+    "file": "apps/universal/src/platform/Preview.native.tsx",
+    "imported": "Plus",
+    "local": "Plus",
+    "target": "lucide-react-native/icons/plus"
+  },
+  {
+    "file": "apps/universal/src/platform/Preview.native.tsx",
+    "imported": "X",
+    "local": "X",
+    "target": "lucide-react-native/icons/x"
+  },
+  {
+    "file": "apps/universal/src/platform/DropSurface.web.tsx",
+    "imported": "FilePlus2",
+    "local": "FilePlus2",
+    "target": "lucide-react-native/icons/file-plus-corner"
+  }
+]

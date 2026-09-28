@@ -32,6 +32,7 @@ import {validateEnvelope,type Request as PlannerRequest,type Envelope, type Step
 const formatSize = (n: number) => n < 1_000_000 ? `${(n / 1000).toFixed(1)} kB` : `${(n / 1_000_000).toFixed(2)} MB`;
 const pageCount = (count: number) => `${count} ${count === 1 ? 'page' : 'pages'}`;
 const localResultTitle = (type: Action, page = 2) => type === 'merge' ? 'Merged PDF' : type === 'remove' ? `PDF with page ${page} removed` : type === 'ocr' ? 'Searchable PDF' : type === 'chain' ? 'Searchable, optimised PDF' : 'Optimised PDF';
+const localCapabilityHelp = `I can merge PDFs, remove pages${ocrAvailable ? ', make scanned English PDFs searchable' : ''}, and compress supported images inside a PDF. Add PDFs, then use a quick action or type “remove page 2”. Type “undo” to restore the previous result.\n\nThese tasks work without an AI connection. Connecting AI is optional for more flexible requests.`;
 function plannedResultTitle(steps: Step[]) {
   const last = steps.at(-1);
   if (last?.operation === 'select_pages') {
@@ -66,6 +67,12 @@ function useWorkspace() {
   const focus = store.focus ? store.list.find(f => f.ref === store.focus) : null;
   const append = (entry: Omit<Entry, 'id'>) => { const id = ++nextId.current; setEntries(previous => [...previous, {...entry, id}]); return id; };
   const say = (text: string) => append({role: 'assistant', text});
+  const showHelp = () => {
+    if (busy) return;
+    setChoice(null);
+    append({role:'user',text:'What can I do with my PDFs?'});
+    say(localCapabilityHelp);
+  };
   useEffect(() => {
     if (Platform.OS !== 'web') return;
     const fn = (e: BeforeUnloadEvent) => { if (store.list.length || controller.state.busy) { e.preventDefault(); e.returnValue = ''; } };
@@ -178,9 +185,8 @@ function useWorkspace() {
           return;
         }
         const help = /^(?:what (?:can you|can atepdf|do you) do|(?:how )?can you help(?: me)?|help|what (?:are your|are atepdf.?s) capabilities)[?.!]*$/i.test(text.trim());
-        const localHelp = `I can merge PDFs, remove pages${ocrAvailable ? ', make scanned English PDFs searchable' : ''}, and compress supported images inside a PDF. Add PDFs, then use the quick actions or type a request such as “remove page 2”.`;
         const reason = !plannerAvailable ? 'AI planning is not available on this device yet.' : status?.connected ? 'AI planning is paused. Open AI connection to check the local request allowance.' : status ? 'OpenAI is not connected yet. You can connect it here for conversational help.' : 'The AI connection is unavailable. Check that atepdf’s local server is running, then try AI connection again.';
-        const id = append({role:'assistant', text: help ? `${localHelp}\n\n${reason}` : `${reason} You can still use Merge, Compress${ocrAvailable ? ' or Make searchable' : ''}. Your files are unchanged.`, choice:plannerAvailable?'connection-help':undefined});
+        const id = append({role:'assistant', text: help ? localCapabilityHelp : `${reason} You can still use Merge, Compress${ocrAvailable ? ' or Make searchable' : ''}. Your files are unchanged.`, choice:plannerAvailable?'connection-help':undefined});
         setChoice(id);return;
       }
       setLoading(false);setPlanning(true);
@@ -229,7 +235,7 @@ function useWorkspace() {
     finally { setSaving(null); }
   };
   return {controller, state, store, entries, busy, loading, current, currentTitle:currentEntry?.resultTitle, focus, preview, setPreview, privacy, setPrivacy,
-    choice, setChoice, saving, receipts, append, say, importFiles, pick, action, undo, submit, confirm, exportResult, planning, connection, connect, refreshConnection, cancel};
+    choice, setChoice, saving, receipts, append, say, showHelp, importFiles, pick, action, undo, submit, confirm, exportResult, planning, connection, connect, refreshConnection, cancel};
 }
 
 const WorkspaceContext=createContext<ReturnType<typeof useWorkspace>|null>(null);
@@ -269,13 +275,15 @@ function Screen(){
   </AssistantRuntimeProvider></WorkspaceContext.Provider>;
 }
 function Welcome(){
-  const {busy,pick}=useWorkspaceContext();const {width,height}=useWindowDimensions();const compact=height<760;
-  return <ScrollView style={{flex:1}} keyboardShouldPersistTaps="handled" contentContainerStyle={{flexGrow:1,justifyContent:"center",paddingHorizontal:20,paddingVertical:12}}>
-    <View className="w-full max-w-xl self-center items-center gap-3 rounded-[28px] border border-dashed border-[#ccd9ec] bg-[#f8faff] px-6 py-5 sm:py-7">
+  const {busy,pick}=useWorkspaceContext();const {width,height}=useWindowDimensions();const compact=height<760,short=height<=600;
+  const instruction=<Text className="text-center text-sm text-muted-foreground">Then tell me what you’d like to do.</Text>;
+  return <ScrollView testID="welcome" style={{flex:1}} keyboardShouldPersistTaps="handled" contentContainerStyle={{flexGrow:1,justifyContent:short?'flex-start':'center',paddingHorizontal:20,paddingVertical:12}}>
+    <View className="atepdf-welcome-card w-full max-w-xl self-center items-center gap-3 rounded-[28px] border border-dashed border-[#ccd9ec] bg-[#f8faff] px-6 py-5 sm:py-7">
       {height>=620&&<Image source={require('./assets/paper.png')} resizeMode="contain" style={{width:compact?144:184,height:compact?84:132}}/>}
       <Text accessibilityRole="header" className="text-center text-[26px] font-semibold tracking-tight text-foreground">{Platform.OS!=='web'||width<640?'Add your files':'Drop files here'}</Text>
-      <Text className="text-center text-sm text-muted-foreground">Then tell me what you’d like to do.</Text>
+      {!short&&instruction}
       <Button primary icon={FolderOpen} disabled={busy} onPress={()=>void pick()}>Choose files</Button>
+      {short&&instruction}
       <Pressable accessibilityRole="button" disabled={busy||!nativeEngineReady} onPress={()=>void pick(true)} className="atepdf-button min-h-11 items-center justify-center rounded-xl px-3"><Text className="text-sm text-muted-foreground">Try the two sample PDFs</Text></Pressable>
     </View>
   </ScrollView>;
@@ -303,12 +311,12 @@ function Footer(){
   const actions=[{title:'Merge',type:'merge',prompt:'Merge my PDFs.',icon:Copy,color:'#aa405e'},{title:'Compress',type:'compress',prompt:'Compress the current PDF.',icon:ArrowDownToLine,color:'#26715c'},{title:'Make searchable',type:'ocr',prompt:'Make this PDF searchable.',icon:ScanText,color:'#7460b0'}].map(item=>{
     const disabled=w.busy||!nativeEngineReady||(item.type==='ocr'&&!ocrAvailable);
     return <Pressable key={item.title} accessibilityRole="button" disabled={disabled} aria-disabled={disabled} onPress={()=>w.action(item.type as Action,item.prompt)} className={`atepdf-button min-h-11 ${scrollActions?'flex-none':'flex-1'} ${Platform.OS==='web'?'sm:flex-none':''} flex-row items-center justify-center gap-1.5 rounded-full border border-border px-2 sm:px-4 active:bg-muted ${disabled?'opacity-40':''}`}>
-      <item.icon size={16} color={item.color}/><Text numberOfLines={scrollActions?1:undefined} className={`${scrollActions?'':'flex-shrink'} text-[11px] sm:text-xs text-foreground`}>{item.title}</Text>
+      <View style={{width:16,height:16,flexShrink:0}}><item.icon size={16} color={item.color}/></View><Text numberOfLines={scrollActions?1:undefined} className={`${scrollActions?'':'flex-shrink'} text-xs text-foreground`}>{item.title}</Text>
     </Pressable>;
   });
   return <View className="gap-2 pb-1">
     {scrollActions?<ScrollView horizontal style={{flexGrow:0}} showsHorizontalScrollIndicator={false} contentContainerStyle={{gap:8}}>{actions}</ScrollView>:<View className="flex-row justify-center gap-2">{actions}</View>}
-    <View className="min-h-7 flex-row items-center justify-center gap-1.5">{w.focus&&<FileText size={12} color="#5d6980"/>}<Text testID="current-context" className="flex-shrink text-center text-xs text-muted-foreground">{w.focus?`Current: ${w.currentTitle ?? 'Your PDF'} · ${pageCount(w.focus.pageCount)}`:w.entries.length?`${w.store.originals.length} originals in this chat`:'Your files stay on this device'}</Text></View>
+    <View className="min-h-11 flex-row items-center justify-center gap-2"><View className="flex-shrink flex-row items-center gap-1.5">{w.focus&&<FileText size={12} color="#5d6980"/>}<Text testID="current-context" className="flex-shrink text-center text-xs text-muted-foreground">{w.focus?`Current: ${w.currentTitle ?? 'Your PDF'} · ${pageCount(w.focus.pageCount)}`:w.entries.length?`${w.store.originals.length} originals in this chat`:'Your files stay on this device'}</Text></View><Pressable accessibilityRole="button" accessibilityLabel="Help" disabled={w.busy} onPress={w.showHelp} className={`atepdf-button min-h-11 min-w-11 flex-none items-center justify-center rounded-xl px-2 active:bg-muted ${w.busy?'opacity-40':''}`}><Text className="text-xs text-muted-foreground">Help</Text></Pressable></View>
   </View>;
 }
 function MessageExtras(){

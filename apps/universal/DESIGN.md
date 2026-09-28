@@ -174,3 +174,7 @@ Use thin cool borders for grouping. Do not turn every message into a card. User 
 ## Structured token review, 29 September 2026
 
 The full Impeccable scan identified ten advisory differences from the first token record. The 11/13/15 px roles and 9/14 px preview radii above record actual existing styles previously described only in prose, including template support primitives that are not active in the primary PDF journey. The merge icon colour is the incumbent shortcut accent. Preview fallback colours now use the same primary/muted values as the semantic tokens; no ignore rules or detector suppressions were added. These documentation corrections do not establish native large-text or screen-reader acceptance.
+
+### Final discovery refinement
+
+Help is a plain secondary text control beside current-document context, with a 44-point minimum target. The three existing shortcuts retain 16-point icons and use the existing 12-point text role at compact widths. Short web windows prioritize Choose files before the secondary instruction; result-card vertical padding is 12px with an 8px row gap so long titles and Save remain together above the composer. Text and touch targets do not shrink. Web preview height follows the measured conversation, header and toolbar; zoom remains available for detail.

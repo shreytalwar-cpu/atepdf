@@ -7,11 +7,17 @@ import {privateInstruction,assertInstructionSafe} from '../../packages/planner/s
 import {createGateway,validateRequest} from '../../packages/planner/src/gateway';
 import {LocalConfig} from '../../packages/planner/src/local-config';
 import {planWithOpenAI,MODEL} from '../../packages/planner/src/provider';
+import {PRODUCT_KNOWLEDGE} from '../../packages/planner/src/generated/product-knowledge';
 import {requestPlan} from '../../packages/planner/src/client';
 import {buildRequest,quickPlan} from '../../packages/contracts/src/protocol';
 import type {Artifact} from '../../packages/core/src/local-file-store';
 const files=[{ref:'file_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',kind:'pdf' as const,pageCount:2,sizeBytes:3000,encrypted:false as const},{ref:'file_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',kind:'pdf' as const,pageCount:1,sizeBytes:2000,encrypted:false as const}];
 const request=()=>buildRequest({revision:2,files,selected:files.map(f=>f.ref),focus:null,originals:files.map(f=>f.ref)},'Combine the two PDFs in the order added.');
+test('AI product knowledge is embedded from the maintained document, not a separate stale facts list',async()=>{
+  assert.equal(PRODUCT_KNOWLEDGE,(await readFile('docs/AI_PRODUCT_KNOWLEDGE.md','utf8')).trim());
+  assert.match(PRODUCT_KNOWLEDGE,/Android development is deferred/);
+  assert.match(PRODUCT_KNOWLEDGE,/Do \*\*not\*\* claim the entire app is always offline/);
+});
 function memoryConfig(remaining=2){let locked=false;return {status:async()=>({connected:true,enabled:remaining>0,remaining}),reserve:async()=>{if(locked||remaining<=0)throw new Error('blocked');locked=true;remaining--;return {key:'sk-test-never-network',release:async()=>{locked=false;}};}};}
 async function setup(provider:Parameters<typeof createGateway>[1],remaining=2,timeoutMs=1000){const config=memoryConfig(remaining),gateway=createGateway(config,provider,{minIntervalMs:0,timeoutMs});const status=await (await gateway(new Request('http://localhost:3211/api/planner/status'))).json();const post=(body:unknown,headers:Record<string,string>={},signal?:AbortSignal)=>gateway(new Request('http://localhost:3211/api/planner',{method:'POST',headers:{origin:'http://localhost:3211','content-type':'application/json','x-atepdf-token':status.token,...headers},body:typeof body==='string'?body:JSON.stringify(body),signal}));return {config,gateway,post};}
 test('planner privacy: exact filename aliasing, local snippet/path/password/bytes rejection and positive manifest projection',()=>{
@@ -63,7 +69,7 @@ test('actual AI SDK adapter mocked HTTP: complete tool call, no upload/output ca
   const req=request();let calls=0;
   const fetcher:typeof fetch=async(url,init)=>{
     calls++;assert.equal(String(url),'https://api.openai.com/v1/responses');
-    const body=JSON.parse(String(init!.body));assert.equal(body.model,MODEL);assert.equal(body.store,false);assert.equal(body.max_output_tokens,undefined);assert.equal(body.tool_choice,'required');assert.deepEqual(body.tools.map((tool:{name:string})=>tool.name).sort(),['reply_in_chat','run_local_pdf_workflow','undo_last_change']);
+    const body=JSON.parse(String(init!.body));assert.equal(body.model,MODEL);assert.equal(body.store,false);assert.equal(body.max_output_tokens,undefined);assert.equal(body.tool_choice,'required');assert.deepEqual(body.tools.map((tool:{name:string})=>tool.name).sort(),['reply_in_chat','run_local_pdf_workflow','undo_last_change']);assert.match(JSON.stringify(body),/Android development is deferred/);
     assert.doesNotMatch(String(init!.body),/brief\.pdf|appendix\.pdf|file_data|image_url|sk-test-never-network/);
     return Response.json({id:'resp_test',created_at:1,model:MODEL,status:'completed',error:null,incomplete_details:null,output:[{id:'fc_test',type:'function_call',status:'completed',call_id:'call_test',name:'run_local_pdf_workflow',arguments:JSON.stringify(quickPlan(req,'merge').planner)}],usage:{input_tokens:50,output_tokens:100,total_tokens:150,input_tokens_details:{cached_tokens:0},output_tokens_details:{reasoning_tokens:0}}});
   };

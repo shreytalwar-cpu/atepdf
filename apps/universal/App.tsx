@@ -1,24 +1,27 @@
 import React, {createContext, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore} from 'react';
 import {View, Text, Image, Pressable, TextInput, ScrollView, Modal, Platform, useWindowDimensions} from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
-import {ArrowDownToLine, Check, FileText, FolderOpen, LockKeyhole, Plus, ScanText, Copy, Undo2, X} from 'lucide-react-native';
+import {ArrowDownToLine, Check, FileText, FolderOpen, LockKeyhole, Plus, ScanText, Copy, Undo2, SquarePen, SlidersHorizontal, Eye} from 'lucide-react-native';
 import type {LucideIcon} from 'lucide-react-native';
 import {AssistantRuntimeProvider, useExternalStoreRuntime, useAuiState, type ThreadMessageLike} from '@assistant-ui/react-native';
 import {Thread} from './src/components/assistant-ui/elements/thread.aui';
 import {Icon} from './src/components/ui/icon';
 import type {LocalFileStore, Artifact} from '@core/local-file-store';
-import {createController, chooseFiles, sampleFiles, save, nativeEngineReady} from './src/platform/runtime';
+import {createController, chooseFiles, sampleFiles, save, nativeEngineReady, ocrAvailable} from './src/platform/runtime';
 import Preview from './src/platform/Preview';
 import DropSurface from './src/platform/DropSurface';
+import {nativeComposerComponents} from './src/platform/ComposerInput';
+import {JobActivity} from './src/components/JobActivity';
+import {useAnnounce,useMotion} from './src/components/assistant-ui/elements/surfaces';
 import {privateInstruction} from '@planner/privacy';
 import {plannerStatus,requestPlan,savePlannerKey,type PlannerStatus} from '@planner/client';
 import {validateEnvelope,type Request as PlannerRequest,type Envelope} from '@contracts/protocol';
 
 const formatSize = (n: number) => n < 1_000_000 ? `${(n / 1000).toFixed(1)} kB` : `${(n / 1_000_000).toFixed(2)} MB`;
 type Action = 'merge' | 'ocr' | 'remove' | 'compress' | 'chain';
-type Entry = {id: number; role: 'user' | 'assistant'; text: string; files?: {name: string; size: number}[]; artifact?: Artifact; choice?: 'compress' | 'chain' | 'clear' | 'planner' | 'execute' | 'connect'; revision?: number; request?:PlannerRequest; envelope?:Envelope; token?:string};
-function Button({children, onPress, disabled=false, primary=false, icon: Glyph, label}: {children?: React.ReactNode; onPress:()=>void; disabled?:boolean; primary?:boolean; icon?:LucideIcon; label?:string}) {
-  return <Pressable accessibilityRole="button" accessibilityLabel={label ?? (typeof children === 'string' ? children : undefined)} disabled={disabled} aria-disabled={disabled} onPress={onPress} className={`min-h-11 flex-row items-center justify-center gap-2 rounded-xl px-3 py-2 active:opacity-70 web:focus-visible:outline-2 web:focus-visible:outline-primary ${primary ? 'bg-primary' : 'border border-border bg-background'} ${disabled ? 'opacity-40' : ''}`}>
+type Entry = {id: number; role: 'user' | 'assistant'; text: string; files?: {name: string; size: number}[]; artifact?: Artifact; choice?: 'compress' | 'chain' | 'clear' | 'execute' | 'connect'; revision?: number; request?:PlannerRequest; envelope?:Envelope; token?:string};
+function Button({children, onPress, disabled=false, primary=false, quiet=false, icon: Glyph, label}: {children?: React.ReactNode; onPress:()=>void; disabled?:boolean; primary?:boolean; quiet?:boolean; icon?:LucideIcon; label?:string}) {
+  return <Pressable accessibilityRole="button" accessibilityLabel={label ?? (typeof children === 'string' ? children : undefined)} disabled={disabled} aria-disabled={disabled} onPress={onPress} className={`atepdf-button min-h-11 flex-row items-center justify-center gap-2 rounded-xl px-3 py-2 active:opacity-70 web:focus-visible:outline-2 web:focus-visible:outline-primary ${primary ? 'atepdf-button-primary bg-primary' : quiet ? 'bg-transparent' : 'border border-border bg-background'} ${disabled ? 'opacity-40' : ''}`}>
     {Glyph && <Icon as={Glyph} className={`size-4 ${primary ? 'text-primary-foreground' : 'text-foreground'}`}/>}<Text className={`text-sm font-medium ${primary ? 'text-primary-foreground' : 'text-foreground'}`}>{children}</Text>
   </Pressable>;
 }
@@ -96,7 +99,7 @@ function useWorkspace() {
     append({role: 'assistant', text: 'I restored your previous result. Your original files are unchanged.', artifact: store.get(store.focus!).meta});
   };
   const submit = (draft: string) => {
-    if (busy || !draft.trim()) return;
+    if (busy || operation.current || !draft.trim()) return;
     const text = draft.trim(), command = text.replace(/[.!]$/, '').toLowerCase();
     const remove = command.match(/^remove (?:physical )?page (\d+)(?: from (?:the )?(?:merged )?result)?$/);
     if (command === 'undo') undo();
@@ -107,43 +110,52 @@ function useWorkspace() {
     else if (command === 'merge, ocr, compress') action('chain', text);
     else { setChoice(null); append({role:'user',text}); void preparePlanning(text); }
   };
-  const checkConnection=async()=>{
-    try{const status=await plannerStatus();setConnection(status);return status;}
-    catch{say('The local planner gateway is unavailable. You can still use the quick actions.');return null;}
+  const checkConnection=async(signal?:AbortSignal)=>{
+    if(Platform.OS!=='web'){say('Use the available local quick actions in this native build. A secure native AI connection is still being tested.');return null;}
+    try{const status=await plannerStatus(signal);signal?.throwIfAborted();setConnection(status);return status;}
+    catch(error){if(signal?.aborted)throw error;say('The local planner gateway is unavailable. You can still use the quick actions.');return null;}
   };
   const refreshConnection=async()=>{
     try{setConnection(await plannerStatus());}
     catch{setConnection(previous=>previous?{...previous,enabled:false}:null);}
   };
   const connect=async()=>{
+    if(Platform.OS!=='web'){say('AI planning is connected in the browser development build. The available quick actions here process your PDFs on this device.');return;}
     const status=await checkConnection();if(!status)return;
     if(!status.connected){const id=append({role:'assistant',text:'Connect OpenAI for optional AI planning. Enter your key in the secure field below. It is saved only by atepdf’s local server and never added to the conversation. Saving makes no OpenAI calls.',choice:'connect',token:status.token});setChoice(id);return;}
-    say(status.enabled?`AI planning is ready for up to ${status.remaining} approved requests. Type what you’d like to do; I’ll show you what will be sent first.`:status.connected?'Your key is saved locally. Paid planning is paused until you approve a request limit in the local setup. Quick actions work now.':'OpenAI is not connected yet. Use the masked local setup step to save your key on this computer. Don’t paste it into this chat. Quick actions work now.');
+    say(status.enabled?`AI planning is ready for up to ${status.remaining} approved requests. Tell me what you’d like to do.`:status.connected?'Your key is saved locally. Paid planning is paused until you approve a request limit in the local setup. Quick actions work now.':'OpenAI is not connected yet. Use the masked local setup step to save your key on this computer. Don’t paste it into this chat. Quick actions work now.');
   };
   const preparePlanning=async(text:string)=>{
     if(operation.current)return;
     operation.current=true;setLoading(true);
+    const abort=new AbortController();plannerAbort.current=abort;
     try{
+      // One submission owns setup, planning and local execution. Only the
+      // positive metadata projection crosses the planner boundary.
       const instruction=privateInstruction(text,store.list),request=controller.request(instruction);
-      const status=await checkConnection();
+      const status=await checkConnection(abort.signal);
+      abort.signal.throwIfAborted();
       if(!status)return;
       if(!status.enabled){say(status.connected?'Your key is saved. AI planning is paused until a request limit is approved. You can use Merge, Compress, Make searchable, “remove page 2”, or “undo”.':'OpenAI is not connected yet. You can use Merge, Compress, Make searchable, “remove page 2”, or “undo” while the masked key setup is completed.');return;}
-      const id=append({role:'assistant',text:`To plan this, I’ll send OpenAI this instruction: “${instruction}” — plus anonymous file references, page counts and sizes. PDF content and filenames stay here. This uses one of your ${status.remaining} approved requests.`,choice:'planner',revision:store.revision,request,token:status.token});setChoice(id);
-    }catch(e){say(e instanceof Error?e.message:'This instruction cannot be sent safely.');}
-    finally{operation.current=false;setLoading(false);}
-  };
-  const plan=async(entry:Entry)=>{
-    if(!entry.request||!entry.token||operation.current)return;
-    operation.current=true;setPlanning(true);const abort=new AbortController();plannerAbort.current=abort;
-    try{
-      const result=await requestPlan(entry.request,entry.token,abort.signal);
-      abort.signal.throwIfAborted();if(store.revision!==entry.request.workspaceRevision)throw new Error('Your files changed. Please ask again.');
+      setLoading(false);setPlanning(true);
+      const result=await requestPlan(request,status.token,abort.signal);
+      abort.signal.throwIfAborted();
+      if(store.revision!==request.workspaceRevision)throw new Error('Your files changed. Please ask again.');
+      // requestPlan validates clarification shape and response binding too.
       if(result.planner.status!=='plan'){say(result.planner.clarification!.question);return;}
-      const envelope=validateEnvelope(result,entry.request,store.revision);
-      const labels=envelope.planner.steps.map(step=>step.operation==='merge_pdf'?`merge ${step.inputs.length} PDFs`:step.operation==='select_pages'?`remove physical page(s) ${(step.params.pages as {indices:number[]}).indices.join(', ')}`:step.operation==='ocr_pdf'?'add searchable English text':'optimise supported JPEG images (image quality may change)');
-      const id=append({role:'assistant',text:`I can ${labels.join(', then ')}. Shall I create a new copy on this device?`,choice:'execute',revision:store.revision,request:entry.request,envelope});setChoice(id);
-    }catch(e){say(abort.signal.aborted?'Planning cancelled. No local files changed.':e instanceof Error?e.message:'Planning failed. No local files changed.');}
-    finally{operation.current=false;setPlanning(false);plannerAbort.current=null;void refreshConnection();}
+      const envelope=validateEnvelope(result,request,store.revision);
+      setPlanning(false);
+      // Retain a choice only when the requested operation can change image
+      // quality. Safe copy-producing plans run after full local validation.
+      if(envelope.planner.steps.some(step=>step.operation==='compress_pdf'&&step.params.preset!=='lossless')){
+        const id=append({role:'assistant',text:'I can make a smaller copy by optimising its images. Image quality may change; your originals will stay intact.',choice:'execute',revision:store.revision,request,envelope});setChoice(id);return;
+      }
+      plannerAbort.current=null;
+      const previous=store.focus;
+      await controller.execute(envelope,request);
+      finish(previous,'Your new PDF is ready.');
+    }catch(e){say(abort.signal.aborted?'Planning cancelled. No local files changed.':e instanceof Error?e.message:'This request could not finish. Your files are unchanged.');}
+    finally{operation.current=false;setLoading(false);setPlanning(false);plannerAbort.current=null;if(Platform.OS==='web')void refreshConnection();}
   };
   const executePlanned=async(entry:Entry)=>{
     if(!entry.envelope||!entry.request||operation.current)return;
@@ -157,7 +169,6 @@ function useWorkspace() {
     setChoice(null);
     if (entry.revision !== store.revision) { say('Your files changed. Please ask again so I use the current files.'); return; }
     if(entry.choice==='connect')return;
-    if(entry.choice==='planner'){void plan(entry);return;}
     if(entry.choice==='execute'){void executePlanned(entry);return;}
     if (entry.choice === 'clear') {
       controller.clear(); setPreview(null); setReceipts({}); setEntries([]);
@@ -166,23 +177,27 @@ function useWorkspace() {
   const exportResult = async (artifact: Artifact) => {
     if (saving) return;
     setSaving(artifact.ref);
-    try { const outcome = await save(store.get(artifact.ref).bytes); setReceipts(previous => ({...previous, [artifact.ref]: outcome === 'saved' ? 'Saved to your device' : outcome === 'cancelled' ? 'Ready · save cancelled' : 'Download started · check your downloads'})); }
+    try { const outcome = await save(store.get(artifact.ref).bytes); setReceipts(previous => ({...previous, [artifact.ref]: outcome === 'shared' ? 'Share sheet closed · check the destination you chose' : outcome === 'saved' ? 'Saved to your device' : outcome === 'cancelled' ? 'Ready · save cancelled' : 'Download started · check your downloads'})); }
     catch (e) { setReceipts(previous => ({...previous, [artifact.ref]: e instanceof Error ? e.message : 'Saving failed. Try again.'})); }
     finally { setSaving(null); }
   };
-  return {controller, state, store, entries, busy, current, focus, preview, setPreview, privacy, setPrivacy,
+  return {controller, state, store, entries, busy, loading, current, focus, preview, setPreview, privacy, setPrivacy,
     choice, setChoice, saving, receipts, append, say, importFiles, pick, action, undo, submit, confirm, exportResult, planning, connection, connect, refreshConnection, cancel};
 }
 
 const WorkspaceContext=createContext<ReturnType<typeof useWorkspace>|null>(null);
 const useWorkspaceContext=()=>{const context=useContext(WorkspaceContext);if(!context)throw new Error('Workspace unavailable');return context;};
 const convertEntry=(entry:Entry):ThreadMessageLike=>({id:String(entry.id),role:entry.role,content:[{type:'text',text:entry.text}],metadata:{custom:{entryId:entry.id}},...(entry.id===-1?{status:{type:'running' as const}}:{})});
-const threadComponents={Welcome,MessageExtras,AddAttachment:AddFiles,Footer};
+function Processing(){const w=useWorkspaceContext();return <JobActivity state={w.state} planning={w.planning} loading={w.loading}/>;}
+const threadComponents={Welcome,MessageExtras,Activity:Processing,AddAttachment:AddFiles,Footer,...nativeComposerComponents};
 
 export default function App(){return <SafeAreaProvider style={{height:'100%'}}><Screen/></SafeAreaProvider>;}
 function Screen(){
   const workspace=useWorkspace(),{entries,busy,controller,state}=workspace;
   const {width}=useWindowDimensions();
+  const motion=useMotion();
+  const announcement=entries.findLast(entry=>entry.role==='assistant')?.text;
+  useAnnounce(announcement);
   const messages=useMemo(()=>busy?[...entries,{id:-1,role:'assistant' as const,text:state.busy?state.message:workspace.planning?'Planning your request…':'Checking local setup…'}]:entries,[entries,busy,state.message,state.busy,workspace.planning]);
   const runtime=useExternalStoreRuntime({messages,convertMessage:convertEntry,isRunning:busy,isSendDisabled:busy||!nativeEngineReady,
     onNew:async message=>{workspace.submit(message.content.filter(p=>p.type==='text').map(p=>p.text).join('\n'));},
@@ -191,27 +206,30 @@ function Screen(){
   return <WorkspaceContext.Provider value={workspace}><AssistantRuntimeProvider runtime={runtime}>
     <SafeAreaView style={{flex:1,backgroundColor:"#fff"}} edges={['top','left','right']}>
       <DropSurface disabled={busy} onFiles={files=>void workspace.importFiles(files)}>
-        <View className="flex-row items-center justify-between px-5 py-3 md:px-8 md:py-5">
+        <View className="flex-row items-center justify-between gap-3 px-4 py-2 md:px-8 md:py-4">
           <View className="flex-row items-center gap-2"><Image source={require('./assets/approved-8-mark-source-crop.png')} resizeMode="contain" style={{width:28,height:37}}/><Image accessibilityLabel="atepdf" source={require('./assets/approved-atepdf-wordmark-source-crop.png')} resizeMode="contain" style={{width:90,height:30}}/></View>
-          <Pressable accessibilityRole="button" accessibilityLabel="Processed on your device" onPress={()=>workspace.setPrivacy(true)} className="min-h-11 flex-row items-center gap-2 rounded-full bg-[#edf9f4] px-3"><LockKeyhole size={14} color="#26715c"/><Text className="text-xs text-[#26715c]">{width<360?"On-device":"Processed on your device"}</Text></Pressable>
+          <View className="flex-row items-center gap-1">
+            <Pressable accessibilityRole="button" accessibilityLabel="Processed on your device" onPress={()=>workspace.setPrivacy(true)} className="atepdf-button min-h-11 min-w-11 flex-row items-center justify-center gap-2 rounded-full bg-[#edf9f4] px-3"><LockKeyhole size={15} color="#26715c"/>{width>=430&&<Text className="text-xs text-[#26715c]">Processed on your device</Text>}</Pressable>
+            {Platform.OS==='web'&&<Pressable accessibilityRole="button" accessibilityLabel="OpenAI connection" accessibilityHint="Manage optional AI planning" disabled={busy} onPress={()=>void workspace.connect()} className={`atepdf-button size-11 items-center justify-center rounded-full ${busy?'opacity-40':''}`}><SlidersHorizontal size={19} color="#5d6980"/></Pressable>}
+            {!!entries.length&&<Pressable accessibilityRole="button" accessibilityLabel="Start over" disabled={busy} onPress={()=>{workspace.append({role:'user',text:'Start over.'});const id=workspace.append({role:'assistant',text:'Save any results you want to keep first. Shall I clear this conversation and its local files? Your originals on your device will stay unchanged.',choice:'clear',revision:workspace.store.revision});workspace.setChoice(id);}} className={`atepdf-button size-11 items-center justify-center rounded-full ${busy?'opacity-40':''}`}><SquarePen size={19} color="#5d6980"/></Pressable>}
+          </View>
         </View>
         {!nativeEngineReady&&<Text className="mx-5 text-xs text-muted-foreground">Native development preview · local PDF processing is not connected yet.</Text>}
         <Thread components={threadComponents}/>
       </DropSurface>
-      <Modal visible={workspace.privacy} transparent animationType="fade" onRequestClose={()=>workspace.setPrivacy(false)}><View className="flex-1 items-center justify-center bg-black/25 px-5"><View accessibilityViewIsModal role="dialog" className="w-full max-w-lg gap-4 rounded-3xl bg-background p-6"><Text accessibilityRole="header" className="text-xl font-semibold text-foreground">Processed on your device</Text><Text className="text-base leading-6 text-foreground">PDF files, previews and recognised text stay on this device. Local quick actions do not contact an AI provider.</Text><Text className="text-sm leading-6 text-muted-foreground">Optional AI planning receives only your approved instruction and limited file details. Filenames, passwords, paths, checksums and document contents are excluded. Your OpenAI key stays in the local server, outside the app.</Text><Text className="text-sm leading-6 text-muted-foreground">Save before closing. Chat and files stay in this session. Saving to a cloud folder or sharing through a chosen provider may transfer the saved file outside atepdf.</Text><Button primary onPress={()=>workspace.setPrivacy(false)}>Got it</Button></View></View></Modal>
+      <Modal visible={workspace.privacy} transparent animationType={motion?'fade':'none'} onRequestClose={()=>workspace.setPrivacy(false)}><View className="flex-1 items-center justify-center bg-black/25 px-5"><View accessibilityViewIsModal role="dialog" className="w-full max-w-lg gap-4 rounded-3xl bg-background p-6"><Text accessibilityRole="header" className="text-xl font-semibold text-foreground">Processed on your device</Text><Text className="text-base leading-6 text-foreground">PDF files, previews and recognised text stay on this device. Local quick actions do not contact an AI provider.</Text><Text className="text-sm leading-6 text-muted-foreground">When you send a request, optional AI planning receives your instruction and anonymous file references, page counts and sizes. Filenames, passwords, paths, checksums and document contents are excluded. Your OpenAI key stays in the local server, outside the app.</Text><Text className="text-sm leading-6 text-muted-foreground">Save before closing. Chat and files stay in this session. Saving to a cloud folder or sharing through a chosen provider may transfer the saved file outside atepdf.</Text><Button primary onPress={()=>workspace.setPrivacy(false)}>Got it</Button></View></View></Modal>
     </SafeAreaView>
   </AssistantRuntimeProvider></WorkspaceContext.Provider>;
 }
 function Welcome(){
-  const {busy,pick}=useWorkspaceContext();const {width,height}=useWindowDimensions();const compact=height<800;
+  const {busy,pick}=useWorkspaceContext();const {width,height}=useWindowDimensions();const compact=height<760;
   return <ScrollView style={{flex:1}} keyboardShouldPersistTaps="handled" contentContainerStyle={{flexGrow:1,justifyContent:"center",paddingHorizontal:20,paddingVertical:12}}>
-    <View className="w-full max-w-lg self-center items-center gap-2 rounded-3xl border border-dashed border-[#ccdaf0] bg-[#f9fbff] px-5 py-4">
-      {height>=620&&<Image source={require('./assets/paper.png')} resizeMode="contain" style={{width:compact?116:168,height:compact?70:124}}/>}
-      <Text accessibilityRole="header" className="text-center text-2xl font-semibold tracking-tight text-foreground">{width<640?'Add your files':'Drop files here'}</Text>
+    <View className="w-full max-w-xl self-center items-center gap-3 rounded-[28px] border border-dashed border-[#ccd9ec] bg-[#f8faff] px-6 py-5 sm:py-7">
+      {height>=620&&<Image source={require('./assets/paper.png')} resizeMode="contain" style={{width:compact?144:184,height:compact?84:132}}/>}
+      <Text accessibilityRole="header" className="text-center text-[26px] font-semibold tracking-tight text-foreground">{Platform.OS!=='web'||width<640?'Add your files':'Drop files here'}</Text>
       <Text className="text-center text-sm text-muted-foreground">Then tell me what you’d like to do.</Text>
       <Button primary icon={FolderOpen} disabled={busy} onPress={()=>void pick()}>Choose files</Button>
-      <Text className="text-xs text-muted-foreground">PDF · processed on your device</Text>
-      <Pressable accessibilityRole="button" disabled={busy||!nativeEngineReady} onPress={()=>void pick(true)} className="min-h-11 items-center justify-center px-2"><Text className="text-sm text-muted-foreground underline">Try the two sample PDFs</Text></Pressable>
+      <Pressable accessibilityRole="button" disabled={busy||!nativeEngineReady} onPress={()=>void pick(true)} className="atepdf-button min-h-11 items-center justify-center rounded-xl px-3"><Text className="text-sm text-muted-foreground">Try the two sample PDFs</Text></Pressable>
     </View>
   </ScrollView>;
 }
@@ -219,27 +237,26 @@ function AddFiles(){const {busy,pick}=useWorkspaceContext();return <Pressable ac
 function Footer(){
   const w=useWorkspaceContext();
   return <View className="gap-2 pb-1">
-    <View className="flex-row justify-center gap-2">{[{title:'Merge',type:'merge',prompt:'Merge my PDFs.',icon:Copy},{title:'Compress',type:'compress',prompt:'Compress the current PDF.',icon:ArrowDownToLine},{title:'Make searchable',type:'ocr',prompt:'Make this PDF searchable.',icon:ScanText}].map(item=><Pressable key={item.title} accessibilityRole="button" disabled={w.busy||!nativeEngineReady} onPress={()=>w.action(item.type as Action,item.prompt)} className="min-h-11 flex-1 sm:flex-none flex-row items-center justify-center gap-1.5 rounded-full border border-border px-2 sm:px-3 active:bg-muted"><Icon as={item.icon} className="size-4 text-muted-foreground"/><Text className="flex-shrink text-[11px] sm:text-xs text-foreground">{item.title}</Text></Pressable>)}</View>
-    <View className="flex-row items-center justify-center gap-3"><Text className="text-xs text-muted-foreground">{w.focus?`Current result · ${w.focus.pageCount} pages`:w.entries.length?`${w.store.originals.length} originals in this chat`:'Your files stay on this device'}</Text>{!!w.entries.length&&<Pressable accessibilityRole="button" accessibilityLabel="Start over" disabled={w.busy} onPress={()=>{w.append({role:'user',text:'Start over.'});const id=w.append({role:'assistant',text:'Save any results you want to keep first. Shall I clear this conversation and its local files? Your originals on your device will stay unchanged.',choice:'clear',revision:w.store.revision});w.setChoice(id);}} className="size-10 items-center justify-center"><X size={15} color="#637089"/></Pressable>}</View>
-    <Pressable accessibilityRole="button" accessibilityLabel="OpenAI connection" disabled={w.busy} onPress={()=>void w.connect()} className="min-h-9 items-center justify-center"><Text className="text-center text-[11px] text-muted-foreground">{w.connection?.enabled?"AI planning ready · quick actions stay local":w.connection?.connected?"AI planning paused · quick actions stay local":"Connect OpenAI · quick actions stay local"}</Text></Pressable>
+    <View className="flex-row justify-center gap-2">{[{title:'Merge',type:'merge',prompt:'Merge my PDFs.',icon:Copy,color:'#aa405e'},{title:'Compress',type:'compress',prompt:'Compress the current PDF.',icon:ArrowDownToLine,color:'#26715c'},{title:'Make searchable',type:'ocr',prompt:'Make this PDF searchable.',icon:ScanText,color:'#7460b0'}].map(item=>{const disabled=w.busy||!nativeEngineReady||(item.type==='ocr'&&!ocrAvailable);return <Pressable key={item.title} accessibilityRole="button" disabled={disabled} aria-disabled={disabled} onPress={()=>w.action(item.type as Action,item.prompt)} className={`atepdf-button min-h-11 flex-1 ${Platform.OS==='web'?'sm:flex-none':''} flex-row items-center justify-center gap-1.5 rounded-full border border-border px-2 sm:px-4 active:bg-muted ${disabled?'opacity-40':''}`}><item.icon size={16} color={item.color}/><Text className="flex-shrink text-[11px] sm:text-xs text-foreground">{item.title}</Text></Pressable>;})}</View>
+    <View className="min-h-7 flex-row items-center justify-center gap-1.5">{w.focus&&<FileText size={12} color="#5d6980"/>}<Text className="text-center text-xs text-muted-foreground">{w.focus?`Current result · ${w.focus.pageCount} pages`:w.entries.length?`${w.store.originals.length} originals in this chat`:'Your files stay on this device'}</Text></View>
   </View>;
 }
 function MessageExtras(){
   const id=useAuiState(s=>s.message.metadata.custom.entryId),w=useWorkspaceContext(),entry=w.entries.find(e=>e.id===id);
-  if(id===-1)return <View testID="progress-message"/>;
+  if(id===-1)return null;
   if(!entry)return null;
   const artifact=entry.artifact;
   return <>
     {entry.files?.map((file,index)=><View key={index} className="max-w-full flex-row items-center gap-3 rounded-2xl border border-border bg-background px-4 py-3"><FileText color="#c45167" size={23}/><View className="min-w-0 flex-shrink"><Text className="text-sm font-medium text-foreground">{file.name}</Text><Text className="mt-1 text-xs text-muted-foreground">{formatSize(file.size)} · Original · {index+1}</Text></View></View>)}
-    {artifact&&<View testID={entry.id===w.current?'current-result':'previous-result'} className="gap-4 rounded-2xl border border-border bg-background p-4">
-      <View className="flex-row items-center gap-3"><View className="size-10 items-center justify-center rounded-xl bg-[#ecf8f2]"><Check size={21} color="#26715c"/></View><View><Text accessibilityRole="header" className="text-base font-semibold text-foreground">Your PDF is ready</Text><Text testID={entry.id===w.current?'result-facts':undefined} className="mt-1 text-sm text-muted-foreground">{artifact.pageCount} pages · {formatSize(artifact.sizeBytes)}</Text></View></View>
+    {artifact&&<View testID={entry.id===w.current?'current-result':'previous-result'} className={`gap-4 rounded-[20px] border bg-background p-4 sm:p-5 ${entry.id===w.current?'border-[#d4dfed]':'border-border'}`}>
+      <View className="flex-row items-center gap-3"><View className="size-11 items-center justify-center rounded-xl bg-[#eef4ff]"><FileText size={23} color="#1769df"/></View><View className="min-w-0 flex-1"><Text accessibilityRole="header" className="text-base font-semibold text-foreground">Your PDF is ready</Text><Text testID={entry.id===w.current?'result-facts':undefined} className="mt-1 text-sm text-muted-foreground">{artifact.pageCount} pages · {formatSize(artifact.sizeBytes)}</Text></View><Check accessibilityLabel="Validated" size={18} color="#26715c"/></View>
       {!!artifact.note&&<Text className="text-sm leading-5 text-muted-foreground">{artifact.note}</Text>}
-      <View className="flex-row flex-wrap gap-2"><Button onPress={()=>w.setPreview(w.preview===entry.id?null:entry.id)}>{w.preview===entry.id?'Hide preview':'Preview'}</Button><Button primary icon={ArrowDownToLine} disabled={!!w.saving} onPress={()=>void w.exportResult(artifact)}>{w.saving===artifact.ref?'Saving…':'Save PDF'}</Button>{entry.id===w.current&&<Button icon={Undo2} disabled={w.busy||!w.store.canUndo} onPress={w.undo}>Undo</Button>}</View>
-      <Text accessibilityLiveRegion="polite" className="text-xs text-muted-foreground">{w.receipts[artifact.ref]??'Ready to save'}</Text>
+      <View className="flex-row flex-wrap items-center gap-2"><Button primary icon={ArrowDownToLine} disabled={!!w.saving} onPress={()=>void w.exportResult(artifact)}>{w.saving===artifact.ref?'Saving…':'Save PDF'}</Button><Button icon={Eye} onPress={()=>w.setPreview(w.preview===entry.id?null:entry.id)}>{w.preview===entry.id?'Hide preview':'Preview'}</Button>{entry.id===w.current&&<Button quiet icon={Undo2} disabled={w.busy||!w.store.canUndo} onPress={w.undo}>Undo</Button>}</View>
+      {!!w.receipts[artifact.ref]&&<Text accessibilityLiveRegion="polite" className="text-xs text-muted-foreground">{w.receipts[artifact.ref]}</Text>}
       {w.preview===entry.id&&<InlinePreview store={w.store} artifact={artifact} onClose={()=>w.setPreview(null)}/>}
-      {entry.id===w.current&&<View className="flex-row flex-wrap items-center gap-3 border-t border-border pt-3"><Text className="text-xs text-muted-foreground">Keep going with this result</Text><Button disabled={w.busy||artifact.pageCount<2} onPress={()=>w.action('remove','Remove physical page 2 from this result.',2)}>Remove page 2</Button></View>}
+      {entry.id===w.current&&<Text className="border-t border-border pt-3 text-sm text-muted-foreground">Tell me what you’d like to do next.</Text>}
     </View>}
-    {entry.choice&&entry.choice!=='connect'&&w.choice===entry.id&&<View className="flex-row flex-wrap gap-2"><Button primary disabled={w.busy} onPress={()=>w.confirm(entry)}>{entry.choice==='clear'?'Clear session':entry.choice==='planner'?'Plan this request':entry.choice==='execute'?'Create local copy':'Create optimised copy'}</Button><Button disabled={w.busy} onPress={()=>{w.setChoice(null);w.append({role:'user',text:'Keep things as they are.'});w.say('Okay. Your current files and result are unchanged.');}}>Keep working</Button></View>}
+    {entry.choice&&entry.choice!=='connect'&&w.choice===entry.id&&<View className="flex-row flex-wrap gap-2"><Button primary disabled={w.busy} onPress={()=>w.confirm(entry)}>{entry.choice==='clear'?'Clear session':'Create optimised copy'}</Button><Button disabled={w.busy} onPress={()=>{w.setChoice(null);w.append({role:'user',text:'Keep things as they are.'});w.say('Okay. Your current files and result are unchanged.');}}>Keep working</Button></View>}
     {entry.choice==='connect'&&w.choice===entry.id&&<KeyEntry token={entry.token!}/>}
     {entry.choice&&w.choice!==entry.id&&<Text className="text-xs text-muted-foreground">This question is closed.</Text>}
   </>;

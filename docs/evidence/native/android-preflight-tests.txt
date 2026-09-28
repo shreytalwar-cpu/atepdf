@@ -1,0 +1,11 @@
+✔ Android admission accepts the shared brief fixture and does not rewrite page dictionaries (8.984959ms)
+✔ Android admission rejects direct, indirect, inherited and malformed non-default UserUnit (6.154666ms)
+✔ Android admission rejects geometry the independent reader cannot report faithfully (1.522666ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 370.33375

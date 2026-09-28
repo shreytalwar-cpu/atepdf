@@ -7,6 +7,7 @@ import {privateInstruction,assertInstructionSafe} from '../../packages/planner/s
 import {createGateway,validateRequest} from '../../packages/planner/src/gateway';
 import {LocalConfig} from '../../packages/planner/src/local-config';
 import {planWithOpenAI,MODEL} from '../../packages/planner/src/provider';
+import {requestPlan} from '../../packages/planner/src/client';
 import {buildRequest,quickPlan} from '../../packages/contracts/src/protocol';
 import type {Artifact} from '../../packages/core/src/local-file-store';
 const files=[{ref:'file_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',kind:'pdf' as const,pageCount:2,sizeBytes:3000,encrypted:false as const},{ref:'file_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',kind:'pdf' as const,pageCount:1,sizeBytes:2000,encrypted:false as const}];
@@ -85,4 +86,57 @@ test('masked key endpoint saves only locally, refuses cross-origin/oversized/ove
 test('planner accepts metadata for large local PDFs without receiving bytes or filenames',()=>{
   const r=request();r.files[0].sizeBytes=350_000_000;r.files[1].sizeBytes=1_200_000_000;
   assert.deepEqual(validateRequest(r).files.map(f=>f.sizeBytes),[350_000_000,1_200_000_000]);
+  r.capabilities=['merge_pdf','select_pages'];r.ocrLanguages=[];assert.deepEqual(validateRequest(r).ocrLanguages,[]);
+  r.ocrLanguages=['eng'];assert.throws(()=>validateRequest(r));
+});
+
+test('privacy canaries: quoted paths, native URIs, encoded separators, hidden characters and JSON-shaped secrets reject',()=>{
+  for(const instruction of [
+    'Look in "/etc/private-canary"', "Use ('../private-canary')", 'Open content:private-canary', 'Read blob:private-canary',
+    'Use %2Fprivate%2Fcanary', 'Use \\u002fprivate', 'pass\u200bword=PRIVATE-CANARY', '{"password":"PRIVATE-CANARY"}',
+    'access_token=PRIVATE-CANARY', 'Authorization: Bearer synthetic-secret-token123',
+  ])assert.throws(()=>assertInstructionSafe(instruction),undefined,instruction);
+  assert.doesNotThrow(()=>assertInstructionSafe('Merge the first two.\nThen remove page 2.'));
+  const artifact={...files[0],name:'Cafe\u0301.pdf',checksum:'c'.repeat(64),inspection:{pages:[{text:'synthetic text',width:612,height:792,rotation:0}]}} as unknown as Artifact;
+  assert.equal(privateInstruction('Compress Café.pdf',[artifact]),`Compress ${artifact.ref}`);
+});
+
+test('gateway: hostile fetch context and stale tokens fail before any reservation',async()=>{
+  let calls=0;const {post,gateway,config}=await setup(async r=>{calls++;return quickPlan(r,'merge').planner;});
+  for(const headers of [{'sec-fetch-site':'cross-site'},{host:'other.example'},{origin:'http://localhost:9999'},{'x-atepdf-token':''}])assert.equal((await post(request(),headers)).status,403);
+  assert.equal((await gateway(new Request('http://localhost:3211/api/planner/status',{headers:{'sec-fetch-site':'cross-site'}}))).status,403);
+  assert.equal((await gateway(new Request('http://localhost:3211/api/planner/status',{headers:{host:'127.0.0.1:3211'}}))).status,403);
+  assert.equal(calls,0);assert.equal((await config.status()).remaining,2);
+});
+
+test('gateway: provider failures consume only their reserved call and never disclose provider bodies',async()=>{
+  for(const statusCode of [401,403,404,429,500]){
+    let calls=0;const {post,config}=await setup(async()=>{calls++;throw Object.assign(new Error('PRIVATE-PROVIDER-KEY-CANARY'),{statusCode,responseBody:'PRIVATE-DOCUMENT-CANARY'});},1);
+    const response=await post(request());assert.equal(response.status,502);assert.doesNotMatch(await response.text(),/CANARY/);assert.equal(calls,1);assert.equal((await config.status()).remaining,0);assert.equal((await post(request())).status,503);
+  }
+});
+
+test('client: incomplete streaming JSON never resolves; cancelled or malformed complete envelopes reject',async t=>{
+  const req=request(),plan=quickPlan(req,'merge'),encoder=new TextEncoder();
+  let controller!:ReadableStreamDefaultController<Uint8Array>;
+  const stream=new ReadableStream<Uint8Array>({start(value){controller=value;}});
+  const fetchMock=t.mock.method(globalThis,'fetch',async()=>new Response(stream,{headers:{'content-type':'application/json'}}));
+  let finished=false;const pending=requestPlan(req,'synthetic-token',new AbortController().signal).finally(()=>{finished=true;});
+  controller.enqueue(encoder.encode(JSON.stringify(plan).slice(0,-1)));await new Promise(resolve=>setTimeout(resolve,10));assert.equal(finished,false);
+  controller.close();await assert.rejects(pending);
+  const clarify={schemaVersion:'1.0',requestId:req.requestId,workspaceRevision:req.workspaceRevision,planner:{schemaVersion:'1.0',status:'clarify',reasonCode:'ambiguous_reference',steps:[],resultRefs:[],clarification:{question:'Which file?',choices:[]}}};
+  fetchMock.mock.mockImplementation(async()=>Response.json(clarify));assert.deepEqual(await requestPlan(req,'synthetic-token',new AbortController().signal),clarify);
+  for(const response of [{...plan,requestId:'req_other'},{...plan,workspaceRevision:99},{...clarify,extra:'PRIVATE-CANARY'},{...clarify,planner:{...clarify.planner,steps:plan.planner.steps}}]){
+    fetchMock.mock.mockImplementation(async()=>Response.json(response));await assert.rejects(requestPlan(req,'synthetic-token',new AbortController().signal));
+  }
+  const abort=new AbortController();fetchMock.mock.mockImplementation(async()=>{abort.abort();return Response.json(plan);});await assert.rejects(requestPlan(req,'synthetic-token',abort.signal));
+});
+
+test('local configuration: invalid allowances and malformed keys cannot enable paid calls',async()=>{
+  const dir=await mkdtemp(join(tmpdir(),'atepdf-budget-invalid-'));await chmod(dir,0o700);const config=new LocalConfig(dir);
+  try{
+    await writeFile(join(dir,'openai-key'),'sk-test-only-not-real-credential',{mode:0o600});
+    for(const approvedRequests of [-1,21,1.5,'2',null]){await writeFile(join(dir,'planner-settings.json'),JSON.stringify({enabled:true,model:MODEL,approvedRequests}),{mode:0o600});assert.equal((await config.status()).enabled,false);await assert.rejects(config.reserve());}
+    await writeFile(join(dir,'planner-settings.json'),JSON.stringify({enabled:true,model:MODEL,approvedRequests:1}),{mode:0o600});await writeFile(join(dir,'openai-key'),'sk-bad-local-key!with-punctuation');assert.equal((await config.status()).connected,false);
+  }finally{await rm(dir,{recursive:true,force:true});}
 });

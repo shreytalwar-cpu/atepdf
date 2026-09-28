@@ -1,0 +1,47 @@
+{
+  "time": "2026-09-28T15:34:35.830519+05:30",
+  "build": "Release iOS Simulator arm64, unsigned, XcodeBuildMCP build_sim explicit SUCCEEDED",
+  "durationSeconds": 36.981,
+  "buildLog": "/Users/shrey/Library/Developer/XcodeBuildMCP/workspaces/atepdf-0efe6fe22454/logs/build_sim_2026-09-28T10-02-06-420Z_pid97948_34629c9c.log",
+  "configuration": {
+    "CODE_SIGNING_ALLOWED": "NO",
+    "ONLY_ACTIVE_ARCH": "YES",
+    "ARCHS": "arm64",
+    "IPHONEOS_DEPLOYMENT_TARGET": "16.4"
+  },
+  "bundleId": "dev.atepdf.fresh",
+  "simulator": "iPhone 17 Pro iOS 27",
+  "processId": 22334,
+  "bundleModifiedLocal": "2026-09-28T15:32:43.198474+05:30",
+  "finalInlineImageGuardIncluded": true,
+  "newFollowUpCopyIncluded": true,
+  "oldFollowUpCopyAbsent": true,
+  "homeVisualVerified": true,
+  "homeScreenshot": "docs/evidence/native/apple-iphone-launch.jpg",
+  "beforeFixScreenshot": "docs/evidence/native/apple-iphone-before-native-style-fix.jpg",
+  "layoutCause": "Uniwind native resolver treats scoped @assistant-ui/react-native as react-native internals, so className styles on upstream primitives were ignored.",
+  "layoutFix": "Map third-party native primitive classes with official withUniwind at the local template boundary. Web aliases remain original components.",
+  "workflowValidation": "XCTest UI workflow pending; CUA cannot connect to Xcode27 DeviceHub. Home captures use purpose-built simulator tools.",
+  "sourceSha256": {
+    "apps/universal/ios/atepdf/AppDelegate.swift": "d8da495671a61a84657aba0f033d35d4cb7f32439c5031c11eab641430830295",
+    "apps/universal/ios/atepdf/Info.plist": "ac2b7300e8456e6c937345653414cb134d913ed6aa0b008a88d68ddde03c71c1",
+    "apps/universal/src/components/assistant-ui/elements/thread.aui.tsx": "42114f9ca2c028634fe311270851b923b2b1ff5b7e2445adac7c7bc9be213dac",
+    "apps/universal/modules/atepdf-pdf/ios/AtepdfPdfModule.swift": "2a0e90214878542d50e4944e356f25e88e3f2eae378be680042a97af607d87f9",
+    "apps/universal/modules/atepdf-pdf/ios/AtepdfPDFEngine.swift": "d7148e7c7819c417613cd4cad018caa123be9a212afe86df46a8c57c7e2c1d43",
+    "packages/web-pdf/src/content-admission.ts": "e228579bae823512351df7d226e8b3198f52595ed57d2e9d6740adc95a3f7307",
+    "apps/universal/App.tsx": "f3fd6b3e25ee7f7f63144d6ca144bb5987850dc5244e76e3be368a2ac3992c21"
+  },
+  "scope": "Simulator build/install/sustained home launch only, no physical device or distribution proof.",
+  "ipad": {
+    "simulator": "iPad Pro 11-inch M5 iOS27",
+    "sameReleaseBuildInstalled": true,
+    "processId": 22508,
+    "homeScreenshot": "docs/evidence/native/apple-ipad-launch.jpg",
+    "homeVisualVerified": true,
+    "workflowInteractionsPerformed": false,
+    "tabletPillLabelsVisible": true,
+    "nativeHeading": "Add your files"
+  },
+  "storageGateIncluded": true,
+  "tabletPillAndHeadingFixIncluded": true
+}

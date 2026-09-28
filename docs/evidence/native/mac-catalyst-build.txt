@@ -1,0 +1,6 @@
+Failed before compile: dependency targets were not explicitly Catalyst-enabled.
+/Users/shrey/Documents/ChatGPT/atepdf/apps/universal/ios/Pods/Pods.xcodeproj: error: The macOS deployment target 'MACOSX_DEPLOYMENT_TARGET' is set to 10.15, but the range of supported deployment target versions is 12.0 to 27.0.x. (in target 'RCTDeprecation' from project 'Pods')
+/Users/shrey/Documents/ChatGPT/atepdf/apps/universal/ios/Pods/Pods.xcodeproj: error: The macOS deployment target 'MACOSX_DEPLOYMENT_TARGET' is set to 10.15, but the range of supported deployment target versions is 12.0 to 27.0.x. (in target 'React-cxxreact-React-cxxreact_privacy' from project 'Pods')
+/Users/shrey/Documents/ChatGPT/atepdf/apps/universal/ios/Pods/Pods.xcodeproj: error: The macOS deployment target 'MACOSX_DEPLOYMENT_TARGET' is set to 10.15, but the range of supported deployment target versions is 12.0 to 27.0.x. (in target 'React-jsinspectorcdp' from project 'Pods')
+/Users/shrey/Documents/ChatGPT/atepdf/apps/universal/ios/Pods/Pods.xcodeproj: error: The macOS deployment target 'MACOSX_DEPLOYMENT_TARGET' is set to 10.15, but the range of supported deployment target versions is 12.0 to 27.0.x. (in target 'React' from project 'Pods')
+Full local diagnostic log (ignored): .build/mac-review-logs/mac-catalyst-build.txt

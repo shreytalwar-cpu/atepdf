@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-09-28T11:08:11.485093+00:00",
+  "authority": "Owner requested AI enabled after adding $10 account credit. Existing local maximum of 20 requests enabled; no paid call made during enablement.",
+  "settings": {
+    "enabled": true,
+    "model": "gpt-5.6-luna",
+    "approvedRequests": 20
+  },
+  "browserVerified": "AI planning is ready for up to 20 approved requests.",
+  "outputTokenLimit": 2000,
+  "retries": 0,
+  "isDollarSpendingCap": false,
+  "credentialReadOrPrinted": false
+}

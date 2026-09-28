@@ -1,0 +1,23 @@
+# Inline-image admission
+
+The shared `packages/web-pdf/src/content-admission.ts` guard runs during `preflight`, before independent reading, rasterization, OCR or transforms on web and Apple. It conservatively rejects **all inline-image drawing programs**, including images below the 12-million-pixel resource limit. Ordinary image XObjects remain supported. There is still no PDF file-size, imported-byte or retained-history admission cap.
+
+The original admission pass checked indirect image XObject dimensions. A synthetic 12,392-byte PDF containing a 4,001 × 3,000 grayscale Flate inline image passed that check. The new guard rejects the `BI` operator before interpreting the inline dictionary or binary image data. This closes an admission gap; the fixture did not demonstrate a crash or measure peak native allocation.
+
+## Implementation and provenance
+
+This is new, local-only admission code, not a copied legacy helper or a rendering engine. Existing MIT-licensed pdf-lib 1.17.1 still parses the PDF structure and decodes its content streams. Its exported decoder is reused; no decoder, dependency or licence was added. PDF.js 6.3.289's lexer is internal to its worker bundle, and its public reader is not a shared React Native API. Apple's CGPDFScanner is an official native parser but is not available to the shared web/native TypeScript layer. Those upstream paths therefore do not provide this shared admission boundary.
+
+The small lexer handles PDF whitespace, comments, escaped/nested literal strings, hexadecimal strings, names, numbers, arrays and dictionaries. It preserves lexical state across page Contents arrays, recognizes supported drawing operators and rejects malformed/repair-dependent or unknown syntax. It never searches compressed bytes with a regular expression. A `BI` in text, comments, hexadecimal text or a name remains valid; actual `BI`, `ID` or `EI` operators fail closed. It scans Form XObjects, tiling-pattern programs and Type 3 glyph programs too, including nested and soft-mask Forms. It does not decode image XObject payloads.
+
+pdf-lib 1.17.1 does not canonicalize lowercase hexadecimal escapes in names. Names retaining a `#XX` escape after pdf-lib decoding are conservatively rejected so a reader cannot recognize a drawing stream that the admission parser missed. This also excludes legitimate literal `#XX` names in this build; names are never rewritten.
+
+The defensive work budget is **16 MiB of aggregate decoded drawing-program bytes per preflight**, 10,000 scanned streams, 50,000 visited PDF objects, 128 levels of lexical/direct-object nesting, and 128 bytes per operator/number token. These are drawing-program work limits, not PDF file-byte or image-byte limits. The existing real tests continue to cover imports over 20 MB, merge output over 40 MB and retained history over 100 MB. Upstream decoders can expand a block ahead of `getByte()`, so the scan budget is not a hard peak-allocation guarantee. Native cancellation remains cooperative during synchronous parser/render calls.
+
+## Independent evidence
+
+`tests/regressions/content-admission.test.ts` uses synthetic, structurally valid PDFs, including compressed and uncompressed content, split content arrays, real inline images, nested Forms, patterns, glyphs, escaped names, malformed syntax and workload bounds. PDF.js independently recognizes the safe inline fixture's image operator. With `stopAtErrors: true` and `maxImageSize: 12_000_000`, the pinned PDF.js build resolves the oversized fixture's operator list as an empty list. A resolved operator list alone therefore cannot establish preserved drawing content; the shared guard rejects the fixture first. This test corrected an initial source-only inference that the image evaluator's error would necessarily reject the public API call.
+
+On 2026-09-28 the complete regression suite passed **60/60**, including eight new admission cases; shared/web and React Native TypeScript checks passed, and the diff whitespace check was clean. The new admission regressions are local parser/reader evidence, not physical-device memory-pressure or native bridge proof. Final application-build and platform runtime evidence is recorded by the session report.
+
+Official/upstream references: [PDF.js public API options](https://mozilla.github.io/pdf.js/api/draft/module-pdfjsLib.html), [pdf-lib stream decoder](https://github.com/Hopding/pdf-lib/blob/v1.17.1/src/core/streams/decode.ts), [pdf-lib name parser](https://github.com/Hopding/pdf-lib/blob/v1.17.1/src/core/objects/PDFName.ts), [Apple CGPDFScanner](https://developer.apple.com/documentation/coregraphics/cgpdfscanner), [Apple operator callbacks](https://developer.apple.com/documentation/coregraphics/cgpdfoperatorcallback).

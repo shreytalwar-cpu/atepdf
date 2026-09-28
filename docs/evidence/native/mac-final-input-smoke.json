@@ -1,0 +1,27 @@
+{
+  "checkedAt": "2026-09-28T10:54:23.020139+00:00",
+  "artifact": "/private/tmp/atepdf-mac-atl8ps9v/atepdf.app",
+  "pid": 34136,
+  "sourceHashes": {
+    "apps/universal/App.tsx": "541a42e36b6ebcdc492e03b29e7ccca1e629e18dc5c4cde30d68d5926048a86d",
+    "apps/universal/src/platform/ComposerInput.native.tsx": "f8621bf48ab4826539322654bb48437dbbc3900972a4d19731b9156ead3bbaac",
+    "apps/universal/src/platform/runtime.native.ts": "bbb842cabeda7c94a694bb56b76e9debed743bbd4e4ba309095a8230eb1ed504",
+    "apps/universal/modules/atepdf-pdf/ios/AtepdfPdfModule.swift": "8869ac7ec3fe3c2116d2dadac90838fb2f16c858c0ae95227689dca2346efb59",
+    "apps/universal/modules/atepdf-pdf/ios/AtepdfPDFExporter.swift": "58f578556efdbe83f002e2f9f2d97ecec3dadebba27f38814ce4bdc7f4800c4b",
+    "apps/universal/modules/atepdf-pdf/ios/AtepdfPDFEngine.swift": "a9457eaad93d085e81935146c642f70b97665b7d1012d95c59b2a39af359dd5b",
+    "apps/universal/ios/Podfile.lock": "ebd942aeae1a8e413e8ee7b32edef26d29ef1f34742d84fda09ec227413af481",
+    "Contents/Resources/main.jsbundle": "82c9d8b5e1cc3926848f6e596922147493b32bd2d5254ebfb65717e15e8de6b8"
+  },
+  "method": "CUA native ordinary typeText, not setValue or clipboard; exact AX values inspected before Send",
+  "results": {
+    "merge": "passed;3pages /3.1kB",
+    "typedRemoval": "passed; input Remove page 2 with normal first-letter autocapitalization, resulting2pages /2.3kB",
+    "clearAfterSend": "passed; composer returned to empty placeholder, Send disabled",
+    "typedUndo": "passed; subsequent exact input undo, restored3pages /3.1kB, composer empty again",
+    "saveCancellation": "passed; native Save PDF dialog opened and Cancel returned Ready \u00b7 save cancelled"
+  },
+  "inputCaveat": "Initial click+typeText in one CUA call delivered no text while focus changed. After AX confirmed focus, complete commands arrived without truncation/reordering. This bounded result does not prove every focus timing path.",
+  "preservedSession": "Prior export-verified app PID28997 retained with its synthetic chat; no Start over or state clearing performed.",
+  "savedFileEvidence": "Prior artifact mac-export-smoke.json and mac-export-independent.json; only accepted native input adapter delta, export implementation unchanged.",
+  "approvalNote": "Initial getApp returned no-approval with no reason. Read-only inventory and verified process paths established the fresh instance; subsequent exact-path read-only selection succeeded under owner approval. No rejected state-clearing action retried."
+}

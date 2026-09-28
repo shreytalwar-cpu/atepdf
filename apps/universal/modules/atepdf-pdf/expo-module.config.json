@@ -1,0 +1,5 @@
+{
+  "platforms": ["apple", "android"],
+  "apple": {"modules": ["AtepdfPdfModule"]},
+  "android": {"modules": ["expo.modules.atepdf.AtepdfPdfModule"]}
+}

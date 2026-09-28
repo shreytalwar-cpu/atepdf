@@ -1,0 +1,46 @@
+{
+  "upstream": {
+    "package": "@assistant-ui/react-native",
+    "version": "0.1.44",
+    "license": "MIT",
+    "repository": "https://github.com/assistant-ui/assistant-ui",
+    "sourcePath": "packages/react-native/src/primitives/composer/ComposerInput.tsx",
+    "installedTapVersion": "0.9.19"
+  },
+  "patch": "historical candidate only; not present in final source",
+  "patchSha256": "44b07957f3c0cf6d4d0344770b58b3fc4869e0575b08da4cf9d0934a72f8233d",
+  "files": {
+    "src/primitives/composer/ComposerInput.tsx": {
+      "beforeSha256": "1beed4034edd95a37d69f7edb514680fc026db50da57f4bae91b44bcdf9196e1",
+      "afterSha256": "b79671ac423f4bcef62ae2a74833e541d42bd2ba371b46a806fbc169aa477ba8"
+    },
+    "dist/primitives/composer/ComposerInput.js": {
+      "beforeSha256": "998a9f26ff54242f5632cb07913621e9a423901a6883a50247a617f8d8d7a468",
+      "afterSha256": "f26a1bbcaaedb648f6eb22c1abf9d36c9ad777e0deacad0ec8ac05eab14009a3"
+    }
+  },
+  "reason": "Actual Release iPhone XCTest fast typing of remove page 2 resulted in page 2re. Disabling autocorrection/spellcheck did not fix it. Public flushTapSync now wraps native onChangeText as already done for web, avoiding deferred composer snapshots writing stale controlled values/caret positions back to RN.",
+  "evidenceBefore": [
+    "docs/evidence/native/ios-ui-fifth-summary.json",
+    "docs/evidence/native/ios-ui-fifth-failure.png",
+    "docs/evidence/native/ios-ui-sixth-summary.json"
+  ],
+  "regression": "tests/native/ios/AtepdfWorkflowUITests.swift checks exact fast typed command plus insertion/backspace before Send; follow-up removal, undo and share dismissal use real local engine.",
+  "upstreamMechanism": "https://www.assistant-ui.com/docs/tap/outside-react",
+  "installation": {
+    "mode": "offline frozen lockfile, ignore-scripts, existing original cache store",
+    "downloadedPackages": 0,
+    "replacedExistingPackages": 1,
+    "versionChanges": false
+  },
+  "validation": "FAILED: seventh real iPhone XCTest still produced page 2r. Candidate patch and package metadata reverted; original package restored offline.",
+  "candidatePatchRemoved": true,
+  "evidenceAfter": "docs/evidence/native/ios-ui-seventh-summary.json",
+  "currentCandidate": {
+    "source": "apps/universal/src/platform/ComposerInput.native.tsx",
+    "mechanism": "Public assistant-ui ComposerInput extension slot with native TextInput defaultValue, no controlled value; onChangeText mirrors public composer.setText and public composer.send clears the native input.",
+    "pendingAcknowledgementHistory": false,
+    "programmaticPrefillScope": "New-message composer only. Edit/retry/voice prefill is not enabled. Any future such feature requires explicit native input handling and tests.",
+    "validation": "PASSED focused fast typing/backspace and full real workflow with first Send clear and second typed undo/reset; see ios-ui-result.json."
+  }
+}

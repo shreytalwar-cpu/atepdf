@@ -1,1 +1,39 @@
-{"expo":{"name":"atepdf","slug":"atepdf-local-dev","version":"0.1.0","orientation":"default","userInterfaceStyle":"light","ios":{"supportsTablet":true,"bundleIdentifier":"dev.atepdf.fresh"},"android":{"package":"dev.atepdf.fresh"},"web":{"bundler":"metro","name":"atepdf","output":"single"},"updates":{"enabled":false},"plugins":["expo-document-picker"],"extra":{"productionEnabled":false,"hostedPlannerEnabled":false}}}
+{
+  "expo": {
+    "name": "atepdf",
+    "slug": "atepdf-local-dev",
+    "version": "0.1.0",
+    "platforms": ["ios", "web"],
+    "orientation": "default",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "dev.atepdf.fresh"
+    },
+    "android": {
+      "package": "dev.atepdf.fresh",
+      "allowBackup": false,
+      "blockedPermissions": [
+        "android.permission.SYSTEM_ALERT_WINDOW",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.VIBRATE"
+      ]
+    },
+    "web": {
+      "bundler": "metro",
+      "name": "atepdf",
+      "output": "single"
+    },
+    "updates": {
+      "enabled": false
+    },
+    "plugins": [
+      "expo-document-picker"
+    ],
+    "extra": {
+      "productionEnabled": false,
+      "hostedPlannerEnabled": false
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import {randomBytes} from 'node:crypto';
 import requestValid from '../../contracts/src/generated/request';
-import {capabilities,type Request as PlannerRequest} from '../../contracts/src/protocol';
+import {capabilities,validateLocalContext,type Request as PlannerRequest} from '../../contracts/src/protocol';
 import {assertInstructionSafe} from './privacy';
 import {bindResponse} from './schema';
 import {planWithOpenAI} from './provider';
@@ -9,12 +9,13 @@ const LIMIT=24_000;
 export function validateRequest(value:unknown):PlannerRequest{
   if(!requestValid(value))throw new Error('Invalid request.');
   const r=value as PlannerRequest;
+  validateLocalContext(r);
   assertInstructionSafe(r.instruction);
-  if(!/^req_[a-f0-9]{32}$/.test(r.requestId)||r.files.some(f=>!/^(file|out)_[a-f0-9]{32}$/.test(f.ref))||r.files.length>40||r.previousPlan!==null||r.previousActionIds.length||r.locale!=='en-IN'||JSON.stringify(r.ocrLanguages)!=='["eng"]'||r.capabilities.some(c=>!capabilities.includes(c)))throw new Error('Unsupported context.');
+  if(!/^req_[a-f0-9]{32}$/.test(r.requestId)||r.files.some(f=>!/^(file|out)_[a-f0-9]{32}$/.test(f.ref))||r.files.length>40||r.previousPlan!==null||r.previousActionIds.length||r.locale!=='en-IN'||r.ocrLanguages.some(language=>language!=='eng')||(!r.capabilities.includes('ocr_pdf')&&r.ocrLanguages.length>0)||r.capabilities.some(c=>!capabilities.includes(c)))throw new Error('Unsupported context.');
   const refs=new Set(r.files.map(f=>f.ref));
   if(refs.size!==r.files.length||r.files.some(f=>f.kind!=='pdf'||f.encrypted||f.pageCount<1||f.pageCount>100)||[...r.selectionRefs,...r.originalRefs,...(r.focusedResultRef?[r.focusedResultRef]:[])].some(ref=>!refs.has(ref)))throw new Error('Invalid file references.');
   // Second positive projection at the server boundary; never forward raw JSON.
-  return {schemaVersion:'1.0',requestId:r.requestId,workspaceRevision:r.workspaceRevision,locale:'en-IN',instruction:r.instruction,files:r.files.map(f=>({ref:f.ref,kind:'pdf',pageCount:f.pageCount,sizeBytes:f.sizeBytes,encrypted:false})),selectionRefs:[...r.selectionRefs],focusedResultRef:r.focusedResultRef,originalRefs:[...r.originalRefs],previousActionIds:[],capabilities:[...r.capabilities],previousPlan:null,ocrLanguages:['eng']};
+  return {schemaVersion:'1.0',requestId:r.requestId,workspaceRevision:r.workspaceRevision,locale:'en-IN',instruction:r.instruction,files:r.files.map(f=>({ref:f.ref,kind:'pdf',pageCount:f.pageCount,sizeBytes:f.sizeBytes,encrypted:false})),selectionRefs:[...r.selectionRefs],focusedResultRef:r.focusedResultRef,originalRefs:[...r.originalRefs],previousActionIds:[],capabilities:[...r.capabilities],previousPlan:null,ocrLanguages:[...r.ocrLanguages]};
 }
 export function createGateway(config:Pick<LocalConfig,'status'|'reserve'> & Partial<Pick<LocalConfig,'saveKey'>>,provider=planWithOpenAI,{timeoutMs=30_000,minIntervalMs=1500}={}){
   const token=randomBytes(32).toString('hex');let running=false,lastStarted=0;const used=new Set<string>();

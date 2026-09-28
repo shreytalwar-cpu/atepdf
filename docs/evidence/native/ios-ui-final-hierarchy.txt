@@ -1,0 +1,258 @@
+Attributes: Application, 0x11326cdc0, pid: 33761, label: 'atepdf'
+Element subtree:
+ →Application, 0x11326cdc0, pid: 33761, label: 'atepdf'
+    Window (Main), 0x11326cf00, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x11326d040, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x11326d180, {{0.0, 0.0}, {402.0, 874.0}}
+        Other, 0x11326d2c0, {{0.0, 0.0}, {402.0, 874.0}}
+          Other, 0x11326d400, {{0.0, 0.0}, {402.0, 874.0}}
+            Other, 0x11326d540, {{0.0, 0.0}, {402.0, 874.0}}
+              Other, 0x11326d680, {{0.0, 0.0}, {402.0, 874.0}}
+                Other, 0x11326d7c0, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x11326d900, {{0.0, 0.0}, {402.0, 874.0}}
+                    Other, 0x11326da40, {{20.0, 85.7}, {28.0, 37.0}}
+                      Image, 0x11326db80, {{20.0, 85.7}, {28.0, 37.0}}, identifier: 'assets/assets/approved-8-mark-source-crop.png'
+                    Other, 0x11326dcc0, {{56.0, 89.3}, {90.0, 30.0}}
+                      Image, 0x11326de00, {{56.0, 89.3}, {90.0, 30.0}}, identifier: 'assets/assets/approved-atepdf-wordmark-source-crop.png', label: 'atepdf'
+                    Button, 0x11326df40, {{190.3, 82.0}, {191.7, 44.0}}, label: 'Processed on your device'
+                    Other, 0x11326e080, {{0.0, 146.0}, {402.0, 410.7}}, identifier: 'conversation'
+                      ScrollView, 0x11326e1c0, {{0.0, 146.0}, {402.0, 410.7}}
+                        Other, 0x11326e300, {{0.0, -970.3}, {402.0, 1527.0}}
+                          Other, 0x11326e440, {{0.0, -970.3}, {402.0, 1527.0}}
+                            Other, 0x11326e580, {{16.0, -946.3}, {370.0, 196.0}}
+                              Other, 0x11326e6c0, {{16.0, -946.3}, {370.0, 196.0}}, identifier: 'user-message'
+                              Other, 0x11326e800, {{205.3, -946.3}, {172.7, 66.0}}
+                              StaticText, 0x11326e940, {{257.3, -933.3}, {103.7, 20.0}}, label: 'brief.pdf'
+                                StaticText, 0x11326ea80, {{257.3, -933.3}, {103.7, 20.0}}, label: 'brief.pdf'
+                              Other, 0x11326ebc0, {{222.3, -924.7}, {23.0, 23.0}}
+                                Other, 0x11326ed00, {{225.2, -923.7}, {17.3, 21.1}}
+                                  Other, 0x11326ee40, {{225.2, -923.7}, {17.3, 21.1}}
+                                  Other, 0x11326ef80, {{229.0, -917.0}, {3.8, 1.9}}
+                                  Other, 0x11326f0c0, {{234.8, -923.7}, {7.7, 7.7}}
+                                  Other, 0x11326f200, {{229.0, -913.2}, {9.6, 1.9}}
+                                  Other, 0x11326f340, {{229.0, -909.3}, {9.6, 1.9}}
+                              StaticText, 0x11326f480, {{257.3, -909.3}, {103.7, 16.0}}, label: '3.1 kB · Original · 1'
+                                StaticText, 0x11326f5c0, {{257.3, -909.3}, {103.7, 16.0}}, label: '3.1 kB · Original · 1'
+                              Other, 0x11326f700, {{203.7, -872.3}, {174.3, 66.0}}
+                              StaticText, 0x11326f840, {{255.7, -859.3}, {105.3, 20.0}}, label: 'appendix.pdf'
+                                StaticText, 0x11326f980, {{255.7, -859.3}, {105.3, 20.0}}, label: 'appendix.pdf'
+                              Other, 0x11326fac0, {{220.7, -850.7}, {23.0, 23.0}}
+                                Other, 0x11326fc00, {{223.5, -849.7}, {17.3, 21.1}}
+                                  Other, 0x11326fd40, {{223.5, -849.7}, {17.3, 21.1}}
+                                  Other, 0x11326fe80, {{227.4, -843.0}, {3.8, 1.9}}
+                                  Other, 0x1129fe300, {{233.1, -849.7}, {7.7, 7.7}}
+                                  Other, 0x11408c000, {{227.4, -839.2}, {9.6, 1.9}}
+                                  Other, 0x11408c140, {{227.4, -835.3}, {9.6, 1.9}}
+                              StaticText, 0x11408c280, {{255.7, -835.3}, {105.3, 16.0}}, label: '2.1 kB · Original · 2'
+                                StaticText, 0x11408c3c0, {{255.7, -835.3}, {105.3, 16.0}}, label: '2.1 kB · Original · 2'
+                              Other, 0x11408c500, {{210.7, -798.3}, {167.3, 40.0}}
+                              StaticText, 0x11408c640, {{226.7, -790.3}, {135.3, 24.0}}, label: 'I’ve added 2 PDFs.'
+                                StaticText, 0x11408c780, {{226.7, -790.3}, {135.3, 24.0}}, label: 'I’ve added 2 PDFs.'
+                            Other, 0x11408c8c0, {{16.0, -722.3}, {370.0, 106.0}}
+                              Other, 0x11408ca00, {{16.0, -722.3}, {370.0, 106.0}}, identifier: 'assistant-message'
+                              StaticText, 0x11408cb40, {{24.0, -722.3}, {354.0, 72.0}}, label: 'Your 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.'
+                                StaticText, 0x11408cc80, {{24.0, -722.3}, {354.0, 72.0}}, label: 'Your 2 PDFs are ready. 3 pages in total. What would you like to do? Merge uses the order you added them.'
+                              Button, 0x11408cdc0, {{20.0, -644.3}, {28.0, 28.0}}, label: 'Copy'
+                            Other, 0x11408cf00, {{16.0, -588.3}, {370.0, 48.0}}
+                              Other, 0x11408d040, {{16.0, -588.3}, {370.0, 48.0}}, identifier: 'user-message'
+                              Other, 0x11408d180, {{227.0, -588.3}, {151.0, 40.0}}
+                              StaticText, 0x11408d2c0, {{243.0, -580.3}, {119.0, 24.0}}, label: 'Merge my PDFs.'
+                                StaticText, 0x11408d400, {{243.0, -580.3}, {119.0, 24.0}}, label: 'Merge my PDFs.'
+                            Other, 0x11408d540, {{16.0, -512.3}, {370.0, 268.0}}
+                              Other, 0x11408d680, {{16.0, -512.3}, {370.0, 268.0}}, identifier: 'assistant-message'
+                              StaticText, 0x11408d7c0, {{24.0, -512.3}, {354.0, 48.0}}, label: 'I merged your PDFs in the order added. Here’s your PDF.'
+                                StaticText, 0x11408d900, {{24.0, -512.3}, {354.0, 48.0}}, label: 'I merged your PDFs in the order added. Here’s your PDF.'
+                              Other, 0x11408da40, {{24.0, -452.3}, {354.0, 174.0}}, identifier: 'previous-result'
+                              Other, 0x11408db80, {{41.0, -431.3}, {40.0, 40.0}}
+                              StaticText, 0x11408dcc0, {{93.0, -435.3}, {133.0, 24.0}}, label: 'Your PDF is ready'
+                                StaticText, 0x11408de00, {{93.0, -435.3}, {133.0, 24.0}}, label: 'Your PDF is ready'
+                              Other, 0x11408df40, {{50.7, -421.7}, {21.0, 21.0}}
+                                Other, 0x11408e080, {{53.3, -417.3}, {15.7, 11.4}}
+                                  Other, 0x11408e1c0, {{53.3, -417.3}, {15.7, 11.4}}
+                              StaticText, 0x11408e300, {{93.0, -407.3}, {133.0, 20.0}}, label: '3 pages · 3.1 kB'
+                                StaticText, 0x11408e440, {{93.0, -407.3}, {133.0, 20.0}}, label: '3 pages · 3.1 kB'
+                              Button, 0x11408e580, {{41.0, -371.3}, {78.3, 44.0}}, label: 'Preview'
+                              Button, 0x11408e6c0, {{127.3, -371.3}, {104.3, 44.0}}, label: 'Saving…', Disabled
+                              StaticText, 0x11408e800, {{41.0, -311.3}, {320.0, 16.0}}, label: 'Ready to save'
+                                StaticText, 0x11408e940, {{41.0, -311.3}, {320.0, 16.0}}, label: 'Ready to save'
+                              Button, 0x11408ea80, {{20.0, -272.3}, {28.0, 28.0}}, label: 'Copy'
+                            Other, 0x11408ebc0, {{16.0, -216.3}, {370.0, 48.0}}
+                              Other, 0x11408ed00, {{16.0, -216.3}, {370.0, 48.0}}, identifier: 'user-message'
+                              Other, 0x11408ee40, {{238.3, -216.3}, {139.7, 40.0}}
+                              StaticText, 0x11408ef80, {{254.3, -208.3}, {107.7, 24.0}}, label: 'remove page 2'
+                                StaticText, 0x11408f0c0, {{254.3, -208.3}, {107.7, 24.0}}, label: 'remove page 2'
+                            Other, 0x11408f200, {{16.0, -140.3}, {370.0, 244.0}}
+                              Other, 0x11408f340, {{16.0, -140.3}, {370.0, 244.0}}, identifier: 'assistant-message'
+                              StaticText, 0x11408f480, {{24.0, -140.3}, {354.0, 24.0}}, label: 'I removed physical page 2. Here’s the new copy.'
+                                StaticText, 0x11408f5c0, {{24.0, -140.3}, {354.0, 24.0}}, label: 'I removed physical page 2. Here’s the new copy.'
+                              Other, 0x11408f700, {{24.0, -104.3}, {354.0, 174.0}}, identifier: 'previous-result'
+                              Other, 0x11408f840, {{41.0, -83.3}, {40.0, 40.0}}
+                              StaticText, 0x11408f980, {{93.0, -87.3}, {133.0, 24.0}}, label: 'Your PDF is ready'
+                                StaticText, 0x11408fac0, {{93.0, -87.3}, {133.0, 24.0}}, label: 'Your PDF is ready'
+                              Other, 0x11408fc00, {{50.7, -73.7}, {21.0, 21.0}}
+                                Other, 0x11408fd40, {{53.3, -69.3}, {15.7, 11.4}}
+                                  Other, 0x11408fe80, {{53.3, -69.3}, {15.7, 11.4}}
+                              StaticText, 0x114098000, {{93.0, -59.3}, {133.0, 20.0}}, label: '2 pages · 2.3 kB'
+                                StaticText, 0x114098140, {{93.0, -59.3}, {133.0, 20.0}}, label: '2 pages · 2.3 kB'
+                              Button, 0x114098280, {{41.0, -23.3}, {78.3, 44.0}}, label: 'Preview'
+                              Button, 0x1140983c0, {{127.3, -23.3}, {110.7, 44.0}}, label: 'Save PDF', Disabled
+                              StaticText, 0x114098500, {{41.0, 36.7}, {320.0, 16.0}}, label: 'Ready to save'
+                                StaticText, 0x114098640, {{41.0, 36.7}, {320.0, 16.0}}, label: 'Ready to save'
+                              Button, 0x114098780, {{20.0, 75.7}, {28.0, 28.0}}, label: 'Copy'
+                            Other, 0x1140988c0, {{16.0, 131.7}, {370.0, 48.0}}
+                              Other, 0x114098a00, {{16.0, 131.7}, {370.0, 48.0}}, identifier: 'user-message'
+                              Other, 0x114098b40, {{187.0, 131.7}, {191.0, 40.0}}
+                              StaticText, 0x114098c80, {{203.0, 139.7}, {159.0, 24.0}}, label: 'Undo the last change.'
+                                StaticText, 0x114098dc0, {{203.0, 139.7}, {159.0, 24.0}}, label: 'Undo the last change.'
+                            Other, 0x114098f00, {{16.0, 207.7}, {370.0, 317.0}}
+                              Other, 0x114099040, {{16.0, 207.7}, {370.0, 317.0}}, identifier: 'assistant-message'
+                              StaticText, 0x114099180, {{24.0, 207.7}, {354.0, 48.0}}, label: 'I restored your previous result. Your original files are unchanged.'
+                                StaticText, 0x1140992c0, {{24.0, 207.7}, {354.0, 48.0}}, label: 'I restored your previous result. Your original files are unchanged.'
+                              Other, 0x114099400, {{24.0, 267.7}, {354.0, 223.0}}, identifier: 'current-result'
+                              Other, 0x114099540, {{41.0, 288.7}, {40.0, 40.0}}
+                              StaticText, 0x114099680, {{93.0, 284.7}, {133.0, 24.0}}, label: 'Your PDF is ready'
+                                StaticText, 0x1140997c0, {{93.0, 284.7}, {133.0, 24.0}}, label: 'Your PDF is ready'
+                              Other, 0x114099900, {{50.7, 298.3}, {21.0, 21.0}}
+                                Other, 0x114099a40, {{53.3, 302.7}, {15.7, 11.4}}
+                                  Other, 0x114099b80, {{53.3, 302.7}, {15.7, 11.4}}
+                              StaticText, 0x114099cc0, {{93.0, 312.7}, {133.0, 20.0}}, identifier: 'result-facts', label: '3 pages · 3.1 kB'
+                                StaticText, 0x114099e00, {{93.0, 312.7}, {133.0, 20.0}}, label: '3 pages · 3.1 kB'
+                              Button, 0x114099f40, {{41.0, 348.7}, {78.3, 44.0}}, label: 'Preview'
+                              Button, 0x11409a080, {{127.3, 348.7}, {104.3, 44.0}}, label: 'Saving…', Disabled
+                              Button, 0x11409a1c0, {{239.7, 348.7}, {85.7, 44.0}}, label: 'Undo', Disabled
+                              StaticText, 0x11409a300, {{41.0, 408.7}, {320.0, 16.0}}, label: 'Ready to save'
+                                StaticText, 0x11409a440, {{41.0, 408.7}, {320.0, 16.0}}, label: 'Ready to save'
+                              StaticText, 0x11409a580, {{41.0, 440.7}, {320.0, 33.0}}, label: 'Tell me what you’d like to do next.'
+                                StaticText, 0x11409a6c0, {{41.0, 440.7}, {320.0, 33.0}}, label: 'Tell me what you’d like to do next.'
+                              Button, 0x11409a800, {{20.0, 496.7}, {28.0, 28.0}}, label: 'Copy'
+                        Other, 0x11409a940, {{0.0, 523.7}, {402.0, 30.0}}, label: 'Horizontal scroll bar, 1 page', value: 0%
+                          Other, 0x11409aa80, {{3.0, 550.7}, {393.0, 3.0}}
+                        Other, 0x11409abc0, {{0.0, 523.7}, {402.0, 30.0}}, label: 'Horizontal scroll bar, 1 page', value: 0%
+                          Other, 0x11409ad00, {{3.0, 550.7}, {393.0, 3.0}}
+                    Other, 0x11409ae40, {{0.0, 146.0}, {402.0, 728.0}}
+                    Other, 0x11409af80, {{16.0, 556.7}, {370.0, 126.0}}
+                    Other, 0x11409b0c0, {{25.0, 565.7}, {352.0, 56.0}}
+                      TextView, 0x11409b200, {{25.0, 565.7}, {352.0, 56.0}}, label: 'Tell atepdf what to do Tell atepdf what to do…'
+                        Other, 0x11409b340, {{25.0, 565.7}, {0.0, 0.0}}, identifier: '_UITextSelectionRangeAdjustmentContainerView'
+                          Other, 0x11409b480, {{25.0, 565.7}, {0.0, 0.0}}, identifier: 'com.apple.text.grabber.leading'
+                            Other, 0x11409b5c0, {{17.8, 552.2}, {16.5, 16.5}}
+                            Other, 0x11409b700, {{25.0, 565.7}, {2.0, 0.0}}
+                          Other, 0x11409b840, {{25.0, 565.7}, {0.0, 0.0}}, identifier: 'com.apple.text.grabber.leading'
+                            Other, 0x11409b980, {{17.8, 552.2}, {16.5, 16.5}}
+                            Other, 0x11409bac0, {{25.0, 565.7}, {2.0, 0.0}}
+                        Other, 0x11409bc00, {{344.0, 565.7}, {30.0, 56.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                          Other, 0x11409bd40, {{371.0, 610.7}, {3.0, 8.0}}
+                        Other, 0x11409be80, {{25.0, 590.7}, {352.0, 28.0}}, label: 'Horizontal scroll bar, 1 page', value: 0%
+                          Other, 0x1140a4000, {{28.0, 615.7}, {346.0, 3.0}}
+                    Button, 0x1140a4140, {{25.0, 629.7}, {44.0, 44.0}}, label: 'Add files'
+                    Button, 0x1140a4280, {{337.0, 631.7}, {40.0, 40.0}}, label: 'Send message', Disabled
+                    Button, 0x1140a43c0, {{16.0, 698.7}, {118.0, 44.0}}, label: 'Merge'
+                    Button, 0x1140a4500, {{142.0, 698.7}, {118.0, 44.0}}, label: 'Compress'
+                    Button, 0x1140a4640, {{268.0, 698.7}, {118.0, 44.0}}, label: 'Make searchable'
+                    Button, 0x1140a4780, {{254.0, 750.7}, {40.0, 40.0}}, label: 'Start over'
+                    StaticText, 0x1140a48c0, {{108.0, 762.7}, {134.0, 16.0}}, label: 'Current result · 3 pages'
+                      StaticText, 0x1140a4a00, {{108.0, 762.7}, {134.0, 16.0}}, label: 'Current result · 3 pages'
+                    StaticText, 0x1140a4b40, {{16.0, 798.7}, {370.0, 29.3}}, label: 'Local quick actions · AI planning is off in this build'
+                      StaticText, 0x1140a4c80, {{16.0, 798.7}, {370.0, 29.3}}, label: 'Local quick actions · AI planning is off in this build'
+      Other, 0x1140a4dc0, {{0.0, 0.0}, {402.0, 874.0}}
+        Other, 0x1140a4f00, {{0.0, 0.0}, {402.0, 874.0}}, identifier: 'PopoverDismissRegion', label: 'dismiss popup'
+        Popover, 0x1140a5040, {{9.0, 492.0}, {384.0, 373.0}}
+          Other, 0x1140a5180, {{9.0, 492.0}, {384.0, 373.0}}
+            Other, 0x1140a52c0, {{9.0, 492.0}, {384.0, 373.0}}
+              Other, 0x1140a5400, {{9.0, 492.0}, {384.0, 373.0}}
+                Other, 0x1140a5540, {{9.0, 492.0}, {384.0, 373.0}}
+                  Other, 0x1140a5680, {{9.0, 492.0}, {384.0, 373.0}}
+                    Other, 0x1140a57c0, {{9.0, 492.0}, {0.0, 0.0}}
+                      Other, 0x1140a5900, {{9.0, 492.0}, {384.0, 373.0}}
+                        Other, 0x1140a5a40, {{9.0, 492.0}, {384.0, 373.0}}
+                          Other, 0x1140a5b80, {{9.0, 492.0}, {384.0, 373.0}}
+                            Other, 0x1140a5cc0, {{9.0, 492.0}, {384.0, 373.0}}
+                              Other, 0x1140a5e00, {{9.0, 492.0}, {384.0, 373.0}}, identifier: 'ActivityListView'
+                                Other, 0x1140a5f40, {{9.0, 492.0}, {384.0, 373.0}}, identifier: 'ShareSheet.RemoteContainerView'
+                                  Other, 0x1140a6080, {{9.0, 492.0}, {384.0, 373.0}}
+                                    Other, 0x1140a61c0, {{9.0, 492.0}, {384.0, 373.0}}
+                                      Other, 0x1140a6300, {{9.0, 492.0}, {384.0, 373.0}}
+                                        Other, 0x1140a6440, {{9.0, 492.0}, {384.0, 373.0}}
+                                          Other, 0x1140a6580, {{9.0, 492.0}, {384.0, 373.0}}
+                                            Other, 0x1140a66c0, {{9.0, 492.0}, {384.0, 373.0}}
+                                              Other, 0x1140a6800, {{9.0, 492.0}, {384.0, 373.0}}
+                                                NavigationBar, 0x1140a6940, {{9.0, 492.0}, {384.0, 107.7}}, identifier: 'UIActivityContentView'
+                                                  Image, 0x1140a6a80, {{36.7, 519.7}, {45.0, 64.0}}
+                                                  Other, 0x1140a6bc0, {{96.7, 527.7}, {268.7, 23.0}}, identifier: 'LP.CaptionBar.TopCaption', label: 'aa9bedc7-ebc7-423d-8530-d0e9d5ed7501'
+                                                  Other, 0x1140a6d00, {{96.7, 550.7}, {268.7, 25.0}}, identifier: 'LP.CaptionBar.BottomCaption', label: 'PDF Document · 3 KB'
+                                                Other, 0x1140a6e40, {{9.0, 492.0}, {384.0, 373.0}}
+                                                  Other, 0x1140a6f80, {{9.0, 492.0}, {384.0, 373.0}}
+                                                    Other, 0x1140a70c0, {{9.0, 492.0}, {384.0, 373.0}}, identifier: 'shareSheet.activity.contentView'
+                                                      CollectionView, 0x1140a7200, {{9.0, 492.0}, {384.0, 373.0}}, identifier: 'activityCollectionView'
+                                                        Other, 0x1140a7340, {{9.0, 492.0}, {384.0, 373.0}}
+                                                          Other, 0x1140a7480, {{9.0, 492.0}, {384.0, 147.7}}
+                                                        Other, 0x1140a75c0, {{9.0, 492.0}, {384.0, 373.0}}
+                                                        ScrollView, 0x1140a7700, {{28.7, 599.7}, {344.7, 124.0}}
+                                                          Cell, 0x1140a7840, {{28.7, 599.7}, {82.0, 123.3}}, identifier: 'shareCell', label: 'attenlo pdf'
+                                                            Other, 0x1140a7980, {{28.7, 599.7}, {82.0, 123.3}}
+                                                              Other, 0x1140a7ac0, {{28.7, 689.7}, {82.0, 17.3}}
+                                                                StaticText, 0x1140a7c00, {{28.7, 689.7}, {82.0, 17.3}}, identifier: 'cellTitleLabel', label: 'attenlo pdf'
+                                                                StaticText, 0x1140a7d40, {{28.7, 689.7}, {32.7, 36.3}}, identifier: 'cellTitleLabel', label: 'Apple Inc'
+                                                                Other, 0x1140a7e80, {{28.7, 689.7}, {82.0, 17.3}}
+                                                              Image, 0x1140b0000, {{36.7, 615.7}, {66.0, 66.0}}, identifier: 'activityImageView'
+                                                          Cell, 0x1140b0140, {{116.3, 599.7}, {82.0, 123.3}}, identifier: 'shareCell', label: 'Preview'
+                                                            Other, 0x1140b0280, {{116.3, 599.7}, {82.0, 123.3}}
+                                                              Other, 0x1140b03c0, {{116.3, 689.7}, {82.0, 17.3}}
+                                                                StaticText, 0x1140b0500, {{116.3, 689.7}, {82.0, 17.3}}, identifier: 'cellTitleLabel', label: 'Preview'
+                                                                StaticText, 0x1140b0640, {{116.3, 689.7}, {32.7, 36.3}}, identifier: 'cellTitleLabel', label: 'Apple Inc'
+                                                                Other, 0x1140b0780, {{116.3, 689.7}, {82.0, 17.3}}
+                                                              Image, 0x1140b08c0, {{124.3, 615.7}, {66.0, 66.0}}, identifier: 'activityImageView'
+                                                          Cell, 0x1140b0a00, {{204.0, 599.7}, {82.0, 123.3}}, identifier: 'shareCell', label: 'More'
+                                                            Other, 0x1140b0b40, {{204.0, 599.7}, {82.0, 123.3}}
+                                                              Other, 0x1140b0c80, {{204.0, 689.7}, {82.0, 17.3}}
+                                                                StaticText, 0x1140b0dc0, {{204.0, 689.7}, {82.0, 17.3}}, identifier: 'cellTitleLabel', label: 'More'
+                                                                StaticText, 0x1140b0f00, {{204.0, 689.7}, {32.7, 36.3}}, identifier: 'cellTitleLabel', label: 'Apple Inc'
+                                                                Other, 0x1140b1040, {{204.0, 689.7}, {82.0, 17.3}}
+                                                              Image, 0x1140b1180, {{212.0, 615.7}, {66.0, 66.0}}, identifier: 'activityImageView'
+                                                        ScrollView, 0x1140b12c0, {{28.7, 724.7}, {344.7, 140.3}}
+                                                          Cell, 0x1140b1400, {{28.7, 724.7}, {82.0, 140.3}}, identifier: 'actionGroupCell', label: 'Copy'
+                                                            Other, 0x1140b1540, {{28.7, 724.7}, {82.0, 140.3}}
+                                                              Other, 0x1140b1680, {{28.7, 812.7}, {82.0, 17.3}}
+                                                                StaticText, 0x1140b17c0, {{28.7, 812.7}, {82.0, 17.3}}, identifier: 'cellTitleLabel', label: 'Copy'
+                                                                StaticText, 0x1140b1900, {{28.7, 812.7}, {32.7, 36.3}}, identifier: 'cellTitleLabel', label: 'Apple Inc'
+                                                                Other, 0x1140b1a40, {{28.7, 812.7}, {82.0, 17.3}}
+                                                              Other, 0x1140b1b80, {{36.7, 740.7}, {66.0, 66.0}}
+                                                              Image, 0x1140b1cc0, {{53.7, 754.7}, {32.0, 38.0}}, identifier: 'activityImageView', label: 'copy'
+                                                          Cell, 0x1140b1e00, {{116.3, 724.7}, {82.0, 140.3}}, identifier: 'actionGroupCell', label: 'Markup'
+                                                            Other, 0x1140b1f40, {{116.3, 724.7}, {82.0, 140.3}}
+                                                              Other, 0x1140b2080, {{116.3, 812.7}, {82.0, 17.3}}
+                                                                StaticText, 0x1140b21c0, {{116.3, 812.7}, {82.0, 17.3}}, identifier: 'cellTitleLabel', label: 'Markup'
+                                                                StaticText, 0x1140b2300, {{116.3, 812.7}, {32.7, 36.3}}, identifier: 'cellTitleLabel', label: 'Apple Inc'
+                                                                Other, 0x1140b2440, {{116.3, 812.7}, {82.0, 17.3}}
+                                                              Other, 0x1140b2580, {{124.3, 740.7}, {66.0, 66.0}}
+                                                              Image, 0x1140b26c0, {{141.3, 757.7}, {32.0, 32.0}}, identifier: 'activityImageView', label: 'Markup'
+                                                          Cell, 0x1140b2800, {{204.0, 724.7}, {82.0, 140.3}}, identifier: 'actionGroupCell', label: 'Print'
+                                                            Other, 0x1140b2940, {{204.0, 724.7}, {82.0, 140.3}}
+                                                              Other, 0x1140b2a80, {{204.0, 812.7}, {82.0, 17.3}}
+                                                                StaticText, 0x1140b2bc0, {{204.0, 812.7}, {82.0, 17.3}}, identifier: 'cellTitleLabel', label: 'Print'
+                                                                StaticText, 0x1140b2d00, {{204.0, 812.7}, {32.7, 36.3}}, identifier: 'cellTitleLabel', label: 'Apple Inc'
+                                                                Other, 0x1140b2e40, {{204.0, 812.7}, {82.0, 17.3}}
+                                                              Other, 0x1140b2f80, {{212.0, 740.7}, {66.0, 66.0}}
+                                                              Image, 0x1140b30c0, {{229.0, 757.3}, {32.0, 33.3}}, identifier: 'activityImageView', label: 'print'
+                                                          Cell, 0x1140b3200, {{291.7, 724.7}, {82.0, 140.3}}, identifier: 'actionGroupCell', label: 'Save to Files'
+                                                            Other, 0x1140b3340, {{291.7, 724.7}, {82.0, 140.3}}
+                                                              Other, 0x1140b3480, {{291.7, 812.7}, {82.0, 17.3}}
+                                                                StaticText, 0x1140b35c0, {{291.7, 812.7}, {82.0, 17.3}}, identifier: 'cellTitleLabel', label: 'Save to Files'
+                                                                StaticText, 0x1140b3700, {{291.7, 812.7}, {32.7, 36.3}}, identifier: 'cellTitleLabel', label: 'Apple Inc'
+                                                                Other, 0x1140b3840, {{291.7, 812.7}, {82.0, 17.3}}
+                                                              Other, 0x1140b3980, {{299.7, 740.7}, {66.0, 66.0}}
+                                                              Image, 0x1140b3ac0, {{311.0, 752.0}, {43.3, 43.3}}, identifier: 'activityImageView'
+                                                        Other, 0x1140b3c00, {{36.7, 723.7}, {328.7, 1.0}}, identifier: 'collectionView.footerView'
+                                                      Other, 0x1140b3d40, {{36.7, 599.7}, {328.7, 1.0}}
+                                                Toolbar, 0x1140b3e80, {{9.0, 492.0}, {384.0, 373.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                                  Other, 0x1140bc000, {{9.0, 492.0}, {384.0, 373.0}}
+    Window, 0x1140bc140, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x1140bc280, {{0.0, 0.0}, {402.0, 874.0}}
+        Other, 0x1140bc3c0, {{0.0, 0.0}, {402.0, 874.0}}
+Path to element:
+ →Application, 0x11326cdc0, pid: 33761, label: 'atepdf'
+Query chain:
+ →Find: Target Application 'dev.atepdf.fresh'
+  Output: {
+    Application, 0x1140bc500, pid: 33761, label: 'atepdf'
+  }

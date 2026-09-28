@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "mutation": "Restore pre-fix non-upscaling CGPDF drawing transform in an isolated temporary source copy",
+  "expectedExit": 42,
+  "actualExit": 42,
+  "failure": "REGRESSION_REJECTED: Error Domain=atepdf-synthetic-test Code=1 \"Raster anchor rotation none, size 724: (0.35359116022099446, 0.3342541436464088, 0.0718232044198895, 0.027624309392265192) expected (0.23333333333333334, 0.2, 0.13333333333333333, 0.05)\" UserInfo={NSLocalizedDescription=Raster anchor rotation none, size 724: (0.35359116022099446, 0.3342541436464088, 0.0718232044198895, 0.027624309392265192) expected (0.23333333333333334, 0.2, 0.13333333333333333, 0.05)}",
+  "newRepositorySourceUnchanged": true
+}

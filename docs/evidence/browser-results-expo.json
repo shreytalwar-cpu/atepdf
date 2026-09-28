@@ -86,12 +86,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1928,
+                  "duration": 8606,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-28T08:46:43.248Z",
+                  "startTime": "2026-09-28T11:28:43.455Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -113,7 +113,7 @@
       "line": 0,
       "specs": [
         {
-          "title": "mocked planner transport: review redacted instruction → complete plan → confirm → real local result → follow-up",
+          "title": "mocked planner transport: Send → redacted complete plan → real local result → follow-up",
           "ok": true,
           "tags": [],
           "tests": [
@@ -128,12 +128,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1283,
+                  "duration": 4540,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-28T08:46:46.006Z",
+                  "startTime": "2026-09-28T11:28:54.529Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -141,13 +141,13 @@
               "status": "expected"
             }
           ],
-          "id": "5d42237028e62295b8dc-cfc4f7a631f7c12c11e3",
+          "id": "5d42237028e62295b8dc-0f7c063a842f5de22dc8",
           "file": "planner.spec.ts",
-          "line": 5,
+          "line": 11,
           "column": 5
         },
         {
-          "title": "planner cancellation and stale consent cannot execute or overwrite a committed result",
+          "title": "direct planner cancellation ignores a late complete plan and keeps local quick actions usable",
           "ok": true,
           "tags": [],
           "tests": [
@@ -162,12 +162,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1108,
+                  "duration": 5371,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-28T08:46:47.295Z",
+                  "startTime": "2026-09-28T11:28:59.171Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -175,9 +175,179 @@
               "status": "expected"
             }
           ],
-          "id": "5d42237028e62295b8dc-ee3bd483ea4cadc32664",
+          "id": "5d42237028e62295b8dc-9a67db28392581f92b05",
           "file": "planner.spec.ts",
-          "line": 14,
+          "line": 22,
+          "column": 5
+        },
+        {
+          "title": "cancelling direct planner setup prevents any later model request",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3063,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T11:29:04.589Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5d42237028e62295b8dc-950290e0ee1d298df8c6",
+          "file": "planner.spec.ts",
+          "line": 37,
+          "column": 5
+        },
+        {
+          "title": "direct planner incomplete response never changes a committed result",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3995,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T11:29:07.672Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5d42237028e62295b8dc-744eb842552da1f2c761",
+          "file": "planner.spec.ts",
+          "line": 55,
+          "column": 7
+        },
+        {
+          "title": "direct planner stale response never changes a committed result",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3241,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T11:29:11.690Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5d42237028e62295b8dc-4c3d42925811ab8e45cd",
+          "file": "planner.spec.ts",
+          "line": 55,
+          "column": 7
+        },
+        {
+          "title": "direct planner truncated JSON response never changes a committed result",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2920,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T11:29:14.976Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5d42237028e62295b8dc-eee945b306e198be1d12",
+          "file": "planner.spec.ts",
+          "line": 55,
+          "column": 7
+        },
+        {
+          "title": "direct balanced-compression plan retains its image-quality choice before local execution",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2618,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T11:29:17.910Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5d42237028e62295b8dc-749df377799be0138b1f",
+          "file": "planner.spec.ts",
+          "line": 74,
           "column": 5
         },
         {
@@ -196,12 +366,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 495,
+                  "duration": 1182,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-28T08:46:48.423Z",
+                  "startTime": "2026-09-28T11:29:20.542Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -211,7 +381,7 @@
           ],
           "id": "5d42237028e62295b8dc-cd402eb487d5f9a4bd87",
           "file": "planner.spec.ts",
-          "line": 20,
+          "line": 82,
           "column": 5
         },
         {
@@ -230,12 +400,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 454,
+                  "duration": 1091,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-28T08:46:48.928Z",
+                  "startTime": "2026-09-28T11:29:21.742Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -245,7 +415,7 @@
           ],
           "id": "5d42237028e62295b8dc-80090aca81b91563f2fc",
           "file": "planner.spec.ts",
-          "line": 26,
+          "line": 89,
           "column": 5
         }
       ]
@@ -272,12 +442,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2196,
+                  "duration": 4929,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-28T08:46:49.403Z",
+                  "startTime": "2026-09-28T11:29:22.863Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -306,12 +476,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1713,
+                  "duration": 4985,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-28T08:46:51.605Z",
+                  "startTime": "2026-09-28T11:29:27.819Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -340,12 +510,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3147,
+                  "duration": 9521,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-28T08:46:53.327Z",
+                  "startTime": "2026-09-28T11:29:32.848Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -374,12 +544,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2100,
+                  "duration": 4014,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-28T08:46:56.483Z",
+                  "startTime": "2026-09-28T11:29:42.400Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -390,6 +560,74 @@
           "id": "c601ceb5ecfc8efa4a14-98d9fae7989c511ee516",
           "file": "workflow.spec.ts",
           "line": 41,
+          "column": 5
+        },
+        {
+          "title": "PDF drag feedback clears on leave and actual drop imports locally",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 576,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T11:29:46.449Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c601ceb5ecfc8efa4a14-2ddbff821d0c2518966c",
+          "file": "workflow.spec.ts",
+          "line": 85,
+          "column": 5
+        },
+        {
+          "title": "keyboard composer and Latest message keep current results reachable",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1176,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T11:29:47.032Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c601ceb5ecfc8efa4a14-8150b8537f7ef19c23b0",
+          "file": "workflow.spec.ts",
+          "line": 111,
           "column": 5
         },
         {
@@ -408,12 +646,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3044,
+                  "duration": 4536,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-28T08:46:58.590Z",
+                  "startTime": "2026-09-28T11:29:48.218Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -423,7 +661,7 @@
           ],
           "id": "c601ceb5ecfc8efa4a14-3ce47b7c9ae8758c889d",
           "file": "workflow.spec.ts",
-          "line": 60,
+          "line": 142,
           "column": 5
         }
       ]
@@ -431,9 +669,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-09-28T08:46:42.933Z",
-    "duration": 18859.855,
-    "expected": 10,
+    "startTime": "2026-09-28T11:28:42.186Z",
+    "duration": 70764.35399999999,
+    "expected": 17,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

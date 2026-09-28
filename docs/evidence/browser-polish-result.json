@@ -1,0 +1,66 @@
+{
+  "recordedAt": "2026-09-28T11:30:54.593167+00:00",
+  "app": "Expo web production export",
+  "baseURL": "http://localhost:3211",
+  "status": "PASSED",
+  "stats": {
+    "startTime": "2026-09-28T11:28:42.186Z",
+    "duration": 70764.35399999999,
+    "expected": 17,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "sourceAggregateSha256": "e3e8ccbc1c649001eea13670849b672e49543c1d02a36041a5b511fdecce5beb",
+  "sourceSnapshot": "docs/evidence/native/ios-ui-renderer-source.json",
+  "testReport": "docs/evidence/browser-results-expo.json",
+  "testSourceSha256": {
+    "tests/e2e/workflow.spec.ts": "a0ea732477431d362dc2ad26d0d2713db310d29cdc8c29e7bd62493832ff5d1a",
+    "tests/e2e/planner.spec.ts": "64a6990c473a83abe2819d823349cc144ffa228272c72731a85ca7e201842986",
+    "tests/e2e/large-files.spec.ts": "b928f9d7702f7dfb0681fcae9294f4410e584edd23b29a7ab89612ea7060f29d"
+  },
+  "processingProof": "Actual local OCR worker held at same-origin English language asset, true controller message, reduced-motion icon opacity unchanged across850ms, no premature result, Cancel enabled, execution disabled, committed result byte-identical after cancellation.",
+  "navigationProof": "Normal Shift+Enter and Enter keyboard interaction; current-result Save button inside conversation and above composer after Latest message.",
+  "dragProof": "Browser DataTransfer dragenter/dragleave/drop events with real synthetic PDF bytes; actual local import. Not operating-system drag automation.",
+  "plannerProof": "Intercepted synthetic transport only. Direct Send redacts filenames, validates full bound envelope, executes real local merge without generic consent dialogs. Cancel during held status unlocks within3seconds with0modelrequests; late response is discarded. Incomplete/stale/truncated JSON never changes prior result. Balanced compression retains actual image-quality choice. No paid provider calls.",
+  "initialAttempt": "All12browser launches failed under restricted shell before tests; same suite passed with approved browser-process permissions.",
+  "screenshots": [
+    "docs/evidence/local-processing-reduced-motion.png",
+    "docs/evidence/latest-message-result.png",
+    "docs/evidence/drag-feedback.png",
+    "docs/evidence/preview.png"
+  ],
+  "limitations": [
+    "Chromium on macOS with synthetic documents only.",
+    "Reduced motion checked at sampled times and no running CSS animations; not a screen-reader or complete motion audit.",
+    "Network observations cover exercised workflows only."
+  ],
+  "previousRefinementRun": {
+    "status": "PASSED",
+    "stats": {
+      "startTime": "2026-09-28T11:06:13.215Z",
+      "duration": 36300.465000000004,
+      "expected": 12,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "scope": "Polished interface before owner direct-planning correction"
+  },
+  "currentLocalAllowance": "Owner local configuration is now enabled under a20requestcap, as coordinated by root. Tests neither read its key nor consumed allowance.",
+  "previousDirectFlowRun": {
+    "status": "PASSED",
+    "stats": {
+      "startTime": "2026-09-28T11:15:35.355Z",
+      "duration": 25740.388,
+      "expected": 17,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "sourceAggregateSha256": "3d169ddd4954c7de9d6bdda1543a2b92d81e7eb029f481f2abea895d7b286538",
+    "scope": "Direct-planning source before native renderer/disabled-Send visual correction"
+  },
+  "finalSourceDelta": "Native raster scaling and native Send opacity changed after prior17-test run. Production export and fresh manual IAB result smoke passed; this final17-test rerun also passed on that final export.",
+  "sourceRecheckedAfterTest": true
+}

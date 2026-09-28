@@ -1,0 +1,1 @@
+619 installed package licences inventoried; 0 missing declarations.

@@ -35,6 +35,7 @@ import {
 import * as Clipboard from "expo-clipboard";
 import {
   ArrowUpIcon,
+  ArrowDownIcon,
   AudioLinesIcon,
   CheckIcon,
   ChevronLeftIcon,
@@ -67,11 +68,35 @@ import {
   type NativeScrollEvent,
   type NativeSyntheticEvent,
   Platform,
+  Pressable,
   Text,
   View,
   type ViewProps,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { withUniwind } from "uniwind";
+
+
+// Uniwind's native resolver treats the scoped @assistant-ui/react-native path as
+// React Native internals. Map classes at our template boundary so those
+// third-party primitives receive native style props. Keep web output unchanged.
+const StyledThreadRoot = Platform.OS === "web" ? ThreadPrimitive.Root : withUniwind(ThreadPrimitive.Root);
+const StyledMessagesFlatList = Platform.OS === "web" ? ThreadPrimitive.MessagesFlatList : withUniwind(ThreadPrimitive.MessagesFlatList);
+const StyledMessageRoot = Platform.OS === "web" ? MessagePrimitive.Root : withUniwind(MessagePrimitive.Root);
+const StyledComposerRoot = Platform.OS === "web" ? ComposerPrimitive.Root : withUniwind(ComposerPrimitive.Root);
+const StyledComposerInput = Platform.OS === "web" ? ComposerPrimitive.Input : withUniwind(ComposerPrimitive.Input);
+const StyledComposerSend = Platform.OS === "web" ? ComposerPrimitive.Send : withUniwind(ComposerPrimitive.Send);
+const StyledComposerCancel = Platform.OS === "web" ? ComposerPrimitive.Cancel : withUniwind(ComposerPrimitive.Cancel);
+const StyledActionCopy = Platform.OS === "web" ? ActionBarPrimitive.Copy : withUniwind(ActionBarPrimitive.Copy);
+const StyledActionReload = Platform.OS === "web" ? ActionBarPrimitive.Reload : withUniwind(ActionBarPrimitive.Reload);
+const StyledActionEdit = Platform.OS === "web" ? ActionBarPrimitive.Edit : withUniwind(ActionBarPrimitive.Edit);
+const StyledErrorRoot = Platform.OS === "web" ? ErrorPrimitive.Root : withUniwind(ErrorPrimitive.Root);
+const StyledErrorMessage = Platform.OS === "web" ? ErrorPrimitive.Message : withUniwind(ErrorPrimitive.Message);
+const StyledSuggestionTrigger = Platform.OS === "web" ? SuggestionPrimitive.Trigger : withUniwind(SuggestionPrimitive.Trigger);
+const StyledSuggestionTitle = Platform.OS === "web" ? SuggestionPrimitive.Title : withUniwind(SuggestionPrimitive.Title);
+const StyledSuggestionDescription = Platform.OS === "web" ? SuggestionPrimitive.Description : withUniwind(SuggestionPrimitive.Description);
+const StyledBranchPrevious = Platform.OS === "web" ? BranchPickerPrimitive.Previous : withUniwind(BranchPickerPrimitive.Previous);
+const StyledBranchNext = Platform.OS === "web" ? BranchPickerPrimitive.Next : withUniwind(BranchPickerPrimitive.Next);
 
 const isNewChatView = (s: AssistantState) =>
   s.thread.messages.length === 0 &&
@@ -88,6 +113,8 @@ export type ThreadGroupPart = MessagePrimitive.GroupedParts.GroupPart;
 export type ThreadComponents = {
   AssistantMessage?: ComponentType | undefined;
   MessageExtras?: ComponentType | undefined;
+  /** Local job activity, replacing the generic typing state for a running turn. */
+  Activity?: ComponentType | undefined;
   AddAttachment?: ComponentType | undefined;
   Footer?: ComponentType | undefined;
   Welcome?: ComponentType | undefined;
@@ -212,6 +239,7 @@ export const Thread: FC<ThreadProps> = ({
   const insets = useSafeAreaInsets();
   const viewportRef = useRef<ComponentRef<typeof View>>(null);
   const [viewportTop, setViewportTop] = useState(0);
+  const [awayFromEnd, setAwayFromEnd] = useState(false);
   const [store] = useState(createViewportStore);
   const listRef = useRef<FlatList<ThreadMessage>>(null);
   const metricsRef = useRef({
@@ -282,6 +310,7 @@ export const Thread: FC<ThreadProps> = ({
   const publishDescent = useCallback(() => {
     const { contentHeight, viewportHeight, scrollY } = metricsRef.current;
     const remaining = contentHeight - viewportHeight - scrollY;
+    setAwayFromEnd(viewportHeight > 0 && remaining > 100);
     const descent =
       viewportHeight > 0
         ? Math.round(
@@ -348,10 +377,10 @@ export const Thread: FC<ThreadProps> = ({
   );
 
   useEffect(() => {
-    if (isRunning) {
+    if (isRunning && !components.Activity) {
       AccessibilityInfo.announceForAccessibility("Assistant is working");
     }
-  }, [isRunning]);
+  }, [isRunning, components.Activity]);
 
   // KeyboardAvoidingView measures its frame against its parent, so a navigation
   // header above the thread would leave the composer covered by the header's
@@ -364,7 +393,7 @@ export const Thread: FC<ThreadProps> = ({
   return (
     <ThreadComponentsContext.Provider value={components}>
       <ThreadViewportContext.Provider value={viewport}>
-        <ThreadPrimitive.Root className="aui-root aui-thread-root bg-background flex-1">
+        <StyledThreadRoot className="aui-root aui-thread-root bg-background flex-1">
           <KeyboardAvoidingView
             className="flex-1"
             behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -374,7 +403,7 @@ export const Thread: FC<ThreadProps> = ({
               ref={viewportRef}
               onLayout={measureViewport}
               className={cn(
-                "aui-thread-viewport mx-auto w-full max-w-[44rem] min-h-0 flex-1",
+                "aui-thread-viewport mx-auto w-full max-w-[48rem] min-h-0 flex-1",
                 isEmpty && "justify-center",
               )}
             >
@@ -386,24 +415,28 @@ export const Thread: FC<ThreadProps> = ({
               </AuiIf>
               <AuiIf condition={(s) => s.thread.messages.length > 0}>
                 {history?.isLoadingMore && <HistoryEdge />}
-                <ThreadPrimitive.MessagesFlatList
+                <StyledMessagesFlatList
                   // Viewability props cannot change once a FlatList is mounted.
                   key={Rail ? "tracked" : "plain"}
                   ref={listRef}
                   className="aui-message-group flex-1"
                   contentContainerClassName={cn(
-                    "gap-7 px-4 pt-6 pb-8",
+                    "gap-6 px-4 pt-6 pb-6",
                     Rail && "pl-10",
                   )}
                   testID="conversation"
+                  // Animated run-start scrolls can race very short local jobs.
+                  // Keep the template's content/keyboard following and respect
+                  // readers who have intentionally scrolled up.
+                  scrollToBottomOnRunStart={false}
                   showsVerticalScrollIndicator={false}
                   keyboardDismissMode="interactive"
                   keyboardShouldPersistTaps="handled"
+                  onContentSizeChange={onListContentSizeChange}
+                  onLayout={onListLayout}
+                  onScroll={onListScroll}
                   {...(Rail
                     ? {
-                        onContentSizeChange: onListContentSizeChange,
-                        onLayout: onListLayout,
-                        onScroll: onListScroll,
                         onScrollToIndexFailed,
                         onViewableItemsChanged,
                         viewabilityConfig: MESSAGE_VIEWABILITY,
@@ -416,12 +449,18 @@ export const Thread: FC<ThreadProps> = ({
                     : {})}
                 >
                   {() => <ThreadMessage />}
-                </ThreadPrimitive.MessagesFlatList>
+                </StyledMessagesFlatList>
               </AuiIf>
               <View
-                className="aui-thread-viewport-footer gap-4 px-4"
+                className="aui-thread-viewport-footer gap-3 px-4"
                 style={{ paddingBottom: insets.bottom + 8 }}
               >
+                {awayFromEnd&&!isEmpty&&<Pressable
+                  accessibilityRole="button" accessibilityLabel="Latest message"
+                  onPress={()=>listRef.current?.scrollToEnd({animated:false})}
+                  className="atepdf-button absolute -top-14 right-5 z-10 size-11 items-center justify-center rounded-full border border-border bg-background"
+                  style={{boxShadow:'0 3px 12px #18213b12'}}
+                ><Icon as={ArrowDownIcon} className="size-4 text-foreground"/></Pressable>}
                 <Composer />
                 <HostSlot name="Footer" />
                 <AuiIf
@@ -440,7 +479,7 @@ export const Thread: FC<ThreadProps> = ({
               )}
             </View>
           </KeyboardAvoidingView>
-        </ThreadPrimitive.Root>
+        </StyledThreadRoot>
       </ThreadViewportContext.Provider>
     </ThreadComponentsContext.Provider>
   );
@@ -497,7 +536,7 @@ const SpokenMessage: FC = () => {
   const opensExchange = position === "start" || position === "single";
 
   return (
-    <MessagePrimitive.Root
+    <StyledMessageRoot
       className={cn(
         "aui-spoken-message bg-muted/40 mx-2 px-3 py-1.5",
         `aui-spoken-message-${position}`,
@@ -541,7 +580,7 @@ const SpokenMessage: FC = () => {
           <SpokenActionBar />
         </View>
       </View>
-    </MessagePrimitive.Root>
+    </StyledMessageRoot>
   );
 };
 
@@ -552,7 +591,7 @@ const SpokenActionBar: FC = () => (
     }
   >
     <View className="aui-spoken-action-bar flex-row gap-1">
-      <ActionBarPrimitive.Copy
+      <StyledActionCopy
         copyToClipboard={copyToClipboard}
         className={cn(iconButtonClassName, "size-6")}
         hitSlop={groupedIconButtonHitSlop}
@@ -564,7 +603,7 @@ const SpokenActionBar: FC = () => (
             className="text-muted-foreground size-3.5"
           />
         )}
-      </ActionBarPrimitive.Copy>
+      </StyledActionCopy>
     </View>
   </AuiIf>
 );
@@ -625,15 +664,15 @@ const ThreadSuggestions: FC = () => (
 );
 
 const ThreadSuggestionItem: FC = () => (
-  <SuggestionPrimitive.Trigger
+  <StyledSuggestionTrigger
     send
     className="aui-thread-welcome-suggestion border-border/60 active:bg-muted flex-row items-center gap-1.5 rounded-full border px-3.5 py-1.5"
   >
-    <SuggestionPrimitive.Title className="aui-thread-welcome-suggestion-text-1 text-foreground text-sm" />
+    <StyledSuggestionTitle className="aui-thread-welcome-suggestion-text-1 text-foreground text-sm" />
     <AuiIf condition={(s) => !!s.suggestion.label}>
-      <SuggestionPrimitive.Description className="aui-thread-welcome-suggestion-text-2 text-muted-foreground text-sm" />
+      <StyledSuggestionDescription className="aui-thread-welcome-suggestion-text-2 text-muted-foreground text-sm" />
     </AuiIf>
-  </SuggestionPrimitive.Trigger>
+  </StyledSuggestionTrigger>
 );
 
 // The placeholder color is a class to prop mapping that reads the CSSOM, so it applies from the first render after hydration.
@@ -641,12 +680,12 @@ const DefaultComposerInput: FC = () => {
   const hydrated = useHydrated();
 
   return (
-    <ComposerPrimitive.Input
+    <StyledComposerInput
       placeholder="Tell atepdf what to do…"
       placeholderTextColorClassName={
-        hydrated ? "accent-muted-foreground/60" : undefined
+        hydrated ? "accent-muted-foreground" : undefined
       }
-      className="aui-composer-input text-foreground web:resize-none web:outline-none max-h-40 min-h-14 px-3 py-2 text-base leading-6"
+      className="aui-composer-input text-foreground web:resize-none web:outline-none max-h-40 min-h-12 px-3 py-2 text-base leading-6"
       multiline
       accessibilityLabel="Tell atepdf what to do"
     />
@@ -659,17 +698,18 @@ const Composer: FC = () => {
   );
 
   return (
-    <ComposerPrimitive.Root className="aui-composer-root w-full">
-      <View className="aui-composer-shell border-border/60 dark:border-muted-foreground/15 bg-card gap-2 rounded-3xl border p-2">
+    <StyledComposerRoot className="aui-composer-root w-full">
+      <View className="aui-composer-shell border-border dark:border-muted-foreground/15 bg-card gap-1 rounded-[28px] border p-2">
 
         <ComposerInput />
         <ComposerAction />
       </View>
-    </ComposerPrimitive.Root>
+    </StyledComposerRoot>
   );
 };
 
 const ComposerAction: FC = () => {
+  const canSend = useAuiState((s) => s.composer.canSend);
   // The stop control only cancels the send while no run it could stop is going.
   const isSending = useAuiState(
     (s) =>
@@ -687,8 +727,9 @@ const ComposerAction: FC = () => {
             (!s.thread.isRunning || s.thread.voice !== undefined)
           }
         >
-          <ComposerPrimitive.Send
-            className="aui-composer-send bg-primary active:bg-primary/90 size-10 items-center justify-center rounded-full disabled:opacity-50"
+          <StyledComposerSend
+            className="aui-composer-send bg-primary active:bg-primary/90 size-11 items-center justify-center rounded-full disabled:opacity-40"
+            style={Platform.OS === "web" ? undefined : { opacity: canSend ? 1 : 0.4 }}
             hitSlop={iconButtonHitSlop}
             accessibilityLabel="Send message"
           >
@@ -696,7 +737,7 @@ const ComposerAction: FC = () => {
               as={ArrowUpIcon}
               className="aui-composer-send-icon text-primary-foreground size-4"
             />
-          </ComposerPrimitive.Send>
+          </StyledComposerSend>
         </AuiIf>
         <AuiIf
           condition={(s) =>
@@ -704,15 +745,15 @@ const ComposerAction: FC = () => {
             (s.thread.isRunning && s.thread.voice === undefined)
           }
         >
-          <ComposerPrimitive.Cancel
-            className="aui-composer-cancel bg-primary active:bg-primary/90 size-10 items-center justify-center rounded-full"
+          <StyledComposerCancel
+            className="aui-composer-cancel bg-foreground active:opacity-80 size-11 items-center justify-center rounded-full"
             hitSlop={iconButtonHitSlop}
             accessibilityLabel={
               isSending ? "Cancel sending" : "Cancel"
             }
           >
             <View className="aui-composer-cancel-icon bg-primary-foreground size-3 rounded-[2px]" />
-          </ComposerPrimitive.Cancel>
+          </StyledComposerCancel>
         </AuiIf>
       </View>
     </View>
@@ -720,22 +761,26 @@ const ComposerAction: FC = () => {
 };
 
 const MessageError: FC = () => (
-  <ErrorPrimitive.Root className="aui-message-error-root border-destructive bg-destructive/10 dark:bg-destructive/5 mt-2 rounded-md border p-3">
-    <ErrorPrimitive.Message
+  <StyledErrorRoot className="aui-message-error-root border-destructive bg-destructive/10 dark:bg-destructive/5 mt-2 rounded-md border p-3">
+    <StyledErrorMessage
       className="aui-message-error-message text-destructive text-sm"
       numberOfLines={2}
     />
-  </ErrorPrimitive.Root>
+  </StyledErrorRoot>
 );
 
-const UserText: TextMessagePartComponent = ({ text }) => (
+const UserText: TextMessagePartComponent = ({ text }) => {
+  const isAssistant=useAuiState(s=>s.message.role==='assistant');
+  return (
   <Text
     className="aui-user-message-text text-foreground text-base leading-6"
     selectable
+    aria-live={Platform.OS==='web'&&isAssistant?'polite':undefined}
+    aria-atomic={isAssistant?true:undefined}
   >
     {text}
   </Text>
-);
+);};
 
 const AssistantIndicator: FC = () => {
   const isRunning = useAuiState((s) => s.message.status?.type === "running");
@@ -751,19 +796,20 @@ const AssistantIndicator: FC = () => {
   );
 };
 
-const AssistantMessage: FC = () => (
-  <MessagePrimitive.Root testID="assistant-message" className="aui-assistant-message-root">
+const AssistantMessage: FC = () => {
+  const {Activity}=useContext(ThreadComponentsContext);
+  const running=useAuiState(s=>s.message.status?.type==='running');
+  return (
+  <StyledMessageRoot testID="assistant-message" className="aui-assistant-message-root">
     <View className="aui-assistant-message-content px-2 gap-3">
-      <MessagePrimitive.Parts components={{ Text: UserText }} />
-      <HostSlot name="MessageExtras" />
-      <AssistantIndicator />
+      {running&&Activity?<Activity/>:<><MessagePrimitive.Parts components={{ Text: UserText }} /><HostSlot name="MessageExtras" /><AssistantIndicator /></>}
       <MessageError />
     </View>
-    <View className="aui-assistant-message-footer ms-2 min-h-7.5 flex-row items-center pt-1.5">
+    {!running&&<View className="aui-assistant-message-footer ms-2 flex-row items-center pt-1.5">
       <AssistantActionBar />
-    </View>
-  </MessagePrimitive.Root>
-);
+    </View>}
+  </StyledMessageRoot>
+);};
 
 const HostSlot: FC<{name: "MessageExtras" | "AddAttachment" | "Footer"}> = ({name}) => {
   const Component = useContext(ThreadComponentsContext)[name];
@@ -777,7 +823,7 @@ const AssistantActionBar: FC = () => (
     }
   >
     <View className="aui-assistant-action-bar-root -ms-1 flex-row gap-1">
-      <ActionBarPrimitive.Copy
+      <StyledActionCopy
         copyToClipboard={copyToClipboard}
         className={iconButtonClassName}
         hitSlop={groupedIconButtonHitSlop}
@@ -789,22 +835,22 @@ const AssistantActionBar: FC = () => (
             className="text-muted-foreground size-4"
           />
         )}
-      </ActionBarPrimitive.Copy>
+      </StyledActionCopy>
       <AuiIf condition={(s) => s.thread.capabilities.reload}>
-      <ActionBarPrimitive.Reload
+      <StyledActionReload
         className={iconButtonClassName}
         hitSlop={groupedIconButtonHitSlop}
         accessibilityLabel="Refresh"
       >
         <Icon as={RefreshCwIcon} className="text-muted-foreground size-4" />
-      </ActionBarPrimitive.Reload>
+      </StyledActionReload>
       </AuiIf>
     </View>
   </AuiIf>
 );
 
 const UserMessage: FC = () => (
-  <MessagePrimitive.Root testID="user-message" className="aui-user-message-root items-end gap-y-2 px-2">
+  <StyledMessageRoot testID="user-message" className="aui-user-message-root items-end gap-y-2 px-2">
     <HostSlot name="MessageExtras" />
     <View className="aui-user-message-content bg-muted max-w-[85%] rounded-xl px-4 py-2">
       <MessagePrimitive.Parts components={{ Text: UserText }} />
@@ -813,23 +859,23 @@ const UserMessage: FC = () => (
       <BranchPicker />
       <UserActionBar />
     </View>
-  </MessagePrimitive.Root>
+  </StyledMessageRoot>
 );
 
 const UserActionBar: FC = () => (
   <AuiIf condition={(s) => !s.thread.isRunning && s.thread.capabilities.edit}>
-    <ActionBarPrimitive.Edit
+    <StyledActionEdit
       className={cn(iconButtonClassName, "aui-user-action-edit")}
       hitSlop={groupedIconButtonHitSlop}
       accessibilityLabel="Edit"
     >
       <Icon as={PencilIcon} className="text-muted-foreground size-4" />
-    </ActionBarPrimitive.Edit>
+    </StyledActionEdit>
   </AuiIf>
 );
 
 const DefaultEditComposerInput: FC = () => (
-  <ComposerPrimitive.Input
+  <StyledComposerInput
     className="aui-edit-composer-input text-foreground web:resize-none web:outline-none min-h-14 px-4 pt-3 pb-1 text-base"
     multiline
     autoFocus
@@ -842,21 +888,21 @@ const EditComposer: FC = () => {
   );
 
   return (
-    <MessagePrimitive.Root className="aui-edit-composer-wrapper px-2">
-      <ComposerPrimitive.Root className="aui-edit-composer-root border-border/60 dark:border-muted-foreground/15 bg-card ms-auto w-full max-w-[85%] rounded-3xl border">
+    <StyledMessageRoot className="aui-edit-composer-wrapper px-2">
+      <StyledComposerRoot className="aui-edit-composer-root border-border/60 dark:border-muted-foreground/15 bg-card ms-auto w-full max-w-[85%] rounded-3xl border">
         <ComposerInput />
         <View className="aui-edit-composer-footer mx-2.5 mb-2.5 flex-row items-center gap-1.5 self-end">
-          <ComposerPrimitive.Cancel className="active:bg-accent h-8 justify-center rounded-full px-3.5">
+          <StyledComposerCancel className="active:bg-accent h-8 justify-center rounded-full px-3.5">
             <Text className="text-foreground text-sm font-medium">Cancel</Text>
-          </ComposerPrimitive.Cancel>
-          <ComposerPrimitive.Send className="bg-primary active:bg-primary/90 h-8 justify-center rounded-full px-3.5">
+          </StyledComposerCancel>
+          <StyledComposerSend className="bg-primary active:bg-primary/90 h-8 justify-center rounded-full px-3.5">
             <Text className="text-primary-foreground text-sm font-medium">
               Update
             </Text>
-          </ComposerPrimitive.Send>
+          </StyledComposerSend>
         </View>
-      </ComposerPrimitive.Root>
-    </MessagePrimitive.Root>
+      </StyledComposerRoot>
+    </StyledMessageRoot>
   );
 };
 
@@ -872,23 +918,23 @@ const BranchPicker: FC<ViewProps> = ({ className, ...rest }) => {
       )}
       {...rest}
     >
-      <BranchPickerPrimitive.Previous
+      <StyledBranchPrevious
         className={cn(iconButtonClassName, "disabled:opacity-35")}
         hitSlop={groupedIconButtonHitSlop}
         accessibilityLabel="Previous"
       >
         <Icon as={ChevronLeftIcon} className="text-muted-foreground size-4" />
-      </BranchPickerPrimitive.Previous>
+      </StyledBranchPrevious>
       <Text className="aui-branch-picker-state text-muted-foreground text-xs font-medium">
         <BranchPickerPrimitive.Number /> / <BranchPickerPrimitive.Count />
       </Text>
-      <BranchPickerPrimitive.Next
+      <StyledBranchNext
         className={cn(iconButtonClassName, "disabled:opacity-35")}
         hitSlop={groupedIconButtonHitSlop}
         accessibilityLabel="Next"
       >
         <Icon as={ChevronRightIcon} className="text-muted-foreground size-4" />
-      </BranchPickerPrimitive.Next>
+      </StyledBranchNext>
     </View>
   );
 };

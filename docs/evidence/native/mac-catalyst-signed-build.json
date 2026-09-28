@@ -1,0 +1,81 @@
+{
+  "builtAt": "2026-09-28T11:29:41.693307+00:00",
+  "app": "/private/tmp/atepdf-mac-80vob5yq/atepdf.app",
+  "identifier": "dev.atepdf.fresh.mac",
+  "buildLog": "/Users/shrey/Documents/ChatGPT/atepdf/.build/mac-build-62hQ0v",
+  "signature": "local ad-hoc, development only",
+  "hardenedRuntime": false,
+  "strictSignatureVerification": "passed",
+  "entitlements": {
+    "com.apple.security.app-sandbox": true,
+    "com.apple.security.files.user-selected.read-write": true
+  },
+  "networkEntitlements": false,
+  "nestedCodeObjects": 14,
+  "stagedFrameworkNormalizations": [
+    {
+      "framework": "React",
+      "identicalVersionCopies": true,
+      "builtBinarySha256BeforeSigning": "ad352f81fd4a5142e136791b9b0a00183edee21aab4dc078bea5363867cf5ff1"
+    },
+    {
+      "framework": "ReactNativeDependencies",
+      "identicalVersionCopies": true,
+      "builtBinarySha256BeforeSigning": "43bcab018ca428cecb60f55bd69fe3627c1de24f808e14fdce8dac004899bf01"
+    }
+  ],
+  "binarySha256": "e14a5443880abd3c2a344ebcafc51f145ee41bde41a89f48b7b422970fd13066",
+  "launchRequested": false,
+  "launchVerified": true,
+  "scope": "Local developer artifact; not notarized or distribution-ready.",
+  "verifiedPid": 45551,
+  "verifiedProcessPath": "/private/tmp/atepdf-mac-80vob5yq/atepdf.app/Contents/MacOS/atepdf",
+  "runtimeChecks": {
+    "process": {
+      "exitCode": 0,
+      "stdout": "45551 /private/tmp/atepdf-mac-80vob5yq/atepdf.app/Contents/MacOS/atepdf",
+      "stderr": ""
+    },
+    "cwd": {
+      "exitCode": 0,
+      "stdout": "p45551\nfcwd\nn/Users/shrey/Library/Containers/dev.atepdf.fresh.mac/Data",
+      "stderr": ""
+    },
+    "sockets": {
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    "signature": {
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  },
+  "sourceHashesAtVerification": {
+    "apps/universal/App.tsx": "d59a7dd7b732d709fa6ad978806813ec34959e0da4dd947c9b6539a4148ed7c4",
+    "apps/universal/global.css": "962c6da438f3cd5baf58edcd067b962259530d1fe60bbde9cb3ce6b532cf08da",
+    "apps/universal/src/platform/ComposerInput.native.tsx": "ae1be7ce80d938c7e29313e67b61acb0d505598fb4dd18b9bd427506a5ac5bf6",
+    "apps/universal/src/platform/Preview.native.tsx": "521fb708082999715dc0474ae815f753b5d07d99fa98b6cae154fe7103dcf04d",
+    "apps/universal/src/platform/runtime.native.ts": "bbb842cabeda7c94a694bb56b76e9debed743bbd4e4ba309095a8230eb1ed504",
+    "apps/universal/src/components/assistant-ui/elements/thread.aui.tsx": "b605773d3a832dc771034858f80bc37e585c37879ffd0c5a44624e9fe917ab47",
+    "apps/universal/modules/atepdf-pdf/ios/AtepdfPDFEngine.swift": "15009d1d96b009f14bbea8806385e1c2091270c4ff61043e98be6d03ea19bd2b",
+    "apps/universal/modules/atepdf-pdf/ios/AtepdfPdfModule.swift": "8869ac7ec3fe3c2116d2dadac90838fb2f16c858c0ae95227689dca2346efb59",
+    "apps/universal/modules/atepdf-pdf/ios/AtepdfPDFExporter.swift": "58f578556efdbe83f002e2f9f2d97ecec3dadebba27f38814ce4bdc7f4800c4b",
+    "Contents/Resources/main.jsbundle": "16019e841cb41274df8dcd3eccca06775fd6aebcafc1de350618847167ef2b25"
+  },
+  "sourceUnchangedFromPreBuildCapture": true,
+  "checkedAt": "2026-09-28T11:34:45.674097+00:00",
+  "runtimeObservation": {
+    "nativeUI": "Corrected final chat: sample merge, fitted preview pages1/2, Zoom, pan within preview, Fit, Close, exact typed removal, exact typed undo and native save cancellation passed.",
+    "previewGeometry": "Full-width synthetic header and content placement now match corrected native reference image and independent Preview appearance. New engine pixel-anchor/OCR-coordinate tests provide geometric regression proof.",
+    "containerHome": "/Users/shrey/Library/Containers/dev.atepdf.fresh.mac/Data",
+    "storageGate": "Successful engine operations require storageIsolated true. Exact process cwd matches expected container.",
+    "networkSockets": "none observed; incoming/outgoing entitlements absent"
+  },
+  "remaining": [
+    "OCR/compression Mac UI not exercised in this bounded smoke; native engine chain tests cover operations separately.",
+    "All focus timing paths, dynamic resizing and runtime scene-disconnect cancellation remain untested.",
+    "Production signing, notarization, distribution and physical-device proof remain absent."
+  ]
+}

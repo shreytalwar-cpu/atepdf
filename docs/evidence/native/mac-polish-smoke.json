@@ -1,0 +1,30 @@
+{
+  "checkedAt": "2026-09-28T11:21:43.756882+00:00",
+  "artifact": "/private/tmp/atepdf-mac-8bg7d71q/atepdf.app",
+  "pid": 40632,
+  "sourceHashes": {
+    "apps/universal/App.tsx": "d59a7dd7b732d709fa6ad978806813ec34959e0da4dd947c9b6539a4148ed7c4",
+    "apps/universal/global.css": "962c6da438f3cd5baf58edcd067b962259530d1fe60bbde9cb3ce6b532cf08da",
+    "apps/universal/src/platform/ComposerInput.native.tsx": "ae1be7ce80d938c7e29313e67b61acb0d505598fb4dd18b9bd427506a5ac5bf6",
+    "apps/universal/src/platform/Preview.native.tsx": "521fb708082999715dc0474ae815f753b5d07d99fa98b6cae154fe7103dcf04d",
+    "apps/universal/src/platform/runtime.native.ts": "bbb842cabeda7c94a694bb56b76e9debed743bbd4e4ba309095a8230eb1ed504",
+    "apps/universal/src/components/assistant-ui/elements/thread.aui.tsx": "8ca373c7c0529bf805882bbc39208e7f9882e0e9f956e817c0440fcdc76697ce",
+    "apps/universal/modules/atepdf-pdf/ios/AtepdfPDFEngine.swift": "15009d1d96b009f14bbea8806385e1c2091270c4ff61043e98be6d03ea19bd2b",
+    "apps/universal/modules/atepdf-pdf/ios/AtepdfPdfModule.swift": "8869ac7ec3fe3c2116d2dadac90838fb2f16c858c0ae95227689dca2346efb59",
+    "apps/universal/modules/atepdf-pdf/ios/AtepdfPDFExporter.swift": "58f578556efdbe83f002e2f9f2d97ecec3dadebba27f38814ce4bdc7f4800c4b",
+    "Contents/Resources/main.jsbundle": "733848e2c5e4c5fccf31fd8635da344e96621aeaaa4a96954b6c0d3fb55d7bce"
+  },
+  "method": "Native CUA accessibility controls, ordinary typing with exact value check, returned screenshot bytes persisted directly",
+  "results": {
+    "merge": "passed;3pages /3.1kB",
+    "previewControls": "passed; header, Close, Fit, page and zoom controls stay visible; page2 Working notes rendered; zoom visibly enlarges page within bounded viewport and Fit restores scale",
+    "previewGeometry": "concern: PDF content centered too small within white page; engine independently investigating; not passed",
+    "typedRemoval": "passed; exact Remove page 2 (normal native capitalization), resulting2pages /2.3kB",
+    "typedUndo": "passed; exact undo in cleared composer restored3pages /3.1kB",
+    "saveCancellation": "passed; native dialog cancelled, Ready \u00b7 save cancelled returned"
+  },
+  "screenshot": "docs/evidence/design/mac-before-raster-fix.png",
+  "screenshotSha256": "96f40f08ab880d19c08eaaa3597bdb6de0fe7e93771e61f8bfc2beda2bb57f51",
+  "preservation": "Prior synthetic chats/processes retained; no state clearing or external file transfer.",
+  "sourceBoundary": "Screenshot/runtime from exact final seamless-chat build before any potential raster-scale correction."
+}

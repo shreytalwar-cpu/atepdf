@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "syntheticOnly": true,
+  "reader": "PDF.js 6.3.289",
+  "savedPath": "/private/tmp/atepdf-export-bej4q8s6/atepdf-synthetic-merged.pdf",
+  "bytes": 3099,
+  "sha256": "04f8ec60476cd302c68c1d68927a2a207e9ade78bc9f66ebcb16ba4ae11d1a05",
+  "pages": 3,
+  "exactOriginalPageTextAndGeometryInOrder": true,
+  "decodedDrawingOperators": true,
+  "checkedAt": "2026-09-28T10:35:10.768Z",
+  "scope": "Independently reopened actual PDF saved through the Catalyst export dialog; full extracted text and geometry match brief A1/A2 then appendix B1."
+}

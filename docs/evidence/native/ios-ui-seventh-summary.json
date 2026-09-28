@@ -1,0 +1,52 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+        "deviceName" : "iPhone 17 Pro",
+        "modelName" : "iPhone 17 Pro",
+        "osBuildNumber" : "24A434",
+        "osVersion" : "27.0",
+        "platform" : "iOS Simulator"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 1,
+      "passedTests" : 0,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "atepdfUI · Built with macOS 27.0",
+  "expectedFailures" : 0,
+  "failedTests" : 1,
+  "finishTime" : 1790592007.583,
+  "passedTests" : 0,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1790591917.069,
+  "statistics" : [
+
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "XCTAssertEqual failed: (\"XCTWaiterResult(rawValue: 2)\") is not equal to (\"XCTWaiterResult(rawValue: 1)\") - Expected UI state for \"Tell atepdf what to do\" TextView",
+      "targetName" : "atepdfUITests",
+      "testIdentifier" : 1,
+      "testIdentifierString" : "AtepdfWorkflowUITests/testBundledMergePreviewRemovalUndoAndShareDismissal()",
+      "testIdentifierURL" : "test://com.apple.xcode/atepdf/atepdfUITests/AtepdfWorkflowUITests/testBundledMergePreviewRemovalUndoAndShareDismissal",
+      "testName" : "testBundledMergePreviewRemovalUndoAndShareDismissal()"
+    }
+  ],
+  "title" : "Test - atepdfUI",
+  "topInsights" : [
+
+  ],
+  "totalTestCount" : 1
+}

@@ -1,0 +1,38 @@
+{
+  "checkedAt": "2026-09-28T11:34:45.674097+00:00",
+  "artifact": "/private/tmp/atepdf-mac-80vob5yq/atepdf.app",
+  "pid": 45551,
+  "sourceHashes": {
+    "apps/universal/App.tsx": "d59a7dd7b732d709fa6ad978806813ec34959e0da4dd947c9b6539a4148ed7c4",
+    "apps/universal/global.css": "962c6da438f3cd5baf58edcd067b962259530d1fe60bbde9cb3ce6b532cf08da",
+    "apps/universal/src/platform/ComposerInput.native.tsx": "ae1be7ce80d938c7e29313e67b61acb0d505598fb4dd18b9bd427506a5ac5bf6",
+    "apps/universal/src/platform/Preview.native.tsx": "521fb708082999715dc0474ae815f753b5d07d99fa98b6cae154fe7103dcf04d",
+    "apps/universal/src/platform/runtime.native.ts": "bbb842cabeda7c94a694bb56b76e9debed743bbd4e4ba309095a8230eb1ed504",
+    "apps/universal/src/components/assistant-ui/elements/thread.aui.tsx": "b605773d3a832dc771034858f80bc37e585c37879ffd0c5a44624e9fe917ab47",
+    "apps/universal/modules/atepdf-pdf/ios/AtepdfPDFEngine.swift": "15009d1d96b009f14bbea8806385e1c2091270c4ff61043e98be6d03ea19bd2b",
+    "apps/universal/modules/atepdf-pdf/ios/AtepdfPdfModule.swift": "8869ac7ec3fe3c2116d2dadac90838fb2f16c858c0ae95227689dca2346efb59",
+    "apps/universal/modules/atepdf-pdf/ios/AtepdfPDFExporter.swift": "58f578556efdbe83f002e2f9f2d97ecec3dadebba27f38814ce4bdc7f4800c4b",
+    "Contents/Resources/main.jsbundle": "16019e841cb41274df8dcd3eccca06775fd6aebcafc1de350618847167ef2b25"
+  },
+  "sourceUnchangedFromPreBuildCapture": true,
+  "method": "Native CUA controls, ordinary keyboard input with exact AX value checks, actual screenshots; no programmatic composer replacement",
+  "results": {
+    "merge": "passed;3pages /3.1kB",
+    "preview": "passed for fixture pages1/2; full-width header and correct content placement visually verified against corrected reference",
+    "navigationAndZoom": "passed; Page2 Working notes, Zoom visibly enlarges, scroll pans within bounded preview while controls stay fixed, Fit restores full page, Close returns same chat",
+    "typedRemoval": "passed; complete Remove page 2 with default capitalization,2pages /2.3kB",
+    "typedUndo": "passed; complete undo in cleared composer,3pages /3.1kB restored",
+    "composerClearing": "passed after each Send; empty composer Send visibly faded and AX disabled",
+    "saveCancellation": "passed; native dialog Cancel returns Ready \u00b7 save cancelled"
+  },
+  "screenshot": "docs/evidence/design/mac-final.png",
+  "screenshotSha256": "f48d81ec940caa6fd808ed61cf0cf05dbc17398d4502ebb82e1ec6544a18c12f",
+  "beforeFixEvidence": [
+    "docs/evidence/native/mac-polish-smoke.json",
+    "docs/evidence/design/mac-before-raster-fix.png",
+    "docs/evidence/native/mac-catalyst-pre-raster-fix.json"
+  ],
+  "savedFileReopenEvidence": "docs/evidence/native/mac-export-smoke.json and mac-export-independent.json; export implementation unchanged",
+  "scope": "Synthetic local development artifact; no paid API calls, old checkout access, file egress, production signing or publication. Prior test chats/processes preserved.",
+  "independentVisualReview": "Root opened saved mac-final.png and confirmed full-page header/content placement, bounded controls and faded empty Send."
+}

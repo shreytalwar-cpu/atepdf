@@ -1,0 +1,6 @@
+{
+  "expo.jsEngine": "hermes",
+  "EX_DEV_CLIENT_NETWORK_INSPECTOR": "false",
+  "expo.inlineModules.watchedDirectories": "[]",
+  "expo.inlineModules.xcodeProjectTargets": "{\"mainTarget\":\"atepdf\",\"targets\":[]}"
+}

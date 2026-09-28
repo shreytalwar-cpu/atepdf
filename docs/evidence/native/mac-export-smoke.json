@@ -1,0 +1,36 @@
+{
+  "checkedAt": "2026-09-28T10:36:37.502940+00:00",
+  "artifact": "/private/tmp/atepdf-mac-fztcd45m/atepdf.app",
+  "syntheticOnly": true,
+  "method": "Native CUA accessibility controls; native system export dialog; independent macOS Preview reopen",
+  "results": {
+    "importAndMerge": "passed; bundled brief.pdf then appendix.pdf, result 3 pages / 3.1 kB",
+    "cancel": "passed; native Cancel returned Ready \u00b7 save cancelled",
+    "retry": "passed; second native Save PDF opened fresh system save dialog",
+    "save": "passed; fresh local temporary folder selected explicitly, no overwrite or cloud destination; app returned Saved to your device",
+    "reopen": "passed; Preview exact file URL, Page 1 of 3, thumbnails for all pages, AX page markers A1/A2/B1, rendered first page visibly observed",
+    "scratchCleanup": "Both exact temporary export-source UUID.pdf paths from the cancelled and completed system dialogs are absent from the app-private atepdf-work directory after completion; saved destination remains present."
+  },
+  "savedPath": "/private/tmp/atepdf-export-bej4q8s6/atepdf-synthetic-merged.pdf",
+  "bytes": 3099,
+  "sha256": "04f8ec60476cd302c68c1d68927a2a207e9ade78bc9f66ebcb16ba4ae11d1a05",
+  "independentValidation": "mac-export-independent.json",
+  "sourceValidation": {
+    "swiftCatalystAPITypecheck": "passed",
+    "nativeEngineRegressionHarness": "passed, including export-source root/URI/symlink/malformed-input/immutability checks",
+    "podLockSha256": "ebd942aeae1a8e413e8ee7b32edef26d29ef1f34742d84fda09ec227413af481",
+    "podLockUnchangedAfterHelperRegistration": true,
+    "lifecycleReview": "independent Apple agent review passed; UUID ownership, identity-guarded single completion, OnDestroy cancellation, scoped scene-disconnect observation"
+  },
+  "limitations": [
+    "No automated runtime scene-disconnect teardown test yet.",
+    "Native composer typing issue is being fixed separately; this export artifact predates that candidate.",
+    "App reimport was not attempted after automatic approval review rejected Start over state clearing. Existing chat was preserved; independent Preview reopen completed instead.",
+    "CUA screenshots remain in session tool results, not separate repository image files."
+  ],
+  "approvalReview": {
+    "rejectedAction": "Click Start over to clear synthetic workflow before app reimport",
+    "reason": "Could discard current non-trivial workflow state without specific authorization",
+    "resolution": "Did not retry or bypass clearing. Preserved chat and reopened saved file in independent Preview."
+  }
+}

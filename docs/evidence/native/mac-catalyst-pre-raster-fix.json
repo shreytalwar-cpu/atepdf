@@ -1,0 +1,79 @@
+{
+  "builtAt": "2026-09-28T11:16:24.709747+00:00",
+  "app": "/private/tmp/atepdf-mac-8bg7d71q/atepdf.app",
+  "identifier": "dev.atepdf.fresh.mac",
+  "buildLog": "/Users/shrey/Documents/ChatGPT/atepdf/.build/mac-build-PGZBuQ",
+  "signature": "local ad-hoc, development only",
+  "hardenedRuntime": false,
+  "strictSignatureVerification": "passed",
+  "entitlements": {
+    "com.apple.security.app-sandbox": true,
+    "com.apple.security.files.user-selected.read-write": true
+  },
+  "networkEntitlements": false,
+  "nestedCodeObjects": 14,
+  "stagedFrameworkNormalizations": [
+    {
+      "framework": "React",
+      "identicalVersionCopies": true,
+      "builtBinarySha256BeforeSigning": "ad352f81fd4a5142e136791b9b0a00183edee21aab4dc078bea5363867cf5ff1"
+    },
+    {
+      "framework": "ReactNativeDependencies",
+      "identicalVersionCopies": true,
+      "builtBinarySha256BeforeSigning": "43bcab018ca428cecb60f55bd69fe3627c1de24f808e14fdce8dac004899bf01"
+    }
+  ],
+  "binarySha256": "1497498d5d423b0ff9cb355d30ec623cf6162c7f736b87b9b8aa34ef2b89aa3e",
+  "launchRequested": false,
+  "launchVerified": true,
+  "scope": "Local developer artifact; not notarized or distribution-ready.",
+  "verifiedPid": 40632,
+  "verifiedProcessPath": "/private/tmp/atepdf-mac-8bg7d71q/atepdf.app/Contents/MacOS/atepdf",
+  "runtimeChecks": {
+    "process": {
+      "exitCode": 0,
+      "stdout": "40632 /private/tmp/atepdf-mac-8bg7d71q/atepdf.app/Contents/MacOS/atepdf",
+      "stderr": ""
+    },
+    "cwd": {
+      "exitCode": 0,
+      "stdout": "p40632\nfcwd\nn/Users/shrey/Library/Containers/dev.atepdf.fresh.mac/Data",
+      "stderr": ""
+    },
+    "sockets": {
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    "signature": {
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  },
+  "sourceHashesAtVerification": {
+    "apps/universal/App.tsx": "d59a7dd7b732d709fa6ad978806813ec34959e0da4dd947c9b6539a4148ed7c4",
+    "apps/universal/global.css": "962c6da438f3cd5baf58edcd067b962259530d1fe60bbde9cb3ce6b532cf08da",
+    "apps/universal/src/platform/ComposerInput.native.tsx": "ae1be7ce80d938c7e29313e67b61acb0d505598fb4dd18b9bd427506a5ac5bf6",
+    "apps/universal/src/platform/Preview.native.tsx": "521fb708082999715dc0474ae815f753b5d07d99fa98b6cae154fe7103dcf04d",
+    "apps/universal/src/platform/runtime.native.ts": "bbb842cabeda7c94a694bb56b76e9debed743bbd4e4ba309095a8230eb1ed504",
+    "apps/universal/src/components/assistant-ui/elements/thread.aui.tsx": "8ca373c7c0529bf805882bbc39208e7f9882e0e9f956e817c0440fcdc76697ce",
+    "apps/universal/modules/atepdf-pdf/ios/AtepdfPDFEngine.swift": "15009d1d96b009f14bbea8806385e1c2091270c4ff61043e98be6d03ea19bd2b",
+    "apps/universal/modules/atepdf-pdf/ios/AtepdfPdfModule.swift": "8869ac7ec3fe3c2116d2dadac90838fb2f16c858c0ae95227689dca2346efb59",
+    "apps/universal/modules/atepdf-pdf/ios/AtepdfPDFExporter.swift": "58f578556efdbe83f002e2f9f2d97ecec3dadebba27f38814ce4bdc7f4800c4b",
+    "Contents/Resources/main.jsbundle": "733848e2c5e4c5fccf31fd8635da344e96621aeaaa4a96954b6c0d3fb55d7bce"
+  },
+  "checkedAt": "2026-09-28T11:21:43.756882+00:00",
+  "runtimeObservation": {
+    "nativeUI": "Final polished native chat: sample merge, bounded preview page1/page2, zoom/Fit, close, typed removal, typed undo and native save cancellation passed as interaction checks.",
+    "containerHome": "/Users/shrey/Library/Containers/dev.atepdf.fresh.mac/Data",
+    "storageGate": "Engine execution verifies native storageIsolated true, exact process cwd matches expected container.",
+    "networkSockets": "none observed; incoming/outgoing entitlements absent"
+  },
+  "remaining": [
+    "Native raster content scale appears too small relative to paper; independent engine diagnosis in progress. Do not claim preview geometry correctness.",
+    "OCR/compression native UI not run in this smoke.",
+    "Production signing, notarization, distribution and physical-device proof remain absent."
+  ]
+}

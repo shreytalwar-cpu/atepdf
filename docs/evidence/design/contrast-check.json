@@ -1,0 +1,40 @@
+{
+  "method": "WCAG relative luminance calculation for selected static token pairs, not whole-UI certification",
+  "pairs": [
+    {
+      "role": "Body",
+      "foreground": "#18213b",
+      "background": "#ffffff",
+      "contrastRatio": 15.91,
+      "ordinaryTextMinimumMet": true
+    },
+    {
+      "role": "Secondary and composer placeholder",
+      "foreground": "#5d6980",
+      "background": "#ffffff",
+      "contrastRatio": 5.53,
+      "ordinaryTextMinimumMet": true
+    },
+    {
+      "role": "Primary action label",
+      "foreground": "#ffffff",
+      "background": "#1769df",
+      "contrastRatio": 5.09,
+      "ordinaryTextMinimumMet": true
+    },
+    {
+      "role": "Privacy badge",
+      "foreground": "#26715c",
+      "background": "#edf9f4",
+      "contrastRatio": 5.41,
+      "ordinaryTextMinimumMet": true
+    },
+    {
+      "role": "User message",
+      "foreground": "#18213b",
+      "background": "#f2f4f8",
+      "contrastRatio": 14.45,
+      "ordinaryTextMinimumMet": true
+    }
+  ]
+}

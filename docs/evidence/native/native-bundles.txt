@@ -1,0 +1,43 @@
+Already up to date
+Done in 196ms using pnpm v11.19.0
+$ node scripts/contracts.mjs && cd apps/universal && EXPO_NO_TELEMETRY=1 expo export --platform ios --platform android --output-dir dist-native
+Canonical contract validators compiled ahead of time; no runtime eval.
+Starting Metro Bundler
+
+| (node:2669) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:2669) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:2669) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:2669) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:2669) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:2669) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:2669) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+Android Bundled 15036ms index.ts (3484 modules)
+iOS Bundled 26134ms index.ts (3490 modules)
+
+› Assets (5):
+assets/approved-8-mark-source-crop.png (35KB)
+assets/approved-atepdf-wordmark-source-crop.png (34KB)
+assets/fixtures/appendix.pdf (2.1KB)
+assets/fixtures/brief.pdf (3.1KB)
+assets/paper.png (688KB)
+
+› android bundles (1):
+_expo/static/js/android/index-bcf7ce6a2b9c62ad2f58b6cc47051681.hbc (6.9MB)
+
+› web bundles (1):
+_expo/static/css/global-d41d8cd98f00b204e9800998ecf8427e.css (0B)
+
+› ios bundles (1):
+_expo/static/js/ios/index-75ed98115bad115cd8cd2042249787f6.hbc (6.9MB)
+
+› Files (1):
+metadata.json (872B)
+
+Exported: dist-native

@@ -1,0 +1,54 @@
+{
+  "verifiedAt": "2026-09-28T15:44:33.116826+05:30",
+  "nativeHarnessPassed": true,
+  "securityAPITypecheck": "arm64-apple-ios16.4-macabi, SecTaskCreateFromSelf and SecTaskCopyValueForEntitlement",
+  "policyTests": [
+    "CFBoolean true with exact independent identity/container/cache accepted",
+    "missing entitlement rejected",
+    "CFBoolean false rejected",
+    "CFNumber 1 rejected",
+    "unsigned global home rejected",
+    "wrong bundle identity rejected",
+    "global caches rejected",
+    "home suffix mismatch rejected",
+    "Substituted work directory symlink rejected before PDF reading"
+  ],
+  "integration": "Native module constants gate JS cleanup/import and every native method checks before constructing engine. Signed Catalyst runtime proof remains separate.",
+  "sourceSha256": {
+    "apps/universal/modules/atepdf-pdf/ios/AtepdfPdfModule.swift": "39bbacd71db86dbb0999eac56006de9608bb4a4d1642222494d2ce4dbdd7acc6",
+    "apps/universal/modules/atepdf-pdf/ios/AtepdfPDFEngine.swift": "1dd2c6f69f4c25dffc18bdac3d5feccc110ba1cd34b1501b5fc0d78f252dff89",
+    "tests/native/apple/main.swift": "60b71bd4235f0b5e38aa20500df4d16dcc876ea155f6f8b134beface759aef73"
+  },
+  "cleanupGate": {
+    "platforms": [
+      "iOS",
+      "Mac Catalyst"
+    ],
+    "nativeHarnessPassed": true,
+    "directories": [
+      "Library",
+      "Library/Caches",
+      "Library/Caches/atepdf-work",
+      "Library/Caches/atepdf-preview",
+      "Library/Caches/atepdf-previews"
+    ],
+    "testedEachCleanupRoot": [
+      "redirecting symlink",
+      "dangling symlink",
+      "self-referential symlink",
+      "ordinary file substitution"
+    ],
+    "parentSubstitutionTests": [
+      "Library",
+      "Library/Caches"
+    ],
+    "positiveTests": [
+      "missing dedicated directories",
+      "real directories",
+      "canonical OS home alias"
+    ],
+    "syntheticSentinelPreserved": true,
+    "boundary": "Startup gate and native-operation recheck; not atomic against concurrent external directory replacement."
+  },
+  "pickerBoundary": "Upstream picker partial-copy failure may leave unreturned orphan copies until OS eviction; no broad picker-cache sweep."
+}

@@ -1,0 +1,31 @@
+{
+  "cause": "UIKit iOS27 requires scene lifecycle adoption",
+  "initialCrashSymbol": "___UIApplicationEvaluateRuntimeIssueForNoSceneLifecycleAdoption_block_invoke",
+  "strategy": "Expo57 built-in EXExpoAppSceneDelegate with ExpoReactNativeFactoryProvider",
+  "expoVersion": "57.0.25",
+  "manifest": {
+    "UIApplicationSupportsMultipleScenes": false,
+    "UISceneConfigurations": {
+      "UIWindowSceneSessionRoleApplication": [
+        {
+          "UISceneConfigurationName": "Default Configuration",
+          "UISceneDelegateClassName": "EXExpoAppSceneDelegate"
+        }
+      ]
+    }
+  },
+  "syntaxAndPlistValidated": true,
+  "applicationRelaunchVerified": true,
+  "scope": "Release app installed and launched on iPhone17Pro iOS27 simulator; runtime snapshot/screenshot verified after scene migration. Native workflows checked separately.",
+  "sourceSha256": {
+    "apps/universal/ios/atepdf/AppDelegate.swift": "d8da495671a61a84657aba0f033d35d4cb7f32439c5031c11eab641430830295",
+    "apps/universal/ios/atepdf/Info.plist": "ac2b7300e8456e6c937345653414cb134d913ed6aa0b008a88d68ddde03c71c1",
+    "node_modules/expo/ios/AppDelegates/ExpoAppSceneDelegate.swift": "eb614d63c4d2c571da2a34af2666c861c99ff938bd6c93dee82e3e73a03b29bf",
+    "node_modules/expo/ios/AppDelegates/ExpoReactNativeFactoryProvider.swift": "2e49994074c7fb4b5b7c496c51a255ff98787523c45e1ab446029532c39e774a",
+    "node_modules/expo/ios/AppDelegates/SceneEventForwarder.swift": "12177396ef45d5573aaff31e273a898f7fda7c9833de37154dc8c51b83afa221"
+  },
+  "source": "https://github.com/expo/fyi/blob/main/ios-scene-lifecycle.md",
+  "runtimeProcessId": 19500,
+  "runtimeScreenshot": "docs/evidence/native/apple-iphone-launch.jpg",
+  "verificationTime": "2026-09-28T15:25:43.121114+05:30"
+}

@@ -1,0 +1,6 @@
+Stopped before completion to persist Catalyst settings.
+  4   -[IDEScheme _executionOperationForSchemeOperationParameters:build:onlyBuild:buildParameters:title:buildLog:dontActuallyRunCommands:restorePersistedBuildResults:deviceAvailableChecker:error:actionCallbackBlock:] (in IDEFoundation)
+  5   -[IDEScheme buildOnlyTaskForSchemeOperationParameters:buildLog:dontActuallyRunCommands:buildParameters:restorePersistedBuildResults:deviceAvailableChecker:error:completionBlock:] (in IDEFoundation)
+  6   -[IDEScheme schemeOperationForSchemeOperationParameters:buildLog:overridingProperties:overridingBuildConfiguration:dontActuallyRunCommands:restorePersistedBuildResults:deviceAvailableChecker:error:completionBlock:] (in IDEFoundation)
+  7   -[IDEScheme schemeOperationForSchemeOperationParameters:buildLog:overridingProperties:overridingBuildConfiguration:dontActuallyRunCommands:restorePersistedBuildResults:error:completionBlock:] (in IDEFoundation)
+Full local diagnostic log (ignored): .build/mac-review-logs/mac-catalyst-build-support.txt

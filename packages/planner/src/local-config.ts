@@ -8,7 +8,7 @@ export class LocalConfig {
   constructor(readonly directory:string){}
   async secureRead(name:string){
     const parent=await lstat(this.directory);
-    if(!parent.isDirectory()||parent.isSymbolicLink()||(parent.mode&0o077)!==0)throw new Error('Unsafe local configuration.');
+    if(!parent.isDirectory()||parent.isSymbolicLink()||(parent.mode&0o077)!==0||parent.uid!==process.getuid?.())throw new Error('Unsafe local configuration.');
     const handle=await open(join(this.directory,name),constants.O_RDONLY|constants.O_NOFOLLOW);
     try{const info=await handle.stat();if(!info.isFile()||(info.mode&0o077)!==0||info.uid!==process.getuid?.()||info.size>8192)throw new Error('Unsafe local configuration.');return await handle.readFile('utf8');}finally{await handle.close();}
   }
@@ -24,7 +24,7 @@ export class LocalConfig {
   }
   async status(){
     try {const key=await this.secureRead('openai-key');const settings=JSON.parse(await this.secureRead('planner-settings.json')) as Settings;
-      const connected=/^sk-\S{17,}$/.test(key),remaining=Number.isSafeInteger(settings.approvedRequests)&&settings.approvedRequests>=0&&settings.approvedRequests<=20?settings.approvedRequests:0;
+      const connected=/^sk-[A-Za-z0-9_-]{17,500}$/.test(key),remaining=Number.isSafeInteger(settings.approvedRequests)&&settings.approvedRequests>=0&&settings.approvedRequests<=20?settings.approvedRequests:0;
       return {connected,enabled:connected&&settings.enabled===true&&settings.model===MODEL&&remaining>0,remaining};
     }catch{return {connected:false,enabled:false,remaining:0};}
   }
@@ -35,7 +35,7 @@ export class LocalConfig {
       const status=await this.status();if(!status.enabled)throw new Error('No approved requests remain.');
       const key=await this.secureRead('openai-key');
       const handle=await open(join(this.directory,'planner-settings.json'),constants.O_WRONLY|constants.O_NOFOLLOW);
-      try{const info=await handle.stat();if(!info.isFile()||(info.mode&0o077)!==0)throw new Error('Unsafe settings.');await handle.truncate(0);await handle.writeFile(JSON.stringify({enabled:status.remaining>1,model:MODEL,approvedRequests:status.remaining-1}));await handle.sync();}finally{await handle.close();}
+      try{const info=await handle.stat();if(!info.isFile()||(info.mode&0o077)!==0||info.uid!==process.getuid?.())throw new Error('Unsafe settings.');await handle.truncate(0);await handle.writeFile(JSON.stringify({enabled:status.remaining>1,model:MODEL,approvedRequests:status.remaining-1}));await handle.sync();}finally{await handle.close();}
       return {key,release:async()=>{await rmdir(lock);}};
     }catch(e){await rmdir(lock);throw e;}
   }

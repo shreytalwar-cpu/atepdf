@@ -1,0 +1,9 @@
+{
+  "event": "CUA bundle-ID selection launched the unsigned .build app instead of the signed staged copy; exact PID19862 was stopped.",
+  "observed": "Initial UI, then process-path audit exposed wrong instance before successful synthetic import.",
+  "risk": "At that revision, module startup could sweep generic Paths.cache/DocumentPicker before sandbox confirmation.",
+  "postEventMetadata": "Expected global and atepdf-bundle-specific cache folders were absent when checked. No personal file contents were read.",
+  "limitation": "No pre-launch directory baseline or observation of the unsigned Expo Paths.cache value exists. Historical file deletion cannot be proven absent.",
+  "fix": "Native Catalyst storageIsolated requires sandbox entitlement, exact app identifier, container home and caches; every native operation and JS cleanup/import fail closed. Generic DocumentPicker startup sweep removed.",
+  "finalEvidence": "mac-catalyst-signed-build.json"
+}

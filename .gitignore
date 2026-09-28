@@ -16,8 +16,12 @@ apps/universal/.expo/
 .pnpm-store/
 apps/universal/dist-web/
 apps/universal/dist-native/
+apps/universal/dist-android/
+apps/universal/android/app/debug.keystore
 
 .build/
+*.xcresult/
+docs/evidence/native/ios-ui-*-attachments/
 apps/web/public/_expo/
 apps/web/public/assets/
 apps/web/public/index.html

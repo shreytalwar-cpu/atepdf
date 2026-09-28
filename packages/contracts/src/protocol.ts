@@ -8,6 +8,14 @@ export type Envelope = { schemaVersion: '1.0'; requestId: string; workspaceRevis
 export type ManifestFile = {ref:string; kind:'pdf'; pageCount:number; sizeBytes:number; encrypted:false};
 export type Request = {schemaVersion:'1.0'; requestId:string; workspaceRevision:number; locale:string; instruction:string; files:ManifestFile[]; selectionRefs:string[]; focusedResultRef:string|null; originalRefs:string[]; previousActionIds:Operation[]; capabilities:Operation[]; previousPlan:null; ocrLanguages:string[]};
 export const capabilities: Operation[] = ['merge_pdf','select_pages','ocr_pdf','compress_pdf'];
+export function validateLocalContext(request: Request): void {
+  if (!requestValid(request)) throw new Error('Invalid instruction or local manifest.');
+  if (!Number.isSafeInteger(request.workspaceRevision)) throw new Error('Invalid workspace revision.');
+  const refs = new Set(request.files.map(file => file.ref));
+  if (refs.size !== request.files.length) throw new Error('Duplicate file reference.');
+  if (request.files.some(file => file.kind !== 'pdf' || file.encrypted || !Number.isSafeInteger(file.pageCount) || file.pageCount < 1 || file.pageCount > 100)) throw new Error('Unsupported local file.');
+  if ([...request.selectionRefs, ...request.originalRefs, ...(request.focusedResultRef ? [request.focusedResultRef] : [])].some(ref => !refs.has(ref))) throw new Error('Unknown file reference.');
+}
 export function buildRequest(context: {revision:number; files:ManifestFile[]; selected:string[]; focus:string|null; originals:string[]}, instruction:string): Request {
   // Positive projection: never spread a local file model into a network DTO.
   const request: Request = {
@@ -17,13 +25,18 @@ export function buildRequest(context: {revision:number; files:ManifestFile[]; se
     selectionRefs:[...context.selected],focusedResultRef:context.focus,originalRefs:[...context.originals],
     previousActionIds:[],capabilities:[...capabilities],previousPlan:null,ocrLanguages:['eng'],
   };
-  if (!requestValid(request)) throw new Error('Invalid instruction or local manifest.');
+  validateLocalContext(request);
   return request;
 }
-export function validateEnvelope(raw:unknown, request:Request, currentRevision:number): Envelope {
+export function validateEnvelopeBinding(raw:unknown, request:Request, currentRevision:number): void {
+  validateLocalContext(request);
   if (!envelopeValid(raw)) throw new Error('Incomplete or invalid plan.');
   const envelope=raw as Envelope;
   if (envelope.requestId!==request.requestId || envelope.workspaceRevision!==request.workspaceRevision || currentRevision!==request.workspaceRevision) throw new Error('Files changed. Run the action again.');
+}
+export function validateEnvelope(raw:unknown, request:Request, currentRevision:number): Envelope {
+  validateEnvelopeBinding(raw,request,currentRevision);
+  const envelope=raw as Envelope;
   const p=envelope.planner;
   if(p.status!=='plan'||p.reasonCode!==null||p.clarification!==null||!p.steps.length||p.steps.length>4) throw new Error('No executable local plan.');
   const counts = new Map(request.files.map(f=>[f.ref,f.pageCount]));
@@ -46,7 +59,7 @@ export function validateEnvelope(raw:unknown, request:Request, currentRevision:n
         if(pages.indices.some(n=>n>count)) throw new Error('That physical page does not exist.');
         count-=pages.indices.length;
       }
-      if(step.operation==='ocr_pdf' && (JSON.stringify(step.params.languages)!=='["eng"]'||step.params.batchMode!=='single')) throw new Error('Only single-document English OCR is available.');
+      if(step.operation==='ocr_pdf' && (JSON.stringify(step.params.languages)!=='["eng"]'||!request.ocrLanguages.includes('eng')||step.params.batchMode!=='single')) throw new Error('Only single-document English OCR is available.');
       if(step.operation==='compress_pdf' && (step.params.batchMode!=='single'||!['balanced','lossless'].includes(String(step.params.preset)))) throw new Error('Compression setting unavailable.');
     }
     if(count<1||count>100) throw new Error('Keep between 1 and 100 pages.');
@@ -60,8 +73,9 @@ export function quickPlan(request:Request, action:'merge'|'remove'|'ocr'|'compre
   const steps:Step[]=[];
   const add=(operation:Operation,inputs:string[],params:Step['params'])=>{
     const outputRef=`out_${crypto.randomUUID().replaceAll('-','')}`;
-    steps.push({id:`s_${steps.length+1}`,operation,inputs,outputRef,params});return outputRef;
+    steps.push({id:`s_${steps.length+1}`,operation,inputs:[...inputs],outputRef,params});return outputRef;
   };
+  if(action!=='merge'&&action!=='chain'&&!request.focusedResultRef&&request.selectionRefs.length!==1)throw new Error('Choose one PDF or create a merged result first.');
   let ref=request.focusedResultRef ?? request.selectionRefs[0];
   if(action==='merge'||action==='chain')ref=add('merge_pdf',request.selectionRefs,{ordering:'as_provided'});
   if(!ref)throw new Error('Choose a PDF first.');

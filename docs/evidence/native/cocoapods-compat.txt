@@ -1,0 +1,12 @@
+Building native extensions. This could take a while...
+Successfully installed ffi-1.16.3
+1 gem installed
+ERROR:  Error installing activesupport:
+	The last version of drb (~> 2.0) to support your Ruby & RubyGems was 2.0.6. Try installing it with `gem install drb -v 2.0.6` and then running the current command again
+	drb requires Ruby version >= 2.7.0. The current ruby version is 2.6.10.210.
+Successfully installed ruby2_keywords-0.0.5
+Successfully installed drb-2.0.6
+2 gems installed
+ERROR:  Error installing activesupport:
+	There are no versions of prism (~> 1.5) compatible with your Ruby & RubyGems. Maybe try installing an older version of the gem you're looking for?
+	prism requires Ruby version >= 2.7.0. The current ruby version is 2.6.10.210.

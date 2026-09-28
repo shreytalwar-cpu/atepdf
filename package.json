@@ -12,9 +12,11 @@
     "audit:licenses": "node scripts/licenses.mjs",
     "expo:start": "cd apps/universal && EXPO_NO_TELEMETRY=1 expo start --localhost",
     "expo:web": "EXPO_NO_TELEMETRY=1 node scripts/contracts.mjs && node scripts/assets.mjs && node scripts/build-gateway.mjs && cd apps/universal && EXPO_NO_TELEMETRY=1 expo export --platform web --output-dir dist-web",
-    "expo:bundles": "node scripts/contracts.mjs && cd apps/universal && EXPO_NO_TELEMETRY=1 expo export --platform ios --platform android --output-dir dist-native",
+    "expo:bundles": "node scripts/contracts.mjs && cd apps/universal && EXPO_NO_TELEMETRY=1 expo export --platform ios --output-dir dist-native",
     "expo:preview": "node scripts/serve-expo.mjs",
-    "connect:openai": "python3 scripts/connect-openai.py"
+    "connect:openai": "python3 scripts/connect-openai.py",
+    "expo:bundles:android": "node scripts/contracts.mjs && cd apps/universal && EXPO_NO_TELEMETRY=1 expo export --platform android --output-dir dist-android",
+    "test:native:apple": "node tests/native/apple/run.mjs"
   },
   "dependencies": {
     "@ai-sdk/openai": "4.0.78",

@@ -1,0 +1,19 @@
+{
+  "artifact": "/private/tmp/atepdf-mac-buld7aec/atepdf.app",
+  "identifier": "dev.atepdf.fresh.mac",
+  "method": "CUA native accessibility actions and screenshots; synthetic bundled PDFs only",
+  "results": {
+    "sampleImport": "passed; two immutable-original entries, total3pages",
+    "merge": "passed; result3pages,3.1kB",
+    "typedRemovePage2": "passed; result2pages,2.3kB",
+    "undo": "passed; restored3pages,3.1kB",
+    "inlinePreview": "mounted Page1of3; partial rendered synthetic-page footer visually observed, full-page visibility and page controls not yet verified",
+    "share": "native share popover opened; Escape dismissed; no destination chosen or file sent"
+  },
+  "limitations": [
+    "CUA wheel/PageDown attempts did not reliably navigate the tall inline preview; cannot distinguish tool behavior from layout without further verification.",
+    "Mac share popover had no local save action, prompting explicit Catalyst export picker implementation.",
+    "This artifact predates the final scratch-symlink cleanup guard and export helper. Final build and save/cancel/reopen test pending."
+  ],
+  "screenshotEvidence": "Native screenshots are preserved in this session CUA tool results; no share-sheet contact suggestions copied to repository."
+}

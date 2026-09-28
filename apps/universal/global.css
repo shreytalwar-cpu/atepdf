@@ -8,10 +8,10 @@
   --color-foreground: #18213b;
   --color-card: #ffffff;
   --color-card-foreground: #18213b;
-  --color-primary: #267bff;
+  --color-primary: #1769df;
   --color-primary-foreground: #ffffff;
   --color-muted: #f2f4f8;
-  --color-muted-foreground: #637089;
+  --color-muted-foreground: #5d6980;
   --color-border: #e2e7ee;
   --color-accent: #eef4ff;
   --color-accent-foreground: #18213b;
@@ -22,5 +22,27 @@
     html, body, #root { height: 100%; overflow: hidden; }
     body { margin: 0; }
     button, textarea { font: inherit; }
+    button, [role='button'], input, textarea { -webkit-tap-highlight-color: transparent; }
+    [role='button']:focus-visible, button:focus-visible {
+      outline: 2px solid #1769df;
+      outline-offset: 3px;
+    }
+    .aui-composer-shell {
+      box-shadow: 0 2px 8px #18213b05, 0 8px 28px #18213b04;
+      transition: border-color 160ms ease-out, box-shadow 160ms ease-out;
+    }
+    .aui-composer-shell:focus-within {
+      border-color: #1769df;
+      box-shadow: 0 0 0 3px #1769df14, 0 8px 28px #18213b04;
+    }
+    .atepdf-button { transition: background-color 140ms ease-out, opacity 140ms ease-out; }
+    @media (hover: hover) and (pointer: fine) {
+      .atepdf-button:not([aria-disabled='true']):hover { background-color: #f2f5fa; }
+      .atepdf-button-primary:not([aria-disabled='true']):hover { background-color: #125ac4; }
+      .aui-composer-send:not([aria-disabled='true']):hover { background-color: #125ac4; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .aui-composer-shell, .atepdf-button { transition: none; }
+    }
   }
 }

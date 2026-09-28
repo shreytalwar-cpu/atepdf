@@ -1,9 +1,10 @@
 import {PDFDocument,PDFName,PDFArray,PDFNumber,PDFRawStream,StandardFonts,TextRenderingMode,pushGraphicsState,popGraphicsState,setTextRenderingMode,decodePDFRawStream} from 'pdf-lib';
 import type {EngineRequest,EngineResult} from './types';
 import {LIMITS} from './types';
+import {admitDrawingContent} from './content-admission';
 const name=(n:string)=>PDFName.of(n);
 export async function preflight(bytes:Uint8Array) {
-  if(new TextDecoder().decode(bytes.slice(0,5))!=='%PDF-')throw new Error('Choose a valid PDF.');
+  if(String.fromCharCode(...bytes.slice(0,5))!=='%PDF-')throw new Error('Choose a valid PDF.');
   const doc=await PDFDocument.load(bytes,{updateMetadata:false,throwOnInvalidObject:true});
   if(doc.getPageCount()<1||doc.getPageCount()>LIMITS.pages)throw new Error('Use a PDF with 1–100 pages.');
   for(const key of ['AcroForm','StructTreeRoot','Collection','Outlines','Names','OpenAction','AA','Perms'])if(doc.catalog.has(name(key)))throw new Error('This PDF has document features this build cannot safely preserve. Your original is unchanged.');
@@ -18,9 +19,16 @@ export async function preflight(bytes:Uint8Array) {
     const w=obj.dict.lookupMaybe(name('Width'),PDFNumber)?.asNumber()??0,h=obj.dict.lookupMaybe(name('Height'),PDFNumber)?.asNumber()??0;
     if(w<1||h<1||w*h>LIMITS.pixels)throw new Error('An embedded image is too large. Use a smaller scan.');
   }
+  admitDrawingContent(doc);
   return doc;
 }
-export async function transform(request:Extract<EngineRequest,{kind:'transform'}>,progress:(text:string)=>void):Promise<EngineResult> {
+export type EnginePlatform={reencodeJPEG?:(bytes:Uint8Array,width:number,height:number)=>Promise<Uint8Array>;checkpoint?:()=>Promise<void>};
+async function browserJPEG(jpeg:Uint8Array):Promise<Uint8Array>{
+  const bitmap=await createImageBitmap(new Blob([new Uint8Array(jpeg)],{type:'image/jpeg'}));
+  try{const canvas=new OffscreenCanvas(bitmap.width,bitmap.height);canvas.getContext('2d')!.drawImage(bitmap,0,0);return new Uint8Array(await(await canvas.convertToBlob({type:'image/jpeg',quality:.82})).arrayBuffer());}
+  finally{bitmap.close();}
+}
+export async function transform(request:Extract<EngineRequest,{kind:'transform'}>,progress:(text:string)=>void,platform:EnginePlatform={}):Promise<EngineResult> {
   const {step,inputs,ocrPages=[]}=request;
   const docs=await Promise.all(inputs.map(i=>preflight(i.bytes)));
   let output=docs[0],note='';
@@ -28,7 +36,7 @@ export async function transform(request:Extract<EngineRequest,{kind:'transform'}
     output=await PDFDocument.create();
     for(let i=0;i<docs.length;i++){
       for(const page of await output.copyPages(docs[i],docs[i].getPageIndices()))output.addPage(page);
-      progress(`Merged ${i+1} of ${docs.length} files`);
+      progress(`Merged ${i+1} of ${docs.length} files`);await platform.checkpoint?.();
     }
   } else if(step.operation==='select_pages') {
     const indices=(step.params.pages as {indices:number[]}).indices;
@@ -50,10 +58,12 @@ export async function transform(request:Extract<EngineRequest,{kind:'transform'}
         // Horizontal scaling fits each recognised word to its measured source box.
         const {setCharacterSpacing,setWordSpacing,setCharacterSqueeze}=await import('pdf-lib');
         page.pushOperators(setCharacterSpacing(0),setWordSpacing(0),setCharacterSqueeze(fontWidth>0?word.width/fontWidth*100:100));
-        page.drawText(word.text,{x:word.x,y:word.y+word.height*0.14,size,font});
+        // Explicit separators keep independent readers from concatenating nearby
+        // word runs. Squeeze remains based on the measured word, not its space.
+        page.drawText(`${word.text} `,{x:word.x,y:word.y+word.height*0.14,size,font});
         page.pushOperators(popGraphicsState());
       }
-      progress(`Added searchable text to page ${entry.page}`);
+      progress(`Added searchable text to page ${entry.page}`);await platform.checkpoint?.();
     }
     note=ocrPages.length?`English text added to ${ocrPages.length} scanned page${ocrPages.length===1?'':'s'}. Review recognition in Preview.`:'Existing text preserved; no scanned pages needed OCR.';
   } else if(step.operation==='compress_pdf') {
@@ -68,20 +78,18 @@ export async function transform(request:Extract<EngineRequest,{kind:'transform'}
         const wrapper=obj.dict.clone(output.context);wrapper.set(name('Filter'),name('ASCII85Decode'));
         jpeg=decodePDFRawStream(PDFRawStream.of(wrapper,obj.contents)).decode();
       }
-      const bitmap=await createImageBitmap(new Blob([new Uint8Array(jpeg)],{type:'image/jpeg'}));
-      try {
-        const canvas=new OffscreenCanvas(bitmap.width,bitmap.height);
-        canvas.getContext('2d')!.drawImage(bitmap,0,0);
-        const bytes=new Uint8Array(await (await canvas.convertToBlob({type:'image/jpeg',quality:0.82})).arrayBuffer());
+      const width=obj.dict.lookup(name('Width'),PDFNumber).asNumber(),height=obj.dict.lookup(name('Height'),PDFNumber).asNumber();
+      const bytes=await(platform.reencodeJPEG??browserJPEG)(jpeg,width,height);
         if(bytes.length<obj.contents.length*0.95){
           const dictionary=obj.dict.clone(output.context);dictionary.set(name('Length'),PDFNumber.of(bytes.length));dictionary.set(name('Filter'),name('DCTDecode'));
           output.context.assign(ref,PDFRawStream.of(dictionary,bytes));changed++;
         }
-      } finally {bitmap.close();}
+      await platform.checkpoint?.();
     }
     note=changed?`Optimised ${changed} JPEG image${changed===1?'':'s'} at original dimensions. Text and vectors retained; review image quality.`:'Lossless object optimisation checked. No supported JPEG images needed re-encoding.';
     progress('Image and object optimisation complete');
   } else throw new Error('Operation unavailable.');
+  await platform.checkpoint?.();
   const bytes=await output.save({useObjectStreams:true,updateFieldAppearances:false});
   if(step.operation==='compress_pdf'&&bytes.length>=inputs[0].bytes.length)return {bytes:inputs[0].bytes.slice(),note:'No useful reduction found. The previous PDF is retained unchanged.'};
   return {bytes,note,ocrPages};

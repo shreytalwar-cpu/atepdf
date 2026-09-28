@@ -1,0 +1,6 @@
+Mac Catalyst locked CocoaPods integration: PASS
+94 dependencies; 93 pods. All 204 target configurations minimum iOS16.4.
+React Native mac_catalyst_enabled=true; dependencies SUPPORTS_MACCATALYST=YES.
+Existing CocoaPods1.16.2/Bundler2.4.22, no new framework or global toolchain.
+Ruby2.6 precompiled-Expo metadata warnings cause Expo modules to build from source; RN prebuilt core/dependencies/Hermes are retained.
+Full local log: .build/mac-catalyst-final-pod-install.log

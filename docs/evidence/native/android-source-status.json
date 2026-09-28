@@ -1,0 +1,39 @@
+{
+  "date": "2026-09-28",
+  "status": "implemented_not_native_built",
+  "source": "apps/universal/modules/atepdf-pdf/android",
+  "moduleClass": "expo.modules.atepdf.AtepdfPdfModule",
+  "javaRuntimeAvailable": false,
+  "sdkDirectoryPresent": false,
+  "commandsAvailable": {
+    "gradle": false,
+    "adb": false,
+    "sdkmanager": false,
+    "kotlinc": false
+  },
+  "testsImplemented": 6,
+  "testsRun": 0,
+  "nativeBuildRun": false,
+  "nativeOCRAvailable": false,
+  "newRuntimeDependencies": [],
+  "oldProjectReadOrWritten": false,
+  "paidRequests": 0,
+  "toolchainInstalled": false,
+  "sdkLicencesAccepted": false,
+  "testSourceResolved": "/Users/shrey/Documents/ChatGPT/atepdf/tests/native/android",
+  "sharedTestAssetsResolved": "/Users/shrey/Documents/ChatGPT/atepdf/apps/universal/public/fixtures",
+  "reviewedSources": [
+    "https://developer.android.com/reference/android/graphics/pdf/PdfRenderer",
+    "https://developer.android.com/reference/android/graphics/pdf/PdfRenderer.Page",
+    "https://docs.expo.dev/modules/module-api/",
+    "https://developer.android.com/jetpack/androidx/releases/test",
+    "https://developers.google.com/ml-kit/terms",
+    "https://developers.google.com/ml-kit/android-data-disclosure",
+    "https://github.com/adaptech-cz/Tesseract4Android"
+  ],
+  "hostPreflightTests": {
+    "run": 3,
+    "passed": 3,
+    "evidence": "docs/evidence/native/android-preflight-tests.txt"
+  }
+}

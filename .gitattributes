@@ -4,3 +4,4 @@
 *.jpeg binary
 *.jpg binary
 atepdf_codex_build_pack/** -text -whitespace
+apps/universal/android/gradlew.bat text eol=crlf

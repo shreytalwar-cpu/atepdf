@@ -1,0 +1,43 @@
+{
+  "recordedAt": "2026-09-28T09:54:13.110Z",
+  "kind": "summary of observed local checks; not a platform build",
+  "verification": {
+    "regressions": {
+      "command": "pnpm test",
+      "passed": 60,
+      "failed": 0,
+      "admissionCases": 8
+    },
+    "sharedTypecheck": {
+      "command": "pnpm typecheck",
+      "passed": true
+    },
+    "nativeTypecheck": {
+      "command": "node node_modules/typescript/bin/tsc --noEmit -p apps/universal/tsconfig.json",
+      "passed": true
+    },
+    "diffCheck": {
+      "command": "git diff --check",
+      "passed": true
+    }
+  },
+  "sourceHashes": {
+    "packages/web-pdf/src/content-admission.ts": "e228579bae823512351df7d226e8b3198f52595ed57d2e9d6740adc95a3f7307",
+    "packages/web-pdf/src/engine.ts": "0fe921cc97cc08926fab20dbc8ec4b541450a1b3a6a9a19662bdf74bee587a9c",
+    "tests/regressions/content-admission.test.ts": "3707faeb5ebed5f9ac49ff417bf10a348455923ec94fa224c8325851d3fc8497",
+    "tests/helpers/inline-pdf.ts": "df44ac587aa22d1edb796b2a71032da48d8e14ddd2c72c3962ee1ea36be7027a"
+  },
+  "limits": {
+    "inlineImages": "all unsupported before readers, including small images",
+    "decodedDrawingProgramBytes": 16777216,
+    "pdfByteAdmissionCap": null,
+    "upstreamDecoderPeakAllocationBounded": false
+  },
+  "independentObservation": {
+    "parser": "pdfjs-dist 6.3.289 legacy build",
+    "safeInlineImage": "image operator present",
+    "oversizedInlineImage": "public operator-list promise resolves empty despite stopAtErrors and maxImageSize; shared guard rejects first"
+  },
+  "paidCalls": 0,
+  "nativeSourceEdits": false
+}

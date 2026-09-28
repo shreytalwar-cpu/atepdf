@@ -1,0 +1,81 @@
+{
+  "date": "2026-09-28",
+  "platform": "Mac Catalyst",
+  "choice": "Retain Expo 57 / React Native 0.86.3 UIKit application and assistant-ui; no WebView or React Native macOS fork introduced.",
+  "reviewedDependencies": {
+    "expo": "57.0.25",
+    "react-native": "0.86.3",
+    "assistant-ui/react-native": "0.1.44",
+    "ReactNativeMacOSReviewed": "0.81.8; requires React Native 0.81.6"
+  },
+  "platformApiTypecheck": {
+    "status": "passed",
+    "target": "arm64-apple-ios16.4-macabi",
+    "frameworks": [
+      "UIKit",
+      "PDFKit",
+      "Vision",
+      "ImageIO",
+      "CryptoKit",
+      "UniformTypeIdentifiers"
+    ],
+    "scope": "API availability only, not application build or runtime conformance",
+    "scratch": "/private/tmp/atepdf-mac-api-review-3ecltcjt"
+  },
+  "existingFrameworkSlices": [
+    "React.xcframework ios/maccatalyst arm64,x86_64",
+    "ReactNativeDependencies.xcframework ios/maccatalyst arm64,x86_64",
+    "hermesvm.xcframework ios/maccatalyst arm64,x86_64"
+  ],
+  "configuration": {
+    "mac_catalyst_enabled": true,
+    "SUPPORTS_MACCATALYST": "YES",
+    "MACOSX_DEPLOYMENT_TARGET": "13.4",
+    "IPHONEOS_DEPLOYMENT_TARGET": "16.4 (all 204 Pod configurations)",
+    "PRODUCT_BUNDLE_IDENTIFIER[sdk=macosx*]": "dev.atepdf.fresh.mac",
+    "ENABLE_APP_SANDBOX[sdk=macosx*]": "YES",
+    "ENABLE_USER_SELECTED_FILES[sdk=macosx*]": "readwrite",
+    "ENABLE_OUTGOING_NETWORK_CONNECTIONS[sdk=macosx*]": "NO",
+    "ENABLE_INCOMING_NETWORK_CONNECTIONS[sdk=macosx*]": "NO"
+  },
+  "knownCaveats": [
+    "Expo UIKit picker/share source and Apple SDK API availability verified; actual Mac picker/share UI still requires testing.",
+    "assistant-ui declares React Native compatibility, not a separate Mac Catalyst certification.",
+    "React Native macOS requires matching RN minor version; introducing 0.81 here would conflict with the current 0.86 runtime.",
+    "Local ad-hoc development build is not production signing, notarization or distribution proof."
+  ],
+  "primarySources": [
+    "https://microsoft.github.io/react-native-macos/docs/getting-started",
+    "https://github.com/microsoft/react-native-macos/releases",
+    "https://github.com/microsoft/react-native-macos/blob/v0.81.8/packages/react-native/package.json",
+    "https://developer.apple.com/documentation/uikit/mac-catalyst",
+    "https://www.assistant-ui.com/docs/react-native",
+    "https://developer.apple.com/documentation/xcode/configuring-the-macos-app-sandbox",
+    "https://developer.apple.com/documentation/xcode/build-settings-reference"
+  ],
+  "applicationBuild": {
+    "status": "Release native application built and linked; reproducible staging/signing script passed",
+    "architecture": "arm64 Mac Catalyst",
+    "script": "scripts/native/mac-build.sh",
+    "buildLog": ".build/mac-build-eZ8eP3",
+    "signedRuntimeEvidence": "docs/evidence/native/mac-catalyst-signed-build.json",
+    "scope": "Local sandboxed developer app launch proven; synthetic UI workflow pending; not distribution proof."
+  },
+  "resolvedBuildIssues": [
+    "Xcode27 Catalyst mapping omits the RN pod minimum15.1 and falls back to unsupported Mac10.15. Floor all Pods to existing app minimum iOS16.4.",
+    "Xcode27 warns DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER is unsupported. Use explicit sdk-conditional development identifier."
+  ],
+  "signingStatus": {
+    "status": "strict nested signature verification passed; exact staged process launched",
+    "identity": "local ad-hoc, no team",
+    "hardenedRuntime": false,
+    "developmentOnly": true,
+    "networkEntitlements": false,
+    "productionTargetHardenedRuntime": "unchanged",
+    "workarounds": [
+      "Fresh temporary app staging without Finder metadata.",
+      "Canonical versioned links restored for generated React/ReactNativeDependencies framework copies after matching duplicate version hashes.",
+      "Local ad-hoc main signature omits Hardened Runtime to avoid Team-ID library validation; no exception entitlement added."
+    ]
+  }
+}

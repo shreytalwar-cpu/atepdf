@@ -16,7 +16,7 @@ test('real merge → preview/save → remove physical page 2 → undo; local-onl
   await page.getByRole('textbox',{name:'Tell atepdf what to do'}).fill('Remove physical page 2 from the merged result.');await page.getByRole('button',{name:'Send message'}).click();await expect(page.getByTestId('result-facts')).toContainText('2 pages');
   const removed=await download(page,'removed');const two=await readPDF(removed);expect(two).toHaveLength(2);expect(two[0]).toContain('A1');expect(two[1]).toContain('B1');
   await page.getByRole('button',{name:'Undo',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');const undo=await download(page,'undo');expect(createHash('sha256').update(undo).digest('hex')).toBe(createHash('sha256').update(merged).digest('hex'));
-  await expect(page.getByTestId('assistant-message').filter({has:page.getByTestId('current-result')})).toHaveCount(1);await expect(page.getByTestId('user-message')).toContainText(['I’ve added 2 PDFs.', 'Merge my PDFs.', 'Remove physical page 2 from the merged result.', 'Undo the last change.']);await expect(page.getByTestId('previous-result')).toHaveCount(2);await page.getByText('Keep going with this result',{exact:true}).scrollIntoViewIfNeeded();await page.screenshot({path:'docs/evidence/desktop-result.png',fullPage:true});
+  await expect(page.getByTestId('assistant-message').filter({has:page.getByTestId('current-result')})).toHaveCount(1);await expect(page.getByTestId('user-message')).toContainText(['I’ve added 2 PDFs.', 'Merge my PDFs.', 'Remove physical page 2 from the merged result.', 'Undo the last change.']);await expect(page.getByTestId('previous-result')).toHaveCount(2);await page.getByText('Tell me what you’d like to do next.',{exact:true}).scrollIntoViewIfNeeded();await expect(page.getByRole('button',{name:'Remove page 2',exact:true})).toHaveCount(0);await page.screenshot({path:'docs/evidence/desktop-result.png',fullPage:true});
   expect(errors).toEqual([]);expect(requests.filter(r=>r.method!=='GET')).toEqual([]);expect(requests.filter(r=>!r.url.startsWith(baseURL+'/'))).toEqual([]);expect(requests.some(r=>r.url.includes('/api/planner'))).toBe(false);
   await writeFile('docs/evidence/network-merge.json',JSON.stringify(requests,null,2));
 });
@@ -39,6 +39,9 @@ test('real merge → OCR → compression preserves text and produces a measured 
   await writeFile('docs/evidence/chain-measurements.json',JSON.stringify({mergedBytes:merged.length,searchableBytes:searchable.length,compressedBytes:compressed.length,pages:4,searchPhraseVerified:true,originalTextPreserved:true},null,2));await writeFile('docs/evidence/network-chain.json',JSON.stringify(requests,null,2));
 });
 test('chat clarification, cancellation and discard guard keep committed results intact',async({page})=>{
+  await page.emulateMedia({reducedMotion:'reduce'});
+  // This no-key branch must not depend on the developer's saved local credential.
+  await page.route('**/api/planner/status',route=>route.fulfill({json:{connected:false,enabled:false,remaining:0,token:'test-only-csrf'}}));
   await page.goto('/');
   await page.getByLabel('Choose PDF files').setInputFiles(['tests/fixtures/mixed-text-and-scan.pdf','tests/fixtures/appendix.pdf']);
   await expect(page.getByText('Your 2 PDFs are ready.',{exact:false})).toBeVisible();
@@ -51,11 +54,90 @@ test('chat clarification, cancellation and discard guard keep committed results 
   const gate=new Promise<void>(resolve=>{release=resolve;}),requested=new Promise<void>(resolve=>{arrived=resolve;});
   await page.route('**/eng.traineddata.gz',async route=>{arrived();await gate;await route.continue();});
   await page.getByRole('button',{name:'Make searchable',exact:true}).click();await requested;
-  await page.getByRole('button',{name:'Cancel',exact:true}).click();await expect(page.getByText('Cancelled. No new result was committed.')).toBeVisible();release();
+  try{
+    const activity=page.getByTestId('progress-message');
+    await expect(activity).toContainText('Loading on-device English recognition');
+    await expect(page.getByTestId('assistant-message').filter({has:activity})).toHaveCount(1);
+    await expect(page.getByRole('button',{name:'Cancel',exact:true})).toBeEnabled();
+    await expect(page.getByRole('button',{name:'Send message',exact:true})).toHaveCount(0);
+    await expect(page.getByRole('button',{name:'Merge',exact:true})).toBeDisabled();
+    await expect(page.getByRole('button',{name:'Make searchable',exact:true})).toBeDisabled();
+    await expect(page.getByTestId('result-facts')).toContainText('4 pages');
+    await expect(page.getByTestId('previous-result')).toHaveCount(0);
+    await expect(page.getByText('Your searchable copy is ready.',{exact:true})).toHaveCount(0);
+    // Observe the actual reduced-motion rendering across the upstream pulse's
+    // first 700ms cycle while the real worker waits for its local language file.
+    const pulse=activity.getByTestId('activity-pulse');
+    await expect(pulse).toHaveCSS('opacity','1');
+    await page.waitForTimeout(850);
+    await expect(pulse).toHaveCSS('opacity','1');
+    expect(await activity.evaluate(element=>element.getAnimations({subtree:true}).filter(animation=>animation.playState==='running').length)).toBe(0);
+    await page.screenshot({path:'docs/evidence/local-processing-reduced-motion.png'});
+    await page.getByRole('button',{name:'Cancel',exact:true}).click();
+    await expect(page.getByText('Cancelled. No new result was committed.')).toBeVisible();
+  }finally{release();}
   await expect(page.getByTestId('progress-message')).toHaveCount(0);const after=await download(page,'cancel-after');expect(after).toEqual(before);
   await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('previous-result')).toHaveCount(1);
   await page.getByRole('button',{name:'Start over'}).click();await expect(page.getByRole('button',{name:'Clear session'})).toBeVisible();await expect(page.getByTestId('current-result')).toHaveCount(1);
   await page.getByRole('button',{name:'Clear session'}).click();await expect(page.getByRole('heading',{name:'Drop files here'})).toBeVisible();await expect(page.getByTestId('conversation')).toHaveCount(0);
+});
+
+test('PDF drag feedback clears on leave and actual drop imports locally',async({page})=>{
+  await page.goto('/');
+  const bytes=[...await readFile('tests/fixtures/brief.pdf')];
+  const transfer=await page.evaluateHandle(data=>{
+    const transfer=new DataTransfer();
+    transfer.items.add(new File([Uint8Array.from(data)],'brief.pdf',{type:'application/pdf'}));
+    return transfer;
+  },bytes);
+  try{
+    const surface=page.getByLabel('Choose PDF files').locator('..');
+    await surface.dispatchEvent('dragenter',{dataTransfer:transfer});
+    await expect(page.getByTestId('drop-feedback')).toBeVisible();
+    await expect(page.getByTestId('drop-feedback')).toContainText('They’ll stay on this device.');
+    await page.screenshot({path:'docs/evidence/drag-feedback.png'});
+    await surface.dispatchEvent('dragleave',{dataTransfer:transfer});
+    await expect(page.getByTestId('drop-feedback')).toHaveCount(0);
+    await expect(page.getByTestId('conversation')).toHaveCount(0);
+    await surface.dispatchEvent('dragenter',{dataTransfer:transfer});
+    await surface.dispatchEvent('drop',{dataTransfer:transfer});
+    await expect(page.getByTestId('drop-feedback')).toHaveCount(0);
+    await expect(page.getByText('brief.pdf',{exact:true})).toBeVisible();
+    await expect(page.getByText('Your 1 PDF is ready.',{exact:false})).toBeVisible();
+    await expect(page.getByTestId('current-result')).toHaveCount(0);
+  }finally{await transfer.dispose();}
+});
+
+test('keyboard composer and Latest message keep current results reachable',async({page})=>{
+  await page.setViewportSize({width:1280,height:720});
+  await page.emulateMedia({reducedMotion:'reduce'});
+  await page.goto('/');
+  await page.getByRole('button',{name:'Try the two sample PDFs'}).click();
+  await expect(page.getByText('Your 2 PDFs are ready.',{exact:false})).toBeVisible();
+  const composer=page.getByRole('textbox',{name:'Tell atepdf what to do'});
+  await composer.focus();
+  await composer.pressSequentially('merge');
+  await composer.press('Shift+Enter');
+  await expect(composer).toHaveValue('merge\n');
+  await expect(composer).toBeFocused();
+  await expect(page.getByTestId('current-result')).toHaveCount(0);
+  await composer.press('Enter');
+  await expect(page.getByTestId('result-facts')).toContainText('3 pages');
+  await expect(composer).toHaveValue('');
+  await expect(composer).toBeFocused();
+  const conversation=page.getByTestId('conversation');
+  await conversation.hover();
+  await page.mouse.wheel(0,-2000);
+  const latest=page.getByRole('button',{name:'Latest message',exact:true});
+  await expect(latest).toBeVisible();
+  await latest.click();
+  const save=page.getByTestId('current-result').getByRole('button',{name:'Save PDF',exact:true});
+  await expect.poll(async()=>{
+    const [viewport,button,input]=await Promise.all([conversation.boundingBox(),save.boundingBox(),composer.boundingBox()]);
+    return !!viewport&&!!button&&!!input&&button.y>=viewport.y&&button.y+button.height<=Math.min(viewport.y+viewport.height,input.y);
+  }).toBe(true);
+  await expect(latest).not.toBeVisible();
+  await page.screenshot({path:'docs/evidence/latest-message-result.png'});
 });
 test('one chat recipe commits only the final merge → OCR → compression result',async({page})=>{
   await page.goto('/');await page.getByLabel('Choose PDF files').setInputFiles(['tests/fixtures/mixed-text-and-scan.pdf','tests/fixtures/image-heavy.pdf']);await expect(page.getByText('Your 2 PDFs are ready.',{exact:false})).toBeVisible();

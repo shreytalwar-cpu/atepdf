@@ -1,0 +1,89 @@
+Your RubyGems version (3.0.3.1) has a bug that prevents `required_ruby_version` from working for Bundler. Any scripts that use `gem install bundler` will break as soon as Bundler drops support for your Ruby version. Please upgrade RubyGems to avoid future breakage and silence this warning by running `gem update --system 3.2.3`
+Fetching gem metadata from https://rubygems.org/.........
+Resolving dependencies...
+Fetching public_suffix 4.0.7
+Fetching mutex_m 0.3.0
+Fetching atomos 0.1.3
+Fetching concurrent-ruby 1.3.8
+Fetching minitest 5.25.4
+Fetching zeitwerk 2.6.18
+Fetching json 2.7.6
+Fetching base64 0.3.0
+Fetching claide 1.1.0
+Fetching CFPropertyList 3.0.9
+Installing atomos 0.1.3
+Installing claide 1.1.0
+Installing mutex_m 0.3.0
+Installing base64 0.3.0
+Installing CFPropertyList 3.0.9
+Fetching fuzzy_match 2.0.4
+Fetching nap 1.1.0
+Fetching netrc 0.11.0
+Fetching ffi 1.16.3
+Fetching logger 1.7.0
+Installing json 2.7.6 with native extensions
+Installing zeitwerk 2.6.18
+Installing public_suffix 4.0.7
+Installing minitest 5.25.4
+Fetching cocoapods-deintegrate 1.0.5
+Fetching cocoapods-downloader 2.1
+Fetching cocoapods-search 1.0.1
+Installing netrc 0.11.0
+Installing concurrent-ruby 1.3.8
+Installing logger 1.7.0
+Fetching cocoapods-try 1.2.0
+Fetching colored2 3.1.2
+Installing cocoapods-deintegrate 1.0.5
+Fetching escape 0.0.4
+Installing fuzzy_match 2.0.4
+Installing cocoapods-downloader 2.1
+Installing nap 1.1.0
+Installing cocoapods-search 1.0.1
+Fetching fourflusher 2.3.1
+Fetching gh_inspector 1.1.3
+Fetching molinillo 0.8.0
+Fetching ruby-macho 2.5.1
+Fetching nanaimo 0.4.0
+Installing cocoapods-try 1.2.0
+Installing colored2 3.1.2
+Fetching nkf 0.3.0
+Fetching rexml 3.4.4
+Installing ffi 1.16.3 with native extensions
+Installing escape 0.0.4
+Fetching httpclient 2.9.0
+Installing gh_inspector 1.1.3
+Installing molinillo 0.8.0
+Installing fourflusher 2.3.1
+Installing ruby-macho 2.5.1
+Installing nanaimo 0.4.0
+Fetching addressable 2.9.0
+Fetching cocoapods-plugins 1.0.0
+Fetching cocoapods-trunk 1.6.0
+Fetching i18n 1.14.8
+Fetching tzinfo 2.0.6
+Installing rexml 3.4.4
+Installing nkf 0.3.0 with native extensions
+Installing cocoapods-plugins 1.0.0
+Installing httpclient 2.9.0
+Installing addressable 2.9.0
+Installing i18n 1.14.8
+Installing cocoapods-trunk 1.6.0
+Installing tzinfo 2.0.6
+Fetching activesupport 6.1.7.10
+Installing activesupport 6.1.7.10
+Fetching algoliasearch 1.27.5
+Installing algoliasearch 1.27.5
+Fetching xcodeproj 1.28.1
+Installing xcodeproj 1.28.1
+Fetching ethon 0.18.0
+Installing ethon 0.18.0
+Fetching typhoeus 1.6.0
+Installing typhoeus 1.6.0
+Fetching cocoapods-core 1.16.2
+Installing cocoapods-core 1.16.2
+Fetching cocoapods 1.16.2
+Installing cocoapods 1.16.2
+Bundle complete! 3 Gemfile dependencies, 42 gems now installed.
+Bundled gems are installed into `./.build/native-tools/bundle`
+Post-install message from algoliasearch:
+A new major version is available for Algolia! Please now use the https://rubygems.org/gems/algolia gem to get the latest features.

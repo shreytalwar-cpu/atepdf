@@ -1,15 +1,22 @@
 import XCTest
+import UIKit
 
 /// Drives the release application's real interface with bundled synthetic PDFs.
-/// No test engine, planner transport, private documents or purchase adapter.
+/// No engine/store/transport mocks, private documents or purchase adapter.
+/// Paired tests use a separate synthetic-only provider with no owner key.
 @MainActor
 final class AtepdfWorkflowUITests: XCTestCase {
   private var app: XCUIApplication!
 
   override func setUpWithError() throws {
     continueAfterFailure = false
+    XCUIDevice.shared.orientation = .portrait
     app = XCUIApplication(bundleIdentifier: "dev.atepdf.fresh")
     app.launch()
+    let accessibility = XCTAttachment(string: "preferredContentSizeCategory=\(UIApplication.shared.preferredContentSizeCategory.rawValue)\nreduceMotion=\(UIAccessibility.isReduceMotionEnabled)")
+    accessibility.name = "simulator-accessibility-configuration"
+    accessibility.lifetime = .keepAlways
+    add(accessibility)
   }
 
   override func tearDownWithError() throws {
@@ -20,6 +27,7 @@ final class AtepdfWorkflowUITests: XCTestCase {
       add(hierarchy)
       capture("final-screen")
       app.terminate()
+      XCUIDevice.shared.orientation = .portrait
     }
   }
 
@@ -33,6 +41,30 @@ final class AtepdfWorkflowUITests: XCTestCase {
   private func tap(_ element: XCUIElement, file: StaticString = #filePath, line: UInt = #line) {
     wait(element, "exists == true AND hittable == true AND enabled == true", file: file, line: line)
     element.tap()
+  }
+
+  private func addBundledSamples(file: StaticString = #filePath, line: UInt = #line) {
+    let button = app.buttons["Try the two sample PDFs"]
+    wait(button, "exists == true", file: file, line: line)
+    let welcome = app.scrollViews.firstMatch
+    for _ in 0..<6 {
+      let viewport = welcome.frame, target = button.frame
+      if button.isHittable && target.midY > viewport.minY + 8 && target.midY < viewport.maxY - 8 { break }
+      // At accessibility text sizes the welcome content scrolls. Reveal it by
+      // an ordinary measured drag; keep the same strict reachable-button tap.
+      let distance = min(0.45, max(0.12, (target.midY - viewport.midY) / viewport.height))
+      let start = welcome.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.75))
+      let finish = welcome.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.75 - distance))
+      start.press(forDuration: 0.05, thenDragTo: finish, withVelocity: .slow, thenHoldForDuration: 0.1)
+    }
+    XCTAssertTrue(button.isHittable && welcome.frame.contains(CGPoint(x: button.frame.midX, y: button.frame.midY)), "The sample action must be visibly reachable", file: file, line: line)
+    tap(button, file: file, line: line)
+  }
+
+  private func waitForState(_ condition: @escaping () -> Bool, timeout: TimeInterval = 10,
+                            file: StaticString = #filePath, line: UInt = #line) {
+    let expectation = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in condition() }, object: nil)
+    XCTAssertEqual(XCTWaiter.wait(for: [expectation], timeout: timeout), .completed, file: file, line: line)
   }
 
   private func tapInConversation(_ element: XCUIElement, file: StaticString = #filePath, line: UInt = #line) {
@@ -91,7 +123,29 @@ final class AtepdfWorkflowUITests: XCTestCase {
   private func assertPages(_ count: Int, file: StaticString = #filePath, line: UInt = #line) {
     let facts = app.staticTexts["result-facts"]
     wait(facts, "exists == true AND label BEGINSWITH '\(count) pages'", file: file, line: line)
-    XCTAssertTrue(app.staticTexts["Current result · \(count) pages"].exists, file: file, line: line)
+    let largeText = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
+    let compactKeyboard = (app.frame.width > app.frame.height || largeText) && app.keyboards.firstMatch.exists
+    if compactKeyboard {
+      XCTAssertFalse(app.staticTexts["Current result · \(count) pages"].exists, file: file, line: line)
+    } else {
+      XCTAssertTrue(app.staticTexts["Current result · \(count) pages"].exists, file: file, line: line)
+    }
+  }
+
+  private func syntheticEvidence() async throws -> (calls: Int, cancelled: Int) {
+    let (data, _) = try await URLSession.shared.data(from: URL(string: "http://localhost:3212/test/evidence")!)
+    let evidence = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
+    XCTAssertEqual(evidence["provider"] as? String, "synthetic-only")
+    return (try XCTUnwrap(evidence["calls"] as? Int), try XCTUnwrap(evidence["cancelled"] as? Int))
+  }
+
+  private func waitForSyntheticEvidence(calls: Int? = nil, cancelled: Int? = nil) async throws {
+    for _ in 0..<30 {
+      let evidence = try await syntheticEvidence()
+      if (calls == nil || evidence.calls >= calls!) && (cancelled == nil || evidence.cancelled >= cancelled!) { return }
+      try await Task.sleep(for: .milliseconds(100))
+    }
+    XCTFail("Synthetic gateway did not observe the expected request/cancellation")
   }
 
   func testPairedNativePlannerProductAnswerMergeRemoveUndoAndCancel() async throws {
@@ -105,7 +159,7 @@ final class AtepdfWorkflowUITests: XCTestCase {
     request.httpMethod="POST";request.httpBody=Data("{}".utf8);request.setValue("application/json",forHTTPHeaderField:"Content-Type");request.setValue("http://localhost:3212",forHTTPHeaderField:"Origin");request.setValue(token,forHTTPHeaderField:"X-Atepdf-Token")
     let (pairData,_)=try await URLSession.shared.data(for:request)
     let code=(try JSONSerialization.jsonObject(with:pairData) as! [String:Any])["code"] as! String
-    tap(app.buttons["Try the two sample PDFs"])
+    addBundledSamples()
     wait(app.staticTexts.matching(NSPredicate(format:"label BEGINSWITH 'Your 2 PDFs are ready.'")).firstMatch,"exists == true")
     tap(app.buttons["AI connection"])
     let field=app.secureTextFields["Pairing code"]
@@ -124,9 +178,130 @@ final class AtepdfWorkflowUITests: XCTestCase {
     send("Wait for cancellation")
     wait(app.buttons["Cancel"],"exists == true AND enabled == true");tap(app.buttons["Cancel"])
     wait(app.staticTexts["Planning cancelled. No local files changed."],"exists == true");assertPages(3)
+    let beforeInterruption = try await syntheticEvidence()
+    send("Wait for interruption")
+    try await waitForSyntheticEvidence(calls: beforeInterruption.calls + 1)
+    // Explicit Stop is the contract. Backgrounding alone is not documented as
+    // cancellation; XCTest also waits for quiescence when activating the app.
+    // Prove the transport cancels before interrupting, then test retained state
+    // and the next real local action after an ordinary background/foreground.
+    tap(app.buttons["Cancel"])
+    wait(app.buttons["Cancel"], "exists == false")
+    try await waitForSyntheticEvidence(cancelled: beforeInterruption.cancelled + 1)
+    XCUIDevice.shared.press(.home)
+    waitForState({
+      self.app.state == .runningBackground || self.app.state == .runningBackgroundSuspended
+    }, timeout: 5)
+    app.activate()
+    XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))
+    assertPages(3)
+    wait(app.buttons["Send message"], "exists == true AND enabled == false")
+    capture("native-stop-then-background-return-preserves-result")
+    send("remove page 2");assertPages(2)
+    send("undo");assertPages(3)
     capture("native-paired-planner-complete-workflow")
-    tap(app.buttons["AI connection"]);tapInConversation(app.buttons["Disconnect this app"])
+    tap(app.buttons["AI connection"])
+    let latest = app.buttons["Latest message"]
+    if latest.exists { tap(latest) }
+    tapInConversation(app.buttons["Disconnect this app"])
     wait(app.staticTexts["Disconnected. Local quick actions still work."],"exists == true")
+    // Session persistence is not implemented. A true relaunch must not show
+    // phantom artifacts or restore a native pairing token from disk.
+    app.terminate();app.launch()
+    wait(app.buttons["Try the two sample PDFs"])
+    XCTAssertFalse(app.staticTexts["result-facts"].exists)
+    tap(app.buttons["AI connection"])
+    wait(app.secureTextFields["Pairing code"], "exists == true")
+    capture("native-relaunch-fresh-session")
+  }
+
+  func testIPadLandscapeKeyboardAndPreview() throws {
+    guard UIDevice.current.userInterfaceIdiom == .pad else { throw XCTSkip("iPad layout regression") }
+    addBundledSamples()
+    wait(app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH 'Your 2 PDFs are ready.'")).firstMatch, "exists == true")
+    tap(app.buttons["Merge"]);assertPages(3)
+    XCUIDevice.shared.orientation = .landscapeLeft
+    waitForState { self.app.frame.width > self.app.frame.height }
+    let composer = app.textViews.matching(NSPredicate(format: "label BEGINSWITH 'Tell atepdf what to do'")).firstMatch
+    tap(composer);wait(app.keyboards.firstMatch, "exists == true")
+    composer.typeText("remove page 2")
+    wait(composer, "value == 'remove page 2'")
+    XCTAssertLessThanOrEqual(composer.frame.maxY, app.keyboards.firstMatch.frame.minY + 1)
+    XCTAssertGreaterThan(app.keyboards.firstMatch.frame.intersection(app.frame).height, 100, "A software keyboard must actually be visible for this layout check")
+    XCTAssertLessThanOrEqual(app.buttons["Send message"].frame.maxY, app.keyboards.firstMatch.frame.minY + 1)
+    XCTAssertGreaterThan(conversation.frame.height, 100)
+    XCTAssertFalse(app.buttons["Merge"].exists)
+    XCTAssertFalse(app.staticTexts["Current result · 3 pages"].exists)
+    XCTAssertTrue(app.buttons["Send message"].isHittable)
+    capture("ipad-landscape-keyboard-command")
+    tap(app.buttons["Send message"]);wait(composer, "value == nil OR value == ''");assertPages(2)
+    wait(app.buttons["Send message"], "exists == true AND enabled == false")
+    let latest = app.buttons["Latest message"]
+    if latest.exists { tap(latest) }
+    tapInConversation(latestResultButton("Preview"))
+    wait(app.images["PDF page 1"], "exists == true")
+    tapInConversation(app.buttons["Next page"])
+    wait(app.images["PDF page 2"], "exists == true")
+    reveal(app.images["PDF page 2"]);reveal(app.buttons["Next page"])
+    // Both centers can be visible while a short landscape viewport clips the
+    // raster's lower edge. Move only the measured overflow, preserving the
+    // navigation center inside the viewport, before asserting actual visibility.
+    let viewport = conversation.frame, raster = app.images["PDF page 2"].frame
+    let navigationRoom = app.buttons["Next page"].frame.midY - viewport.minY - 12
+    let correction = min(max(0, raster.maxY - viewport.maxY + 2), max(0, navigationRoom))
+    if correction > 0 {
+      let start = conversation.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.75))
+      let finish = conversation.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.75 - correction / viewport.height))
+      start.press(forDuration: 0.05, thenDragTo: finish, withVelocity: .slow, thenHoldForDuration: 0.1)
+    }
+    XCTAssertGreaterThan(app.images["PDF page 2"].frame.intersection(conversation.frame).height, 80)
+    XCTAssertTrue(visibleInConversation(app.buttons["Next page"]))
+    XCTAssertTrue(app.staticTexts["Page 2 of 2"].exists)
+    capture("ipad-landscape-preview-second-page")
+    XCUIDevice.shared.orientation = .portrait
+    waitForState { self.app.frame.height > self.app.frame.width }
+    assertPages(2)
+    tapInConversation(app.buttons["Close preview"])
+    wait(app.buttons["Close preview"], "exists == false")
+    capture("ipad-portrait-after-rotation")
+  }
+
+  func testPinnedTLSPlannerMergeThroughNativeInterface() async throws {
+    // The companion harness binds only 127.0.0.1:3444/3445 and constructs its
+    // own synthetic provider and temporary certificate chain, never LocalConfig.
+    func evidence() async throws -> Int {
+      let (data, _) = try await URLSession.shared.data(from: URL(string: "http://127.0.0.1:3445/test/evidence")!)
+      let value = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
+      XCTAssertEqual(value["syntheticOnly"] as? Bool, true)
+      return try XCTUnwrap(value["calls"] as? Int)
+    }
+    let before = try await evidence()
+    let (data, _) = try await URLSession.shared.data(from: URL(string: "http://127.0.0.1:3445/test/pairing")!)
+    let pairing = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
+    let code = try XCTUnwrap(pairing["code"] as? String)
+    XCTAssertTrue(code.hasPrefix("atepdf-beta:"))
+    addBundledSamples()
+    wait(app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH 'Your 2 PDFs are ready.'")).firstMatch, "exists == true")
+    tap(app.buttons["AI connection"])
+    let field = app.secureTextFields["Pairing code"]
+    tapInConversation(field);field.typeText(code)
+    tapInConversation(app.buttons["Connect this app"])
+    wait(app.staticTexts["Connected to the local planner. Tell me what you’d like to do."], "exists == true")
+    let composer = app.textViews.matching(NSPredicate(format: "label BEGINSWITH 'Tell atepdf what to do'")).firstMatch
+    tap(composer);composer.typeText("Merge the two PDFs")
+    wait(composer, "value == 'Merge the two PDFs'")
+    tap(app.buttons["Send message"]);wait(composer, "value == ''")
+    assertPages(3)
+    let after = try await evidence()
+    XCTAssertEqual(after, before + 1, "The synthetic TLS provider must receive the request; local fallback is not this test.")
+    if app.buttons["Latest message"].exists { tap(app.buttons["Latest message"]) }
+    reveal(latestResultButton("Save PDF"))
+    capture("ipad-native-pinned-tls-local-merge")
+    tap(app.buttons["AI connection"])
+    let latest = app.buttons["Latest message"]
+    if latest.exists { tap(latest) }
+    tapInConversation(app.buttons["Disconnect this app"])
+    wait(app.staticTexts["Disconnected. Local quick actions still work."], "exists == true")
   }
 
   func testNativeComposerPreservesFastTypingAndBackspace() throws {
@@ -142,8 +317,181 @@ final class AtepdfWorkflowUITests: XCTestCase {
     capture("native-exact-fast-input-and-backspace")
   }
 
+  func testPreviewToolbarControlsRemainReachableAtCurrentTextSize() throws {
+    addBundledSamples()
+    wait(app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH 'Your 2 PDFs are ready.'")).firstMatch, "exists == true")
+    tap(app.buttons["Merge"]);assertPages(3)
+    tapInConversation(latestResultButton("Preview"))
+    wait(app.images["PDF page 1"], "exists == true")
+    tapInConversation(app.buttons["Next page"])
+    wait(app.images["PDF page 2"], "exists == true")
+    func visibleControl(_ label: String) -> XCUIElement {
+      let button = app.buttons[label]
+      reveal(button)
+      XCTAssertGreaterThanOrEqual(button.frame.width, 44)
+      XCTAssertGreaterThanOrEqual(button.frame.height, 44)
+      XCTAssertGreaterThanOrEqual(button.frame.minX, conversation.frame.minX)
+      XCTAssertLessThanOrEqual(button.frame.maxX, conversation.frame.maxX)
+      return button
+    }
+    tap(visibleControl("Zoom in"))
+    wait(app.buttons["Zoom out"], "exists == true AND enabled == true")
+    tap(visibleControl("Zoom out"))
+    wait(app.buttons["Zoom out"], "exists == true AND enabled == false")
+    tap(visibleControl("Zoom in"))
+    tap(visibleControl("Fit page"))
+    wait(app.buttons["Zoom out"], "exists == true AND enabled == false")
+    tap(visibleControl("Previous page"))
+    wait(app.images["PDF page 1"], "exists == true")
+    _ = visibleControl("Zoom in")
+    let controls = XCTAttachment(string: app.debugDescription)
+    controls.name = "preview-controls-at-current-text-size";controls.lifetime = .keepAlways;add(controls)
+    capture("native-preview-controls-at-current-text-size")
+    tap(visibleControl("Close preview"))
+    wait(app.buttons["Close preview"], "exists == false")
+  }
+
+  func testBackgroundResumeTypingWithoutPlanner() throws {
+    // Isolates the observed foreground quiescence warning from planner/jobs.
+    executionTimeAllowance = 180
+    let composer = app.textViews.matching(NSPredicate(format: "label BEGINSWITH 'Tell atepdf what to do'")).firstMatch
+    tap(composer);composer.typeText("remove")
+    wait(composer, "value == 'remove'")
+    XCUIDevice.shared.press(.home)
+    waitForState { self.app.state == .runningBackground || self.app.state == .runningBackgroundSuspended }
+    app.activate()
+    XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))
+    tap(composer);composer.typeText(" page 2")
+    wait(composer, "value == 'remove page 2'")
+    capture("native-background-resume-typing-without-planner")
+  }
+
+  func testPopulatedLocalThreadBackgroundResumeTypingWithoutPlanner() throws {
+    executionTimeAllowance = 180
+    addBundledSamples()
+    wait(app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH 'Your 2 PDFs are ready.'")).firstMatch, "exists == true")
+    tap(app.buttons["Merge"]);assertPages(3)
+    XCTAssertFalse(app.buttons["Cancel"].exists)
+    let resultReady = Date()
+    let composer = app.textViews.matching(NSPredicate(format: "label BEGINSWITH 'Tell atepdf what to do'")).firstMatch
+    tap(composer);composer.typeText("remove")
+    wait(composer, "value == 'remove'")
+    let timing = XCTAttachment(string: "secondsBetweenValidatedResultAndHome=\(Date().timeIntervalSince(resultReady))")
+    timing.name = "populated-thread-background-timing";timing.lifetime = .keepAlways;add(timing)
+    XCUIDevice.shared.press(.home)
+    waitForState { self.app.state == .runningBackground || self.app.state == .runningBackgroundSuspended }
+    app.activate()
+    XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))
+    assertPages(3)
+    tap(composer);composer.typeText(" page 2")
+    wait(composer, "value == 'remove page 2'")
+    capture("native-populated-local-thread-resume-without-planner")
+  }
+
+  func testAsyncPopulatedLocalThreadBackgroundResumeWithoutPlanner() async throws {
+    // Only the XCTest entrypoint changes: no transport, await, or app behavior.
+    // Distinguishes the async paired-test runner from the passing sync baseline.
+    try testPopulatedLocalThreadBackgroundResumeTypingWithoutPlanner()
+  }
+
+  func testSyntheticFilesPickerOCRAndCompression() throws {
+    guard UIDevice.current.userInterfaceIdiom == .pad else { throw XCTSkip("Bounded iPad Files-picker acceptance") }
+    // Actual Safari download and system Files picker, not app-container writes
+    // or a test-only input path. This server serves exactly two tracked fixtures.
+    let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
+    safari.open(URL(string: "http://127.0.0.1:3448/")!)
+    for title in ["Continue", "Start Browsing"] {
+      let button = safari.buttons[title]
+      if button.waitForExistence(timeout: 2) && button.isHittable { button.tap() }
+    }
+    let safariHierarchy = XCTAttachment(string: safari.debugDescription)
+    safariHierarchy.name = "synthetic-safari-download-page"
+    safariHierarchy.lifetime = .keepAlways;add(safariHierarchy)
+    for name in ["mixed-text-and-scan.pdf", "image-heavy.pdf"] {
+      tap(safari.links["Download \(name)"])
+      let download = safari.buttons["Download"]
+      if download.waitForExistence(timeout: 5) { tap(download) }
+    }
+    capture("synthetic-fixtures-downloaded-in-safari")
+    app.activate()
+    for (index, name) in ["mixed-text-and-scan", "image-heavy"].enumerated() {
+      tap(app.buttons[index == 0 ? "Choose files" : "Add files"])
+      let browse = app.buttons["Browse"]
+      if browse.waitForExistence(timeout: 3) && browse.isHittable { browse.tap() }
+      // Match the observed sidebar cell, not ambiguous folder/sidebar text.
+      // The picker remembers its prior folder across application launches.
+      tap(app.cells["DOC.sidebar.item.Downloads"])
+      let picker = XCTAttachment(string: app.debugDescription)
+      picker.name = "files-picker-\(name)";picker.lifetime = .keepAlways;add(picker)
+      let file = app.cells.matching(NSPredicate(format: "label CONTAINS %@", name)).firstMatch
+      tap(file)
+      // The multi-select system picker only marks a cell selected. Its visible
+      // Open action commits the selection and resolves the app's import prompt.
+      tap(app.buttons["Open"])
+      wait(app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH %@", "Your \(index + 1) PDF")).firstMatch, "exists == true")
+    }
+    tap(app.buttons["Merge"]);assertPages(4)
+    tap(app.buttons["Make searchable"])
+    wait(app.staticTexts["Your searchable copy is ready."], "exists == true", timeout: 90)
+    assertPages(4);capture("native-files-picker-ocr-four-pages")
+    tap(app.buttons["Compress"])
+    let latest = app.buttons["Latest message"]
+    if latest.exists { tap(latest) }
+    tapInConversation(app.buttons["Create optimised copy"])
+    wait(app.staticTexts["I checked the optimised copy. Here’s the result."], "exists == true", timeout: 90)
+    assertPages(4);capture("native-files-picker-compressed-four-pages")
+  }
+
+  func testCancelledPlannerBackgroundResumeKeepsResultAndDraft() async throws {
+    executionTimeAllowance = 180
+    // Isolate explicit Stop + interruption without the long chat's repeated
+    // result/preview/connection scrolling. Real local merge, synthetic planner.
+    let (statusData, _) = try await URLSession.shared.data(from: URL(string: "http://localhost:3212/api/planner/status")!)
+    let status = try XCTUnwrap(JSONSerialization.jsonObject(with: statusData) as? [String: Any])
+    let token = try XCTUnwrap(status["token"] as? String)
+    var request = URLRequest(url: URL(string: "http://localhost:3212/api/planner/pairing")!)
+    request.httpMethod = "POST";request.httpBody = Data("{}".utf8)
+    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    request.setValue("http://localhost:3212", forHTTPHeaderField: "Origin")
+    request.setValue(token, forHTTPHeaderField: "X-Atepdf-Token")
+    let (data, _) = try await URLSession.shared.data(for: request)
+    let pairing = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
+    let code = try XCTUnwrap(pairing["code"] as? String)
+    addBundledSamples()
+    wait(app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH 'Your 2 PDFs are ready.'")).firstMatch, "exists == true")
+    tap(app.buttons["Merge"]);assertPages(3)
+    tap(app.buttons["AI connection"])
+    if app.buttons["Latest message"].exists { tap(app.buttons["Latest message"]) }
+    let field = app.secureTextFields["Pairing code"]
+    tapInConversation(field);field.typeText(code)
+    tapInConversation(app.buttons["Connect this app"])
+    wait(app.staticTexts["Connected to the local planner. Tell me what you’d like to do."], "exists == true")
+    let before = try await syntheticEvidence()
+    let composer = app.textViews.matching(NSPredicate(format: "label BEGINSWITH 'Tell atepdf what to do'")).firstMatch
+    tap(composer);composer.typeText("Wait for interruption")
+    wait(composer, "value == 'Wait for interruption'")
+    tap(app.buttons["Send message"])
+    try await waitForSyntheticEvidence(calls: before.calls + 1)
+    tap(app.buttons["Cancel"])
+    wait(app.buttons["Cancel"], "exists == false")
+    try await waitForSyntheticEvidence(cancelled: before.cancelled + 1)
+    assertPages(3)
+    tap(composer);composer.typeText("remove")
+    wait(composer, "value == 'remove'")
+    XCUIDevice.shared.press(.home)
+    waitForState { self.app.state == .runningBackground || self.app.state == .runningBackgroundSuspended }
+    app.activate()
+    XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))
+    assertPages(3)
+    tap(composer);composer.typeText(" page 2")
+    wait(composer, "value == 'remove page 2'")
+    tap(app.buttons["Send message"])
+    wait(composer, "value == ''");assertPages(2)
+    capture("native-cancel-background-resume-and-next-action")
+  }
+
   func testBundledMergePreviewRemovalUndoAndShareDismissal() throws {
-    tap(app.buttons["Try the two sample PDFs"])
+    addBundledSamples()
     wait(app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH 'Your 2 PDFs are ready.'")).firstMatch, "exists == true")
     XCTAssertTrue(app.staticTexts["brief.pdf"].exists)
     XCTAssertTrue(app.staticTexts["appendix.pdf"].exists)
@@ -177,6 +525,14 @@ final class AtepdfWorkflowUITests: XCTestCase {
     wait(composer, "value == 'remove page 2x'")
     composer.typeText(XCUIKeyboardKey.delete.rawValue)
     wait(composer, "value == 'remove page 2'")
+    let geometry = XCTAttachment(string: "conversation=\(conversation.frame)\ncomposer=\(composer.frame)\nsend=\(app.buttons["Send message"].frame)\nkeyboard=\(app.keyboards.firstMatch.frame)")
+    geometry.name = "keyboard-workspace-geometry"
+    geometry.lifetime = .keepAlways
+    add(geometry)
+    XCTAssertGreaterThan(conversation.frame.height, 100, "Keyboard must leave usable conversation space")
+    XCTAssertGreaterThan(app.keyboards.firstMatch.frame.intersection(app.frame).height, 100, "A software keyboard must actually be visible for this layout check")
+    XCTAssertLessThanOrEqual(composer.frame.maxY, app.keyboards.firstMatch.frame.minY + 1)
+    XCTAssertLessThanOrEqual(app.buttons["Send message"].frame.maxY, app.keyboards.firstMatch.frame.minY + 1)
     capture("04-command-ready")
     tap(app.buttons["Send message"])
     wait(composer, "value == nil OR value == ''")

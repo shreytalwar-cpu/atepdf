@@ -1,0 +1,38 @@
+{
+  "capturedAt": "2026-09-28T17:30:14.089374+00:00",
+  "scope": "Final preview-controls Release products; no rebuild by iPhone QA",
+  "testProductsPath": "/Users/shrey/Library/Developer/XcodeBuildMCP/workspaces/atepdf-0efe6fe22454/test-products/test_sim_2026-09-28T17-28-27-903Z_pid12385_9d524d88.xctestproducts",
+  "sourceSnapshot": "docs/evidence/native/beta-ipad-final-source.json",
+  "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+  "builtFiles": {
+    "atepdf": {
+      "sha256": "793200f22ebcd18b0fd8f632619e18be1bb698f7909109a39a912d052542b71b",
+      "bytes": 8205976
+    },
+    "main.jsbundle": {
+      "sha256": "d8b30eeb536f5cb359ab9479ad39fef7c66d3eda95e17ece5450473aae66e01e",
+      "bytes": 6916943
+    },
+    "Info.plist": {
+      "sha256": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c",
+      "bytes": 2215
+    }
+  },
+  "installedAppPath": "/Users/shrey/Library/Developer/CoreSimulator/Devices/D68C4547-67D3-4960-AAB9-D85FD786D6FC/data/Containers/Bundle/Application/8C13CA12-C0FF-45D5-A8A6-B39AD634E75B/atepdf.app",
+  "installedVerifiedAt": "2026-09-28T17:30:43.837258+00:00",
+  "installedFiles": {
+    "atepdf": {
+      "sha256": "793200f22ebcd18b0fd8f632619e18be1bb698f7909109a39a912d052542b71b",
+      "bytes": 8205976
+    },
+    "main.jsbundle": {
+      "sha256": "d8b30eeb536f5cb359ab9479ad39fef7c66d3eda95e17ece5450473aae66e01e",
+      "bytes": 6916943
+    },
+    "Info.plist": {
+      "sha256": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c",
+      "bytes": 2215
+    }
+  },
+  "installedMatchesCapturedProducts": true
+}

@@ -1,0 +1,45 @@
+{
+  "builtAt": "2026-09-28T17:31:26.320939+00:00",
+  "app": "/private/tmp/atepdf-mac-wiqs9zkf/atepdf.app",
+  "identifier": "dev.atepdf.fresh.mac",
+  "buildLog": "/Users/shrey/Documents/ChatGPT/atepdf/.build/mac-build-7mc1Jl",
+  "signature": "local ad-hoc, development only",
+  "hardenedRuntime": false,
+  "strictSignatureVerification": "passed",
+  "entitlements": {
+    "com.apple.security.app-sandbox": true,
+    "com.apple.security.network.client": true,
+    "com.apple.security.files.user-selected.read-write": true
+  },
+  "networkEntitlements": "outgoing only; native planner permits paired loopback or pinned private TLS endpoints",
+  "nestedCodeObjects": 14,
+  "stagedFrameworkNormalizations": [
+    {
+      "framework": "React",
+      "identicalVersionCopies": true,
+      "builtBinarySha256BeforeSigning": "ad352f81fd4a5142e136791b9b0a00183edee21aab4dc078bea5363867cf5ff1"
+    },
+    {
+      "framework": "ReactNativeDependencies",
+      "identicalVersionCopies": true,
+      "builtBinarySha256BeforeSigning": "43bcab018ca428cecb60f55bd69fe3627c1de24f808e14fdce8dac004899bf01"
+    }
+  ],
+  "binarySha256": "63a7ad56d7c4c1ca3b4685733a510a9cc255fbc2f9a9c3c4c8ec1df7debd35cb",
+  "launchRequested": false,
+  "launchVerified": false,
+  "scope": "Local developer artifact; not notarized or distribution-ready.",
+  "sourceCommit": "afa15b5",
+  "sourceSha256": {
+    "apps/universal/App.tsx": "04f41c7ceca9e370a4f4fdc83ed2afee0963e11a14d99dc19e4c71ee85912bbf",
+    "apps/universal/src/platform/Preview.native.tsx": "f97964625220bc185e0e766485c572053e4964165c61787b7322f5d8c3d3be42"
+  },
+  "bundleSha256": "3e2af6d4c0533d328304068767298bcf4dda24bd3cdcf7b51ef0ea795c47ef86",
+  "interactiveWorkflowVerified": false,
+  "interactiveWorkflowStatus": "Owner deferred Mac UI checks. Final candidate not newly launched or visually accepted.",
+  "previousCandidateLaunch": {
+    "app": "/private/tmp/atepdf-mac-ii9ax_6l/atepdf.app",
+    "launchVerified": true,
+    "evidence": "Exact new app executable observed running with PID 77278; interactive UI blocked by locked Mac."
+  }
+}

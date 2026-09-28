@@ -1,0 +1,29 @@
+{
+  "recordedAt": "2026-09-28T17:03:38.200523+00:00",
+  "sourceBase": "63e5127",
+  "syntheticOnly": true,
+  "paidCalls": 0,
+  "privateNetworkListening": false,
+  "systemTrustChanges": false,
+  "swiftTransportResult": "passed",
+  "checks": [
+    "reject public origin and plain HTTP beta origin",
+    "reject expired pairing code and malformed pin",
+    "reject incorrect pin",
+    "reject correctly pinned wrong-host certificate before HTTP",
+    "reject correctly pinned expired leaf before HTTP",
+    "pair valid one-use code after bad-pin attempt",
+    "authenticated status and complete synthetic merge plan",
+    "disconnect removes native session"
+  ],
+  "sourceSha256": {
+    "apps/universal/modules/atepdf-planner/ios/AtepdfPlannerTransport.swift": "b40364d39c51cd8c1870f9adcb433c24e999b6e251fb8b69cb5c085d799c8bcd",
+    "tests/native/planner/tls-main.swift": "3f55121b4d3525e5ee06d4cc7d98c2b74a48ccab2c07c7c2b66979e0bc4bcdac",
+    "tests/native/planner/tls-server.ts": "1f65a1aeb01ffa57fe2bb02a69fc48a6feaa34cb0b4e07b735b96ef8396f04b8",
+    "packages/planner/src/native-beta.ts": "d455d6ca84db54e02255e5ede76d5f19355a30ab9780a23e785ef0ad2af93942",
+    "scripts/native/beta-tls.mjs": "97e98ca4f82b869e1fd8ed2b1f5f5eeed0d51ee5bd35a87d5bc4d57d2a8ccfae"
+  },
+  "certificateChain": "Distinct issuer/server subjects with SKI and AKI; issuer-only Node TLS and pinned Apple transport both passed.",
+  "productionCommit": "2cb0c83",
+  "loopbackTransportResult": "Passed current Swift pairing, private DTO, product answer, complete plan, redirect and body rejection, active/early cancellation, disconnect"
+}

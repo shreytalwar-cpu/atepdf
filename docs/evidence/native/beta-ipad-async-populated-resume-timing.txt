@@ -1,0 +1,1 @@
+secondsBetweenValidatedResultAndHome=3.5703059434890747

@@ -1,0 +1,35 @@
+[
+  {
+    "test": "AtepdfWorkflowUITests/testBundledMergePreviewRemovalUndoAndShareDismissal()",
+    "evidence": "docs/evidence/native/beta-iphone-accessibility-large-initial-final-screen.png",
+    "configurationName": "Test Scheme Action",
+    "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+    "deviceName": "iPhone 17 Pro",
+    "exportedFileName": "5AE39AA0-F5A0-48E8-B149-7119E98CA539.png",
+    "isAssociatedWithFailure": false,
+    "suggestedHumanReadableName": "final-screen_0_783428B4-4693-462F-B2FE-31C3D58C271C.png",
+    "timestamp": 1790615624.402
+  },
+  {
+    "test": "AtepdfWorkflowUITests/testBundledMergePreviewRemovalUndoAndShareDismissal()",
+    "evidence": "docs/evidence/native/beta-iphone-accessibility-large-initial-final-accessibility-hierarchy.txt",
+    "configurationName": "Test Scheme Action",
+    "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+    "deviceName": "iPhone 17 Pro",
+    "exportedFileName": "ECECE03C-B2BE-46A1-A420-3E0FB0DDDCD0.txt",
+    "isAssociatedWithFailure": false,
+    "suggestedHumanReadableName": "final-accessibility-hierarchy_0_D0EF9069-CD7F-468A-B451-8BDE540223A6.txt",
+    "timestamp": 1790615624.06
+  },
+  {
+    "test": "AtepdfWorkflowUITests/testBundledMergePreviewRemovalUndoAndShareDismissal()",
+    "evidence": "docs/evidence/native/beta-iphone-accessibility-large-initial-simulator-accessibility-configuration.txt",
+    "configurationName": "Test Scheme Action",
+    "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+    "deviceName": "iPhone 17 Pro",
+    "exportedFileName": "A1C2DEC5-78BB-4975-A87F-C25177A7E802.txt",
+    "isAssociatedWithFailure": false,
+    "suggestedHumanReadableName": "simulator-accessibility-configuration_0_DF6CA422-32E5-41E6-946A-365E10318AB1.txt",
+    "timestamp": 1790615593.116
+  }
+]

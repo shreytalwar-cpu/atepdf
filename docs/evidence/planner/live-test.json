@@ -1,6 +1,7 @@
 {
   "approvedMaximum": 2,
   "calls": 2,
+  "model": "gpt-6-luna",
   "completed": [
     "live model planned merge; local engine produced independently validated 3-page PDF",
     "live model planned physical page removal; local engine produced independently validated 2-page PDF",
@@ -13,17 +14,17 @@
       "body": null
     },
     {
-      "url": "http://localhost:3211/_expo/static/css/global-34df0a5c015a3c1116062c1bf7470e33.css",
+      "url": "http://localhost:3211/_expo/static/css/global-fc22ed4f54109f1bd93e502bcbea74b6.css",
       "method": "GET",
       "body": null
     },
     {
-      "url": "http://localhost:3211/_expo/static/css/preview-ce12e70606a94b58889bc540df19e4f7.css",
+      "url": "http://localhost:3211/_expo/static/css/preview-a1cf6af13c563d19213b9f25f6f9251d.css",
       "method": "GET",
       "body": null
     },
     {
-      "url": "http://localhost:3211/_expo/static/js/web/index-5216a5a0ecd66c42f8c63dc7726e7cf3.js",
+      "url": "http://localhost:3211/_expo/static/js/web/index-84b5a465b3206e50b4855c21b2f4b4ba.js",
       "method": "GET",
       "body": null
     },
@@ -58,7 +59,7 @@
       "body": null
     },
     {
-      "url": "http://localhost:3211/_expo/static/js/web/pdf-12ebbcdcae7bfd29686252393091bbb6.js",
+      "url": "http://localhost:3211/_expo/static/js/web/pdf-6c360a0f82f065a844b8bf2609a9c02e.js",
       "method": "GET",
       "body": null
     },
@@ -107,20 +108,20 @@
       "method": "POST",
       "body": {
         "schemaVersion": "1.0",
-        "requestId": "req_5333d1258cf844229078d5ce0b179066",
+        "requestId": "req_8853924fc6674001a4ecdfb99fc49519",
         "workspaceRevision": 1,
         "locale": "en-IN",
         "instruction": "Please combine both documents in their current order.",
         "files": [
           {
-            "ref": "file_3a4b7d1c05ae47a1a71b3553f018d79d",
+            "ref": "file_c17881e72aca4b5db1ede6ae54501fee",
             "kind": "pdf",
             "pageCount": 2,
             "sizeBytes": 3140,
             "encrypted": false
           },
           {
-            "ref": "file_c749c379d428492f86f9099707caa141",
+            "ref": "file_70599590a5a54c97bf17eb50640de430",
             "kind": "pdf",
             "pageCount": 1,
             "sizeBytes": 2062,
@@ -128,13 +129,13 @@
           }
         ],
         "selectionRefs": [
-          "file_3a4b7d1c05ae47a1a71b3553f018d79d",
-          "file_c749c379d428492f86f9099707caa141"
+          "file_c17881e72aca4b5db1ede6ae54501fee",
+          "file_70599590a5a54c97bf17eb50640de430"
         ],
         "focusedResultRef": null,
         "originalRefs": [
-          "file_3a4b7d1c05ae47a1a71b3553f018d79d",
-          "file_c749c379d428492f86f9099707caa141"
+          "file_c17881e72aca4b5db1ede6ae54501fee",
+          "file_70599590a5a54c97bf17eb50640de430"
         ],
         "previousActionIds": [],
         "capabilities": [
@@ -175,45 +176,50 @@
       "body": null
     },
     {
+      "url": "http://localhost:3211/api/planner/status",
+      "method": "GET",
+      "body": null
+    },
+    {
       "url": "http://localhost:3211/api/planner",
       "method": "POST",
       "body": {
         "schemaVersion": "1.0",
-        "requestId": "req_df13a188724a48dca658f134bb1c35b5",
+        "requestId": "req_0139ce89790c40b3b34c68d3eb618866",
         "workspaceRevision": 2,
         "locale": "en-IN",
         "instruction": "Please delete the second physical page from the current result.",
         "files": [
           {
-            "ref": "file_3a4b7d1c05ae47a1a71b3553f018d79d",
+            "ref": "file_c17881e72aca4b5db1ede6ae54501fee",
             "kind": "pdf",
             "pageCount": 2,
             "sizeBytes": 3140,
             "encrypted": false
           },
           {
-            "ref": "file_c749c379d428492f86f9099707caa141",
+            "ref": "file_70599590a5a54c97bf17eb50640de430",
             "kind": "pdf",
             "pageCount": 1,
             "sizeBytes": 2062,
             "encrypted": false
           },
           {
-            "ref": "out_dd1f6ed0196b42ffba97f94b304a66ba",
+            "ref": "out_65a22ca3657a4fdcb77989af695a8c88",
             "kind": "pdf",
             "pageCount": 3,
-            "sizeBytes": 3099,
+            "sizeBytes": 3100,
             "encrypted": false
           }
         ],
         "selectionRefs": [
-          "file_3a4b7d1c05ae47a1a71b3553f018d79d",
-          "file_c749c379d428492f86f9099707caa141"
+          "file_c17881e72aca4b5db1ede6ae54501fee",
+          "file_70599590a5a54c97bf17eb50640de430"
         ],
-        "focusedResultRef": "out_dd1f6ed0196b42ffba97f94b304a66ba",
+        "focusedResultRef": "out_65a22ca3657a4fdcb77989af695a8c88",
         "originalRefs": [
-          "file_3a4b7d1c05ae47a1a71b3553f018d79d",
-          "file_c749c379d428492f86f9099707caa141"
+          "file_c17881e72aca4b5db1ede6ae54501fee",
+          "file_70599590a5a54c97bf17eb50640de430"
         ],
         "previousActionIds": [],
         "capabilities": [
@@ -245,6 +251,11 @@
     },
     {
       "url": "http://localhost:3211/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "url": "http://localhost:3211/api/planner/status",
       "method": "GET",
       "body": null
     }

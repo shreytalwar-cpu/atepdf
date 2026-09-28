@@ -1,0 +1,22 @@
+{
+  "recordedAt": "2026-09-28T17:34:33.297265+00:00",
+  "result": "BUILD SUCCEEDED",
+  "sdk": "iphoneos27.0",
+  "platform": "iphoneos",
+  "bundleIdentifier": "dev.atepdf.fresh",
+  "app": "/Users/shrey/Documents/ChatGPT/atepdf/.build/device/Build/Products/Release-iphoneos/atepdf.app",
+  "signed": false,
+  "installed": false,
+  "physicalDeviceTested": false,
+  "binarySha256": "575db57aed5d347c75e07ab754578b6ff56b1c31b5ccbd08840f765adf2b97bd",
+  "bundleSha256": "6056fae6c7abc69bbd0347a348ab5d8f4706202359f9c040459f6ccb82242b90",
+  "infoPlistSha256": "cff42bff67f678432e769c6c1ba9e7ab631446bd685b7cf19d266ed6d5dcdd85",
+  "sourceSha256": {
+    "apps/universal/App.tsx": "04f41c7ceca9e370a4f4fdc83ed2afee0963e11a14d99dc19e4c71ee85912bbf",
+    "apps/universal/ios/atepdf/Info.plist": "14b35edc5b30ccc5c84ec59eded361b704e3e87664840f586ccdeb995bea97ea",
+    "apps/universal/modules/atepdf-planner/ios/AtepdfPlannerTransport.swift": "b40364d39c51cd8c1870f9adcb433c24e999b6e251fb8b69cb5c085d799c8bcd",
+    "apps/universal/src/platform/Preview.native.tsx": "f97964625220bc185e0e766485c572053e4964165c61787b7322f5d8c3d3be42"
+  },
+  "scope": "Unsigned arm64 device-target compile only. Installation requires separately approved development signing and the physical device.",
+  "sourceCommit": "afa15b5"
+}

@@ -1,0 +1,89 @@
+{
+  "capturedAt": "2026-09-28T17:38:26.820890+00:00",
+  "sourceHead": "afa15b553b7c2bf829874ed379625ee0325718d4",
+  "sourceSnapshot": "docs/evidence/native/beta-ipad-files-source.json",
+  "sourceChangesSinceBuildSnapshot": [],
+  "appArtifacts": {
+    "atepdf": {
+      "built": {
+        "path": "/Users/shrey/Library/Developer/XcodeBuildMCP/workspaces/atepdf-0efe6fe22454/test-products/test_sim_2026-09-28T17-34-21-045Z_pid12385_daff4812.xctestproducts/Binaries/0/Release-iphonesimulator/atepdf.app/atepdf",
+        "sha256": "793200f22ebcd18b0fd8f632619e18be1bb698f7909109a39a912d052542b71b",
+        "modifiedAt": "2026-09-28T16:45:40.734575+00:00"
+      },
+      "installed": {
+        "path": "/Users/shrey/Library/Developer/CoreSimulator/Devices/526CAD4B-89C5-49C1-8CEE-F65602AA0DEE/data/Containers/Bundle/Application/23177C7F-D64E-4FCE-9725-00EC7A911376/atepdf.app/atepdf",
+        "sha256": "793200f22ebcd18b0fd8f632619e18be1bb698f7909109a39a912d052542b71b",
+        "modifiedAt": "2026-09-28T16:45:40.734575+00:00"
+      },
+      "identical": true
+    },
+    "main.jsbundle": {
+      "built": {
+        "path": "/Users/shrey/Library/Developer/XcodeBuildMCP/workspaces/atepdf-0efe6fe22454/test-products/test_sim_2026-09-28T17-34-21-045Z_pid12385_daff4812.xctestproducts/Binaries/0/Release-iphonesimulator/atepdf.app/main.jsbundle",
+        "sha256": "d8b30eeb536f5cb359ab9479ad39fef7c66d3eda95e17ece5450473aae66e01e",
+        "modifiedAt": "2026-09-28T17:34:41.743314+00:00"
+      },
+      "installed": {
+        "path": "/Users/shrey/Library/Developer/CoreSimulator/Devices/526CAD4B-89C5-49C1-8CEE-F65602AA0DEE/data/Containers/Bundle/Application/23177C7F-D64E-4FCE-9725-00EC7A911376/atepdf.app/main.jsbundle",
+        "sha256": "d8b30eeb536f5cb359ab9479ad39fef7c66d3eda95e17ece5450473aae66e01e",
+        "modifiedAt": "2026-09-28T17:34:41.743314+00:00"
+      },
+      "identical": true
+    },
+    "Info.plist": {
+      "built": {
+        "path": "/Users/shrey/Library/Developer/XcodeBuildMCP/workspaces/atepdf-0efe6fe22454/test-products/test_sim_2026-09-28T17-34-21-045Z_pid12385_daff4812.xctestproducts/Binaries/0/Release-iphonesimulator/atepdf.app/Info.plist",
+        "sha256": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c",
+        "modifiedAt": "2026-09-28T16:45:55.508379+00:00"
+      },
+      "installed": {
+        "path": "/Users/shrey/Library/Developer/CoreSimulator/Devices/526CAD4B-89C5-49C1-8CEE-F65602AA0DEE/data/Containers/Bundle/Application/23177C7F-D64E-4FCE-9725-00EC7A911376/atepdf.app/Info.plist",
+        "sha256": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c",
+        "modifiedAt": "2026-09-28T16:45:55.508379+00:00"
+      },
+      "identical": true
+    }
+  },
+  "scope": "Actual unsigned final Release iPad iOS27 simulator app, final immutable test products and installed copy. Results individually recorded; not all beta scenarios pass.",
+  "finalTestResults": [
+    {
+      "test": "testSyntheticFilesPickerOCRAndCompression",
+      "status": "passed",
+      "summary": "docs/evidence/native/beta-ipad-files-chain-final-summary.json",
+      "durationSeconds": 66.314
+    },
+    {
+      "test": "testAsyncPopulatedLocalThreadBackgroundResumeWithoutPlanner",
+      "status": "passed",
+      "summary": "docs/evidence/native/beta-ipad-async-populated-resume-summary.json",
+      "durationSeconds": 23.134
+    }
+  ],
+  "buildLog": "/Users/shrey/Library/Developer/XcodeBuildMCP/workspaces/atepdf-0efe6fe22454/logs/test_sim_2026-09-28T17-34-21-045Z_pid12385_c78a5a46.log",
+  "testProductsPath": "/Users/shrey/Library/Developer/XcodeBuildMCP/workspaces/atepdf-0efe6fe22454/test-products/test_sim_2026-09-28T17-34-21-045Z_pid12385_daff4812.xctestproducts",
+  "finalSyntheticGatewayCounters": {
+    "provider": "synthetic-only",
+    "calls": 24,
+    "cancelled": 8,
+    "attribution": "Cumulative process counters include other root synthetic transport tests; not solely this UI suite."
+  },
+  "physicalDevice": false,
+  "paidCalls": 0,
+  "limits": [
+    "Paired Stop/background/post-resume interaction has unresolved repeated XCTest idle waits; cause unknown.",
+    "iPhone visible software-keyboard clearance remains unverified.",
+    "Native Reduce Motion-on, physical Wi-Fi/permissions/signing/install, and selected iOS Save/reopen destination are unverified."
+  ],
+  "cleanup": {
+    "textCategory": "large",
+    "readback": "large",
+    "orientation": "portrait (XCTest tearDown)",
+    "reduceMotionChanged": false,
+    "syntheticServersStopped": [
+      3212,
+      3448
+    ],
+    "ownerAndRootTLSServersUntouched": true,
+    "recordedAt": "2026-09-28T17:38:58.925796+00:00"
+  }
+}

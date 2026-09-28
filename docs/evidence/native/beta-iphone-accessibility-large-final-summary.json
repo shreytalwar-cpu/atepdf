@@ -1,0 +1,52 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+        "deviceName" : "iPhone 17 Pro",
+        "modelName" : "iPhone 17 Pro",
+        "osBuildNumber" : "24A434",
+        "osVersion" : "27.0",
+        "platform" : "iOS Simulator"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 1,
+      "passedTests" : 1,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "atepdfUI · Built with macOS 27.0",
+  "expectedFailures" : 0,
+  "failedTests" : 1,
+  "finishTime" : 1790616250.632,
+  "passedTests" : 1,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1790616188.378,
+  "statistics" : [
+
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "XCTAssertGreaterThan failed: (\"0.0\") is not greater than (\"100.0\") - A software keyboard must actually be visible for this layout check",
+      "targetName" : "atepdfUITests",
+      "testIdentifier" : 1,
+      "testIdentifierString" : "AtepdfWorkflowUITests/testBundledMergePreviewRemovalUndoAndShareDismissal()",
+      "testIdentifierURL" : "test://com.apple.xcode/atepdf/atepdfUITests/AtepdfWorkflowUITests/testBundledMergePreviewRemovalUndoAndShareDismissal",
+      "testName" : "testBundledMergePreviewRemovalUndoAndShareDismissal()"
+    }
+  ],
+  "title" : "Test - atepdfUI",
+  "topInsights" : [
+
+  ],
+  "totalTestCount" : 2
+}

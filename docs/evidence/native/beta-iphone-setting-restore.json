@@ -1,0 +1,20 @@
+{
+  "restoredAt": "2026-09-28T17:15:32.646937+00:00",
+  "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+  "originalUIKitCategory": "UICTContentSizeCategoryL",
+  "testedUIKitCategory": "UICTContentSizeCategoryAccessibilityL",
+  "restoredVia": "simctl ui <iPhone> content_size large",
+  "readback": "large",
+  "reduceMotionChanged": false,
+  "resultInterpretation": "Initial larger-text run timed out at sample button below Welcome scroll viewport; scrolling not attempted in captured test. This is a test reachability gap, not proof that the app control is inaccessible.",
+  "finalProbeRestore": {
+    "at": "2026-09-28T17:25:08.688074+00:00",
+    "readback": "large",
+    "reduceMotionChanged": false
+  },
+  "previewControlsProbeRestore": {
+    "at": "2026-09-28T17:32:09.311951+00:00",
+    "readback": "large",
+    "reduceMotionChanged": false
+  }
+}

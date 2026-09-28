@@ -1,0 +1,16 @@
+{
+  "recordedAt": "2026-09-28T17:05:07.083Z",
+  "model": "gpt-6-luna",
+  "accountModelLookupHttpStatus": 200,
+  "modelVisible": true,
+  "inferenceCalls": 2,
+  "allowanceChanged": true,
+  "localConnection": {
+    "connected": true,
+    "enabled": true,
+    "remaining": 18,
+    "model": "gpt-6-luna"
+  },
+  "approvalForAdditionalRequests": "Owner approved20 additional requests, including at most two synthetic checks",
+  "liveChecks": "Passed merge and physical page removal; saved result independently reopened A1/B1; no filenames/content in planner DTO"
+}

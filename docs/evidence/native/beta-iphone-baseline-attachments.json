@@ -1,0 +1,156 @@
+[
+  {
+    "test": "AtepdfWorkflowUITests/testBundledMergePreviewRemovalUndoAndShareDismissal()",
+    "evidence": "docs/evidence/native/beta-iphone-baseline-workflow-final-screen.png",
+    "configurationName": "Test Scheme Action",
+    "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+    "deviceName": "iPhone 17 Pro",
+    "exportedFileName": "7BC147F3-8C50-4B9C-BD5D-7FDFFA20009E.png",
+    "isAssociatedWithFailure": false,
+    "suggestedHumanReadableName": "final-screen_0_91D9F282-9DB5-4E3C-89B1-3B64286EE990.png",
+    "timestamp": 1790615425.155
+  },
+  {
+    "test": "AtepdfWorkflowUITests/testBundledMergePreviewRemovalUndoAndShareDismissal()",
+    "evidence": "docs/evidence/native/beta-iphone-baseline-workflow-final-accessibility-hierarchy.txt",
+    "configurationName": "Test Scheme Action",
+    "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+    "deviceName": "iPhone 17 Pro",
+    "exportedFileName": "7D992C76-34EC-4F6A-B1CD-D2800DDD6BF1.txt",
+    "isAssociatedWithFailure": false,
+    "suggestedHumanReadableName": "final-accessibility-hierarchy_0_CF962E93-6D33-4A70-9849-7ECF5D9B303A.txt",
+    "timestamp": 1790615425.02
+  },
+  {
+    "test": "AtepdfWorkflowUITests/testBundledMergePreviewRemovalUndoAndShareDismissal()",
+    "evidence": "docs/evidence/native/beta-iphone-baseline-workflow-06-share-dismissed-with-honest-receipt.png",
+    "configurationName": "Test Scheme Action",
+    "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+    "deviceName": "iPhone 17 Pro",
+    "exportedFileName": "40F8A4E9-B01D-447C-BF2E-10DFA869F2A8.png",
+    "isAssociatedWithFailure": false,
+    "suggestedHumanReadableName": "06-share-dismissed-with-honest-receipt_0_1CBF01B1-7021-4BD2-B37C-5A8EB38E2027.png",
+    "timestamp": 1790615424.12
+  },
+  {
+    "test": "AtepdfWorkflowUITests/testBundledMergePreviewRemovalUndoAndShareDismissal()",
+    "evidence": "docs/evidence/native/beta-iphone-baseline-workflow-05-undo-restores-three-pages.png",
+    "configurationName": "Test Scheme Action",
+    "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+    "deviceName": "iPhone 17 Pro",
+    "exportedFileName": "A294F061-D454-4568-B38A-5ED573BA669F.png",
+    "isAssociatedWithFailure": false,
+    "suggestedHumanReadableName": "05-undo-restores-three-pages_0_9FE1B689-202D-4389-920C-22AD0904F2DE.png",
+    "timestamp": 1790615409.154
+  },
+  {
+    "test": "AtepdfWorkflowUITests/testBundledMergePreviewRemovalUndoAndShareDismissal()",
+    "evidence": "docs/evidence/native/beta-iphone-baseline-workflow-04-follow-up-two-pages.png",
+    "configurationName": "Test Scheme Action",
+    "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+    "deviceName": "iPhone 17 Pro",
+    "exportedFileName": "716B62D4-2508-4666-AF7B-DA1AE99C26B3.png",
+    "isAssociatedWithFailure": false,
+    "suggestedHumanReadableName": "04-follow-up-two-pages_0_866339BA-7DA7-46FB-972C-07BE0668CB3D.png",
+    "timestamp": 1790615397.741
+  },
+  {
+    "test": "AtepdfWorkflowUITests/testBundledMergePreviewRemovalUndoAndShareDismissal()",
+    "evidence": "docs/evidence/native/beta-iphone-baseline-workflow-04-command-ready.png",
+    "configurationName": "Test Scheme Action",
+    "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+    "deviceName": "iPhone 17 Pro",
+    "exportedFileName": "517FF224-17AA-451C-B1C2-791BF8F1F649.png",
+    "isAssociatedWithFailure": false,
+    "suggestedHumanReadableName": "04-command-ready_0_EC9EFB31-08C8-4710-826A-37C877D76396.png",
+    "timestamp": 1790615392.14
+  },
+  {
+    "test": "AtepdfWorkflowUITests/testBundledMergePreviewRemovalUndoAndShareDismissal()",
+    "evidence": "docs/evidence/native/beta-iphone-baseline-workflow-03-inline-preview-second-page.png",
+    "configurationName": "Test Scheme Action",
+    "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+    "deviceName": "iPhone 17 Pro",
+    "exportedFileName": "05F87F05-E74E-4DF5-ADFE-9FDDD7307770.png",
+    "isAssociatedWithFailure": false,
+    "suggestedHumanReadableName": "03-inline-preview-second-page_0_14855E53-6759-4793-9B93-8C6FA726504C.png",
+    "timestamp": 1790615376.193
+  },
+  {
+    "test": "AtepdfWorkflowUITests/testBundledMergePreviewRemovalUndoAndShareDismissal()",
+    "evidence": "docs/evidence/native/beta-iphone-baseline-workflow-02-merged-three-pages.png",
+    "configurationName": "Test Scheme Action",
+    "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+    "deviceName": "iPhone 17 Pro",
+    "exportedFileName": "968409B2-FE2F-4962-A632-C019079A50DC.png",
+    "isAssociatedWithFailure": false,
+    "suggestedHumanReadableName": "02-merged-three-pages_0_2D16BBA7-1C7D-4768-BD22-C33C2AD3C916.png",
+    "timestamp": 1790615359.162
+  },
+  {
+    "test": "AtepdfWorkflowUITests/testBundledMergePreviewRemovalUndoAndShareDismissal()",
+    "evidence": "docs/evidence/native/beta-iphone-baseline-workflow-01-bundled-originals.png",
+    "configurationName": "Test Scheme Action",
+    "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+    "deviceName": "iPhone 17 Pro",
+    "exportedFileName": "BA15B092-5B71-4D23-84A7-EBF85EC34A46.png",
+    "isAssociatedWithFailure": false,
+    "suggestedHumanReadableName": "01-bundled-originals_0_EDBD221E-7CDD-4696-AE0A-3F0191E26CA5.png",
+    "timestamp": 1790615356.28
+  },
+  {
+    "test": "AtepdfWorkflowUITests/testBundledMergePreviewRemovalUndoAndShareDismissal()",
+    "evidence": "docs/evidence/native/beta-iphone-baseline-workflow-simulator-accessibility-configuration.txt",
+    "configurationName": "Test Scheme Action",
+    "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+    "deviceName": "iPhone 17 Pro",
+    "exportedFileName": "AB451D7D-106C-4F9D-93AA-ABB5092C2859.txt",
+    "isAssociatedWithFailure": false,
+    "suggestedHumanReadableName": "simulator-accessibility-configuration_0_C67572F1-8760-4B69-930D-638B0BCB4D06.txt",
+    "timestamp": 1790615353.318
+  },
+  {
+    "test": "AtepdfWorkflowUITests/testNativeComposerPreservesFastTypingAndBackspace()",
+    "evidence": "docs/evidence/native/beta-iphone-baseline-typing-final-screen.png",
+    "configurationName": "Test Scheme Action",
+    "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+    "deviceName": "iPhone 17 Pro",
+    "exportedFileName": "53DC8916-A08B-4D2C-B0D3-605928975D0B.png",
+    "isAssociatedWithFailure": false,
+    "suggestedHumanReadableName": "final-screen_0_2A26E38B-E73B-49B5-8426-A22240E7B632.png",
+    "timestamp": 1790615449.081
+  },
+  {
+    "test": "AtepdfWorkflowUITests/testNativeComposerPreservesFastTypingAndBackspace()",
+    "evidence": "docs/evidence/native/beta-iphone-baseline-typing-final-accessibility-hierarchy.txt",
+    "configurationName": "Test Scheme Action",
+    "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+    "deviceName": "iPhone 17 Pro",
+    "exportedFileName": "FD40D898-F8E3-46B3-A3FD-AEA88B3ACA55.txt",
+    "isAssociatedWithFailure": false,
+    "suggestedHumanReadableName": "final-accessibility-hierarchy_0_EF09899F-C0A0-4B17-8570-BF14D313E175.txt",
+    "timestamp": 1790615448.909
+  },
+  {
+    "test": "AtepdfWorkflowUITests/testNativeComposerPreservesFastTypingAndBackspace()",
+    "evidence": "docs/evidence/native/beta-iphone-baseline-typing-native-exact-fast-input-and-backspace.png",
+    "configurationName": "Test Scheme Action",
+    "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+    "deviceName": "iPhone 17 Pro",
+    "exportedFileName": "13F4BD04-2A5B-459A-B582-C413ED33171C.png",
+    "isAssociatedWithFailure": false,
+    "suggestedHumanReadableName": "native-exact-fast-input-and-backspace_0_06BB5934-BFCB-41D8-A6E2-61A9FC2830B7.png",
+    "timestamp": 1790615443.603
+  },
+  {
+    "test": "AtepdfWorkflowUITests/testNativeComposerPreservesFastTypingAndBackspace()",
+    "evidence": "docs/evidence/native/beta-iphone-baseline-typing-simulator-accessibility-configuration.txt",
+    "configurationName": "Test Scheme Action",
+    "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+    "deviceName": "iPhone 17 Pro",
+    "exportedFileName": "921BE63E-B7D1-48A0-BAD5-3DF2AE79E998.txt",
+    "isAssociatedWithFailure": false,
+    "suggestedHumanReadableName": "simulator-accessibility-configuration_0_12F1182E-385B-45BB-AFB6-107489521B87.txt",
+    "timestamp": 1790615433.041
+  }
+]

@@ -1,0 +1,87 @@
+{
+  "recordedAt": "2026-09-28T17:32:22.049825+00:00",
+  "sourceCommit": "afa15b5",
+  "webBuild": {
+    "expoExport": "passed",
+    "nextProductionBuild": "passed",
+    "log": ".build/beta-web-build.log"
+  },
+  "regressions": {
+    "passed": 72,
+    "failed": 0,
+    "skipped": 0,
+    "log": ".build/beta-final-regressions.log"
+  },
+  "typescript": {
+    "web": "passed",
+    "nativeShared": "passed"
+  },
+  "browser": {
+    "host": "new detached beta launcher at localhost3211",
+    "passed": 19,
+    "failed": 0,
+    "paidCalls": 0,
+    "result": "docs/evidence/browser-results-expo.json",
+    "log": ".build/beta-launcher-browser-tests.log",
+    "durationSeconds": 53.7
+  },
+  "launcher": {
+    "passed": 15,
+    "failed": 0,
+    "evidence": "docs/evidence/native/beta-launcher.json"
+  },
+  "liveModel": {
+    "model": "gpt-6-luna",
+    "ownerApprovedRequests": 20,
+    "automatedMaximum": 2,
+    "calls": 2,
+    "completed": [
+      "merge",
+      "physical page removal",
+      "independent A1/B1 saved-output check"
+    ],
+    "remainingAtCheck": 18,
+    "evidence": "docs/evidence/planner/live-test.json"
+  },
+  "physicalDeviceTests": false,
+  "productionPublication": false,
+  "oldSourceReadOrModifiedThisSlice": false,
+  "sourceSha256": {
+    "apps/universal/App.tsx": "04f41c7ceca9e370a4f4fdc83ed2afee0963e11a14d99dc19e4c71ee85912bbf",
+    "apps/universal/modules/atepdf-planner/ios/AtepdfPlannerTransport.swift": "b40364d39c51cd8c1870f9adcb433c24e999b6e251fb8b69cb5c085d799c8bcd",
+    "packages/planner/src/native-beta.ts": "d455d6ca84db54e02255e5ede76d5f19355a30ab9780a23e785ef0ad2af93942",
+    "scripts/native/beta-tls.mjs": "97e98ca4f82b869e1fd8ed2b1f5f5eeed0d51ee5bd35a87d5bc4d57d2a8ccfae",
+    "tests/live/planner.live.ts": "edd3d625df89e4ddf9eb71e88a68d8cf6b2f9997a517d3dd724fa1678e78022e",
+    "apps/universal/src/platform/Preview.native.tsx": "f97964625220bc185e0e766485c572053e4964165c61787b7322f5d8c3d3be42"
+  },
+  "mac": "docs/evidence/native/beta-mac-build.json",
+  "unsignedIPhoneCompile": "docs/evidence/native/beta-device-compile.json",
+  "nativeUIReports": [
+    "docs/BETA_APPLE_QA.md",
+    "docs/BETA_IPHONE_QA.md"
+  ],
+  "nativeUIReportsHaveSeparateFailuresAndGaps": true,
+  "nativeFilesChain": {
+    "sourceCommit": "afa15b5",
+    "passed": 1,
+    "durationSeconds": 66.314,
+    "steps": [
+      "actual Safari fixture download",
+      "system Files picker and Open",
+      "native import",
+      "local merge",
+      "Vision OCR",
+      "compression"
+    ],
+    "outputPages": 4,
+    "independentDestinationSaveVerified": false,
+    "evidence": "docs/evidence/native/beta-ipad-files-chain-final-summary.json"
+  },
+  "knownGaps": [
+    "Mac UI checks deferred by owner",
+    "Physical signing/install and acceptance tomorrow",
+    "iPhone visible software-keyboard geometry unavailable in current simulator configuration",
+    "Paired Stop/background XCTest waits remain unresolved; cancellation and retained result observed but later interaction not fully accepted",
+    "Actual purchase-provider sandbox not implemented"
+  ]
+}

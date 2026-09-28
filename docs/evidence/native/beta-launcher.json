@@ -1,0 +1,171 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-09-28T17:02:45.932127+00:00",
+  "repository": "/Users/shrey/Documents/ChatGPT/atepdf",
+  "baselineCommit": "63e5127c663588b6b1f29c56eec19ced5c25230b",
+  "sourceState": "Uncommitted launcher slice on baseline; source hashes identify tested files.",
+  "scope": "Local internal beta launcher and Mac artifact registry. This is not an application build, physical-device acceptance, or public distribution proof.",
+  "sourceFiles": [
+    {
+      "path": "scripts/beta/Open atepdf Mac.command",
+      "sha256": "4e09f5c7f88456e95fee7e357db26f03788ef217e15f0d979a280cae691124e1"
+    },
+    {
+      "path": "scripts/beta/Start atepdf.command",
+      "sha256": "5ba639450c08bc78c7b376ce4ed5b7cfbf1d2b0e5c7752440aae8f1eaf8cc6c7"
+    },
+    {
+      "path": "scripts/beta/Stop atepdf.command",
+      "sha256": "3df8eddb789ceb26be77af79d651ad100edf48247fb0d7bd35d63e7f571d888f"
+    },
+    {
+      "path": "scripts/beta/beta.mjs",
+      "sha256": "cd779106b05b83237218e267cf0e379820a4e34977d158bcdb0fdc75a2bbdf50"
+    },
+    {
+      "path": "scripts/beta/beta.test.mjs",
+      "sha256": "a02fafe1679b67099a67ff83a9d6f28dacb29f06a775fe5b666b5da63ae62fd3"
+    },
+    {
+      "path": "scripts/beta/files.mjs",
+      "sha256": "85a62769c98f7fe7cef7c4ad00289a0e7d4ba04f688c2a0ee52bc154c875cfbc"
+    },
+    {
+      "path": "scripts/beta/mac.mjs",
+      "sha256": "f53f256f069dffac8112b631b8ad545f0c2bdb47e8c169d1e22abd704715ddac"
+    },
+    {
+      "path": "scripts/beta/server.mjs",
+      "sha256": "adb53b79b1b6fb02c30f3c3a5b12a80baac8ae241b5284db42a56fec955cdfa0"
+    },
+    {
+      "path": "scripts/beta/web.mjs",
+      "sha256": "8514553b9582e42a667467d9f9afd4312ec62977617eccd49f845ed61cb6f395"
+    },
+    {
+      "path": "docs/INTERNAL_BETA.md",
+      "sha256": "ba4a6adcc725592faf8c9f9be5d4edc286ef910ef4ba9cd0911b7d54a10ab4a3"
+    }
+  ],
+  "sourceAggregateSha256": "622d6de040e1200fd38e14e28ea29a87553a4b02bb68db57bb6ebab28575c7b5",
+  "tests": {
+    "command": "node --test scripts/beta/beta.test.mjs",
+    "passed": 15,
+    "failed": 0,
+    "skipped": 0,
+    "durationMs": 3213.307584,
+    "configuration": "Fresh synthetic temporary repositories, actual built planner gateway with disabled synthetic settings, IPv4/IPv6 loopback sockets. Successful companion integration uses the real TLS helper and native gateway on browser3210 and TLS3443; TLS-failure case remains a synthetic failing adapter.",
+    "coverage": [
+      "Detached launcher caller exits while owned server remains usable",
+      "Repeat start reuses healthy owned process",
+      "Signed request and response ownership challenge; token never transmitted",
+      "Cross-origin and malformed non-ASCII management headers rejected; server remains alive",
+      "Unrelated IPv4 and IPv6-only port owners preserved",
+      "Reassigned-port impostor never receives stop or token",
+      "Local-only mode cannot save a key or reserve a paid call",
+      "Normal mode preserves synthetic existing key and request allowance",
+      "Static symlink escape and foreign Host rejection",
+      "Changed browser export fails closed",
+      "Unsafe private directories and substituted state files rejected",
+      "Invalid/public/wildcard device addresses rejected",
+      "Missing build reported without installation",
+      "Failed TLS companion startup closes all newly created listeners",
+      "Real wrapped pairing over CA-only trusted HTTPS; anonymous disabled status and restricted routes; complete listener shutdown; fresh private certificates across restart preserving earlier certificates"
+    ],
+    "networkScope": "Loopback only. No LAN listener, external request, or paid planning call from this suite.",
+    "permission": "Initial filesystem sandbox denied loopback bind; isolated suite then ran with approved socket permission."
+  },
+  "otherChecks": [
+    "JavaScript syntax checks passed",
+    "All three macOS shortcut shell syntax checks passed",
+    "git diff --check passed",
+    "Existing Mac artifact register and status passed strict signature, independent identifier, sandbox entitlement, binary and bundle hash checks"
+  ],
+  "resolvedFindings": [
+    "Management idle-socket shutdown race: fresh connections and flush-before-close",
+    "Non-ASCII HMAC byte-length exception: exact lowercase hexadecimal guards and regression",
+    "IPv6-only existing server collision: both loopback address families must bind before readiness",
+    "CA-only HTTPS initially rejected identical issuer/leaf names without key identifiers: helper now generates distinct subjects with SKI/AKI; strict unchanged integration passed"
+  ],
+  "macRegistrationObserved": {
+    "app": "/private/tmp/atepdf-mac-pqm62igk/atepdf.app",
+    "builtAt": "2026-09-28T13:44:30.195618+00:00",
+    "binarySha256": "8eeb258a7aa26bd2d3dfc7f07d29e6cb8710786ab3649ba1ac91f4d78cbf4508",
+    "bundleSha256": "7c583729a9981dca45e95069cd316d57733fae88f40ca381ea5ed4e07425d485",
+    "scope": "Read-only verification of earlier staged artifact. Parent subsequently registered ii9ax_6l; current pointer is .build/beta/mac.json. This record does not assert a launch or independently verify that later artifact."
+  },
+  "boundaries": {
+    "oldAttenloSourceAccessed": false,
+    "existingServersStartedOrStoppedByThisSlice": false,
+    "macBuildOrLaunchByThisSlice": false,
+    "paidCalls": 0,
+    "keyOrAllowanceChanged": false,
+    "productionIdentitiesChanged": false,
+    "publication": false,
+    "ownerCodexFilesTouched": false
+  },
+  "remaining": [
+    "Parent-owned normal browser3211 transition after browser QA",
+    "Parent-owned current Mac build/launch acceptance",
+    "Physical iPhone/iPad installation and private Wi-Fi pairing tomorrow",
+    "Production signing, notarization/distribution and live billing remain outside this local launcher"
+  ],
+  "nextExecutableTask": "Parent: start the normal owned browser beta after transitioning only its known older server, confirm safe planner status without resetting allowance, and register/open the final Mac artifact.",
+  "integrationDependencyHashes": [
+    {
+      "path": "scripts/native/beta-tls.mjs",
+      "sha256": "97e98ca4f82b869e1fd8ed2b1f5f5eeed0d51ee5bd35a87d5bc4d57d2a8ccfae"
+    },
+    {
+      "path": "packages/planner/src/native-beta.ts",
+      "sha256": "d455d6ca84db54e02255e5ede76d5f19355a30ab9780a23e785ef0ad2af93942"
+    },
+    {
+      "path": "packages/planner/src/gateway.ts",
+      "sha256": "c194ad3f50676250c05d72acea7d739c3fc2610fe35bebd33033d05780cf380c"
+    },
+    {
+      "path": ".build/planner/gateway.mjs",
+      "sha256": "acdb4c34b50e0ca57d28d7cdf0398906faf375c3bfc4f18f4533a2ab274ae0a5"
+    },
+    {
+      "path": ".build/planner/native-beta.mjs",
+      "sha256": "d0b46d42380d2ea41f5c3816c7395a784bc955ced5f9108e46b43978a131bb72"
+    },
+    {
+      "path": ".build/planner/local-config.mjs",
+      "sha256": "7cfc068234e72193f2ccbbff0beb18a80f1ba9bd8af9e1937015c2f7533c21da"
+    }
+  ],
+  "successfulTLSIntegration": {
+    "browserOrigin": "http://localhost:3210",
+    "nativeOrigin": "https://127.0.0.1:3443",
+    "setup": "Actual helper and built gateway, isolated synthetic key, enabled:false, approvedRequests:0",
+    "trust": "Only generated CA supplied; rejectUnauthorized:true; no system trust changes or verification bypass",
+    "wrappedPairingIssued": true,
+    "certificateFingerprintMatched": true,
+    "pairingExchangedOverHTTPS": true,
+    "nativeStatusFields": [
+      "connected",
+      "enabled",
+      "model",
+      "remaining"
+    ],
+    "statusEnabled": false,
+    "nativePlanningRejectedWithoutAllowance": true,
+    "fileAndSetupRoutesRejected403": true,
+    "browserContextRejected403": true,
+    "allIPv4IPv6AndTLSListenersClosed": true,
+    "repeatedStartReusesSameOwnedCertificate": true,
+    "restartCreatesDifferentCertificateInFreshPrivateDirectory": true,
+    "earlierCertificateAndKeyMetadataUnchanged": true,
+    "owner3211ConfigurationAccessed": false,
+    "modelCalls": 0,
+    "physicalDeviceAcceptance": false
+  },
+  "postTestDocumentationUpdate": {
+    "path": "docs/INTERNAL_BETA.md",
+    "reason": "Owner approved 20 additional requests; two live checks passed and 18 remained. Runtime launcher sources did not change.",
+    "sha256": "4988f21cb029abf100f346b508bbe13145de562025cbeb3ac2c97365251b0ce3"
+  }
+}

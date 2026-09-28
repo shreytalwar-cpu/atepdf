@@ -1,0 +1,57 @@
+[
+  {
+    "test": "AtepdfWorkflowUITests/testPreviewToolbarControlsRemainReachableAtCurrentTextSize()",
+    "evidence": "docs/evidence/native/beta-iphone-preview-controls-final-screen.png",
+    "configurationName": "Test Scheme Action",
+    "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+    "deviceName": "iPhone 17 Pro",
+    "exportedFileName": "79AA9A3F-FDAA-41EA-89F2-DB9A9BBCBBD7.png",
+    "isAssociatedWithFailure": false,
+    "suggestedHumanReadableName": "final-screen_0_5BAB642E-DE40-48A8-BFCB-3F0872BF8AEC.png",
+    "timestamp": 1790616672.979
+  },
+  {
+    "test": "AtepdfWorkflowUITests/testPreviewToolbarControlsRemainReachableAtCurrentTextSize()",
+    "evidence": "docs/evidence/native/beta-iphone-preview-controls-final-accessibility-hierarchy.txt",
+    "configurationName": "Test Scheme Action",
+    "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+    "deviceName": "iPhone 17 Pro",
+    "exportedFileName": "69D2E6DE-B34F-47BE-B82F-E93F155448A2.txt",
+    "isAssociatedWithFailure": false,
+    "suggestedHumanReadableName": "final-accessibility-hierarchy_0_E8244EFE-4953-4C73-B3B8-A0F3719A94B2.txt",
+    "timestamp": 1790616672.842
+  },
+  {
+    "test": "AtepdfWorkflowUITests/testPreviewToolbarControlsRemainReachableAtCurrentTextSize()",
+    "evidence": "docs/evidence/native/beta-iphone-preview-controls-native-preview-controls-at-current-text-size.png",
+    "configurationName": "Test Scheme Action",
+    "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+    "deviceName": "iPhone 17 Pro",
+    "exportedFileName": "BEC18290-71C3-4C85-B239-D6DAA4358C48.png",
+    "isAssociatedWithFailure": false,
+    "suggestedHumanReadableName": "native-preview-controls-at-current-text-size_0_5D03D8CB-FDDE-4D80-9D63-824A877047DB.png",
+    "timestamp": 1790616667.126
+  },
+  {
+    "test": "AtepdfWorkflowUITests/testPreviewToolbarControlsRemainReachableAtCurrentTextSize()",
+    "evidence": "docs/evidence/native/beta-iphone-preview-controls-preview-controls-at-current-text-size.txt",
+    "configurationName": "Test Scheme Action",
+    "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+    "deviceName": "iPhone 17 Pro",
+    "exportedFileName": "4A86D85F-BFFD-45D6-B422-C04E0FA998F3.txt",
+    "isAssociatedWithFailure": false,
+    "suggestedHumanReadableName": "preview-controls-at-current-text-size_0_F23F897B-09FC-4F06-A866-C1D0A8F27DF3.txt",
+    "timestamp": 1790616666.927
+  },
+  {
+    "test": "AtepdfWorkflowUITests/testPreviewToolbarControlsRemainReachableAtCurrentTextSize()",
+    "evidence": "docs/evidence/native/beta-iphone-preview-controls-simulator-accessibility-configuration.txt",
+    "configurationName": "Test Scheme Action",
+    "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+    "deviceName": "iPhone 17 Pro",
+    "exportedFileName": "792C3F2D-494B-48A4-BF7C-166406E423AA.txt",
+    "isAssociatedWithFailure": false,
+    "suggestedHumanReadableName": "simulator-accessibility-configuration_0_A8458DB7-5C50-45CE-A93A-31BED20BB79C.txt",
+    "timestamp": 1790616618.435
+  }
+]

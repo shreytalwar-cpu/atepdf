@@ -13,7 +13,7 @@
       "method": "GET"
     },
     {
-      "url": "http://localhost:3211/_expo/static/css/global-fc22ed4f54109f1bd93e502bcbea74b6.css",
+      "url": "http://localhost:3211/_expo/static/css/global-ee2824bfe5e0dfde670f2b2b3636f997.css",
       "method": "GET"
     },
     {
@@ -21,7 +21,7 @@
       "method": "GET"
     },
     {
-      "url": "http://localhost:3211/_expo/static/js/web/index-d27dcb8a1b3809f8d9e6d72947ab3a0b.js",
+      "url": "http://localhost:3211/_expo/static/js/web/index-5de477d3eea88c1ff3981dd6340825aa.js",
       "method": "GET"
     },
     {
@@ -41,7 +41,7 @@
       "method": "GET"
     },
     {
-      "url": "http://localhost:3211/_expo/static/js/web/pdf-35b9391219db1642c441508b32ac7373.js",
+      "url": "http://localhost:3211/_expo/static/js/web/pdf-6c360a0f82f065a844b8bf2609a9c02e.js",
       "method": "GET"
     },
     {
@@ -65,23 +65,7 @@
       "method": "GET"
     },
     {
-      "url": "http://localhost:3211/engines/atepdf.worker.js",
-      "method": "GET"
-    },
-    {
-      "url": "http://localhost:3211/engines/pdf.worker.min.mjs",
-      "method": "GET"
-    },
-    {
-      "url": "http://localhost:3211/engines/standard_fonts/LiberationSans-Regular.ttf",
-      "method": "GET"
-    },
-    {
-      "url": "http://localhost:3211/engines/pdf.worker.min.mjs",
-      "method": "GET"
-    },
-    {
-      "url": "http://localhost:3211/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "url": "http://localhost:3211/api/planner/status",
       "method": "GET"
     },
     {
@@ -94,6 +78,38 @@
     },
     {
       "url": "http://localhost:3211/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/api/planner/status",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/engines/pdf.worker.min.mjs",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/api/planner/status",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/engines/atepdf.worker.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/engines/pdf.worker.min.mjs",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/api/planner/status",
       "method": "GET"
     }
   ]

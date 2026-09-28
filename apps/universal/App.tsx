@@ -257,7 +257,7 @@ function Welcome(){
 function AddFiles(){const {busy,pick}=useWorkspaceContext();return <Pressable accessibilityRole="button" accessibilityLabel="Add files" disabled={busy} onPress={()=>void pick()} className="size-11 items-center justify-center rounded-full active:bg-muted"><Plus size={21} color="#637089"/></Pressable>;}
 function Footer(){
   const w=useWorkspaceContext();
-  const {width,height}=useWindowDimensions();
+  const {width,height,fontScale}=useWindowDimensions();
   const [keyboardVisible,setKeyboardVisible]=useState(()=>Platform.OS!=='web'&&Keyboard.isVisible());
   useEffect(()=>{
     if(Platform.OS==='web')return;
@@ -270,10 +270,18 @@ function Footer(){
     if(Platform.OS!=='web')setKeyboardVisible(Keyboard.isVisible());
   },[width,height]);
   // The thread already moves the composer above the keyboard. Give its
-  // conversation the secondary controls' space in a short landscape viewport.
-  if(Platform.OS!=='web'&&width>height&&keyboardVisible)return null;
+  // conversation the secondary controls' space in landscape or at larger text.
+  const largeText=Platform.OS!=='web'&&fontScale>=1.3;
+  const scrollActions=largeText&&width<600;
+  if(Platform.OS!=='web'&&keyboardVisible&&(width>height||largeText))return null;
+  const actions=[{title:'Merge',type:'merge',prompt:'Merge my PDFs.',icon:Copy,color:'#aa405e'},{title:'Compress',type:'compress',prompt:'Compress the current PDF.',icon:ArrowDownToLine,color:'#26715c'},{title:'Make searchable',type:'ocr',prompt:'Make this PDF searchable.',icon:ScanText,color:'#7460b0'}].map(item=>{
+    const disabled=w.busy||!nativeEngineReady||(item.type==='ocr'&&!ocrAvailable);
+    return <Pressable key={item.title} accessibilityRole="button" disabled={disabled} aria-disabled={disabled} onPress={()=>w.action(item.type as Action,item.prompt)} className={`atepdf-button min-h-11 ${scrollActions?'flex-none':'flex-1'} ${Platform.OS==='web'?'sm:flex-none':''} flex-row items-center justify-center gap-1.5 rounded-full border border-border px-2 sm:px-4 active:bg-muted ${disabled?'opacity-40':''}`}>
+      <item.icon size={16} color={item.color}/><Text numberOfLines={scrollActions?1:undefined} className={`${scrollActions?'':'flex-shrink'} text-[11px] sm:text-xs text-foreground`}>{item.title}</Text>
+    </Pressable>;
+  });
   return <View className="gap-2 pb-1">
-    <View className="flex-row justify-center gap-2">{[{title:'Merge',type:'merge',prompt:'Merge my PDFs.',icon:Copy,color:'#aa405e'},{title:'Compress',type:'compress',prompt:'Compress the current PDF.',icon:ArrowDownToLine,color:'#26715c'},{title:'Make searchable',type:'ocr',prompt:'Make this PDF searchable.',icon:ScanText,color:'#7460b0'}].map(item=>{const disabled=w.busy||!nativeEngineReady||(item.type==='ocr'&&!ocrAvailable);return <Pressable key={item.title} accessibilityRole="button" disabled={disabled} aria-disabled={disabled} onPress={()=>w.action(item.type as Action,item.prompt)} className={`atepdf-button min-h-11 flex-1 ${Platform.OS==='web'?'sm:flex-none':''} flex-row items-center justify-center gap-1.5 rounded-full border border-border px-2 sm:px-4 active:bg-muted ${disabled?'opacity-40':''}`}><item.icon size={16} color={item.color}/><Text className="flex-shrink text-[11px] sm:text-xs text-foreground">{item.title}</Text></Pressable>;})}</View>
+    {scrollActions?<ScrollView horizontal style={{flexGrow:0}} showsHorizontalScrollIndicator={false} contentContainerStyle={{gap:8}}>{actions}</ScrollView>:<View className="flex-row justify-center gap-2">{actions}</View>}
     <View className="min-h-7 flex-row items-center justify-center gap-1.5">{w.focus&&<FileText size={12} color="#5d6980"/>}<Text className="text-center text-xs text-muted-foreground">{w.focus?`Current result · ${w.focus.pageCount} pages`:w.entries.length?`${w.store.originals.length} originals in this chat`:'Your files stay on this device'}</Text></View>
   </View>;
 }

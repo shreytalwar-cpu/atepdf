@@ -14,10 +14,11 @@ function PreviewButton({label,icon,onPress,disabled=false}:{label:string;icon:Lu
 }
 
 export default function Preview({bytes,count,onClose}:{bytes:Uint8Array;count:number;onClose:()=>void}){
-  const {height:windowHeight}=useWindowDimensions();
+  const {height:windowHeight,fontScale}=useWindowDimensions();
   const [page,setPage]=useState(1),[image,setImage]=useState<{uri:string;width:number;height:number}|null>(null),[error,setError]=useState(''),[loading,setLoading]=useState(true);
   const [width,setWidth]=useState(0),[zoom,setZoom]=useState(1),[reducedMotion,setReducedMotion]=useState(true),[keyboardHeight,setKeyboardHeight]=useState(()=>Keyboard.metrics()?.height??0);
   const rendering=useRef(true);
+  const splitToolbar=fontScale>=1.3&&width<400;
   // Reserve the same bounded space while loading and rendering. The actual page
   // fits inside it initially; zooming pans within the preview, never the chat.
   const viewportHeight=Math.round(Math.max(104,Math.min(320,(windowHeight-keyboardHeight)*.34)));
@@ -51,13 +52,17 @@ export default function Preview({bytes,count,onClose}:{bytes:Uint8Array;count:nu
       <Pressable accessibilityRole="button" accessibilityLabel="Fit page" disabled={loading} accessibilityState={{disabled:loading}} onPress={()=>setZoom(1)} className="min-h-11 min-w-11 items-center justify-center rounded-lg px-2 active:bg-accent"><Text className="text-sm text-foreground">Fit</Text></Pressable>
       <PreviewButton label="Close preview" icon={X} onPress={onClose}/>
     </View>
-    <View className="min-h-12 flex-row items-center justify-between border-b border-border px-1">
-      <PreviewButton label="Previous page" icon={ChevronLeft} disabled={loading||page===1} onPress={()=>navigate(-1)}/>
-      <Text accessibilityLiveRegion="polite" className="text-sm tabular-nums text-foreground">Page {page} of {count}</Text>
-      <PreviewButton label="Next page" icon={ChevronRight} disabled={loading||page>=count} onPress={()=>navigate(1)}/>
-      <View className="mx-1 h-5 w-px bg-border"/>
-      <PreviewButton label="Zoom out" icon={Minus} disabled={loading||zoom<=1} onPress={()=>setZoom(value=>Math.max(1,value-.5))}/>
-      <PreviewButton label="Zoom in" icon={Plus} disabled={loading||zoom>=3} onPress={()=>setZoom(value=>Math.min(3,value+.5))}/>
+    <View className={`min-h-12 ${splitToolbar?'':'flex-row items-center'} border-b border-border px-1`}>
+      <View className={`min-h-12 flex-row items-center justify-between ${splitToolbar?'':'flex-1'}`}>
+        <PreviewButton label="Previous page" icon={ChevronLeft} disabled={loading||page===1} onPress={()=>navigate(-1)}/>
+        <Text accessibilityLiveRegion="polite" className="flex-1 text-center text-sm tabular-nums text-foreground">Page {page} of {count}</Text>
+        <PreviewButton label="Next page" icon={ChevronRight} disabled={loading||page>=count} onPress={()=>navigate(1)}/>
+      </View>
+      <View className={`flex-row items-center justify-end ${splitToolbar?'border-t border-border':''}`}>
+        {!splitToolbar&&<View className="mx-1 h-5 w-px bg-border"/>}
+        <PreviewButton label="Zoom out" icon={Minus} disabled={loading||zoom<=1} onPress={()=>setZoom(value=>Math.max(1,value-.5))}/>
+        <PreviewButton label="Zoom in" icon={Plus} disabled={loading||zoom>=3} onPress={()=>setZoom(value=>Math.min(3,value+.5))}/>
+      </View>
     </View>
     <View onLayout={event=>setWidth(event.nativeEvent.layout.width)} style={{height:viewportHeight}} className="overflow-hidden bg-muted">
       {image&&width>0?<ScrollView key={page} style={{flex:1}} minimumZoomScale={1} maximumZoomScale={3} zoomScale={zoom} centerContent pinchGestureEnabled

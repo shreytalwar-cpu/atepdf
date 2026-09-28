@@ -55,7 +55,13 @@ python3 scripts/approve-planner.py 20
 
 Its terminal confirmation authorizes paid requests; this is not an OpenAI account dollar cap. The app has no repeated per-message confirmation and no 2,000-output-token cap. Sending a request or using an AI-enabled PDF quick action consumes the same shared allowance, including failed or cancelled calls. A read-only model lookup does not consume it.
 
-## Tomorrow's physical iPhone/iPad check
+## Current virtual checks
+
+The original-source iPhone simulator completed an actual local Files save, atepdf restart and exact-copy reopen in system Preview. An independent reader verified all three merged pages. Real Reduce Motion-on merge, preview, removal and undo also passed. The [current beta record](SESSION_2026-09-28_BETA.md) keeps each build and run separate.
+
+Known simulator gaps remain: default-motion automation can wait after a delayed AI response; large-text iPad landscape scrolls an earlier preview out when the composer gains focus; the current iPhone simulator configuration has not shown an onscreen software keyboard. These are recorded limitations, not physical-device acceptance. The latest Mac app is built and signature-verified; its interactive check remains deferred at the owner's request.
+
+## Physical iPhone/iPad check
 
 Physical installation and network acceptance remain pending. Use the tracked Apple workspace and the owner-approved development team/device signing setup; no production identity, TestFlight upload, or signing change is performed by this launcher. See [the Apple build instructions](NATIVE_APPLE.md), [device acceptance steps](BETA_DEVICE_ACCEPTANCE.md), and the current [implementation status](IMPLEMENTATION_STATUS.md) before installing. Confirm the independent `dev.atepdf.fresh` identifier.
 

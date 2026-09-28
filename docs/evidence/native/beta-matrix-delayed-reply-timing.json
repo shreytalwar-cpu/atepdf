@@ -1,0 +1,9 @@
+{
+  "delayed-reply-exact-continuation-timing": "elapsedSeconds=130.49598598480225\napplicationState=4",
+  "delayed-reply-after-foreground-timing": "elapsedSeconds=65.15599393844604\napplicationState=4",
+  "delayed-reply-activate-returned": "elapsedSeconds=65.15498697757721\n",
+  "delayed-reply-activate-start": "elapsedSeconds=5.1018699407577515\n",
+  "delayed-reply-home-start": "elapsedSeconds=3.571013927459717\n",
+  "delayed-reply-before-home-timing": "elapsedSeconds=3.2269469499588013\napplicationState=4",
+  "delayed-reply-completed": "elapsedSeconds=16.526072025299072\n"
+}

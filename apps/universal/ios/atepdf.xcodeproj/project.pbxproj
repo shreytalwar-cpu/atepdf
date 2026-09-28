@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3C40EA40A031426199EC6B29 /* AtepdfAccessibilityUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95C46A4991B74A43884A83C3 /* AtepdfAccessibilityUITests.swift */; };
+		E82C9C2B0A4943258CB4B745 /* AtepdfExportUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A60E77634C9D412692559D13 /* AtepdfExportUITests.swift */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		206C009A3374FF5588AFC72A /* AtepdfWorkflowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 459D977AF81B2DD141461B59 /* AtepdfWorkflowUITests.swift */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
@@ -29,6 +31,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		95C46A4991B74A43884A83C3 /* AtepdfAccessibilityUITests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AtepdfAccessibilityUITests.swift; sourceTree = "<group>"; };
+		A60E77634C9D412692559D13 /* AtepdfExportUITests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AtepdfExportUITests.swift; sourceTree = "<group>"; };
 		074278888B800A65A73CA45C /* Pods-atepdf.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atepdf.release.xcconfig"; path = "Target Support Files/Pods-atepdf/Pods-atepdf.release.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* atepdf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = atepdf.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = atepdf/Images.xcassets; sourceTree = "<group>"; };
@@ -153,6 +157,8 @@
 			isa = PBXGroup;
 			children = (
 				459D977AF81B2DD141461B59 /* AtepdfWorkflowUITests.swift */,
+				A60E77634C9D412692559D13 /* AtepdfExportUITests.swift */,
+				95C46A4991B74A43884A83C3 /* AtepdfAccessibilityUITests.swift */,
 			);
 			name = "atepdf UI Tests";
 			path = ../../../tests/native/ios;
@@ -410,6 +416,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				206C009A3374FF5588AFC72A /* AtepdfWorkflowUITests.swift in Sources */,
+				E82C9C2B0A4943258CB4B745 /* AtepdfExportUITests.swift in Sources */,
+				3C40EA40A031426199EC6B29 /* AtepdfAccessibilityUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

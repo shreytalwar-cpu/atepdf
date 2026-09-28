@@ -1,0 +1,31 @@
+{
+  "recordedAt": "2026-09-28T17:53:42.821Z",
+  "syntheticOnly": true,
+  "paidCalls": 0,
+  "before": {
+    "provider": "synthetic-only",
+    "calls": 0,
+    "cancelled": 0
+  },
+  "completed": {
+    "provider": "synthetic-only",
+    "calls": 1,
+    "cancelled": 0
+  },
+  "afterDeadline": {
+    "provider": "synthetic-only",
+    "calls": 1,
+    "cancelled": 0
+  },
+  "afterAbort": {
+    "provider": "synthetic-only",
+    "calls": 2,
+    "cancelled": 1
+  },
+  "elapsedMilliseconds": 32012,
+  "checks": [
+    "Completed10s response200",
+    "No cancellation counted after30s gateway deadline",
+    "Pending25s request aborted and counted exactly once"
+  ]
+}

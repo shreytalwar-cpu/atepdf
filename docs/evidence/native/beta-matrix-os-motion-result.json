@@ -1,0 +1,35 @@
+{
+  "recordedAt": "2026-09-28T18:18:56.521712+00:00",
+  "status": "PASSED",
+  "passed": 1,
+  "failed": 0,
+  "skipped": 0,
+  "methodDurationSeconds": 72.077,
+  "activationSeconds": 0.15456008911132812,
+  "foregroundToExactContinuationSeconds": 4.612604022026062,
+  "sourceSnapshot": "beta-matrix-os-motion-source.json",
+  "summary": "beta-matrix-os-motion-summary.json",
+  "resultBundle": "beta-matrix-os-motion.xcresult",
+  "testProductsPath": "/Users/shrey/Library/Developer/XcodeBuildMCP/workspaces/atepdf-0efe6fe22454/test-products/test_sim_2026-09-28T18-15-40-461Z_pid12385_199aa16b.xctestproducts",
+  "workflow": "Real local sample import and3-page merge, synthetic pairing, completed10s plan and independently validated3-page result, partial draft, Home, foreground, exact continuation. Strict activation<5s and interaction<10s passed.",
+  "configuration": "Actual public Settings Reduce Motion switch1 before fresh app launch and again after workflow. Runner UIKit getter is diagnostic only.",
+  "restoration": {
+    "reduceMotion": false,
+    "autoPlayMessageEffects": true,
+    "evidence": "beta-matrix-os-motion-restored.txt",
+    "matchesOriginal": true
+  },
+  "interpretation": "The same strict lifecycle case passes under real OS Reduce Motion. This is a motion-sensitive XCTest observation; it does not independently identify the application pulse driver or establish production deadlock.",
+  "paidCalls": 0,
+  "timingAttachments": {
+    "reduce-motion-restored": "elapsedSeconds=1.0728836059570312e-06\nverifiedSettingsSwitch=false\nrunnerUIKitDiagnostic=false",
+    "delayed-reply-exact-continuation-timing": "elapsedSeconds=10.003805041313171\napplicationState=4",
+    "delayed-reply-after-foreground-timing": "elapsedSeconds=5.391201019287109\napplicationState=4",
+    "delayed-reply-activate-returned": "elapsedSeconds=5.390269041061401\n",
+    "delayed-reply-activate-start": "elapsedSeconds=5.235708951950073\n",
+    "delayed-reply-home-start": "elapsedSeconds=3.7064390182495117\n",
+    "delayed-reply-before-home-timing": "elapsedSeconds=3.3755069971084595\napplicationState=4",
+    "delayed-reply-completed": "elapsedSeconds=16.41282296180725\n",
+    "reduce-motion-matrix-start": "elapsedSeconds=9.5367431640625e-07\nverifiedSettingsSwitch=true\nrunnerUIKitDiagnostic=false"
+  }
+}

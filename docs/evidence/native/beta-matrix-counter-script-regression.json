@@ -1,0 +1,31 @@
+{
+  "recordedAt": "2026-09-28T18:03:08.821Z",
+  "syntheticOnly": true,
+  "paidCalls": 0,
+  "before": {
+    "provider": "synthetic-only",
+    "calls": 4,
+    "cancelled": 2
+  },
+  "completed": {
+    "provider": "synthetic-only",
+    "calls": 5,
+    "cancelled": 2
+  },
+  "afterDeadline": {
+    "provider": "synthetic-only",
+    "calls": 5,
+    "cancelled": 2
+  },
+  "afterAbort": {
+    "provider": "synthetic-only",
+    "calls": 6,
+    "cancelled": 3
+  },
+  "elapsedMilliseconds": 31783,
+  "checks": [
+    "Completed 10-second response is HTTP 200",
+    "No cancellation after the 30-second deadline",
+    "Pending 25-second request abort is counted exactly once"
+  ]
+}

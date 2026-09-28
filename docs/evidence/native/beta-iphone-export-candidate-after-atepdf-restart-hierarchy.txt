@@ -1,0 +1,63 @@
+Attributes: Application, 0x10ab6c780, pid: 9179, label: 'atepdf'
+Element subtree:
+ →Application, 0x10ab6c780, pid: 9179, label: 'atepdf'
+    Window (Main), 0x10ab6c000, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x10ab6c8c0, {{0.0, 0.0}, {402.0, 874.0}}
+        Other, 0x10ab6c3c0, {{0.0, 0.0}, {402.0, 874.0}}
+          Other, 0x10ab6c640, {{0.0, 0.0}, {402.0, 874.0}}
+            Other, 0x10ab6ca00, {{0.0, 0.0}, {402.0, 874.0}}
+              Other, 0x10ab6cb40, {{0.0, 0.0}, {402.0, 874.0}}
+                Other, 0x10ab6c500, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x10ab6cf00, {{0.0, 0.0}, {402.0, 874.0}}
+                    Other, 0x10ab6c280, {{16.0, 81.7}, {28.0, 37.0}}
+                      Image, 0x10ab6cdc0, {{16.0, 81.7}, {28.0, 37.0}}, identifier: 'assets/assets/approved-8-mark-source-crop.png'
+                    Other, 0x10ab6d2c0, {{52.0, 85.3}, {90.0, 30.0}}
+                      Image, 0x10ab6d180, {{52.0, 85.3}, {90.0, 30.0}}, identifier: 'assets/assets/approved-atepdf-wordmark-source-crop.png', label: 'atepdf'
+                    Button, 0x10ab6d900, {{294.0, 78.0}, {44.0, 44.0}}, label: 'Processed on your device'
+                    Button, 0x10ab6d540, {{342.0, 78.0}, {44.0, 44.0}}, label: 'AI connection'
+                    Other, 0x10ab6d040, {{0.0, 138.0}, {402.0, 472.0}}
+                      ScrollView, 0x10ab6d400, {{0.0, 138.0}, {402.0, 472.0}}
+                        Other, 0x10ab6cc80, {{0.0, 138.0}, {402.0, 472.0}}
+                          Other, 0x10ab6c140, {{0.0, 138.0}, {402.0, 472.0}}
+                            Other, 0x10ab6d680, {{20.0, 185.3}, {362.0, 377.3}}
+                            Other, 0x10ab6dcc0, {{109.0, 214.3}, {184.0, 132.0}}
+                              Image, 0x10ab6d7c0, {{109.0, 214.3}, {184.0, 132.0}}, identifier: 'assets/assets/paper.png'
+                            StaticText, 0x10ab6db80, {{125.0, 358.3}, {152.0, 31.3}}, label: 'Add your files'
+                              StaticText, 0x10ab6e080, {{125.0, 358.3}, {152.0, 31.3}}, label: 'Add your files'
+                            StaticText, 0x10ab6da40, {{91.0, 401.7}, {220.0, 20.0}}, label: 'Then tell me what you’d like to do.'
+                              StaticText, 0x10ab6df40, {{91.0, 401.7}, {220.0, 20.0}}, label: 'Then tell me what you’d like to do.'
+                            Button, 0x10ab6de00, {{136.3, 433.7}, {129.7, 44.0}}, label: 'Choose files'
+                            Button, 0x1136f3ac0, {{109.0, 489.7}, {184.3, 44.0}}, label: 'Try the two sample PDFs'
+                        Other, 0x1136f3d40, {{369.0, 138.0}, {30.0, 472.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                          Other, 0x1136f3c00, {{396.0, 141.0}, {3.0, 528.0}}
+                        Other, 0x1136f3840, {{0.0, 577.0}, {402.0, 30.0}}, label: 'Horizontal scroll bar, 1 page', value: 0%
+                          Other, 0x1136f3980, {{3.0, 604.0}, {396.0, 3.0}}
+                        Other, 0x114cb2d00, {{369.0, 138.0}, {30.0, 472.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                          Other, 0x114cb2bc0, {{396.0, 141.0}, {3.0, 528.0}}
+                        Other, 0x114cb3e80, {{0.0, 577.0}, {402.0, 30.0}}, label: 'Horizontal scroll bar, 1 page', value: 0%
+                          Other, 0x114cb3d40, {{3.0, 604.0}, {396.0, 3.0}}
+                    Other, 0x10ab65a40, {{0.0, 138.0}, {402.0, 736.0}}
+                    Other, 0x10ab65b80, {{16.0, 610.0}, {370.0, 114.0}}
+                    Other, 0x10ab65cc0, {{25.0, 619.0}, {352.0, 48.0}}
+                      TextView, 0x10ab65e00, {{25.0, 619.0}, {352.0, 48.0}}, label: 'Tell atepdf what to do Tell atepdf what to do…'
+                        Other, 0x10ab65f40, {{344.0, 619.0}, {30.0, 48.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                          Other, 0x10ab66080, {{371.0, 656.0}, {3.0, 8.0}}
+                        Other, 0x10ab661c0, {{25.0, 640.0}, {352.0, 24.0}}, label: 'Horizontal scroll bar, 1 page', value: 0%
+                          Other, 0x10ab66300, {{28.0, 661.0}, {346.0, 3.0}}
+                    Button, 0x10ab66440, {{25.0, 671.0}, {44.0, 44.0}}, label: 'Add files'
+                    Button, 0x10ab66e40, {{333.0, 671.0}, {44.0, 44.0}}, label: 'Send message', Disabled
+                    Button, 0x10ab66f80, {{16.0, 736.0}, {118.0, 44.0}}, label: 'Merge'
+                    Button, 0x10ab670c0, {{142.0, 736.0}, {118.0, 44.0}}, label: 'Compress'
+                    Button, 0x10ab67200, {{268.0, 736.0}, {118.0, 44.0}}, label: 'Make searchable'
+                    StaticText, 0x10ab67340, {{120.3, 794.0}, {161.3, 16.0}}, label: 'Your files stay on this device'
+                      StaticText, 0x10ab67980, {{120.3, 794.0}, {161.3, 16.0}}, label: 'Your files stay on this device'
+    Window, 0x10ab67ac0, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x10ab67e80, {{0.0, 0.0}, {402.0, 874.0}}
+        Other, 0x10ab67d40, {{0.0, 0.0}, {402.0, 874.0}}
+Path to element:
+ →Application, 0x10ab6c780, pid: 9179, label: 'atepdf'
+Query chain:
+ →Find: Target Application 'dev.atepdf.fresh'
+  Output: {
+    Application, 0x10ab65680, pid: 9179, label: 'atepdf'
+  }

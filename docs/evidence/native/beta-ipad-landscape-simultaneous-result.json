@@ -1,0 +1,40 @@
+{
+  "recordedAt": "2026-09-28T18:30:14.798644+00:00",
+  "status": "FAILED",
+  "passed": 0,
+  "failed": 1,
+  "skipped": 0,
+  "methodDurationSeconds": 46.602,
+  "sourceSnapshot": "beta-final-apple-tests-source.json",
+  "summary": "beta-ipad-landscape-simultaneous-summary.json",
+  "resultBundle": "beta-ipad-landscape-simultaneous.xcresult",
+  "productionSource": "afa15b5 (all pulse candidates reverted)",
+  "testProductsPath": "/Users/shrey/Library/Developer/XcodeBuildMCP/workspaces/atepdf-0efe6fe22454/test-products/test_sim_2026-09-28T18-27-09-350Z_pid12385_9d86fa57.xctestproducts",
+  "installedAppPath": "/Users/shrey/Library/Developer/CoreSimulator/Devices/526CAD4B-89C5-49C1-8CEE-F65602AA0DEE/data/Containers/Bundle/Application/47A3087E-71A4-481F-A86D-C9DD29F6182E/atepdf.app",
+  "installedMatchesBuilt": true,
+  "sha256": {
+    "atepdf": {
+      "built": "793200f22ebcd18b0fd8f632619e18be1bb698f7909109a39a912d052542b71b",
+      "installed": "793200f22ebcd18b0fd8f632619e18be1bb698f7909109a39a912d052542b71b"
+    },
+    "main.jsbundle": {
+      "built": "d8b30eeb536f5cb359ab9479ad39fef7c66d3eda95e17ece5450473aae66e01e",
+      "installed": "d8b30eeb536f5cb359ab9479ad39fef7c66d3eda95e17ece5450473aae66e01e"
+    },
+    "Info.plist": {
+      "built": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c",
+      "installed": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c"
+    }
+  },
+  "device": "526CAD4B-89C5-49C1-8CEE-F65602AA0DEE",
+  "textSizeDuring": "accessibility-large",
+  "textSizeRestoredReadback": "large",
+  "orientationRestored": "portrait",
+  "frames": "beta-ipad-landscape-simultaneous-frames.txt",
+  "observation": "Actual software keyboard370pt. Composer and Send remain clear and hittable; conversation156.5pt. Refocusing composer places preview above viewport; raster overlap0pt. Simultaneous keyboard+preview visibility assertion failed.",
+  "limits": [
+    "This is focus/scroll positioning evidence, not a PDF engine failure.",
+    "No complete AX-large landscape acceptance is claimed."
+  ],
+  "paidCalls": 0
+}

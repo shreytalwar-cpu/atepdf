@@ -1,0 +1,52 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "2DA633C1-2AC8-43E8-90D7-C29801278468",
+        "deviceName" : "iPad Pro 13-inch (M5)",
+        "modelName" : "iPad Pro 13-inch (M5)",
+        "osBuildNumber" : "24A434",
+        "osVersion" : "27.0",
+        "platform" : "iOS Simulator"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 1,
+      "passedTests" : 0,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "atepdfUI · Built with macOS 27.0",
+  "expectedFailures" : 0,
+  "failedTests" : 1,
+  "finishTime" : 1790618902.305,
+  "passedTests" : 0,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1790618838.871,
+  "statistics" : [
+
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "failed: caught error: \"unavailable(\"Expected exists == true AND value == \\'1\\' for \\\"REDUCE_MOTION\\\" Switch\")\"",
+      "targetName" : "atepdfUITests",
+      "testIdentifier" : 1,
+      "testIdentifierString" : "AtepdfAccessibilityUITests/testLocalPDFWorkflowWithReduceMotionEnabled()",
+      "testIdentifierURL" : "test://com.apple.xcode/atepdf/atepdfUITests/AtepdfAccessibilityUITests/testLocalPDFWorkflowWithReduceMotionEnabled",
+      "testName" : "testLocalPDFWorkflowWithReduceMotionEnabled()"
+    }
+  ],
+  "title" : "Test - atepdfUI",
+  "topInsights" : [
+
+  ],
+  "totalTestCount" : 1
+}

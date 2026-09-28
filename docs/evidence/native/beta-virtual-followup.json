@@ -1,0 +1,107 @@
+{
+  "recordedAt": "2026-09-28T18:37:45.945034+00:00",
+  "localDate": "2026-09-29",
+  "productionSourceCommit": "afa15b5",
+  "continuationBaseCommit": "cb23813040efecc7f8bc705ebfec937d976af449",
+  "productionImplementationChanged": false,
+  "changes": [
+    "Public Settings Reduce Motion helper and local PDF acceptance",
+    "Actual Files save/restart/reopen acceptance",
+    "Focused paired resume and simultaneous landscape assertions",
+    "Synthetic delay abort-listener cleanup and real-HTTP regression",
+    "Independent saved-export PDF.js verifier"
+  ],
+  "actualSimulatorReleaseBuild": "passed; original-source installed products match captured executable, JavaScript and Info.plist",
+  "buildSource": "beta-final-apple-tests-source.json",
+  "savedCopy": {
+    "status": "actual local Files save and restart verified; independent PDF.js all-page text/order/geometry passed; exact Files selection opened in system Preview and rendering visually inspected",
+    "readerEvidence": "beta-iphone-saved-copy-independent.json",
+    "uiReport": "../../BETA_IPHONE_QA.md",
+    "sha256": "4ae158da5e4f1576d9842141faaf65b17502327d42815844973b8ee5a48ab8c0",
+    "reopenMethodPassed": 1,
+    "reopenDurationSeconds": 32.353,
+    "revisedReusableCombinedFlowRerun": true,
+    "uiEvidence": "beta-iphone-export-acceptance.json",
+    "renderedPreview": "beta-iphone-export-reopened-preview.png",
+    "revisedReusableCombinedFlow": {
+      "build": "passed",
+      "test": "failed before folder creation or save",
+      "durationSeconds": 27.231,
+      "failure": "Observed generic Back label rejected by guarded picker navigation; visible title identified prior b347 QA folder",
+      "retries": 0,
+      "evidence": "beta-iphone-export-retained-result.json"
+    }
+  },
+  "localReduceMotion": {
+    "passed": 1,
+    "durationSeconds": 133.693,
+    "evidence": "beta-reduce-motion-local.json",
+    "settingsRestoration": "beta-motion-settings-restoration.json"
+  },
+  "pairedResume": {
+    "pairingOnly": "passed",
+    "immediateCompletedReply": "passed",
+    "defaultMotionDelayedReply": "not accepted; repeated XCTest animation-completion waits",
+    "realOSReduceMotionDelayedReply": "passed",
+    "activationSeconds": 0.15456,
+    "exactContinuationSeconds": 4.6126,
+    "evidence": "beta-matrix-os-motion-result.json",
+    "candidateChangesRetained": false,
+    "rejectedCandidates": [
+      "single native pulse loop: two activation failures",
+      "JavaScript pulse driver: Stop activation failure, second case failed during pairing"
+    ]
+  },
+  "largeTextLandscape": {
+    "status": "failed",
+    "evidence": "beta-ipad-landscape-simultaneous-result.json",
+    "keyboardHeightPoints": 370,
+    "conversationHeightPoints": 156.5,
+    "composerAndSendClearAndHittable": true,
+    "earlierPreviewOverlapAfterComposerFocusPoints": 0
+  },
+  "counterRegression": {
+    "status": "passed",
+    "evidence": "beta-matrix-counter-script-regression.json",
+    "paidCalls": 0
+  },
+  "priorSuitesNotRerun": [
+    "72 regression tests",
+    "19 browser workflows",
+    "15 launcher tests",
+    "Expo web export and Next production build",
+    "Mac Catalyst Release",
+    "unsigned physical arm64 Release"
+  ],
+  "ownerBeta": {
+    "url": "http://localhost:3211",
+    "enabled": true,
+    "remainingRequestsAtRecheck": 18,
+    "deviceSharing": false,
+    "unchangedBuild": true
+  },
+  "additionalPaidCallsThisContinuation": 0,
+  "oldReference": {
+    "path": "/Users/shrey/Documents/attenlo/attenlo-docs",
+    "readModifiedOrRunThisContinuation": false,
+    "freshIntegrityScanPerformed": false
+  },
+  "knownGaps": [
+    "Physical signing/install and device acceptance pending",
+    "Mac interactive checks explicitly deferred by owner",
+    "Default-motion paired delayed-work XCTest wait unresolved",
+    "Large-text iPad landscape preview scrolls out when composer focused",
+    "iPhone on-screen software-keyboard clearance unavailable in current simulator configuration",
+    "Actual purchase-provider sandbox unimplemented; commerce disabled",
+    "Reusable single-run export test rejects generic system Back label; actual save/restart/reopen separately verified"
+  ],
+  "cleanup": {
+    "ownedSynthetic3212Stopped": true,
+    "iPadTextSizeRestored": "large",
+    "iPadOrientationRestored": "portrait",
+    "reduceMotionRestored": false,
+    "autoPlayMessageEffectsRestored": true,
+    "unrelatedFilesPreserved": true
+  },
+  "nextExecutableTask": "Install exact development candidate on the physical iPhone/iPad after independent signing/network authorization and execute docs/BETA_DEVICE_ACCEPTANCE.md."
+}

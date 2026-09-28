@@ -1,0 +1,68 @@
+{
+  "recordedAt": "2026-09-28T18:16:34.089738+00:00",
+  "result": "passed",
+  "passed": 1,
+  "failed": 0,
+  "skipped": 0,
+  "testDurationSeconds": 133.693,
+  "test": "AtepdfAccessibilityUITests/testLocalPDFWorkflowWithReduceMotionEnabled",
+  "device": "iPad Pro 13-inch (M5), iOS27 Simulator",
+  "explicitDestination": "2DA633C1-2AC8-43E8-90D7-C29801278468",
+  "parallelTestingEnabled": false,
+  "runtimeInventory": "MCP list_sims observed the same explicit destination Booted while this run was active.",
+  "products": "/Users/shrey/Library/Developer/XcodeBuildMCP/workspaces/atepdf-0efe6fe22454/test-products/test_sim_2026-09-28T18-09-38-603Z_pid12385_d2e8bc8e.xctestproducts",
+  "resultBundle": "/Users/shrey/Documents/ChatGPT/atepdf/.build/reduce-motion-final-s5qy8okw/result.xcresult",
+  "applicationSourceCommit": "afa15b5",
+  "sha256": {
+    "Binaries/0/Release-iphonesimulator/atepdf.app/atepdf": "793200f22ebcd18b0fd8f632619e18be1bb698f7909109a39a912d052542b71b",
+    "Binaries/0/Release-iphonesimulator/atepdf.app/main.jsbundle": "d8b30eeb536f5cb359ab9479ad39fef7c66d3eda95e17ece5450473aae66e01e",
+    "Binaries/0/Release-iphonesimulator/atepdf.app/Info.plist": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c",
+    "Binaries/0/Release-iphonesimulator/atepdfUITests-Runner.app/PlugIns/atepdfUITests.xctest/atepdfUITests": "3aea88755c3e8882b03b8ad6be661a0ed5c29c0f774b6ae627bc062e966a51d7"
+  },
+  "settings": {
+    "originalReduceMotion": false,
+    "enabledPublicSwitch": true,
+    "thisRunTestRunnerUIKitGetterAtStartAndEnd": true,
+    "restoredPublicSwitch": false,
+    "restoredTestRunnerUIKitGetter": false,
+    "secondaryDifference": {
+      "label": "Auto-Play Message Effects",
+      "originalAXValue": 1,
+      "afterReduceMotionRestorationAXValue": 0,
+      "status": "Resolved by separate public-UI cleanup: Auto-Play Message Effects restored1; Reduce Motion reverified0; exact runtime simulator identity matched. See beta-motion-settings-restoration.json."
+    }
+  },
+  "operations": [
+    "bundled synthetic import",
+    "actual local 3-page merge",
+    "inline rendered A2/page2 plus reachable Next and Close",
+    "exact typed remove page2 -> 2 pages",
+    "exact typed undo -> 3 pages",
+    "empty Send disabled"
+  ],
+  "screenshotsVisuallyReviewed": [
+    "beta-reduce-motion-on.png",
+    "beta-reduce-motion-page2.png",
+    "beta-reduce-motion-workflow.png",
+    "beta-reduce-motion-restored.png"
+  ],
+  "plannerCalls": 0,
+  "paidCalls": 0,
+  "scope": "Actual unpaired local app workflow with public Reduce Motion switch on; readback and screenshots retained. Not frame-by-frame pulse proof, physical-device acceptance, keyboard clearance or destination save/reopen.",
+  "testSourceDeltaAfterBuild": "After this product compiled, shared helper was adjusted for a different iPad11 runner whose getter remained stale: public switch is required, getter is diagnostic, final switch1 is rechecked before restore. No application code changed; this run retained its original stronger getter assertions.",
+  "evidenceFilesReviewed": [
+    "beta-reduce-motion-on.png",
+    "beta-reduce-motion-on.txt",
+    "beta-reduce-motion-page2.png",
+    "beta-reduce-motion-workflow.png",
+    "beta-reduce-motion-restored.png",
+    "beta-reduce-motion-restored.txt",
+    "beta-reduce-motion-restore-confirmation.txt"
+  ],
+  "finalCleanup": {
+    "reduceMotion": false,
+    "autoPlayMessageEffects": true,
+    "verified": true,
+    "evidence": "docs/evidence/native/beta-motion-settings-restoration.json"
+  }
+}

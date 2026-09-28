@@ -1,0 +1,16 @@
+{
+  "capturedAt": "2026-09-28T18:40:37.380159+00:00",
+  "testSource": "tests/native/ios/AtepdfExportUITests.swift",
+  "testSourceSha256": "385d66d576b3be35a9915913bb8b29a2f4b3456a27cdb86c66a002cc86b629c8",
+  "executedSourceCopy": "docs/evidence/native/beta-iphone-export-retained-test-source.swift",
+  "productionSourceSnapshot": "docs/evidence/native/beta-final-apple-tests-source.json",
+  "productionSourceFilesCompared": 98,
+  "productionSourceMatches": true,
+  "buildResult": "TEST BUILD SUCCEEDED",
+  "buildLog": ".build/beta-iphone-export-retained-build.log",
+  "configuration": "Release / iOS Simulator arm64 / signing disabled",
+  "xctestrun": ".build/ios-export-20260928/Build/Products/atepdfUI_iphonesimulator27.0-arm64.xctestrun",
+  "explicitDeviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+  "parallelTesting": false,
+  "testOutcome": "See separate retained result evidence after completion"
+}

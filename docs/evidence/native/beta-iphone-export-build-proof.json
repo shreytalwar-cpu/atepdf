@@ -1,0 +1,39 @@
+{
+  "capturedAt": "2026-09-28T18:21:41.691176+00:00",
+  "testProductsPath": "/Users/shrey/Library/Developer/XcodeBuildMCP/workspaces/atepdf-0efe6fe22454/test-products/test_sim_2026-09-28T18-20-01-874Z_pid12385_5ad9244e.xctestproducts",
+  "sourceSnapshot": "docs/evidence/native/beta-matrix-js-driver-source.json",
+  "scope": "Controlled JS-animation-driver candidate; pending parent acceptance of separate timing matrix. This is installed/build provenance, not a saved-output claim.",
+  "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+  "parallelTesting": false,
+  "builtFiles": {
+    "atepdf": {
+      "sha256": "793200f22ebcd18b0fd8f632619e18be1bb698f7909109a39a912d052542b71b",
+      "bytes": 8205976
+    },
+    "main.jsbundle": {
+      "sha256": "b13ebf34390d856bd0b27296515e3bd5b2d137e4ce4ce424925ba48503931f6c",
+      "bytes": 6916943
+    },
+    "Info.plist": {
+      "sha256": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c",
+      "bytes": 2215
+    }
+  },
+  "installedAppPath": "/Users/shrey/Library/Developer/CoreSimulator/Devices/D68C4547-67D3-4960-AAB9-D85FD786D6FC/data/Containers/Bundle/Application/75C0C756-9245-417B-BA28-7862CDD22436/atepdf.app",
+  "installedFiles": {
+    "atepdf": {
+      "sha256": "793200f22ebcd18b0fd8f632619e18be1bb698f7909109a39a912d052542b71b",
+      "bytes": 8205976
+    },
+    "main.jsbundle": {
+      "sha256": "b13ebf34390d856bd0b27296515e3bd5b2d137e4ce4ce424925ba48503931f6c",
+      "bytes": 6916943
+    },
+    "Info.plist": {
+      "sha256": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c",
+      "bytes": 2215
+    }
+  },
+  "installedMatchesCapturedProducts": true,
+  "exportTestSourceSha256": "136cec3220ae775cf974c732dd87883f8fccb518b14b22e6cc6da6d2c184d47a"
+}

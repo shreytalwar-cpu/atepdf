@@ -1,0 +1,42 @@
+{
+  "recordedAt": "2026-09-28T18:42:39.844692+00:00",
+  "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+  "builtAppPath": ".build/ios-export-20260928/Build/Products/Release-iphonesimulator/atepdf.app",
+  "installedAppPath": "/Users/shrey/Library/Developer/CoreSimulator/Devices/D68C4547-67D3-4960-AAB9-D85FD786D6FC/data/Containers/Bundle/Application/ABEC062D-E1A9-47FE-B9AC-BBB537CFCC94/atepdf.app",
+  "builtFiles": {
+    "atepdf": {
+      "sha256": "b37c996656c4456d5e7b76ef2dd3707c40bf764d403e8644cfb401a2e3b999cc",
+      "bytes": 8213592
+    },
+    "main.jsbundle": {
+      "sha256": "4f6dbd404ca33f51b89f833437cb8f2631bd32b10b04957c1447a675eadbcd21",
+      "bytes": 6916959
+    },
+    "Info.plist": {
+      "sha256": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c",
+      "bytes": 2215
+    }
+  },
+  "installedFiles": {
+    "atepdf": {
+      "sha256": "b37c996656c4456d5e7b76ef2dd3707c40bf764d403e8644cfb401a2e3b999cc",
+      "bytes": 8213592
+    },
+    "main.jsbundle": {
+      "sha256": "4f6dbd404ca33f51b89f833437cb8f2631bd32b10b04957c1447a675eadbcd21",
+      "bytes": 6916959
+    },
+    "Info.plist": {
+      "sha256": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c",
+      "bytes": 2215
+    }
+  },
+  "installedMatchesBuilt": true,
+  "compiledTestBundleExecutable": ".build/ios-export-20260928/Build/Products/Release-iphonesimulator/atepdfUITests-Runner.app/PlugIns/atepdfUITests.xctest/atepdfUITests",
+  "compiledTestBundleSha256": "c6ff25decca18030e814cb5ef20162937db65c87e89679dcb9e95f9c524fe767",
+  "compiledTestBundleBytes": 455856,
+  "testSourceSha256": "385d66d576b3be35a9915913bb8b29a2f4b3456a27cdb86c66a002cc86b629c8",
+  "buildResult": "TEST BUILD SUCCEEDED",
+  "buildLog": ".build/beta-iphone-export-retained-build.log",
+  "sourceSnapshot": "docs/evidence/native/beta-iphone-export-retained-source.json"
+}

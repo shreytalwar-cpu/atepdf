@@ -1,6 +1,6 @@
-# iPhone Simulator beta QA — 28 September 2026
+# iPhone Simulator beta QA — 28–29 September 2026
 
-The first captured Release application passed the two ordinary local-only iPhone UI tests. A refreshed app then passed exact typing at accessibility-large size and completed import, merge and preview before correctly failing the visible-software-keyboard gate. The final focused accessibility-large test passed page navigation, zoom, fit and close after correcting the clipped toolbar. This is Simulator evidence, not physical-device or distribution acceptance. This agent only executed captured products: no independent application rebuild, planner request, owner credential access, or old-project access occurred in this QA pass.
+The first captured Release application passed the two ordinary local-only iPhone UI tests. A refreshed app then passed exact typing at accessibility-large size and completed import, merge and preview before correctly failing the visible-software-keyboard gate. The final focused accessibility-large test passed page navigation, zoom, fit and close after correcting the clipped toolbar. This is Simulator evidence, not physical-device or distribution acceptance. The initial QA reused captured products. Later test-only builds and actual saved-copy acceptance are recorded separately below. No planner request, owner credential access or old-project access occurred in this iPhone QA pass.
 
 ## Tested application
 
@@ -66,6 +66,25 @@ The app uses separate navigation and zoom rows when the preview is narrow and te
 
 The public text-size setting was restored to `large` and verified after this final run. No further exploratory UI changes were made. The remaining executable check is to enable an actual software keyboard when simulator UI or a physical device is available, then rerun the strict larger-text workflow through removal, undo and sharing. The zero-intersection failure above remains unmodified in the evidence.
 
+## Actual Files save, app restart and independent reopen
+
+The follow-up exercised the original accepted application source `afa15b5`, after both temporary pulse experiments were reverted. The actual system share sheet **Save to Files** action wrote `b347bc45-45db-4dcd-b397-bfd586220a21.pdf` into a local QA folder. The system picker restored a previous test folder, so the observed destination is explicitly nested:
+
+```text
+On My iPhone/
+  atepdf-beta-743ef2f5-e142-4e7e-b848-4c259d6c6958/
+    atepdf-beta-b347bc45-45db-4dcd-b397-bfd586220a21/
+      b347bc45-45db-4dcd-b397-bfd586220a21.pdf
+```
+
+atepdf was terminated and relaunched to a fresh session; the original result no longer appeared. Read-only host inspection found the surviving copy in that independent local Files provider. The new `tests/native/ios/verify-saved-export.mjs` opened that exact real path with PDF.js: **3,100 bytes, three pages A1/A2/B1, complete matching text, page boxes and rotation**. SHA-256: `4ae158da5e4f1576d9842141faaf65b17502327d42815844973b8ee5a48ab8c0`. The authoritative full digest is in [the independent reader evidence](evidence/native/beta-iphone-saved-copy-independent.json).
+
+A bounded separate public-UI follow-up selected those exact two folders and the exact UUID-named PDF through Files, then opened it in the independent system Preview app. It passed **1/1 in 32.353 seconds**. The first foreground snapshot was still transitioning and was not accepted as render proof. A subsequent read-only simulator screenshot clearly showed the matching `b347bc45…` document title, the complete **Project brief / A1** page and the following **Working notes / A2** page. Both the agent and parent visually inspected it. PDF.js supplies the separate all-three-page structural/text check; this screenshot is not an every-page visual inspection. No file injection, new PDF job, paid request or customer document was used for the reopen.
+
+The earlier combined test attempts failed system navigation assumptions after saving; they are not a single all-green save/reopen suite. Hidden browsing-root containers survive folder changes, Browse can expose a sidebar, and inline folder creation automatically enters the new folder. The reusable test now follows the actual visible parent controls, verifies a direct local-root destination, and explicitly selects **On My iPhone** in Files. The final retained flow then compiled successfully and ran once. It **failed in 27.231 seconds**, before creating a folder or saving, at the guarded system picker parent-label assertion: the visible control was labelled **Back**, while the visible title identified the prior b347 QA folder. No retry followed. See [the final retained-test build and failure](evidence/native/beta-iphone-export-retained-result.json). The complete reusable flow is therefore not accepted; the earlier actual save and separate exact-copy reopen remain independently evidenced. The one-off exact-copy test is preserved only as executed evidence, not retained as a reusable device-dependent test.
+
+Earlier candidate-source exports and discovery-created empty QA folders remain separately identified; they were not substituted for this original-source copy. No unrelated Files entries were modified or cleaned up. The [follow-up acceptance record](evidence/native/beta-iphone-export-acceptance.json) links the final source/build, actual save, passing exact-copy reopen and [rendered system Preview](evidence/native/beta-iphone-export-reopened-preview.png).
+
 ## Remaining acceptance boundaries
 
-Physical iPhone/iPad installation, on-device memory pressure, actual Files-provider import, save-to-destination and independent reopen, interruption behavior, and keyboard/accessibility combinations still require their separate acceptance evidence. This pass does not validate the native planner, TLS, billing, signing, TestFlight, or production distribution. Use [physical-device acceptance](BETA_DEVICE_ACCEPTANCE.md) for those device-side PDF steps.
+Physical iPhone/iPad installation, on-device memory pressure, device Files-provider behavior, interruption behavior, and keyboard/accessibility combinations still require physical acceptance. The simulator save/restart/reopen evidence above does not establish physical-device success. This pass does not validate the native planner, TLS, billing, signing, TestFlight, or production distribution. Use [physical-device acceptance](BETA_DEVICE_ACCEPTANCE.md) for those device-side PDF steps.

@@ -1,0 +1,14 @@
+{
+  "recordedAt": "2026-09-28T18:11:35.148874+00:00",
+  "status": "FAILED_BEFORE_APPLICATION_WORKFLOW",
+  "sourceSnapshot": "beta-matrix-reduced-motion-child-source.json",
+  "summary": "beta-matrix-reduced-motion-child-summary.json",
+  "resultBundle": "beta-matrix-reduced-motion-child.xcresult",
+  "observedFailure": "Inner public Settings switch changed to1, but UIAccessibility.isReduceMotionEnabled in the separate XCTest runner did not match while Settings was foreground. Workflow stopped before app launch and planning.",
+  "restoration": "tearDown set inner Settings switch0 and verified runner UIKitfalse, equal to initial state.",
+  "limits": [
+    "No inference about the application process accessibility value from the separate runner value.",
+    "No paired lifecycle result in this attempt."
+  ],
+  "paidCalls": 0
+}

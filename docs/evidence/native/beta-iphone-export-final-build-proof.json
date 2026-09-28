@@ -1,0 +1,40 @@
+{
+  "capturedAt": "2026-09-28T18:29:00.639999+00:00",
+  "testProductsPath": "/Users/shrey/Library/Developer/XcodeBuildMCP/workspaces/atepdf-0efe6fe22454/test-products/test_sim_2026-09-28T18-27-09-350Z_pid12385_9d86fa57.xctestproducts",
+  "sourceSnapshot": "docs/evidence/native/beta-final-apple-tests-source.json",
+  "sourceAggregateSha256": "525caa717cee163e3c715ea08eacec43d4ba535e93fec98b24e14a21e3917fba",
+  "scope": "Final restored production-source Release products; test fixes only. Installed/build provenance, not by itself a saved-output claim.",
+  "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+  "parallelTesting": false,
+  "builtFiles": {
+    "atepdf": {
+      "sha256": "793200f22ebcd18b0fd8f632619e18be1bb698f7909109a39a912d052542b71b",
+      "bytes": 8205976
+    },
+    "main.jsbundle": {
+      "sha256": "d8b30eeb536f5cb359ab9479ad39fef7c66d3eda95e17ece5450473aae66e01e",
+      "bytes": 6916943
+    },
+    "Info.plist": {
+      "sha256": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c",
+      "bytes": 2215
+    }
+  },
+  "installedAppPath": "/Users/shrey/Library/Developer/CoreSimulator/Devices/D68C4547-67D3-4960-AAB9-D85FD786D6FC/data/Containers/Bundle/Application/35DD2010-E9F2-461A-8A61-D1652EB5C402/atepdf.app",
+  "installedFiles": {
+    "atepdf": {
+      "sha256": "793200f22ebcd18b0fd8f632619e18be1bb698f7909109a39a912d052542b71b",
+      "bytes": 8205976
+    },
+    "main.jsbundle": {
+      "sha256": "d8b30eeb536f5cb359ab9479ad39fef7c66d3eda95e17ece5450473aae66e01e",
+      "bytes": 6916943
+    },
+    "Info.plist": {
+      "sha256": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c",
+      "bytes": 2215
+    }
+  },
+  "installedMatchesCapturedProducts": true,
+  "exportTestSourceSha256": "5375d2ded77b63941166f69bf10fb24d52a320ca5c13d2464c6e72ad7d835334"
+}

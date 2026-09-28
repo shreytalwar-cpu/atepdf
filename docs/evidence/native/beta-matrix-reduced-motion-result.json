@@ -1,0 +1,11 @@
+{
+  "recordedAt": "2026-09-28T18:09:13.257407+00:00",
+  "status": "FAILED_BEFORE_APPLICATION_WORKFLOW",
+  "sourceSnapshot": "beta-matrix-reduced-motion-source.json",
+  "summary": "beta-matrix-reduced-motion-summary.json",
+  "resultBundle": "beta-matrix-reduced-motion.xcresult",
+  "testProductsPath": "/Users/shrey/Library/Developer/XcodeBuildMCP/workspaces/atepdf-0efe6fe22454/test-products/test_sim_2026-09-28T18-05-45-356Z_pid12385_0ba71d4e.xctestproducts",
+  "observedFailure": "Public Settings switch.tap targeted the wide accessible row; Reduce Motion remained false, so enabling timed out. No application matrix or planner request was reached.",
+  "restoration": "tearDown verified Settings0 and UIKitfalse, equal to initial state.",
+  "paidCalls": 0
+}

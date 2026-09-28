@@ -1,0 +1,33 @@
+{
+  "recordedAt": "2026-09-28T17:49:21.053Z",
+  "appSourceCommit": "afa15b5",
+  "device": "iPad Pro 11-inch (M5), iOS 27 simulator",
+  "scenario": "Completed ten-second synthetic planner request followed by Home, foreground activation and exact draft continuation",
+  "sampleDurationSeconds": 3,
+  "app": {
+    "processId": 97784,
+    "rawPath": "/private/tmp/atepdf-delayed-success-app.sample.txt",
+    "sha256": "500a3c4d1c25f706fab09ecae32fe37b4027282a15ef87ecc9f6cc75f3354bce",
+    "mainThreadSamples": 2089,
+    "mainThreadIdleMachMessageSamples": 1928,
+    "javaScriptThreadSamples": 2089,
+    "javaScriptThreadIdleMachMessageSamples": 2089,
+    "observations": [
+      "Main-thread activity outside the idle run loop primarily served accessibility snapshots.",
+      "The UIKit animation manager thread was waiting in AnimationKit.",
+      "No busy JavaScript or main-thread PDF engine loop was observed in this short sample."
+    ]
+  },
+  "runner": {
+    "processId": 97762,
+    "rawPath": "/private/tmp/atepdf-delayed-success-runner.sample.txt",
+    "sha256": "65b7af63bad0aa517ef3179f7e35c198fcf86b75fef067b38db98adabf0159b7",
+    "observation": "The sample captured result assertions and accessibility queries after the first animation wait; it does not profile the entire wait."
+  },
+  "limits": [
+    "Sampling is diagnostic evidence, not proof that every frame or input was responsive.",
+    "The baseline test contains two approximately sixty-second XCTest animation waits and fails its cancellation-counter assertion; it is not an accepted fast-resume test.",
+    "The counter error was independently traced to a synthetic provider listener that remained registered after successful completion."
+  ],
+  "paidCalls": 0
+}

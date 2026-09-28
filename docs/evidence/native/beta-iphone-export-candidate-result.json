@@ -1,0 +1,11 @@
+{
+  "status": "Actual save and atepdf restart completed; Files exact-folder selector failed because item count is appended to label. Independent viewer reopen is not yet proven.",
+  "candidate": "JS-animation-driver candidate, subsequently rejected; production unchanged",
+  "sourceSnapshot": "docs/evidence/native/beta-matrix-js-driver-source.json",
+  "resultBundle": ".build/beta-iphone-export-save-reopen-corrected.xcresult",
+  "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+  "folder": "On My iPhone/atepdf-beta-743ef2f5-e142-4e7e-b848-4c259d6c6958",
+  "fileName": "743ef2f5-e142-4e7e-b848-4c259d6c6958.pdf",
+  "preserveOutput": true,
+  "savedCopyIndependentVerification": "docs/evidence/native/beta-iphone-saved-copy-independent-candidate.json"
+}

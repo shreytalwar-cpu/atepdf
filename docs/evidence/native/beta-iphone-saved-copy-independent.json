@@ -1,0 +1,16 @@
+{
+  "recordedAt": "2026-09-28T18:30:43.064Z",
+  "reader": "PDF.js",
+  "input": "/Users/shrey/Library/Developer/CoreSimulator/Devices/D68C4547-67D3-4960-AAB9-D85FD786D6FC/data/Containers/Shared/AppGroup/C444E40E-2C13-4DF8-8E32-5984E1BC7336/File Provider Storage/atepdf-beta-743ef2f5-e142-4e7e-b848-4c259d6c6958/atepdf-beta-b347bc45-45db-4dcd-b397-bfd586220a21/b347bc45-45db-4dcd-b397-bfd586220a21.pdf",
+  "bytes": 3100,
+  "sha256": "4ae158da5e4f1576d9842141faaf65b17502327d42815844973b8ee5a48ab8c0",
+  "pageCount": 3,
+  "pageMarkers": [
+    "A1",
+    "A2",
+    "B1"
+  ],
+  "originalTextOrderAndGeometryMatch": true,
+  "syntheticOnly": true,
+  "scope": "Independent read-only inspection; pair with the separate actual Files UI save/relaunch/reopen evidence."
+}

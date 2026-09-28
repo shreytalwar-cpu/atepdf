@@ -1,0 +1,12 @@
+{
+  "capturedAt": "2026-09-28T18:34:35.542263+00:00",
+  "scope": "Existing saved-copy reopen test only; no PDF jobs or saves. Production source unchanged from final restored-source snapshot.",
+  "productionSourceSnapshot": "docs/evidence/native/beta-final-apple-tests-source.json",
+  "productionSourceFilesCompared": 98,
+  "productionSourceMatches": true,
+  "testSourceSha256": "222d13ee3dd3a80d6f8c340339360e8264d436dcea3df2ebfc3eb266109c0f4d",
+  "xctestrun": ".build/ios-export-20260928/Build/Products/atepdfUI_iphonesimulator27.0-arm64.xctestrun",
+  "buildLog": ".build/beta-iphone-export-reopen-build.log",
+  "buildResult": "TEST BUILD SUCCEEDED",
+  "testSourceEvidence": "docs/evidence/native/beta-iphone-export-reopen-test-source.swift"
+}

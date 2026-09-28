@@ -1,0 +1,18 @@
+{
+  "recordedAt": "2026-09-28T18:09:58.756661+00:00",
+  "result": "failed before app workflow",
+  "passed": 0,
+  "failed": 1,
+  "durationSeconds": 33.033,
+  "applicationLaunched": false,
+  "plannerCalls": 0,
+  "originalSetting": false,
+  "restoredSwitch": false,
+  "restoredUIKitReadback": false,
+  "failure": "Named Switch spans the row; default center tap did not reach the actual inner toggle. Value stayed 0.",
+  "correction": "Shared public Settings helper now selects the unique exposed child Switch beneath the observed Reduce Motion row. No coordinates/private settings/app edits. Runtime retry pending.",
+  "products": "/Users/shrey/Library/Developer/XcodeBuildMCP/workspaces/atepdf-0efe6fe22454/test-products/test_sim_2026-09-28T18-05-45-356Z_pid12385_0ba71d4e.xctestproducts",
+  "resultBundle": "/Users/shrey/Documents/ChatGPT/atepdf/.build/reduce-motion-workflow-_sg08u61/result.xcresult",
+  "destination": "2DA633C1-2AC8-43E8-90D7-C29801278468",
+  "parallelTestingEnabled": false
+}

@@ -1,0 +1,10 @@
+{
+  "status": "New Folder action discovered; no output saved.",
+  "testProducts": "/Users/shrey/Library/Developer/XcodeBuildMCP/workspaces/atepdf-0efe6fe22454/test-products/test_sim_2026-09-28T18-05-45-356Z_pid12385_0ba71d4e.xctestproducts",
+  "device": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+  "parallelTesting": false,
+  "resultBundle": ".build/beta-iphone-export-folder-menu.xcresult",
+  "testDurationSeconds": 37.198,
+  "passed": 1,
+  "sourceScope": "Restored original production app; menu discovery only."
+}

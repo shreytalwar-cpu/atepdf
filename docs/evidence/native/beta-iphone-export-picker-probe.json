@@ -1,0 +1,17 @@
+{
+  "status": "Picker probe passed; no destination save or reopen claimed.",
+  "test": "AtepdfExportUITests/testProbeSaveToFilesLocalDestination",
+  "device": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+  "testProducts": "/Users/shrey/Library/Developer/XcodeBuildMCP/workspaces/atepdf-0efe6fe22454/test-products/test_sim_2026-09-28T17-56-44-406Z_pid12385_f3badd94.xctestproducts",
+  "sourceSnapshot": "docs/evidence/native/beta-matrix-native-pulse-source.json",
+  "sourceScope": "This intermediate UI-discovery probe used the subsequently rejected isolated pulse candidate. Final saved/reopened acceptance must use the restored app source.",
+  "resultBundle": ".build/beta-iphone-export-picker-wait-probe.xcresult",
+  "observedLocation": "On My iPhone",
+  "pickerControls": [
+    "FullDocumentManagerViewControllerNavigationBar",
+    "OverflowBarButtonItem",
+    "DOCPicker.actionButton",
+    "DOCPicker.filenameTextField"
+  ],
+  "preservation": "Existing unrelated files were not opened, changed or selected. This probe did not save."
+}

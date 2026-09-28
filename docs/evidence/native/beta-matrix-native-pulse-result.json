@@ -1,0 +1,41 @@
+{
+  "recordedAt": "2026-09-28T18:02:24.589227+00:00",
+  "sourceSnapshot": "beta-matrix-native-pulse-source.json",
+  "resultBundle": "beta-matrix-native-pulse.xcresult",
+  "status": "FAILED",
+  "passed": 0,
+  "failed": 2,
+  "activationSeconds": {
+    "cancelled-plan": 60.05669903755188,
+    "delayed-reply": 60.05278205871582
+  },
+  "candidateDecision": "Rejected and reverted by root: single native timing loop did not improve either strict resume case.",
+  "limits": [
+    "Observed XCTest animation-completion waits do not alone prove production app deadlock.",
+    "Tests fail after foreground screenshot at activation <5s guard; exact continuation is not attempted in this candidate run."
+  ],
+  "paidCalls": 0,
+  "timingAttachments": {
+    "cancelled-plan": {
+      "cancelled-plan-after-foreground-timing": "elapsedSeconds=65.29249608516693\napplicationState=4",
+      "cancelled-plan-activate-returned": "elapsedSeconds=65.29152500629425\n",
+      "cancelled-plan-activate-start": "elapsedSeconds=5.234255075454712\n",
+      "cancelled-plan-home-start": "elapsedSeconds=3.6931530237197876\n",
+      "cancelled-plan-before-home-timing": "elapsedSeconds=3.343954086303711\napplicationState=4",
+      "cancel-observed": "elapsedSeconds=0.0\ncalls=3\ncancelled=2"
+    },
+    "delayed-reply": {
+      "delayed-reply-after-foreground-timing": "elapsedSeconds=65.10522103309631\napplicationState=4",
+      "delayed-reply-activate-returned": "elapsedSeconds=65.1041669845581\n",
+      "delayed-reply-activate-start": "elapsedSeconds=5.05103600025177\n",
+      "delayed-reply-home-start": "elapsedSeconds=3.5271270275115967\n",
+      "delayed-reply-before-home-timing": "elapsedSeconds=3.2031540870666504\napplicationState=4",
+      "delayed-reply-completed": "elapsedSeconds=16.43265199661255\n"
+    }
+  },
+  "restoredProductionPulseSha256": "c754ed5b1124d0dce1c4296895ea79143b8c89238392ef5f30e15aed128aa9ba",
+  "rejectedPatchSha256": "3166a48d4818890ca1752ddba8b60056dbcf0e1b02d304fad1b45bb5be7e84d9",
+  "testProductsPath": "/Users/shrey/Library/Developer/XcodeBuildMCP/workspaces/atepdf-0efe6fe22454/test-products/test_sim_2026-09-28T17-56-44-406Z_pid12385_f3badd94.xctestproducts",
+  "candidateScope": "All tests in this captured product use the rejected pulse candidate; no current-production success claim.",
+  "rejectedPatchPath": "docs/evidence/native/beta-native-pulse-rejected.patch"
+}

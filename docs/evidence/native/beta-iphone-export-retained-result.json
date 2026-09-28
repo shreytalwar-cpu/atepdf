@@ -1,0 +1,36 @@
+{
+  "recordedAt": "2026-09-28T18:42:39.845462+00:00",
+  "status": "FAILED; single authorized final retained run, no retry or runtime changes.",
+  "test": "AtepdfExportUITests/testSaveToLocalFilesAndReopenAfterRestart",
+  "resultBundle": ".build/beta-iphone-export-retained.xcresult",
+  "log": ".build/beta-iphone-export-retained.log",
+  "summary": "docs/evidence/native/beta-iphone-export-retained-summary.json",
+  "passed": 0,
+  "failed": 1,
+  "testDurationSeconds": 27.231,
+  "runnerDurationSeconds": 45.077,
+  "testSourceSha256": "385d66d576b3be35a9915913bb8b29a2f4b3456a27cdb86c66a002cc86b629c8",
+  "buildProof": "docs/evidence/native/beta-iphone-export-retained-build-proof.json",
+  "productionSourceUnchanged": true,
+  "failureStage": "After actual merge and share preparation, at guarded visible picker parent navigation, before New Folder or Save.",
+  "failureLine": 122,
+  "assertion": "Only leave this test's local QA folder chain",
+  "observedBackButton": {
+    "identifier": "BackButton",
+    "label": "Back"
+  },
+  "observedVisibleFolderTitle": "atepdf-beta-b347bc45-45db-4dcd-b397-bfd586220a21, Actions Menu",
+  "observedBrowsingRootIdentifier": "DOC.browsingRoot Source: com.apple.FileProvider.LocalStorage, Title: On My iPhone",
+  "interpretation": "The system reports a generic Back label for the restored local QA folder; the test guard refuses that unrecognized parent. The browsing-root identifier does not reliably describe the visible directory. No product PDF corruption or save failure was demonstrated.",
+  "createdFileStatus": {
+    "preparedDisposableSourceBasename": "97747575-6e72-46ae-9a12-eb5a51319f60",
+    "localImportAndMergeCompleted": true,
+    "externalDestinationSavePressed": false,
+    "newQAProviderFolderCreated": false,
+    "newProviderPDFSaved": false,
+    "existingSavedCopies": "Preserved; not changed or opened by this final run."
+  },
+  "earlierVerifiedOutput": "docs/evidence/native/beta-iphone-export-acceptance.json",
+  "earlierEvidenceStatus": "Actual earlier original-source Save/restart/exact Files reopen, settled Preview render, and independent PDF.js inspection remain valid; this retained one-shot regression is not passing.",
+  "stoppedAfterAuthorizedSingleRun": true
+}

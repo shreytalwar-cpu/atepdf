@@ -1,0 +1,8 @@
+{
+  "completed-reply-exact-continuation-timing": "elapsedSeconds=10.331690073013306\napplicationState=4",
+  "completed-reply-after-foreground-timing": "elapsedSeconds=5.552103042602539\napplicationState=4",
+  "completed-reply-activate-returned": "elapsedSeconds=5.5516510009765625\n",
+  "completed-reply-activate-start": "elapsedSeconds=5.2136290073394775\n",
+  "completed-reply-home-start": "elapsedSeconds=3.712082028388977\n",
+  "completed-reply-before-home-timing": "elapsedSeconds=3.3441590070724487\napplicationState=4"
+}

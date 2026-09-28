@@ -1,0 +1,64 @@
+diff --git a/apps/universal/src/components/assistant-ui/elements/surfaces.tsx b/apps/universal/src/components/assistant-ui/elements/surfaces.tsx
+index 59b9224..2ed6cdc 100644
+--- a/apps/universal/src/components/assistant-ui/elements/surfaces.tsx
++++ b/apps/universal/src/components/assistant-ui/elements/surfaces.tsx
+@@ -9,6 +9,7 @@ import {
+ import {
+   AccessibilityInfo,
+   Animated,
++  Easing,
+   Platform,
+   Text,
+   type TextProps,
+@@ -102,36 +103,33 @@ export const useMotion = () =>
+   useSyncExternalStore(subscribeMotion, getMotion, getMotion);
+ 
+ export const usePulse = (active: boolean, low = 0.45) => {
+-  const [opacity] = useState(() => new Animated.Value(1));
++  const [phase] = useState(() => new Animated.Value(0));
+   const motion = useMotion();
+ 
+   useEffect(() => {
+     if (!active || !motion) {
+-      opacity.setValue(1);
++      phase.setValue(0);
+       return;
+     }
+     const useNativeDriver = Platform.OS !== "web";
+     const animation = Animated.loop(
+-      Animated.sequence([
+-        Animated.timing(opacity, {
+-          toValue: low,
+-          duration: 700,
+-          useNativeDriver,
+-          isInteraction: false,
+-        }),
+-        Animated.timing(opacity, {
+-          toValue: 1,
+-          duration: 700,
+-          useNativeDriver,
+-          isInteraction: false,
+-        }),
+-      ]),
++      // One native loop owns the entire cycle and its cancellation handle.
++      Animated.timing(phase, {
++        toValue: 1,
++        duration: 1400,
++        easing: Easing.linear,
++        useNativeDriver,
++        isInteraction: false,
++      }),
+     );
+     animation.start();
+     return () => animation.stop();
+-  }, [active, low, motion, opacity]);
++  }, [active, motion, phase]);
+ 
+-  return opacity;
++  return phase.interpolate({
++    inputRange: [0, 0.25, 0.5, 0.75, 1],
++    outputRange: [1, (1 + low) / 2, low, (1 + low) / 2, 1],
++  });
+ };
+ 
+ export const ShimmerLabel: FC<TextProps & { active?: boolean }> = ({

@@ -1,0 +1,42 @@
+{
+  "recordedAt": "2026-09-28T17:56:14.077178+00:00",
+  "productionBaseline": "afa15b5 (checkpoint cb23813)",
+  "sameSetup": "Real bundled import and3-page merge, synthetic planner pairing, partial draft, Home, activate, exact continuation.",
+  "cases": [
+    {
+      "case": "pairing only",
+      "result": "Passed",
+      "methodDurationSeconds": 38.244,
+      "activationSeconds": 0.3132760524749756,
+      "foregroundToExactContinuationSeconds": 5.021749019622803,
+      "summary": "docs/evidence/native/beta-matrix-pair-only-summary.json",
+      "timings": "docs/evidence/native/beta-matrix-pair-only-timing.json"
+    },
+    {
+      "case": "immediate completed answer",
+      "result": "Passed",
+      "methodDurationSeconds": 44.963,
+      "activationSeconds": 0.33802199363708496,
+      "foregroundToExactContinuationSeconds": 4.779587030410767,
+      "summary": "docs/evidence/native/beta-matrix-completed-reply-summary.json",
+      "timings": "docs/evidence/native/beta-matrix-completed-reply-timing.json"
+    },
+    {
+      "case": "10-second completed local plan",
+      "result": "Failed",
+      "methodDurationSeconds": 177.57,
+      "activationSeconds": 60.05311703681946,
+      "foregroundToExactContinuationSeconds": 65.3399920463562,
+      "summary": "docs/evidence/native/beta-matrix-delayed-reply-summary.json",
+      "timings": "docs/evidence/native/beta-matrix-delayed-reply-timing.json"
+    }
+  ],
+  "interpretation": "Pair-only and fast completed answer resume normally. A10s successful completed plan reproduces two60s XCTest animation-completion waits without user Stop. The app remains readable and eventually accepts exact continuation. Sustained planning is sufficient; cancellation itself is not required. No production cause is proven by this matrix alone.",
+  "counterCaveat": "Delayed-success test failed only its final cancelled counter assertion because the synthetic server kept an abort listener after its delay resolved; gateway30s deadline later incremented it. This fixture defect is now fixed and independently checked in beta-matrix-counter-regression.json. The60s UI waits are independently evidenced by step timestamps and runner log.",
+  "previousCancellationEvidence": "docs/evidence/native/beta-ipad-cancel-resume-summary.json",
+  "sourceSnapshots": [
+    "docs/evidence/native/beta-matrix-source.json",
+    "docs/evidence/native/beta-matrix-delayed-source.json"
+  ],
+  "paidCalls": 0
+}

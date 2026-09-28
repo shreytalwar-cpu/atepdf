@@ -1,0 +1,64 @@
+{
+  "recordedAt": "2026-09-28T18:38:05.299567+00:00",
+  "status": "Verified actual local save, atepdf restart, exact Files folder navigation, independent Preview render, and independent PDF.js saved-byte inspection.",
+  "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+  "platform": "iPhone17Pro iOS27 Simulator; no physical-device claim",
+  "productionSource": "Original restored production sources; 98 app/package hashes match beta-final-apple-tests-source.json. Rejected animation candidates were not used for this saved copy.",
+  "sourceCommitAtEvidence": "cb23813040efecc7f8bc705ebfec937d976af449",
+  "actualDestination": "On My iPhone/atepdf-beta-743ef2f5-e142-4e7e-b848-4c259d6c6958/atepdf-beta-b347bc45-45db-4dcd-b397-bfd586220a21/b347bc45-45db-4dcd-b397-bfd586220a21.pdf",
+  "destinationNote": "The picker restored the prior local QA folder, so this actual output is in the recorded nested fresh folder. The root-destination test assumption was corrected after the save; the file was preserved and reopened via its exact two-folder chain.",
+  "saveStage": {
+    "resultBundle": ".build/beta-iphone-export-final.xcresult",
+    "completed": [
+      "samples imported",
+      "actual 3-page merge",
+      "Save to Files",
+      "fresh local folder name committed",
+      "actual Save",
+      "share completion",
+      "atepdf terminate/relaunch with empty session"
+    ],
+    "testOutcome": "The original one-shot test subsequently failed on Files navigation. This is not represented as a passing one-shot test."
+  },
+  "reopenStage": {
+    "resultBundle": ".build/beta-iphone-export-independent-reopen.xcresult",
+    "method": "testReopenKnownSavedOriginalSourceCopy",
+    "passed": 1,
+    "failed": 0,
+    "testDurationSeconds": 32.353,
+    "runtimeSeconds": 37.801,
+    "noNewPDFJobsOrSaves": true,
+    "source": "docs/evidence/native/beta-iphone-export-reopen-test-source.swift",
+    "sourceProof": "docs/evidence/native/beta-iphone-export-reopen-source.json"
+  },
+  "renderProof": {
+    "screenshot": "docs/evidence/native/beta-iphone-export-reopened-preview.png",
+    "capture": "Public simctl screenshot of exact explicit iPhone after system Preview launch settled; no intervening UI action. Immediate test foreground-state capture preceded the viewer animation and was not counted as render proof.",
+    "visuallyObserved": [
+      "Preview title b347bc45\u2026",
+      "Project brief",
+      "Page marker: A1",
+      "Working notes / Page marker: A2 beginning below first page"
+    ]
+  },
+  "independentBytes": "docs/evidence/native/beta-iphone-saved-copy-independent.json",
+  "pageCount": 3,
+  "pageMarkers": [
+    "A1",
+    "A2",
+    "B1"
+  ],
+  "bytes": 3100,
+  "sha256": "4ae158da5e4f1576d9842141faaf65b17502327d42815844973b8ee5a48ab8c0",
+  "reusableTest": "tests/native/ios/AtepdfExportUITests.swift",
+  "reusableTestSha256": "385d66d576b3be35a9915913bb8b29a2f4b3456a27cdb86c66a002cc86b629c8",
+  "testCleanup": "Temporary hardcoded saved-copy method removed after preserving its exact executed source. Reusable flow includes visible parent/sidebar navigation and exact document-title wait. The later authorized single retained end-to-end run compiled successfully but failed its guarded generic Back-label navigation before any new destination save; see latestRetainedRegression.",
+  "preserveOutput": true,
+  "limitations": [
+    "Simulator evidence only; physical iPhone/iPad destination-save acceptance remains required.",
+    "No software-keyboard clearance claim.",
+    "Existing unrelated local files were not opened or changed."
+  ],
+  "latestRetainedRegression": "docs/evidence/native/beta-iphone-export-retained-result.json",
+  "retainedOneShotPassing": false
+}

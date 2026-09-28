@@ -1,0 +1,7 @@
+simulatorUDID=D68C4547-67D3-4960-AAB9-D85FD786D6FC
+fileName=b347bc45-45db-4dcd-b397-bfd586220a21.pdf
+localDestination=On My iPhone/atepdf-beta-743ef2f5-e142-4e7e-b848-4c259d6c6958/atepdf-beta-b347bc45-45db-4dcd-b397-bfd586220a21
+atepdfRestartedBeforeReopen=true
+viewer=com.apple.Preview
+status=copy selected from exact local folder; screenshot must prove actual document rendering
+preserveOutput=true

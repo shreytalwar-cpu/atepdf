@@ -1,0 +1,36 @@
+{
+  "recordedAt": "2026-09-28T18:25:20.379968+00:00",
+  "status": "FAILED",
+  "passed": 0,
+  "failed": 2,
+  "sourceSnapshot": "beta-matrix-js-driver-source.json",
+  "summary": "beta-matrix-js-driver-summary.json",
+  "resultBundle": "beta-matrix-js-driver.xcresult",
+  "testProductsPath": "/Users/shrey/Library/Developer/XcodeBuildMCP/workspaces/atepdf-0efe6fe22454/test-products/test_sim_2026-09-28T18-20-01-874Z_pid12385_5ad9244e.xctestproducts",
+  "cases": {
+    "cancelled-plan": {
+      "durationSeconds": 105.143,
+      "activationSeconds": 60.06555104255676,
+      "failure": "Same missing XCTest animation-completion notification; strict activation<5s failed."
+    },
+    "delayed-reply": {
+      "durationSeconds": 57.872,
+      "failure": "Pairing connected-text wait timed out. This attempt did not reach planning or backgrounding."
+    }
+  },
+  "decision": "Rejected and fully reverted. No further pulse experiments.",
+  "restoredProductionPulseSha256": "c754ed5b1124d0dce1c4296895ea79143b8c89238392ef5f30e15aed128aa9ba",
+  "rejectedPatch": "beta-js-pulse-rejected.patch",
+  "rejectedPatchSha256": "fb5c3eb92a5697bb10ec9cbe42ebbc5ca2e3913af91245e10a1bce826550c6b9",
+  "paidCalls": 0,
+  "timingAttachments": {
+    "cancelled-plan": {
+      "cancelled-plan-after-foreground-timing": "elapsedSeconds=65.16292202472687\napplicationState=4",
+      "cancelled-plan-activate-returned": "elapsedSeconds=65.16080093383789\n",
+      "cancelled-plan-activate-start": "elapsedSeconds=5.094759941101074\n",
+      "cancelled-plan-home-start": "elapsedSeconds=3.6032789945602417\n",
+      "cancelled-plan-before-home-timing": "elapsedSeconds=3.277330994606018\napplicationState=4"
+    },
+    "delayed-reply": {}
+  }
+}

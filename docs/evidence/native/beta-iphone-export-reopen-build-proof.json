@@ -1,0 +1,36 @@
+{
+  "capturedAt": "2026-09-28T18:38:05.299340+00:00",
+  "builtAppPath": ".build/ios-export-20260928/Build/Products/Release-iphonesimulator/atepdf.app",
+  "installedAppPath": "/Users/shrey/Library/Developer/CoreSimulator/Devices/D68C4547-67D3-4960-AAB9-D85FD786D6FC/data/Containers/Bundle/Application/10BE9F86-290E-478C-A6E0-37F45A6B0DE6/atepdf.app",
+  "builtFiles": {
+    "atepdf": {
+      "sha256": "b37c996656c4456d5e7b76ef2dd3707c40bf764d403e8644cfb401a2e3b999cc",
+      "bytes": 8213592
+    },
+    "main.jsbundle": {
+      "sha256": "4f6dbd404ca33f51b89f833437cb8f2631bd32b10b04957c1447a675eadbcd21",
+      "bytes": 6916959
+    },
+    "Info.plist": {
+      "sha256": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c",
+      "bytes": 2215
+    }
+  },
+  "installedFiles": {
+    "atepdf": {
+      "sha256": "b37c996656c4456d5e7b76ef2dd3707c40bf764d403e8644cfb401a2e3b999cc",
+      "bytes": 8213592
+    },
+    "main.jsbundle": {
+      "sha256": "4f6dbd404ca33f51b89f833437cb8f2631bd32b10b04957c1447a675eadbcd21",
+      "bytes": 6916959
+    },
+    "Info.plist": {
+      "sha256": "acec4d55a18d2edc268c50761db4e5314ef9930d817c1f62146862d1ecf4305c",
+      "bytes": 2215
+    }
+  },
+  "installedMatchesBuilt": true,
+  "deviceId": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+  "sourceProof": "docs/evidence/native/beta-iphone-export-reopen-source.json"
+}

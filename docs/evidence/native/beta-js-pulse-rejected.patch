@@ -1,0 +1,15 @@
+diff --git a/apps/universal/src/components/assistant-ui/elements/surfaces.tsx b/apps/universal/src/components/assistant-ui/elements/surfaces.tsx
+index 59b9224..5d4dac9 100644
+--- a/apps/universal/src/components/assistant-ui/elements/surfaces.tsx
++++ b/apps/universal/src/components/assistant-ui/elements/surfaces.tsx
+@@ -110,7 +110,9 @@ export const usePulse = (active: boolean, low = 0.45) => {
+       opacity.setValue(1);
+       return;
+     }
+-    const useNativeDriver = Platform.OS !== "web";
++    // Keep Apple's small opacity pulse on the JS driver so its lifetime follows
++    // the component's start/stop rather than native animation-loop bookkeeping.
++    const useNativeDriver = Platform.OS === "android";
+     const animation = Animated.loop(
+       Animated.sequence([
+         Animated.timing(opacity, {

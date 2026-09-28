@@ -1,0 +1,18 @@
+{
+  "recordedAt": "2026-09-28T18:30:14.798971+00:00",
+  "syntheticGatewayFinal": {
+    "provider": "synthetic-only",
+    "calls": 8,
+    "cancelled": 4
+  },
+  "ownedGatewaySession": 77944,
+  "ownedGatewayStopped": true,
+  "iPadTextSizeRestoredReadback": "large",
+  "iPadMotionRestored": false,
+  "iPadAutoPlayMessageEffectsRestored": true,
+  "switchRestorationEvidence": "beta-matrix-os-motion-restored.txt",
+  "orientation": "portrait",
+  "oldSourceReadOrExecuted": false,
+  "ownerGatewayOrKeyTouched": false,
+  "paidCalls": 0
+}

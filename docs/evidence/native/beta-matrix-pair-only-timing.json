@@ -1,0 +1,8 @@
+{
+  "pair-only-exact-continuation-timing": "elapsedSeconds=10.7014080286026\napplicationState=4",
+  "pair-only-after-foreground-timing": "elapsedSeconds=5.679659008979797\napplicationState=4",
+  "pair-only-activate-returned": "elapsedSeconds=5.679066061973572\n",
+  "pair-only-activate-start": "elapsedSeconds=5.365790009498596\n",
+  "pair-only-home-start": "elapsedSeconds=3.7990440130233765\n",
+  "pair-only-before-home-timing": "elapsedSeconds=3.45245099067688\napplicationState=4"
+}

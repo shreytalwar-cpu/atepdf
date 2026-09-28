@@ -1,0 +1,35 @@
+{
+  "recordedAt": "2026-09-28T18:05:15.496072+00:00",
+  "test": "AtepdfAccessibilityUITests/testProbePublicReduceMotionSettings",
+  "result": "passed",
+  "passed": 1,
+  "failed": 0,
+  "skipped": 0,
+  "testDurationSeconds": 20.891,
+  "device": "iPad Pro 13-inch (M5), iOS27 Simulator",
+  "simulator": "2DA633C1-2AC8-43E8-90D7-C29801278468",
+  "products": "/Users/shrey/Library/Developer/XcodeBuildMCP/workspaces/atepdf-0efe6fe22454/test-products/test_sim_2026-09-28T17-56-44-406Z_pid12385_f3badd94.xctestproducts",
+  "testBundleBinarySha256": "49068e8c8c3da965a54d371839442f81a2bbecc490e534be3926b98bf8d36e1c",
+  "resultBundle": "/Users/shrey/Documents/ChatGPT/atepdf/.build/reduce-motion-probe-authorized-t4_36w0y/result.xcresult",
+  "settingsRoute": [
+    "Accessibility",
+    "Motion",
+    "Reduce Motion"
+  ],
+  "observedIdentifiers": {
+    "motionCell": "MOTION_TITLE",
+    "switch": "REDUCE_MOTION"
+  },
+  "originalSwitch": false,
+  "publicUIKitReadback": false,
+  "settingChanged": false,
+  "plannerCalls": 0,
+  "applicationWorkflowTested": false,
+  "scope": "Public Settings navigation/read-only probe only. Product contains the temporary pulse candidate; it does not establish application acceptance. Functional Reduce Motion-on work must use rebuilt restored production source. Test source was subsequently refactored into the shared public helper for the next build.",
+  "priorAttempt": {
+    "result": "not executed",
+    "exitCode": 70,
+    "reason": "Filesystem sandbox denied CoreSimulatorService access; no simulator setting or app workflow reached. Authorized retry passed.",
+    "directory": ".build/reduce-motion-probe-3cachjym"
+  }
+}

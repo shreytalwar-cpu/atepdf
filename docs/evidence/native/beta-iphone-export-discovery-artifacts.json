@@ -1,0 +1,23 @@
+{
+  "simulator": "D68C4547-67D3-4960-AAB9-D85FD786D6FC",
+  "resultBundle": ".build/beta-iphone-export-folder-dialog.xcresult",
+  "testProducts": "/Users/shrey/Library/Developer/XcodeBuildMCP/workspaces/atepdf-0efe6fe22454/test-products/test_sim_2026-09-28T18-09-38-603Z_pid12385_d2e8bc8e.xctestproducts",
+  "observedBehavior": "New Folder immediately creates an empty local folder and starts DOC.inlineRenameField editing, rather than showing a confirmation dialog.",
+  "createdByProbe": [
+    {
+      "location": "On My iPhone",
+      "name": "untitled folder",
+      "kind": "empty folder",
+      "status": "left in place after bounded UI discovery"
+    },
+    {
+      "location": "On My iPhone",
+      "name": "atepdf-beta-b36d97da-3777-44ca-9408-b9106de03552",
+      "kind": "empty folder",
+      "status": "rename committed and automatically entered; test stopped before Save while expecting a parent-grid cell"
+    }
+  ],
+  "pdfSaved": false,
+  "preservation": "Unrelated pre-existing files were not selected, opened, deleted or changed.",
+  "laterResultBundle": ".build/beta-iphone-export-save-reopen.xcresult"
+}

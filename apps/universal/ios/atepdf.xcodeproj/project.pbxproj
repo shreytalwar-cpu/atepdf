@@ -437,7 +437,7 @@
 				"ENABLE_APP_SANDBOX[sdk=macosx*]" = YES;
 				ENABLE_BITCODE = NO;
 				"ENABLE_INCOMING_NETWORK_CONNECTIONS[sdk=macosx*]" = NO;
-				"ENABLE_OUTGOING_NETWORK_CONNECTIONS[sdk=macosx*]" = NO;
+				"ENABLE_OUTGOING_NETWORK_CONNECTIONS[sdk=macosx*]" = YES;
 				"ENABLE_USER_SELECTED_FILES[sdk=macosx*]" = readwrite;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -486,7 +486,7 @@
 				DEAD_CODE_STRIPPING = YES;
 				"ENABLE_APP_SANDBOX[sdk=macosx*]" = YES;
 				"ENABLE_INCOMING_NETWORK_CONNECTIONS[sdk=macosx*]" = NO;
-				"ENABLE_OUTGOING_NETWORK_CONNECTIONS[sdk=macosx*]" = NO;
+				"ENABLE_OUTGOING_NETWORK_CONNECTIONS[sdk=macosx*]" = YES;
 				"ENABLE_USER_SELECTED_FILES[sdk=macosx*]" = readwrite;
 				INFOPLIST_FILE = atepdf/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;

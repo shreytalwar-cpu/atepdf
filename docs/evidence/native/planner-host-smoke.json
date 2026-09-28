@@ -1,0 +1,20 @@
+[
+  {
+    "port": 3210,
+    "applicationHTTP": 200,
+    "pairing": "passed",
+    "nativeStatus": "passed without secret",
+    "revocation": "passed",
+    "model": "gpt-6-luna",
+    "planningRequestsSent": 0
+  },
+  {
+    "port": 3211,
+    "applicationHTTP": 200,
+    "pairing": "passed",
+    "nativeStatus": "passed without secret",
+    "revocation": "passed",
+    "model": "gpt-6-luna",
+    "planningRequestsSent": 0
+  }
+]

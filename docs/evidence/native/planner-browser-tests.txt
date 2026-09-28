@@ -1,0 +1,29 @@
+Already up to date
+Done in 318ms using pnpm v11.19.0
+$ playwright test
+
+Running 19 tests using 1 worker
+
+(node:64922) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/e2e/large-files.spec.ts:7:5 › large local PDFs: import → >40 MB merge → preview/save → remove → undo without egress (4.4s)
+  ✓   2 tests/e2e/planner.spec.ts:11:5 › mocked planner transport: Send → redacted complete plan → real local result → follow-up (2.1s)
+  ✓   3 tests/e2e/planner.spec.ts:22:5 › AI-enabled quick PDF action uses planner, while a product question replies in chat without changing files (1.8s)
+  ✓   4 tests/e2e/planner.spec.ts:33:5 › direct planner cancellation ignores a late complete plan and keeps local quick actions usable (2.1s)
+  ✓   5 tests/e2e/planner.spec.ts:49:5 › cancelling direct planner setup prevents any later model request (12.1s)
+  ✓   6 tests/e2e/planner.spec.ts:67:7 › direct planner incomplete response never changes a committed result (977ms)
+  ✓   7 tests/e2e/planner.spec.ts:67:7 › direct planner stale response never changes a committed result (978ms)
+  ✓   8 tests/e2e/planner.spec.ts:67:7 › direct planner truncated JSON response never changes a committed result (976ms)
+  ✓   9 tests/e2e/planner.spec.ts:86:5 › direct balanced-compression plan retains its image-quality choice before local execution (1.1s)
+  ✓  10 tests/e2e/planner.spec.ts:94:5 › privacy rejection happens before transport, unknown instruction with no key stays honest (465ms)
+  ✓  11 tests/e2e/planner.spec.ts:101:5 › masked local key setup keeps the key outside chat and model transport (538ms)
+  ✓  12 tests/e2e/planner.spec.ts:108:5 › native pairing code stays in a masked setup control and makes no model request (917ms)
+  ✓  13 tests/e2e/workflow.spec.ts:8:5 › real merge → preview/save → remove physical page 2 → undo; local-only network (3.3s)
+  ✓  14 tests/e2e/workflow.spec.ts:23:5 › responsive workspace, keyboard height, privacy and save cancellation (2.2s)
+  ✓  15 tests/e2e/workflow.spec.ts:30:5 › real merge → OCR → compression preserves text and produces a measured smaller PDF without egress (5.3s)
+  ✓  16 tests/e2e/workflow.spec.ts:41:5 › chat clarification, cancellation and discard guard keep committed results intact (2.8s)
+  ✓  17 tests/e2e/workflow.spec.ts:85:5 › PDF drag feedback clears on leave and actual drop imports locally (571ms)
+  ✓  18 tests/e2e/workflow.spec.ts:111:5 › keyboard composer and Latest message keep current results reachable (1.3s)
+  ✓  19 tests/e2e/workflow.spec.ts:142:5 › one chat recipe commits only the final merge → OCR → compression result (4.4s)
+
+  19 passed (50.6s)

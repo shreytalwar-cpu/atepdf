@@ -1,0 +1,13 @@
+# ADR 0008 — Native development connection to the local planner
+
+The next authorized slice connects the native conversation to the existing planner without distributing an OpenAI credential or creating a public service. Mac Catalyst and iOS Simulator can reach the same loopback gateway on the developer's Mac. Physical iOS cannot use the Mac's loopback address and remains local-actions-only until an authenticated HTTPS service is implemented and approved for deployment.
+
+The browser's connection controls create a random 256-bit, single-use pairing code valid for five minutes. It is displayed only in a masked setup control, with an explicit copy button. A native exchange returns an eight-hour, process-scoped bearer; only a hash is retained by the gateway. Native Swift holds the bearer in actor memory, not JavaScript, preferences, files or Keychain. Quitting either app/server or expiry requires pairing again. This deliberately limits the development credential lifecycle; persistent account authentication is a later integration.
+
+The independent `AtepdfPlanner` Expo module uses Foundation URLSession, permits only localhost ports 3210/3211/3212, rejects redirects, has no cookies/credential store/cache, bounds responses to 256 KB, and cancels by request identity. Port 3212 is reserved for the explicit synthetic test server; no production configuration points there. Arbitrary URLs, PDF byte bodies and unknown request fields are rejected. No new third-party runtime library was added.
+
+Native status and planner endpoints require a paired bearer and refuse browser Origin/fetch-context headers. Browser pairing issuance retains the existing same-origin/CSRF controls. Native planning shares the same private DTO, complete response validation, provider, model, product knowledge, request allowance and controller as the browser. Pairing alone makes no provider call and creates no allowance. Original PDFs remain local and immutable.
+
+Mac Catalyst now needs the outgoing-network sandbox entitlement. Incoming networking remains disabled. The native transport narrows its own destinations to loopback; an outgoing entitlement by itself is not a domain firewall. The local staging script verifies the exact entitlement set. No production signing identity, deployment, account, purchase product or migration is introduced.
+
+References: [Expo local modules](https://docs.expo.dev/modules/get-started/), [Apple ephemeral URLSession](https://developer.apple.com/documentation/foundation/urlsessionconfiguration/ephemeral), repository Swift security guidance for credential lifecycle and avoiding plaintext persistence. Runtime/test evidence is recorded in `SESSION_2026-09-28_NATIVE_PLANNER.md`.

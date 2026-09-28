@@ -1,34 +1,45 @@
 import {randomBytes} from 'node:crypto';
-import requestValid from '../../contracts/src/generated/request';
-import {capabilities,validateLocalContext,type Request as PlannerRequest} from '../../contracts/src/protocol';
-import {assertInstructionSafe} from './privacy';
+import type {Request as PlannerRequest} from '../../contracts/src/protocol';
+import {validateRequest} from './request';
+export {validateRequest} from './request';
 import {bindResponse} from './schema';
 import {MODEL,planWithOpenAI} from './provider';
 import {LocalConfig} from './local-config';
+import {NativePairing} from './native-pairing';
 const LIMIT=24_000;
-export function validateRequest(value:unknown):PlannerRequest{
-  if(!requestValid(value))throw new Error('Invalid request.');
-  const r=value as PlannerRequest;
-  validateLocalContext(r);
-  assertInstructionSafe(r.instruction);
-  if(!/^req_[a-f0-9]{32}$/.test(r.requestId)||r.files.some(f=>!/^(file|out)_[a-f0-9]{32}$/.test(f.ref))||r.files.length>40||r.previousPlan!==null||r.previousActionIds.length||r.locale!=='en-IN'||r.ocrLanguages.some(language=>language!=='eng')||(!r.capabilities.includes('ocr_pdf')&&r.ocrLanguages.length>0)||r.capabilities.some(c=>!capabilities.includes(c)))throw new Error('Unsupported context.');
-  const refs=new Set(r.files.map(f=>f.ref));
-  if(refs.size!==r.files.length||r.files.some(f=>f.kind!=='pdf'||f.encrypted||f.pageCount<1||f.pageCount>100)||[...r.selectionRefs,...r.originalRefs,...(r.focusedResultRef?[r.focusedResultRef]:[])].some(ref=>!refs.has(ref)))throw new Error('Invalid file references.');
-  // Second positive projection at the server boundary; never forward raw JSON.
-  return {schemaVersion:'1.0',requestId:r.requestId,workspaceRevision:r.workspaceRevision,locale:'en-IN',instruction:r.instruction,files:r.files.map(f=>({ref:f.ref,kind:'pdf',pageCount:f.pageCount,sizeBytes:f.sizeBytes,encrypted:false})),selectionRefs:[...r.selectionRefs],focusedResultRef:r.focusedResultRef,originalRefs:[...r.originalRefs],previousActionIds:[],capabilities:[...r.capabilities],previousPlan:null,ocrLanguages:[...r.ocrLanguages]};
-}
+
 export function createGateway(config:Pick<LocalConfig,'status'|'reserve'> & Partial<Pick<LocalConfig,'saveKey'>>,provider=planWithOpenAI,{timeoutMs=30_000,minIntervalMs=1500}={}){
   const token=randomBytes(32).toString('hex');let running=false,lastStarted=0;const used=new Set<string>();
+  const pairing=new NativePairing();
   const json=(body:unknown,status=200)=>Response.json(body,{status,headers:{'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
   return async(request:Request)=>{
     const url=new URL(request.url),host=request.headers.get('host')??url.host;
     if(!/^https?:$/.test(url.protocol)||!['localhost','127.0.0.1','[::1]'].includes(url.hostname)||host!==url.host)return json({error:'Local access only.'},403);
     const origin=request.headers.get('origin');
     if((origin&&origin!==url.origin)||request.headers.get('sec-fetch-site')==='cross-site')return json({error:'Use atepdf on this computer.'},403);
+    const native=url.pathname.startsWith('/api/native/');
+    if(native){
+      // Native requests have no browser fetch context; never grant native auth
+      // to a browser just because it is same-origin.
+      if(origin||request.headers.has('sec-fetch-site'))return json({error:'Native connection required.'},403);
+      if(url.pathname==='/api/native/pair'&&request.method==='POST'){
+        if(request.headers.get('content-type')?.split(';')[0]!=='application/json')return json({error:'Invalid pairing request.'},415);
+        try{const text=await smallBody(request,256),data=JSON.parse(text);if(Object.keys(data).length!==1||typeof data.code!=='string')throw new Error();return json(pairing.exchange(data.code,url.origin));}
+        catch{return json({error:'Pairing expired or invalid. Create a new code in the browser.'},401);}
+      }
+      if(!pairing.accepts(request.headers.get('authorization'),url.origin))return json({error:'Pair this app with the browser again.'},401);
+      if(request.method==='GET'&&url.pathname==='/api/native/planner/status')return json({...await config.status(),model:MODEL});
+      if(request.method==='POST'&&url.pathname==='/api/native/disconnect'){pairing.revoke(request.headers.get('authorization'));return json({disconnected:true});}
+      if(request.method!=='POST'||url.pathname!=='/api/native/planner')return json({error:'Not found.'},404);
+    }
     if(request.method==='GET'&&url.pathname==='/api/planner/status')return json({...await config.status(),token,model:MODEL});
     if(request.method!=='POST')return json({error:'Method not allowed.'},405);
-    if(origin!==url.origin||request.headers.get('x-atepdf-token')!==token)return json({error:'Refresh atepdf before planning.'},403);
+    if(!native&&(origin!==url.origin||request.headers.get('x-atepdf-token')!==token))return json({error:'Refresh atepdf before planning.'},403);
     if(request.headers.get('content-type')?.split(';')[0]!=='application/json')return json({error:'Expected a plan request.'},415);
+    if(url.pathname==='/api/planner/pairing'){
+      try{if(await smallBody(request,8)!=='{}')throw new Error();if(!['3210','3211','3212'].includes(url.port))throw new Error();return json(pairing.issue(url.origin));}
+      catch{return json({error:'Local pairing unavailable.'},400);}
+    }
     if(url.pathname==='/api/planner/key'){
       if(!config.saveKey)return json({error:'Key setup unavailable.'},503);
       try{
@@ -38,7 +49,7 @@ export function createGateway(config:Pick<LocalConfig,'status'|'reserve'> & Part
         await config.saveKey(data.key);return json({saved:true,enabled:false});
       }catch{return json({error:'The key could not be saved. Check its format or the existing local setup; nothing was overwritten.'},400);}
     }
-    if(url.pathname!=='/api/planner')return json({error:'Not found.'},404);
+    if(url.pathname!=='/api/planner'&&url.pathname!=='/api/native/planner')return json({error:'Not found.'},404);
     if(!((await config.status()).enabled))return json({error:'AI planning is not enabled. Connect a key and approve a request limit locally.'},503);
     if(running||Date.now()-lastStarted<minIntervalMs)return json({error:'Wait for the current request.'},429);
     let parsed:PlannerRequest;
@@ -65,4 +76,9 @@ export function createGateway(config:Pick<LocalConfig,'status'|'reserve'> & Part
     }
     finally{running=false;if(release)await release().catch(()=>{});}
   };
+}
+async function smallBody(request:Request,limit:number){
+  const reader=request.body?.getReader();if(!reader)throw new Error();let size=0,text='';const decoder=new TextDecoder();
+  try{while(true){const {value,done}=await reader.read();if(done)break;size+=value.byteLength;if(size>limit)throw new Error();text+=decoder.decode(value,{stream:true});}return text+decoder.decode();}
+  finally{await reader.cancel();}
 }

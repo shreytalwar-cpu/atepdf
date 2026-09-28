@@ -1,5 +1,7 @@
 # Apple local PDF adapter
 
+The PDF adapter remains independent of the new AtepdfPlanner module. Mac and iOS Simulator can pair with the local development gateway under ADR 0008. Physical-device AI is not enabled. The provider key stays in the Mac's local server; native PDF processing remains in this adapter. Current native planner evidence is in SESSION_2026-09-28_NATIVE_PLANNER.md.
+
 New source in `apps/universal/modules/atepdf-pdf/ios`. No old application source was read, copied, or executed for this adapter. It uses OS-supplied PDFKit/CoreGraphics, Vision and ImageIO; these frameworks add no bundled third-party PDF/OCR engine or cloud service. Shared pdf-lib remains the writer under the repository's existing licence review.
 
 ## Interface

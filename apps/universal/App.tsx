@@ -4,6 +4,7 @@ import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {ArrowDownToLine, Check, FileText, FolderOpen, LockKeyhole, Plus, ScanText, Copy, Undo2, SquarePen, SlidersHorizontal, Eye} from 'lucide-react-native';
 import type {LucideIcon} from 'lucide-react-native';
 import {AssistantRuntimeProvider, useExternalStoreRuntime, useAuiState, type ThreadMessageLike} from '@assistant-ui/react-native';
+import * as Clipboard from 'expo-clipboard';
 import {Thread} from './src/components/assistant-ui/elements/thread.aui';
 import {Icon} from './src/components/ui/icon';
 import type {LocalFileStore, Artifact} from '@core/local-file-store';
@@ -14,12 +15,12 @@ import {nativeComposerComponents} from './src/platform/ComposerInput';
 import {JobActivity} from './src/components/JobActivity';
 import {useAnnounce,useMotion} from './src/components/assistant-ui/elements/surfaces';
 import {privateInstruction} from '@planner/privacy';
-import {plannerStatus,requestPlan,savePlannerKey,type PlannerStatus} from '@planner/client';
+import {plannerStatus,requestPlan,savePlannerKey,createNativePairing,pairNativePlanner,disconnectNativePlanner,plannerAvailable,type PlannerStatus} from './src/platform/planner';
 import {validateEnvelope,type Request as PlannerRequest,type Envelope} from '@contracts/protocol';
 
 const formatSize = (n: number) => n < 1_000_000 ? `${(n / 1000).toFixed(1)} kB` : `${(n / 1_000_000).toFixed(2)} MB`;
 type Action = 'merge' | 'ocr' | 'remove' | 'compress' | 'chain';
-type Entry = {id: number; role: 'user' | 'assistant'; text: string; files?: {name: string; size: number}[]; artifact?: Artifact; choice?: 'compress' | 'chain' | 'clear' | 'execute' | 'connect'; revision?: number; request?:PlannerRequest; envelope?:Envelope; token?:string};
+type Entry = {id: number; role: 'user' | 'assistant'; text: string; files?: {name: string; size: number}[]; artifact?: Artifact; choice?: 'compress' | 'chain' | 'clear' | 'execute' | 'connect' | 'native-link' | 'native-pair'; revision?: number; request?:PlannerRequest; envelope?:Envelope; token?:string};
 function Button({children, onPress, disabled=false, primary=false, quiet=false, icon: Glyph, label}: {children?: React.ReactNode; onPress:()=>void; disabled?:boolean; primary?:boolean; quiet?:boolean; icon?:LucideIcon; label?:string}) {
   return <Pressable accessibilityRole="button" accessibilityLabel={label ?? (typeof children === 'string' ? children : undefined)} disabled={disabled} aria-disabled={disabled} onPress={onPress} className={`atepdf-button min-h-11 flex-row items-center justify-center gap-2 rounded-xl px-3 py-2 active:opacity-70 web:focus-visible:outline-2 web:focus-visible:outline-primary ${primary ? 'atepdf-button-primary bg-primary' : quiet ? 'bg-transparent' : 'border border-border bg-background'} ${disabled ? 'opacity-40' : ''}`}>
     {Glyph && <Icon as={Glyph} className={`size-4 ${primary ? 'text-primary-foreground' : 'text-foreground'}`}/>}<Text className={`text-sm font-medium ${primary ? 'text-primary-foreground' : 'text-foreground'}`}>{children}</Text>
@@ -88,7 +89,7 @@ function useWorkspace() {
   const action = (type: Action, text: string, page = 2) => {
     if (busy || operation.current) return;
     setChoice(null); append({role: 'user', text});
-    if(Platform.OS==='web'){void preparePlanning(text,{type,page});return;}
+    if(plannerAvailable){void preparePlanning(text,{type,page});return;}
     if ((type === 'compress' || type === 'chain') && store.originals.length) {
       const id = append({role: 'assistant', text: 'I can re-encode supported JPEG images at their original dimensions. Image quality may change; text and vectors stay intact. Some PDFs may not get smaller. Shall I create a new copy for you to preview?', choice: type, revision: store.revision});
       setChoice(id); return;
@@ -109,7 +110,7 @@ function useWorkspace() {
     if (busy || operation.current || !draft.trim()) return;
     const text = draft.trim(), command = text.replace(/[.!]$/, '').toLowerCase();
     const remove = command.match(/^remove (?:physical )?page (\d+)(?: from (?:the )?(?:merged )?result)?$/);
-    if(Platform.OS==='web'){
+    if(plannerAvailable){
       const fallback=remove?{type:'remove' as const,page:Number(remove[1])}:['merge', 'merge pdfs', 'merge these pdfs'].includes(command)?{type:'merge' as const,page:2}:['make searchable','ocr'].includes(command)?{type:'ocr' as const,page:2}:command==='compress'?{type:'compress' as const,page:2}:command==='merge, ocr, compress'?{type:'chain' as const,page:2}:command==='undo'?{type:'undo' as const,page:2}:undefined;
       setChoice(null);append({role:'user',text});void preparePlanning(text,fallback);return;
     }
@@ -122,7 +123,7 @@ function useWorkspace() {
     else { setChoice(null); append({role:'user',text}); void preparePlanning(text); }
   };
   const checkConnection=async(signal?:AbortSignal,quiet=false)=>{
-    if(Platform.OS!=='web'){say('Use the available local quick actions in this native build. A secure native AI connection is still being tested.');return null;}
+    if(!plannerAvailable){say('AI connection is not available on this device yet. Local quick actions still work.');return null;}
     try{const status=await plannerStatus(signal);signal?.throwIfAborted();setConnection(status);return status;}
     catch(error){if(signal?.aborted)throw error;if(!quiet)say('The local planner gateway is unavailable. You can still use the quick actions.');return null;}
   };
@@ -131,10 +132,10 @@ function useWorkspace() {
     catch{setConnection(previous=>previous?{...previous,enabled:false}:null);}
   };
   const connect=async()=>{
-    if(Platform.OS!=='web'){say('AI planning is connected in the browser development build. The available quick actions here process your PDFs on this device.');return;}
     const status=await checkConnection();if(!status)return;
+    if(Platform.OS!=='web'){const id=append({role:'assistant',text:status.pairingRequired?'Connect to the atepdf browser running on this Mac. Create a pairing code in its OpenAI connection controls, then paste it below.':'This app is paired with the local planner on this Mac.',choice:'native-pair'});setChoice(id);return;}
     if(!status.connected){const id=append({role:'assistant',text:'Connect OpenAI for optional AI planning. Enter your key in the secure field below. It is saved only by atepdf’s local server and never added to the conversation. Saving makes no OpenAI calls.',choice:'connect',token:status.token});setChoice(id);return;}
-    say(status.enabled?`AI planning is ready for up to ${status.remaining} approved requests. Tell me what you’d like to do.`:status.connected?'Your key is saved locally. Paid planning is paused until you approve a request limit in the local setup. Quick actions work now.':'OpenAI is not connected yet. Use the masked local setup step to save your key on this computer. Don’t paste it into this chat. Quick actions work now.');
+    const id=append({role:'assistant',text:status.enabled?`AI planning is ready for up to ${status.remaining} approved requests. Tell me what you’d like to do.`:'Your key is saved locally. Paid planning is paused until you approve a request limit in the local setup. Quick actions work now.',choice:'native-link',token:status.token});setChoice(id);
   };
   const preparePlanning=async(text:string,fallback?:{type:Action|'undo';page:number})=>{
     if(operation.current)return;
@@ -175,7 +176,7 @@ function useWorkspace() {
       await controller.execute(envelope,request);
       finish(previous,'Your new PDF is ready.');
     }catch(e){say(abort.signal.aborted?'Planning cancelled. No local files changed.':e instanceof Error?e.message:'This request could not finish. Your files are unchanged.');}
-    finally{operation.current=false;setLoading(false);setPlanning(false);plannerAbort.current=null;if(Platform.OS==='web')void refreshConnection();}
+    finally{operation.current=false;setLoading(false);setPlanning(false);plannerAbort.current=null;if(plannerAvailable)void refreshConnection();}
   };
   const executePlanned=async(entry:Entry)=>{
     if(!entry.envelope||!entry.request||operation.current)return;
@@ -188,7 +189,7 @@ function useWorkspace() {
     if (busy || choice !== entry.id) return;
     setChoice(null);
     if (entry.revision !== store.revision) { say('Your files changed. Please ask again so I use the current files.'); return; }
-    if(entry.choice==='connect')return;
+    if(entry.choice==='connect'||entry.choice==='native-link'||entry.choice==='native-pair')return;
     if(entry.choice==='execute'){void executePlanned(entry);return;}
     if (entry.choice === 'clear') {
       controller.clear(); setPreview(null); setReceipts({}); setEntries([]);
@@ -230,7 +231,7 @@ function Screen(){
           <View className="flex-row items-center gap-2"><Image source={require('./assets/approved-8-mark-source-crop.png')} resizeMode="contain" style={{width:28,height:37}}/><Image accessibilityLabel="atepdf" source={require('./assets/approved-atepdf-wordmark-source-crop.png')} resizeMode="contain" style={{width:90,height:30}}/></View>
           <View className="flex-row items-center gap-1">
             <Pressable accessibilityRole="button" accessibilityLabel="Processed on your device" onPress={()=>workspace.setPrivacy(true)} className="atepdf-button min-h-11 min-w-11 flex-row items-center justify-center gap-2 rounded-full bg-[#edf9f4] px-3"><LockKeyhole size={15} color="#26715c"/>{width>=430&&<Text className="text-xs text-[#26715c]">Processed on your device</Text>}</Pressable>
-            {Platform.OS==='web'&&<Pressable accessibilityRole="button" accessibilityLabel="OpenAI connection" accessibilityHint="Manage optional AI planning" disabled={busy} onPress={()=>void workspace.connect()} className={`atepdf-button size-11 items-center justify-center rounded-full ${busy?'opacity-40':''}`}><SlidersHorizontal size={19} color="#5d6980"/></Pressable>}
+            {plannerAvailable&&<Pressable accessibilityRole="button" accessibilityLabel={Platform.OS==='web'?'OpenAI connection':'AI connection'} accessibilityHint="Manage optional AI planning" disabled={busy} onPress={()=>void workspace.connect()} className={`atepdf-button size-11 items-center justify-center rounded-full ${busy?'opacity-40':''}`}><SlidersHorizontal size={19} color="#5d6980"/></Pressable>}
             {!!entries.length&&<Pressable accessibilityRole="button" accessibilityLabel="Start over" disabled={busy} onPress={()=>{workspace.append({role:'user',text:'Start over.'});const id=workspace.append({role:'assistant',text:'Save any results you want to keep first. Shall I clear this conversation and its local files? Your originals on your device will stay unchanged.',choice:'clear',revision:workspace.store.revision});workspace.setChoice(id);}} className={`atepdf-button size-11 items-center justify-center rounded-full ${busy?'opacity-40':''}`}><SquarePen size={19} color="#5d6980"/></Pressable>}
           </View>
         </View>
@@ -276,12 +277,25 @@ function MessageExtras(){
       {w.preview===entry.id&&<InlinePreview store={w.store} artifact={artifact} onClose={()=>w.setPreview(null)}/>}
       {entry.id===w.current&&<Text className="border-t border-border pt-3 text-sm text-muted-foreground">Tell me what you’d like to do next.</Text>}
     </View>}
-    {entry.choice&&entry.choice!=='connect'&&w.choice===entry.id&&<View className="flex-row flex-wrap gap-2"><Button primary disabled={w.busy} onPress={()=>w.confirm(entry)}>{entry.choice==='clear'?'Clear session':'Create optimised copy'}</Button><Button disabled={w.busy} onPress={()=>{w.setChoice(null);w.append({role:'user',text:'Keep things as they are.'});w.say('Okay. Your current files and result are unchanged.');}}>Keep working</Button></View>}
+    {entry.choice&&['clear','compress','chain','execute'].includes(entry.choice)&&w.choice===entry.id&&<View className="flex-row flex-wrap gap-2"><Button primary disabled={w.busy} onPress={()=>w.confirm(entry)}>{entry.choice==='clear'?'Clear session':'Create optimised copy'}</Button><Button disabled={w.busy} onPress={()=>{w.setChoice(null);w.append({role:'user',text:'Keep things as they are.'});w.say('Okay. Your current files and result are unchanged.');}}>Keep working</Button></View>}
     {entry.choice==='connect'&&w.choice===entry.id&&<KeyEntry token={entry.token!}/>}
+    {entry.choice==='native-link'&&w.choice===entry.id&&<BrowserPairing token={entry.token!}/>}
+    {entry.choice==='native-pair'&&w.choice===entry.id&&<NativePairing/>}
     {entry.choice&&w.choice!==entry.id&&<Text className="text-xs text-muted-foreground">This question is closed.</Text>}
   </>;
 }
 
+function BrowserPairing({token}:{token:string}){
+  const [code,setCode]=useState(''),[busy,setBusy]=useState(false),[message,setMessage]=useState('');
+  const generate=async()=>{setBusy(true);setCode('');setMessage('');try{const pairing=await createNativePairing(token);setCode(pairing.code);setMessage('Valid once, for five minutes. Paste it in the native app’s AI connection controls.');}catch{setMessage('A code could not be created. Open connection controls and try again.');}finally{setBusy(false);}};
+  return <View className="gap-3 rounded-2xl border border-border p-4"><Text className="text-sm font-medium text-foreground">Connect Mac or iOS Simulator</Text><Text className="text-sm text-muted-foreground">Pair the native app with this local planner. Your OpenAI key stays on this computer.</Text><Button disabled={busy} onPress={()=>void generate()}>Create pairing code</Button>{!!code&&<><TextInput accessibilityLabel="Native pairing code" value={code} readOnly secureTextEntry className="min-h-11 rounded-xl border border-border px-3 text-foreground"/><Button onPress={()=>{void Clipboard.setStringAsync(code);setMessage('Copied. Paste it in the native app’s AI connection controls.');}}>Copy pairing code</Button></>}{!!message&&<Text accessibilityLiveRegion="polite" className="text-sm text-muted-foreground">{message}</Text>}</View>;
+}
+function NativePairing(){
+  const w=useWorkspaceContext(),[code,setCode]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState('');
+  const pair=async()=>{setBusy(true);setError('');try{await pairNativePlanner(code);setCode('');await w.refreshConnection();w.setChoice(null);w.say('Connected to the local planner. Tell me what you’d like to do.');}catch{setCode('');setError('Pairing did not finish. Create a fresh code in the browser and try again.');}finally{setBusy(false);}};
+  const disconnect=async()=>{setBusy(true);try{await disconnectNativePlanner();await w.refreshConnection();w.setChoice(null);w.say('Disconnected. Local quick actions still work.');}finally{setBusy(false);}};
+  return <View className="gap-3 rounded-2xl border border-border p-4">{w.connection?.pairingRequired?<><Text className="text-sm font-medium text-foreground">Pairing code</Text><TextInput accessibilityLabel="Pairing code" secureTextEntry autoComplete="off" autoCorrect={false} autoCapitalize="none" textContentType="none" value={code} onChangeText={setCode} editable={!busy} placeholder="Paste pairing code" className="min-h-12 rounded-xl border border-border px-3 py-2 text-base text-foreground"/><Button primary disabled={busy||!code.trim()} onPress={()=>void pair()}>Connect this app</Button><Text className="text-xs text-muted-foreground">This development connection lasts for this app session. The local server must stay open.</Text></>:<Button disabled={busy} onPress={()=>void disconnect()}>Disconnect this app</Button>}{!!error&&<Text className="text-sm text-destructive">{error}</Text>}</View>;
+}
 function KeyEntry({token}:{token:string}){
   const w=useWorkspaceContext();const [key,setKey]=useState(''),[saving,setSaving]=useState(false),[error,setError]=useState('');
   const saveKey=async()=>{

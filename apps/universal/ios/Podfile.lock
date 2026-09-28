@@ -1,6 +1,8 @@
 PODS:
   - AtepdfPdf (0.1.0):
     - ExpoModulesCore
+  - AtepdfPlanner (0.1.0):
+    - ExpoModulesCore
   - EXConstants (57.0.19):
     - ExpoModulesCore
   - Expo (57.0.25):
@@ -2021,6 +2023,7 @@ PODS:
 
 DEPENDENCIES:
   - AtepdfPdf (from `../modules/atepdf-pdf/ios`)
+  - AtepdfPlanner (from `../modules/atepdf-planner/ios`)
   - "EXConstants (from `../../../node_modules/.pnpm/expo-constants@57.0.19_expo@57.0.25_react-native@0.86.3_@babel+core@7.29.7_supports-col_a1d8cee9dc8227fbe248fcc1312f98aa/node_modules/expo-constants/ios`)"
   - "Expo (from `../../../node_modules/.pnpm/expo@57.0.25_@babel+core@7.29.7_supports-color@8.1.1__@expo+dom-webview@57.0.1_@expo+me_c992397ffb2d32d825a0ffdfbbdf694e/node_modules/expo`)"
   - "ExpoAsset (from `../../../node_modules/.pnpm/expo-asset@57.0.18_expo@57.0.25_react-native@0.86.3_@babel+core@7.29.7_supports-color@8_ea9271b393e53878ae15a645a59d2f5b/node_modules/expo-asset/ios`)"
@@ -2118,6 +2121,8 @@ DEPENDENCIES:
 EXTERNAL SOURCES:
   AtepdfPdf:
     :path: "../modules/atepdf-pdf/ios"
+  AtepdfPlanner:
+    :path: "../modules/atepdf-planner/ios"
   EXConstants:
     :path: "../../../node_modules/.pnpm/expo-constants@57.0.19_expo@57.0.25_react-native@0.86.3_@babel+core@7.29.7_supports-col_a1d8cee9dc8227fbe248fcc1312f98aa/node_modules/expo-constants/ios"
   Expo:
@@ -2306,6 +2311,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AtepdfPdf: 81fbaa63c3d6142cce5e6ad626ec550785e37c12
+  AtepdfPlanner: 1f7c4c939c73912c2c21228433bfbfa65ee6b25a
   EXConstants: 9ae13e3b5d0f222a979eed6d14197339739b123d
   Expo: 0f0440690c1d549abb2930fdd4749d282e637c47
   ExpoAsset: b210270fcd528dc6b219c1ba63093bf9e9f4b1e9

@@ -10,7 +10,7 @@ const mime={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript'
 const csp="default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; font-src 'self'; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'";
 createServer(async(req,res)=>{
   res.setHeader('Content-Security-Policy',csp);res.setHeader('Referrer-Policy','no-referrer');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Cache-Control','no-store');
-  if(req.url==='/api/planner'||req.url==='/api/planner/status'||req.url==='/api/planner/key'){
+  if(['/api/planner','/api/planner/status','/api/planner/key','/api/planner/pairing','/api/native/pair','/api/native/planner','/api/native/planner/status','/api/native/disconnect'].includes(req.url)){
     const abort=new AbortController();res.on('close',()=>{if(!res.writableEnded)abort.abort();});
     try {const request=new Request(`http://${req.headers.host}${req.url}`,{method:req.method,headers:req.headers,signal:abort.signal,...(req.method==='POST'?{body:req,duplex:'half'}:{})});const response=await gateway(request);res.writeHead(response.status,Object.fromEntries(response.headers));res.end(await response.text());}catch{res.writeHead(400);res.end('{"error":"Invalid local request"}');}return;
   }

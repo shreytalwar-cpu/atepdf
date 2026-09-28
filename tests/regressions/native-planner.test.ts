@@ -1,0 +1,38 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {NativePairing} from '../../packages/planner/src/native-pairing';
+import {createGateway} from '../../packages/planner/src/gateway';
+import {buildRequest,quickPlan} from '../../packages/contracts/src/protocol';
+const origin='http://localhost:3211';
+test('native pairing is one-use, short-lived, origin-bound and revocable; only hashes are retained',()=>{
+  let now=1000;const pairing=new NativePairing(()=>now),code=pairing.issue(origin).code;
+  assert.throws(()=>pairing.exchange(code,'http://localhost:3210'));
+  const session=pairing.exchange(code,origin);assert.throws(()=>pairing.exchange(code,origin));
+  assert.equal(pairing.accepts(`Bearer ${session.token}`,origin),true);
+  assert.equal(pairing.accepts(`Bearer ${session.token}`,'http://127.0.0.1:3211'),false);
+  pairing.revoke(`Bearer ${session.token}`);assert.equal(pairing.accepts(`Bearer ${session.token}`,origin),false);
+  const expired=pairing.issue(origin).code;now+=300001;assert.throws(()=>pairing.exchange(expired,origin));
+  const next=pairing.exchange(pairing.issue(origin).code,origin);now=next.expiresAt;assert.equal(pairing.accepts(`Bearer ${next.token}`,origin),false);
+});
+test('native gateway uses the same private DTO and request allowance, with separate browser and native authentication',async()=>{
+  let calls=0,remaining=1;
+  const gateway=createGateway({status:async()=>({connected:true,enabled:remaining>0,remaining}),reserve:async()=>{assert.ok(remaining>0);remaining--;return {key:'sk-synthetic-never-network',release:async()=>{}};}},async request=>{calls++;assert.equal(Object.hasOwn(request.files[0],'name'),false);return quickPlan(request,'merge').planner;},{minIntervalMs:0});
+  const status=await (await gateway(new Request(origin+'/api/planner/status'))).json();
+  const issue=()=>gateway(new Request(origin+'/api/planner/pairing',{method:'POST',headers:{origin,'content-type':'application/json','x-atepdf-token':status.token},body:'{}'}));
+  const code=(await (await issue()).json()).code;
+  const pair=(headers:Record<string,string>={},body=JSON.stringify({code}))=>gateway(new Request(origin+'/api/native/pair',{method:'POST',headers:{'content-type':'application/json',...headers},body}));
+  assert.equal((await pair({origin})).status,403);assert.equal((await pair({'sec-fetch-site':'same-origin'})).status,403);
+  assert.equal((await pair({},'x'.repeat(300))).status,401);
+  const session=await (await pair()).json();assert.equal((await pair()).status,401);
+  const headers={'content-type':'application/json',authorization:`Bearer ${session.token}`};
+  const nativeStatus=await (await gateway(new Request(origin+'/api/native/planner/status',{headers}))).json();assert.equal(nativeStatus.token,undefined);assert.equal(calls,0);
+  const files=[{ref:'file_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',kind:'pdf' as const,pageCount:2,sizeBytes:3000,encrypted:false as const},{ref:'file_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',kind:'pdf' as const,pageCount:1,sizeBytes:2000,encrypted:false as const}];
+  const request=()=>buildRequest({revision:2,files,selected:files.map(f=>f.ref),focus:null,originals:files.map(f=>f.ref)},'Merge in the order added.');
+  const post=(body:unknown,h=headers)=>gateway(new Request(origin+'/api/native/planner',{method:'POST',headers:h,body:JSON.stringify(body)}));
+  assert.equal((await post(request(),{'content-type':'application/json',authorization:'Bearer invalid'})).status,401);
+  assert.equal((await post({...request(),bytes:'PRIVATE-CANARY'})).status,400);assert.equal(calls,0);
+  const response=await post(request());assert.equal(response.status,200);assert.equal((await response.json()).planner.steps[0].operation,'merge_pdf');assert.equal(calls,1);
+  assert.equal((await post(request())).status,503);assert.equal(calls,1);
+  await gateway(new Request(origin+'/api/native/disconnect',{method:'POST',headers,body:'{}'}));
+  assert.equal((await gateway(new Request(origin+'/api/native/planner/status',{headers}))).status,401);
+});

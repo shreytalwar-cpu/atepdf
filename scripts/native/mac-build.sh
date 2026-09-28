@@ -103,7 +103,7 @@ for name in ('React', 'ReactNativeDependencies'):
 # Ad-hoc development signatures intentionally omit Hardened Runtime, because it
 # requires real Team IDs for these dynamic frameworks. Production Xcode target
 # settings remain unchanged. No library-validation exception is granted.
-entitlements = {'com.apple.security.app-sandbox': True,
+entitlements = {'com.apple.security.app-sandbox': True, 'com.apple.security.network.client': True,
                 'com.apple.security.files.user-selected.read-write': True}
 entitlement_file = stage / 'atepdf-local.entitlements'
 entitlement_file.write_bytes(plistlib.dumps(entitlements))
@@ -131,14 +131,14 @@ record = {'builtAt': datetime.datetime.now(datetime.timezone.utc).isoformat(),
           'app': str(app), 'identifier': info['CFBundleIdentifier'], 'buildLog': log,
           'signature': 'local ad-hoc, development only', 'hardenedRuntime': False,
           'strictSignatureVerification': 'passed', 'entitlements': entitlements,
-          'networkEntitlements': False, 'nestedCodeObjects': len(nested),
+          'networkEntitlements': 'outgoing only; native planner permits loopback endpoints', 'nestedCodeObjects': len(nested),
           'stagedFrameworkNormalizations': normalizations,
           'binarySha256': hashlib.sha256((app / 'Contents/MacOS/atepdf').read_bytes()).hexdigest(),
           'launchRequested': launch, 'launchVerified': False,
           'scope': 'Local developer artifact; not notarized or distribution-ready.'}
 (repo / '.build/mac-last-build.json').write_text(json.dumps(record, indent=2) + '\n')
 print(f'Mac application built; strict signature and sandbox entitlement checks passed.\nApp: {app}')
-print('Evidence: .build/mac-last-build.json\nDevelopment-only ad-hoc signature; no networking entitlements.')
+print('Evidence: .build/mac-last-build.json\nDevelopment-only ad-hoc signature; outgoing network entitlement for the paired loopback planner.')
 if launch:
     subprocess.run(['/usr/bin/open', '-n', '-a', str(app)], check=True)
     print('Launch requested by exact path. Verify the process path and sandbox container before UI testing.')

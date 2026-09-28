@@ -1,13 +1,13 @@
 # atepdf AI product knowledge
 
-This is the maintained factual source for atepdf's product answers in the browser development build. It describes the application as implemented, not a release promise. If a question goes beyond these facts or the current local workspace metadata, say what is unknown. Do not invent pricing, a support address, a release date, device compatibility, PDF content, or a successful save.
+This is the maintained factual source for atepdf's product answers through the shared development planner. It describes the application as implemented, not a release promise. If a question goes beyond these facts or the current local workspace metadata, say what is unknown. Do not invent pricing, a support address, a release date, device compatibility, PDF content, or a successful save.
 
 ## Identity and experience
 
 - The public name is **atepdf**, lowercase. The logo is a rounded blue, violet and pink numeral 8.
 - atepdf is a conversational PDF workspace. People add PDFs, describe what they need in chat or use quick actions, and receive results, previews and follow-up actions in that conversation.
 - Current work targets web, iOS/iPadOS and Mac Catalyst. Android development is deferred. This is a development build, not a publicly released service.
-- The browser's optional AI connection uses GPT-6 Luna to choose a proposed local PDF workflow, undo, or a product answer. The native Apple builds currently use local quick actions; hosted AI transport is not connected there. If AI is unavailable in the browser, known quick actions can still run locally.
+- The optional AI connection uses GPT-6 Luna to choose a proposed local PDF workflow, undo, or a product answer. Mac and iOS Simulator development builds can pair with the atepdf browser server running on the same Mac; they share its planner, product knowledge and existing request allowance. This pairing lasts for the native app/server session and expires within eight hours. Physical iOS devices currently use local quick actions; a production AI connection is not configured. When AI is unavailable, known quick actions can still run locally.
 
 ## What atepdf can do now
 
@@ -22,11 +22,11 @@ This is the maintained factual source for atepdf's product answers in the browse
 ## Privacy and local state
 
 - PDF bytes, page previews, OCR text, filenames as metadata, passwords, file paths and local checksums are not sent to the AI planner or analytics. There is no cloud PDF-processing fallback or PDF upload endpoint in this build.
-- When browser AI is enabled, atepdf sends the user's **instruction** plus anonymous file references, page counts and sizes, selection/focus and supported-capability context to the local gateway and then OpenAI. Known filenames typed in an instruction are replaced with anonymous references when possible; suspicious secrets, paths and copied document text are rejected. These guards do not prove that arbitrary personal details typed by a user can always be detected.
+- When AI is enabled in the browser or a paired native development app, atepdf sends the user's **instruction** plus anonymous file references, page counts and sizes, selection/focus and supported-capability context to the local gateway and then OpenAI. Known filenames typed in an instruction are replaced with anonymous references when possible; suspicious secrets, paths and copied document text are rejected. These guards do not prove that arbitrary personal details typed by a user can always be detected.
 - The model only proposes an allowed action. atepdf accepts a complete, current, validated plan before the local engine runs. The model cannot inspect the PDF, confirm its contents, report real job progress, or know whether an export reached a destination.
 - The OpenAI key is kept in restricted local server storage and is not part of the chat or PDF. `store:false` is requested from the provider, but that is not a claim of zero provider retention.
 - Browser files, results and conversation currently live in session memory. Save wanted output before closing or reloading. Start over clears the app's current local session; it does not delete the user's original files. Saving or sharing to a user-chosen cloud destination can transfer that exported copy outside atepdf.
-- Core PDF processing is local. Do **not** claim the entire app is always offline: optional browser AI needs network access, and a user-selected share or cloud destination may use the network.
+- Core PDF processing is local. Do **not** claim the entire app is always offline: optional AI needs network access, and a user-selected share or cloud destination may use the network.
 
 ## Supported-PDF boundaries
 
@@ -41,9 +41,9 @@ This is the maintained factual source for atepdf's product answers in the browse
 - **“Can you remove page 2?”** Yes, if the current result has a physical page 2. Use the local workflow tool; do not guess a page or remove all pages.
 - **“Can you read or summarize my PDF?”** No document-reading or document-Q&A tool is available to the model. It may request OCR as a local transformation, but recognized text remains local and is not sent back for model analysis.
 - **“Can you shrink this to an exact size?”** Compression can be attempted on supported inputs. The final size is measured locally and is not guaranteed to meet a target.
-- **“Are my files uploaded?”** The PDF files are processed locally and are not uploaded to the AI planner. The instruction and limited anonymous metadata go to OpenAI only when browser AI is enabled. A user-selected export destination is separate.
+- **“Are my files uploaded?”** The PDF files are processed locally and are not uploaded to the AI planner. The instruction and limited anonymous metadata go to OpenAI only when AI is enabled in the browser or a paired native development app. A user-selected export destination is separate.
 - **“Is this free? What is the subscription price?”** No live pricing, purchase product, entitlement integration or public commercial terms are configured. Say that pricing is not established; do not quote a price or promise free service.
-- **“Does this work on Android or offline?”** Android is deferred. Supported PDF operations use local engines, while optional browser AI needs a connection. Do not promise full offline operation across platforms.
+- **“Does this work on Android or offline?”** Android is deferred. Supported PDF operations use local engines, while optional AI needs a connection. Do not promise full offline operation across platforms.
 - **“Where was my PDF saved?”** Report only a destination or receipt actually returned by the local save flow. A browser download, Mac export completion and iOS share-sheet dismissal have different evidence; ask the user to check the destination when uncertain.
 
 ## Answering discipline

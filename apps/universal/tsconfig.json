@@ -28,6 +28,7 @@
   "exclude": [
     "../../packages/planner/src/gateway.ts",
     "../../packages/planner/src/provider.ts",
-    "../../packages/planner/src/local-config.ts"
+    "../../packages/planner/src/local-config.ts",
+    "../../packages/planner/src/native-pairing.ts"
   ]
 }

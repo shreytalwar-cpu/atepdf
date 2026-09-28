@@ -94,6 +94,41 @@ final class AtepdfWorkflowUITests: XCTestCase {
     XCTAssertTrue(app.staticTexts["Current result · \(count) pages"].exists, file: file, line: line)
   }
 
+  func testPairedNativePlannerProductAnswerMergeRemoveUndoAndCancel() async throws {
+    // This port belongs exclusively to tests/native/planner/server.ts. It has
+    // an injected synthetic provider and cannot read the owner's API key.
+    var statusRequest=URLRequest(url:URL(string:"http://localhost:3212/api/planner/status")!)
+    statusRequest.timeoutInterval=2
+    guard let (data,_)=try? await URLSession.shared.data(for:statusRequest),
+          let status=try JSONSerialization.jsonObject(with:data) as? [String:Any],let token=status["token"] as? String else { throw XCTSkip("Start the synthetic native test gateway on localhost:3212.") }
+    var request=URLRequest(url:URL(string:"http://localhost:3212/api/planner/pairing")!)
+    request.httpMethod="POST";request.httpBody=Data("{}".utf8);request.setValue("application/json",forHTTPHeaderField:"Content-Type");request.setValue("http://localhost:3212",forHTTPHeaderField:"Origin");request.setValue(token,forHTTPHeaderField:"X-Atepdf-Token")
+    let (pairData,_)=try await URLSession.shared.data(for:request)
+    let code=(try JSONSerialization.jsonObject(with:pairData) as! [String:Any])["code"] as! String
+    tap(app.buttons["Try the two sample PDFs"])
+    wait(app.staticTexts.matching(NSPredicate(format:"label BEGINSWITH 'Your 2 PDFs are ready.'")).firstMatch,"exists == true")
+    tap(app.buttons["AI connection"])
+    let field=app.secureTextFields["Pairing code"]
+    tapInConversation(field);field.typeText(code)
+    tapInConversation(app.buttons["Connect this app"])
+    wait(app.staticTexts["Connected to the local planner. Tell me what you’d like to do."],"exists == true")
+    let composer=app.textViews.matching(NSPredicate(format:"label BEGINSWITH 'Tell atepdf what to do'")).firstMatch
+    func send(_ text:String) {
+      tap(composer);composer.typeText(text);wait(composer,"value == '\(text)'");tap(app.buttons["Send message"]);wait(composer,"value == ''")
+    }
+    send("What can atepdf do?")
+    wait(app.staticTexts["I can merge PDFs and remove pages on your device. Your originals stay unchanged."],"exists == true")
+    tap(app.buttons["Merge"]);assertPages(3)
+    send("remove page 2");assertPages(2)
+    send("undo");assertPages(3)
+    send("Wait for cancellation")
+    wait(app.buttons["Cancel"],"exists == true AND enabled == true");tap(app.buttons["Cancel"])
+    wait(app.staticTexts["Planning cancelled. No local files changed."],"exists == true");assertPages(3)
+    capture("native-paired-planner-complete-workflow")
+    tap(app.buttons["AI connection"]);tapInConversation(app.buttons["Disconnect this app"])
+    wait(app.staticTexts["Disconnected. Local quick actions still work."],"exists == true")
+  }
+
   func testNativeComposerPreservesFastTypingAndBackspace() throws {
     let composer = app.textViews.matching(NSPredicate(format: "label BEGINSWITH 'Tell atepdf what to do'")).firstMatch
     tap(composer)

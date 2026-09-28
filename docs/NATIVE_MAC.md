@@ -1,5 +1,7 @@
 # Mac development build
 
+Current planner update: the new AtepdfPlanner module can pair with the local browser gateway (ADR 0008). The staging script now includes and verifies the outgoing-network sandbox entitlement; incoming networking remains disabled. The module restricts destinations to loopback, rejects redirects and holds its short-lived bearer in native memory. Earlier no-network/native-AI-unavailable evidence below describes the preceding build. Current verification is in SESSION_2026-09-28_NATIVE_PLANNER.md.
+
 atepdf uses the existing Expo 57 / React Native 0.86 UIKit application through Mac Catalyst, including assistant-ui's native components and the local PDFKit/Vision adapter. It is a native application. No WebView, React Native macOS fork, or framework downgrade was introduced.
 
 The React Native macOS upstream release reviewed (0.81.8, requiring React Native 0.81.6) does not match this application's 0.86.3 runtime.
@@ -16,7 +18,7 @@ The script compiles and links the actual Release application in `.build/mac`, th
 
 - `apps/universal/ios/Podfile` enables React Native's `mac_catalyst_enabled` hook. Every dependency uses the existing app minimum iOS 16.4, because Xcode 27's Catalyst map does not correctly map the dependencies' old 15.1 minimum.
 - `apps/universal/ios/atepdf.xcodeproj/project.pbxproj` enables Catalyst and assigns Mac the independent `dev.atepdf.fresh.mac` identifier. iOS keeps its own identifier.
-- Mac App Sandbox allows user-selected read/write only. Incoming and outgoing network entitlements are absent; native hosted planning is unavailable in this build.
+- Mac App Sandbox permits user-selected read/write and outgoing networking for the local planner. Incoming networking remains disabled. The planner module restricts its own endpoints to loopback; the network entitlement itself is not a domain firewall.
 - The native module exposes `storageIsolated` only when the real sandbox entitlement, exact bundle identifier, container home, and cache path agree. Native operations and JavaScript startup cleanup/import fail closed otherwise. PDF engine input is restricted further to `atepdf-work`; previews are generated in `atepdf-preview`.
 - Do not launch the unsigned `.build/mac/.../atepdf.app` as the runnable artifact. Always use the verified staged app path. Bundle-ID lookup can resolve an older unsigned copy; confirm the process path before UI testing.
 
@@ -26,7 +28,7 @@ Signing directly under the repository's Documents directory failed because the f
 
 Installed React and ReactNativeDependencies Catalyst framework packages contain flattened duplicate version directories. The script verifies matching `Versions/A` and `Versions/Current` contents, preserves the built binaries, and restores canonical version links only in the generated staged app. It never modifies Pods or dependency source. Unexpected contents or different version copies fail closed.
 
-All nested code and the app receive an ad-hoc development signature. The main development signature intentionally omits Hardened Runtime: without real Team IDs, its library validation rejected the embedded ExpoModulesJSI framework. Production target hardened settings remain unchanged. No library-validation exception, network entitlement, developer team, certificate, Gatekeeper bypass, or provisioning profile is added. This is not a distributable or notarized release.
+All nested code and the app receive an ad-hoc development signature. The main development signature intentionally omits Hardened Runtime: without real Team IDs, its library validation rejected the embedded ExpoModulesJSI framework. Production target hardened settings remain unchanged. No library-validation exception, developer team, certificate, Gatekeeper bypass, or provisioning profile is added. ADR 0008 adds the outgoing-network entitlement described above. This is not a distributable or notarized release.
 
 Strict nested signature verification and exact entitlement comparison must pass before optional launch.
 

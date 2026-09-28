@@ -1,0 +1,129 @@
+{
+  "recordedAt": "2026-09-28T13:57:11.584069+00:00",
+  "baseCommit": "523917f",
+  "scope": "Local native development pairing. Synthetic provider only; real local PDF engines.",
+  "sourceSha256": {
+    "apps/universal/App.tsx": "2ef03cf4e9fb593c1c42558351a72b7db43e1c64d3703529475b3f7d6ae4695b",
+    "apps/universal/src/platform/planner.native.ts": "9d0b976288db045dcdd56952807d8ba2ba701edaa674c42d78e1b705c0a9e294",
+    "apps/universal/modules/atepdf-planner/ios/AtepdfPlannerTransport.swift": "5fdc1e630e69e255cb33d8cb109a06362654abef76c32b8c754400e3c6e61213",
+    "apps/universal/modules/atepdf-planner/ios/AtepdfPlannerModule.swift": "a926f76a8b1084812cd2e4f50962dffd2ae913bf1f19d86cfca4d6ceba58ed12",
+    "packages/planner/src/gateway.ts": "ad256a1ca1360e5a0df36c2de2c87afd2dab94536bb9c334777188409b674b75",
+    "packages/planner/src/request.ts": "3dffd452768608d3def223edf61d0ef27f8718104ba11a280af9b650077c18da",
+    "packages/planner/src/native-pairing.ts": "c4840d5dddbd50cfd66489a2ff964f1682a55b6e319dbcd188c8c04db0426201",
+    "packages/planner/src/client.ts": "b16683c16c8c6df29e0b1e62dc16cbfbda0dd65ea80cdceae6e62d9278846e78",
+    "tests/native/ios/AtepdfWorkflowUITests.swift": "9328e645bb443707974abd9678539b7b5de58ff01ab8dcddeacf146473a7d669",
+    "tests/native/planner/main.swift": "6743ba7d480458b3598aa1ceb04c9dea61750cd15852d7bcbcc46050ff25a117",
+    "tests/native/planner/server.ts": "739f431cd189aacfeb94611f39007209cdb752043591a45c194560d8ca2e7ac4",
+    "docs/AI_PRODUCT_KNOWLEDGE.md": "d85d66ad39890967af26d89668856dae26e9cb128bc41fa88bd9e935ad121cd8"
+  },
+  "tests": {
+    "node": {
+      "passed": 70,
+      "failed": 0,
+      "skipped": 0
+    },
+    "browser": {
+      "passed": 19,
+      "failed": 0,
+      "provider": "mocked"
+    },
+    "iosUI": {
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0,
+      "device": "iPhone 17 Pro iOS 27 Simulator",
+      "configuration": "Release",
+      "resultBundle": "/Users/shrey/Documents/ChatGPT/atepdf/.build/native-planner-ui.xcresult"
+    },
+    "swiftURLSession": {
+      "result": "passed",
+      "runner": "tests/native/planner/main.swift",
+      "provider": "synthetic-only",
+      "checks": [
+        "pairing",
+        "private DTO",
+        "product answer",
+        "complete plan",
+        "redirect rejected",
+        "oversized response rejected",
+        "active cancellation",
+        "early cancellation",
+        "disconnect"
+      ]
+    },
+    "macUI": {
+      "result": "passed",
+      "app": "/private/tmp/atepdf-mac-pqm62igk/atepdf.app",
+      "processPathVerified": true,
+      "checks": [
+        "masked pairing",
+        "product answer",
+        "bundled sample import",
+        "planned merge 3 pages",
+        "typed removal 2 pages",
+        "typed undo 3 pages",
+        "read-only rendered preview",
+        "disconnect"
+      ],
+      "destinationSaveRetested": false
+    }
+  },
+  "macBuild": {
+    "builtAt": "2026-09-28T13:44:30.195618+00:00",
+    "app": "/private/tmp/atepdf-mac-pqm62igk/atepdf.app",
+    "identifier": "dev.atepdf.fresh.mac",
+    "buildLog": "/Users/shrey/Documents/ChatGPT/atepdf/.build/mac-build-X6I5e8",
+    "signature": "local ad-hoc, development only",
+    "hardenedRuntime": false,
+    "strictSignatureVerification": "passed",
+    "entitlements": {
+      "com.apple.security.app-sandbox": true,
+      "com.apple.security.network.client": true,
+      "com.apple.security.files.user-selected.read-write": true
+    },
+    "networkEntitlements": "outgoing only; native planner permits loopback endpoints",
+    "nestedCodeObjects": 14,
+    "stagedFrameworkNormalizations": [
+      {
+        "framework": "React",
+        "identicalVersionCopies": true,
+        "builtBinarySha256BeforeSigning": "ad352f81fd4a5142e136791b9b0a00183edee21aab4dc078bea5363867cf5ff1"
+      },
+      {
+        "framework": "ReactNativeDependencies",
+        "identicalVersionCopies": true,
+        "builtBinarySha256BeforeSigning": "43bcab018ca428cecb60f55bd69fe3627c1de24f808e14fdce8dac004899bf01"
+      }
+    ],
+    "binarySha256": "8eeb258a7aa26bd2d3dfc7f07d29e6cb8710786ab3649ba1ac91f4d78cbf4508",
+    "launchRequested": false,
+    "launchVerified": false,
+    "scope": "Local developer artifact; not notarized or distribution-ready."
+  },
+  "syntheticGatewayFinal": {
+    "calls": 12,
+    "cancelled": 2,
+    "stopped": true,
+    "macDisconnected": true
+  },
+  "paidCalls": 0,
+  "productionSigningOrDeployment": false,
+  "oldSourceAccessed": false,
+  "logs": {
+    "webBuild": "/tmp/atepdf-native-final-build.log",
+    "macBuild": "/tmp/atepdf-native-mac-build.log"
+  },
+  "limitations": [
+    "Physical-device AI unavailable",
+    "No new physical-device or destination-save proof",
+    "No production authentication or distribution",
+    "No actual billing sandbox integration",
+    "Apple upstream build warnings remain"
+  ],
+  "hostSmoke": "planner-host-smoke.json",
+  "finalKnowledgeEmbeddingTest": {
+    "passed": 1,
+    "failed": 0
+  },
+  "webBuild": "passed"
+}

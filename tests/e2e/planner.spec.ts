@@ -105,3 +105,11 @@ test('masked local key setup keeps the key outside chat and model transport',asy
   page.on('request',r=>{if(r.method()==='POST'&&r.url().endsWith('/api/planner'))modelPosts.push(r.url());});
   await page.goto('/');await page.getByRole('button',{name:'OpenAI connection'}).click();const input=page.getByRole('textbox',{name:'OpenAI project key'});await expect(input).toHaveAttribute('type','password');await input.fill(canary);await page.getByRole('button',{name:'Save key on this computer'}).click();await expect(page.getByText('Your key is saved on this computer.',{exact:false})).toBeVisible();await expect(input).toHaveCount(0);expect(saved).toEqual([canary]);expect(modelPosts).toEqual([]);await expect(page.getByTestId('conversation')).not.toContainText(canary);
 });
+test('native pairing code stays in a masked setup control and makes no model request',async({page})=>{
+  const code='atepdf-local:3211:'+'a'.repeat(64);let issued=0,modelCalls=0;
+  await page.route('**/api/planner/status',route=>route.fulfill({json:status}));
+  await page.route('**/api/planner/pairing',async route=>{issued++;expect(route.request().headers()['x-atepdf-token']).toBe(status.token);expect(route.request().postDataJSON()).toEqual({});await route.fulfill({json:{code,expiresAt:Date.now()+300_000}});});
+  await page.route('**/api/planner',async route=>{modelCalls++;await route.abort();});
+  await page.goto('/');await page.getByRole('button',{name:'OpenAI connection'}).click();await page.getByRole('button',{name:'Create pairing code'}).click();
+  const field=page.getByRole('textbox',{name:'Native pairing code'});await expect(field).toHaveAttribute('type','password');await expect(field).toHaveValue(code);await expect(page.getByTestId('conversation')).not.toContainText(code);expect(issued).toBe(1);expect(modelCalls).toBe(0);
+});

@@ -1,0 +1,26 @@
+[
+  {
+    "registryPath": "components/assistant-ui/elements/icon-button.tsx",
+    "url": "https://raw.githubusercontent.com/assistant-ui/assistant-ui/5b23b2df762737246990e6a7bccebdbac0ca0959/packages/ui/src/components/react-native/assistant-ui/elements/icon-button.tsx",
+    "sha256": "1ccb540572bbec94a440bb34d6e1c5df2f46a85d226a8a8a7f53e6e75f1875ad",
+    "verifiedAtPinnedCommit": true
+  },
+  {
+    "registryPath": "components/assistant-ui/elements/surfaces.tsx",
+    "url": "https://raw.githubusercontent.com/assistant-ui/assistant-ui/5b23b2df762737246990e6a7bccebdbac0ca0959/packages/ui/src/components/react-native/assistant-ui/elements/surfaces.tsx",
+    "sha256": "c754ed5b1124d0dce1c4296895ea79143b8c89238392ef5f30e15aed128aa9ba",
+    "verifiedAtPinnedCommit": true
+  },
+  {
+    "registryPath": "components/assistant-ui/elements/typing-indicator.tsx",
+    "url": "https://raw.githubusercontent.com/assistant-ui/assistant-ui/5b23b2df762737246990e6a7bccebdbac0ca0959/packages/ui/src/components/react-native/assistant-ui/elements/typing-indicator.tsx",
+    "sha256": "bb5e5adae8655d4c03023a094e00acc8486f9107b95a57e82dbede74e15910a9",
+    "verifiedAtPinnedCommit": true
+  },
+  {
+    "registryPath": "components/ui/icon.tsx",
+    "url": "https://raw.githubusercontent.com/assistant-ui/assistant-ui/5b23b2df762737246990e6a7bccebdbac0ca0959/packages/ui/src/components/react-native/ui/icon.tsx",
+    "sha256": "9345c83ee2a952e6d273df8bc2812143ae8a723b64bcb913bd25ff11acb94fce",
+    "verifiedAtPinnedCommit": true
+  }
+]

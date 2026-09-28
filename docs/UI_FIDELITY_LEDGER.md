@@ -6,7 +6,7 @@ The approved brand board and iPhone/iPad/desktop references were viewed before i
 | --- | --- |
 | Quiet white workspace, dark navy type | Preserved in shared RN screen; desktop-empty.png and phone.png |
 | Rounded blue primary controls | Choose files, send and Save PDF; native Pressable controls with disabled/focus states |
-| Pastel quick-action pills | Merge, Compress, Make searchable feed the conversation |
+| Three quick-action pills | Merge, Compress, Make searchable feed the conversation; calmer neutral template styling under owner-approved assistant-ui refinement |
 | Dashed pale-blue drop area with paper illustration | Kept on the empty state; new generated paper asset, no recreation of brand-board UI |
 | Chat composer and results | Owner's latest direction: every workflow and its results live in chat; composer fixed below scrollable thread; inline read-only preview |
 
@@ -17,3 +17,5 @@ Visual checks: Chrome screenshots at 1440×1086, 390×844, 320×568, 820×1180, 
 PDF visual checks: all four final chain pages rendered independently and viewed. OCR rendered pixels match the pre-OCR PDF on every page. Compression changed only the deliberately image-heavy fourth page, with a mean absolute RGB channel difference below 1/255 at 1× rendering; scan and digital text remained visibly readable. This is bounded synthetic quality evidence, not a general perceptual guarantee. See pdf-visual-metrics.json and chain-final-page-*.png.
 
 Remaining: physical iOS/Android safe areas, accessibility text scaling/screen readers, device keyboard behavior, native PDF rendering, broader scan/compression visual corpus. Pixel crops are approved source artwork, not final vector master assets.
+
+2026-09-28 follow-up: ADR 0003 adopts official assistant-ui native thread/composer/message recipes with atepdf brand tokens. Native-template scrolling and message actions replace the custom shell. Results, quality confirmation and masked key entry remain in the conversation. No tool sidebar. The small-screen audit found horizontal overflow and an overlapping empty state; shorter badge text, flexible pills and a scrollable welcome fix both. Layout tests now check vertical separation as well as horizontal overflow. Original approved iPad and name/logo board were viewed again; only name/logo were taken from the brand board. Owner-requested file-size policy text is now “PDF · processed on your device”.

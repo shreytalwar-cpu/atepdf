@@ -1,0 +1,36 @@
+{
+  "newRoot": "/Users/shrey/Documents/ChatGPT/atepdf",
+  "oldReadOnlyRoot": "/Users/shrey/Documents/attenlo/attenlo-docs",
+  "distinctGitCommonDirs": true,
+  "oldObservations": [
+    {
+      "path": "/Users/shrey/Documents/attenlo/attenlo-docs/src/engine/pdf.ts",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/shrey/Documents/attenlo/attenlo-docs/src/engine/worker.ts",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/shrey/Documents/attenlo/attenlo-docs/src/workflow.ts",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/shrey/Documents/attenlo/attenlo-docs/tests/result-preview.test.ts",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/shrey/Documents/attenlo/attenlo-docs/tests/workflows.test.ts",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/shrey/Documents/attenlo/attenlo-docs/CODE_AUDIT.md",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/shrey/Documents/attenlo/attenlo-docs/docs/RELEASE_STATUS.md",
+      "unchanged": true
+    }
+  ],
+  "oldCommandsRun": "git common-directory read only; no old installs, builds, tests or migrations"
+}

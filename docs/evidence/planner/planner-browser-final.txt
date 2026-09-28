@@ -1,0 +1,13 @@
+Already up to date
+Done in 144ms using pnpm v11.19.0
+
+Running 4 tests using 1 worker
+
+(node:96992) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/planner.spec.ts:5:5 › mocked planner transport: review redacted instruction → complete plan → confirm → real local result → follow-up (1.2s)
+  ✓  2 tests/e2e/planner.spec.ts:15:5 › planner cancellation and stale consent cannot execute or overwrite a committed result (856ms)
+  ✓  3 tests/e2e/planner.spec.ts:21:5 › privacy rejection happens before transport, unknown instruction with no key stays honest (402ms)
+  ✓  4 tests/e2e/planner.spec.ts:28:5 › masked local key setup keeps the key outside chat and model transport (412ms)
+
+  4 passed (4.2s)

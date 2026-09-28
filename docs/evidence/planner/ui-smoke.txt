@@ -1,0 +1,11 @@
+Already up to date
+Done in 150ms using pnpm v11.19.0
+$ playwright test --grep 'real merge → preview'
+
+Running 1 test using 1 worker
+
+(node:92207) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/workflow.spec.ts:8:5 › real merge → preview/save → remove physical page 2 → undo; local-only network (2.9s)
+
+  1 passed (4.3s)

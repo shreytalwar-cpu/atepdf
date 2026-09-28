@@ -10,6 +10,16 @@
     }
   },
   {
+    "name": "@ai-sdk/openai",
+    "version": "4.0.78",
+    "license": "Apache-2.0",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/vercel/ai",
+      "directory": "packages/openai"
+    }
+  },
+  {
     "name": "@ai-sdk/provider",
     "version": "4.0.18",
     "license": "Apache-2.0",
@@ -34,6 +44,46 @@
     "version": "5.3.0",
     "license": "MIT",
     "repository": "https://github.com/aleclarson/quick-lru"
+  },
+  {
+    "name": "@assistant-ui/core",
+    "version": "0.3.21",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/assistant-ui/assistant-ui.git",
+      "directory": "packages/core"
+    }
+  },
+  {
+    "name": "@assistant-ui/react-native",
+    "version": "0.1.44",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/assistant-ui/assistant-ui.git",
+      "directory": "packages/react-native"
+    }
+  },
+  {
+    "name": "@assistant-ui/store",
+    "version": "0.3.15",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/assistant-ui/assistant-ui.git",
+      "directory": "packages/store"
+    }
+  },
+  {
+    "name": "@assistant-ui/tap",
+    "version": "0.9.19",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/assistant-ui/assistant-ui.git",
+      "directory": "packages/tap"
+    }
   },
   {
     "name": "@babel/code-frame",
@@ -1646,6 +1696,16 @@
     }
   },
   {
+    "name": "@types/json-schema",
+    "version": "7.0.15",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+      "directory": "types/json-schema"
+    }
+  },
+  {
     "name": "@types/node",
     "version": "26.6.3",
     "license": "MIT",
@@ -1879,6 +1939,26 @@
     "repository": {
       "type": "git",
       "url": "https://github.com/kriskowal/asap.git"
+    }
+  },
+  {
+    "name": "assistant-cloud",
+    "version": "0.2.3",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/assistant-ui/assistant-ui.git",
+      "directory": "packages/cloud"
+    }
+  },
+  {
+    "name": "assistant-stream",
+    "version": "0.3.45",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/assistant-ui/assistant-ui.git",
+      "directory": "packages/assistant-stream"
     }
   },
   {
@@ -2341,6 +2421,12 @@
     "repository": "https://github.com/frenic/csstype"
   },
   {
+    "name": "culori",
+    "version": "4.0.2",
+    "license": "MIT",
+    "repository": "git@github.com:Evercoder/culori.git"
+  },
+  {
     "name": "debug",
     "version": "2.6.9",
     "license": "MIT",
@@ -2604,6 +2690,26 @@
       "type": "git",
       "url": "https://github.com/expo/expo.git",
       "directory": "packages/expo-asset"
+    }
+  },
+  {
+    "name": "expo-clipboard",
+    "version": "57.0.0",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/expo/expo.git",
+      "directory": "packages/expo-clipboard"
+    }
+  },
+  {
+    "name": "expo-clipboard",
+    "version": "57.0.2",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/expo/expo.git",
+      "directory": "packages/expo-clipboard"
     }
   },
   {
@@ -3249,7 +3355,25 @@
   },
   {
     "name": "lightningcss",
+    "version": "1.30.1",
+    "license": "MPL-2.0",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/parcel-bundler/lightningcss.git"
+    }
+  },
+  {
+    "name": "lightningcss",
     "version": "1.32.0",
+    "license": "MPL-2.0",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/parcel-bundler/lightningcss.git"
+    }
+  },
+  {
+    "name": "lightningcss-darwin-arm64",
+    "version": "1.30.1",
     "license": "MPL-2.0",
     "repository": {
       "type": "git",
@@ -3766,6 +3890,12 @@
   {
     "name": "nanoid",
     "version": "3.3.19",
+    "license": "MIT",
+    "repository": "ai/nanoid"
+  },
+  {
+    "name": "nanoid",
+    "version": "6.0.1",
     "license": "MIT",
     "repository": "ai/nanoid"
   },
@@ -4408,6 +4538,15 @@
     }
   },
   {
+    "name": "secure-json-parse",
+    "version": "4.1.0",
+    "license": "BSD-3-Clause",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/fastify/secure-json-parse.git"
+    }
+  },
+  {
     "name": "semver",
     "version": "6.3.1",
     "license": "ISC",
@@ -4888,6 +5027,12 @@
       "type": "git",
       "url": "https://github.com/mathiasbynens/unicode-property-aliases-ecmascript.git"
     }
+  },
+  {
+    "name": "uniwind",
+    "version": "1.12.0",
+    "license": "MIT",
+    "repository": "https://github.com/uni-stack/uniwind"
   },
   {
     "name": "unpipe",

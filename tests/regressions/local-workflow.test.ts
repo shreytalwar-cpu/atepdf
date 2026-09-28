@@ -65,3 +65,13 @@ test('unhelpful compression retains actual input bytes with honest result',async
   const result=await transform({kind:'transform',inputs:[{bytes,inspection}],step:{id:'s_1',operation:'compress_pdf',inputs:['file_a'],outputRef:'out_a',params:{preset:'lossless',batchMode:'single',targetBytes:1}}},()=>{});
   assert.ok(result.bytes.length<=bytes.length);assert.equal((await independent(result.bytes)).pages.length,2);
 });
+
+test('large PDFs: real >20 MB inputs, >40 MB merge, >100 MB retained history, page removal and undo',async()=>{
+  const {largePDF}=await import('../helpers/large-pdf');const a=await largePDF('LARGE-A1'),b=await largePDF('LARGE-B1');assert.ok(a.length>20_000_000);assert.ok(b.length>20_000_000);
+  const store=new LocalFileStore(),controller=new JobController(store,service);
+  await controller.import([new File([a],'large-a.pdf'),new File([b],'large-b.pdf')]);assert.equal(controller.state.error,null);assert.equal(store.originals.length,2);
+  const originalHashes=store.list.map(f=>f.checksum);await controller.quick('merge');assert.equal(controller.state.error,null);const merged=store.focus!;
+  assert.ok(store.get(merged).bytes.length>40_000_000);assert.equal(store.get(merged).meta.pageCount,2);assert.match(store.get(merged).meta.inspection.pages[1].text,/LARGE-B1/);
+  await controller.quick('remove',2);assert.equal(controller.state.error,null);assert.ok(store.retainedBytes>100_000_000);assert.equal(store.get(store.focus!).meta.pageCount,1);assert.match(store.get(store.focus!).meta.inspection.pages[0].text,/LARGE-A1/);
+  controller.undo();assert.equal(store.focus,merged);assert.deepEqual(store.originals.map(r=>store.get(r).meta.checksum),originalHashes);
+});

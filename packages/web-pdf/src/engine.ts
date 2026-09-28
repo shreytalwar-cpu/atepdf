@@ -3,7 +3,7 @@ import type {EngineRequest,EngineResult} from './types';
 import {LIMITS} from './types';
 const name=(n:string)=>PDFName.of(n);
 export async function preflight(bytes:Uint8Array) {
-  if(bytes.length>LIMITS.file||new TextDecoder().decode(bytes.slice(0,5))!=='%PDF-')throw new Error('Choose a valid PDF smaller than 20 MB.');
+  if(new TextDecoder().decode(bytes.slice(0,5))!=='%PDF-')throw new Error('Choose a valid PDF.');
   const doc=await PDFDocument.load(bytes,{updateMetadata:false,throwOnInvalidObject:true});
   if(doc.getPageCount()<1||doc.getPageCount()>LIMITS.pages)throw new Error('Use a PDF with 1–100 pages.');
   for(const key of ['AcroForm','StructTreeRoot','Collection','Outlines','Names','OpenAction','AA','Perms'])if(doc.catalog.has(name(key)))throw new Error('This PDF has document features this build cannot safely preserve. Your original is unchanged.');
@@ -83,7 +83,6 @@ export async function transform(request:Extract<EngineRequest,{kind:'transform'}
     progress('Image and object optimisation complete');
   } else throw new Error('Operation unavailable.');
   const bytes=await output.save({useObjectStreams:true,updateFieldAppearances:false});
-  if(bytes.length>LIMITS.total)throw new Error('Output is too large. Try fewer files.');
   if(step.operation==='compress_pdf'&&bytes.length>=inputs[0].bytes.length)return {bytes:inputs[0].bytes.slice(),note:'No useful reduction found. The previous PDF is retained unchanged.'};
   return {bytes,note,ocrPages};
 }

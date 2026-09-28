@@ -1,5 +1,4 @@
 import type {Inspection} from '@pdf/types';
-import {LIMITS} from '@pdf/types';
 export type Artifact={ref:string;name:string;sizeBytes:number;pageCount:number;original:boolean;inspection:Inspection;checksum:string;note:string};
 export class LocalFileStore {
   #files=new Map<string,{meta:Artifact;bytes:Uint8Array}>();
@@ -19,7 +18,6 @@ export class LocalFileStore {
   commit(files:Awaited<ReturnType<LocalFileStore['prepare']>>[],expectedRevision:number){
     if(this.revision!==expectedRevision)throw new Error('Files changed. Run the action again.');
     if(files.some(f=>this.#files.has(f.meta.ref))||new Set(files.map(f=>f.meta.ref)).size!==files.length)throw new Error('Output was already committed.');
-    if(this.retainedBytes+files.reduce((n,f)=>n+f.bytes.length,0)>LIMITS.retained)throw new Error('Session memory limit reached. Save your work and start over.');
     for(const f of files){this.#files.set(f.meta.ref,{bytes:f.bytes.slice(),meta:structuredClone(f.meta)});if(f.meta.original)this.#originals.push(f.meta.ref);else this.#history.push(f.meta.ref);}
     this.revision++;
   }

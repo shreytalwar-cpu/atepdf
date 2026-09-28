@@ -1,0 +1,30 @@
+Already up to date
+Done in 146ms using pnpm v11.19.0
+$ node --import tsx --test tests/regressions/*.test.ts
+✔ L01/L02: actual merge, physical-page follow-up, independent text order, immutable originals and undo (645.561334ms)
+✔ complete plans only; stale, duplicate and malicious envelopes never execute (7.054ms)
+✔ remove all, out-of-range, duplicate input, future output and unsupported language rejected (6.174417ms)
+✔ L03: save cancellation and browser initiation never claim persistent save (0.232709ms)
+✔ L04: cancellation and failed independent validation cannot promote a candidate (3.77725ms)
+✔ local metadata cannot leak through the positive planner projection (0.1405ms)
+✔ damaged, active, form and oversized PDF features fail closed (2.074541ms)
+✔ unhelpful compression retains actual input bytes with honest result (3.072209ms)
+✔ large PDFs: real >20 MB inputs, >40 MB merge, >100 MB retained history, page removal and undo (273.187083ms)
+✔ planner privacy: exact filename aliasing, local snippet/path/password/bytes rejection and positive manifest projection (4.476917ms)
+✔ gateway: host/origin/token/content-type and disabled state cannot call provider (10.038375ms)
+✔ gateway: malformed, oversized, unknown fields, unsupported context and document canaries fail before provider (1.50325ms)
+✔ gateway: complete bound plan, duplicate rejection, hard request cap and no automatic follow-up calls (6.124667ms)
+✔ gateway: partial, unavailable operation and future refs never form an executable response (0.623667ms)
+✔ gateway: concurrent requests, timeout and cancellation stop planning without retry or provider-error disclosure (37.853625ms)
+✔ local credential: private permissions, no symlink following, budget persists across gateway restarts (8.678666ms)
+✔ actual AI SDK adapter mocked HTTP: allowlisted request, store=false, structured output, no tools/uploads/telemetry and no retries (26.352709ms)
+✔ masked key endpoint saves only locally, refuses cross-origin/oversized/overwrite and never invokes the provider (10.621666ms)
+✔ planner accepts metadata for large local PDFs without receiving bytes or filenames (0.523542ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1129.128875

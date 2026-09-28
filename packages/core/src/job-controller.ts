@@ -1,7 +1,6 @@
 import {buildRequest,quickPlan,validateEnvelope,type Request,type Envelope} from '@contracts/protocol';
 import {LocalFileStore} from './local-file-store';
 import type {EngineRequest,EngineResult,Inspection,OCRPage} from '@pdf/types';
-import {LIMITS} from '@pdf/types';
 type Services={worker:(request:EngineRequest,signal:AbortSignal,progress?:(text:string)=>void)=>Promise<EngineResult|{pages:number}>;inspect:(bytes:Uint8Array,signal:AbortSignal)=>Promise<Inspection>;recognize:(bytes:Uint8Array,inspection:Inspection,signal:AbortSignal,progress:(text:string)=>void)=>Promise<OCRPage[]>};
 export type JobState={busy:boolean;message:string;error:string|null;stage:'idle'|'importing'|'executing'|'validating'|'complete'|'cancelled'|'failed'};
 const normalize=(s:string)=>s.replace(/\s+/g,'').toLowerCase();
@@ -27,10 +26,9 @@ export class JobController {
   async import(files:File[]){
     await this.locked('importing',async signal=>{
       const revision=this.store.revision;
-      if(!files.length||files.length+this.store.originals.length>20||files.reduce((n,f)=>n+f.size,0)+this.store.originals.reduce((n,r)=>n+this.store.get(r).meta.sizeBytes,0)>LIMITS.total)throw new Error('Choose up to 20 PDFs, with a total size under 40 MB.');
+      if(!files.length||files.length+this.store.originals.length>20)throw new Error('Choose between 1 and 20 PDFs per session.');
       const staged=[];
       for(const file of files){
-        if(file.size>LIMITS.file)throw new Error('Choose PDFs smaller than 20 MB each.');
         const bytes=new Uint8Array(await file.arrayBuffer());signal.throwIfAborted();
         await this.services.worker({kind:'inspect',bytes},signal);
         const inspection=await this.services.inspect(bytes,signal);

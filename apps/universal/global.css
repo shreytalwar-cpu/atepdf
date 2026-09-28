@@ -1,0 +1,26 @@
+@import 'tailwindcss';
+@import 'uniwind';
+@source './App.tsx';
+@source './src';
+@theme {
+  --radius: 0.75rem;
+  --color-background: #ffffff;
+  --color-foreground: #18213b;
+  --color-card: #ffffff;
+  --color-card-foreground: #18213b;
+  --color-primary: #267bff;
+  --color-primary-foreground: #ffffff;
+  --color-muted: #f2f4f8;
+  --color-muted-foreground: #637089;
+  --color-border: #e2e7ee;
+  --color-accent: #eef4ff;
+  --color-accent-foreground: #18213b;
+  --color-destructive: #b4233a;
+}
+@layer base {
+  @media web {
+    html, body, #root { height: 100%; overflow: hidden; }
+    body { margin: 0; }
+    button, textarea { font: inherit; }
+  }
+}

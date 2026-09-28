@@ -16,3 +16,9 @@ apps/universal/.expo/
 .pnpm-store/
 apps/universal/dist-web/
 apps/universal/dist-native/
+
+.build/
+apps/web/public/_expo/
+apps/web/public/assets/
+apps/web/public/index.html
+apps/web/public/metadata.json

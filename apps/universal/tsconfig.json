@@ -1,1 +1,33 @@
-{"extends":"expo/tsconfig.base","compilerOptions":{"strict":true,"paths":{"@/*":["../web/src/*"],"@core/*":["../../packages/core/src/*"],"@contracts/*":["../../packages/contracts/src/*"],"@pdf/*":["../../packages/web-pdf/src/*"]}},"include":["**/*.ts","**/*.tsx","../../packages/**/*.ts"]}
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "@core/*": [
+        "../../packages/core/src/*"
+      ],
+      "@contracts/*": [
+        "../../packages/contracts/src/*"
+      ],
+      "@pdf/*": [
+        "../../packages/web-pdf/src/*"
+      ],
+      "@planner/*": [
+        "../../packages/planner/src/*"
+      ]
+    }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "../../packages/**/*.ts"
+  ],
+  "exclude": [
+    "../../packages/planner/src/gateway.ts",
+    "../../packages/planner/src/provider.ts",
+    "../../packages/planner/src/local-config.ts"
+  ]
+}

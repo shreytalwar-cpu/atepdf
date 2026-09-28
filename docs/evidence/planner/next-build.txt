@@ -1,0 +1,24 @@
+Already up to date
+Done in 155ms using pnpm v11.19.0
+▲ Next.js 16.3.6 (webpack)
+✓ Running next.config.ts took 85ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 1665ms
+  Running TypeScript ...
+  Finished TypeScript in 208ms ...
+  Collecting page data using 6 workers ...
+  Generating static pages using 6 workers (0/2) ...
+✓ Generating static pages using 6 workers (2/2) in 309ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ƒ /
+├ ○ /_not-found
+├ ƒ /api/planner
+└ ƒ /api/planner/status
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand

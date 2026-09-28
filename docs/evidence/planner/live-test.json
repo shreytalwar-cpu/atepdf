@@ -1,0 +1,252 @@
+{
+  "approvedMaximum": 2,
+  "calls": 2,
+  "completed": [
+    "live model planned merge; local engine produced independently validated 3-page PDF",
+    "live model planned physical page removal; local engine produced independently validated 2-page PDF",
+    "download independently reopened in A1/B1 order; browser requests only same-origin; no filenames/content in planner DTO"
+  ],
+  "network": [
+    {
+      "url": "http://localhost:3211/",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "url": "http://localhost:3211/_expo/static/css/global-34df0a5c015a3c1116062c1bf7470e33.css",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "url": "http://localhost:3211/_expo/static/css/preview-ce12e70606a94b58889bc540df19e4f7.css",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "url": "http://localhost:3211/_expo/static/js/web/index-5216a5a0ecd66c42f8c63dc7726e7cf3.js",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "url": "http://localhost:3211/assets/assets/approved-8-mark-source-crop.8b708587521942c4118f8e6a3c3f84f8.png",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "url": "http://localhost:3211/assets/assets/approved-atepdf-wordmark-source-crop.e129a61b59d2f9c2fdcb1f1b2521e212.png",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "url": "http://localhost:3211/assets/assets/paper.1cb2ca1d4826879d6316a24bfbeecd07.png",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "url": "http://localhost:3211/fixtures/brief.pdf",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "url": "http://localhost:3211/fixtures/appendix.pdf",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "url": "http://localhost:3211/engines/atepdf.worker.js",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "url": "http://localhost:3211/_expo/static/js/web/pdf-12ebbcdcae7bfd29686252393091bbb6.js",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "url": "http://localhost:3211/engines/pdf.worker.min.mjs",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "url": "http://localhost:3211/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "url": "http://localhost:3211/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "url": "http://localhost:3211/engines/atepdf.worker.js",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "url": "http://localhost:3211/engines/pdf.worker.min.mjs",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "url": "http://localhost:3211/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "url": "http://localhost:3211/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "url": "http://localhost:3211/api/planner/status",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "url": "http://localhost:3211/api/planner",
+      "method": "POST",
+      "body": {
+        "schemaVersion": "1.0",
+        "requestId": "req_5333d1258cf844229078d5ce0b179066",
+        "workspaceRevision": 1,
+        "locale": "en-IN",
+        "instruction": "Please combine both documents in their current order.",
+        "files": [
+          {
+            "ref": "file_3a4b7d1c05ae47a1a71b3553f018d79d",
+            "kind": "pdf",
+            "pageCount": 2,
+            "sizeBytes": 3140,
+            "encrypted": false
+          },
+          {
+            "ref": "file_c749c379d428492f86f9099707caa141",
+            "kind": "pdf",
+            "pageCount": 1,
+            "sizeBytes": 2062,
+            "encrypted": false
+          }
+        ],
+        "selectionRefs": [
+          "file_3a4b7d1c05ae47a1a71b3553f018d79d",
+          "file_c749c379d428492f86f9099707caa141"
+        ],
+        "focusedResultRef": null,
+        "originalRefs": [
+          "file_3a4b7d1c05ae47a1a71b3553f018d79d",
+          "file_c749c379d428492f86f9099707caa141"
+        ],
+        "previousActionIds": [],
+        "capabilities": [
+          "merge_pdf",
+          "select_pages",
+          "ocr_pdf",
+          "compress_pdf"
+        ],
+        "previousPlan": null,
+        "ocrLanguages": [
+          "eng"
+        ]
+      }
+    },
+    {
+      "url": "http://localhost:3211/engines/atepdf.worker.js",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "url": "http://localhost:3211/engines/pdf.worker.min.mjs",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "url": "http://localhost:3211/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "url": "http://localhost:3211/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "url": "http://localhost:3211/api/planner/status",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "url": "http://localhost:3211/api/planner",
+      "method": "POST",
+      "body": {
+        "schemaVersion": "1.0",
+        "requestId": "req_df13a188724a48dca658f134bb1c35b5",
+        "workspaceRevision": 2,
+        "locale": "en-IN",
+        "instruction": "Please delete the second physical page from the current result.",
+        "files": [
+          {
+            "ref": "file_3a4b7d1c05ae47a1a71b3553f018d79d",
+            "kind": "pdf",
+            "pageCount": 2,
+            "sizeBytes": 3140,
+            "encrypted": false
+          },
+          {
+            "ref": "file_c749c379d428492f86f9099707caa141",
+            "kind": "pdf",
+            "pageCount": 1,
+            "sizeBytes": 2062,
+            "encrypted": false
+          },
+          {
+            "ref": "out_dd1f6ed0196b42ffba97f94b304a66ba",
+            "kind": "pdf",
+            "pageCount": 3,
+            "sizeBytes": 3099,
+            "encrypted": false
+          }
+        ],
+        "selectionRefs": [
+          "file_3a4b7d1c05ae47a1a71b3553f018d79d",
+          "file_c749c379d428492f86f9099707caa141"
+        ],
+        "focusedResultRef": "out_dd1f6ed0196b42ffba97f94b304a66ba",
+        "originalRefs": [
+          "file_3a4b7d1c05ae47a1a71b3553f018d79d",
+          "file_c749c379d428492f86f9099707caa141"
+        ],
+        "previousActionIds": [],
+        "capabilities": [
+          "merge_pdf",
+          "select_pages",
+          "ocr_pdf",
+          "compress_pdf"
+        ],
+        "previousPlan": null,
+        "ocrLanguages": [
+          "eng"
+        ]
+      }
+    },
+    {
+      "url": "http://localhost:3211/engines/atepdf.worker.js",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "url": "http://localhost:3211/engines/pdf.worker.min.mjs",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "url": "http://localhost:3211/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "url": "http://localhost:3211/engines/standard_fonts/LiberationSans-Bold.ttf",
+      "method": "GET",
+      "body": null
+    }
+  ]
+}

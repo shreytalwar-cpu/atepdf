@@ -1,0 +1,11 @@
+Already up to date
+Done in 157ms using pnpm v11.19.0
+
+Running 2 tests using 1 worker
+
+(node:97160) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/workflow.spec.ts:8:5 › real merge → preview/save → remove physical page 2 → undo; local-only network (2.5s)
+  ✓  2 tests/e2e/workflow.spec.ts:23:5 › responsive workspace, keyboard height, privacy and save cancellation (1.8s)
+
+  2 passed (5.2s)

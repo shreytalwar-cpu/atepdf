@@ -1,0 +1,72 @@
+[
+  {
+    "registry": "https://r.assistant-ui.com/native/thread.json",
+    "path": "components/assistant-ui/elements/thread.aui.tsx",
+    "sha256": "3a5f3ac506b268e93751a364b0ad8b570b9b1a888a41c6e5dbce8e7345da9f1c"
+  },
+  {
+    "registry": "https://r.assistant-ui.com/native/attachment.json",
+    "path": "components/assistant-ui/elements/attachment.aui.tsx",
+    "sha256": "38cb8a12cec2810c3242ee594b24020e60081a0cd0923a9dad976935be1ef636"
+  },
+  {
+    "registry": "https://r.assistant-ui.com/native/elements-icon-button.json",
+    "path": "components/assistant-ui/elements/icon-button.tsx",
+    "sha256": "1ccb540572bbec94a440bb34d6e1c5df2f46a85d226a8a8a7f53e6e75f1875ad"
+  },
+  {
+    "registry": "https://r.assistant-ui.com/utils.json",
+    "path": "lib/utils.ts",
+    "sha256": "55bbdc94cef3e0c8a8bba386e94f97228dd2c967fe61466fc565378890550c08"
+  },
+  {
+    "registry": "https://r.assistant-ui.com/native/icon.json",
+    "path": "components/ui/icon.tsx",
+    "sha256": "9345c83ee2a952e6d273df8bc2812143ae8a723b64bcb913bd25ff11acb94fce"
+  },
+  {
+    "registry": "https://r.assistant-ui.com/native/file.json",
+    "path": "components/assistant-ui/elements/file.tsx",
+    "sha256": "fa45a1f1d7f6b77bd0ae6ce4228b36aa951e3fea9bb4aa2ffa5683ef509cd8d6"
+  },
+  {
+    "registry": "https://r.assistant-ui.com/native/image.json",
+    "path": "components/assistant-ui/elements/image.tsx",
+    "sha256": "6ae908740c29f19a243078ef1743f3f3b6e5ff781baa20fc9966de0221c12516"
+  },
+  {
+    "registry": "https://r.assistant-ui.com/native/elements-surfaces.json",
+    "path": "components/assistant-ui/elements/surfaces.tsx",
+    "sha256": "c754ed5b1124d0dce1c4296895ea79143b8c89238392ef5f30e15aed128aa9ba"
+  },
+  {
+    "registry": "https://r.assistant-ui.com/native/reasoning.json",
+    "path": "components/assistant-ui/elements/reasoning.aui.tsx",
+    "sha256": "fed9ffef221465a2d36de898fab42b73a5642e0fceb7947e8332f9f0dc515c21"
+  },
+  {
+    "registry": "https://r.assistant-ui.com/native/elements-reasoning.json",
+    "path": "components/assistant-ui/elements/reasoning.tsx",
+    "sha256": "38eb747b105c6dfdc4c80ecec658a5e39d4d239847c539fb37d863c8d65405b2"
+  },
+  {
+    "registry": "https://r.assistant-ui.com/native/markdown-text.json",
+    "path": "components/assistant-ui/elements/markdown-text.tsx",
+    "sha256": "8d716fffcdc3b3bfedfecf7eb483711b29f49a37ac5ac7443f4150ae682cf69d"
+  },
+  {
+    "registry": "https://r.assistant-ui.com/native/elements-typing-indicator.json",
+    "path": "components/assistant-ui/elements/typing-indicator.tsx",
+    "sha256": "bb5e5adae8655d4c03023a094e00acc8486f9107b95a57e82dbede74e15910a9"
+  },
+  {
+    "registry": "https://r.assistant-ui.com/native/elements-tool-fallback.json",
+    "path": "components/assistant-ui/elements/tool-fallback.tsx",
+    "sha256": "9c36bb54bb7c543918fb4795abf30c4a0288c2528dd32fba0c144ba43746e9b3"
+  },
+  {
+    "registry": "https://r.assistant-ui.com/native/elements-task.json",
+    "path": "components/assistant-ui/utils/task.ts",
+    "sha256": "b4bcf0ac99cca343eb1b2546f866c2d2fccdcb7482187fc379701343bd5d1b1b"
+  }
+]

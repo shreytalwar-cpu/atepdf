@@ -1,0 +1,33 @@
+Already up to date
+Done in 144ms using pnpm v11.19.0
+$ node scripts/contracts.mjs && cd apps/universal && EXPO_NO_TELEMETRY=1 expo export --platform ios --platform android --output-dir dist-native
+Canonical contract validators compiled ahead of time; no runtime eval.
+Starting Metro Bundler
+
+| (node:96822) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:96822) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:96822) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+iOS Bundled 9920ms index.ts (3298 modules)
+Android Bundled 18874ms index.ts (2979 modules)
+
+› Assets (3):
+assets/approved-8-mark-source-crop.png (35KB)
+assets/approved-atepdf-wordmark-source-crop.png (34KB)
+assets/paper.png (688KB)
+
+› ios bundles (1):
+_expo/static/js/ios/index-90d70758494981f997cf8ea4b5726e47.hbc (6.1MB)
+
+› web bundles (1):
+_expo/static/css/global-d41d8cd98f00b204e9800998ecf8427e.css (0B)
+
+› android bundles (1):
+_expo/static/js/android/index-afd903685b25e5fb0f51b6e8fe52a846.hbc (6.1MB)
+
+› Files (1):
+metadata.json (620B)
+
+Exported: dist-native

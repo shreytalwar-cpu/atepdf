@@ -1,0 +1,100 @@
+{
+  "inputBytes": [
+    21235242,
+    21235242
+  ],
+  "mergedBytes": 42469826,
+  "undoByteIdentical": true,
+  "previewRendered": true,
+  "noPDFEgress": true,
+  "requests": [
+    {
+      "url": "http://localhost:3211/",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/_expo/static/css/global-34df0a5c015a3c1116062c1bf7470e33.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/_expo/static/css/preview-ce12e70606a94b58889bc540df19e4f7.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/_expo/static/js/web/index-5216a5a0ecd66c42f8c63dc7726e7cf3.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/assets/assets/approved-8-mark-source-crop.8b708587521942c4118f8e6a3c3f84f8.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/assets/assets/approved-atepdf-wordmark-source-crop.e129a61b59d2f9c2fdcb1f1b2521e212.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/assets/assets/paper.1cb2ca1d4826879d6316a24bfbeecd07.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/engines/atepdf.worker.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/_expo/static/js/web/pdf-12ebbcdcae7bfd29686252393091bbb6.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/engines/pdf.worker.min.mjs",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/engines/atepdf.worker.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/engines/pdf.worker.min.mjs",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/engines/atepdf.worker.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/engines/pdf.worker.min.mjs",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/engines/pdf.worker.min.mjs",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/engines/atepdf.worker.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/engines/pdf.worker.min.mjs",
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3211/engines/standard_fonts/LiberationSans-Regular.ttf",
+      "method": "GET"
+    }
+  ]
+}

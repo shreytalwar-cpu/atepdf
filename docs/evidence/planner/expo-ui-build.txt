@@ -1,0 +1,40 @@
+Already up to date
+Done in 173ms using pnpm v11.19.0
+$ EXPO_NO_TELEMETRY=1 node scripts/contracts.mjs && node scripts/assets.mjs && node scripts/build-gateway.mjs && cd apps/universal && EXPO_NO_TELEMETRY=1 expo export --platform web --output-dir dist-web
+Canonical contract validators compiled ahead of time; no runtime eval.
+Pinned local PDF, OCR and English assets prepared.
+Starting Metro Bundler
+
+| (node:91397) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:91397) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:91397) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:91397) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:91397) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:91397) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:91397) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+Web Bundled 7488ms index.ts (2898 modules)
+
+› Assets (3):
+assets/approved-8-mark-source-crop.8b708587521942c4118f8e6a3c3f84f8.png (35KB)
+assets/approved-atepdf-wordmark-source-crop.e129a61b59d2f9c2fdcb1f1b2521e212.png (34KB)
+assets/paper.1cb2ca1d4826879d6316a24bfbeecd07.png (688KB)
+
+› web bundles (5):
+_expo/static/css/global-dd05e9b5921c939c141f838862fbc62b.css (17KB)
+_expo/static/css/preview-ce12e70606a94b58889bc540df19e4f7.css (2.5KB)
+_expo/static/js/web/index-916a98b7dc903a6c0968bbb1bde024d6.js (18KB)
+_expo/static/js/web/index-a3337a4ece0d35397ae21b0d2010db05.js (4.2MB)
+_expo/static/js/web/pdf-1ba59c1a9d5f9f7744b706b961b48faa.js (549KB)
+
+› Files (2):
+index.html (1.6KB)
+metadata.json (49B)
+
+Exported: dist-web

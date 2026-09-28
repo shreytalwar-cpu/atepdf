@@ -43,7 +43,7 @@ export default function Workspace(){
         <h1><span className="wide-heading">Drop files here</span><span className="phone-heading">Add your files</span></h1>
         <p>or choose files from your device</p>
         <Button className="choose-button" disabled={busy} onClick={()=>input.current?.click()}><FolderOpen/>Choose files</Button>
-        <span className="file-hint">PDF · up to 20 MB per file</span>
+        <span className="file-hint">PDF · processed on your device</span>
         <Button variant="ghost" className="sample-button" disabled={busy} onClick={()=>void sample()}>Try the two sample PDFs</Button>
       </section>:<section className={`files-section ${drag?'drag-active':''}`} aria-label="Your local files">
         <div className="section-heading"><div><h1>Your files</h1><p>Kept on this device · merged in the order below</p></div><Button variant="outline" disabled={busy} onClick={()=>input.current?.click()}><Plus/>Add files</Button></div>

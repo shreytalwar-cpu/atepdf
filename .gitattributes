@@ -1,0 +1,6 @@
+# PDF offsets and approved handoff hashes depend on exact bytes.
+*.pdf binary
+*.png binary
+*.jpeg binary
+*.jpg binary
+atepdf_codex_build_pack/** -text -whitespace

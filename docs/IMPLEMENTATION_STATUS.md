@@ -40,4 +40,6 @@ Optional hosted planning uses the saved local key and GPT-6 Luna. After the prio
 
 ## Next executable task
 
+The owner-requested [UI/UX execution plan](UI_UX_EXECUTION_PLAN.md) breaks down the existing F02/F03/F04/F05/F07/F09/F10 work and provides the installed `$atepdf-chat-ux` skill, available MCP routes and measurable acceptance criteria. It is planning/tooling, not a newly implemented UI or a second roadmap. Its first design slice is document context, composer and result flow.
+
 Virtual checks and their bounded failures are recorded in BETA_APPLE_QA.md and BETA_IPHONE_QA.md. The actual Files save and independent saved-copy check pass on the simulator; physical keyboard, lifecycle, local-network and memory behavior still need device evidence. Next, connect the physical device, approve the independent development signing setup and private-network test, then verify actual Files save/reopen, OCR/compression and mobile lifecycle/memory behavior with the shared corpus. The owner deferred current Mac interactive checks. The final Mac application build and ad-hoc signature are verified; an earlier candidate was launched by exact path, which does not establish launch or workflow acceptance of the latest build. Android remains deferred. Production authentication, actual commerce sandbox integration and rollout retain the existing IDs and approval gates.

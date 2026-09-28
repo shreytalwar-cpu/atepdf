@@ -1,0 +1,6 @@
+interface:
+  display_name: "atepdf Chat UX"
+  short_description: "Refine and verify atepdf's conversational PDF experience"
+  default_prompt: "Use $atepdf-chat-ux to improve the current atepdf conversation flow and verify it with actual local PDF workflows."
+policy:
+  allow_implicit_invocation: true

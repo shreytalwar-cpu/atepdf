@@ -26,3 +26,5 @@ apps/web/public/_expo/
 apps/web/public/assets/
 apps/web/public/index.html
 apps/web/public/metadata.json
+
+docs/evidence/native/beta-*-attachments/

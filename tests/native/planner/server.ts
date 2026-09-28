@@ -7,7 +7,7 @@ let calls=0,cancelled=0;
 const gateway=createGateway({status:async()=>({connected:true,enabled:true,remaining:100}),reserve:async()=>({key:'synthetic-native-test-only',release:async()=>{}})},async(request,_key,signal)=>{
   if(/brief\.pdf|appendix\.pdf|PRIVATE-CANARY/.test(JSON.stringify(request)))throw new Error('Privacy canary leaked.');
   calls++;
-  if(request.instruction==='Wait for cancellation')await new Promise<void>((resolve,reject)=>{const timer=setTimeout(resolve,10_000);signal.addEventListener('abort',()=>{cancelled++;clearTimeout(timer);reject(new Error('cancelled'));},{once:true});});
+  if(request.instruction==='Wait for cancellation'||request.instruction==='Wait for interruption')await new Promise<void>((resolve,reject)=>{const timer=setTimeout(resolve,request.instruction==='Wait for interruption'?25_000:10_000);signal.addEventListener('abort',()=>{cancelled++;clearTimeout(timer);reject(new Error('cancelled'));},{once:true});});
   if(/what can atepdf do/i.test(request.instruction))return {schemaVersion:'1.0',status:'answer',reasonCode:'product_information',steps:[],resultRefs:[],clarification:{question:'I can merge PDFs and remove pages on your device. Your originals stay unchanged.',choices:[]}};
   if(/^undo/i.test(request.instruction))return {schemaVersion:'1.0',status:'undo',reasonCode:'undo_last_change',steps:[],resultRefs:[],clarification:null};
   return quickPlan(request,/remove/i.test(request.instruction)?'remove':'merge',2).planner;

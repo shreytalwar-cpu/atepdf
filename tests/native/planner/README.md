@@ -21,3 +21,20 @@ The executable checks pairing, credential-free status, private request admission
 With the same server running, use XcodeBuildMCP `test_sim` for the `atepdfUI` scheme, Release configuration, and an iPhone simulator. The new UI test types a masked pairing code, asks a product question, merges the bundled PDFs, removes page 2, undoes the change, cancels a request, and disconnects. PDF processing and complete-plan validation are real; provider responses are synthetic. Check that all three tests pass with zero skips. The paired test explicitly skips when its test server is absent, so a skipped run is not pairing evidence.
 
 Disconnect any manually paired test app and stop this server afterward. A development connection to the owner's real local gateway must use a new code created by that gateway; never substitute test responses for live AI. Physical devices, production authentication, paid-provider availability and purchases are outside this harness.
+
+## Private TLS beta checks
+
+The separate synthetic TLS harness never reads `.local` or constructs a paid provider:
+
+```sh
+node --import tsx tests/native/planner/tls-server.ts
+```
+
+It binds loopback 3444 for the native gateway, 3445 for test-only code issuance and counters, and 3446/3447 for deliberately invalid certificate fixtures. The test-only issuance endpoints must never be added to the application server. In another terminal:
+
+```sh
+xcrun swiftc -parse-as-library apps/universal/modules/atepdf-planner/ios/AtepdfPlannerTransport.swift tests/native/planner/tls-main.swift -o .build/native-tls-planner-tests
+.build/native-tls-planner-tests
+```
+
+This exercises the actual Swift transport: private endpoint admission, expired pairing code, bad fingerprint, correctly pinned wrong-host and expired-leaf rejection before any HTTP request, successful one-use pairing, complete synthetic plan and disconnect. The native UI suite also has `testPinnedTLSPlannerMergeThroughNativeInterface`, which obtains a synthetic code through 3445 and runs the real app's three-page merge through the TLS connection. That UI test must pass with zero skips; the command-line helper alone is not iOS application proof. Stop the harness after acceptance. No private-LAN binding, system trust installation, physical-device success or paid request is implied.

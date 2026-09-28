@@ -1,6 +1,6 @@
 # Apple local PDF adapter
 
-The PDF adapter remains independent of the new AtepdfPlanner module. Mac and iOS Simulator can pair with the local development gateway under ADR 0008. Physical-device AI is not enabled. The provider key stays in the Mac's local server; native PDF processing remains in this adapter. Current native planner evidence is in SESSION_2026-09-28_NATIVE_PLANNER.md.
+The PDF adapter remains independent of the new AtepdfPlanner module. Mac and iOS Simulator can pair with the local development gateway under ADR 0008. ADR 0009 adds an explicit private TLS beta connection for Apple devices; simulator verification and physical-device acceptance remain separate. The provider key stays in the Mac's local server; native PDF processing remains in this adapter. Current native planner evidence is in SESSION_2026-09-28_NATIVE_PLANNER.md.
 
 New source in `apps/universal/modules/atepdf-pdf/ios`. No old application source was read, copied, or executed for this adapter. It uses OS-supplied PDFKit/CoreGraphics, Vision and ImageIO; these frameworks add no bundled third-party PDF/OCR engine or cloud service. Shared pdf-lib remains the writer under the repository's existing licence review.
 
@@ -80,4 +80,4 @@ xcrun simctl install SIMULATOR_UDID .build/ios/Build/Products/Release-iphonesimu
 xcrun simctl launch SIMULATOR_UDID dev.atepdf.fresh
 ```
 
-XcodeBuildMCP can run the same workspace/scheme/configuration with those build arguments, then install and launch separately. A tool timeout alone does not prove build failure or success: check the original process before starting another build, and retain an explicit successful build result. The final incremental simulator build on 2026-09-28 completed in 36.981 seconds after the final storage guard (the preceding layout build took 41.4 seconds). Its embedded bundle was produced after the final shared admission guard and follow-up copy edits. Native AI planning remains disabled; quick actions and the bounded local command planner operate without any network credentials.
+XcodeBuildMCP can run the same workspace/scheme/configuration with those build arguments, then install and launch separately. A tool timeout alone does not prove build failure or success: check the original process before starting another build, and retain an explicit successful build result. The final incremental simulator build on 2026-09-28 completed in 36.981 seconds after the final storage guard (the preceding layout build took 41.4 seconds). Its embedded bundle was produced after the final shared admission guard and follow-up copy edits. That historical build predates native pairing. Current builds support the paired planner described in ADRs 0008–0009; unpaired quick actions still work locally.

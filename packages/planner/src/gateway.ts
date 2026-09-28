@@ -6,9 +6,11 @@ import {bindResponse} from './schema';
 import {MODEL,planWithOpenAI} from './provider';
 import {LocalConfig} from './local-config';
 import {NativePairing} from './native-pairing';
+import {packBetaPairing,validateNativeEndpoint,type NativeEndpoint} from './native-beta';
 const LIMIT=24_000;
 
-export function createGateway(config:Pick<LocalConfig,'status'|'reserve'> & Partial<Pick<LocalConfig,'saveKey'>>,provider=planWithOpenAI,{timeoutMs=30_000,minIntervalMs=1500}={}){
+export function createGateway(config:Pick<LocalConfig,'status'|'reserve'> & Partial<Pick<LocalConfig,'saveKey'>>,provider=planWithOpenAI,{timeoutMs=30_000,minIntervalMs=1500,nativeEndpoint}:{timeoutMs?:number;minIntervalMs?:number;nativeEndpoint?:NativeEndpoint}={}){
+  if(nativeEndpoint)validateNativeEndpoint(nativeEndpoint);
   const token=randomBytes(32).toString('hex');let running=false,lastStarted=0;const used=new Set<string>();
   const pairing=new NativePairing();
   const json=(body:unknown,status=200)=>Response.json(body,{status,headers:{'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
@@ -37,7 +39,7 @@ export function createGateway(config:Pick<LocalConfig,'status'|'reserve'> & Part
     if(!native&&(origin!==url.origin||request.headers.get('x-atepdf-token')!==token))return json({error:'Refresh atepdf before planning.'},403);
     if(request.headers.get('content-type')?.split(';')[0]!=='application/json')return json({error:'Expected a plan request.'},415);
     if(url.pathname==='/api/planner/pairing'){
-      try{if(await smallBody(request,8)!=='{}')throw new Error();if(!['3210','3211','3212'].includes(url.port))throw new Error();return json(pairing.issue(url.origin));}
+      try{if(await smallBody(request,8)!=='{}')throw new Error();if(!['3210','3211','3212'].includes(url.port))throw new Error();const issued=pairing.issue(url.origin);return json(nativeEndpoint?packBetaPairing(issued,nativeEndpoint):issued);}
       catch{return json({error:'Local pairing unavailable.'},400);}
     }
     if(url.pathname==='/api/planner/key'){

@@ -4,11 +4,7 @@ import Foundation
 public final class AtepdfPlannerModule: Module {
   private let transport = AtepdfPlannerTransport()
   private var available: Bool {
-    #if targetEnvironment(simulator) || targetEnvironment(macCatalyst)
     return true
-    #else
-    return false // A physical device needs an approved authenticated HTTPS service.
-    #endif
   }
   private func requireAvailable() throws {
     guard available else { throw AtepdfPlannerTransport.Failure.unavailable }

@@ -1,4 +1,4 @@
-// Explicitly invoked only after owner grants the two-call test allowance.
+// Explicitly invoked only after the owner authorizes at most two paid checks.
 // Not part of normal test/e2e scripts. Never reads or prints a credential.
 import {chromium} from '@playwright/test';
 import assert from 'node:assert/strict';
@@ -9,16 +9,24 @@ async function main(){
 if(process.env.ATEPDF_APPROVED_LIVE_REQUESTS!=='2')throw new Error('An explicit two-request approval is required.');
 const browser=await chromium.launch({headless:true,channel:'chrome'}),page=await browser.newPage({viewport:{width:1280,height:960}}),dir=await mkdtemp(join(tmpdir(),'atepdf-live-'));
 const requests:{url:string;method:string;body:unknown}[]=[],errors:string[]=[];
-const evidence:{approvedMaximum:number;calls:number;completed:string[];error?:string;network?:unknown}={approvedMaximum:2,calls:0,completed:[]};
+const evidence:{approvedMaximum:number;calls:number;model:string;completed:string[];error?:string;network?:unknown}={approvedMaximum:2,calls:0,model:'gpt-6-luna',completed:[]};
 page.on('pageerror',e=>errors.push(e.message));
-page.on('request',r=>{const body=r.url().endsWith('/api/planner')?r.postDataJSON():null;requests.push({url:r.url(),method:r.method(),body});if(body)evidence.calls++;});
+page.on('request',r=>{const body=r.url().endsWith('/api/planner')?r.postDataJSON():null;requests.push({url:r.url(),method:r.method(),body});});
 try{
+  // This is an external-spend guard, not a mock response: permit no more than
+  // two actual submissions even if the interface accidentally submits again.
+  await page.route('**/api/planner',async route=>{
+    if(evidence.calls>=2){await route.abort();return;}
+    evidence.calls++;await route.continue();
+  });
+  const status=await(await page.request.get('http://localhost:3211/api/planner/status')).json();
+  assert.equal(status.model,evidence.model);assert.equal(status.enabled,true);assert.ok(status.remaining>=2);
   await page.addInitScript(()=>Object.defineProperty(window,'showSaveFilePicker',{value:undefined,configurable:true}));
   await page.goto('http://localhost:3211/');await page.getByRole('button',{name:'Try the two sample PDFs'}).click();await page.getByText('Your 2 PDFs are ready.',{exact:false}).waitFor();
   const plan=async(text:string)=>{
-    await page.getByRole('textbox',{name:'Tell atepdf what to do'}).fill(text);await page.getByRole('button',{name:'Send message'}).click();await page.getByRole('button',{name:'Plan this request'}).click();
-    await page.getByRole('button',{name:'Create local copy'}).waitFor({timeout:40_000});
-    await page.getByRole('button',{name:'Create local copy'}).click();
+    await page.getByRole('textbox',{name:'Tell atepdf what to do'}).fill(text);await page.getByRole('button',{name:'Send message'}).click();
+    // Completed plans run through the real local controller directly. There is
+    // no per-request disclosure dialog or second execution-confirmation step.
   };
   await plan('Please combine both documents in their current order.');await page.getByTestId('result-facts').filter({hasText:'3 pages'}).waitFor({timeout:30_000});evidence.completed.push('live model planned merge; local engine produced independently validated 3-page PDF');
   // Respect the gateway's start-rate limit even if the first model response is fast.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Owner-operated bounded API-test authorization. Makes no API calls."""
+"""Owner-operated bounded planner authorization. Makes no API calls."""
 from pathlib import Path
 import json
 import os
@@ -11,7 +11,7 @@ folder = root / '.local'
 if len(sys.argv) != 2 or not sys.argv[1].isdigit() or not 1 <= int(sys.argv[1]) <= 20:
     raise SystemExit('Usage: python3 scripts/approve-planner.py REQUESTS (1–20)')
 if not sys.stdin.isatty():
-    raise SystemExit('Run this in an interactive terminal to approve paid test requests.')
+    raise SystemExit('Run this in an interactive terminal to approve paid planning requests.')
 if folder.is_symlink() or not folder.is_dir():
     raise SystemExit('Connect a key first using the masked setup.')
 if (folder / 'planner.lock').exists():
@@ -43,4 +43,4 @@ try:
         os.fsync(stream.fileno())
 finally:
     lock.rmdir()
-print('Local allowance saved. Requests still require confirmation inside atepdf.')
+print('Local allowance saved. Sending a chat request or choosing a PDF quick action can use the planner.')

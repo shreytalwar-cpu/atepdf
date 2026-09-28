@@ -2,6 +2,10 @@
 
 Fresh independent PDF application. One React Native / Expo conversation interface for web, iOS/iPadOS and Mac Catalyst. The working browser slice imports PDFs, merges locally, independently validates, previews inside chat, saves, removes pages and undoes changes. English OCR and bounded JPEG compression run locally too.
 
+## Private beta
+
+After the browser export is built, use **Start atepdf.command** and **Stop atepdf.command** in `scripts/beta`. **Open atepdf Mac.command** opens the latest verified local Mac build. These shortcuts do not install, build, publish or change the request allowance. See [beta instructions](docs/INTERNAL_BETA.md) for pairing and tomorrow's physical-device acceptance.
+
 ## Run locally
 
 Node 24 and pnpm 11 were used for verification. Install dependencies with `pnpm install --frozen-lockfile`.
@@ -19,7 +23,7 @@ Try the two sample PDFs, then Merge. Type `remove page 2` and `undo`. Other supp
 
 Current targets are **iOS/iPadOS, Mac and web** (ADR 0005). Android is deferred; its experimental source is preserved. Apple builds connect the shared local controller to PDFKit validation/preview, Vision OCR and ImageIO compression. Mac Save uses Apple's document export dialog and waits for copy confirmation. iOS/iPadOS Save opens the system share sheet and asks you to verify the destination; closing that sheet alone does not confirm a save.
 
-The browser has an optional local OpenAI gateway using GPT-6 Luna. The owner enabled a bounded request allowance and removed atepdf’s 2,000-output-token cap; the model’s own limits still apply. Requests have no retries. When enabled, typed PDF requests and quick actions ask the model to choose a local PDF tool; complete plans are independently validated and executed on this device. Basic product questions receive an in-chat answer. When AI is unavailable, known quick actions still work locally. Mac and iOS Simulator can pair with this same local gateway through the connection controls; physical-device/production AI transport is not connected. Pairing creates no new request allowance. No analytics, live billing, cloud PDF processing, production identity or user migration is configured. Commerce has disabled synthetic domain contracts only, not a purchase integration.
+The browser has an optional local OpenAI gateway using GPT-6 Luna. The owner enabled a bounded request allowance and removed atepdf’s 2,000-output-token cap; the model’s own limits still apply. Requests have no retries. When enabled, typed PDF requests and quick actions ask the model to choose a local PDF tool; complete plans are independently validated and executed on this device. Basic product questions receive an in-chat answer. When AI is unavailable, known quick actions still work locally. Apple development apps can pair with this same gateway through the connection controls. An explicit private TLS companion supports the upcoming same-Wi-Fi device beta; physical-device acceptance and production authentication remain open. Pairing creates no new request allowance. No analytics, live billing, cloud PDF processing, production identity or user migration is configured. Commerce has disabled synthetic domain contracts only, not a purchase integration.
 
 See [implementation and evidence](docs/IMPLEMENTATION_STATUS.md), [platform limits](docs/PLATFORM_CAPABILITIES.md), [privacy checks](docs/PRIVACY_TEST_REPORT.md) and [legacy evidence](docs/legacy-learning/SOURCE_AUDIT.md). The supplied v7 handoff is preserved in `atepdf_codex_build_pack/`. Owner-approved React Native and conversational workflow changes are recorded under `docs/adr/`; the handoff itself remains unchanged.
 

@@ -1,5 +1,5 @@
 import React, {createContext, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore} from 'react';
-import {View, Text, Image, Pressable, TextInput, ScrollView, Modal, Platform, useWindowDimensions} from 'react-native';
+import {View, Text, Image, Pressable, TextInput, ScrollView, Modal, Platform, Keyboard, useWindowDimensions} from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {ArrowDownToLine, Check, FileText, FolderOpen, LockKeyhole, Plus, ScanText, Copy, Undo2, SquarePen, SlidersHorizontal, Eye} from 'lucide-react-native';
 import type {LucideIcon} from 'lucide-react-native';
@@ -133,7 +133,7 @@ function useWorkspace() {
   };
   const connect=async()=>{
     const status=await checkConnection();if(!status)return;
-    if(Platform.OS!=='web'){const id=append({role:'assistant',text:status.pairingRequired?'Connect to the atepdf browser running on this Mac. Create a pairing code in its OpenAI connection controls, then paste it below.':'This app is paired with the local planner on this Mac.',choice:'native-pair'});setChoice(id);return;}
+    if(Platform.OS!=='web'){const id=append({role:'assistant',text:status.pairingRequired?'Create a pairing code in atepdf on your Mac, then paste it below. On iPhone or iPad, keep both devices on the same Wi-Fi and use the private beta connection.':'This app is paired with the planner on your Mac.',choice:'native-pair'});setChoice(id);return;}
     if(!status.connected){const id=append({role:'assistant',text:'Connect OpenAI for optional AI planning. Enter your key in the secure field below. It is saved only by atepdf’s local server and never added to the conversation. Saving makes no OpenAI calls.',choice:'connect',token:status.token});setChoice(id);return;}
     const id=append({role:'assistant',text:status.enabled?`AI planning is ready for up to ${status.remaining} approved requests. Tell me what you’d like to do.`:'Your key is saved locally. Paid planning is paused until you approve a request limit in the local setup. Quick actions work now.',choice:'native-link',token:status.token});setChoice(id);
   };
@@ -257,6 +257,21 @@ function Welcome(){
 function AddFiles(){const {busy,pick}=useWorkspaceContext();return <Pressable accessibilityRole="button" accessibilityLabel="Add files" disabled={busy} onPress={()=>void pick()} className="size-11 items-center justify-center rounded-full active:bg-muted"><Plus size={21} color="#637089"/></Pressable>;}
 function Footer(){
   const w=useWorkspaceContext();
+  const {width,height}=useWindowDimensions();
+  const [keyboardVisible,setKeyboardVisible]=useState(()=>Platform.OS!=='web'&&Keyboard.isVisible());
+  useEffect(()=>{
+    if(Platform.OS==='web')return;
+    const shown=Keyboard.addListener('keyboardDidShow',()=>setKeyboardVisible(true));
+    const hidden=Keyboard.addListener('keyboardDidHide',()=>setKeyboardVisible(false));
+    return()=>{shown.remove();hidden.remove();};
+  },[]);
+  useEffect(()=>{
+    // Rotation can keep the keyboard open without another show event.
+    if(Platform.OS!=='web')setKeyboardVisible(Keyboard.isVisible());
+  },[width,height]);
+  // The thread already moves the composer above the keyboard. Give its
+  // conversation the secondary controls' space in a short landscape viewport.
+  if(Platform.OS!=='web'&&width>height&&keyboardVisible)return null;
   return <View className="gap-2 pb-1">
     <View className="flex-row justify-center gap-2">{[{title:'Merge',type:'merge',prompt:'Merge my PDFs.',icon:Copy,color:'#aa405e'},{title:'Compress',type:'compress',prompt:'Compress the current PDF.',icon:ArrowDownToLine,color:'#26715c'},{title:'Make searchable',type:'ocr',prompt:'Make this PDF searchable.',icon:ScanText,color:'#7460b0'}].map(item=>{const disabled=w.busy||!nativeEngineReady||(item.type==='ocr'&&!ocrAvailable);return <Pressable key={item.title} accessibilityRole="button" disabled={disabled} aria-disabled={disabled} onPress={()=>w.action(item.type as Action,item.prompt)} className={`atepdf-button min-h-11 flex-1 ${Platform.OS==='web'?'sm:flex-none':''} flex-row items-center justify-center gap-1.5 rounded-full border border-border px-2 sm:px-4 active:bg-muted ${disabled?'opacity-40':''}`}><item.icon size={16} color={item.color}/><Text className="flex-shrink text-[11px] sm:text-xs text-foreground">{item.title}</Text></Pressable>;})}</View>
     <View className="min-h-7 flex-row items-center justify-center gap-1.5">{w.focus&&<FileText size={12} color="#5d6980"/>}<Text className="text-center text-xs text-muted-foreground">{w.focus?`Current result · ${w.focus.pageCount} pages`:w.entries.length?`${w.store.originals.length} originals in this chat`:'Your files stay on this device'}</Text></View>
@@ -287,14 +302,14 @@ function MessageExtras(){
 
 function BrowserPairing({token}:{token:string}){
   const [code,setCode]=useState(''),[busy,setBusy]=useState(false),[message,setMessage]=useState('');
-  const generate=async()=>{setBusy(true);setCode('');setMessage('');try{const pairing=await createNativePairing(token);setCode(pairing.code);setMessage('Valid once, for five minutes. Paste it in the native app’s AI connection controls.');}catch{setMessage('A code could not be created. Open connection controls and try again.');}finally{setBusy(false);}};
-  return <View className="gap-3 rounded-2xl border border-border p-4"><Text className="text-sm font-medium text-foreground">Connect Mac or iOS Simulator</Text><Text className="text-sm text-muted-foreground">Pair the native app with this local planner. Your OpenAI key stays on this computer.</Text><Button disabled={busy} onPress={()=>void generate()}>Create pairing code</Button>{!!code&&<><TextInput accessibilityLabel="Native pairing code" value={code} readOnly secureTextEntry className="min-h-11 rounded-xl border border-border px-3 text-foreground"/><Button onPress={()=>{void Clipboard.setStringAsync(code);setMessage('Copied. Paste it in the native app’s AI connection controls.');}}>Copy pairing code</Button></>}{!!message&&<Text accessibilityLiveRegion="polite" className="text-sm text-muted-foreground">{message}</Text>}</View>;
+  const generate=async()=>{setBusy(true);setCode('');setMessage('');try{const pairing=await createNativePairing(token);setCode(pairing.code);setMessage('Valid once, for five minutes. Paste it in your app’s AI connection controls.');}catch{setMessage('A code could not be created. Open connection controls and try again.');}finally{setBusy(false);}};
+  return <View className="gap-3 rounded-2xl border border-border p-4"><Text className="text-sm font-medium text-foreground">Connect an Apple device</Text><Text className="text-sm text-muted-foreground">Pair the native app with this local planner. Your OpenAI key stays on this computer.</Text><Button disabled={busy} onPress={()=>void generate()}>Create pairing code</Button>{!!code&&<><TextInput accessibilityLabel="Native pairing code" value={code} readOnly secureTextEntry className="min-h-11 rounded-xl border border-border px-3 text-foreground"/><Button onPress={()=>{void Clipboard.setStringAsync(code);setMessage('Copied. Paste it in the native app’s AI connection controls.');}}>Copy pairing code</Button></>}{!!message&&<Text accessibilityLiveRegion="polite" className="text-sm text-muted-foreground">{message}</Text>}</View>;
 }
 function NativePairing(){
   const w=useWorkspaceContext(),[code,setCode]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState('');
   const pair=async()=>{setBusy(true);setError('');try{await pairNativePlanner(code);setCode('');await w.refreshConnection();w.setChoice(null);w.say('Connected to the local planner. Tell me what you’d like to do.');}catch{setCode('');setError('Pairing did not finish. Create a fresh code in the browser and try again.');}finally{setBusy(false);}};
   const disconnect=async()=>{setBusy(true);try{await disconnectNativePlanner();await w.refreshConnection();w.setChoice(null);w.say('Disconnected. Local quick actions still work.');}finally{setBusy(false);}};
-  return <View className="gap-3 rounded-2xl border border-border p-4">{w.connection?.pairingRequired?<><Text className="text-sm font-medium text-foreground">Pairing code</Text><TextInput accessibilityLabel="Pairing code" secureTextEntry autoComplete="off" autoCorrect={false} autoCapitalize="none" textContentType="none" value={code} onChangeText={setCode} editable={!busy} placeholder="Paste pairing code" className="min-h-12 rounded-xl border border-border px-3 py-2 text-base text-foreground"/><Button primary disabled={busy||!code.trim()} onPress={()=>void pair()}>Connect this app</Button><Text className="text-xs text-muted-foreground">This development connection lasts for this app session. The local server must stay open.</Text></>:<Button disabled={busy} onPress={()=>void disconnect()}>Disconnect this app</Button>}{!!error&&<Text className="text-sm text-destructive">{error}</Text>}</View>;
+  return <View className="gap-3 rounded-2xl border border-border p-4">{w.connection?.pairingRequired?<><Text className="text-sm font-medium text-foreground">Pairing code</Text><TextInput accessibilityLabel="Pairing code" secureTextEntry autoComplete="off" autoCorrect={false} autoCapitalize="none" textContentType="none" value={code} onChangeText={setCode} editable={!busy} placeholder="Paste pairing code" className="min-h-12 rounded-xl border border-border px-3 py-2 text-base text-foreground"/><Button primary disabled={busy||!code.trim()} onPress={()=>void pair()}>Connect this app</Button><Text className="text-xs text-muted-foreground">This connection lasts for this app session. Keep atepdf running on your Mac.</Text></>:<Button disabled={busy} onPress={()=>void disconnect()}>Disconnect this app</Button>}{!!error&&<Text className="text-sm text-destructive">{error}</Text>}</View>;
 }
 function KeyEntry({token}:{token:string}){
   const w=useWorkspaceContext();const [key,setKey]=useState(''),[saving,setSaving]=useState(false),[error,setError]=useState('');

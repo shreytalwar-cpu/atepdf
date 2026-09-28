@@ -1,0 +1,66 @@
+{
+  "status": "specified_not_run_in_application",
+  "cases": [
+    {
+      "id": "BR01",
+      "name": "Canonical public name",
+      "expected": "Visible name is exactly atepdf; paid plan is atepdf Pro.",
+      "status": "not_run_in_application"
+    },
+    {
+      "id": "BR02",
+      "name": "Logo identity",
+      "expected": "Primary mark matches the supplied rounded blue/violet/pink 8, not the old A or mascot.",
+      "status": "not_run_in_application"
+    },
+    {
+      "id": "BR03",
+      "name": "Layout unchanged",
+      "expected": "Original file-drop/chat-first UI is retained; no sidebar/tool directory from the brand board.",
+      "status": "not_run_in_application"
+    },
+    {
+      "id": "BR04",
+      "name": "Scope unchanged",
+      "expected": "No editing, annotation, signing or other unapproved feature is introduced.",
+      "status": "not_run_in_application"
+    },
+    {
+      "id": "BR05",
+      "name": "Privacy unchanged",
+      "expected": "Local PDF processing plus cloud instruction disclosure stays visible and accurate.",
+      "status": "not_run_in_application"
+    },
+    {
+      "id": "BR06",
+      "name": "No forced splash",
+      "expected": "Phone home-screen and splash treatments in the board do not add a waiting screen or onboarding.",
+      "status": "not_run_in_application"
+    },
+    {
+      "id": "BR07",
+      "name": "Brand consistency",
+      "expected": "Headers, titles, paywall, email, ads, help, accessibility labels and listing drafts use canonical branding.",
+      "status": "not_run_in_application"
+    },
+    {
+      "id": "BR08",
+      "name": "Fresh development identities; legacy unchanged",
+      "expected": "New atepdf development namespaces do not reuse legacy production identities/data by default; old installations/purchases are untouched; any production identity reuse or migration requires explicit approval.",
+      "status": "not_run_in_application"
+    },
+    {
+      "id": "BR09",
+      "name": "Asset quality",
+      "expected": "Production exports are visually compared, legible at target sizes and not passed off as supplied vectors.",
+      "status": "not_run_in_application"
+    },
+    {
+      "id": "BR10",
+      "name": "No invented business details",
+      "expected": "No guessed domain, seller, support email, trademark clearance or automatic publication.",
+      "status": "not_run_in_application"
+    }
+  ],
+  "handoff_version": "7.0"
+}

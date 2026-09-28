@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "handoff_version": "7.0",
+  "approval_date": "2026-09-28",
+  "public_name": "atepdf",
+  "wordmark_text": "atepdf",
+  "casing": "lowercase",
+  "paid_plan_name": "atepdf Pro",
+  "previous_product_name": "Attenlo PDF",
+  "studio_name": "Attenlo Labs",
+  "logo": {
+    "description": "Rounded, upright numeral 8 in a blue-to-violet-to-pink gradient; two counters; no mouth, bite, document, face or letter A.",
+    "source_reference": "brand/reference/approved-atepdf-brand-board.jpeg",
+    "mark_reference": "brand/reference/approved-8-mark-source-crop.png",
+    "lockup_reference": "brand/reference/approved-atepdf-lockup-source-crop.png",
+    "wordmark_reference": "brand/reference/approved-atepdf-wordmark-source-crop.png",
+    "production_vector_supplied": false,
+    "production_store_icon_supplied": false,
+    "exact_font_identified": false,
+    "asset_status": "owner_approved_raster_reference_not_finished_asset_exports"
+  },
+  "approval_scope": {
+    "name": true,
+    "logo_identity": true,
+    "new_ui_mockups": false,
+    "new_feature_claims": false,
+    "new_onboarding_or_splash": false
+  },
+  "tagline_in_reference": {
+    "text": "Small tools. Big possibilities.",
+    "status": "reference_copy_not_required_new_UI_or_separate_product_claim"
+  },
+  "functional_promise": "Drop your files. Tell atepdf what to do. Get the result.",
+  "privacy_badge": "Processed on your device",
+  "privacy_explanation": "Cloud AI interprets your instructions. PDF processing happens on your device.",
+  "ui_source_of_truth": [
+    "design/references/approved-iphone.jpeg",
+    "design/references/approved-ipad.jpeg",
+    "design/references/desktop-style-reference.png"
+  ],
+  "ui_policy": "Preserve the previously approved file-drop and instruction workspace. Replace only old brand name and logo; do not copy layouts from the brand board.",
+  "empty_state_mascot": "Keep the approved paper illustration as secondary illustration, not the brand mark.",
+  "domain": null,
+  "support_email": null,
+  "legal_seller": null,
+  "technical_identity_policy": "Fresh independent atepdf development namespaces. Do not inherit or mutate legacy production bundle IDs, app groups, OAuth apps, storage, purchase SKUs or customer entitlements by default. Historical handoff/schema labels may remain. Any production reuse or migration needs explicit approval.",
+  "publication_authorized": false,
+  "new_spend_authorized": false
+}

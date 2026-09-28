@@ -1,0 +1,41 @@
+{
+  "unchanged": true,
+  "files": [
+    {
+      "path": "growth/models/Attenlo_PDF_Monetization_and_Growth_Plan_2026-09-27.md",
+      "bytes": 22991,
+      "sha256": "42b54241ca387075fb742d17bc96c49962d78e7b062371f99ed7079ea3f11a88",
+      "status": "Original supplied artifact, unchanged; assumptions are not revalidated actuals."
+    },
+    {
+      "path": "growth/models/Attenlo_PDF_Monetization_Model_2026-09-27.xlsx",
+      "bytes": 58725,
+      "sha256": "846d7f6350f2e865ef76418b5fe4f277d734236e07e512b0a1028036f0283518",
+      "status": "Original supplied artifact, unchanged; assumptions are not revalidated actuals."
+    },
+    {
+      "path": "growth/models/Attenlo_PDF_36_Month_Growth_Notes.md",
+      "bytes": 12943,
+      "sha256": "80a2e000c4fff10e4235b09712c369593e55d109ad39829b01afaf6a14c6ae3a",
+      "status": "Original supplied artifact, unchanged; assumptions are not revalidated actuals."
+    },
+    {
+      "path": "growth/models/Attenlo_PDF_36_Month_Growth_and_Profitability.xlsx",
+      "bytes": 536519,
+      "sha256": "b63f9f32bdf5786019b03ddb9c0bb2e7662d97c4814f7ff39f5c56fdca60e10b",
+      "status": "Original supplied artifact, unchanged; assumptions are not revalidated actuals."
+    },
+    {
+      "path": "growth/models/Attenlo_PDF_Profit_Growth.png",
+      "bytes": 108899,
+      "sha256": "4fe9e9f92f9289049ab81ed46b76a7a304e5ce569d95152e52dfa0d7ef391450",
+      "status": "Original supplied artifact, unchanged; assumptions are not revalidated actuals."
+    },
+    {
+      "path": "growth/models/Attenlo_PDF_Paying_User_Growth.png",
+      "bytes": 110381,
+      "sha256": "ae42695acac12b5ace904a4e0664c6e5c6be5812ce9810c99c6586408f55fd2c",
+      "status": "Original supplied artifact, unchanged; assumptions are not revalidated actuals."
+    }
+  ]
+}

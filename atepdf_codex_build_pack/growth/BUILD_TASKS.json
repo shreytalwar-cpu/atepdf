@@ -1,0 +1,721 @@
+{
+  "version": 2,
+  "taskCount": 30,
+  "tasks": [
+    {
+      "id": "G01",
+      "priority": "P0",
+      "workstream": "Contract",
+      "title": "Reconcile commercial assumptions and create safe disabled config",
+      "depends_on": [],
+      "acceptance_ids": [
+        "AC-46",
+        "AC-49"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G02",
+      "priority": "P0",
+      "workstream": "UX",
+      "title": "Workspace-first onboarding and deep-link entry",
+      "depends_on": [
+        "G01"
+      ],
+      "acceptance_ids": [
+        "AC-01",
+        "AC-02",
+        "AC-03"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G03",
+      "priority": "P0",
+      "workstream": "UX",
+      "title": "Build real local sample fixture/recipe",
+      "depends_on": [
+        "G02"
+      ],
+      "acceptance_ids": [
+        "AC-04"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G04",
+      "priority": "P0",
+      "workstream": "Privacy",
+      "title": "Cloud consent and withdrawal",
+      "depends_on": [
+        "G02"
+      ],
+      "acceptance_ids": [
+        "AC-05",
+        "AC-06"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G05",
+      "priority": "P0",
+      "workstream": "Privacy",
+      "title": "Analytics payload boundary and backup exclusions",
+      "depends_on": [
+        "G01"
+      ],
+      "acceptance_ids": [
+        "AC-07",
+        "AC-08"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G06",
+      "priority": "P0",
+      "workstream": "Quota",
+      "title": "Reservation, commit, release and window semantics",
+      "depends_on": [
+        "G01"
+      ],
+      "acceptance_ids": [
+        "AC-09",
+        "AC-10",
+        "AC-11",
+        "AC-12",
+        "AC-15"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G07",
+      "priority": "P0",
+      "workstream": "Quota",
+      "title": "Partial job accounting and provider abuse controls",
+      "depends_on": [
+        "G06"
+      ],
+      "acceptance_ids": [
+        "AC-13",
+        "AC-14"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G08",
+      "priority": "P0",
+      "workstream": "Billing",
+      "title": "Purchase adapter and verified entitlement schema",
+      "depends_on": [
+        "G01"
+      ],
+      "acceptance_ids": [
+        "AC-25",
+        "AC-26"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G09",
+      "priority": "P0",
+      "workstream": "UX",
+      "title": "Contextual paywall and localized plan cards",
+      "depends_on": [
+        "G06",
+        "G08"
+      ],
+      "acceptance_ids": [
+        "AC-16",
+        "AC-17",
+        "AC-18",
+        "AC-19",
+        "AC-20"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G10",
+      "priority": "P0",
+      "workstream": "UX",
+      "title": "Capability/allowance/error gates",
+      "depends_on": [
+        "G04",
+        "G07",
+        "G09"
+      ],
+      "acceptance_ids": [
+        "AC-21",
+        "AC-22"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G11",
+      "priority": "P0",
+      "workstream": "Billing",
+      "title": "Checkout pending/cancel/failure/idempotency",
+      "depends_on": [
+        "G08",
+        "G09"
+      ],
+      "acceptance_ids": [
+        "AC-23",
+        "AC-24"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G12",
+      "priority": "P0",
+      "workstream": "Billing",
+      "title": "Resume retained job after verified purchase",
+      "depends_on": [
+        "G10",
+        "G11"
+      ],
+      "acceptance_ids": [
+        "AC-27"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G13",
+      "priority": "P0",
+      "workstream": "Billing",
+      "title": "Restore and identity-transfer collision handling",
+      "depends_on": [
+        "G08"
+      ],
+      "acceptance_ids": [
+        "AC-28"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G14",
+      "priority": "P0",
+      "workstream": "Billing",
+      "title": "Renewal grace expiry refund state reconciliation",
+      "depends_on": [
+        "G08",
+        "G13"
+      ],
+      "acceptance_ids": [
+        "AC-29",
+        "AC-30",
+        "AC-31"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G15",
+      "priority": "P0",
+      "workstream": "Account",
+      "title": "Optional linking and cross-platform access",
+      "depends_on": [
+        "G13",
+        "G14"
+      ],
+      "acceptance_ids": [
+        "AC-32",
+        "AC-33",
+        "AC-34"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G16",
+      "priority": "P0",
+      "workstream": "Account",
+      "title": "Plan centre, management and cancellation",
+      "depends_on": [
+        "G14"
+      ],
+      "acceptance_ids": [
+        "AC-35"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G17",
+      "priority": "P0",
+      "workstream": "Account",
+      "title": "Account deletion and separate local cleanup",
+      "depends_on": [
+        "G15",
+        "G16"
+      ],
+      "acceptance_ids": [
+        "AC-36"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G18",
+      "priority": "P0",
+      "workstream": "Reliability",
+      "title": "Offline access and network recovery",
+      "depends_on": [
+        "G04",
+        "G14"
+      ],
+      "acceptance_ids": [
+        "AC-37",
+        "AC-38"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G19",
+      "priority": "P0",
+      "workstream": "Reliability",
+      "title": "Save/share semantics and missing local history",
+      "depends_on": [
+        "G02"
+      ],
+      "acceptance_ids": [
+        "AC-39",
+        "AC-40"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G20",
+      "priority": "P1",
+      "workstream": "Retention",
+      "title": "Saved recipe discovery/replay",
+      "depends_on": [
+        "G07",
+        "G10"
+      ],
+      "acceptance_ids": [
+        "AC-41"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G21",
+      "priority": "P0",
+      "workstream": "Support",
+      "title": "Help and private diagnostics",
+      "depends_on": [
+        "G05"
+      ],
+      "acceptance_ids": [
+        "AC-45"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G22",
+      "priority": "P1",
+      "workstream": "Retention",
+      "title": "System review scheduling and app sharing",
+      "depends_on": [
+        "G19"
+      ],
+      "acceptance_ids": [
+        "AC-42",
+        "AC-43"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G23",
+      "priority": "P2",
+      "workstream": "Retention",
+      "title": "User-requested completion/routine reminders",
+      "depends_on": [
+        "G18"
+      ],
+      "acceptance_ids": [
+        "AC-44"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G24",
+      "priority": "P1",
+      "workstream": "Measurement",
+      "title": "Funnel, cost and contribution report",
+      "depends_on": [
+        "G05",
+        "G08"
+      ],
+      "acceptance_ids": [
+        "AC-49"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G25",
+      "priority": "P1",
+      "workstream": "Experiment",
+      "title": "Disabled experiment framework and stable assignments",
+      "depends_on": [
+        "G24",
+        "G09"
+      ],
+      "acceptance_ids": [
+        "AC-46",
+        "AC-47"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G26",
+      "priority": "P2",
+      "workstream": "Experiment",
+      "title": "Optional provider trial spike after approval",
+      "depends_on": [
+        "G25",
+        "G14"
+      ],
+      "acceptance_ids": [
+        "AC-48"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G27",
+      "priority": "P0",
+      "workstream": "Design QA",
+      "title": "Extend approved tokens across lifecycle states",
+      "depends_on": [
+        "G09",
+        "G16",
+        "G19"
+      ],
+      "acceptance_ids": [
+        "AC-50",
+        "AC-51"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G28",
+      "priority": "P0",
+      "workstream": "Release",
+      "title": "Commercial claims, policy and asset review",
+      "depends_on": [
+        "G17",
+        "G21",
+        "G27"
+      ],
+      "acceptance_ids": [
+        "AC-52",
+        "AC-35",
+        "AC-36"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G29",
+      "priority": "P0",
+      "workstream": "Release",
+      "title": "Cross-platform sandbox lifecycle test matrix",
+      "depends_on": [
+        "G12",
+        "G13",
+        "G14",
+        "G15",
+        "G18",
+        "G28"
+      ],
+      "acceptance_ids": [
+        "AC-23",
+        "AC-24",
+        "AC-25",
+        "AC-28",
+        "AC-29",
+        "AC-30",
+        "AC-32"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    },
+    {
+      "id": "G30",
+      "priority": "P1",
+      "workstream": "Research",
+      "title": "Reopen Appllama refs when media access works; record evidence",
+      "depends_on": [
+        "G01"
+      ],
+      "acceptance_ids": [
+        "AC-50",
+        "AC-52"
+      ],
+      "status": "not_started",
+      "platforms": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "definition_of_done": "Implemented in the NEW atepdf repository, appropriate tests run, actual UI/receipt/network evidence recorded; otherwise report the blocker.",
+      "notes": "This is an extension of the original 65-task build backlog, not a replacement. P1 paid benefits must be complete before advertising them; P2 defaults off."
+    }
+  ]
+}

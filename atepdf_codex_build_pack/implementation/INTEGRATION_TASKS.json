@@ -1,0 +1,293 @@
+{
+  "version": 7,
+  "taskCount": 10,
+  "purpose": "Integration overlay for existing technical and growth backlogs; do not duplicate their work.",
+  "dependency_note": "Dependencies sequence the completed integration gates. Compression/OCR/native feasibility spikes and independent safe UI work should start early, not wait for every preceding gate or missing credential.",
+  "tasks": [
+    {
+      "id": "F01",
+      "title": "Fresh repository boundary and scoped handoff installation",
+      "depends_on": [],
+      "technical_task_ids": [
+        "M0-01",
+        "M0-02",
+        "M0-03",
+        "M0-04"
+      ],
+      "growth_task_ids": [],
+      "acceptance_ids": [
+        "SI-15"
+      ],
+      "status": "not_started_in_application",
+      "fresh_start_requirements": [
+        "new separate Git root",
+        "legacy read-only",
+        "no nested/worktree clone",
+        "record unavailable legacy access without blocking scaffold"
+      ]
+    },
+    {
+      "id": "F02",
+      "title": "Approved shadcn workspace integration",
+      "depends_on": [
+        "F01"
+      ],
+      "technical_task_ids": [
+        "M1-01",
+        "M1-02",
+        "M1-05"
+      ],
+      "growth_task_ids": [
+        "G02",
+        "G27"
+      ],
+      "acceptance_ids": [
+        "SI-01",
+        "SI-24"
+      ],
+      "status": "not_started_in_application",
+      "legacy_learning_requirement": "Use exact old-source evidence when available; recreate the approved workspace in NEW source, not an old UI transplant."
+    },
+    {
+      "id": "F03",
+      "title": "Real local merge, result and save",
+      "depends_on": [
+        "F02"
+      ],
+      "technical_task_ids": [
+        "M1-06",
+        "M1-07"
+      ],
+      "growth_task_ids": [
+        "G19"
+      ],
+      "acceptance_ids": [
+        "SI-02",
+        "SI-20"
+      ],
+      "status": "not_started_in_application",
+      "independence_requirement": "New local workflow runs without old-source runtime dependency; any isolated port recorded and tested."
+    },
+    {
+      "id": "F04",
+      "title": "Independent job controller, lineage, undo and cancellation",
+      "depends_on": [
+        "F03"
+      ],
+      "technical_task_ids": [
+        "M1-08",
+        "M2-07",
+        "M3-01"
+      ],
+      "growth_task_ids": [
+        "G06",
+        "G07"
+      ],
+      "acceptance_ids": [
+        "SI-03",
+        "SI-04",
+        "SI-10",
+        "SI-11",
+        "SI-12",
+        "SI-13",
+        "SI-21"
+      ],
+      "status": "not_started_in_application"
+    },
+    {
+      "id": "F05",
+      "title": "Allowlisted planner transport and consent",
+      "depends_on": [
+        "F04"
+      ],
+      "technical_task_ids": [
+        "M2-01",
+        "M2-02",
+        "M2-03",
+        "M2-04"
+      ],
+      "growth_task_ids": [
+        "G04",
+        "G05"
+      ],
+      "acceptance_ids": [
+        "SI-05",
+        "SI-06",
+        "SI-07",
+        "SI-08",
+        "SI-17"
+      ],
+      "status": "not_started_in_application"
+    },
+    {
+      "id": "F06",
+      "title": "Safe gateway, request binding and bounded spend",
+      "depends_on": [
+        "F05"
+      ],
+      "technical_task_ids": [
+        "M2-05",
+        "M2-08",
+        "M2-09",
+        "M2-10"
+      ],
+      "growth_task_ids": [
+        "G06",
+        "G07",
+        "G18"
+      ],
+      "acceptance_ids": [
+        "SI-09",
+        "SI-10",
+        "SI-14",
+        "SI-15",
+        "SI-16",
+        "SI-25"
+      ],
+      "status": "not_started_in_application"
+    },
+    {
+      "id": "F07",
+      "title": "Genuine merge/OCR/compress proof",
+      "depends_on": [
+        "F06"
+      ],
+      "technical_task_ids": [
+        "M0-05",
+        "M0-06",
+        "M4-01",
+        "M4-02",
+        "M4-03",
+        "M4-04",
+        "M4-05",
+        "M4-06",
+        "M4-07"
+      ],
+      "growth_task_ids": [
+        "G03",
+        "G10"
+      ],
+      "acceptance_ids": [
+        "SI-13",
+        "SI-22",
+        "SI-23"
+      ],
+      "status": "not_started_in_application"
+    },
+    {
+      "id": "F08",
+      "title": "Commercial lifecycle integrated with retained local work",
+      "depends_on": [
+        "F07"
+      ],
+      "technical_task_ids": [
+        "M6-01",
+        "M6-02",
+        "M6-03"
+      ],
+      "growth_task_ids": [
+        "G01",
+        "G08",
+        "G09",
+        "G10",
+        "G11",
+        "G12",
+        "G13",
+        "G14",
+        "G15",
+        "G16",
+        "G17",
+        "G21",
+        "G24",
+        "G25",
+        "G28",
+        "G29"
+      ],
+      "acceptance_ids": [
+        "SI-18",
+        "SI-19",
+        "SI-20"
+      ],
+      "status": "not_started_in_application"
+    },
+    {
+      "id": "F09",
+      "title": "Native conformance and platform capability evidence",
+      "depends_on": [
+        "F07"
+      ],
+      "technical_task_ids": [
+        "M0-07",
+        "M1-03",
+        "M1-04",
+        "M4-08",
+        "M5-07"
+      ],
+      "growth_task_ids": [
+        "G15",
+        "G18",
+        "G19",
+        "G27",
+        "G29"
+      ],
+      "acceptance_ids": [
+        "SI-24",
+        "SI-26"
+      ],
+      "status": "not_started_in_application"
+    },
+    {
+      "id": "F10",
+      "title": "Release evidence and founder-approved rollout",
+      "depends_on": [
+        "F08",
+        "F09"
+      ],
+      "technical_task_ids": [
+        "M7-01",
+        "M7-02",
+        "M7-03",
+        "M7-04",
+        "M7-05",
+        "M7-06",
+        "M7-07",
+        "M7-08",
+        "M7-09"
+      ],
+      "growth_task_ids": [
+        "G28",
+        "G29",
+        "G30"
+      ],
+      "acceptance_ids": [
+        "SI-01",
+        "SI-02",
+        "SI-03",
+        "SI-04",
+        "SI-05",
+        "SI-06",
+        "SI-07",
+        "SI-08",
+        "SI-09",
+        "SI-10",
+        "SI-11",
+        "SI-12",
+        "SI-13",
+        "SI-14",
+        "SI-15",
+        "SI-16",
+        "SI-17",
+        "SI-18",
+        "SI-19",
+        "SI-20",
+        "SI-21",
+        "SI-22",
+        "SI-23",
+        "SI-24",
+        "SI-25",
+        "SI-26"
+      ],
+      "status": "not_started_in_application"
+    }
+  ]
+}

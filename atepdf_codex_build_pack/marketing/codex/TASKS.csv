@@ -1,0 +1,25 @@
+task_id,priority,task,evidence,guardrail,status
+PM01,P0,Audit existing release and tracking,Current-state and capability report,No campaign may claim an untested operation,Not started
+PM02,P0,Implement private workspace boundary,Network tests and CSP/origin evidence,No ad tags or replay in imported-file context,Not started
+PM03,P0,Verify purchase ledger and first-order idempotency,Sandbox purchase/refund fixtures,"Exclude renewals, restores and pending orders",Not started
+PM04,P0,Implement separate marketing consent,Grant/deny/withdrawal tests,Cloud-AI consent is not marketing consent,Not started
+PM05,P0,Build baseline document-pack landing,Real responsive screenshots and routes,No mandatory email wall or false free offer,Not started
+PM06,P0,Connect safe preset deep links,Preserved preset and privacy tests,No raw instructions in URLs,Not started
+PM07,P0,Capture three real synthetic-file product demos,"Footage, build ID and evidence manifest",No fake outputs or unlabelled time compression,Not started
+PM08,P0,Prepare creator and footage rights checklist,Private rights ledger template,No downloaded competitor creative,Not started
+PM09,P1,Prepare paused campaign drafts,"Draft config, assets and spend calculation",Publication and spend flags remain false,Not started
+PM10,P1,Integrate approved read-only ad reports or imports,Reconciled report using test data,No inferred live access; actual authorisation required,Not started
+PM11,P1,Build first-purchase conversion adapter,"Current API contract, consent and replay tests",Server-side reporting is not a consent bypass,Not started
+PM12,P1,Add campaign and cohort summary,Validated formulas and denominators,Sample jobs are not activated customers,Not started
+PM13,P1,Create 12-brief creative inventory,Source/claim/angle/version matrix,Only 2–3 ads live initially,Not started
+PM14,P1,Implement safe provider purchase/price display,Localised full period and restore evidence,No hardcoded fake savings,Not started
+PM15,P1,Implement recipe value and repeat use prompts,Nonblocking user-controlled workflow,No invented need for daily engagement,Not started
+PM16,P1,Draft creator outreach and opt-in lifecycle copy,Permission/status-separated drafts,No bulk sends,Not started
+PM17,P2,Produce diagnostic weekly memo,Keep/change/pause proposal with uncertainty,Never directly increases campaign spend,Not started
+PM18,P2,Build paired funnel experiment support,Cohort/version log and rollback,"Do not change audience, price and page together",Not started
+PM19,P2,Prepare narrow Google Search draft,"Keywords, negatives, actual account review",Dormant until separately approved,Not started
+PM20,P2,Prepare Apple search-results test,"Native product, sandbox and privacy prerequisites",Do not advertise unsupported native app,Not started
+PM21,P2,Reconcile CAC and economic contribution,"Actual invoice taxes, creative, refunds and plan mix",Annual-only limits not applied to monthly mix,Not started
+PM22,P2,Prepare 30-day buyer cohort review,"Second jobs, refunds, unknown share, support",No forecasts upgraded to proof,Not started
+PM23,P2,Add marketing incident stop recommendation,Incident/allowance/spend alert tests,Approval boundary for live actions,Not started
+PM24,P2,Write final launch evidence and human approvals,"Readiness checklist, dates and budget authorisation",No live spend until signed off,Not started

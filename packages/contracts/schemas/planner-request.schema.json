@@ -1,0 +1,1311 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Attenlo planner request 1.0",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "requestId": {
+      "type": "string",
+      "pattern": "^req_[A-Za-z0-9_]{1,80}$"
+    },
+    "workspaceRevision": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "locale": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 35
+    },
+    "instruction": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ref": {
+            "type": "string",
+            "pattern": "^(file|out)_[A-Za-z0-9_]{1,64}$"
+          },
+          "kind": {
+            "enum": [
+              "pdf",
+              "image",
+              "text",
+              "archive"
+            ]
+          },
+          "pageCount": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 100000
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sizeBytes": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1099511627776
+          },
+          "encrypted": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "ref",
+          "kind",
+          "pageCount",
+          "sizeBytes",
+          "encrypted"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0,
+      "maxItems": 100
+    },
+    "selectionRefs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^(file|out)_[A-Za-z0-9_]{1,64}$"
+      },
+      "minItems": 0,
+      "maxItems": 100,
+      "uniqueItems": true
+    },
+    "focusedResultRef": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^(file|out)_[A-Za-z0-9_]{1,64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "originalRefs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^(file|out)_[A-Za-z0-9_]{1,64}$"
+      },
+      "minItems": 0,
+      "maxItems": 100,
+      "uniqueItems": true
+    },
+    "previousActionIds": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "merge_pdf",
+          "select_pages",
+          "split_pdf",
+          "reorder_pdf",
+          "rotate_pdf",
+          "reverse_pdf",
+          "compress_pdf",
+          "ocr_pdf",
+          "images_to_pdf",
+          "pdf_to_images",
+          "extract_text",
+          "remove_metadata",
+          "protect_pdf",
+          "unlock_pdf",
+          "export_zip"
+        ]
+      },
+      "minItems": 0,
+      "maxItems": 16
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "merge_pdf",
+          "select_pages",
+          "split_pdf",
+          "reorder_pdf",
+          "rotate_pdf",
+          "reverse_pdf",
+          "compress_pdf",
+          "ocr_pdf",
+          "images_to_pdf",
+          "pdf_to_images",
+          "extract_text",
+          "remove_metadata",
+          "protect_pdf",
+          "unlock_pdf",
+          "export_zip"
+        ]
+      },
+      "minItems": 0,
+      "maxItems": 100,
+      "uniqueItems": true
+    },
+    "previousPlan": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "steps": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "pattern": "^s_[A-Za-z0-9_]{1,32}$"
+                      },
+                      "operation": {
+                        "const": "merge_pdf"
+                      },
+                      "inputs": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^(file|out)_[A-Za-z0-9_]{1,64}$"
+                        },
+                        "minItems": 1,
+                        "maxItems": 100
+                      },
+                      "outputRef": {
+                        "type": "string",
+                        "pattern": "^out_[A-Za-z0-9_]{1,64}$"
+                      },
+                      "params": {
+                        "type": "object",
+                        "properties": {
+                          "ordering": {
+                            "const": "as_provided"
+                          }
+                        },
+                        "required": [
+                          "ordering"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "operation",
+                      "inputs",
+                      "outputRef",
+                      "params"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "pattern": "^s_[A-Za-z0-9_]{1,32}$"
+                      },
+                      "operation": {
+                        "const": "select_pages"
+                      },
+                      "inputs": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^(file|out)_[A-Za-z0-9_]{1,64}$"
+                        },
+                        "minItems": 1,
+                        "maxItems": 100
+                      },
+                      "outputRef": {
+                        "type": "string",
+                        "pattern": "^out_[A-Za-z0-9_]{1,64}$"
+                      },
+                      "params": {
+                        "type": "object",
+                        "properties": {
+                          "action": {
+                            "enum": [
+                              "extract",
+                              "remove"
+                            ]
+                          },
+                          "pages": {
+                            "anyOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "mode": {
+                                    "const": "all"
+                                  }
+                                },
+                                "required": [
+                                  "mode"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "mode": {
+                                    "const": "explicit"
+                                  },
+                                  "indices": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "integer",
+                                      "minimum": 1,
+                                      "maximum": 100000
+                                    },
+                                    "minItems": 1,
+                                    "maxItems": 10000,
+                                    "uniqueItems": true
+                                  }
+                                },
+                                "required": [
+                                  "mode",
+                                  "indices"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "mode": {
+                                    "enum": [
+                                      "first",
+                                      "last"
+                                    ]
+                                  },
+                                  "count": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 100000
+                                  }
+                                },
+                                "required": [
+                                  "mode",
+                                  "count"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "mode": {
+                                    "enum": [
+                                      "odd",
+                                      "even"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "mode"
+                                ],
+                                "additionalProperties": false
+                              }
+                            ]
+                          }
+                        },
+                        "required": [
+                          "action",
+                          "pages"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "operation",
+                      "inputs",
+                      "outputRef",
+                      "params"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "pattern": "^s_[A-Za-z0-9_]{1,32}$"
+                      },
+                      "operation": {
+                        "const": "split_pdf"
+                      },
+                      "inputs": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^(file|out)_[A-Za-z0-9_]{1,64}$"
+                        },
+                        "minItems": 1,
+                        "maxItems": 100
+                      },
+                      "outputRef": {
+                        "type": "string",
+                        "pattern": "^out_[A-Za-z0-9_]{1,64}$"
+                      },
+                      "params": {
+                        "type": "object",
+                        "properties": {
+                          "mode": {
+                            "enum": [
+                              "each_page",
+                              "fixed_size",
+                              "ranges"
+                            ]
+                          },
+                          "pagesPerFile": {
+                            "anyOf": [
+                              {
+                                "type": "integer",
+                                "minimum": 1,
+                                "maximum": 100000
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "ranges": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "start": {
+                                  "type": "integer",
+                                  "minimum": 1,
+                                  "maximum": 100000
+                                },
+                                "end": {
+                                  "type": "integer",
+                                  "minimum": 1,
+                                  "maximum": 100000
+                                }
+                              },
+                              "required": [
+                                "start",
+                                "end"
+                              ],
+                              "additionalProperties": false
+                            },
+                            "minItems": 0,
+                            "maxItems": 1000
+                          }
+                        },
+                        "required": [
+                          "mode",
+                          "pagesPerFile",
+                          "ranges"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "operation",
+                      "inputs",
+                      "outputRef",
+                      "params"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "pattern": "^s_[A-Za-z0-9_]{1,32}$"
+                      },
+                      "operation": {
+                        "const": "reorder_pdf"
+                      },
+                      "inputs": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^(file|out)_[A-Za-z0-9_]{1,64}$"
+                        },
+                        "minItems": 1,
+                        "maxItems": 100
+                      },
+                      "outputRef": {
+                        "type": "string",
+                        "pattern": "^out_[A-Za-z0-9_]{1,64}$"
+                      },
+                      "params": {
+                        "type": "object",
+                        "properties": {
+                          "pageOrder": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 100000
+                            },
+                            "minItems": 1,
+                            "maxItems": 10000,
+                            "uniqueItems": true
+                          }
+                        },
+                        "required": [
+                          "pageOrder"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "operation",
+                      "inputs",
+                      "outputRef",
+                      "params"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "pattern": "^s_[A-Za-z0-9_]{1,32}$"
+                      },
+                      "operation": {
+                        "const": "rotate_pdf"
+                      },
+                      "inputs": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^(file|out)_[A-Za-z0-9_]{1,64}$"
+                        },
+                        "minItems": 1,
+                        "maxItems": 100
+                      },
+                      "outputRef": {
+                        "type": "string",
+                        "pattern": "^out_[A-Za-z0-9_]{1,64}$"
+                      },
+                      "params": {
+                        "type": "object",
+                        "properties": {
+                          "pages": {
+                            "anyOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "mode": {
+                                    "const": "all"
+                                  }
+                                },
+                                "required": [
+                                  "mode"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "mode": {
+                                    "const": "explicit"
+                                  },
+                                  "indices": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "integer",
+                                      "minimum": 1,
+                                      "maximum": 100000
+                                    },
+                                    "minItems": 1,
+                                    "maxItems": 10000,
+                                    "uniqueItems": true
+                                  }
+                                },
+                                "required": [
+                                  "mode",
+                                  "indices"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "mode": {
+                                    "enum": [
+                                      "first",
+                                      "last"
+                                    ]
+                                  },
+                                  "count": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 100000
+                                  }
+                                },
+                                "required": [
+                                  "mode",
+                                  "count"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "mode": {
+                                    "enum": [
+                                      "odd",
+                                      "even"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "mode"
+                                ],
+                                "additionalProperties": false
+                              }
+                            ]
+                          },
+                          "degrees": {
+                            "enum": [
+                              90,
+                              180,
+                              270
+                            ]
+                          }
+                        },
+                        "required": [
+                          "pages",
+                          "degrees"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "operation",
+                      "inputs",
+                      "outputRef",
+                      "params"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "pattern": "^s_[A-Za-z0-9_]{1,32}$"
+                      },
+                      "operation": {
+                        "const": "reverse_pdf"
+                      },
+                      "inputs": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^(file|out)_[A-Za-z0-9_]{1,64}$"
+                        },
+                        "minItems": 1,
+                        "maxItems": 100
+                      },
+                      "outputRef": {
+                        "type": "string",
+                        "pattern": "^out_[A-Za-z0-9_]{1,64}$"
+                      },
+                      "params": {
+                        "type": "object",
+                        "properties": {},
+                        "required": [],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "operation",
+                      "inputs",
+                      "outputRef",
+                      "params"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "pattern": "^s_[A-Za-z0-9_]{1,32}$"
+                      },
+                      "operation": {
+                        "const": "compress_pdf"
+                      },
+                      "inputs": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^(file|out)_[A-Za-z0-9_]{1,64}$"
+                        },
+                        "minItems": 1,
+                        "maxItems": 100
+                      },
+                      "outputRef": {
+                        "type": "string",
+                        "pattern": "^out_[A-Za-z0-9_]{1,64}$"
+                      },
+                      "params": {
+                        "type": "object",
+                        "properties": {
+                          "targetBytes": {
+                            "anyOf": [
+                              {
+                                "type": "integer",
+                                "minimum": 1,
+                                "maximum": 2147483647
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "preset": {
+                            "enum": [
+                              "balanced",
+                              "lossless",
+                              "smaller"
+                            ]
+                          },
+                          "batchMode": {
+                            "enum": [
+                              "single",
+                              "per_file"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "targetBytes",
+                          "preset",
+                          "batchMode"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "operation",
+                      "inputs",
+                      "outputRef",
+                      "params"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "pattern": "^s_[A-Za-z0-9_]{1,32}$"
+                      },
+                      "operation": {
+                        "const": "ocr_pdf"
+                      },
+                      "inputs": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^(file|out)_[A-Za-z0-9_]{1,64}$"
+                        },
+                        "minItems": 1,
+                        "maxItems": 100
+                      },
+                      "outputRef": {
+                        "type": "string",
+                        "pattern": "^out_[A-Za-z0-9_]{1,64}$"
+                      },
+                      "params": {
+                        "type": "object",
+                        "properties": {
+                          "languages": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "pattern": "^[a-zA-Z0-9_+-]{2,24}$"
+                            },
+                            "minItems": 1,
+                            "maxItems": 5,
+                            "uniqueItems": true
+                          },
+                          "existingText": {
+                            "const": "preserve"
+                          },
+                          "batchMode": {
+                            "enum": [
+                              "single",
+                              "per_file"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "languages",
+                          "existingText",
+                          "batchMode"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "operation",
+                      "inputs",
+                      "outputRef",
+                      "params"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "pattern": "^s_[A-Za-z0-9_]{1,32}$"
+                      },
+                      "operation": {
+                        "const": "images_to_pdf"
+                      },
+                      "inputs": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^(file|out)_[A-Za-z0-9_]{1,64}$"
+                        },
+                        "minItems": 1,
+                        "maxItems": 100
+                      },
+                      "outputRef": {
+                        "type": "string",
+                        "pattern": "^out_[A-Za-z0-9_]{1,64}$"
+                      },
+                      "params": {
+                        "type": "object",
+                        "properties": {
+                          "pageSizing": {
+                            "enum": [
+                              "fit_image",
+                              "a4",
+                              "letter"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "pageSizing"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "operation",
+                      "inputs",
+                      "outputRef",
+                      "params"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "pattern": "^s_[A-Za-z0-9_]{1,32}$"
+                      },
+                      "operation": {
+                        "const": "pdf_to_images"
+                      },
+                      "inputs": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^(file|out)_[A-Za-z0-9_]{1,64}$"
+                        },
+                        "minItems": 1,
+                        "maxItems": 100
+                      },
+                      "outputRef": {
+                        "type": "string",
+                        "pattern": "^out_[A-Za-z0-9_]{1,64}$"
+                      },
+                      "params": {
+                        "type": "object",
+                        "properties": {
+                          "pages": {
+                            "anyOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "mode": {
+                                    "const": "all"
+                                  }
+                                },
+                                "required": [
+                                  "mode"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "mode": {
+                                    "const": "explicit"
+                                  },
+                                  "indices": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "integer",
+                                      "minimum": 1,
+                                      "maximum": 100000
+                                    },
+                                    "minItems": 1,
+                                    "maxItems": 10000,
+                                    "uniqueItems": true
+                                  }
+                                },
+                                "required": [
+                                  "mode",
+                                  "indices"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "mode": {
+                                    "enum": [
+                                      "first",
+                                      "last"
+                                    ]
+                                  },
+                                  "count": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 100000
+                                  }
+                                },
+                                "required": [
+                                  "mode",
+                                  "count"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "mode": {
+                                    "enum": [
+                                      "odd",
+                                      "even"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "mode"
+                                ],
+                                "additionalProperties": false
+                              }
+                            ]
+                          },
+                          "format": {
+                            "enum": [
+                              "jpeg",
+                              "png"
+                            ]
+                          },
+                          "dpi": {
+                            "type": "integer",
+                            "minimum": 72,
+                            "maximum": 300
+                          }
+                        },
+                        "required": [
+                          "pages",
+                          "format",
+                          "dpi"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "operation",
+                      "inputs",
+                      "outputRef",
+                      "params"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "pattern": "^s_[A-Za-z0-9_]{1,32}$"
+                      },
+                      "operation": {
+                        "const": "extract_text"
+                      },
+                      "inputs": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^(file|out)_[A-Za-z0-9_]{1,64}$"
+                        },
+                        "minItems": 1,
+                        "maxItems": 100
+                      },
+                      "outputRef": {
+                        "type": "string",
+                        "pattern": "^out_[A-Za-z0-9_]{1,64}$"
+                      },
+                      "params": {
+                        "type": "object",
+                        "properties": {
+                          "pages": {
+                            "anyOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "mode": {
+                                    "const": "all"
+                                  }
+                                },
+                                "required": [
+                                  "mode"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "mode": {
+                                    "const": "explicit"
+                                  },
+                                  "indices": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "integer",
+                                      "minimum": 1,
+                                      "maximum": 100000
+                                    },
+                                    "minItems": 1,
+                                    "maxItems": 10000,
+                                    "uniqueItems": true
+                                  }
+                                },
+                                "required": [
+                                  "mode",
+                                  "indices"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "mode": {
+                                    "enum": [
+                                      "first",
+                                      "last"
+                                    ]
+                                  },
+                                  "count": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 100000
+                                  }
+                                },
+                                "required": [
+                                  "mode",
+                                  "count"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "mode": {
+                                    "enum": [
+                                      "odd",
+                                      "even"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "mode"
+                                ],
+                                "additionalProperties": false
+                              }
+                            ]
+                          },
+                          "ocrIfNeeded": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "pages",
+                          "ocrIfNeeded"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "operation",
+                      "inputs",
+                      "outputRef",
+                      "params"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "pattern": "^s_[A-Za-z0-9_]{1,32}$"
+                      },
+                      "operation": {
+                        "const": "remove_metadata"
+                      },
+                      "inputs": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^(file|out)_[A-Za-z0-9_]{1,64}$"
+                        },
+                        "minItems": 1,
+                        "maxItems": 100
+                      },
+                      "outputRef": {
+                        "type": "string",
+                        "pattern": "^out_[A-Za-z0-9_]{1,64}$"
+                      },
+                      "params": {
+                        "type": "object",
+                        "properties": {
+                          "removeInfo": {
+                            "const": true
+                          },
+                          "removeXmp": {
+                            "const": true
+                          }
+                        },
+                        "required": [
+                          "removeInfo",
+                          "removeXmp"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "operation",
+                      "inputs",
+                      "outputRef",
+                      "params"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "pattern": "^s_[A-Za-z0-9_]{1,32}$"
+                      },
+                      "operation": {
+                        "const": "protect_pdf"
+                      },
+                      "inputs": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^(file|out)_[A-Za-z0-9_]{1,64}$"
+                        },
+                        "minItems": 1,
+                        "maxItems": 100
+                      },
+                      "outputRef": {
+                        "type": "string",
+                        "pattern": "^out_[A-Za-z0-9_]{1,64}$"
+                      },
+                      "params": {
+                        "type": "object",
+                        "properties": {
+                          "algorithm": {
+                            "const": "aes256"
+                          },
+                          "requiresLocalSecret": {
+                            "const": true
+                          }
+                        },
+                        "required": [
+                          "algorithm",
+                          "requiresLocalSecret"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "operation",
+                      "inputs",
+                      "outputRef",
+                      "params"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "pattern": "^s_[A-Za-z0-9_]{1,32}$"
+                      },
+                      "operation": {
+                        "const": "unlock_pdf"
+                      },
+                      "inputs": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^(file|out)_[A-Za-z0-9_]{1,64}$"
+                        },
+                        "minItems": 1,
+                        "maxItems": 100
+                      },
+                      "outputRef": {
+                        "type": "string",
+                        "pattern": "^out_[A-Za-z0-9_]{1,64}$"
+                      },
+                      "params": {
+                        "type": "object",
+                        "properties": {
+                          "requiresLocalSecret": {
+                            "const": true
+                          }
+                        },
+                        "required": [
+                          "requiresLocalSecret"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "operation",
+                      "inputs",
+                      "outputRef",
+                      "params"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "pattern": "^s_[A-Za-z0-9_]{1,32}$"
+                      },
+                      "operation": {
+                        "const": "export_zip"
+                      },
+                      "inputs": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^(file|out)_[A-Za-z0-9_]{1,64}$"
+                        },
+                        "minItems": 1,
+                        "maxItems": 100
+                      },
+                      "outputRef": {
+                        "type": "string",
+                        "pattern": "^out_[A-Za-z0-9_]{1,64}$"
+                      },
+                      "params": {
+                        "type": "object",
+                        "properties": {},
+                        "required": [],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "operation",
+                      "inputs",
+                      "outputRef",
+                      "params"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "minItems": 0,
+              "maxItems": 16
+            },
+            "resultRefs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^(file|out)_[A-Za-z0-9_]{1,64}$"
+              },
+              "minItems": 0,
+              "maxItems": 100,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "steps",
+            "resultRefs"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "ocrLanguages": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z]{3}(?:_[A-Za-z]+)?$"
+      },
+      "uniqueItems": true,
+      "maxItems": 30
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "requestId",
+    "workspaceRevision",
+    "locale",
+    "instruction",
+    "files",
+    "selectionRefs",
+    "focusedResultRef",
+    "originalRefs",
+    "previousActionIds",
+    "capabilities",
+    "previousPlan",
+    "ocrLanguages"
+  ],
+  "additionalProperties": false
+}

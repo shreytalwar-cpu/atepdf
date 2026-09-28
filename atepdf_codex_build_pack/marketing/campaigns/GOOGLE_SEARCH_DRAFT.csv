@@ -1,0 +1,13 @@
+group,keyword,match_type,landing_path,market,status,volume,cpc,proof_gate
+PACK,merge and compress pdf,Exact,/document-pack,US,DRAFT,,,"Verify keyword demand, current match semantics, local capability and approved budget"
+PACK,combine pdf files and compress,Phrase,/document-pack,US,DRAFT,,,"Verify keyword demand, current match semantics, local capability and approved budget"
+PACK,merge scanned pdf files,Exact,/document-pack,US,DRAFT,,,"Verify keyword demand, current match semantics, local capability and approved budget"
+PACK,combine multiple pdf files,Phrase,/document-pack,US,DRAFT,,,"Verify keyword demand, current match semantics, local capability and approved budget"
+SIZE,compress pdf under 5 mb,Exact,/smaller-pdf,US,DRAFT,,,"Verify keyword demand, current match semantics, local capability and approved budget"
+SIZE,reduce pdf file size for upload,Phrase,/smaller-pdf,US,DRAFT,,,"Verify keyword demand, current match semantics, local capability and approved budget"
+SIZE,batch compress pdf files,Exact,/smaller-pdf,US,DRAFT,,,"Verify keyword demand, current match semantics, local capability and approved budget"
+SIZE,compress pdf on device,Phrase,/smaller-pdf,US,DRAFT,,,"Verify keyword demand, current match semantics, local capability and approved budget"
+OCR,make scanned pdf searchable,Exact,/searchable-pdf,US,DRAFT,,,"Verify keyword demand, current match semantics, local capability and approved budget"
+OCR,searchable pdf ocr,Exact,/searchable-pdf,US,DRAFT,,,"Verify keyword demand, current match semantics, local capability and approved budget"
+OCR,ocr multiple pdf files,Phrase,/searchable-pdf,US,DRAFT,,,"Verify keyword demand, current match semantics, local capability and approved budget"
+LOCAL,pdf tools without uploading files,Phrase,/private-pdf-processing,US,DRAFT,,,"Verify keyword demand, current match semantics, local capability and approved budget"

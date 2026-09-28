@@ -1,0 +1,4 @@
+# Reviewed local binary installer; the Tesseract funding-message postinstall is unnecessary.
+allowBuilds:
+  esbuild: true
+  tesseract.js: false

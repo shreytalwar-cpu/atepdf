@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "records": [],
+  "required_fields": [
+    "observation_id",
+    "observed_at",
+    "cohort",
+    "observation_type",
+    "deidentified_theme",
+    "behaviour_or_intention",
+    "source_permission",
+    "next_test"
+  ],
+  "forbidden_fields": [
+    "document_contents",
+    "raw_pdf",
+    "customer_filename",
+    "password",
+    "raw_prompt",
+    "payment_details"
+  ],
+  "notes": "Keep genuine identities in an approved private system, not this public-safe research ledger. No fabricated sample is a customer."
+}

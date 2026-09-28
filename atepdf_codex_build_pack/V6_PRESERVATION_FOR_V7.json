@@ -1,0 +1,1600 @@
+{
+  "version": "7.0",
+  "source_archive_sha256": "e78148b7fbe460b92af318d1baa9d4b69816731c332f5036fca003168df67d6d",
+  "source_file_count": 199,
+  "removed_files": [],
+  "files": [
+    {
+      "path": ".agents/product-marketing.md",
+      "source_sha256": "6ee0b2754662b54ba3522693cb1b3b0401ed10dd4f66054f280603ab37d469d7",
+      "final_sha256": "6ee0b2754662b54ba3522693cb1b3b0401ed10dd4f66054f280603ab37d469d7",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": ".agents/skills/attenlo-chat-integration/SKILL.md",
+      "source_sha256": "452009a8e3319d742dbc522bf1558774e0f6d7f7e57936eb5cc348644931e4e8",
+      "final_sha256": "7af20d00ddc1607cd3956665f291aa7f65e7a50821a743b343fed4165e977f30",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": ".agents/skills/attenlo-command-evals/SKILL.md",
+      "source_sha256": "1147e7de16aa3acd2ec97c6297dcc3f13c348dada0b6ff78f05ab2236cd54f68",
+      "final_sha256": "dbcf90ad5a23599193cf7d6c97eb819c0909dd1612c61d9a737b4c6ef7e113d0",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": ".agents/skills/attenlo-creative-evidence/SKILL.md",
+      "source_sha256": "5c92907e3258c369151f1bd0e7980ec559e8aeeef9e600b42f54324e85825bca",
+      "final_sha256": "5c92907e3258c369151f1bd0e7980ec559e8aeeef9e600b42f54324e85825bca",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": ".agents/skills/attenlo-growth-lifecycle/SKILL.md",
+      "source_sha256": "35c1159657667d58b3f3158172cd5a69adad3c96c7275ed7c5c59569b6bada8f",
+      "final_sha256": "35c1159657667d58b3f3158172cd5a69adad3c96c7275ed7c5c59569b6bada8f",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": ".agents/skills/attenlo-growth-measurement/SKILL.md",
+      "source_sha256": "1d83f1b9dcc7340574720c4512a53463be915c7ead142e9efadb785077ed7673",
+      "final_sha256": "1d83f1b9dcc7340574720c4512a53463be915c7ead142e9efadb785077ed7673",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": ".agents/skills/attenlo-local-processing/SKILL.md",
+      "source_sha256": "163f464ce23b7d939d684e02d42079acad224c59a1448ee2c32af64b2cbc5cea",
+      "final_sha256": "11c33405d53e6e5ba24f987d2ff81e923b7727b06900cfd057eb7e1304dca271",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": ".agents/skills/attenlo-marketing-operator/SKILL.md",
+      "source_sha256": "d15ecea44b76ea682892a32b74eb68d3cbb34489f1d1fbcaabb0dbf0e7321c12",
+      "final_sha256": "d15ecea44b76ea682892a32b74eb68d3cbb34489f1d1fbcaabb0dbf0e7321c12",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": ".agents/skills/attenlo-marketing-release/SKILL.md",
+      "source_sha256": "9acb20529f0a518fc62d2e1d8d6412c70cac5aacb2fa1735eca6ed3ff7dac2d9",
+      "final_sha256": "9acb20529f0a518fc62d2e1d8d6412c70cac5aacb2fa1735eca6ed3ff7dac2d9",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": ".agents/skills/attenlo-release-check/SKILL.md",
+      "source_sha256": "34b329abac7703d0ed9c1bc09e8105404232302fe4c7910c37b4f69f716eca73",
+      "final_sha256": "0d549f6afc834840a4b38ec00b7a2e7a6b766a2279dcb0ebb3d72257e92a8ab3",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": ".agents/skills/attenlo-ui-fidelity/SKILL.md",
+      "source_sha256": "b87bf64ecdb02b0434a93b5ac2c5e88aaa929343d34703cc7501a50d8759a98a",
+      "final_sha256": "54b4461ce4251fa87e522bfbf078cfbf2b1515427fbd953ef5cd82b36ec03677",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "00_READ_FIRST.md",
+      "source_sha256": "a64c0381baf1f0d6782ee0a12d097c5ffdfd10ac8ecfeae18dee4cc3f53c6b48",
+      "final_sha256": "d1d9e1a8eb027accba26e16c0b590ed798ed4c6466d9d3b97c0d37ef4e6f0434",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "AGENTS.md",
+      "source_sha256": "d6c042b5a160b12ded3f8783f1e63f173bdad046172ae469f13f9954671c8700",
+      "final_sha256": "a7650da0e11a5308835f139d5c625b27cee827f5b7a2383edfb4818f96f4826c",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "CHANGELOG.md",
+      "source_sha256": "a038fd883eb1236ddf5dc38ea6a04f3b5d3d7e40b5423768d82b1b710bbcd072",
+      "final_sha256": "a038fd883eb1236ddf5dc38ea6a04f3b5d3d7e40b5423768d82b1b710bbcd072",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "CHANGELOG_V6.md",
+      "source_sha256": "d3a92916daed9c8d5c539900dae729e3196fe1d37b70e23ea360236837bc0121",
+      "final_sha256": "d3a92916daed9c8d5c539900dae729e3196fe1d37b70e23ea360236837bc0121",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "CODEX_PROMPT.txt",
+      "source_sha256": "9789d40b0f16974d5f573f6fcddb2a5321710ea48efd6705c5d4adc7b3be5366",
+      "final_sha256": "fe9bb850aab2742c0abe8abfb8500e32e79faea7cc6bd6a01890f65ca91856da",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "DECISIONS_AND_PRECEDENCE.md",
+      "source_sha256": "1be7203e8f4cfe26b873e0fe52bafa14fe563ba60a16dc6e24269b0d4c6bbd9f",
+      "final_sha256": "127ad559a617a2890265a633d930f6dbf45a21e61cadc544ff83b7b038c9ef0a",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "DESIGN.md",
+      "source_sha256": "864ec1e68053e37896969473a7695f1cbeb384b8af3b9843bf2c51ead26b813b",
+      "final_sha256": "864ec1e68053e37896969473a7695f1cbeb384b8af3b9843bf2c51ead26b813b",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "FILE_MANIFEST.json",
+      "source_sha256": "ddec75a1319296e6944ae93d2b30629a63b525c95bb1740300ae9fde0544e84d",
+      "final_sha256": "ddec75a1319296e6944ae93d2b30629a63b525c95bb1740300ae9fde0544e84d",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "FINAL_HANDOFF.md",
+      "source_sha256": "5187c0704a411b031897288fc8ed0aee409182f43d2abe9dd8469780b8d03af4",
+      "final_sha256": "a13f4585b65e04438753d7471cca7f684b6da46dc7bf191ddf4aa30ad88ddca9",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "FINAL_VALIDATION_REPORT.md",
+      "source_sha256": "d9ff04d42166b0991f130a8ead8e8a4af8331569665071f2f6e99668ee3292d8",
+      "final_sha256": "ee2713a15f13cf3f1e8cffc3c6ec6950561c77d1761479eb6b51718bf904a24f",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "HANDOFF_SUMMARY_V5.md",
+      "source_sha256": "c704c5bf8ae189cfcb641f6046b5e26646a5e3bb6a620c597a5444bd3be3d828",
+      "final_sha256": "c704c5bf8ae189cfcb641f6046b5e26646a5e3bb6a620c597a5444bd3be3d828",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "HANDOFF_SUMMARY_V6.md",
+      "source_sha256": "323a253163cbe6cbf802edff9e4e62350b899042b819f5fe82b855481478d68a",
+      "final_sha256": "323a253163cbe6cbf802edff9e4e62350b899042b819f5fe82b855481478d68a",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "MASTER_BUILD_PLAN.md",
+      "source_sha256": "cf79ba5cee5c9ab973116ab5ac5ec858b9fc8566386a763cfa7c707ba1568f75",
+      "final_sha256": "ec0fa1169f6bcc2e7a518b24f5258d0e3cfa197ad255b73103b10a1ce160f29b",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "ORIGINAL_PACK_PRESERVATION.json",
+      "source_sha256": "bb34cf4f90848590291aa6dff888f3f8692f1e41af16d8140a6a588e00cf1c39",
+      "final_sha256": "bb34cf4f90848590291aa6dff888f3f8692f1e41af16d8140a6a588e00cf1c39",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "PACK_VALIDATION_REPORT.md",
+      "source_sha256": "6127f1977b818f173eb45de1ea45b41c5f48aefae2f05dac2bcd962dcd3a705a",
+      "final_sha256": "6127f1977b818f173eb45de1ea45b41c5f48aefae2f05dac2bcd962dcd3a705a",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "README.md",
+      "source_sha256": "d025878fe4cc7f820b856ad8caf1310df5661c896eeac613318c0afc60478fbf",
+      "final_sha256": "760b3c7295fe7acb445efa9513b18aaccf5804653eef8305764a257e2b42e51e",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "SOURCES.md",
+      "source_sha256": "0452dae3209b0d70f5f8234c7d7af581977545b931cf4e6b2928908509ff447c",
+      "final_sha256": "0452dae3209b0d70f5f8234c7d7af581977545b931cf4e6b2928908509ff447c",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "STACK_DECISION.md",
+      "source_sha256": "12ff6218c7ba6a53441a8170b7cebdc7cbdc97fa26f46fea9a9e3e4f34a8b65c",
+      "final_sha256": "a0870db5fc179fc6d89b45ef6fbaad3ee084001ab9e4ed567eb5148d09e0d567",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "START_HERE.md",
+      "source_sha256": "8fc5f037004a632f69777aacdc9ab3c4b591d926db02d2c66ba9f7cf2907ca3f",
+      "final_sha256": "69bcbdc89dc928f84578852833bb18066af1cfc3c68f455dc4fa4f2dc4bdce6e",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "V2_CHECK_OUTPUT.txt",
+      "source_sha256": "88d0d3ffa878864ed49e3193e490449c7f45f9882af7203ef3417a2cc3f405d7",
+      "final_sha256": "88d0d3ffa878864ed49e3193e490449c7f45f9882af7203ef3417a2cc3f405d7",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "V2_PRESERVATION.json",
+      "source_sha256": "39dadeeb3991f6935eba1b00624f6ab86e57b426450ac1ed41a728ac32853cc0",
+      "final_sha256": "39dadeeb3991f6935eba1b00624f6ab86e57b426450ac1ed41a728ac32853cc0",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "V2_VALIDATION_REPORT.md",
+      "source_sha256": "3b2c022aab44f4af217cae3938a979f95cbf3dc13c2d8d06097e5e9fc22de144",
+      "final_sha256": "3b2c022aab44f4af217cae3938a979f95cbf3dc13c2d8d06097e5e9fc22de144",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "V3_PRESERVATION_FOR_V4.json",
+      "source_sha256": "505536aee62c8e74f6fa8e7c1b79215b18580f6e1b291e8db04ca940534097be",
+      "final_sha256": "505536aee62c8e74f6fa8e7c1b79215b18580f6e1b291e8db04ca940534097be",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "V4_FILE_MANIFEST.json",
+      "source_sha256": "3ba5c113ff41787921b3a154cc1e7799b4df7f8480e08182b9978c196af19e15",
+      "final_sha256": "3ba5c113ff41787921b3a154cc1e7799b4df7f8480e08182b9978c196af19e15",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "V4_PRESERVATION_FOR_V5.json",
+      "source_sha256": "67fc3ff1fb8f0c433e719b2d29c2e4cc04b98d5d7743b3865a4914ab283dae2c",
+      "final_sha256": "67fc3ff1fb8f0c433e719b2d29c2e4cc04b98d5d7743b3865a4914ab283dae2c",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "V4_VALIDATION_REPORT.md",
+      "source_sha256": "cddb7e6ebff47b69ffcf5fea246160cc7f4db65858b969bfdb40c41e94e01796",
+      "final_sha256": "cddb7e6ebff47b69ffcf5fea246160cc7f4db65858b969bfdb40c41e94e01796",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "V5_FILE_MANIFEST.json",
+      "source_sha256": "c0c0d8afe919012f9dcc493ee2842a461ae3c3ff355a0d7232b4c9fc6f16ac8f",
+      "final_sha256": "c0c0d8afe919012f9dcc493ee2842a461ae3c3ff355a0d7232b4c9fc6f16ac8f",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "V5_PRESERVATION_FOR_V6.json",
+      "source_sha256": "da88166c43f5f9be7d81bde8b91bc8003e0b05be88993bd9d0a08b8bcfe9e796",
+      "final_sha256": "da88166c43f5f9be7d81bde8b91bc8003e0b05be88993bd9d0a08b8bcfe9e796",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "V5_SOURCE_SNAPSHOT.json",
+      "source_sha256": "9bcfa765abdd3b6e94910ac026cb4fbb03fde692dfe21a8c52d6332aa361df8a",
+      "final_sha256": "9bcfa765abdd3b6e94910ac026cb4fbb03fde692dfe21a8c52d6332aa361df8a",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "V5_VALIDATION_REPORT.md",
+      "source_sha256": "180d41393f82392fe932a26173b425e2dfe71ade073948014d08ef0ee4f89bb5",
+      "final_sha256": "180d41393f82392fe932a26173b425e2dfe71ade073948014d08ef0ee4f89bb5",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "V6_FILE_MANIFEST.json",
+      "source_sha256": "dbcef73412bbfa1e7d9d981dda557af3357787bec529084301b6537a5e1a94a6",
+      "final_sha256": "dbcef73412bbfa1e7d9d981dda557af3357787bec529084301b6537a5e1a94a6",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "VALIDATION_OUTPUT_V6.txt",
+      "source_sha256": "eb32f90cf037eb7cd545fc1c37368b1999918a90c94c3d830c429f8cfe01da83",
+      "final_sha256": "eb32f90cf037eb7cd545fc1c37368b1999918a90c94c3d830c429f8cfe01da83",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "brand/APPROVED_BRAND.md",
+      "source_sha256": "08df43714ef6ccf743c8df5adf3fae2ff9eff06cee12d617a8a24bb46aa86580",
+      "final_sha256": "4af87b37b5e79b807b717f6c295aed2b737acef78de6bc00fa57e96a5332b15d",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "brand/IMPLEMENTATION_CHECKLIST.md",
+      "source_sha256": "24b3100947a22524d697427123f8359c9d7848d397cb352a5a5f5d9c0718d569",
+      "final_sha256": "0a727106282d7fbd71cebe1381bcd5a7e87b6c39fa76f02e39894cb5a5804065",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "brand/README.md",
+      "source_sha256": "31d1a126e5a1edb5e22d305f3cfaaff56d3c3feebb36149e27d2fac3d476b7a9",
+      "final_sha256": "31d1a126e5a1edb5e22d305f3cfaaff56d3c3feebb36149e27d2fac3d476b7a9",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "brand/acceptance-cases.json",
+      "source_sha256": "462adc7ef2ef0eafbe2bcd746b07eda5a0d320feafc0f56a00a7ab5508d14763",
+      "final_sha256": "193e61b900ac2f38f6d3d33a449ae61188cf27bc9cdce4da10429a2ba218c1a7",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "brand/asset-manifest.json",
+      "source_sha256": "621ee0c91c816e736069820f4f73e1f6982b2d762fa243d17ce1a7afa3400ad9",
+      "final_sha256": "621ee0c91c816e736069820f4f73e1f6982b2d762fa243d17ce1a7afa3400ad9",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "brand/brand.json",
+      "source_sha256": "0453114ad4e42f62761e857a1ed53c98dd1d628879a61b79967f188b7fe836c1",
+      "final_sha256": "6d79f0c6edc609e6d436a569af16954a3b982a9b1b4a5181a7b1744f1945c573",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "brand/reference/approved-8-mark-source-crop.png",
+      "source_sha256": "c52607a555dd550577eea13eda93049712d341d8325a9252d015cd70de3e2411",
+      "final_sha256": "c52607a555dd550577eea13eda93049712d341d8325a9252d015cd70de3e2411",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "brand/reference/approved-atepdf-brand-board.jpeg",
+      "source_sha256": "bb4358d7c269453892db821d2e96c5f610850a7f46bdf6fef64734accb6715a1",
+      "final_sha256": "bb4358d7c269453892db821d2e96c5f610850a7f46bdf6fef64734accb6715a1",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "brand/reference/approved-atepdf-lockup-source-crop.png",
+      "source_sha256": "70238ce25375ca7fbddfb0f496947f9f74f08ae641812c6e4f87d9dc6b0f4ead",
+      "final_sha256": "70238ce25375ca7fbddfb0f496947f9f74f08ae641812c6e4f87d9dc6b0f4ead",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "brand/reference/approved-atepdf-wordmark-source-crop.png",
+      "source_sha256": "7ee2c53dde15726e80ec76e7af8e2cd36ff61dbde5ae37deb01e882ba8e9a067",
+      "final_sha256": "7ee2c53dde15726e80ec76e7af8e2cd36ff61dbde5ae37deb01e882ba8e9a067",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "contracts/README.md",
+      "source_sha256": "3e2e045c7334422b8681046b4dd2db758c6c93dfbb800f7dff85923b344f4021",
+      "final_sha256": "3e2e045c7334422b8681046b4dd2db758c6c93dfbb800f7dff85923b344f4021",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "contracts/gateway-envelope.schema.json",
+      "source_sha256": "be0e4da082a676e1c3222edcdecadcf526ed8c46fed2c0be6e89769f9352f549",
+      "final_sha256": "be0e4da082a676e1c3222edcdecadcf526ed8c46fed2c0be6e89769f9352f549",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "contracts/local-job-event.schema.json",
+      "source_sha256": "609073ad5e7bf9830f717939b22878b797ea09300ddc677fdc4210cd3d675b24",
+      "final_sha256": "609073ad5e7bf9830f717939b22878b797ea09300ddc677fdc4210cd3d675b24",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "contracts/operation-registry.json",
+      "source_sha256": "5dd4a0d04af5d01802de34020b5415385c2f979697a02433b5d9a4871ce9bb7e",
+      "final_sha256": "5dd4a0d04af5d01802de34020b5415385c2f979697a02433b5d9a4871ce9bb7e",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "contracts/planner-request.schema.json",
+      "source_sha256": "29651fe5ce6823ab03f85db31e16533a465d4deabbaa9d3411e19a851ace4616",
+      "final_sha256": "29651fe5ce6823ab03f85db31e16533a465d4deabbaa9d3411e19a851ace4616",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "contracts/planner-response.schema.json",
+      "source_sha256": "60c95aa55a09b6e780d12145578246d28fdcd942a5a3a065d878a782483e2b1f",
+      "final_sha256": "60c95aa55a09b6e780d12145578246d28fdcd942a5a3a065d878a782483e2b1f",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "design/REFERENCE_NOTES.md",
+      "source_sha256": "0cf14ba991386f7d66788a9e73ab29ec1b88bf0b03c94054c4e6d75957211eaf",
+      "final_sha256": "0cf14ba991386f7d66788a9e73ab29ec1b88bf0b03c94054c4e6d75957211eaf",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "design/references/approved-ipad.jpeg",
+      "source_sha256": "8ae123de9435246206372cfe8b37c3098d00e04815698fd29b1931d88bd1dbf7",
+      "final_sha256": "8ae123de9435246206372cfe8b37c3098d00e04815698fd29b1931d88bd1dbf7",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "design/references/approved-iphone.jpeg",
+      "source_sha256": "85728a72222ebb3ba05abbd454bee463215c554a626c922d0470e1ef6fbdfec3",
+      "final_sha256": "85728a72222ebb3ba05abbd454bee463215c554a626c922d0470e1ef6fbdfec3",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "design/references/desktop-style-reference.png",
+      "source_sha256": "7645cf325f8b7a67c582ec7d86ce579dd05005f6f338bd7755380ab9360a46b1",
+      "final_sha256": "7645cf325f8b7a67c582ec7d86ce579dd05005f6f338bd7755380ab9360a46b1",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "design/tokens.json",
+      "source_sha256": "dc5081cf9e92d655990c700002aaccd480d331b91d30dcfbd5defad43b04b3c6",
+      "final_sha256": "dc5081cf9e92d655990c700002aaccd480d331b91d30dcfbd5defad43b04b3c6",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "docs/01_PRODUCT_AND_SCOPE.md",
+      "source_sha256": "473faf423a5e2cbd14c870ea31c686a516a4dc9215d324c3394e62940210aa4d",
+      "final_sha256": "473faf423a5e2cbd14c870ea31c686a516a4dc9215d324c3394e62940210aa4d",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "docs/02_ARCHITECTURE.md",
+      "source_sha256": "0bb7e5ac64a64e30c8a1250698fc0e86142f88db24582c152523500d6a41b3eb",
+      "final_sha256": "304b65bee9b8041666d3a38002bd4d1c093d437db8256750faed8e1e5304c12c",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "docs/03_ENGINE_STRATEGY.md",
+      "source_sha256": "61eb6762c0db102c6691ce02bbbec34e58a6a4f565cb6071da1d16d3a3c8e1cc",
+      "final_sha256": "eb477a806c28f27ecd2f03d5cbe7ac4c9688626035969cb2ce14a0323fa35c39",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "docs/04_AI_AND_PROTOCOL.md",
+      "source_sha256": "4a5e2a27bb6b03940593ac515d82066473ffab89ecea8ed3bc226854860f5ad0",
+      "final_sha256": "4a5e2a27bb6b03940593ac515d82066473ffab89ecea8ed3bc226854860f5ad0",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "docs/05_PRIVACY_AND_SECURITY.md",
+      "source_sha256": "ef494dfe8508be986bf7ec7aa38dd154f94d06f5b632580117ef22dd63a58fb8",
+      "final_sha256": "ef494dfe8508be986bf7ec7aa38dd154f94d06f5b632580117ef22dd63a58fb8",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "docs/06_PLATFORM_IMPLEMENTATION.md",
+      "source_sha256": "9ef8b261e4fb19c7bcf96a9c8ca1222f0c10239a627badcbed091ba76af4546e",
+      "final_sha256": "ea8c831010dd0838fab842c2e235146775c984894f4c1ec397d65559ea622b41",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "docs/07_BUILD_BACKLOG.md",
+      "source_sha256": "a121653ebdb8253da321c052f799455093e2ba2061dee37cf3e46c08cf2f90e2",
+      "final_sha256": "bf7231e91662c848d48aad10f80eb236acc2fc304841b59059b4efb74c090005",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "docs/08_TESTING_AND_RELEASE.md",
+      "source_sha256": "fe6b8e5acca424ce6cb8f36291dc7147f22b80b9f3bdc13fc6891406bd411edb",
+      "final_sha256": "fe6b8e5acca424ce6cb8f36291dc7147f22b80b9f3bdc13fc6891406bd411edb",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "docs/09_MONETIZATION_AND_LAUNCH.md",
+      "source_sha256": "2cabbe2a494992082b0e18fe5572aa8ff1fc0e3ebf2fdce49ea2b96a5f762ff2",
+      "final_sha256": "2cabbe2a494992082b0e18fe5572aa8ff1fc0e3ebf2fdce49ea2b96a5f762ff2",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "docs/10_CODEX_SKILLS_AND_TOOLS.md",
+      "source_sha256": "e71365a4eb7bfdffcd5576572416ccceb2cfaed61300f106205acaa78c52f5e6",
+      "final_sha256": "e71365a4eb7bfdffcd5576572416ccceb2cfaed61300f106205acaa78c52f5e6",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "docs/11_EDGE_CASES_AND_DECISIONS.md",
+      "source_sha256": "8551c202ab55be9c7c5c983e75976a13eb07c36a493c552713641547ee6aa2a3",
+      "final_sha256": "8551c202ab55be9c7c5c983e75976a13eb07c36a493c552713641547ee6aa2a3",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "docs/BUILD_TASKS.json",
+      "source_sha256": "1c5021aae529ff4396b27a7de5d0ea683e45ca2ab4251e2452fb4fca14e6fe75",
+      "final_sha256": "721ae0ab56c6203ed2a62db7f5bc0a55e65cf63ad78046130495310fa9710904",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "docs/IMPLEMENTATION_STATUS_TEMPLATE.md",
+      "source_sha256": "75703bed3f91766514466eb88896b3bcd73e8a4e1b6a3538f41b1681aaad2bcd",
+      "final_sha256": "77497662e6e1c30232cef2132cfba09e3719b08baefc8db0d1c22b784dcc692e",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "examples/batch.request.json",
+      "source_sha256": "3a7c7338d011d2ccd015f361171b384608887e9698d114874464d2f904e8093c",
+      "final_sha256": "3a7c7338d011d2ccd015f361171b384608887e9698d114874464d2f904e8093c",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "examples/batch.response.json",
+      "source_sha256": "b91e21b4254fd8eba388f3430d11cfe1c0c7cf8e39b1284b53fcb4451ab67fc7",
+      "final_sha256": "b91e21b4254fd8eba388f3430d11cfe1c0c7cf8e39b1284b53fcb4451ab67fc7",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "examples/follow-up.request.json",
+      "source_sha256": "293e2b560eb70c415d59d9b6128a6f8c7adbfa1330b67b93c54d7d34054cb924",
+      "final_sha256": "293e2b560eb70c415d59d9b6128a6f8c7adbfa1330b67b93c54d7d34054cb924",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "examples/follow-up.response.json",
+      "source_sha256": "aae22fa83944bf5d87921e8e462ddf52a58a133160df24851dde7c97c6d52858",
+      "final_sha256": "aae22fa83944bf5d87921e8e462ddf52a58a133160df24851dde7c97c6d52858",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "examples/hero.gateway-envelope.json",
+      "source_sha256": "02eaa2aaac8e19123aeb1f79f37d54f951bad47bfe5d5316d4c57eeb59e4beba",
+      "final_sha256": "02eaa2aaac8e19123aeb1f79f37d54f951bad47bfe5d5316d4c57eeb59e4beba",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "examples/hero.request.json",
+      "source_sha256": "c30968d5feffda0e44b4c9b170d6300330acb8bde451c670e8c2e5ecaed9ae44",
+      "final_sha256": "c30968d5feffda0e44b4c9b170d6300330acb8bde451c670e8c2e5ecaed9ae44",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "examples/hero.response.json",
+      "source_sha256": "054fe1ca9e14589e2042f28a6ef3df430a10696966ee06362bd4a600258cd803",
+      "final_sha256": "054fe1ca9e14589e2042f28a6ef3df430a10696966ee06362bd4a600258cd803",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "examples/local-progress.event.json",
+      "source_sha256": "9b907264117adf88db7c190041c0ffb14b6a17270b6c94e3a4dd5648f21abc46",
+      "final_sha256": "9b907264117adf88db7c190041c0ffb14b6a17270b6c94e3a4dd5648f21abc46",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "examples/repeat.request.json",
+      "source_sha256": "012cc2ef73db2b3db0b8a7464f3d3a9e556959b49cc31e95256ea4e5ab2a8424",
+      "final_sha256": "012cc2ef73db2b3db0b8a7464f3d3a9e556959b49cc31e95256ea4e5ab2a8424",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "examples/repeat.response.json",
+      "source_sha256": "39ff8a313d3b2bbb678692e4baefe2a4ce0b1d7120bd95f35c852904f9632d1b",
+      "final_sha256": "39ff8a313d3b2bbb678692e4baefe2a4ce0b1d7120bd95f35c852904f9632d1b",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "fixtures/startup/README.md",
+      "source_sha256": "b0b7bd3bae9a725111bb6386fbdf2d6eb2b06b900e043d455ff8c63ccfd87f87",
+      "final_sha256": "b0b7bd3bae9a725111bb6386fbdf2d6eb2b06b900e043d455ff8c63ccfd87f87",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "fixtures/startup/appendix.pdf",
+      "source_sha256": "c8d1d72a3f899992b2fba5cd247171712447c4f4fa60cf0c69bd9d811137e7a7",
+      "final_sha256": "c8d1d72a3f899992b2fba5cd247171712447c4f4fa60cf0c69bd9d811137e7a7",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "fixtures/startup/brief.pdf",
+      "source_sha256": "6e7d2ffe2d9bd72f2de172b1e91648b915952b28face2eec1a88cc88172c6d90",
+      "final_sha256": "6e7d2ffe2d9bd72f2de172b1e91648b915952b28face2eec1a88cc88172c6d90",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "fixtures/startup/expectations.json",
+      "source_sha256": "db74b860715ddeb65f44d56dbb4eba72bac9d5bbb718b09727b136d280fdc7c4",
+      "final_sha256": "db74b860715ddeb65f44d56dbb4eba72bac9d5bbb718b09727b136d280fdc7c4",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "fixtures/startup/image-input.png",
+      "source_sha256": "221f09c602cdc187293d9a2068ad86a0b51bc115bead956d22868678572a8d14",
+      "final_sha256": "221f09c602cdc187293d9a2068ad86a0b51bc115bead956d22868678572a8d14",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "fixtures/startup/mixed-text-and-scan.pdf",
+      "source_sha256": "44972359f06ae6fb05d62450182ab33e2b1d2b2709429907ca9e4a098ea97b9c",
+      "final_sha256": "44972359f06ae6fb05d62450182ab33e2b1d2b2709429907ca9e4a098ea97b9c",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "fixtures/startup/scanned-note.pdf",
+      "source_sha256": "19d8713895b5597021834c41b4190d12735800fd9482008823a2e6a786023874",
+      "final_sha256": "19d8713895b5597021834c41b4190d12735800fd9482008823a2e6a786023874",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "growth/ANALYTICS_AND_EXPERIMENTS.md",
+      "source_sha256": "abaffe99d8d8fd0fd259e09acb0249603168ad6a8b934afc79b735bd82655e6f",
+      "final_sha256": "abaffe99d8d8fd0fd259e09acb0249603168ad6a8b934afc79b735bd82655e6f",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "growth/APPLLAMA_RESEARCH.md",
+      "source_sha256": "86f6ee4749e573a3b39dff214be6cbf5431be03844636daa5e121c2216569382",
+      "final_sha256": "86f6ee4749e573a3b39dff214be6cbf5431be03844636daa5e121c2216569382",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "growth/BUILD_TASKS.json",
+      "source_sha256": "f0c48acff20abdc775167b329c5d5b287f4316c428aadf4ec5ff2ee1e354fbbe",
+      "final_sha256": "fdf3b3209ad79607d9d68849fbfa6cc5b9d6fdfb53afa356d918fe90ee715e6a",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "growth/COPY_DECK.md",
+      "source_sha256": "042d020e2e6de1608ccf3788d11c7f45ee3bc95025979b182c56bca86ae27a25",
+      "final_sha256": "042d020e2e6de1608ccf3788d11c7f45ee3bc95025979b182c56bca86ae27a25",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "growth/EXECUTIVE_BRIEF.md",
+      "source_sha256": "6161988cc06bd2c2c1e9d17d4971f28df218acb30fbe65ce0bc57b02ce8df7d8",
+      "final_sha256": "485012cef08512e3565e935d503bd1f11d91fe1fcefd1093aa5bddf859d8de03",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "growth/IMPLEMENTATION_BACKLOG.md",
+      "source_sha256": "770a6d02a0675806af1f5576b3f4889f1630c5be9a947515ac71605a50ba95e8",
+      "final_sha256": "770a6d02a0675806af1f5576b3f4889f1630c5be9a947515ac71605a50ba95e8",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "growth/LIFECYCLE_AND_RETENTION.md",
+      "source_sha256": "670bded23b6fc1b5bad8fa78e16b56f9a1c8941c6ddc69c2556a0100c00e8840",
+      "final_sha256": "670bded23b6fc1b5bad8fa78e16b56f9a1c8941c6ddc69c2556a0100c00e8840",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "growth/MODEL_RECONCILIATION.md",
+      "source_sha256": "be03698227776888bbee810f51d9b67f931c71e9462734514f39f73608a6ebf3",
+      "final_sha256": "be03698227776888bbee810f51d9b67f931c71e9462734514f39f73608a6ebf3",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "growth/MONETIZATION_HYPOTHESIS.md",
+      "source_sha256": "e21f36150dab693fc886511581b01b37df2bc5a14bc767a014e7f9b19d02fb42",
+      "final_sha256": "e21f36150dab693fc886511581b01b37df2bc5a14bc767a014e7f9b19d02fb42",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "growth/ONBOARDING_AND_ACTIVATION.md",
+      "source_sha256": "462f917c304362db59b923e577f7fc302d705bb4f6d99ce1c4f1494bc15bc0ba",
+      "final_sha256": "462f917c304362db59b923e577f7fc302d705bb4f6d99ce1c4f1494bc15bc0ba",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "growth/PAYWALL_AND_BILLING.md",
+      "source_sha256": "be03771dd52134755d03fe4170cae6db33a72e411fe9e5536e37ae7c8d5e1d5a",
+      "final_sha256": "be03771dd52134755d03fe4170cae6db33a72e411fe9e5536e37ae7c8d5e1d5a",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "growth/README.md",
+      "source_sha256": "d2215f786d67b6b1189a8e686a72eea33eb46a4305d372ebb13c7ef53dfe818f",
+      "final_sha256": "d2215f786d67b6b1189a8e686a72eea33eb46a4305d372ebb13c7ef53dfe818f",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "growth/SCREEN_AND_STATE_INVENTORY.md",
+      "source_sha256": "9de169efbf6b8670a8de0e56682a63c59c4181fd53d6814de3bc8f4a9caa5663",
+      "final_sha256": "9de169efbf6b8670a8de0e56682a63c59c4181fd53d6814de3bc8f4a9caa5663",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "growth/config/event-catalog.json",
+      "source_sha256": "454245524f626ebc7522fbe9f56d3174ec4b7192934cd6770e0195029831f52d",
+      "final_sha256": "454245524f626ebc7522fbe9f56d3174ec4b7192934cd6770e0195029831f52d",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "growth/config/monetization-hypotheses.json",
+      "source_sha256": "d980a08d8ce57b9ad190490295424f72c248d22489f1a060de1365f1ab27171a",
+      "final_sha256": "d980a08d8ce57b9ad190490295424f72c248d22489f1a060de1365f1ab27171a",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "growth/config/screen-inventory.json",
+      "source_sha256": "0aeeb1b6d70a5c3a1a21fc546840001398b14efed8645b506238c0f140f41500",
+      "final_sha256": "0aeeb1b6d70a5c3a1a21fc546840001398b14efed8645b506238c0f140f41500",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "growth/contracts/growth-event.schema.json",
+      "source_sha256": "708608aca4fe094edbe9003bdf0019f3d6f2629a9c6e7d181218f799f57a102b",
+      "final_sha256": "708608aca4fe094edbe9003bdf0019f3d6f2629a9c6e7d181218f799f57a102b",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "growth/examples/event-forbidden.json",
+      "source_sha256": "bcc01833dc99fcb9ba9eeb501da3674cda4324a66eb978a39b922d67c7752185",
+      "final_sha256": "bcc01833dc99fcb9ba9eeb501da3674cda4324a66eb978a39b922d67c7752185",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "growth/examples/event-valid.json",
+      "source_sha256": "3c75d5948cc801f5bd7e73516c1139ebd58b0c85e15e632ef4036bcae2381066",
+      "final_sha256": "3c75d5948cc801f5bd7e73516c1139ebd58b0c85e15e632ef4036bcae2381066",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "growth/models/Attenlo_PDF_36_Month_Growth_Notes.md",
+      "source_sha256": "80a2e000c4fff10e4235b09712c369593e55d109ad39829b01afaf6a14c6ae3a",
+      "final_sha256": "80a2e000c4fff10e4235b09712c369593e55d109ad39829b01afaf6a14c6ae3a",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "growth/models/Attenlo_PDF_36_Month_Growth_and_Profitability.xlsx",
+      "source_sha256": "b63f9f32bdf5786019b03ddb9c0bb2e7662d97c4814f7ff39f5c56fdca60e10b",
+      "final_sha256": "b63f9f32bdf5786019b03ddb9c0bb2e7662d97c4814f7ff39f5c56fdca60e10b",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "growth/models/Attenlo_PDF_Monetization_Model_2026-09-27.xlsx",
+      "source_sha256": "846d7f6350f2e865ef76418b5fe4f277d734236e07e512b0a1028036f0283518",
+      "final_sha256": "846d7f6350f2e865ef76418b5fe4f277d734236e07e512b0a1028036f0283518",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "growth/models/Attenlo_PDF_Monetization_and_Growth_Plan_2026-09-27.md",
+      "source_sha256": "42b54241ca387075fb742d17bc96c49962d78e7b062371f99ed7079ea3f11a88",
+      "final_sha256": "42b54241ca387075fb742d17bc96c49962d78e7b062371f99ed7079ea3f11a88",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "growth/models/Attenlo_PDF_Paying_User_Growth.png",
+      "source_sha256": "ae42695acac12b5ace904a4e0664c6e5c6be5812ce9810c99c6586408f55fd2c",
+      "final_sha256": "ae42695acac12b5ace904a4e0664c6e5c6be5812ce9810c99c6586408f55fd2c",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "growth/models/Attenlo_PDF_Profit_Growth.png",
+      "source_sha256": "4fe9e9f92f9289049ab81ed46b76a7a304e5ce569d95152e52dfa0d7ef391450",
+      "final_sha256": "4fe9e9f92f9289049ab81ed46b76a7a304e5ce569d95152e52dfa0d7ef391450",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "growth/models/ORIGINALS_MANIFEST.json",
+      "source_sha256": "e828df08029c27e2af83a88d44a7b69cf2b97c5a48a8954d7e11f3173d90f576",
+      "final_sha256": "e828df08029c27e2af83a88d44a7b69cf2b97c5a48a8954d7e11f3173d90f576",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "growth/reference/growth_policy.py",
+      "source_sha256": "589740e838b73cb5f2a0387dcd761198cb3940331ca37e622ef98e92239a8de2",
+      "final_sha256": "589740e838b73cb5f2a0387dcd761198cb3940331ca37e622ef98e92239a8de2",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "growth/tests/growth_acceptance_cases.jsonl",
+      "source_sha256": "3d2afc104027bcd9b70cb00c1beda07c5425fd78ecf99415cc3e0e2992cef9ef",
+      "final_sha256": "3d2afc104027bcd9b70cb00c1beda07c5425fd78ecf99415cc3e0e2992cef9ef",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "growth/tests/growth_policy_cases.jsonl",
+      "source_sha256": "7811f60479ec8684b52882118b68b101bc768c9771a3f3a0fe1d392818746527",
+      "final_sha256": "7811f60479ec8684b52882118b68b101bc768c9771a3f3a0fe1d392818746527",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "implementation/FIRST_BUILD_SEQUENCE.md",
+      "source_sha256": "0da33d993036f39965a724c97ed1b9f749e7e5b85f6b00626a9124520d4060df",
+      "final_sha256": "c5b05313d6c4febeca7fbdd4465ef7b89e28944e881280a341bca1947e525160",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "implementation/INTEGRATION_TASKS.json",
+      "source_sha256": "c232f228eb6e0947fc41f59a1a11410e96299d10b0bd3a8a3ecbd7a7c3b431dc",
+      "final_sha256": "6f5e8653fbd919901f7aa1b8404a731763579c569bf3834d0150f1b8f0ca4b52",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "implementation/RELEASE_AND_AUTHORITY.md",
+      "source_sha256": "4032e61b01e45c4d022fd9aa2ac8dba14f7d8c15c831410de07f066e9b020ba5",
+      "final_sha256": "577de608cfeb361838d48610f664f073fedc46778b384b1337298a0743d271bf",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "implementation/REPOSITORY_RULES_SNIPPET.md",
+      "source_sha256": "ac9307b11fd2eb06752246533c3b7a3f6348561c2efb007289c4c4f76d0a89af",
+      "final_sha256": "f490ac2e1970c844f97bf305427c70df6d2299fd41a880d64a46f66f9422045d",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "implementation/SHADCN_INTEGRATION.md",
+      "source_sha256": "88850fcf4acaba4a7ce127df95d277fc42e89110495474475bd1d55ddf2c2fd4",
+      "final_sha256": "b45c45737514ec35617fa8937bcc4be79a3a2da3789d9c9942b91cf06d12f79e",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "implementation/STACK_ACCEPTANCE_CASES.jsonl",
+      "source_sha256": "965d556830da1d01c2047c3d0992614a56afec7d514f25918f148e5fd49d19bd",
+      "final_sha256": "965d556830da1d01c2047c3d0992614a56afec7d514f25918f148e5fd49d19bd",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "implementation/STATUS_TEMPLATE.md",
+      "source_sha256": "5495a8b630c11c0471ffeb681a9e46ba8254aa065b17665935302d9bb3441918",
+      "final_sha256": "f1e8cdbdd454fb046589d11829be35663c5b73458b8f2ebd96e1bfbf53f70190",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "implementation/VALIDATION_LEVELS.md",
+      "source_sha256": "ab49c034d7d5b0a1a8407af9252a9e01617c8e4fbb842280813a162d5b5209f5",
+      "final_sha256": "ab49c034d7d5b0a1a8407af9252a9e01617c8e4fbb842280813a162d5b5209f5",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "implementation/decisions.json",
+      "source_sha256": "69d1f7d5161204bf7602f3420d28057c5df6303804b29d1b7c5b96566c6ea122",
+      "final_sha256": "c58888d79abcccaed5e679bc8e7e64df6100afee10bbf233af4f0cfb2acc7881",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "marketing/PERFORMANCE_MARKETING_PLAN.md",
+      "source_sha256": "f7782afe647251fe86eb5081e9443a9f0a8684b62740bf7de39e6397dfd213e6",
+      "final_sha256": "f7782afe647251fe86eb5081e9443a9f0a8684b62740bf7de39e6397dfd213e6",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/README.md",
+      "source_sha256": "eb9f77074e5b6c534a0458dbd5d31777c4cff9ea709bf2f25d3713ed784efd93",
+      "final_sha256": "eb9f77074e5b6c534a0458dbd5d31777c4cff9ea709bf2f25d3713ed784efd93",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/VALIDATION.md",
+      "source_sha256": "0144dce46ccf35032de6f5edc96ec2b1f2259be9d95c6788830a55579bb39797",
+      "final_sha256": "0144dce46ccf35032de6f5edc96ec2b1f2259be9d95c6788830a55579bb39797",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/briefs/CREATIVE_PLAYBOOK.md",
+      "source_sha256": "d7e271a6e9c9af216e0a23fbe7a76fbeb28b30f70ceed531b50b63cb459e2499",
+      "final_sha256": "d7e271a6e9c9af216e0a23fbe7a76fbeb28b30f70ceed531b50b63cb459e2499",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/briefs/LANDING_AND_LIFECYCLE_COPY.md",
+      "source_sha256": "c6acb46e83e0a42d58250ca716c437ecc033e6d8cffaec35fe0519a94c60081e",
+      "final_sha256": "c6acb46e83e0a42d58250ca716c437ecc033e6d8cffaec35fe0519a94c60081e",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/campaigns/GOOGLE_SEARCH_DRAFT.csv",
+      "source_sha256": "cfb1b7dc4a795bcb5f8449dbd6a392feea9aad8452630cd4b3e5fd3a687ad63f",
+      "final_sha256": "cfb1b7dc4a795bcb5f8449dbd6a392feea9aad8452630cd4b3e5fd3a687ad63f",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/campaigns/NEGATIVE_KEYWORDS_DRAFT.csv",
+      "source_sha256": "310e921183caaeebcc521a670c6b2dcc7d31240b78934679cec48347a4fda511",
+      "final_sha256": "310e921183caaeebcc521a670c6b2dcc7d31240b78934679cec48347a4fda511",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/campaigns/campaign_draft.json",
+      "source_sha256": "dedc982d9487962477d070a51b16c5aab3bd532b9dfc323ad90b81c3228c0aa6",
+      "final_sha256": "dedc982d9487962477d070a51b16c5aab3bd532b9dfc323ad90b81c3228c0aa6",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/campaigns/creative_queue.csv",
+      "source_sha256": "e28b67398e3d07e271a4391685473dd5c9ca75f9ea67c7e25d201396467dda70",
+      "final_sha256": "e28b67398e3d07e271a4391685473dd5c9ca75f9ea67c7e25d201396467dda70",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/codex/START_HERE.md",
+      "source_sha256": "d340be38d99f840510add4104c09103df3a5b9792c7659901fbad139019d71ab",
+      "final_sha256": "baec1bc0186e3f504420aca3dfd1f1ce3abc23f6ef29991e37ce0e433f9cf339",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "marketing/codex/TASKS.csv",
+      "source_sha256": "9eeb35c78e1b48de77dadc8e2b99281750a1c2acbd129c4977bc739ca790518e",
+      "final_sha256": "9eeb35c78e1b48de77dadc8e2b99281750a1c2acbd129c4977bc739ca790518e",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/codex/WEEKLY_REVIEW_TEMPLATE.md",
+      "source_sha256": "3bd1207f8cef2d7643298736000cf074f828a58a472499cf691ee7fa63d5ee52",
+      "final_sha256": "3bd1207f8cef2d7643298736000cf074f828a58a472499cf691ee7fa63d5ee52",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/measurement/MEASUREMENT_SPEC.md",
+      "source_sha256": "a1a057a8ed2b2624950086d4e1cf57b80ab566d633074a8a9bb1e6e5faf06624",
+      "final_sha256": "a1a057a8ed2b2624950086d4e1cf57b80ab566d633074a8a9bb1e6e5faf06624",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/measurement/event_policy.json",
+      "source_sha256": "982aab1f0efb06fde65110e07dee10b323f3249068372cb738bbd67e38220b3e",
+      "final_sha256": "982aab1f0efb06fde65110e07dee10b323f3249068372cb738bbd67e38220b3e",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/measurement/marketing_controls.py",
+      "source_sha256": "d3698931fe73a30f584114abc87462eae880592fd66c1945597db573ddc2803b",
+      "final_sha256": "d3698931fe73a30f584114abc87462eae880592fd66c1945597db573ddc2803b",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/models/Attenlo_PDF_Performance_Marketing_Control.xlsx",
+      "source_sha256": "be2bceb0cefcdf2873c05226cc7c96c2e63e784ed267e506ec196a145325bcdf",
+      "final_sha256": "be2bceb0cefcdf2873c05226cc7c96c2e63e784ed267e506ec196a145325bcdf",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/ops/AUTHORITY.md",
+      "source_sha256": "bb3d07ae1a8a5a8952275750c3072b5604aded4c0881696842cd6ca0f3178d32",
+      "final_sha256": "63ec2fab50477ec7fc1bfe1b6ce374fdd4629c23124a5d7a386441f56402ba75",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "marketing/ops/CREATIVE_AND_CLAIMS.md",
+      "source_sha256": "193a6fe158c7583b324f78dc33df6ed3c9e710c906775bd75cfec8d38166febd",
+      "final_sha256": "193a6fe158c7583b324f78dc33df6ed3c9e710c906775bd75cfec8d38166febd",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/ops/CUSTOMER_AND_PARTNER_LOOP.md",
+      "source_sha256": "cd54ec29c44fa24469c32e636015d9b1720d08a1e790bbe900eda15747350da4",
+      "final_sha256": "cd54ec29c44fa24469c32e636015d9b1720d08a1e790bbe900eda15747350da4",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/ops/DAY_ONE_AND_PROMPTS.md",
+      "source_sha256": "41e931fcdf27661b30d27e67a7b7c77decac740a2306428365541b907e05177d",
+      "final_sha256": "f57f4b1d06e00bb44adec132a02d64ebed67c6ae06b209196bf346de9cb540d9",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "marketing/ops/EMAIL_AND_RETENTION.md",
+      "source_sha256": "b94fc571928f415f8f21c6334efca46678017f4e907e59b00407e039326c4c11",
+      "final_sha256": "b94fc571928f415f8f21c6334efca46678017f4e907e59b00407e039326c4c11",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/ops/LAUNCH_AND_DISCOVERY.md",
+      "source_sha256": "09f93ca203837e24bd0fbec5dca3ed90ae09ba59a64cdd8e83de2dcbcf19cc22",
+      "final_sha256": "09f93ca203837e24bd0fbec5dca3ed90ae09ba59a64cdd8e83de2dcbcf19cc22",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/ops/MEASUREMENT_AND_RUNBOOKS.md",
+      "source_sha256": "dc815ad3acb7ba92b67323324c6c86ec9cd7d46eaf0ce6a0f0c9dadee9548b71",
+      "final_sha256": "dc815ad3acb7ba92b67323324c6c86ec9cd7d46eaf0ce6a0f0c9dadee9548b71",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/ops/README.md",
+      "source_sha256": "ca4a08fa112d1d1d04c42bd414f338c1c55f009edc61bdc673b0008a1c4c0718",
+      "final_sha256": "1a61baf51d091b2afe4e21b3b490a1571f8ddb7a919dd5136eb3556608cb9713",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "marketing/ops/SETUP_AND_SMOKE_TESTS.md",
+      "source_sha256": "6fe15b39eb25e58b69e012503ce80445074d087bf26db716b53bd614220c6333",
+      "final_sha256": "6fe15b39eb25e58b69e012503ce80445074d087bf26db716b53bd614220c6333",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/ops/SKILLS_AND_CONTEXT.md",
+      "source_sha256": "31fc355518baae9663e5292806696153a5bcf68da039b8ce25e1af8915c0b981",
+      "final_sha256": "31fc355518baae9663e5292806696153a5bcf68da039b8ce25e1af8915c0b981",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/ops/SOURCES.md",
+      "source_sha256": "7a76189b95bf76a4924761de57f0856d98035a4f9f674b9434a9f90b5aced917",
+      "final_sha256": "7a76189b95bf76a4924761de57f0856d98035a4f9f674b9434a9f90b5aced917",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/ops/TOOL_STACK.md",
+      "source_sha256": "e08a9f417b442e7bead5d10c41f347b2daa9208d03d8c3f87d3d980aa8d22f79",
+      "final_sha256": "684b7552cdf4674228ccd4fb2b0f9b7816f97d6d26dd1b4ae9b39d0d8e191b6d",
+      "status": "modified",
+      "protected": false,
+      "reason": "Updated active fresh-build strategy or current packaging metadata."
+    },
+    {
+      "path": "marketing/ops/codex-mcp.example.toml",
+      "source_sha256": "c6c20b6b83f85722ec703986a5bd866ee12d8e8971b58d59b81c97e3dacca2ab",
+      "final_sha256": "c6c20b6b83f85722ec703986a5bd866ee12d8e8971b58d59b81c97e3dacca2ab",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/ops/preflight.py",
+      "source_sha256": "349f6808cdaa2e65a9405843278390ba787d804a77aca0a6d2ce7a553d9bed71",
+      "final_sha256": "349f6808cdaa2e65a9405843278390ba787d804a77aca0a6d2ce7a553d9bed71",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/ops/skills-selection.json",
+      "source_sha256": "39e3db2dbff2e3a88416ff616eef376486b40483573359169008795270e341a6",
+      "final_sha256": "39e3db2dbff2e3a88416ff616eef376486b40483573359169008795270e341a6",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/ops/source-register.json",
+      "source_sha256": "51cfb826b33a4c7570dd7025bde0b79738395fb2ebe53c9c29d54f5ccd50fee3",
+      "final_sha256": "51cfb826b33a4c7570dd7025bde0b79738395fb2ebe53c9c29d54f5ccd50fee3",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/ops/tasks.json",
+      "source_sha256": "6aab9e69e4ca0f5782d72a7c1a5e4de5cd19d1538f9e7179b50337375bc4b87c",
+      "final_sha256": "6aab9e69e4ca0f5782d72a7c1a5e4de5cd19d1538f9e7179b50337375bc4b87c",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/ops/templates/WEEKLY_DECISION.md",
+      "source_sha256": "4782eee6c3b8ed7a57213aade561fe66b08c51368bb7c6c16f7cac4472ff6052",
+      "final_sha256": "4782eee6c3b8ed7a57213aade561fe66b08c51368bb7c6c16f7cac4472ff6052",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/ops/templates/asset-record.json",
+      "source_sha256": "ed6879502924eb63b68024d52f6aa7bebd53c07aac79efe056582e6490509857",
+      "final_sha256": "ed6879502924eb63b68024d52f6aa7bebd53c07aac79efe056582e6490509857",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/ops/templates/claims-register.json",
+      "source_sha256": "922623f536d706cb1c03438be0016459c4a35713ccf9ba609ccdae7274327edc",
+      "final_sha256": "922623f536d706cb1c03438be0016459c4a35713ccf9ba609ccdae7274327edc",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/ops/templates/experiment.json",
+      "source_sha256": "6aa23bcf2f2cdf5fe4472bba5b693fc82577bd8942b3f3f74995445be4db798f",
+      "final_sha256": "6aa23bcf2f2cdf5fe4472bba5b693fc82577bd8942b3f3f74995445be4db798f",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/ops/templates/launch-approval.json",
+      "source_sha256": "d957f5ab8c0b1d7aefa961692486680934656f0763e1cc8fd400b8e92b971f66",
+      "final_sha256": "d957f5ab8c0b1d7aefa961692486680934656f0763e1cc8fd400b8e92b971f66",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/ops/templates/launch-checklist.json",
+      "source_sha256": "00953f41856f4f1f7cc9bddbe529bd56b7fd48452c513b0733b809bf0bc2a0c4",
+      "final_sha256": "00953f41856f4f1f7cc9bddbe529bd56b7fd48452c513b0733b809bf0bc2a0c4",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/ops/templates/voice-of-customer.json",
+      "source_sha256": "ad6e361dc4f2d16426574ff566f893609e01dd67c8e1c5e0d589202f7ed9c136",
+      "final_sha256": "ad6e361dc4f2d16426574ff566f893609e01dd67c8e1c5e0d589202f7ed9c136",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/ops/tests/test_preflight.py",
+      "source_sha256": "13efd37568e6c2bbdb8f047d2286a3dc123675d369b964883d3986d3c428b3e7",
+      "final_sha256": "13efd37568e6c2bbdb8f047d2286a3dc123675d369b964883d3986d3c428b3e7",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/ops/tool-access-register.json",
+      "source_sha256": "f6d997e65b21c51087afbfff510318c7fbec3ef7eb6dc1ee81bf1c6d936f1840",
+      "final_sha256": "f6d997e65b21c51087afbfff510318c7fbec3ef7eb6dc1ee81bf1c6d936f1840",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/research/SOURCES.csv",
+      "source_sha256": "162649c127f4daa5d4db79c97abf2f4a9d9c4ae675ceba7d844bbaa250db9a8d",
+      "final_sha256": "162649c127f4daa5d4db79c97abf2f4a9d9c4ae675ceba7d844bbaa250db9a8d",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "marketing/tests/test_marketing_controls.py",
+      "source_sha256": "6ea29e2120dc25725bc25873c8408723b70033c3716058d7706684727df0eeb8",
+      "final_sha256": "6ea29e2120dc25725bc25873c8408723b70033c3716058d7706684727df0eeb8",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "prompts/FEW_SHOT_POLICY.md",
+      "source_sha256": "ce63303c2e21a8db4b6cc2485c08d51f07463ef68fb90b2d6be673d50d1005cd",
+      "final_sha256": "ce63303c2e21a8db4b6cc2485c08d51f07463ef68fb90b2d6be673d50d1005cd",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "prompts/planner_system.md",
+      "source_sha256": "72dc026eee0403c0e62739ab6092850cd3091a8674bb65f253072e9b6d0d653a",
+      "final_sha256": "72dc026eee0403c0e62739ab6092850cd3091a8674bb65f253072e9b6d0d653a",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "reference/.env.example",
+      "source_sha256": "5cda4b102d15bdbe90b39a5f72ba3a13f2629dac000887258be5419fdf3ac055",
+      "final_sha256": "5cda4b102d15bdbe90b39a5f72ba3a13f2629dac000887258be5419fdf3ac055",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "reference/requirements-dev.txt",
+      "source_sha256": "48bdd1a500202e6cd681cb6e978b2c525ce9fb262013f8ff4a9bd2bb46419130",
+      "final_sha256": "48bdd1a500202e6cd681cb6e978b2c525ce9fb262013f8ff4a9bd2bb46419130",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "reference/serialize_planner_request.py",
+      "source_sha256": "c73b2ef73d68cc3c55a1310a0630294a6c9c27e4a7a8d6ab663adb73e98724a8",
+      "final_sha256": "c73b2ef73d68cc3c55a1310a0630294a6c9c27e4a7a8d6ab663adb73e98724a8",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "reference/validate_plan.py",
+      "source_sha256": "8fbe6d7ff8ec8ef6d317a23d9735f75be09f6cddff1a47e10e24dfa43f104374",
+      "final_sha256": "8fbe6d7ff8ec8ef6d317a23d9735f75be09f6cddff1a47e10e24dfa43f104374",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "research/CHAT_STACK_SOURCES.json",
+      "source_sha256": "82907ca81129a9bca90b5b902bd1f73fa3ecf10641c151807e0575667a0aa5b4",
+      "final_sha256": "82907ca81129a9bca90b5b902bd1f73fa3ecf10641c151807e0575667a0aa5b4",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "research/CHAT_STACK_SOURCES.md",
+      "source_sha256": "9948029bf7172cc90e9793679e6a22f80f73f77f9b5b7934076d2e66afd42ec5",
+      "final_sha256": "9948029bf7172cc90e9793679e6a22f80f73f77f9b5b7934076d2e66afd42ec5",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "research/POLICY_SOURCES.json",
+      "source_sha256": "d0d7d56303e2d0ee000bb77d60bdab1ddccc6e3b8e7486134004616f29467929",
+      "final_sha256": "d0d7d56303e2d0ee000bb77d60bdab1ddccc6e3b8e7486134004616f29467929",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "research/POLICY_SOURCES.md",
+      "source_sha256": "f30b3139f9d0b3c7e62d7d716051c7242fa50c770e294bfdd972dabcbc62a9ac",
+      "final_sha256": "f30b3139f9d0b3c7e62d7d716051c7242fa50c770e294bfdd972dabcbc62a9ac",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "research/appllama/SOURCE_REGISTRY.json",
+      "source_sha256": "e7a8b65975fbc09363b4d259638591514e04f20494837c33e0d1a73cd625a4c2",
+      "final_sha256": "e7a8b65975fbc09363b4d259638591514e04f20494837c33e0d1a73cd625a4c2",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "research/appllama/index.html",
+      "source_sha256": "efa7c6701eb4b7732217eb8e921a2929cff5b8bb77522fd794ebc0dfedd9b79e",
+      "final_sha256": "efa7c6701eb4b7732217eb8e921a2929cff5b8bb77522fd794ebc0dfedd9b79e",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "scripts/validate_final_handoff.py",
+      "source_sha256": "3acc0847a0451fe04753a3d9cdc43d40c9dfd96fd75c50b4c9a1c6e273da2edb",
+      "final_sha256": "3acc0847a0451fe04753a3d9cdc43d40c9dfd96fd75c50b4c9a1c6e273da2edb",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "scripts/validate_growth_handoff.py",
+      "source_sha256": "cdfb9ab47e5a109e66c0cc735961e6b261460a81c40d9d88567cd68ada4ad4df",
+      "final_sha256": "cdfb9ab47e5a109e66c0cc735961e6b261460a81c40d9d88567cd68ada4ad4df",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "scripts/validate_handoff.py",
+      "source_sha256": "9a10d2d4ebc6fcfd673c592b5b866e5c26b767c5b3b4a6730e7e5a3a8f8435a1",
+      "final_sha256": "9a10d2d4ebc6fcfd673c592b5b866e5c26b767c5b3b4a6730e7e5a3a8f8435a1",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "scripts/validate_startup_fixtures.py",
+      "source_sha256": "3806415ce58e7c6111ef59bf9c7c2834566142bdd910cebe1d3c62c29546d191",
+      "final_sha256": "3806415ce58e7c6111ef59bf9c7c2834566142bdd910cebe1d3c62c29546d191",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "scripts/validate_v5_handoff.py",
+      "source_sha256": "b2f5461b5462063d5df0a6106243efd99f7fbbbde188ffd5883d67d7dd667722",
+      "final_sha256": "b2f5461b5462063d5df0a6106243efd99f7fbbbde188ffd5883d67d7dd667722",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "scripts/validate_v6_handoff.py",
+      "source_sha256": "29fa274cc27ac114ef2abbe2e432039bae67e18ec22ec4fd313a086be1153961",
+      "final_sha256": "29fa274cc27ac114ef2abbe2e432039bae67e18ec22ec4fd313a086be1153961",
+      "status": "unchanged",
+      "protected": false,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "tests/README.md",
+      "source_sha256": "c62df75032ac4d09a89591a555f87dc9b49e79f6797546f9e1e21f1f30684a39",
+      "final_sha256": "c62df75032ac4d09a89591a555f87dc9b49e79f6797546f9e1e21f1f30684a39",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "tests/dataset_manifest.json",
+      "source_sha256": "8c9ffdb9b8df1d076e4a7c1f256edbc26b16b5564fd6f33d65783b5c4829ccb0",
+      "final_sha256": "8c9ffdb9b8df1d076e4a7c1f256edbc26b16b5564fd6f33d65783b5c4829ccb0",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "tests/invalid_plan_cases.jsonl",
+      "source_sha256": "c149617a4532a90171a3f57aea4b36396310e45f1861fc845187b762600d791e",
+      "final_sha256": "c149617a4532a90171a3f57aea4b36396310e45f1861fc845187b762600d791e",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "tests/planner_seed_cases.jsonl",
+      "source_sha256": "1e72ba5e3cdf89840662482d9431f086fa2c7eaa0b3b6296419dc346d697c3a3",
+      "final_sha256": "1e72ba5e3cdf89840662482d9431f086fa2c7eaa0b3b6296419dc346d697c3a3",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    },
+    {
+      "path": "tests/test_request_boundary.py",
+      "source_sha256": "5c2c5633874ac8e741396e4b6ae061376442303183dc462c95e12cb5d744a272",
+      "final_sha256": "5c2c5633874ac8e741396e4b6ae061376442303183dc462c95e12cb5d744a272",
+      "status": "unchanged",
+      "protected": true,
+      "reason": "Retained original bytes."
+    }
+  ]
+}

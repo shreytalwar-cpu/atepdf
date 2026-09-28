@@ -1,0 +1,73 @@
+{
+  "legacy_source_audited": true,
+  "source_snapshot": "source-snapshot.json",
+  "code_ported": false,
+  "entries": [
+    {
+      "id": "L01",
+      "source": "src/engine/pdf.ts:144",
+      "evidence": "source_reviewed",
+      "finding": "Merge copies pages into a new PDF through pdf-lib.",
+      "keep": "Immutable originals and visible input order.",
+      "avoid": "Inheriting the old multi-tool application.",
+      "new_test": "tests/regressions/local-workflow.test.ts: actual merge and independent text order",
+      "new_test_status": "passed",
+      "legacy_runtime_reproduction": "not_run"
+    },
+    {
+      "id": "L02",
+      "source": "tests/result-preview.test.ts:28",
+      "evidence": "source_reviewed",
+      "finding": "Preview test asserts source patterns for worker parsing and byte copies.",
+      "keep": "Independent reader and disposable preview resources.",
+      "avoid": "Equating source assertions with transformed-PDF correctness.",
+      "new_test": "tests/regressions/local-workflow.test.ts: independent PDF.js reopen, output text and immutable copies",
+      "new_test_status": "passed",
+      "legacy_runtime_reproduction": "not_run"
+    },
+    {
+      "id": "L03",
+      "source": "src/workflow.ts:36-66",
+      "evidence": "source_reviewed",
+      "finding": "Export lifecycle distinguishes starting a download from persistent save and binds receipts to revisions.",
+      "keep": "Ready/cancelled/download-started/saved distinctions and result-bound receipts.",
+      "avoid": "Claiming a cancelled picker saved a file.",
+      "new_test": "tests/regressions/local-workflow.test.ts: save cancellation and failed close",
+      "new_test_status": "passed",
+      "legacy_runtime_reproduction": "not_run"
+    },
+    {
+      "id": "L04",
+      "source": "src/engine/worker.ts; tests/workflows.test.ts:99",
+      "evidence": "source_reviewed",
+      "finding": "Worker dispatch runs engines separately; synthetic batch test covers cancellation.",
+      "keep": "Cancellation and validation gates preserve committed outputs.",
+      "avoid": "Promoting partial results after cancellation.",
+      "new_test": "tests/regressions/local-workflow.test.ts: cancellation and failed independent validation",
+      "new_test_status": "passed",
+      "legacy_runtime_reproduction": "not_run"
+    },
+    {
+      "id": "L05",
+      "source": "CODE_AUDIT.md:43",
+      "evidence": "documented_only",
+      "finding": "Notes report selected inputs omitted from an unsaved-work predicate.",
+      "keep": "Warn before discarding original selections or results.",
+      "avoid": "Claiming this reported legacy issue was reproduced.",
+      "new_test": "tests/e2e/workflow.spec.ts: chat discard confirmation and imported-original before-unload guard",
+      "new_test_status": "passed",
+      "legacy_runtime_reproduction": "not_run"
+    },
+    {
+      "id": "L06",
+      "source": "docs/RELEASE_STATUS.md:5-13",
+      "evidence": "documented_only",
+      "finding": "Dated release notes describe save copy changes and disabled OCR.",
+      "keep": "Prove searchable output and size with independent reader/measurements.",
+      "avoid": "Treating old notes as current engine or release proof.",
+      "new_test": "tests/e2e/workflow.spec.ts: real OCR/compression chain",
+      "new_test_status": "passed",
+      "legacy_runtime_reproduction": "not_run"
+    }
+  ]
+}

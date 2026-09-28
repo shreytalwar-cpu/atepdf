@@ -1,0 +1,132 @@
+PASS: handoff schema, reference semantics and artifact consistency checks
+{
+  "adversarial_cases_rejected": 21,
+  "backlog_tasks": 65,
+  "context_binding_checks": 3,
+  "declared_operations": 15,
+  "defined_sources": 26,
+  "example_envelopes_events": 2,
+  "example_plan_pairs": 4,
+  "json_documents": 63,
+  "present_design_references": 3,
+  "seed_cases_validated": 118,
+  "valid_schemas": 4
+}
+NOT RUN: live model evaluation, PDF processing, application builds, device/browser UI tests, production network/privacy audit.
+PASS: v2 reference policy, evidence registry, financial copies and configuration checks
+{
+  "reference_gate_cases": 54,
+  "invalid_contexts_rejected": 6,
+  "event_privacy_origin_checks": 4,
+  "safe_default_config": true,
+  "appllama_metadata_refs": 26,
+  "additional_tasks": 30,
+  "specified_not_run_app_acceptance_cases": 52,
+  "unchanged_financial_artifacts": 6,
+  "specified_ui_states": 32
+}
+NOT RUN: app UI, local PDF engines, live model, store purchases, subscription webhooks, production privacy or conversion tests.
+test_expected_fields_only (__main__.RequestBoundaryTests.test_expected_fields_only) ... ok
+test_files_container_must_be_list (__main__.RequestBoundaryTests.test_files_container_must_be_list) ... ok
+test_instruction_is_explicitly_sent_not_a_dlp_claim (__main__.RequestBoundaryTests.test_instruction_is_explicitly_sent_not_a_dlp_claim) ... ok
+test_instruction_type_rejected (__main__.RequestBoundaryTests.test_instruction_type_rejected) ... ok
+test_metadata_excludes_local_files_and_previews (__main__.RequestBoundaryTests.test_metadata_excludes_local_files_and_previews) ... ok
+test_missing_required_field_rejected (__main__.RequestBoundaryTests.test_missing_required_field_rejected) ... ok
+test_nested_prior_plan_secret_rejected (__main__.RequestBoundaryTests.test_nested_prior_plan_secret_rejected) ... ok
+test_no_consent (__main__.RequestBoundaryTests.test_no_consent) ... ok
+test_result_is_independent_snapshot (__main__.RequestBoundaryTests.test_result_is_independent_snapshot) ... ok
+test_snapshot_is_not_mutated (__main__.RequestBoundaryTests.test_snapshot_is_not_mutated) ... ok
+test_top_level_state_not_serialised (__main__.RequestBoundaryTests.test_top_level_state_not_serialised) ... ok
+test_wrong_metadata_type_rejected (__main__.RequestBoundaryTests.test_wrong_metadata_type_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.002s
+
+OK
+test_01_default_no_live_spend (__main__.Controls.test_01_default_no_live_spend) ... ok
+test_02_cash_envelope (__main__.Controls.test_02_cash_envelope) ... ok
+test_03_net_media (__main__.Controls.test_03_net_media) ... ok
+test_04_consent_denied (__main__.Controls.test_04_consent_denied) ... ok
+test_05_verified_purchase (__main__.Controls.test_05_verified_purchase) ... ok
+test_06_pending (__main__.Controls.test_06_pending) ... ok
+test_07_renewal (__main__.Controls.test_07_renewal) ... ok
+test_08_unverified (__main__.Controls.test_08_unverified) ... ok
+test_09_content_fields (__main__.Controls.test_09_content_fields) ... ok
+test_10_url_not_category (__main__.Controls.test_10_url_not_category) ... ok
+test_11_invalid_numbers (__main__.Controls.test_11_invalid_numbers) ... ok
+test_12_zero_buyer_cac (__main__.Controls.test_12_zero_buyer_cac) ... ok
+test_13_loaded_cac (__main__.Controls.test_13_loaded_cac) ... ok
+test_14_no_approval (__main__.Controls.test_14_no_approval) ... ok
+test_15_maturity_and_incident (__main__.Controls.test_15_maturity_and_incident) ... ok
+test_16_zero_purchase_review (__main__.Controls.test_16_zero_purchase_review) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.000s
+
+OK
+test_approval_not_yet_current (__main__.PreflightTests.test_approval_not_yet_current) ... ok
+test_bad_hash_rejected (__main__.PreflightTests.test_bad_hash_rejected) ... ok
+test_boolean_budget_rejected (__main__.PreflightTests.test_boolean_budget_rejected) ... ok
+test_cap_includes_spent_and_reserved (__main__.PreflightTests.test_cap_includes_spent_and_reserved) ... ok
+test_changed_asset (__main__.PreflightTests.test_changed_asset) ... ok
+test_changed_landing (__main__.PreflightTests.test_changed_landing) ... ok
+test_changed_price (__main__.PreflightTests.test_changed_price) ... ok
+test_default_arguments_block (__main__.PreflightTests.test_default_arguments_block) ... ok
+test_draft_template_blocks (__main__.PreflightTests.test_draft_template_blocks) ... ok
+test_exact_cap_ready (__main__.PreflightTests.test_exact_cap_ready) ... ok
+test_expired_approval (__main__.PreflightTests.test_expired_approval) ... ok
+test_extends_approval_window (__main__.PreflightTests.test_extends_approval_window) ... ok
+test_failed_privacy (__main__.PreflightTests.test_failed_privacy) ... ok
+test_failed_purchase (__main__.PreflightTests.test_failed_purchase) ... ok
+test_failed_rights (__main__.PreflightTests.test_failed_rights) ... ok
+test_incomplete_checks_rejected (__main__.PreflightTests.test_incomplete_checks_rejected) ... ok
+test_missing_evidence_reference (__main__.PreflightTests.test_missing_evidence_reference) ... ok
+test_naive_time_rejected (__main__.PreflightTests.test_naive_time_rejected) ... ok
+test_negative_spend_rejected (__main__.PreflightTests.test_negative_spend_rejected) ... ok
+test_no_approval (__main__.PreflightTests.test_no_approval) ... ok
+test_ready_is_reference_only (__main__.PreflightTests.test_ready_is_reference_only) ... ok
+test_reversed_window_rejected (__main__.PreflightTests.test_reversed_window_rejected) ... ok
+test_truthy_string_rejected (__main__.PreflightTests.test_truthy_string_rejected) ... ok
+test_unknown_approval_field_rejected (__main__.PreflightTests.test_unknown_approval_field_rejected) ... ok
+test_unknown_payload_rejected (__main__.PreflightTests.test_unknown_payload_rejected) ... ok
+test_untrusted_approval (__main__.PreflightTests.test_untrusted_approval) ... ok
+test_unverified_evidence (__main__.PreflightTests.test_unverified_evidence) ... ok
+test_wrong_account (__main__.PreflightTests.test_wrong_account) ... ok
+test_wrong_campaign (__main__.PreflightTests.test_wrong_campaign) ... ok
+test_wrong_currency (__main__.PreflightTests.test_wrong_currency) ... ok
+test_zero_budget (__main__.PreflightTests.test_zero_budget) ... ok
+test_zero_cap (__main__.PreflightTests.test_zero_cap) ... ok
+
+----------------------------------------------------------------------
+Ran 32 tests in 0.001s
+
+OK
+test_broken_marker (__main__.GuardTests.test_broken_marker) ... ok
+test_distinct_empty (__main__.GuardTests.test_distinct_empty) ... ok
+test_git_symlink (__main__.GuardTests.test_git_symlink) ... ok
+test_handoff_only (__main__.GuardTests.test_handoff_only) ... ok
+test_legacy_root_is_file (__main__.GuardTests.test_legacy_root_is_file) ... ok
+test_linked_worktree (__main__.GuardTests.test_linked_worktree) ... ok
+test_marker_is_template (__main__.GuardTests.test_marker_is_template) ... ok
+test_missing_legacy_path (__main__.GuardTests.test_missing_legacy_path) ... ok
+test_new_contains_old (__main__.GuardTests.test_new_contains_old) ... ok
+test_new_git_directory_not_a_parent (__main__.GuardTests.test_new_git_directory_not_a_parent) ... ok
+test_new_root_is_file (__main__.GuardTests.test_new_root_is_file) ... ok
+test_new_within_old (__main__.GuardTests.test_new_within_old) ... ok
+test_no_legacy_source (__main__.GuardTests.test_no_legacy_source) ... ok
+test_no_mutations_or_private_path_output (__main__.GuardTests.test_no_mutations_or_private_path_output) ... ok
+test_nonempty_unverified_target (__main__.GuardTests.test_nonempty_unverified_target) ... ok
+test_nonexistent_new_root (__main__.GuardTests.test_nonexistent_new_root) ... ok
+test_parent_git (__main__.GuardTests.test_parent_git) ... ok
+test_relative_root (__main__.GuardTests.test_relative_root) ... ok
+test_resume_new_project (__main__.GuardTests.test_resume_new_project) ... ok
+test_root_directory (__main__.GuardTests.test_root_directory) ... ok
+test_same_root (__main__.GuardTests.test_same_root) ... ok
+test_symlink_into_old_child (__main__.GuardTests.test_symlink_into_old_child) ... ok
+test_symlink_to_old (__main__.GuardTests.test_symlink_to_old) ... ok
+test_wrong_marker (__main__.GuardTests.test_wrong_marker) ... ok
+
+----------------------------------------------------------------------
+Ran 24 tests in 0.021s
+
+OK

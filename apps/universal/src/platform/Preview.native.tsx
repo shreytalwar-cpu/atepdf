@@ -1,0 +1,2 @@
+import {Modal,View,Text,Pressable} from 'react-native';
+export default function Preview({onClose}:{bytes:Uint8Array;count:number;onClose:()=>void}){return <Modal onRequestClose={onClose}><View style={{padding:32}}><Text>Native read-only preview is pending the verified native PDF adapter.</Text><Pressable accessibilityRole="button" onPress={onClose}><Text>Close preview</Text></Pressable></View></Modal>;}

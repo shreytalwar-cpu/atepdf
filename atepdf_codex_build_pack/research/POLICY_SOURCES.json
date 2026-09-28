@@ -1,0 +1,30 @@
+[
+  {
+    "id": "P01",
+    "title": "Apple App Review Guidelines",
+    "url": "https://developer.apple.com/app-store/review/guidelines/",
+    "checked": "2026-09-28",
+    "use": "Privacy/minimal selected access, explicit permission for third-party AI sharing, account deletion, system review requests and applicable purchasing rules. Recheck exact scope on submission."
+  },
+  {
+    "id": "P02",
+    "title": "Google Play subscriptions policy",
+    "url": "https://support.google.com/googleplay/android-developer/answer/9900533?hl=en",
+    "checked": "2026-09-28",
+    "use": "Clear billing/trial terms and discoverable management/cancellation. Regional exceptions and actual product terms remain relevant."
+  },
+  {
+    "id": "P03",
+    "title": "RevenueCat restoring purchases",
+    "url": "https://www.revenuecat.com/docs/getting-started/restoring-purchases",
+    "checked": "2026-09-28",
+    "use": "User-triggered restore and account transfer/alias handling; not proof that RevenueCat is already integrated."
+  },
+  {
+    "id": "P04",
+    "title": "Google Play subscription lifecycle",
+    "url": "https://developer.android.com/google/play/billing/lifecycle/subscriptions",
+    "checked": "2026-09-28",
+    "use": "Cancellation while still entitled, revocation, grace/hold and provider-backed state reconciliation."
+  }
+]

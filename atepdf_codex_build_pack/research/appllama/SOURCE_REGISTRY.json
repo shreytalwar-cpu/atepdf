@@ -1,0 +1,582 @@
+{
+  "version": 2,
+  "retrieved_date": "2026-09-28",
+  "app_count": 8,
+  "selected_screen_count": 26,
+  "coverage": "Selected recorded iOS flows, not complete live app journeys. First Jomo onboarding page only; flow totals can include video/variant records.",
+  "limitations": "No screenshot pixel inspection, purchase test, funnel metrics, A/B results, verified revenue or proof of causation. Expiring URLs omitted; use stable refs.",
+  "sources": [
+    {
+      "source_id": "A01",
+      "app": "PDF Expert",
+      "app_id": "743974925",
+      "screen_id": "onb_1t4kp",
+      "screen_ref": "743974925/onb_1t4kp",
+      "screen_name": "Onboarding Intro",
+      "retrieved_date": "2026-09-28",
+      "record_capture_date": "not supplied",
+      "evidence_type": "Appllama screen/flow/UI-element metadata",
+      "observation": "Bold value headline, PDF logo, primary CTA, secondary login link and legal footnote.",
+      "proposed_adaptation": "Keep one clear promise; do not introduce a tool catalogue.",
+      "pixel_reviewed": false,
+      "media_status": "Download blocked: container DNS failure; alternate fetch unavailable. No image bundled.",
+      "refresh_tool": {
+        "name": "Appllama.get_screen",
+        "arguments": {
+          "screen_ref": "743974925/onb_1t4kp"
+        }
+      },
+      "reuse_boundary": "Internal research reference only. Do not copy third-party branding, illustration, testimonials or exact commercial claims into production."
+    },
+    {
+      "source_id": "A02",
+      "app": "PDF Expert",
+      "app_id": "743974925",
+      "screen_id": "onb_95q9r",
+      "screen_ref": "743974925/onb_95q9r",
+      "screen_name": "Sign Up Options",
+      "retrieved_date": "2026-09-28",
+      "record_capture_date": "not supplied",
+      "evidence_type": "Appllama screen/flow/UI-element metadata",
+      "observation": "Apple, Google and email authentication choices with a bottom Skip link.",
+      "proposed_adaptation": "Make identity optional before value; offer account linking when it serves cross-device access.",
+      "pixel_reviewed": false,
+      "media_status": "Download blocked: container DNS failure; alternate fetch unavailable. No image bundled.",
+      "refresh_tool": {
+        "name": "Appllama.get_screen",
+        "arguments": {
+          "screen_ref": "743974925/onb_95q9r"
+        }
+      },
+      "reuse_boundary": "Internal research reference only. Do not copy third-party branding, illustration, testimonials or exact commercial claims into production."
+    },
+    {
+      "source_id": "A03",
+      "app": "PDF Expert",
+      "app_id": "743974925",
+      "screen_id": "pay_yriav",
+      "screen_ref": "743974925/pay_yriav",
+      "screen_name": "Subscription Paywall",
+      "retrieved_date": "2026-09-28",
+      "record_capture_date": "not supplied",
+      "evidence_type": "Appllama screen/flow/UI-element metadata",
+      "observation": "Close control, feature list, price summary, primary CTA, secondary plan link and Restore.",
+      "proposed_adaptation": "Make renewal, alternatives and recovery discoverable.",
+      "pixel_reviewed": false,
+      "media_status": "Download blocked: container DNS failure; alternate fetch unavailable. No image bundled.",
+      "refresh_tool": {
+        "name": "Appllama.get_screen",
+        "arguments": {
+          "screen_ref": "743974925/pay_yriav"
+        }
+      },
+      "reuse_boundary": "Internal research reference only. Do not copy third-party branding, illustration, testimonials or exact commercial claims into production."
+    },
+    {
+      "source_id": "A04",
+      "app": "PDF Expert",
+      "app_id": "743974925",
+      "screen_id": "pay_8oy77",
+      "screen_ref": "743974925/pay_8oy77",
+      "screen_name": "Plan Picker Paywall",
+      "retrieved_date": "2026-09-28",
+      "record_capture_date": "not supplied",
+      "evidence_type": "Appllama screen/flow/UI-element metadata",
+      "observation": "Selected/unselected plan cards in a bottom sheet, device icons and billing captions.",
+      "proposed_adaptation": "Explain cross-platform entitlement while explicitly excluding document sync.",
+      "pixel_reviewed": false,
+      "media_status": "Download blocked: container DNS failure; alternate fetch unavailable. No image bundled.",
+      "refresh_tool": {
+        "name": "Appllama.get_screen",
+        "arguments": {
+          "screen_ref": "743974925/pay_8oy77"
+        }
+      },
+      "reuse_boundary": "Internal research reference only. Do not copy third-party branding, illustration, testimonials or exact commercial claims into production."
+    },
+    {
+      "source_id": "A05",
+      "app": "PDF Expert",
+      "app_id": "743974925",
+      "screen_id": "onb_ck431",
+      "screen_ref": "743974925/onb_ck431",
+      "screen_name": "Home Coachmark",
+      "retrieved_date": "2026-09-28",
+      "record_capture_date": "not supplied",
+      "evidence_type": "Appllama screen/flow/UI-element metadata",
+      "observation": "A tooltip/coachmark over home with tool cards and a floating add action.",
+      "proposed_adaptation": "Use one dismissible inline hint, not the underlying dense tool navigation.",
+      "pixel_reviewed": false,
+      "media_status": "Download blocked: container DNS failure; alternate fetch unavailable. No image bundled.",
+      "refresh_tool": {
+        "name": "Appllama.get_screen",
+        "arguments": {
+          "screen_ref": "743974925/onb_ck431"
+        }
+      },
+      "reuse_boundary": "Internal research reference only. Do not copy third-party branding, illustration, testimonials or exact commercial claims into production."
+    },
+    {
+      "source_id": "A06",
+      "app": "Scanner Pro",
+      "app_id": "333710667",
+      "screen_id": "onb_bnb10",
+      "screen_ref": "333710667/onb_bnb10",
+      "screen_name": "Onboarding Document Safety",
+      "retrieved_date": "2026-09-28",
+      "record_capture_date": "not supplied",
+      "evidence_type": "Appllama screen/flow/UI-element metadata",
+      "observation": "Document-safety onboarding with a receipt/phone preview, caption and Continue.",
+      "proposed_adaptation": "Explain local PDF execution concretely, not through vague security badges.",
+      "pixel_reviewed": false,
+      "media_status": "Download blocked: container DNS failure; alternate fetch unavailable. No image bundled.",
+      "refresh_tool": {
+        "name": "Appllama.get_screen",
+        "arguments": {
+          "screen_ref": "333710667/onb_bnb10"
+        }
+      },
+      "reuse_boundary": "Internal research reference only. Do not copy third-party branding, illustration, testimonials or exact commercial claims into production."
+    },
+    {
+      "source_id": "A07",
+      "app": "Scanner Pro",
+      "app_id": "333710667",
+      "screen_id": "onb_naf6n",
+      "screen_ref": "333710667/onb_naf6n",
+      "screen_name": "Onboarding Document Sharing",
+      "retrieved_date": "2026-09-28",
+      "record_capture_date": "not supplied",
+      "evidence_type": "Appllama screen/flow/UI-element metadata",
+      "observation": "Document-sharing onboarding with a receipt preview and toolbar.",
+      "proposed_adaptation": "Teach the actual output and export, not backend engine names.",
+      "pixel_reviewed": false,
+      "media_status": "Download blocked: container DNS failure; alternate fetch unavailable. No image bundled.",
+      "refresh_tool": {
+        "name": "Appllama.get_screen",
+        "arguments": {
+          "screen_ref": "333710667/onb_naf6n"
+        }
+      },
+      "reuse_boundary": "Internal research reference only. Do not copy third-party branding, illustration, testimonials or exact commercial claims into production."
+    },
+    {
+      "source_id": "A08",
+      "app": "Scanner Pro",
+      "app_id": "333710667",
+      "screen_id": "pay_1muku",
+      "screen_ref": "333710667/pay_1muku",
+      "screen_name": "Subscription Offer",
+      "retrieved_date": "2026-09-28",
+      "record_capture_date": "not supplied",
+      "evidence_type": "Appllama screen/flow/UI-element metadata",
+      "observation": "Feature list, selectable plan cards, savings badge, trial CTA and Restore Purchases.",
+      "proposed_adaptation": "Use explicit plan comparison; no trial until separately approved.",
+      "pixel_reviewed": false,
+      "media_status": "Download blocked: container DNS failure; alternate fetch unavailable. No image bundled.",
+      "refresh_tool": {
+        "name": "Appllama.get_screen",
+        "arguments": {
+          "screen_ref": "333710667/pay_1muku"
+        }
+      },
+      "reuse_boundary": "Internal research reference only. Do not copy third-party branding, illustration, testimonials or exact commercial claims into production."
+    },
+    {
+      "source_id": "A09",
+      "app": "Jomo",
+      "app_id": "1609960918",
+      "screen_id": "onb_4wjx1",
+      "screen_ref": "1609960918/onb_4wjx1",
+      "screen_name": "Friction Intro",
+      "retrieved_date": "2026-09-28",
+      "record_capture_date": "not supplied",
+      "evidence_type": "Appllama screen/flow/UI-element metadata",
+      "observation": "Friction-focused intro with a phone mockup and a primary action.",
+      "proposed_adaptation": "Frame relief from PDF tool-switching, not a list of engines.",
+      "pixel_reviewed": false,
+      "media_status": "Download blocked: container DNS failure; alternate fetch unavailable. No image bundled.",
+      "refresh_tool": {
+        "name": "Appllama.get_screen",
+        "arguments": {
+          "screen_ref": "1609960918/onb_4wjx1"
+        }
+      },
+      "reuse_boundary": "Internal research reference only. Do not copy third-party branding, illustration, testimonials or exact commercial claims into production."
+    },
+    {
+      "source_id": "A10",
+      "app": "Jomo",
+      "app_id": "1609960918",
+      "screen_id": "onb_mblba",
+      "screen_ref": "1609960918/onb_mblba",
+      "screen_name": "Personalize Intro",
+      "retrieved_date": "2026-09-28",
+      "record_capture_date": "not supplied",
+      "evidence_type": "Appllama screen/flow/UI-element metadata",
+      "observation": "Centered character illustration with laptop/mug props, headline and primary CTA.",
+      "proposed_adaptation": "Keep a welcoming tone with the approved Attenlo paper mascot, not borrowed art.",
+      "pixel_reviewed": false,
+      "media_status": "Download blocked: container DNS failure; alternate fetch unavailable. No image bundled.",
+      "refresh_tool": {
+        "name": "Appllama.get_screen",
+        "arguments": {
+          "screen_ref": "1609960918/onb_mblba"
+        }
+      },
+      "reuse_boundary": "Internal research reference only. Do not copy third-party branding, illustration, testimonials or exact commercial claims into production."
+    },
+    {
+      "source_id": "A11",
+      "app": "Jomo",
+      "app_id": "1609960918",
+      "screen_id": "pay_dx56g",
+      "screen_ref": "1609960918/pay_dx56g",
+      "screen_name": "Subscription Offer",
+      "retrieved_date": "2026-09-28",
+      "record_capture_date": "not supplied",
+      "evidence_type": "Appllama screen/flow/UI-element metadata",
+      "observation": "Later link, before/now cards, benefits, selected annual plan, price badge and trial reminder note.",
+      "proposed_adaptation": "Use genuine outcome framing and an honest free exit; reject fake time-saved metrics and long personal quizzes.",
+      "pixel_reviewed": false,
+      "media_status": "Download blocked: container DNS failure; alternate fetch unavailable. No image bundled.",
+      "refresh_tool": {
+        "name": "Appllama.get_screen",
+        "arguments": {
+          "screen_ref": "1609960918/pay_dx56g"
+        }
+      },
+      "reuse_boundary": "Internal research reference only. Do not copy third-party branding, illustration, testimonials or exact commercial claims into production."
+    },
+    {
+      "source_id": "A12",
+      "app": "Opal",
+      "app_id": "1497465230",
+      "screen_id": "pay_2ztwr",
+      "screen_ref": "1497465230/pay_2ztwr",
+      "screen_name": "Annual Subscription Paywall",
+      "retrieved_date": "2026-09-28",
+      "record_capture_date": "not supplied",
+      "evidence_type": "Appllama screen/flow/UI-element metadata",
+      "observation": "Restore/close controls, journey timeline, circular steps, plan options and trial footnote.",
+      "proposed_adaptation": "If a trial is ever tested, make dates and renewal amount explicit.",
+      "pixel_reviewed": false,
+      "media_status": "Download blocked: container DNS failure; alternate fetch unavailable. No image bundled.",
+      "refresh_tool": {
+        "name": "Appllama.get_screen",
+        "arguments": {
+          "screen_ref": "1497465230/pay_2ztwr"
+        }
+      },
+      "reuse_boundary": "Internal research reference only. Do not copy third-party branding, illustration, testimonials or exact commercial claims into production."
+    },
+    {
+      "source_id": "A13",
+      "app": "Opal",
+      "app_id": "1497465230",
+      "screen_id": "pay_4zt6h",
+      "screen_ref": "1497465230/pay_4zt6h",
+      "screen_name": "Monthly Downsell Paywall",
+      "retrieved_date": "2026-09-28",
+      "record_capture_date": "not supplied",
+      "evidence_type": "Appllama screen/flow/UI-element metadata",
+      "observation": "Monthly downsell in a bottom sheet with a No Thanks link.",
+      "proposed_adaptation": "Keep monthly visible initially; do not stack another sales modal after dismissal.",
+      "pixel_reviewed": false,
+      "media_status": "Download blocked: container DNS failure; alternate fetch unavailable. No image bundled.",
+      "refresh_tool": {
+        "name": "Appllama.get_screen",
+        "arguments": {
+          "screen_ref": "1497465230/pay_4zt6h"
+        }
+      },
+      "reuse_boundary": "Internal research reference only. Do not copy third-party branding, illustration, testimonials or exact commercial claims into production."
+    },
+    {
+      "source_id": "A14",
+      "app": "CamScanner",
+      "app_id": "388627783",
+      "screen_id": "onb_lxdlq",
+      "screen_ref": "388627783/onb_lxdlq",
+      "screen_name": "Onboarding Referral Survey",
+      "retrieved_date": "2026-09-28",
+      "record_capture_date": "not supplied",
+      "evidence_type": "Appllama screen/flow/UI-element metadata",
+      "observation": "Referral-source survey with option rows, close and Done.",
+      "proposed_adaptation": "Make attribution an optional later question; never block a first PDF job.",
+      "pixel_reviewed": false,
+      "media_status": "Download blocked: container DNS failure; alternate fetch unavailable. No image bundled.",
+      "refresh_tool": {
+        "name": "Appllama.get_screen",
+        "arguments": {
+          "screen_ref": "388627783/onb_lxdlq"
+        }
+      },
+      "reuse_boundary": "Internal research reference only. Do not copy third-party branding, illustration, testimonials or exact commercial claims into production."
+    },
+    {
+      "source_id": "A15",
+      "app": "CamScanner",
+      "app_id": "388627783",
+      "screen_id": "pay_drcyy",
+      "screen_ref": "388627783/pay_drcyy",
+      "screen_name": "Free Trial Offer",
+      "retrieved_date": "2026-09-28",
+      "record_capture_date": "not supplied",
+      "evidence_type": "Appllama screen/flow/UI-element metadata",
+      "observation": "Hero preview, trial/plan rows, savings badge, billing note and legal links.",
+      "proposed_adaptation": "Connect payment to a demonstrated workflow and readable billing terms.",
+      "pixel_reviewed": false,
+      "media_status": "Download blocked: container DNS failure; alternate fetch unavailable. No image bundled.",
+      "refresh_tool": {
+        "name": "Appllama.get_screen",
+        "arguments": {
+          "screen_ref": "388627783/pay_drcyy"
+        }
+      },
+      "reuse_boundary": "Internal research reference only. Do not copy third-party branding, illustration, testimonials or exact commercial claims into production."
+    },
+    {
+      "source_id": "A16",
+      "app": "CamScanner",
+      "app_id": "388627783",
+      "screen_id": "pay_4evzh",
+      "screen_ref": "388627783/pay_4evzh",
+      "screen_name": "Subscription Offer",
+      "retrieved_date": "2026-09-28",
+      "record_capture_date": "not supplied",
+      "evidence_type": "Appllama screen/flow/UI-element metadata",
+      "observation": "Subscription offer metadata identifies a selected weekly row and recurring-billing note.",
+      "proposed_adaptation": "Do not import weekly auto-renewal as the Attenlo default.",
+      "pixel_reviewed": false,
+      "media_status": "Download blocked: container DNS failure; alternate fetch unavailable. No image bundled.",
+      "refresh_tool": {
+        "name": "Appllama.get_screen",
+        "arguments": {
+          "screen_ref": "388627783/pay_4evzh"
+        }
+      },
+      "reuse_boundary": "Internal research reference only. Do not copy third-party branding, illustration, testimonials or exact commercial claims into production."
+    },
+    {
+      "source_id": "A17",
+      "app": "Genius Scan",
+      "app_id": "377672876",
+      "screen_id": "pay_y6awx",
+      "screen_ref": "377672876/pay_y6awx",
+      "screen_name": "Subscription Offer",
+      "retrieved_date": "2026-09-28",
+      "record_capture_date": "not supplied",
+      "evidence_type": "Appllama screen/flow/UI-element metadata",
+      "observation": "Benefit icons, primary CTA, secondary Basic CTA and footer links.",
+      "proposed_adaptation": "Give the free route a clear, dignified exit.",
+      "pixel_reviewed": false,
+      "media_status": "Download blocked: container DNS failure; alternate fetch unavailable. No image bundled.",
+      "refresh_tool": {
+        "name": "Appllama.get_screen",
+        "arguments": {
+          "screen_ref": "377672876/pay_y6awx"
+        }
+      },
+      "reuse_boundary": "Internal research reference only. Do not copy third-party branding, illustration, testimonials or exact commercial claims into production."
+    },
+    {
+      "source_id": "A18",
+      "app": "Genius Scan",
+      "app_id": "377672876",
+      "screen_id": "oth_l9x40",
+      "screen_ref": "377672876/oth_l9x40",
+      "screen_name": "Settings and Help",
+      "retrieved_date": "2026-09-28",
+      "record_capture_date": "not supplied",
+      "evidence_type": "Appllama screen/flow/UI-element metadata",
+      "observation": "Grouped settings with current plan, account, export settings and support links.",
+      "proposed_adaptation": "Provide a compact plan and support centre outside the main workspace.",
+      "pixel_reviewed": false,
+      "media_status": "Download blocked: container DNS failure; alternate fetch unavailable. No image bundled.",
+      "refresh_tool": {
+        "name": "Appllama.get_screen",
+        "arguments": {
+          "screen_ref": "377672876/oth_l9x40"
+        }
+      },
+      "reuse_boundary": "Internal research reference only. Do not copy third-party branding, illustration, testimonials or exact commercial claims into production."
+    },
+    {
+      "source_id": "A19",
+      "app": "Genius Scan",
+      "app_id": "377672876",
+      "screen_id": "oth_qmzqn",
+      "screen_ref": "377672876/oth_qmzqn",
+      "screen_name": "Settings and Help continued",
+      "retrieved_date": "2026-09-28",
+      "record_capture_date": "not supplied",
+      "evidence_type": "Appllama screen/flow/UI-element metadata",
+      "observation": "Settings continuation with recognition, storage, help, social and about sections.",
+      "proposed_adaptation": "Include local storage and self-service help, omit unnecessary social clutter.",
+      "pixel_reviewed": false,
+      "media_status": "Download blocked: container DNS failure; alternate fetch unavailable. No image bundled.",
+      "refresh_tool": {
+        "name": "Appllama.get_screen",
+        "arguments": {
+          "screen_ref": "377672876/oth_qmzqn"
+        }
+      },
+      "reuse_boundary": "Internal research reference only. Do not copy third-party branding, illustration, testimonials or exact commercial claims into production."
+    },
+    {
+      "source_id": "A20",
+      "app": "Genius Scan",
+      "app_id": "377672876",
+      "screen_id": "oth_u17uh",
+      "screen_ref": "377672876/oth_u17uh",
+      "screen_name": "Genius Cloud",
+      "retrieved_date": "2026-09-28",
+      "record_capture_date": "not supplied",
+      "evidence_type": "Appllama screen/flow/UI-element metadata",
+      "observation": "Cloud-benefit card with create-account and login actions.",
+      "proposed_adaptation": "Tie login to a clear benefit, but do not copy cloud-sync claims into Attenlo.",
+      "pixel_reviewed": false,
+      "media_status": "Download blocked: container DNS failure; alternate fetch unavailable. No image bundled.",
+      "refresh_tool": {
+        "name": "Appllama.get_screen",
+        "arguments": {
+          "screen_ref": "377672876/oth_u17uh"
+        }
+      },
+      "reuse_boundary": "Internal research reference only. Do not copy third-party branding, illustration, testimonials or exact commercial claims into production."
+    },
+    {
+      "source_id": "A21",
+      "app": "Structured",
+      "app_id": "1499198946",
+      "screen_id": "onb_3ypjz",
+      "screen_ref": "1499198946/onb_3ypjz",
+      "screen_name": "Timeline Intro",
+      "retrieved_date": "2026-09-28",
+      "record_capture_date": "not supplied",
+      "evidence_type": "Appllama screen/flow/UI-element metadata",
+      "observation": "Skip link, pastel introductory preview, progress indicator and next action.",
+      "proposed_adaptation": "Keep playfulness and a skippable path; retain the approved palette.",
+      "pixel_reviewed": false,
+      "media_status": "Download blocked: container DNS failure; alternate fetch unavailable. No image bundled.",
+      "refresh_tool": {
+        "name": "Appllama.get_screen",
+        "arguments": {
+          "screen_ref": "1499198946/onb_3ypjz"
+        }
+      },
+      "reuse_boundary": "Internal research reference only. Do not copy third-party branding, illustration, testimonials or exact commercial claims into production."
+    },
+    {
+      "source_id": "A22",
+      "app": "Structured",
+      "app_id": "1499198946",
+      "screen_id": "onb_1fugx",
+      "screen_ref": "1499198946/onb_1fugx",
+      "screen_name": "Task Goal Entry",
+      "retrieved_date": "2026-09-28",
+      "record_capture_date": "not supplied",
+      "evidence_type": "Appllama screen/flow/UI-element metadata",
+      "observation": "Goal input with suggestion chips inside an onboarding sequence.",
+      "proposed_adaptation": "Let the user do a real task with a sample instruction rather than answer a persona survey.",
+      "pixel_reviewed": false,
+      "media_status": "Download blocked: container DNS failure; alternate fetch unavailable. No image bundled.",
+      "refresh_tool": {
+        "name": "Appllama.get_screen",
+        "arguments": {
+          "screen_ref": "1499198946/onb_1fugx"
+        }
+      },
+      "reuse_boundary": "Internal research reference only. Do not copy third-party branding, illustration, testimonials or exact commercial claims into production."
+    },
+    {
+      "source_id": "A23",
+      "app": "Structured",
+      "app_id": "1499198946",
+      "screen_id": "onb_0pz8o",
+      "screen_ref": "1499198946/onb_0pz8o",
+      "screen_name": "Notification Permission",
+      "retrieved_date": "2026-09-28",
+      "record_capture_date": "not supplied",
+      "evidence_type": "Appllama screen/flow/UI-element metadata",
+      "observation": "Success headline and plan summary precede a notification-permission presentation.",
+      "proposed_adaptation": "Request optional permissions only when there is a real benefit; no notifications at first launch.",
+      "pixel_reviewed": false,
+      "media_status": "Download blocked: container DNS failure; alternate fetch unavailable. No image bundled.",
+      "refresh_tool": {
+        "name": "Appllama.get_screen",
+        "arguments": {
+          "screen_ref": "1499198946/onb_0pz8o"
+        }
+      },
+      "reuse_boundary": "Internal research reference only. Do not copy third-party branding, illustration, testimonials or exact commercial claims into production."
+    },
+    {
+      "source_id": "A24",
+      "app": "Structured",
+      "app_id": "1499198946",
+      "screen_id": "pay_qlhga",
+      "screen_ref": "1499198946/pay_qlhga",
+      "screen_name": "Subscription Offer",
+      "retrieved_date": "2026-09-28",
+      "record_capture_date": "not supplied",
+      "evidence_type": "Appllama screen/flow/UI-element metadata",
+      "observation": "Brand-colour hero, product preview, price card, skip link and footer utilities.",
+      "proposed_adaptation": "Keep Attenlo paywalls visually part of the same product.",
+      "pixel_reviewed": false,
+      "media_status": "Download blocked: container DNS failure; alternate fetch unavailable. No image bundled.",
+      "refresh_tool": {
+        "name": "Appllama.get_screen",
+        "arguments": {
+          "screen_ref": "1499198946/pay_qlhga"
+        }
+      },
+      "reuse_boundary": "Internal research reference only. Do not copy third-party branding, illustration, testimonials or exact commercial claims into production."
+    },
+    {
+      "source_id": "A25",
+      "app": "Structured",
+      "app_id": "1499198946",
+      "screen_id": "pay_55w8r",
+      "screen_ref": "1499198946/pay_55w8r",
+      "screen_name": "Plan Selection Paywall",
+      "retrieved_date": "2026-09-28",
+      "record_capture_date": "not supplied",
+      "evidence_type": "Appllama screen/flow/UI-element metadata",
+      "observation": "Annual/monthly/lifetime choices, selected check and terms in a bottom sheet.",
+      "proposed_adaptation": "Use annual/monthly selection only; lifetime is not part of this model.",
+      "pixel_reviewed": false,
+      "media_status": "Download blocked: container DNS failure; alternate fetch unavailable. No image bundled.",
+      "refresh_tool": {
+        "name": "Appllama.get_screen",
+        "arguments": {
+          "screen_ref": "1499198946/pay_55w8r"
+        }
+      },
+      "reuse_boundary": "Internal research reference only. Do not copy third-party branding, illustration, testimonials or exact commercial claims into production."
+    },
+    {
+      "source_id": "A26",
+      "app": "Noted",
+      "app_id": "1149425482",
+      "screen_id": "oth_y5h83",
+      "screen_ref": "1149425482/oth_y5h83",
+      "screen_name": "My Plan",
+      "retrieved_date": "2026-09-28",
+      "record_capture_date": "not supplied",
+      "evidence_type": "Appllama screen/flow/UI-element metadata",
+      "observation": "Plan summary card, license action and account option cards.",
+      "proposed_adaptation": "Put plan status and recovery in a quiet, easy-to-find plan centre.",
+      "pixel_reviewed": false,
+      "media_status": "Download blocked: container DNS failure; alternate fetch unavailable. No image bundled.",
+      "refresh_tool": {
+        "name": "Appllama.get_screen",
+        "arguments": {
+          "screen_ref": "1149425482/oth_y5h83"
+        }
+      },
+      "reuse_boundary": "Internal research reference only. Do not copy third-party branding, illustration, testimonials or exact commercial claims into production."
+    }
+  ]
+}

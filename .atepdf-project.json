@@ -1,0 +1,7 @@
+{
+  "name": "atepdf",
+  "sourceStrategy": "fresh_independent_repository",
+  "handoff": "atepdf_codex_build_pack",
+  "version": 7,
+  "productionEnabled": false
+}

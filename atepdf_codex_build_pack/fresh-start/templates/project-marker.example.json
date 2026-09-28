@@ -1,0 +1,8 @@
+{
+  "product": "atepdf",
+  "build_origin": "fresh_repository",
+  "handoff_version": "7.0",
+  "legacy_policy": "read_only_reference",
+  "legacy_runtime_dependency_allowed": false,
+  "status": "template_not_created_in_application"
+}

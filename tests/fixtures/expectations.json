@@ -1,0 +1,118 @@
+{
+  "version": 3,
+  "synthetic_only": true,
+  "production_app_tested": false,
+  "purpose": "Small real inputs for local import, merge, page selection, OCR preservation and image-to-PDF tests; not a compression, multilingual, security or maximum-file-size benchmark.",
+  "files": {
+    "brief.pdf": {
+      "pages": 2,
+      "expected_page_markers": [
+        "A1",
+        "A2"
+      ],
+      "text_page_indexes": [
+        1,
+        2
+      ],
+      "raster_only_page_indexes": [],
+      "bytes": 3140,
+      "sha256": "6e7d2ffe2d9bd72f2de172b1e91648b915952b28face2eec1a88cc88172c6d90"
+    },
+    "appendix.pdf": {
+      "pages": 1,
+      "expected_page_markers": [
+        "B1"
+      ],
+      "text_page_indexes": [
+        1
+      ],
+      "raster_only_page_indexes": [],
+      "bytes": 2062,
+      "sha256": "c8d1d72a3f899992b2fba5cd247171712447c4f4fa60cf0c69bd9d811137e7a7"
+    },
+    "scanned-note.pdf": {
+      "pages": 1,
+      "expected_page_markers": [
+        "S1 after successful OCR"
+      ],
+      "text_page_indexes": [],
+      "raster_only_page_indexes": [
+        1
+      ],
+      "bytes": 130538,
+      "sha256": "19d8713895b5597021834c41b4190d12735800fd9482008823a2e6a786023874"
+    },
+    "mixed-text-and-scan.pdf": {
+      "pages": 3,
+      "expected_page_markers": [
+        "A1",
+        "S1 after successful OCR",
+        "B1"
+      ],
+      "text_page_indexes": [
+        1,
+        3
+      ],
+      "raster_only_page_indexes": [
+        2
+      ],
+      "bytes": 132811,
+      "sha256": "44972359f06ae6fb05d62450182ab33e2b1d2b2709429907ca9e4a098ea97b9c"
+    },
+    "image-input.png": {
+      "width": 1489,
+      "height": 2105,
+      "kind": "synthetic page image",
+      "bytes": 151885,
+      "sha256": "221f09c602cdc187293d9a2068ad86a0b51bc115bead956d22868678572a8d14"
+    }
+  },
+  "merge": {
+    "input_files": [
+      "brief.pdf",
+      "appendix.pdf"
+    ],
+    "expected_pages": 3,
+    "ordered_page_markers": [
+      "A1",
+      "A2",
+      "B1"
+    ]
+  },
+  "follow_up": {
+    "instruction": "Remove physical page 2 from the merged result.",
+    "expected_pages": 2,
+    "ordered_page_markers": [
+      "A1",
+      "B1"
+    ]
+  },
+  "undo": {
+    "expected_pages": 3,
+    "ordered_page_markers": [
+      "A1",
+      "A2",
+      "B1"
+    ],
+    "rule": "Switch to prior committed output; do not mutate originals."
+  },
+  "ocr": {
+    "input": "mixed-text-and-scan.pdf",
+    "expected_pages": 3,
+    "scan_physical_page": 2,
+    "search_phrase": "Paperwork made simple",
+    "invoice_reference": "DEMO-0042",
+    "preserve_existing_text_pages": [
+      1,
+      3
+    ],
+    "rule": "The scan is image-only before processing. Successful OCR requires an actual searchable/selectable text layer with correct geometry, independent search/copy verification and preservation review. No OCR is performed in this handoff."
+  },
+  "network_canaries": [
+    "ATTENLO_LOCAL_ONLY_CANARY_A1_7C82",
+    "ATTENLO_LOCAL_ONLY_CANARY_A2_9B14",
+    "ATTENLO_LOCAL_ONLY_CANARY_B1_3A65",
+    "ATTENLO_LOCAL_ONLY_CANARY_S1_8F20"
+  ],
+  "canary_use": "Detect these values or derivative image/text payloads in outgoing app/provider requests; they must not appear. Exact string absence alone is not proof of no leakage, so also inspect request content type, schema and binary/base64 payloads."
+}

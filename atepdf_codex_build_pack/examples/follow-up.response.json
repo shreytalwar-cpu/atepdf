@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "1.0",
+  "status": "plan",
+  "reasonCode": null,
+  "steps": [
+    {
+      "id": "s_1",
+      "operation": "select_pages",
+      "inputs": [
+        "out_final"
+      ],
+      "outputRef": "out_result",
+      "params": {
+        "action": "remove",
+        "pages": {
+          "mode": "last",
+          "count": 2
+        }
+      }
+    }
+  ],
+  "resultRefs": [
+    "out_result"
+  ],
+  "clarification": null
+}

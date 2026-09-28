@@ -1,0 +1,48 @@
+{
+  "renderScale": 1,
+  "ocrUnchangedPixels": [
+    {
+      "meanAbsoluteRGBDifference": 0,
+      "changedChannels": 0,
+      "maxChannelDifference": 0
+    },
+    {
+      "meanAbsoluteRGBDifference": 0,
+      "changedChannels": 0,
+      "maxChannelDifference": 0
+    },
+    {
+      "meanAbsoluteRGBDifference": 0,
+      "changedChannels": 0,
+      "maxChannelDifference": 0
+    },
+    {
+      "meanAbsoluteRGBDifference": 0,
+      "changedChannels": 0,
+      "maxChannelDifference": 0
+    }
+  ],
+  "compressionQualityMeasurements": [
+    {
+      "meanAbsoluteRGBDifference": 0,
+      "changedChannels": 0,
+      "maxChannelDifference": 0
+    },
+    {
+      "meanAbsoluteRGBDifference": 0,
+      "changedChannels": 0,
+      "maxChannelDifference": 0
+    },
+    {
+      "meanAbsoluteRGBDifference": 0,
+      "changedChannels": 0,
+      "maxChannelDifference": 0
+    },
+    {
+      "meanAbsoluteRGBDifference": 0.844706329342622,
+      "changedChannels": 934510,
+      "maxChannelDifference": 27
+    }
+  ],
+  "textBaselinesInPage": true
+}

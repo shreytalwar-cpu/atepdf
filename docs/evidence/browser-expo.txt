@@ -1,0 +1,12 @@
+
+Running 5 tests using 1 worker
+
+(node:87966) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/workflow.spec.ts:8:5 › real merge → preview/save → remove physical page 2 → undo; local-only network (2.1s)
+  ✓  2 tests/e2e/workflow.spec.ts:23:5 › responsive workspace, keyboard height, privacy and save cancellation (1.1s)
+  ✓  3 tests/e2e/workflow.spec.ts:30:5 › real merge → OCR → compression preserves text and produces a measured smaller PDF without egress (3.0s)
+  ✓  4 tests/e2e/workflow.spec.ts:41:5 › chat clarification, cancellation and discard guard keep committed results intact (1.3s)
+  ✓  5 tests/e2e/workflow.spec.ts:60:5 › one chat recipe commits only the final merge → OCR → compression result (2.9s)
+
+  5 passed (11.5s)

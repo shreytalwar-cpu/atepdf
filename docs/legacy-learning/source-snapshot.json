@@ -1,0 +1,35 @@
+{
+  "root": "/Users/shrey/Documents/attenlo/attenlo-docs",
+  "commit": null,
+  "reason": "Unborn main branch; inspected working source snapshot",
+  "files": [
+    {
+      "path": "/Users/shrey/Documents/attenlo/attenlo-docs/src/engine/pdf.ts",
+      "sha256": "ef5b59cd74f5f0f5b2201970170df0271881c3ed1af887596b9e9e9744479c97"
+    },
+    {
+      "path": "/Users/shrey/Documents/attenlo/attenlo-docs/src/engine/worker.ts",
+      "sha256": "7c9dff167bafc5e50c8360690b329497634f391e8818c7481ab1cd721700aa64"
+    },
+    {
+      "path": "/Users/shrey/Documents/attenlo/attenlo-docs/src/workflow.ts",
+      "sha256": "7d6361d3f7fbefb544613ca6109b75836fe600798dd2f6c7d497d97fa2bf654e"
+    },
+    {
+      "path": "/Users/shrey/Documents/attenlo/attenlo-docs/tests/result-preview.test.ts",
+      "sha256": "bad23f522f39254c1f5a56deab39339c125a93d47b2ea6e3bb04828030daefbc"
+    },
+    {
+      "path": "/Users/shrey/Documents/attenlo/attenlo-docs/tests/workflows.test.ts",
+      "sha256": "25acf908e3b5377038b0cbf4f278ac302596c6d98e883aa3f073d35bde052017"
+    },
+    {
+      "path": "/Users/shrey/Documents/attenlo/attenlo-docs/CODE_AUDIT.md",
+      "sha256": "f7973f962a3c2b1d3d915fcdd1555d67d6c9654556759e2233cb60511caa5bf1"
+    },
+    {
+      "path": "/Users/shrey/Documents/attenlo/attenlo-docs/docs/RELEASE_STATUS.md",
+      "sha256": "cce9c376718e15d9a535405512bca7bd2c51588677e1041973686b7105f5eed3"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "1.0",
+  "status": "plan",
+  "reasonCode": null,
+  "steps": [
+    {
+      "id": "s_1",
+      "operation": "compress_pdf",
+      "inputs": [
+        "file_a",
+        "file_b",
+        "file_c"
+      ],
+      "outputRef": "out_batch",
+      "params": {
+        "targetBytes": null,
+        "preset": "balanced",
+        "batchMode": "per_file"
+      }
+    },
+    {
+      "id": "s_2",
+      "operation": "export_zip",
+      "inputs": [
+        "out_batch"
+      ],
+      "outputRef": "out_zip",
+      "params": {}
+    }
+  ],
+  "resultRefs": [
+    "out_zip"
+  ],
+  "clarification": null
+}

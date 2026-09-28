@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Attenlo minimal growth event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "event",
+    "platform",
+    "occurred_at",
+    "origin",
+    "event_id"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 2
+    },
+    "event": {
+      "enum": [
+        "workspace_ready",
+        "sample_started",
+        "files_added",
+        "ai_consent_allowed",
+        "ai_consent_declined",
+        "plan_requested",
+        "clarification_shown",
+        "job_validated",
+        "job_failed",
+        "job_cancelled",
+        "preview_opened",
+        "export_initiated",
+        "native_save_confirmed",
+        "share_sheet_presented",
+        "repeat_session_job",
+        "offer_viewed",
+        "offer_dismissed",
+        "plan_selected",
+        "checkout_started",
+        "purchase_pending",
+        "purchase_verified",
+        "purchase_cancelled",
+        "purchase_failed",
+        "restore_started",
+        "restore_succeeded",
+        "restore_failed",
+        "account_linked",
+        "renewal_cancelled",
+        "entitlement_expired",
+        "entitlement_revoked",
+        "billing_grace_entered",
+        "billing_recovered",
+        "renewal_verified",
+        "refund_verified",
+        "recipe_saved",
+        "recipe_replayed",
+        "support_requested",
+        "quota_released",
+        "quota_committed"
+      ]
+    },
+    "platform": {
+      "enum": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ]
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "origin": {
+      "enum": [
+        "client",
+        "verified_server"
+      ]
+    },
+    "sample": {
+      "type": "boolean"
+    },
+    "plan": {
+      "enum": [
+        "free",
+        "monthly",
+        "annual",
+        "unknown"
+      ]
+    },
+    "placement": {
+      "enum": [
+        "none",
+        "explicit_pro",
+        "free_quota",
+        "recipe",
+        "batch",
+        "post_result_link",
+        "settings"
+      ]
+    },
+    "success": {
+      "type": "boolean"
+    },
+    "count_bucket": {
+      "enum": [
+        "0",
+        "1",
+        "2-5",
+        "6-20",
+        "21-100",
+        "100+"
+      ]
+    },
+    "duration_bucket": {
+      "enum": [
+        "under_2s",
+        "2-10s",
+        "10-60s",
+        "1-5m",
+        "over_5m"
+      ]
+    },
+    "error_code": {
+      "enum": [
+        "NONE",
+        "NETWORK",
+        "UNSUPPORTED",
+        "FILE_ACCESS",
+        "PDF_INVALID",
+        "PASSWORD_REQUIRED",
+        "RESOURCE_LIMIT",
+        "ENGINE_FAILURE",
+        "CANCELLED",
+        "STORE_PENDING",
+        "STORE_FAILED",
+        "ENTITLEMENT_CONFLICT",
+        "QUOTA",
+        "VERIFICATION_PENDING"
+      ]
+    },
+    "cohort": {
+      "enum": [
+        "control",
+        "EXP-01-A",
+        "EXP-01-B",
+        "EXP-02-A",
+        "EXP-02-B",
+        "EXP-03-A",
+        "EXP-03-B",
+        "EXP-04-A",
+        "EXP-04-B",
+        "EXP-05-A",
+        "EXP-05-B"
+      ]
+    },
+    "event_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Random purpose-limited identifier, never derived from filenames, document hashes, advertising IDs or fingerprinting. Optional linkage only under appropriate consent/purpose."
+    },
+    "subject_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Random purpose-limited identifier, never derived from filenames, document hashes, advertising IDs or fingerprinting. Optional linkage only under appropriate consent/purpose."
+    },
+    "session_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Random purpose-limited identifier, never derived from filenames, document hashes, advertising IDs or fingerprinting. Optional linkage only under appropriate consent/purpose."
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "enum": [
+              "purchase_verified",
+              "renewal_verified",
+              "refund_verified",
+              "entitlement_revoked",
+              "billing_grace_entered",
+              "billing_recovered",
+              "quota_committed",
+              "quota_released"
+            ]
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "properties": {
+          "origin": {
+            "const": "verified_server"
+          }
+        }
+      }
+    }
+  ]
+}

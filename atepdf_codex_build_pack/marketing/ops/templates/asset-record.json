@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "creative_id": "APDF-US-WEB-PACK-C01-E01-H01-V01",
+  "status": "draft",
+  "file_path": null,
+  "sha256": null,
+  "source_build": null,
+  "synthetic_inputs_only": true,
+  "real_processing_verified": false,
+  "time_compression_disclosed": false,
+  "claim_ids": [],
+  "rights_evidence": [],
+  "rights_valid_through": null,
+  "landing_version": null,
+  "price_version": null,
+  "approved_by": null,
+  "approval_evidence_ref": null,
+  "publication_allowed": false
+}

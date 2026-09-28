@@ -1,0 +1,27 @@
+$ node scripts/assets.mjs && next build apps/web --webpack
+Pinned local PDF, OCR and English assets prepared.
+▲ Next.js 16.3.6 (webpack)
+✓ Running next.config.ts took 53ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 1582ms
+  Running TypeScript ...
+  Finished TypeScript in 212ms ...
+  Collecting page data using 5 workers ...
+  Generating static pages using 5 workers (0/4) ...
+  Generating static pages using 5 workers (1/4) 
+  Generating static pages using 5 workers (2/4) 
+  Generating static pages using 5 workers (3/4) 
+✓ Generating static pages using 5 workers (4/4) in 276ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+└ ƒ /api/planner
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

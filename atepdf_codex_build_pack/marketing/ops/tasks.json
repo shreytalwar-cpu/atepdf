@@ -1,0 +1,247 @@
+{
+  "version": 5,
+  "task_count": 16,
+  "relationship": "Completes specific gaps in retained PM01–PM24; no replacement backlog. Dependencies on PM tasks must be satisfied in the app.",
+  "tasks": [
+    {
+      "id": "OP01",
+      "priority": "P0",
+      "title": "Merge shared product context and verify tool inventory",
+      "depends_on": [],
+      "existing_marketing_tasks": [
+        "PM01"
+      ],
+      "acceptance_evidence": "Observed host/repo inventory; no secrets or assumed connections",
+      "status": "not_started_in_application"
+    },
+    {
+      "id": "OP02",
+      "priority": "P0",
+      "title": "Review and pin selected skills and MCP configuration",
+      "depends_on": [
+        "OP01"
+      ],
+      "existing_marketing_tasks": [
+        "PM01"
+      ],
+      "acceptance_evidence": "Resolved revisions/licences and reviewed configuration diffs; inactive defaults",
+      "status": "not_started_in_application"
+    },
+    {
+      "id": "OP03",
+      "priority": "P0",
+      "title": "Create creative IDs, claim and rights records",
+      "depends_on": [
+        "OP01"
+      ],
+      "existing_marketing_tasks": [
+        "PM07",
+        "PM08",
+        "PM13"
+      ],
+      "acceptance_evidence": "Original-footage chain with hashes, evidence and rights period",
+      "status": "not_started_in_application"
+    },
+    {
+      "id": "OP04",
+      "priority": "P0",
+      "title": "Close in-app-browser and consent-denied journey gaps",
+      "depends_on": [
+        "OP01"
+      ],
+      "existing_marketing_tasks": [
+        "PM02",
+        "PM04",
+        "PM05",
+        "PM06"
+      ],
+      "acceptance_evidence": "Real target-browser import/result/checkout/export checks",
+      "status": "not_started_in_application"
+    },
+    {
+      "id": "OP05",
+      "priority": "P1",
+      "title": "Implement a reproducible real-footage rendering recipe",
+      "depends_on": [
+        "OP02",
+        "OP03"
+      ],
+      "existing_marketing_tasks": [
+        "PM07",
+        "PM13"
+      ],
+      "acceptance_evidence": "Local Remotion render with clear speed-up labels and inspected cuts",
+      "status": "not_started_in_application"
+    },
+    {
+      "id": "OP06",
+      "priority": "P1",
+      "title": "Verify correct analytics/billing/ad account reads",
+      "depends_on": [
+        "OP02"
+      ],
+      "existing_marketing_tasks": [
+        "PM03",
+        "PM10",
+        "PM11"
+      ],
+      "acceptance_evidence": "Authorised read evidence per account/currency/timezone, no writes",
+      "status": "not_started_in_application"
+    },
+    {
+      "id": "OP07",
+      "priority": "P1",
+      "title": "Reconcile plan-mix CAC and source versions",
+      "depends_on": [
+        "OP06"
+      ],
+      "existing_marketing_tasks": [
+        "PM12",
+        "PM17",
+        "PM21"
+      ],
+      "acceptance_evidence": "Actuals/unknowns separated; costs allocated once",
+      "status": "not_started_in_application"
+    },
+    {
+      "id": "OP08",
+      "priority": "P1",
+      "title": "Prepare email authentication, suppression and draft lifecycle",
+      "depends_on": [
+        "OP02"
+      ],
+      "existing_marketing_tasks": [
+        "PM15",
+        "PM16"
+      ],
+      "acceptance_evidence": "DNS/provider/test-inbox evidence and deny/withdrawal suppression tests",
+      "status": "not_started_in_application"
+    },
+    {
+      "id": "OP09",
+      "priority": "P1",
+      "title": "Create de-identified feedback and partner workflow",
+      "depends_on": [
+        "OP03"
+      ],
+      "existing_marketing_tasks": [
+        "PM08",
+        "PM16",
+        "PM22"
+      ],
+      "acceptance_evidence": "Genuine observation records or clearly empty templates; rights/disclosure controls",
+      "status": "not_started_in_application"
+    },
+    {
+      "id": "OP10",
+      "priority": "P1",
+      "title": "Prepare baseline SEO and native listing kit",
+      "depends_on": [
+        "OP03",
+        "OP04"
+      ],
+      "existing_marketing_tasks": [
+        "PM05",
+        "PM19",
+        "PM20"
+      ],
+      "acceptance_evidence": "Draft supported-feature screenshots, routes, metadata and help pages",
+      "status": "not_started_in_application"
+    },
+    {
+      "id": "OP11",
+      "priority": "P1",
+      "title": "Connect Buffer drafts only when needed",
+      "depends_on": [
+        "OP02",
+        "OP03"
+      ],
+      "existing_marketing_tasks": [
+        "PM16"
+      ],
+      "acceptance_evidence": "Correct brand/channels and private drafts; no live schedule",
+      "status": "not_started_in_application"
+    },
+    {
+      "id": "OP12",
+      "priority": "P1",
+      "title": "Implement owner approval, caps and version binding",
+      "depends_on": [
+        "OP03",
+        "OP06"
+      ],
+      "existing_marketing_tasks": [
+        "PM09",
+        "PM23",
+        "PM24"
+      ],
+      "acceptance_evidence": "Actual secure approval and platform limit tests, beyond local reference checker",
+      "status": "not_started_in_application"
+    },
+    {
+      "id": "OP13",
+      "priority": "P2",
+      "title": "Validate staged public discovery and review timing",
+      "depends_on": [
+        "OP09",
+        "OP10"
+      ],
+      "existing_marketing_tasks": [
+        "PM20",
+        "PM22"
+      ],
+      "acceptance_evidence": "Permissioned outreach/listing plan; no incentives or invented reviews",
+      "status": "not_started_in_application"
+    },
+    {
+      "id": "OP14",
+      "priority": "P1",
+      "title": "Run an incident-response drill",
+      "depends_on": [
+        "OP04",
+        "OP06",
+        "OP12"
+      ],
+      "existing_marketing_tasks": [
+        "PM23",
+        "PM24"
+      ],
+      "acceptance_evidence": "Sanitised privacy/output/spend/entitlement failure drills with known owner controls",
+      "status": "not_started_in_application"
+    },
+    {
+      "id": "OP15",
+      "priority": "P2",
+      "title": "Add approved read-only reporting schedule only after manual proof",
+      "depends_on": [
+        "OP07",
+        "OP12"
+      ],
+      "existing_marketing_tasks": [
+        "PM17",
+        "PM21",
+        "PM22"
+      ],
+      "acceptance_evidence": "Explicit scheduler/timezone/credentials/dedupe; no auto-publication",
+      "status": "not_started_in_application"
+    },
+    {
+      "id": "OP16",
+      "priority": "P1",
+      "title": "Assemble final launch evidence and unresolved approvals",
+      "depends_on": [
+        "OP04",
+        "OP05",
+        "OP07",
+        "OP08",
+        "OP12",
+        "OP14"
+      ],
+      "existing_marketing_tasks": [
+        "PM24"
+      ],
+      "acceptance_evidence": "One owner review packet; no scheduled deadline overrides readiness",
+      "status": "not_started_in_application"
+    }
+  ]
+}

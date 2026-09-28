@@ -1,0 +1,51 @@
+{
+  "status": "selection_to_review_not_installed",
+  "checked_date": "2026-09-28",
+  "repository": "https://github.com/coreyhaines31/marketingskills",
+  "resolved_revision": null,
+  "groups": {
+    "foundation": [
+      "product-marketing",
+      "customer-research"
+    ],
+    "first_campaign": [
+      "ads",
+      "ad-creative",
+      "copywriting",
+      "copy-editing",
+      "cro"
+    ],
+    "measurement": [
+      "analytics",
+      "attribution",
+      "ab-testing"
+    ],
+    "lifecycle_when_needed": [
+      "onboarding",
+      "paywalls",
+      "emails"
+    ],
+    "discovery_when_needed": [
+      "social",
+      "seo-audit",
+      "aso"
+    ]
+  },
+  "external_benchmarks_are_not_attenlo_targets": true,
+  "specialist_repositories": [
+    "https://github.com/remotion-dev/skills",
+    "https://github.com/appllama/appllama-skills",
+    "https://github.com/RevenueCat/ai-toolkit",
+    "https://github.com/resend/resend-skills"
+  ],
+  "existing_skill_families": [
+    "frontend-app-builder",
+    "frontend-testing-debugging",
+    "react-best-practices",
+    "shadcn",
+    "swiftui-patterns",
+    "build-run-debug",
+    "test-triage"
+  ],
+  "policy": "Discover exact paths and names at the pinned revision. Install only needed skills; no account access is conferred."
+}

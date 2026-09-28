@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "experiment_id": "EXP-UNASSIGNED",
+  "status": "draft",
+  "hypothesis": "A real command-to-result demo attracts repeat document-pack users.",
+  "primary_metric": "verified_first_purchases_per_eligible_prospect",
+  "guardrails": [
+    "valid_real_result_rate",
+    "refunds",
+    "support_load",
+    "privacy",
+    "gross_cash_cap"
+  ],
+  "market": "US",
+  "language": "en",
+  "channel": "meta_web",
+  "account_alias": null,
+  "creative_ids": [],
+  "landing_version": null,
+  "price_version": null,
+  "starts_at": null,
+  "ends_at": null,
+  "approved_cash_cap_minor": 0,
+  "currency": "INR",
+  "approved": false,
+  "sample_size_basis": null,
+  "observation_windows": {
+    "operating_click_days": 7,
+    "cohort_days": 30
+  },
+  "actuals": null,
+  "decision": null
+}

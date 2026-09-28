@@ -1,0 +1,18 @@
+{
+  "version": "7.0",
+  "new_project_root": null,
+  "legacy_reference_root": null,
+  "legacy_reference_mode": "read_only",
+  "legacy_source_status": "not_inspected",
+  "new_repository_creation_authorized": true,
+  "legacy_writes_authorized": false,
+  "whole_repository_copy_authorized": false,
+  "legacy_runtime_dependency_allowed": false,
+  "production_migration_authorized": false,
+  "remote_creation_or_push_authorized": false,
+  "notes": [
+    "Fill absolute paths locally after owner confirmation; do not commit private absolute paths.",
+    "Missing legacy source is not a reason to stop the new scaffold.",
+    "This is a policy/configuration example, not operating-system permission enforcement."
+  ]
+}

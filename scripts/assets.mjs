@@ -1,0 +1,20 @@
+import { cp, mkdir, readdir } from 'node:fs/promises';
+import { createRequire } from 'node:module';
+import { dirname, join } from 'node:path';
+const require = createRequire(import.meta.url);
+const dest = 'apps/web/public/engines';
+await mkdir(dest, { recursive: true });
+const pdf = dirname(require.resolve('pdfjs-dist/package.json'));
+await cp(join(pdf, 'build/pdf.worker.min.mjs'), join(dest,'pdf.worker.min.mjs'));
+for (const dir of ['standard_fonts','cmaps','wasm']) await cp(join(pdf,dir),join(dest,dir),{recursive:true});
+const tess = dirname(require.resolve('tesseract.js/package.json'));
+await cp(join(tess,'dist/worker.min.js'),join(dest,'tesseract-worker.min.js'));
+const core = dirname(createRequire(join(tess,'package.json')).resolve('tesseract.js-core/package.json'));
+for (const f of await readdir(core)) if (/\.wasm(\.js)?$/.test(f)) await cp(join(core,f),join(dest,f));
+const eng = dirname(require.resolve('@tesseract.js-data/eng/package.json'));
+await cp(join(eng,'4.0.0/eng.traineddata.gz'),join(dest,'eng.traineddata.gz'));
+console.log('Pinned local PDF, OCR and English assets prepared.');
+
+const {build}=await import('esbuild');
+await build({entryPoints:['packages/web-pdf/src/pdf.worker.ts'],bundle:true,format:'esm',platform:'browser',target:'es2022',outfile:join(dest,'atepdf.worker.js'),minify:true});
+await cp(dest,'apps/universal/public/engines',{recursive:true});

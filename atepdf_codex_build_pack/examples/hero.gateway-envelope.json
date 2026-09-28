@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.0",
+  "requestId": "req_example",
+  "workspaceRevision": 4,
+  "planner": {
+    "schemaVersion": "1.0",
+    "status": "plan",
+    "reasonCode": null,
+    "steps": [
+      {
+        "id": "s_1",
+        "operation": "merge_pdf",
+        "inputs": [
+          "file_a",
+          "file_b",
+          "file_c"
+        ],
+        "outputRef": "out_merged",
+        "params": {
+          "ordering": "as_provided"
+        }
+      },
+      {
+        "id": "s_2",
+        "operation": "ocr_pdf",
+        "inputs": [
+          "out_merged"
+        ],
+        "outputRef": "out_searchable",
+        "params": {
+          "languages": [
+            "eng"
+          ],
+          "existingText": "preserve",
+          "batchMode": "single"
+        }
+      },
+      {
+        "id": "s_3",
+        "operation": "compress_pdf",
+        "inputs": [
+          "out_searchable"
+        ],
+        "outputRef": "out_final",
+        "params": {
+          "targetBytes": 4999999,
+          "preset": "balanced",
+          "batchMode": "single"
+        }
+      }
+    ],
+    "resultRefs": [
+      "out_final"
+    ],
+    "clarification": null
+  }
+}

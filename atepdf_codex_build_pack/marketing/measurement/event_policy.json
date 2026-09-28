@@ -1,0 +1,61 @@
+{
+  "version": "1.0",
+  "status": "DRAFT_NO_LIVE_TRANSMISSION",
+  "marketing_consent_default": "denied",
+  "workspace_third_party_ad_tags": false,
+  "workspace_session_replay": false,
+  "publication_approved": false,
+  "spend_approved": false,
+  "allowed_events": [
+    "LandingView",
+    "Activated",
+    "CheckoutOpened",
+    "FirstPurchase"
+  ],
+  "allowed_fields": [
+    "event_name",
+    "event_id",
+    "event_time",
+    "campaign_id",
+    "creative_id",
+    "market",
+    "platform",
+    "currency",
+    "value"
+  ],
+  "forbidden_fields": [
+    "filename",
+    "file_path",
+    "document_text",
+    "ocr_text",
+    "pdf",
+    "pdf_bytes",
+    "prompt",
+    "raw_prompt",
+    "preview",
+    "image",
+    "email",
+    "phone",
+    "user_agent",
+    "ip",
+    "cookie",
+    "raw_url"
+  ],
+  "purchase_requirements": {
+    "verified": true,
+    "is_first_payment": true,
+    "provider_state": "paid"
+  },
+  "attribution": {
+    "primary_click_days": 7,
+    "cohort_supplement_days": 30,
+    "unknown_remains_unknown": true
+  },
+  "notes": [
+    "Example allowlist only; not a complete Meta or Google payload contract.",
+    "Any additional matching identifiers require explicit privacy review, consent and provider-specific validation.",
+    "Prefer one server-origin first-purchase dispatch; do not emit renewal/restore events as acquisition purchases.",
+    "Do not put raw instruction, file references containing names, or document data into approved string fields.",
+    "Transport failures never permit fallback to document upload or consent bypass."
+  ]
+}

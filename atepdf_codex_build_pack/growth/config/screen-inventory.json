@@ -1,0 +1,230 @@
+{
+  "version": 2,
+  "not_all_are_separate_pages": true,
+  "states": [
+    {
+      "id": "UI-01",
+      "name": "Fresh workspace",
+      "trigger": "Launch",
+      "requirement": "Original approved empty state",
+      "priority": "P0"
+    },
+    {
+      "id": "UI-02",
+      "name": "Sample recipe",
+      "trigger": "User taps Try a sample",
+      "requirement": "Real local synthetic demo, not fake AI",
+      "priority": "P0"
+    },
+    {
+      "id": "UI-03",
+      "name": "File import cancelled/denied",
+      "trigger": "Picker result",
+      "requirement": "Retain draft; selected scope only",
+      "priority": "P0"
+    },
+    {
+      "id": "UI-04",
+      "name": "Files loaded",
+      "trigger": "Files added",
+      "requirement": "Compact cards and composer",
+      "priority": "P0"
+    },
+    {
+      "id": "UI-05",
+      "name": "Cloud AI consent",
+      "trigger": "First remote instruction",
+      "requirement": "Provider and boundary, accept/refuse",
+      "priority": "P0"
+    },
+    {
+      "id": "UI-06",
+      "name": "Clarification",
+      "trigger": "Ambiguous supported command",
+      "requirement": "One relevant choice, no debit",
+      "priority": "P0"
+    },
+    {
+      "id": "UI-07",
+      "name": "Processing / cancel",
+      "trigger": "Validated plan",
+      "requirement": "Real progress, originals retained",
+      "priority": "P0"
+    },
+    {
+      "id": "UI-08",
+      "name": "Result / follow-up",
+      "trigger": "Local validation complete",
+      "requirement": "Measured facts, preview/save/share",
+      "priority": "P0"
+    },
+    {
+      "id": "UI-09",
+      "name": "Preview / export cancelled",
+      "trigger": "User requests output",
+      "requirement": "Read-only preview; result remains ready",
+      "priority": "P0"
+    },
+    {
+      "id": "UI-10",
+      "name": "Free quota exhausted",
+      "trigger": "Next new cloud job",
+      "requirement": "Reset date + local alternatives + Pro",
+      "priority": "P0"
+    },
+    {
+      "id": "UI-11",
+      "name": "Contextual Pro offer",
+      "trigger": "User Pro intent",
+      "requirement": "Two live-priced plans, free exit, restore",
+      "priority": "P0"
+    },
+    {
+      "id": "UI-12",
+      "name": "Product metadata unavailable",
+      "trigger": "Store config/network issue",
+      "requirement": "Disable purchase, preserve free work",
+      "priority": "P0"
+    },
+    {
+      "id": "UI-13",
+      "name": "Checkout cancelled / declined",
+      "trigger": "Provider result",
+      "requirement": "No extra debit or duplicate request",
+      "priority": "P0"
+    },
+    {
+      "id": "UI-14",
+      "name": "Purchase pending / verifying",
+      "trigger": "Provider result",
+      "requirement": "Retain work; no second charge",
+      "priority": "P0"
+    },
+    {
+      "id": "UI-15",
+      "name": "Purchase verified / safe resume",
+      "trigger": "Server entitlement",
+      "requirement": "Revalidate local manifest then continue",
+      "priority": "P0"
+    },
+    {
+      "id": "UI-16",
+      "name": "Restore no match / conflict / success",
+      "trigger": "User restore",
+      "requirement": "Explicit account-safe resolution",
+      "priority": "P0"
+    },
+    {
+      "id": "UI-17",
+      "name": "Account link / sign-in",
+      "trigger": "Cross-device user intent",
+      "requirement": "No document sync claim",
+      "priority": "P0"
+    },
+    {
+      "id": "UI-18",
+      "name": "My plan / manage billing",
+      "trigger": "Secondary menu",
+      "requirement": "Allowance and renewal/expiry separately",
+      "priority": "P0"
+    },
+    {
+      "id": "UI-19",
+      "name": "Cancelled but entitled",
+      "trigger": "Provider state",
+      "requirement": "Access through verified expiry",
+      "priority": "P0"
+    },
+    {
+      "id": "UI-20",
+      "name": "Grace / hold / expired / revoked",
+      "trigger": "Provider state",
+      "requirement": "Correct access, no document deletion",
+      "priority": "P0"
+    },
+    {
+      "id": "UI-21",
+      "name": "Pro allowance exhausted",
+      "trigger": "Paying user usage limit",
+      "requirement": "No buy-Pro-again offer",
+      "priority": "P0"
+    },
+    {
+      "id": "UI-22",
+      "name": "Offline / unsupported / resource limit",
+      "trigger": "Preflight/engine error",
+      "requirement": "Local alternatives, no hidden cloud",
+      "priority": "P0"
+    },
+    {
+      "id": "UI-23",
+      "name": "Partial batch / quota repair",
+      "trigger": "Execution failure",
+      "requirement": "Explicit subset and idempotent recovery",
+      "priority": "P0"
+    },
+    {
+      "id": "UI-24",
+      "name": "Saved recipes / repeat job",
+      "trigger": "Recurring use",
+      "requirement": "Fresh local selection, no unnecessary AI",
+      "priority": "P1"
+    },
+    {
+      "id": "UI-25",
+      "name": "History / missing handle",
+      "trigger": "Return session",
+      "requirement": "Only real persisted outputs, reimport",
+      "priority": "P0"
+    },
+    {
+      "id": "UI-26",
+      "name": "Help / redacted diagnostics",
+      "trigger": "Report problem",
+      "requirement": "No attached documents or raw prompts",
+      "priority": "P0"
+    },
+    {
+      "id": "UI-27",
+      "name": "Privacy / withdraw / clear local data",
+      "trigger": "Settings",
+      "requirement": "Separate data/consent controls",
+      "priority": "P0"
+    },
+    {
+      "id": "UI-28",
+      "name": "Account deletion",
+      "trigger": "Account action",
+      "requirement": "Provider billing distinction; no barriers",
+      "priority": "P0"
+    },
+    {
+      "id": "UI-29",
+      "name": "System review / share app",
+      "trigger": "Later eligible success",
+      "requirement": "No sentiment gate or reward",
+      "priority": "P1"
+    },
+    {
+      "id": "UI-30",
+      "name": "Optional reminders / education",
+      "trigger": "User-specific request",
+      "requirement": "Consent and reliable delivery only",
+      "priority": "P2"
+    },
+    {
+      "id": "UI-31",
+      "name": "Provider-backed trial",
+      "trigger": "Approved future experiment",
+      "requirement": "Eligibility and exact charge timeline",
+      "priority": "P2"
+    },
+    {
+      "id": "UI-32",
+      "name": "Browser-to-app handoff",
+      "trigger": "User requests app",
+      "requirement": "Link entitlement; files reselected locally",
+      "priority": "P1"
+    }
+  ]
+}

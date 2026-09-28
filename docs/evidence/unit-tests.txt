@@ -1,0 +1,16 @@
+✔ L01/L02: actual merge, physical-page follow-up, independent text order, immutable originals and undo (911.5255ms)
+✔ complete plans only; stale, duplicate and malicious envelopes never execute (27.169458ms)
+✔ remove all, out-of-range, duplicate input, future output and unsupported language rejected (14.505375ms)
+✔ L03: save cancellation and browser initiation never claim persistent save (0.29825ms)
+✔ L04: cancellation and failed independent validation cannot promote a candidate (8.072708ms)
+✔ local metadata cannot leak through the positive planner projection (0.238875ms)
+✔ damaged, active, form and oversized PDF features fail closed (2.894583ms)
+✔ unhelpful compression retains actual input bytes with honest result (5.842083ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1527.927834

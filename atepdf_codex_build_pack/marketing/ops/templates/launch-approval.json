@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "status": "draft_not_authority",
+  "approved": false,
+  "account_alias": null,
+  "campaign_id": null,
+  "currency": "INR",
+  "cash_cap_minor": 0,
+  "starts_at": null,
+  "expires_at": null,
+  "asset_sha256": null,
+  "landing_version": null,
+  "price_version": null,
+  "approval_evidence_ref": null,
+  "note": "Reference shape only. Actual approval must be authenticated and stored outside agent-editable records; no authorisation is conferred."
+}

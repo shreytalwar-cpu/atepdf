@@ -1,0 +1,842 @@
+{
+  "note": "Specification only. Runtime must advertise only tested operations. No handler implementation is bundled.",
+  "operations": [
+    {
+      "id": "merge_pdf",
+      "protocolVersion": "1.0",
+      "execution": "local",
+      "implementationStatus": "not_implemented_in_this_pack",
+      "platformsPlanned": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "requiresRealEngineTest": true,
+      "requiresLocalSecret": false,
+      "releaseGate": "core",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "ordering": {
+            "const": "as_provided"
+          }
+        },
+        "required": [
+          "ordering"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "select_pages",
+      "protocolVersion": "1.0",
+      "execution": "local",
+      "implementationStatus": "not_implemented_in_this_pack",
+      "platformsPlanned": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "requiresRealEngineTest": true,
+      "requiresLocalSecret": false,
+      "releaseGate": "core",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "enum": [
+              "extract",
+              "remove"
+            ]
+          },
+          "pages": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "const": "all"
+                  }
+                },
+                "required": [
+                  "mode"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "const": "explicit"
+                  },
+                  "indices": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 100000
+                    },
+                    "minItems": 1,
+                    "maxItems": 10000,
+                    "uniqueItems": true
+                  }
+                },
+                "required": [
+                  "mode",
+                  "indices"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "enum": [
+                      "first",
+                      "last"
+                    ]
+                  },
+                  "count": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100000
+                  }
+                },
+                "required": [
+                  "mode",
+                  "count"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "enum": [
+                      "odd",
+                      "even"
+                    ]
+                  }
+                },
+                "required": [
+                  "mode"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "required": [
+          "action",
+          "pages"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "split_pdf",
+      "protocolVersion": "1.0",
+      "execution": "local",
+      "implementationStatus": "not_implemented_in_this_pack",
+      "platformsPlanned": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "requiresRealEngineTest": true,
+      "requiresLocalSecret": false,
+      "releaseGate": "core",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "mode": {
+            "enum": [
+              "each_page",
+              "fixed_size",
+              "ranges"
+            ]
+          },
+          "pagesPerFile": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 100000
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "ranges": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "start": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 100000
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 100000
+                }
+              },
+              "required": [
+                "start",
+                "end"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 0,
+            "maxItems": 1000
+          }
+        },
+        "required": [
+          "mode",
+          "pagesPerFile",
+          "ranges"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "reorder_pdf",
+      "protocolVersion": "1.0",
+      "execution": "local",
+      "implementationStatus": "not_implemented_in_this_pack",
+      "platformsPlanned": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "requiresRealEngineTest": true,
+      "requiresLocalSecret": false,
+      "releaseGate": "core",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "pageOrder": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100000
+            },
+            "minItems": 1,
+            "maxItems": 10000,
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "pageOrder"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "rotate_pdf",
+      "protocolVersion": "1.0",
+      "execution": "local",
+      "implementationStatus": "not_implemented_in_this_pack",
+      "platformsPlanned": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "requiresRealEngineTest": true,
+      "requiresLocalSecret": false,
+      "releaseGate": "core",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "pages": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "const": "all"
+                  }
+                },
+                "required": [
+                  "mode"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "const": "explicit"
+                  },
+                  "indices": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 100000
+                    },
+                    "minItems": 1,
+                    "maxItems": 10000,
+                    "uniqueItems": true
+                  }
+                },
+                "required": [
+                  "mode",
+                  "indices"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "enum": [
+                      "first",
+                      "last"
+                    ]
+                  },
+                  "count": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100000
+                  }
+                },
+                "required": [
+                  "mode",
+                  "count"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "enum": [
+                      "odd",
+                      "even"
+                    ]
+                  }
+                },
+                "required": [
+                  "mode"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "degrees": {
+            "enum": [
+              90,
+              180,
+              270
+            ]
+          }
+        },
+        "required": [
+          "pages",
+          "degrees"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "reverse_pdf",
+      "protocolVersion": "1.0",
+      "execution": "local",
+      "implementationStatus": "not_implemented_in_this_pack",
+      "platformsPlanned": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "requiresRealEngineTest": true,
+      "requiresLocalSecret": false,
+      "releaseGate": "core",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "compress_pdf",
+      "protocolVersion": "1.0",
+      "execution": "local",
+      "implementationStatus": "not_implemented_in_this_pack",
+      "platformsPlanned": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "requiresRealEngineTest": true,
+      "requiresLocalSecret": false,
+      "releaseGate": "core",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "targetBytes": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 2147483647
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "preset": {
+            "enum": [
+              "balanced",
+              "lossless",
+              "smaller"
+            ]
+          },
+          "batchMode": {
+            "enum": [
+              "single",
+              "per_file"
+            ]
+          }
+        },
+        "required": [
+          "targetBytes",
+          "preset",
+          "batchMode"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "ocr_pdf",
+      "protocolVersion": "1.0",
+      "execution": "local",
+      "implementationStatus": "not_implemented_in_this_pack",
+      "platformsPlanned": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "requiresRealEngineTest": true,
+      "requiresLocalSecret": false,
+      "releaseGate": "core",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "languages": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9_+-]{2,24}$"
+            },
+            "minItems": 1,
+            "maxItems": 5,
+            "uniqueItems": true
+          },
+          "existingText": {
+            "const": "preserve"
+          },
+          "batchMode": {
+            "enum": [
+              "single",
+              "per_file"
+            ]
+          }
+        },
+        "required": [
+          "languages",
+          "existingText",
+          "batchMode"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "images_to_pdf",
+      "protocolVersion": "1.0",
+      "execution": "local",
+      "implementationStatus": "not_implemented_in_this_pack",
+      "platformsPlanned": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "requiresRealEngineTest": true,
+      "requiresLocalSecret": false,
+      "releaseGate": "core",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "pageSizing": {
+            "enum": [
+              "fit_image",
+              "a4",
+              "letter"
+            ]
+          }
+        },
+        "required": [
+          "pageSizing"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "pdf_to_images",
+      "protocolVersion": "1.0",
+      "execution": "local",
+      "implementationStatus": "not_implemented_in_this_pack",
+      "platformsPlanned": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "requiresRealEngineTest": true,
+      "requiresLocalSecret": false,
+      "releaseGate": "core",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "pages": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "const": "all"
+                  }
+                },
+                "required": [
+                  "mode"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "const": "explicit"
+                  },
+                  "indices": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 100000
+                    },
+                    "minItems": 1,
+                    "maxItems": 10000,
+                    "uniqueItems": true
+                  }
+                },
+                "required": [
+                  "mode",
+                  "indices"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "enum": [
+                      "first",
+                      "last"
+                    ]
+                  },
+                  "count": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100000
+                  }
+                },
+                "required": [
+                  "mode",
+                  "count"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "enum": [
+                      "odd",
+                      "even"
+                    ]
+                  }
+                },
+                "required": [
+                  "mode"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "format": {
+            "enum": [
+              "jpeg",
+              "png"
+            ]
+          },
+          "dpi": {
+            "type": "integer",
+            "minimum": 72,
+            "maximum": 300
+          }
+        },
+        "required": [
+          "pages",
+          "format",
+          "dpi"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "extract_text",
+      "protocolVersion": "1.0",
+      "execution": "local",
+      "implementationStatus": "not_implemented_in_this_pack",
+      "platformsPlanned": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "requiresRealEngineTest": true,
+      "requiresLocalSecret": false,
+      "releaseGate": "core",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "pages": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "const": "all"
+                  }
+                },
+                "required": [
+                  "mode"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "const": "explicit"
+                  },
+                  "indices": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 100000
+                    },
+                    "minItems": 1,
+                    "maxItems": 10000,
+                    "uniqueItems": true
+                  }
+                },
+                "required": [
+                  "mode",
+                  "indices"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "enum": [
+                      "first",
+                      "last"
+                    ]
+                  },
+                  "count": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100000
+                  }
+                },
+                "required": [
+                  "mode",
+                  "count"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "enum": [
+                      "odd",
+                      "even"
+                    ]
+                  }
+                },
+                "required": [
+                  "mode"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "ocrIfNeeded": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "pages",
+          "ocrIfNeeded"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "remove_metadata",
+      "protocolVersion": "1.0",
+      "execution": "local",
+      "implementationStatus": "not_implemented_in_this_pack",
+      "platformsPlanned": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "requiresRealEngineTest": true,
+      "requiresLocalSecret": false,
+      "releaseGate": "extension",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "removeInfo": {
+            "const": true
+          },
+          "removeXmp": {
+            "const": true
+          }
+        },
+        "required": [
+          "removeInfo",
+          "removeXmp"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "protect_pdf",
+      "protocolVersion": "1.0",
+      "execution": "local",
+      "implementationStatus": "not_implemented_in_this_pack",
+      "platformsPlanned": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "requiresRealEngineTest": true,
+      "requiresLocalSecret": true,
+      "releaseGate": "extension",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "algorithm": {
+            "const": "aes256"
+          },
+          "requiresLocalSecret": {
+            "const": true
+          }
+        },
+        "required": [
+          "algorithm",
+          "requiresLocalSecret"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "unlock_pdf",
+      "protocolVersion": "1.0",
+      "execution": "local",
+      "implementationStatus": "not_implemented_in_this_pack",
+      "platformsPlanned": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "requiresRealEngineTest": true,
+      "requiresLocalSecret": true,
+      "releaseGate": "extension",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "requiresLocalSecret": {
+            "const": true
+          }
+        },
+        "required": [
+          "requiresLocalSecret"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "export_zip",
+      "protocolVersion": "1.0",
+      "execution": "local",
+      "implementationStatus": "not_implemented_in_this_pack",
+      "platformsPlanned": [
+        "web",
+        "android",
+        "ios",
+        "ipados",
+        "macos"
+      ],
+      "requiresRealEngineTest": true,
+      "requiresLocalSecret": false,
+      "releaseGate": "core",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      }
+    }
+  ]
+}

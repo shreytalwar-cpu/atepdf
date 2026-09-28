@@ -1,0 +1,31 @@
+$ python3 scripts/validate_handoff.py
+PASS: handoff schema, reference semantics and artifact consistency checks
+{
+  "adversarial_cases_rejected": 21,
+  "backlog_tasks": 65,
+  "context_binding_checks": 3,
+  "declared_operations": 15,
+  "defined_sources": 26,
+  "example_envelopes_events": 2,
+  "example_plan_pairs": 4,
+  "json_documents": 30,
+  "present_design_references": 3,
+  "seed_cases_validated": 118,
+  "valid_schemas": 4
+}
+NOT RUN: live model evaluation, PDF processing, application builds, device/browser UI tests, production network/privacy audit.
+
+$ python3 scripts/validate_growth_handoff.py
+PASS: v2 reference policy, evidence registry, financial copies and configuration checks
+{
+  "reference_gate_cases": 54,
+  "invalid_contexts_rejected": 6,
+  "event_privacy_origin_checks": 4,
+  "safe_default_config": true,
+  "appllama_metadata_refs": 26,
+  "additional_tasks": 30,
+  "specified_not_run_app_acceptance_cases": 52,
+  "unchanged_financial_artifacts": 6,
+  "specified_ui_states": 32
+}
+NOT RUN: app UI, local PDF engines, live model, store purchases, subscription webhooks, production privacy or conversion tests.

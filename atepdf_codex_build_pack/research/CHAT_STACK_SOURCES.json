@@ -1,0 +1,72 @@
+{
+  "version": 3,
+  "checked": "2026-09-28",
+  "type": "primary_source_design_evidence_not_runtime_benchmark",
+  "sources": [
+    {
+      "id": "CS01",
+      "title": "Minimal shadcn Chatbot README",
+      "url": "https://github.com/shadcn-ui/chatbot-template/blob/main/README.md",
+      "checked": "2026-09-28",
+      "method": "web search/open",
+      "use": "Minimal Next.js/AI SDK/shadcn template with streaming, tool calls and clarification examples.",
+      "limit": "No build or full dependency security audit performed."
+    },
+    {
+      "id": "CS02",
+      "title": "Minimal shadcn Chatbot API route",
+      "url": "https://github.com/shadcn-ui/chatbot-template/blob/main/app/api/chat/route.ts",
+      "checked": "2026-09-28",
+      "method": "GitHub.fetch_file",
+      "git_blob_sha": "4254cb2ad9df6840d2c52991e12d2b19ba5ee2ef",
+      "use": "Public endpoint warning, message validation, model/step/output controls and abort handling; must add production access/rate/budget controls.",
+      "limit": "Blob SHA is not repository commit or released package version."
+    },
+    {
+      "id": "CS03",
+      "title": "Minimal shadcn Chatbot Chat component",
+      "url": "https://github.com/shadcn-ui/chatbot-template/blob/main/components/chat.tsx",
+      "checked": "2026-09-28",
+      "method": "GitHub.fetch_file",
+      "git_blob_sha": "957d2ae53e05f3962817659bbc9493dd6fc866cf",
+      "use": "useChat lifecycle, scroller integration, clarification handling and automatic tool-result continuation.",
+      "limit": "Source inspection only; no app runtime test."
+    },
+    {
+      "id": "CS04",
+      "title": "AI SDK transport documentation",
+      "url": "https://ai-sdk.dev/docs/ai-sdk-ui/transport",
+      "checked": "2026-09-28",
+      "method": "web search; direct open unsupported markdown type",
+      "use": "Custom request/response transport boundary; version-matched integration required.",
+      "limit": "Search index freshness is not a dependency pin."
+    },
+    {
+      "id": "CS05",
+      "title": "assistant-ui ExternalStoreRuntime",
+      "url": "https://www.assistant-ui.com/docs/runtimes/custom/external-store",
+      "checked": "2026-09-28",
+      "method": "web search",
+      "use": "Host-owned state and capability-based UI; supports the documented fallback design.",
+      "limit": "No performance comparison or migration implementation."
+    },
+    {
+      "id": "CS06",
+      "title": "assistant-ui attachments",
+      "url": "https://www.assistant-ui.com/docs/guides/attachments",
+      "checked": "2026-09-28",
+      "method": "web search",
+      "use": "Default AI SDK adapter converts files to base64 and sends file-content parts; unsuitable for the default Attenlo pipeline.",
+      "limit": "A custom adapter can change behaviour; not a claim that the library cannot support local-only files."
+    },
+    {
+      "id": "CS07",
+      "title": "Codex project instructions",
+      "url": "https://developers.openai.com/codex/guides/agents-md",
+      "checked": "2026-09-28",
+      "method": "web open; official redirect",
+      "use": "Project instructions have path scope; nested handoff rules must be read/merged for sibling application code.",
+      "limit": "Do not overwrite existing repository/global instructions."
+    }
+  ]
+}

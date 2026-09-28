@@ -1,0 +1,230 @@
+{
+  "original_zip": "Attenlo_PDF_Codex_Build_Pack_2026-09-27.zip",
+  "all_original_entries_present": true,
+  "items": [
+    {
+      "path": ".agents/skills/attenlo-command-evals/SKILL.md",
+      "status": "unchanged"
+    },
+    {
+      "path": ".agents/skills/attenlo-local-processing/SKILL.md",
+      "status": "unchanged"
+    },
+    {
+      "path": ".agents/skills/attenlo-release-check/SKILL.md",
+      "status": "unchanged"
+    },
+    {
+      "path": ".agents/skills/attenlo-ui-fidelity/SKILL.md",
+      "status": "unchanged"
+    },
+    {
+      "path": "AGENTS.md",
+      "status": "updated_document"
+    },
+    {
+      "path": "DESIGN.md",
+      "status": "updated_document"
+    },
+    {
+      "path": "FILE_MANIFEST.json",
+      "status": "regenerated_manifest"
+    },
+    {
+      "path": "MASTER_BUILD_PLAN.md",
+      "status": "updated_document"
+    },
+    {
+      "path": "PACK_VALIDATION_REPORT.md",
+      "status": "unchanged"
+    },
+    {
+      "path": "README.md",
+      "status": "updated_document"
+    },
+    {
+      "path": "SOURCES.md",
+      "status": "unchanged"
+    },
+    {
+      "path": "START_HERE.md",
+      "status": "updated_document"
+    },
+    {
+      "path": "contracts/README.md",
+      "status": "unchanged"
+    },
+    {
+      "path": "contracts/gateway-envelope.schema.json",
+      "status": "unchanged"
+    },
+    {
+      "path": "contracts/local-job-event.schema.json",
+      "status": "unchanged"
+    },
+    {
+      "path": "contracts/operation-registry.json",
+      "status": "unchanged"
+    },
+    {
+      "path": "contracts/planner-request.schema.json",
+      "status": "unchanged"
+    },
+    {
+      "path": "contracts/planner-response.schema.json",
+      "status": "unchanged"
+    },
+    {
+      "path": "design/REFERENCE_NOTES.md",
+      "status": "unchanged"
+    },
+    {
+      "path": "design/references/approved-ipad.jpeg",
+      "status": "unchanged"
+    },
+    {
+      "path": "design/references/approved-iphone.jpeg",
+      "status": "unchanged"
+    },
+    {
+      "path": "design/references/desktop-style-reference.png",
+      "status": "unchanged"
+    },
+    {
+      "path": "design/tokens.json",
+      "status": "unchanged"
+    },
+    {
+      "path": "docs/01_PRODUCT_AND_SCOPE.md",
+      "status": "unchanged"
+    },
+    {
+      "path": "docs/02_ARCHITECTURE.md",
+      "status": "unchanged"
+    },
+    {
+      "path": "docs/03_ENGINE_STRATEGY.md",
+      "status": "unchanged"
+    },
+    {
+      "path": "docs/04_AI_AND_PROTOCOL.md",
+      "status": "unchanged"
+    },
+    {
+      "path": "docs/05_PRIVACY_AND_SECURITY.md",
+      "status": "unchanged"
+    },
+    {
+      "path": "docs/06_PLATFORM_IMPLEMENTATION.md",
+      "status": "unchanged"
+    },
+    {
+      "path": "docs/07_BUILD_BACKLOG.md",
+      "status": "unchanged"
+    },
+    {
+      "path": "docs/08_TESTING_AND_RELEASE.md",
+      "status": "unchanged"
+    },
+    {
+      "path": "docs/09_MONETIZATION_AND_LAUNCH.md",
+      "status": "updated_document"
+    },
+    {
+      "path": "docs/10_CODEX_SKILLS_AND_TOOLS.md",
+      "status": "updated_document"
+    },
+    {
+      "path": "docs/11_EDGE_CASES_AND_DECISIONS.md",
+      "status": "unchanged"
+    },
+    {
+      "path": "docs/BUILD_TASKS.json",
+      "status": "unchanged"
+    },
+    {
+      "path": "docs/IMPLEMENTATION_STATUS_TEMPLATE.md",
+      "status": "unchanged"
+    },
+    {
+      "path": "examples/batch.request.json",
+      "status": "unchanged"
+    },
+    {
+      "path": "examples/batch.response.json",
+      "status": "unchanged"
+    },
+    {
+      "path": "examples/follow-up.request.json",
+      "status": "unchanged"
+    },
+    {
+      "path": "examples/follow-up.response.json",
+      "status": "unchanged"
+    },
+    {
+      "path": "examples/hero.gateway-envelope.json",
+      "status": "unchanged"
+    },
+    {
+      "path": "examples/hero.request.json",
+      "status": "unchanged"
+    },
+    {
+      "path": "examples/hero.response.json",
+      "status": "unchanged"
+    },
+    {
+      "path": "examples/local-progress.event.json",
+      "status": "unchanged"
+    },
+    {
+      "path": "examples/repeat.request.json",
+      "status": "unchanged"
+    },
+    {
+      "path": "examples/repeat.response.json",
+      "status": "unchanged"
+    },
+    {
+      "path": "prompts/FEW_SHOT_POLICY.md",
+      "status": "unchanged"
+    },
+    {
+      "path": "prompts/planner_system.md",
+      "status": "unchanged"
+    },
+    {
+      "path": "reference/.env.example",
+      "status": "unchanged"
+    },
+    {
+      "path": "reference/requirements-dev.txt",
+      "status": "unchanged"
+    },
+    {
+      "path": "reference/validate_plan.py",
+      "status": "unchanged"
+    },
+    {
+      "path": "scripts/validate_handoff.py",
+      "status": "unchanged"
+    },
+    {
+      "path": "tests/README.md",
+      "status": "unchanged"
+    },
+    {
+      "path": "tests/dataset_manifest.json",
+      "status": "unchanged"
+    },
+    {
+      "path": "tests/invalid_plan_cases.jsonl",
+      "status": "unchanged"
+    },
+    {
+      "path": "tests/planner_seed_cases.jsonl",
+      "status": "unchanged"
+    }
+  ]
+}

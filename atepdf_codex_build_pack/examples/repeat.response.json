@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1.0",
+  "status": "plan",
+  "reasonCode": null,
+  "steps": [
+    {
+      "id": "s_1",
+      "operation": "ocr_pdf",
+      "inputs": [
+        "file_a",
+        "file_b",
+        "file_c"
+      ],
+      "outputRef": "out_searchable_batch",
+      "params": {
+        "languages": [
+          "eng"
+        ],
+        "existingText": "preserve",
+        "batchMode": "per_file"
+      }
+    },
+    {
+      "id": "s_2",
+      "operation": "compress_pdf",
+      "inputs": [
+        "out_searchable_batch"
+      ],
+      "outputRef": "out_final_batch",
+      "params": {
+        "targetBytes": 4999999,
+        "preset": "balanced",
+        "batchMode": "per_file"
+      }
+    }
+  ],
+  "resultRefs": [
+    "out_final_batch"
+  ],
+  "clarification": null
+}

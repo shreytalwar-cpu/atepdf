@@ -1,0 +1,119 @@
+[
+  {
+    "name": "expo",
+    "version": "57.0.25",
+    "license": "MIT",
+    "peerDependencies": {
+      "react": "*",
+      "react-dom": "*",
+      "react-native": "*",
+      "react-native-web": "*",
+      "@expo/dom-webview": "*",
+      "@expo/metro-runtime": "*",
+      "react-native-webview": "*"
+    }
+  },
+  {
+    "name": "react-native",
+    "version": "0.87.1",
+    "license": "MIT",
+    "peerDependencies": {
+      "react": "^19.2.3",
+      "@types/react": "^19.1.1"
+    }
+  },
+  {
+    "name": "react-native-web",
+    "version": "0.21.3",
+    "license": "MIT",
+    "peerDependencies": {
+      "react": "^18.0.0 || ^19.0.0",
+      "react-dom": "^18.0.0 || ^19.0.0"
+    }
+  },
+  {
+    "name": "expo-document-picker",
+    "version": "57.0.2",
+    "license": "MIT",
+    "peerDependencies": {
+      "expo": "*"
+    }
+  },
+  {
+    "name": "expo-file-system",
+    "version": "57.0.7",
+    "license": "MIT",
+    "peerDependencies": {
+      "expo": "*",
+      "react-native": "*"
+    }
+  },
+  {
+    "name": "expo-sharing",
+    "version": "57.0.22",
+    "license": "MIT",
+    "peerDependencies": {
+      "expo": "*",
+      "react": "*",
+      "react-native": "*"
+    }
+  },
+  {
+    "name": "expo-crypto",
+    "version": "57.0.3",
+    "license": "MIT",
+    "peerDependencies": {
+      "expo": "*"
+    }
+  },
+  {
+    "name": "expo-asset",
+    "version": "57.0.18",
+    "license": "MIT",
+    "peerDependencies": {
+      "expo": "*",
+      "react": "*",
+      "react-native": "*"
+    }
+  },
+  {
+    "name": "react-native-safe-area-context",
+    "version": "5.10.0",
+    "license": "MIT",
+    "peerDependencies": {
+      "react": "*",
+      "react-native": "*"
+    }
+  },
+  {
+    "name": "lucide-react-native",
+    "version": "1.48.0",
+    "license": "ISC",
+    "peerDependencies": {
+      "react": "^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0",
+      "react-native": "*",
+      "react-native-svg": "^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0"
+    }
+  },
+  {
+    "name": "react-native-svg",
+    "version": "15.15.5",
+    "license": "MIT",
+    "peerDependencies": {
+      "react": "*",
+      "react-native": "*"
+    }
+  },
+  {
+    "name": "@expo/metro-runtime",
+    "version": "57.0.16",
+    "license": "MIT",
+    "peerDependencies": {
+      "expo": "*",
+      "react": "*",
+      "react-dom": "*",
+      "react-native": "*",
+      "@expo/log-box": "^57.0.4"
+    }
+  }
+]

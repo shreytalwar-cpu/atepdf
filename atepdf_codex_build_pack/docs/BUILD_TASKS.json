@@ -1,0 +1,528 @@
+{
+  "version": "7.0",
+  "taskCount": 65,
+  "phases": 8,
+  "tasks": [
+    {
+      "id": "M0-01",
+      "phase": "M0",
+      "phaseTitle": "Fresh repository, legacy learning and technical risk",
+      "task": "Validate separate new/legacy roots and initialise or safely resume the NEW atepdf project.",
+      "acceptanceEvidence": "New Git root not nested/shared with legacy; old source untouched; instructions and destination recorded.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M0-02",
+      "phase": "M0",
+      "phaseTitle": "Fresh repository, legacy learning and technical risk",
+      "task": "Read old source/tests without writes; create fresh web baseline and reproduce useful cases in new tests.",
+      "acceptanceEvidence": "Source/commit or unavailable status; new runnable app; no builds/install/tests in old checkout.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M0-03",
+      "phase": "M0",
+      "phaseTitle": "Fresh repository, legacy learning and technical risk",
+      "task": "Inventory dependencies and upstream/transitive licences.",
+      "acceptanceEvidence": "Exact version/licence/source/maintenance report.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M0-04",
+      "phase": "M0",
+      "phaseTitle": "Fresh repository, legacy learning and technical risk",
+      "task": "Record legacy lessons, selective-port decisions and new clean architecture.",
+      "acceptanceEvidence": "Evidence levels, provenance and regression test map; no bulk old source or runtime dependency.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M0-05",
+      "phase": "M0",
+      "phaseTitle": "Fresh repository, legacy learning and technical risk",
+      "task": "Compression spike on representative PDFs.",
+      "acceptanceEvidence": "Actual input/output bytes, render/text checks, target-not-met path.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M0-06",
+      "phase": "M0",
+      "phaseTitle": "Fresh repository, legacy learning and technical risk",
+      "task": "Searchable OCR spike on real synthetic scans.",
+      "acceptanceEvidence": "Independently searchable output; text/geometry checks.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M0-07",
+      "phase": "M0",
+      "phaseTitle": "Fresh repository, legacy learning and technical risk",
+      "task": "Android local writer and browser native/WASM spike.",
+      "acceptanceEvidence": "Running local merge and packaging evidence, not repo discovery alone.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M0-08",
+      "phase": "M0",
+      "phaseTitle": "Fresh repository, legacy learning and technical risk",
+      "task": "Establish task board, capability matrix and risk register.",
+      "acceptanceEvidence": "Clear blocked/experimental/tested statuses.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M1-01",
+      "phase": "M1",
+      "phaseTitle": "Approved interface plus a real file result",
+      "task": "Token/config layer and shared copy keys.",
+      "acceptanceEvidence": "Brand changed in one place; no rejected rebrands.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M1-02",
+      "phase": "M1",
+      "phaseTitle": "Approved interface plus a real file result",
+      "task": "Responsive empty workspace in NEW atepdf web source.",
+      "acceptanceEvidence": "Screenshot comparison at phone/tablet/desktop.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M1-03",
+      "phase": "M1",
+      "phaseTitle": "Approved interface plus a real file result",
+      "task": "Fresh SwiftUI Apple empty/loaded/result states.",
+      "acceptanceEvidence": "Actual iPhone/iPad/Mac renders and keyboard behaviour.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M1-04",
+      "phase": "M1",
+      "phaseTitle": "Approved interface plus a real file result",
+      "task": "Fresh Kotlin/Compose Android empty/loaded/result states.",
+      "acceptanceEvidence": "Compose runtime/emulator screenshots, not a static image.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M1-05",
+      "phase": "M1",
+      "phaseTitle": "Approved interface plus a real file result",
+      "task": "Local import, MIME sniffing, IDs and preflight.",
+      "acceptanceEvidence": "File bytes never sent; malformed/encrypted/unsupported tests.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M1-06",
+      "phase": "M1",
+      "phaseTitle": "Approved interface plus a real file result",
+      "task": "Real two-file merge through adapter/executor.",
+      "acceptanceEvidence": "Independently reopened output in correct order.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M1-07",
+      "phase": "M1",
+      "phaseTitle": "Approved interface plus a real file result",
+      "task": "Read-only preview and real save/share/export.",
+      "acceptanceEvidence": "File saved only after picker confirmation; cancellation handled.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M1-08",
+      "phase": "M1",
+      "phaseTitle": "Approved interface plus a real file result",
+      "task": "Immutable originals, result focus and undo foundation.",
+      "acceptanceEvidence": "Original hashes unchanged locally; previous version restored.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M1-09",
+      "phase": "M1",
+      "phaseTitle": "Approved interface plus a real file result",
+      "task": "Privacy disclosure and event-driven progress.",
+      "acceptanceEvidence": "No AI call for Merge shortcut; no synthetic timer progress.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M2-01",
+      "phase": "M2",
+      "phaseTitle": "Cloud instruction interpretation and conversational state",
+      "task": "Integrate request/response schemas and generate DTOs.",
+      "acceptanceEvidence": "Contract fixtures pass on TypeScript, Swift and Kotlin.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M2-02",
+      "phase": "M2",
+      "phaseTitle": "Cloud instruction interpretation and conversational state",
+      "task": "Build positive request serializer.",
+      "acceptanceEvidence": "Filename/text/password canary tests reject leaks.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M2-03",
+      "phase": "M2",
+      "phaseTitle": "Cloud instruction interpretation and conversational state",
+      "task": "Backend provider adapter, secret handling and no-store config.",
+      "acceptanceEvidence": "Real bounded API call; no secrets in client bundle.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M2-04",
+      "phase": "M2",
+      "phaseTitle": "Cloud instruction interpretation and conversational state",
+      "task": "Planner prompt + operation allowlist.",
+      "acceptanceEvidence": "Golden cases compile to expected plans.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M2-05",
+      "phase": "M2",
+      "phaseTitle": "Cloud instruction interpretation and conversational state",
+      "task": "Local semantic compiler and stale-plan protection.",
+      "acceptanceEvidence": "Bad refs, invalid ranges, cycles and unsupported ops rejected.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M2-06",
+      "phase": "M2",
+      "phaseTitle": "Cloud instruction interpretation and conversational state",
+      "task": "Multi-step chaining and result collections.",
+      "acceptanceEvidence": "No reupload/reimport; upstream outputs feed downstream steps.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M2-07",
+      "phase": "M2",
+      "phaseTitle": "Cloud instruction interpretation and conversational state",
+      "task": "Current/original/focused-result context.",
+      "acceptanceEvidence": "Follow-up cases pass across multiple versions.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M2-08",
+      "phase": "M2",
+      "phaseTitle": "Cloud instruction interpretation and conversational state",
+      "task": "Clarification, cancellation, outage and retry UX.",
+      "acceptanceEvidence": "One useful question; local actions still work with gateway blocked.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M2-09",
+      "phase": "M2",
+      "phaseTitle": "Cloud instruction interpretation and conversational state",
+      "task": "Guest quotas, abuse controls, budget circuit breaker.",
+      "acceptanceEvidence": "No unbounded request loops; useful rate-limit error.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M2-10",
+      "phase": "M2",
+      "phaseTitle": "Cloud instruction interpretation and conversational state",
+      "task": "Initial held-out planner evaluation.",
+      "acceptanceEvidence": "Accuracy/latency/cost report; no hand-picked success-only demo.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M3-01",
+      "phase": "M3",
+      "phaseTitle": "Dependable everyday local tools",
+      "task": "Split/extract/delete with one-based page selectors.",
+      "acceptanceEvidence": "First/last/ranges/reverse/invalid/all-deleted cases.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M3-02",
+      "phase": "M3",
+      "phaseTitle": "Dependable everyday local tools",
+      "task": "Reorder/rotate/reverse and exact ordering semantics.",
+      "acceptanceEvidence": "Page geometry and visual checks; displayed input order respected.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M3-03",
+      "phase": "M3",
+      "phaseTitle": "Dependable everyday local tools",
+      "task": "JPEG/PNG to PDF.",
+      "acceptanceEvidence": "EXIF/order/page-size tests; all advertised images supported.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M3-04",
+      "phase": "M3",
+      "phaseTitle": "Dependable everyday local tools",
+      "task": "PDF to page images.",
+      "acceptanceEvidence": "Correct count/order/naming; oversized raster handling.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M3-05",
+      "phase": "M3",
+      "phaseTitle": "Dependable everyday local tools",
+      "task": "Digital text extraction to UTF-8.",
+      "acceptanceEvidence": "Unicode and per-page separation; no cloud text transmission.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M3-06",
+      "phase": "M3",
+      "phaseTitle": "Dependable everyday local tools",
+      "task": "Bounded batch executor and partial-success UI.",
+      "acceptanceEvidence": "One failed file does not masquerade as full success.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M3-07",
+      "phase": "M3",
+      "phaseTitle": "Dependable everyday local tools",
+      "task": "ZIP export and safe output naming.",
+      "acceptanceEvidence": "Archives reopen; traversal/collision tests pass.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M3-08",
+      "phase": "M3",
+      "phaseTitle": "Dependable everyday local tools",
+      "task": "Preservation preflight and unsupported document handling.",
+      "acceptanceEvidence": "Signed/complex-form/tagged cases fail safely where unsupported.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M4-01",
+      "phase": "M4",
+      "phaseTitle": "Hero workflow: compression and searchable OCR",
+      "task": "Compression candidate pipeline.",
+      "acceptanceEvidence": "Meaningful reduction on intended corpus; text/vector preservation.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M4-02",
+      "phase": "M4",
+      "phaseTitle": "Hero workflow: compression and searchable OCR",
+      "task": "Target-size logic and quality review.",
+      "acceptanceEvidence": "Decimal/MiB tests; under-target truthful; no silent rasterisation.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M4-03",
+      "phase": "M4",
+      "phaseTitle": "Hero workflow: compression and searchable OCR",
+      "task": "Local page classification and OCR scheduling.",
+      "acceptanceEvidence": "Skip existing text where appropriate; mixed-document handling.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M4-04",
+      "phase": "M4",
+      "phaseTitle": "Hero workflow: compression and searchable OCR",
+      "task": "Searchable text-layer writer/composition.",
+      "acceptanceEvidence": "Independent search/copy and before/after visual comparison.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M4-05",
+      "phase": "M4",
+      "phaseTitle": "Hero workflow: compression and searchable OCR",
+      "task": "OCR language asset loading/caching/capabilities.",
+      "acceptanceEvidence": "Real language availability; no pretend universal support.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M4-06",
+      "phase": "M4",
+      "phaseTitle": "Hero workflow: compression and searchable OCR",
+      "task": "Merge -> OCR -> compress -> final validation chain.",
+      "acceptanceEvidence": "Actual final size includes text layer; all inputs/pages accounted for.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M4-07",
+      "phase": "M4",
+      "phaseTitle": "Hero workflow: compression and searchable OCR",
+      "task": "Memory limits, pause/cancel/interruption and cleanup.",
+      "acceptanceEvidence": "Mid-range mobile tests; no corrupt committed output.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M4-08",
+      "phase": "M4",
+      "phaseTitle": "Hero workflow: compression and searchable OCR",
+      "task": "Per-platform core parity and capability publication.",
+      "acceptanceEvidence": "Matrix backed by real tests on web, Android, Apple mobile and Mac.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M5-01",
+      "phase": "M5",
+      "phaseTitle": "Repeatability and carefully bounded extensions",
+      "task": "Save/rebind/revalidate local compiled recipes.",
+      "acceptanceEvidence": "Old file refs/secrets removed; replay works without AI.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M5-02",
+      "phase": "M5",
+      "phaseTitle": "Repeatability and carefully bounded extensions",
+      "task": "Local recent jobs, restore/reimport and clear-data behaviour.",
+      "acceptanceEvidence": "Retention disclosed; missing file handles handled honestly.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M5-03",
+      "phase": "M5",
+      "phaseTitle": "Repeatability and carefully bounded extensions",
+      "task": "Known-password unlock/protect where engine is tested.",
+      "acceptanceEvidence": "Secure control; secret absent from cloud/history/logs.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M5-04",
+      "phase": "M5",
+      "phaseTitle": "Repeatability and carefully bounded extensions",
+      "task": "Scoped Info/XMP cleanup.",
+      "acceptanceEvidence": "Exact removed fields verified; no anonymisation claim.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M5-05",
+      "phase": "M5",
+      "phaseTitle": "Repeatability and carefully bounded extensions",
+      "task": "Duplicate/interleave/bookmark splitting.",
+      "acceptanceEvidence": "Explicit inputs, odd-page and missing-bookmark cases.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M5-06",
+      "phase": "M5",
+      "phaseTitle": "Repeatability and carefully bounded extensions",
+      "task": "Blank-page candidate detection/review.",
+      "acceptanceEvidence": "Faint text preserved unless user confirms removal.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M5-07",
+      "phase": "M5",
+      "phaseTitle": "Repeatability and carefully bounded extensions",
+      "task": "Share extension/intents, OS integration and accessibility polish.",
+      "acceptanceEvidence": "Actual import from another app without upload.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M6-01",
+      "phase": "M6",
+      "phaseTitle": "Commercial readiness without damaging simplicity",
+      "task": "Optional accounts and entitlement abstraction.",
+      "acceptanceEvidence": "Basic local use works without signup; no document sync.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M6-02",
+      "phase": "M6",
+      "phaseTitle": "Commercial readiness without damaging simplicity",
+      "task": "Sandbox platform billing and verified server entitlements.",
+      "acceptanceEvidence": "Restore, pending, expired, refund and account-link tests.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M6-03",
+      "phase": "M6",
+      "phaseTitle": "Commercial readiness without damaging simplicity",
+      "task": "Honest paywall placement and pricing configuration.",
+      "acceptanceEvidence": "No result held hostage after unannounced processing charge.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M6-04",
+      "phase": "M6",
+      "phaseTitle": "Commercial readiness without damaging simplicity",
+      "task": "Public website/privacy/help/feature capability pages.",
+      "acceptanceEvidence": "No unsupported feature/“all offline” claims or fake testimonials.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M6-05",
+      "phase": "M6",
+      "phaseTitle": "Commercial readiness without damaging simplicity",
+      "task": "SEO entry points into the same workspace.",
+      "acceptanceEvidence": "Merge/compress/OCR pages preselect intent, not separate clunky funnels.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M6-06",
+      "phase": "M6",
+      "phaseTitle": "Commercial readiness without damaging simplicity",
+      "task": "Store metadata/assets and support reporting.",
+      "acceptanceEvidence": "Screenshots from actual app; no customer documents in reports.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M7-01",
+      "phase": "M7",
+      "phaseTitle": "Verification and controlled release",
+      "task": "Complete planner holdout and adversarial suite.",
+      "acceptanceEvidence": "Threshold report with failures, not just average score.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M7-02",
+      "phase": "M7",
+      "phaseTitle": "Verification and controlled release",
+      "task": "PDF preservation/quality corpus across all adapters.",
+      "acceptanceEvidence": "Reopen, render, text and feature retention checks.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M7-03",
+      "phase": "M7",
+      "phaseTitle": "Verification and controlled release",
+      "task": "Release-mode network privacy audit.",
+      "acceptanceEvidence": "Canary report and approved endpoint inventory.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M7-04",
+      "phase": "M7",
+      "phaseTitle": "Verification and controlled release",
+      "task": "Full state/responsive/accessibility visual QA.",
+      "acceptanceEvidence": "Approved reference comparison and fixed discrepancy ledger.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M7-05",
+      "phase": "M7",
+      "phaseTitle": "Verification and controlled release",
+      "task": "Device/browser memory, battery and interruption testing.",
+      "acceptanceEvidence": "Real limits and supported-device policy.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M7-06",
+      "phase": "M7",
+      "phaseTitle": "Verification and controlled release",
+      "task": "Dependency/security/licence/release review.",
+      "acceptanceEvidence": "SBOM, locked builds, source notices and no critical known blockers.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M7-07",
+      "phase": "M7",
+      "phaseTitle": "Verification and controlled release",
+      "task": "Reproducible builds, signing and distribution preparation.",
+      "acceptanceEvidence": "Appropriate native build artifacts and installation tests.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M7-08",
+      "phase": "M7",
+      "phaseTitle": "Verification and controlled release",
+      "task": "Pilot with real first-time users and revise friction points.",
+      "acceptanceEvidence": "Measured task completion, clarification and abandonment patterns.",
+      "status": "not_started_in_this_pack"
+    },
+    {
+      "id": "M7-09",
+      "phase": "M7",
+      "phaseTitle": "Verification and controlled release",
+      "task": "Owner-controlled public release and rollback plan.",
+      "acceptanceEvidence": "Approved claims/prices/channels; versioned rollback and capability flags.",
+      "status": "not_started_in_this_pack"
+    }
+  ],
+  "setup_strategy": "fresh_repository_with_read_only_legacy_learning"
+}

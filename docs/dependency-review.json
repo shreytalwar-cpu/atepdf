@@ -1,0 +1,249 @@
+[
+  {
+    "name": "next",
+    "version": "16.3.6",
+    "license": "MIT",
+    "engines": {
+      "node": ">=20.9.0"
+    },
+    "repository": {
+      "url": "git+https://github.com/vercel/next.js.git",
+      "type": "git"
+    }
+  },
+  {
+    "name": "react",
+    "version": "19.3.0",
+    "license": "MIT",
+    "engines": {
+      "node": ">=0.10.0"
+    },
+    "repository": {
+      "url": "git+https://github.com/react/react.git",
+      "type": "git",
+      "directory": "packages/react"
+    }
+  },
+  {
+    "name": "react-dom",
+    "version": "19.3.0",
+    "license": "MIT",
+    "engines": {},
+    "repository": {
+      "url": "git+https://github.com/react/react.git",
+      "type": "git",
+      "directory": "packages/react-dom"
+    }
+  },
+  {
+    "name": "ai",
+    "version": "7.0.118",
+    "license": "Apache-2.0",
+    "engines": {
+      "node": ">=22"
+    },
+    "repository": {
+      "url": "https://github.com/vercel/ai",
+      "type": "git",
+      "directory": "packages/ai"
+    }
+  },
+  {
+    "name": "pdf-lib",
+    "version": "1.17.1",
+    "license": "MIT",
+    "engines": {},
+    "repository": {
+      "url": "git+https://github.com/Hopding/pdf-lib.git",
+      "type": "git"
+    }
+  },
+  {
+    "name": "pdfjs-dist",
+    "version": "6.3.289",
+    "license": "Apache-2.0",
+    "engines": {
+      "node": ">=22.13.0 || >=24"
+    },
+    "repository": {
+      "url": "git+https://github.com/mozilla/pdf.js.git",
+      "type": "git"
+    }
+  },
+  {
+    "name": "tesseract.js",
+    "version": "7.0.0",
+    "license": "Apache-2.0",
+    "engines": {},
+    "repository": {
+      "url": "git+https://github.com/naptha/tesseract.js.git",
+      "type": "git"
+    }
+  },
+  {
+    "name": "@tesseract.js-data/eng",
+    "version": "1.0.0",
+    "license": "MIT",
+    "engines": {},
+    "repository": {
+      "url": "git+https://github.com/naptha/tessdata.git",
+      "type": "git"
+    }
+  },
+  {
+    "name": "@radix-ui/react-dialog",
+    "version": "1.1.23",
+    "license": "MIT",
+    "engines": {},
+    "repository": {
+      "url": "git+https://github.com/radix-ui/primitives.git",
+      "type": "git",
+      "directory": "packages/react/dialog"
+    }
+  },
+  {
+    "name": "@radix-ui/react-slot",
+    "version": "1.3.3",
+    "license": "MIT",
+    "engines": {},
+    "repository": {
+      "url": "git+https://github.com/radix-ui/primitives.git",
+      "type": "git",
+      "directory": "packages/react/slot"
+    }
+  },
+  {
+    "name": "class-variance-authority",
+    "version": "0.7.1",
+    "license": "Apache-2.0",
+    "engines": {},
+    "repository": {
+      "url": "git+https://github.com/joe-bell/cva.git",
+      "type": "git"
+    }
+  },
+  {
+    "name": "clsx",
+    "version": "2.1.1",
+    "license": "MIT",
+    "engines": {
+      "node": ">=6"
+    },
+    "repository": {
+      "url": "git+https://github.com/lukeed/clsx.git",
+      "type": "git"
+    }
+  },
+  {
+    "name": "tailwind-merge",
+    "version": "3.7.0",
+    "license": "MIT",
+    "engines": {},
+    "repository": {
+      "url": "https://github.com/dcastil/tailwind-merge.git",
+      "type": "git",
+      "directory": "packages/tailwind-merge"
+    }
+  },
+  {
+    "name": "lucide-react",
+    "version": "1.48.0",
+    "license": "ISC",
+    "engines": {},
+    "repository": {
+      "url": "https://github.com/lucide-icons/lucide.git",
+      "type": "git",
+      "directory": "packages/lucide-react"
+    }
+  },
+  {
+    "name": "typescript",
+    "version": "7.0.2",
+    "license": "Apache-2.0",
+    "engines": {
+      "node": ">=16.20.0"
+    },
+    "repository": {
+      "url": "git+https://github.com/microsoft/TypeScript.git",
+      "type": "git"
+    }
+  },
+  {
+    "name": "tsx",
+    "version": "4.23.15",
+    "license": "MIT",
+    "engines": {
+      "node": ">=18.0.0"
+    },
+    "repository": {
+      "url": "git+https://github.com/privatenumber/tsx.git",
+      "type": "git"
+    }
+  },
+  {
+    "name": "@playwright/test",
+    "version": "1.63.0",
+    "license": "Apache-2.0",
+    "engines": {
+      "node": ">=20"
+    },
+    "repository": {
+      "url": "git+https://github.com/microsoft/playwright.git",
+      "type": "git"
+    }
+  },
+  {
+    "name": "ajv",
+    "version": "8.20.0",
+    "license": "MIT",
+    "engines": {},
+    "repository": {
+      "url": "git+https://github.com/ajv-validator/ajv.git",
+      "type": "git"
+    }
+  },
+  {
+    "name": "@types/react",
+    "version": "19.3.0",
+    "license": "MIT",
+    "engines": {},
+    "repository": {
+      "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+      "type": "git",
+      "directory": "types/react"
+    }
+  },
+  {
+    "name": "@types/node",
+    "version": "26.6.3",
+    "license": "MIT",
+    "engines": {},
+    "repository": {
+      "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+      "type": "git",
+      "directory": "types/node"
+    }
+  },
+  {
+    "name": "tailwindcss",
+    "version": "4.3.3",
+    "license": "MIT",
+    "engines": {},
+    "repository": {
+      "url": "https://github.com/tailwindlabs/tailwindcss.git",
+      "type": "git",
+      "directory": "packages/tailwindcss"
+    }
+  },
+  {
+    "name": "@tailwindcss/postcss",
+    "version": "4.3.3",
+    "license": "MIT",
+    "engines": {},
+    "repository": {
+      "url": "https://github.com/tailwindlabs/tailwindcss.git",
+      "type": "git",
+      "directory": "packages/@tailwindcss-postcss"
+    }
+  }
+]

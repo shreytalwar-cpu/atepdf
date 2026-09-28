@@ -1,0 +1,45 @@
+{
+  "edition": "2026-09-28-marketing-1",
+  "mode": "draft",
+  "enable_publication": false,
+  "enable_paid_spend": false,
+  "default_cell": {
+    "country": "US",
+    "language": "English",
+    "surface": "web",
+    "channel": "Meta",
+    "audience_hypothesis": "recurring document-pack users"
+  },
+  "live_creative_count_max": 3,
+  "preferred_conversion": "verified_first_purchase",
+  "budget": {
+    "currency": "INR",
+    "max_total_cash": 40000,
+    "creative_research_cash": 8000,
+    "gross_media_tranches": [
+      4000,
+      8000,
+      12000
+    ],
+    "held_cash": 8000,
+    "assumed_media_nonrecoverable_tax_fee_rate": 0.18,
+    "all_tax_in_cash_cap": true,
+    "unused_reserve_is_expense": false
+  },
+  "controls": {
+    "automatic_budget_increase": false,
+    "review_zero_buyer_spend_multiple": 3,
+    "proposed_scale_increment_max": 0.2,
+    "requires_mature_window": true,
+    "requires_founder_approval": true
+  },
+  "start_time": null,
+  "end_time": null,
+  "constraints": [
+    "No live credentials in files",
+    "No competitor-copy uploads",
+    "No customer document capture",
+    "No tracking in file workspace",
+    "No publishing untested capabilities"
+  ]
+}

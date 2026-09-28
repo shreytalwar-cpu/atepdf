@@ -1,0 +1,9 @@
+{
+  "schema_version": 2,
+  "event": "job_validated",
+  "platform": "web",
+  "occurred_at": "2026-09-28T12:00:00Z",
+  "origin": "client",
+  "filename": "private-client-report.pdf",
+  "event_id": "c54b8a50-4d5d-4c15-a239-8a8d51c28524"
+}

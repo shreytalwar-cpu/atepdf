@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "status": "unverified_on_codex_host",
+  "not_a_secret_store": true,
+  "tools": [
+    {
+      "service": "git",
+      "installed": false,
+      "authenticated": false,
+      "verified_read": false,
+      "account_or_project_alias": null,
+      "checked_at": null,
+      "evidence_ref": null,
+      "permitted_modes": [],
+      "next_step": "Discover actual capability and permissions before connecting."
+    },
+    {
+      "service": "browser",
+      "installed": false,
+      "authenticated": false,
+      "verified_read": false,
+      "account_or_project_alias": null,
+      "checked_at": null,
+      "evidence_ref": null,
+      "permitted_modes": [],
+      "next_step": "Discover actual capability and permissions before connecting."
+    },
+    {
+      "service": "appllama",
+      "installed": false,
+      "authenticated": false,
+      "verified_read": false,
+      "account_or_project_alias": null,
+      "checked_at": null,
+      "evidence_ref": null,
+      "permitted_modes": [],
+      "next_step": "Discover actual capability and permissions before connecting."
+    },
+    {
+      "service": "exa",
+      "installed": false,
+      "authenticated": false,
+      "verified_read": false,
+      "account_or_project_alias": null,
+      "checked_at": null,
+      "evidence_ref": null,
+      "permitted_modes": [],
+      "next_step": "Discover actual capability and permissions before connecting."
+    },
+    {
+      "service": "remotion",
+      "installed": false,
+      "authenticated": false,
+      "verified_read": false,
+      "account_or_project_alias": null,
+      "checked_at": null,
+      "evidence_ref": null,
+      "permitted_modes": [],
+      "next_step": "Discover actual capability and permissions before connecting."
+    },
+    {
+      "service": "posthog",
+      "installed": false,
+      "authenticated": false,
+      "verified_read": false,
+      "account_or_project_alias": null,
+      "checked_at": null,
+      "evidence_ref": null,
+      "permitted_modes": [],
+      "next_step": "Discover actual capability and permissions before connecting."
+    },
+    {
+      "service": "revenuecat",
+      "installed": false,
+      "authenticated": false,
+      "verified_read": false,
+      "account_or_project_alias": null,
+      "checked_at": null,
+      "evidence_ref": null,
+      "permitted_modes": [],
+      "next_step": "Discover actual capability and permissions before connecting."
+    },
+    {
+      "service": "windsor",
+      "installed": false,
+      "authenticated": false,
+      "verified_read": false,
+      "account_or_project_alias": null,
+      "checked_at": null,
+      "evidence_ref": null,
+      "permitted_modes": [],
+      "next_step": "Discover actual capability and permissions before connecting."
+    },
+    {
+      "service": "buffer",
+      "installed": false,
+      "authenticated": false,
+      "verified_read": false,
+      "account_or_project_alias": null,
+      "checked_at": null,
+      "evidence_ref": null,
+      "permitted_modes": [],
+      "next_step": "Discover actual capability and permissions before connecting."
+    },
+    {
+      "service": "resend",
+      "installed": false,
+      "authenticated": false,
+      "verified_read": false,
+      "account_or_project_alias": null,
+      "checked_at": null,
+      "evidence_ref": null,
+      "permitted_modes": [],
+      "next_step": "Discover actual capability and permissions before connecting."
+    },
+    {
+      "service": "search_console",
+      "installed": false,
+      "authenticated": false,
+      "verified_read": false,
+      "account_or_project_alias": null,
+      "checked_at": null,
+      "evidence_ref": null,
+      "permitted_modes": [],
+      "next_step": "Discover actual capability and permissions before connecting."
+    }
+  ],
+  "note": "False means not verified by this handoff, not proof the user lacks an account."
+}

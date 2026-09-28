@@ -1,0 +1,117 @@
+{
+  "schemaVersion": "1.0",
+  "requestId": "req_example",
+  "workspaceRevision": 4,
+  "locale": "en-IN",
+  "instruction": "Remove the last two pages from that result.",
+  "files": [
+    {
+      "ref": "file_a",
+      "kind": "pdf",
+      "pageCount": 12,
+      "sizeBytes": 1250000,
+      "encrypted": false
+    },
+    {
+      "ref": "file_b",
+      "kind": "pdf",
+      "pageCount": 8,
+      "sizeBytes": 1250000,
+      "encrypted": false
+    },
+    {
+      "ref": "file_c",
+      "kind": "pdf",
+      "pageCount": 5,
+      "sizeBytes": 1250000,
+      "encrypted": false
+    },
+    {
+      "ref": "out_final",
+      "kind": "pdf",
+      "pageCount": 25,
+      "sizeBytes": 1250000,
+      "encrypted": false
+    }
+  ],
+  "selectionRefs": [],
+  "focusedResultRef": "out_final",
+  "originalRefs": [
+    "file_a",
+    "file_b",
+    "file_c"
+  ],
+  "previousActionIds": [
+    "merge_pdf",
+    "ocr_pdf",
+    "compress_pdf"
+  ],
+  "capabilities": [
+    "merge_pdf",
+    "select_pages",
+    "split_pdf",
+    "reorder_pdf",
+    "rotate_pdf",
+    "reverse_pdf",
+    "compress_pdf",
+    "ocr_pdf",
+    "images_to_pdf",
+    "pdf_to_images",
+    "extract_text",
+    "remove_metadata",
+    "protect_pdf",
+    "unlock_pdf",
+    "export_zip"
+  ],
+  "previousPlan": {
+    "steps": [
+      {
+        "id": "s_1",
+        "operation": "merge_pdf",
+        "inputs": [
+          "file_a",
+          "file_b",
+          "file_c"
+        ],
+        "outputRef": "out_merged",
+        "params": {
+          "ordering": "as_provided"
+        }
+      },
+      {
+        "id": "s_2",
+        "operation": "ocr_pdf",
+        "inputs": [
+          "out_merged"
+        ],
+        "outputRef": "out_searchable",
+        "params": {
+          "languages": [
+            "eng"
+          ],
+          "existingText": "preserve",
+          "batchMode": "single"
+        }
+      },
+      {
+        "id": "s_3",
+        "operation": "compress_pdf",
+        "inputs": [
+          "out_searchable"
+        ],
+        "outputRef": "out_final",
+        "params": {
+          "targetBytes": 4999999,
+          "preset": "balanced",
+          "batchMode": "single"
+        }
+      }
+    ],
+    "resultRefs": [
+      "out_final"
+    ]
+  },
+  "ocrLanguages": [
+    "eng"
+  ]
+}

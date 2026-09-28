@@ -1,0 +1,104 @@
+{
+  "version": "7.0",
+  "legacy_source_audited": false,
+  "legacy_source_identity": null,
+  "notes": "Seed rows are prior approved requirements only. Codex must append actual old-source findings with exact evidence. No app tests are represented as run.",
+  "entries": [
+    {
+      "id": "L001",
+      "evidence_level": "handoff_requirement",
+      "source_reference": "DESIGN.md",
+      "source_path_or_commit": null,
+      "finding": "The approved interface has one file-drop/composer workspace, not a tool catalogue.",
+      "disposition": "implement_cleanly_and_test",
+      "new_module": null,
+      "new_regression_test_id": "UI-first-result",
+      "test_status": "not_run_in_new_application",
+      "code_ported": false
+    },
+    {
+      "id": "L002",
+      "evidence_level": "handoff_requirement",
+      "source_reference": "docs/05_PRIVACY_AND_SECURITY.md",
+      "source_path_or_commit": null,
+      "finding": "Cloud AI interprets instructions; all document manipulation stays local.",
+      "disposition": "implement_cleanly_and_test",
+      "new_module": null,
+      "new_regression_test_id": "PRIVACY-request-allowlist",
+      "test_status": "not_run_in_new_application",
+      "code_ported": false
+    },
+    {
+      "id": "L003",
+      "evidence_level": "handoff_requirement",
+      "source_reference": "docs/08_TESTING_AND_RELEASE.md",
+      "source_path_or_commit": null,
+      "finding": "Progress/success must be measured by local engines, not model prose.",
+      "disposition": "implement_cleanly_and_test",
+      "new_module": null,
+      "new_regression_test_id": "JOB-output-validity",
+      "test_status": "not_run_in_new_application",
+      "code_ported": false
+    },
+    {
+      "id": "L004",
+      "evidence_level": "handoff_requirement",
+      "source_reference": "implementation/SHADCN_INTEGRATION.md",
+      "source_path_or_commit": null,
+      "finding": "Originals are immutable and follow-up/undo use committed output versions.",
+      "disposition": "implement_cleanly_and_test",
+      "new_module": null,
+      "new_regression_test_id": "JOB-follow-up-undo",
+      "test_status": "not_run_in_new_application",
+      "code_ported": false
+    },
+    {
+      "id": "L005",
+      "evidence_level": "handoff_requirement",
+      "source_reference": "docs/03_ENGINE_STRATEGY.md",
+      "source_path_or_commit": null,
+      "finding": "OCR recognition alone is not a searchable PDF; independent search is required.",
+      "disposition": "implement_cleanly_and_test",
+      "new_module": null,
+      "new_regression_test_id": "OCR-searchable-layer",
+      "test_status": "not_run_in_new_application",
+      "code_ported": false
+    },
+    {
+      "id": "L006",
+      "evidence_level": "handoff_requirement",
+      "source_reference": "docs/03_ENGINE_STRATEGY.md",
+      "source_path_or_commit": null,
+      "finding": "Compression may miss a target; do not fake gains or silently damage documents.",
+      "disposition": "implement_cleanly_and_test",
+      "new_module": null,
+      "new_regression_test_id": "COMPRESS-target-not-met",
+      "test_status": "not_run_in_new_application",
+      "code_ported": false
+    },
+    {
+      "id": "L007",
+      "evidence_level": "handoff_requirement",
+      "source_reference": "docs/01_PRODUCT_AND_SCOPE.md",
+      "source_path_or_commit": null,
+      "finding": "Unsupported operations must not route to cloud document processing.",
+      "disposition": "implement_cleanly_and_test",
+      "new_module": null,
+      "new_regression_test_id": "CAPABILITY-no-remote-fallback",
+      "test_status": "not_run_in_new_application",
+      "code_ported": false
+    },
+    {
+      "id": "L008",
+      "evidence_level": "handoff_requirement",
+      "source_reference": "growth/PAYWALL_AND_BILLING.md",
+      "source_path_or_commit": null,
+      "finding": "Commercial gating must preserve free completed outputs and pending drafts.",
+      "disposition": "implement_cleanly_and_test",
+      "new_module": null,
+      "new_regression_test_id": "BILLING-dismiss-preserves-work",
+      "test_status": "not_run_in_new_application",
+      "code_ported": false
+    }
+  ]
+}

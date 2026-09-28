@@ -1,0 +1,132 @@
+{
+  "checked_date": "2026-09-28",
+  "scope": "Public documentation research only. No installations or account reads performed in this update.",
+  "sources": [
+    {
+      "id": "T01",
+      "title": "Codex MCP configuration",
+      "url": "https://developers.openai.com/codex/mcp",
+      "verification": "opened",
+      "use": "MCP supports local and remote servers, per-project configuration and environment-backed credentials. Use installed CLI help; configurations here are inactive examples."
+    },
+    {
+      "id": "T02",
+      "title": "Codex skills",
+      "url": "https://developers.openai.com/codex/skills",
+      "verification": "opened",
+      "use": "Project-local skills require correct placement. A nested handoff is not automatically an installed skill collection."
+    },
+    {
+      "id": "T03",
+      "title": "Corey Haines marketing skills",
+      "url": "https://github.com/coreyhaines31/marketingskills",
+      "verification": "opened",
+      "use": "MIT collection with selective installation, shared product-marketing context and named marketing skills. No account access or Attenlo performance is established."
+    },
+    {
+      "id": "T04",
+      "title": "External ads skill reviewed",
+      "url": "https://github.com/coreyhaines31/marketingskills/blob/main/skills/ads/SKILL.md",
+      "verification": "opened",
+      "use": "Contains broad tactics and numerical claims. Attenlo must not treat those as its own benchmarks, spending authority or permission to imitate another advertiser."
+    },
+    {
+      "id": "T05",
+      "title": "Appllama MCP and skills",
+      "url": "https://appllama.io/mcp",
+      "verification": "search_result_verified_direct_fetch_failed",
+      "use": "Official search result lists remote MCP and skills setup. Existing screen metadata research remains unmodified; no new competitor image audit was performed."
+    },
+    {
+      "id": "T06",
+      "title": "Exa MCP",
+      "url": "https://exa.ai/mcp",
+      "verification": "opened",
+      "use": "Official remote endpoint and search tools. Public research only; no customer PDFs or credentials."
+    },
+    {
+      "id": "T07",
+      "title": "Playwright MCP",
+      "url": "https://github.com/microsoft/playwright-mcp",
+      "verification": "reference_recheck_on_install",
+      "use": "Already selected browser-automation reference. Recheck the official repository and installed package before use; this update did not execute it."
+    },
+    {
+      "id": "T08",
+      "title": "Remotion agent skills",
+      "url": "https://www.remotion.dev/docs/ai/skills",
+      "verification": "opened",
+      "use": "Official skills include creation, rendering and captions. The documentation marks the older MCP deprecated. Licensing must be checked before commercial use."
+    },
+    {
+      "id": "T09",
+      "title": "PostHog Codex integration",
+      "url": "https://posthog.com/docs/model-context-protocol/codex",
+      "verification": "opened",
+      "use": "Official MCP URL and plugin setup; analytics, flags and errors. OAuth/account scope can expose writes, so do not assume read-only access."
+    },
+    {
+      "id": "T10",
+      "title": "Windsor Meta integration",
+      "url": "https://windsor.ai/connect/facebook-ads-mcp/",
+      "verification": "opened",
+      "use": "Documents Meta performance access and supported actions. This is not proof of the exact tools available in the future Codex client or this user account."
+    },
+    {
+      "id": "T11",
+      "title": "Buffer MCP",
+      "url": "https://developers.buffer.com/guides/integrations/mcp.html",
+      "verification": "opened",
+      "use": "Official MCP endpoint with bearer API key; draft and channel workflows. Account, paid plan and Codex permissions are not verified here."
+    },
+    {
+      "id": "T12",
+      "title": "RevenueCat AI Toolkit",
+      "url": "https://www.revenuecat.com/docs/tools/ai-toolkit",
+      "verification": "opened",
+      "use": "Official Codex plugin, MCP, purchase/paywall skills and an Android billing plugin. Access includes project configuration, not just reporting."
+    },
+    {
+      "id": "T13",
+      "title": "Resend Codex plugin",
+      "url": "https://resend.com/codex",
+      "verification": "opened",
+      "use": "Official plugin combines MCP and skills; remote endpoint and skills repository documented. Customer communications require separate authority."
+    },
+    {
+      "id": "T14",
+      "title": "Resend domain verification",
+      "url": "https://resend.com/docs/dashboard/domains/introduction",
+      "verification": "opened",
+      "use": "Domain authentication and DMARC guidance; separate subdomains can segment sending purpose. Verify actual DNS and provider state before sending."
+    },
+    {
+      "id": "T15",
+      "title": "Apple custom product pages",
+      "url": "https://developer.apple.com/app-store/custom-product-pages/",
+      "verification": "opened",
+      "use": "Supports alternate feature-focused product pages and links. No promised conversion lift is imported into our model."
+    },
+    {
+      "id": "T16",
+      "title": "Google Play listing experiments",
+      "url": "https://support.google.com/googleplay/android-developer/answer/12053285?hl=en",
+      "verification": "opened",
+      "use": "Official store-listing experimentation workflow. Verify eligibility, current fields and allowed assets at launch."
+    },
+    {
+      "id": "T17",
+      "title": "FTC influencer disclosures",
+      "url": "https://www.ftc.gov/business-guidance/resources/disclosures-101-social-media-influencers",
+      "verification": "opened_via_official_equivalent",
+      "use": "Disclose material relationships clearly and keep endorsements truthful. This is source guidance, not legal signoff."
+    },
+    {
+      "id": "T18",
+      "title": "Google consent mode",
+      "url": "https://developers.google.com/tag-platform/security/concepts/consent-mode",
+      "verification": "inherited_v4_recheck_at_implementation",
+      "use": "Retain the v4 conservative consent boundary. This update does not implement a consent platform or certify compliance."
+    }
+  ]
+}

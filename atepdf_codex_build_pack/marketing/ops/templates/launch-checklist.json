@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "release_id": "UNASSIGNED",
+  "not_live_test_evidence": true,
+  "checks": [
+    {
+      "id": "product_workflow",
+      "passed": false,
+      "evidence_ref": null,
+      "tested_at": null,
+      "owner": null
+    },
+    {
+      "id": "target_platforms",
+      "passed": false,
+      "evidence_ref": null,
+      "tested_at": null,
+      "owner": null
+    },
+    {
+      "id": "in_app_browser",
+      "passed": false,
+      "evidence_ref": null,
+      "tested_at": null,
+      "owner": null
+    },
+    {
+      "id": "claims",
+      "passed": false,
+      "evidence_ref": null,
+      "tested_at": null,
+      "owner": null
+    },
+    {
+      "id": "creative_rights",
+      "passed": false,
+      "evidence_ref": null,
+      "tested_at": null,
+      "owner": null
+    },
+    {
+      "id": "price_terms",
+      "passed": false,
+      "evidence_ref": null,
+      "tested_at": null,
+      "owner": null
+    },
+    {
+      "id": "consent",
+      "passed": false,
+      "evidence_ref": null,
+      "tested_at": null,
+      "owner": null
+    },
+    {
+      "id": "purchase_restore_refund",
+      "passed": false,
+      "evidence_ref": null,
+      "tested_at": null,
+      "owner": null
+    },
+    {
+      "id": "event_reconciliation",
+      "passed": false,
+      "evidence_ref": null,
+      "tested_at": null,
+      "owner": null
+    },
+    {
+      "id": "privacy_network",
+      "passed": false,
+      "evidence_ref": null,
+      "tested_at": null,
+      "owner": null
+    },
+    {
+      "id": "export_follow_up",
+      "passed": false,
+      "evidence_ref": null,
+      "tested_at": null,
+      "owner": null
+    },
+    {
+      "id": "support_route",
+      "passed": false,
+      "evidence_ref": null,
+      "tested_at": null,
+      "owner": null
+    },
+    {
+      "id": "gross_budget",
+      "passed": false,
+      "evidence_ref": null,
+      "tested_at": null,
+      "owner": null
+    },
+    {
+      "id": "account_identity",
+      "passed": false,
+      "evidence_ref": null,
+      "tested_at": null,
+      "owner": null
+    },
+    {
+      "id": "rollback",
+      "passed": false,
+      "evidence_ref": null,
+      "tested_at": null,
+      "owner": null
+    }
+  ]
+}

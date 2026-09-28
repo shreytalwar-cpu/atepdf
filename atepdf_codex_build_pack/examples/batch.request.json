@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "1.0",
+  "requestId": "req_example",
+  "workspaceRevision": 4,
+  "locale": "en-IN",
+  "instruction": "Compress each PDF separately and put the results in a ZIP.",
+  "files": [
+    {
+      "ref": "file_a",
+      "kind": "pdf",
+      "pageCount": 12,
+      "sizeBytes": 1250000,
+      "encrypted": false
+    },
+    {
+      "ref": "file_b",
+      "kind": "pdf",
+      "pageCount": 8,
+      "sizeBytes": 1250000,
+      "encrypted": false
+    },
+    {
+      "ref": "file_c",
+      "kind": "pdf",
+      "pageCount": 5,
+      "sizeBytes": 1250000,
+      "encrypted": false
+    }
+  ],
+  "selectionRefs": [
+    "file_a",
+    "file_b",
+    "file_c"
+  ],
+  "focusedResultRef": null,
+  "originalRefs": [
+    "file_a",
+    "file_b",
+    "file_c"
+  ],
+  "previousActionIds": [],
+  "capabilities": [
+    "merge_pdf",
+    "select_pages",
+    "split_pdf",
+    "reorder_pdf",
+    "rotate_pdf",
+    "reverse_pdf",
+    "compress_pdf",
+    "ocr_pdf",
+    "images_to_pdf",
+    "pdf_to_images",
+    "extract_text",
+    "remove_metadata",
+    "protect_pdf",
+    "unlock_pdf",
+    "export_zip"
+  ],
+  "previousPlan": null,
+  "ocrLanguages": [
+    "eng"
+  ]
+}

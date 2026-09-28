@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "approval_date": "2026-09-28",
+  "scope": "Owner approved name and logo; ignore product mock-ups in source board.",
+  "assets": [
+    {
+      "path": "brand/reference/approved-atepdf-brand-board.jpeg",
+      "role": "owner_supplied_brand_reference_only",
+      "authoritative_for": [
+        "product_name",
+        "logo_identity"
+      ],
+      "not_authoritative_for": [
+        "product_ui",
+        "features",
+        "launch_flow",
+        "platform_asset_requirements"
+      ],
+      "sha256": "bb4358d7c269453892db821d2e96c5f610850a7f46bdf6fef64734accb6715a1",
+      "width": 670,
+      "height": 1024,
+      "transformation": "none",
+      "production_ready": false
+    },
+    {
+      "path": "brand/reference/approved-8-mark-source-crop.png",
+      "role": "exact_raster_reference_crop",
+      "source": "brand/reference/approved-atepdf-brand-board.jpeg",
+      "crop_box_left_top_right_bottom": [
+        354,
+        49,
+        521,
+        267
+      ],
+      "sha256": "c52607a555dd550577eea13eda93049712d341d8325a9252d015cd70de3e2411",
+      "width": 167,
+      "height": 218,
+      "background_retained": true,
+      "redrawn": false,
+      "upscaled": false,
+      "production_ready": false
+    },
+    {
+      "path": "brand/reference/approved-atepdf-lockup-source-crop.png",
+      "role": "exact_raster_reference_crop",
+      "source": "brand/reference/approved-atepdf-brand-board.jpeg",
+      "crop_box_left_top_right_bottom": [
+        283,
+        49,
+        596,
+        357
+      ],
+      "sha256": "70238ce25375ca7fbddfb0f496947f9f74f08ae641812c6e4f87d9dc6b0f4ead",
+      "width": 313,
+      "height": 308,
+      "background_retained": true,
+      "redrawn": false,
+      "upscaled": false,
+      "production_ready": false
+    },
+    {
+      "path": "brand/reference/approved-atepdf-wordmark-source-crop.png",
+      "role": "exact_raster_reference_crop",
+      "source": "brand/reference/approved-atepdf-brand-board.jpeg",
+      "crop_box_left_top_right_bottom": [
+        289,
+        267,
+        594,
+        357
+      ],
+      "sha256": "7ee2c53dde15726e80ec76e7af8e2cd36ff61dbde5ae37deb01e882ba8e9a067",
+      "width": 305,
+      "height": 90,
+      "background_retained": true,
+      "redrawn": false,
+      "upscaled": false,
+      "production_ready": false
+    }
+  ]
+}

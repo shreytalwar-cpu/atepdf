@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "claims": [
+    {
+      "id": "CL01",
+      "text": "PDFs are processed on your device. Cloud AI interprets your instructions.",
+      "status": "requires_platform_evidence",
+      "required_evidence": "Network audit and no remote document fallback for every advertised platform",
+      "evidence_refs": []
+    },
+    {
+      "id": "CL02",
+      "text": "Combine PDFs and make scanned pages searchable in one request.",
+      "status": "requires_platform_evidence",
+      "required_evidence": "Real combined searchable PDF, independently checked",
+      "evidence_refs": []
+    },
+    {
+      "id": "CL03",
+      "text": "Compress towards a chosen file-size limit.",
+      "status": "requires_platform_evidence",
+      "required_evidence": "Measured output and honest target-not-met behaviour",
+      "evidence_refs": []
+    }
+  ],
+  "forbidden_unsubstantiated_claims": [
+    "fully offline AI",
+    "nothing ever leaves the device",
+    "guaranteed under 5 MB",
+    "first or best",
+    "unverified testimonials or ratings"
+  ]
+}

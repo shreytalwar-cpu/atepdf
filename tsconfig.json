@@ -1,0 +1,19 @@
+{
+  "extends": "./apps/web/tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@/*": [
+        "./apps/web/src/*"
+      ],
+      "@contracts/*": [
+        "./packages/contracts/src/*"
+      ],
+      "@pdf/*": [
+        "./packages/web-pdf/src/*"
+      ],
+      "@core/*": [
+        "./packages/core/src/*"
+      ]
+    }
+  }
+}

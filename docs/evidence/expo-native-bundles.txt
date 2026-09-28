@@ -1,0 +1,24 @@
+Already up to date
+Done in 184ms using pnpm v11.19.0
+$ node scripts/contracts.mjs && cd apps/universal && expo export --platform ios --platform android --output-dir dist-native
+Canonical contract validators compiled ahead of time; no runtime eval.
+Starting Metro Bundler
+
+Android Bundled 8959ms index.ts (2146 modules)
+iOS Bundled 15714ms index.ts (2607 modules)
+
+› Assets (3):
+assets/approved-8-mark-source-crop.png (35KB)
+assets/approved-atepdf-wordmark-source-crop.png (34KB)
+assets/paper.png (688KB)
+
+› android bundles (1):
+_expo/static/js/android/index-8605fcdc7b25b88e56c7d8299b5d704a.hbc (4.1MB)
+
+› ios bundles (1):
+_expo/static/js/ios/index-7eb0112199966787d22e0125a4b8a9e9.hbc (4.1MB)
+
+› Files (1):
+metadata.json (620B)
+
+Exported: dist-native

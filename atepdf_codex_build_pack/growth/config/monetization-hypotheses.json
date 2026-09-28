@@ -1,0 +1,82 @@
+{
+  "version": 2,
+  "status": "hypothesis_requires_founder_approval",
+  "production_enabled": false,
+  "platforms": [
+    "web",
+    "android",
+    "ios",
+    "ipados",
+    "macos"
+  ],
+  "document_processing": "local_only",
+  "instruction_planner": "cloud_with_explicit_consent",
+  "pricing_anchors": {
+    "IN": {
+      "currency": "INR",
+      "monthly_minor": 24900,
+      "annual_minor": 199900,
+      "tax_assumption": "18% included, verify applicability"
+    },
+    "GLOBAL_USD": {
+      "currency": "USD",
+      "monthly_minor": 599,
+      "annual_minor": 3999,
+      "tax_assumption": "before applicable local tax"
+    }
+  },
+  "runtime_price_source": "verified_provider_product_data_not_these_anchors",
+  "allowances": {
+    "free_monthly_completed_ai_jobs": 3,
+    "pro_monthly_completed_ai_jobs": 300,
+    "debit_on": "validated_intent_completion",
+    "clarification_debit": 0,
+    "system_retry_debit": 0,
+    "local_quick_action_ai_debit": 0,
+    "compiled_recipe_ai_debit": 0,
+    "free_window": "server_calendar_month",
+    "pro_window": "server_activation_anchored_month",
+    "carryover": false
+  },
+  "offers": {
+    "default_selection": "annual_visible",
+    "monthly_visible": true,
+    "hard_launch_paywall": false,
+    "automatic_post_result_paywall": false,
+    "visible_free_exit": true,
+    "restore_visible": true,
+    "trial_enabled": false,
+    "weekly_renewal_enabled": false,
+    "lifetime_enabled": false,
+    "nonrenewing_pass_enabled": false,
+    "production_discount_enabled": false
+  },
+  "acquisition": {
+    "autonomous_spend_authorized": false,
+    "six_week_hypothesis_ceiling_inr": 40000,
+    "cash_cac_target_inr": {
+      "india_web_annual": 400,
+      "india_store_annual": 350,
+      "international_web_annual": 900,
+      "international_store_annual": 800
+    }
+  },
+  "experiments": {
+    "production_enabled": false,
+    "active_ids": []
+  },
+  "privacy": {
+    "document_uploads": false,
+    "raw_prompt_analytics": false,
+    "session_replay": false,
+    "marketing_opt_in_default": false
+  },
+  "operating_model": {
+    "employee_payroll_assumed_zero": true,
+    "founder_opportunity_cost_separate": true,
+    "maintenance_support_reserves_required": true,
+    "provisional_ai_cost_inr_per_job": 0.1287,
+    "fx_inr_per_usd_planning_only": 90,
+    "scenario_outputs_are_not_forecasts": true
+  }
+}

@@ -12,6 +12,7 @@ import {promisify} from 'node:util';
 import {startWeb, stopWeb, webStatus, management, sleep, buildIdentity} from './web.mjs';
 import {randomBytes, randomUUID, X509Certificate} from 'node:crypto';
 import {readPrivateJSON, writePrivateJSON} from './files.mjs';
+import {gunzipSync} from 'node:zlib';
 
 const realRepo = await realpath(fileURLToPath(new URL('../../', import.meta.url)));
 async function fixture(t) {
@@ -151,6 +152,87 @@ test('static serving blocks symlink escapes and rejects foreign Host headers', a
   });
   assert.equal(foreignHost, 403);
   assert.equal((await fetchWithTimeout(`${running.url}/.local/openai-key`)).status, 404);
+});
+
+test('static scripts and styles negotiate gzip without changing bytes or the privacy policy', async t => {
+  const repo = await fixture(t), site = join(repo, 'apps/universal/dist-web');
+  const source = Buffer.from('/* synthetic public app asset */\n'.repeat(300));
+  for (const name of ['entry.js', 'worker.mjs', 'style.css']) await writeFile(join(site, name), source);
+  const running = await startWeb(repo, {port: 0, localOnly: true});
+  // node:http preserves encoded wire bytes; fetch transparently decompresses.
+  const raw = (path, encoding, method = 'GET') => new Promise((resolve, reject) => {
+    const req = request(running.url + path, {method, agent: false, headers: encoding === undefined ? {} : {'Accept-Encoding': encoding}}, response => {
+      const chunks = []; response.on('data', chunk => chunks.push(chunk));
+      response.on('end', () => resolve({status: response.statusCode, headers: response.headers, bytes: Buffer.concat(chunks)}));
+    });
+    req.setTimeout(3000, () => req.destroy(new Error('Synthetic static response timed out.')));
+    req.on('error', reject); req.end();
+  });
+  for (const name of ['entry.js', 'worker.mjs', 'style.css']) {
+    const encoded = await raw('/' + name, 'gzip, deflate, br');
+    assert.equal(encoded.status, 200); assert.equal(encoded.headers['content-encoding'], 'gzip');
+    assert.equal(encoded.headers['content-type'], name.endsWith('.css') ? 'text/css' : 'text/javascript');
+    assert.ok(encoded.bytes.length < source.length); assert.deepEqual(gunzipSync(encoded.bytes), source);
+    assert.equal(Number(encoded.headers['content-length']), encoded.bytes.length);
+    assert.equal(encoded.headers.vary, 'Accept-Encoding'); assert.equal(encoded.headers['cache-control'], 'no-store');
+    assert.equal(encoded.headers['x-content-type-options'], 'nosniff');
+    assert.match(encoded.headers['content-security-policy'], /connect-src 'self'/);
+    const head = await raw('/' + name, 'gzip', 'HEAD');
+    assert.equal(head.bytes.length, 0); assert.equal(head.headers['content-encoding'], 'gzip');
+    assert.equal(head.headers['content-length'], encoded.headers['content-length']);
+    const identityHead = await raw('/' + name, 'identity', 'HEAD');
+    assert.equal(identityHead.bytes.length, 0); assert.equal(identityHead.headers['content-encoding'], undefined);
+    assert.equal(Number(identityHead.headers['content-length']), source.length);
+  }
+  for (const encoding of [undefined, '', 'identity', 'br', 'gzip;q=0', '*;q=0, identity;q=1', 'gzip;q=0.2, identity;q=0.8', 'gzip;q=bogus', 'gzip;q=1.5', 'gzip;q=1, gzip;q=0', 'gzip;q=0;q=1', 'gzip;q=1;q=0']) {
+    const response = await raw('/entry.js', encoding);
+    assert.equal(response.status, 200, String(encoding)); assert.equal(response.headers['content-encoding'], undefined);
+    assert.deepEqual(response.bytes, source); assert.equal(response.headers.vary, 'Accept-Encoding');
+  }
+  for (const encoding of ['GZIP ; q=1', '*', 'gzip;q=0.8, identity;q=0.2', 'gzip;q=0.5, identity;q=0', '*;q=0, gzip;q=1']) {
+    const response = await raw('/entry.js', encoding);
+    assert.equal(response.status, 200, encoding); assert.equal(response.headers['content-encoding'], 'gzip');
+    assert.deepEqual(gunzipSync(response.bytes), source);
+  }
+  for (const encoding of ['gzip;q=0, identity;q=0', '*;q=0', 'br, identity;q=0']) {
+    const response = await raw('/entry.js', encoding);
+    assert.equal(response.status, 406, encoding); assert.equal(response.bytes.length, 0);
+    assert.equal(response.headers.vary, 'Accept-Encoding');
+  }
+  await writeFile(join(site, 'tiny.js'), '1');
+  assert.equal((await raw('/tiny.js', 'gzip')).headers['content-encoding'], undefined);
+  assert.deepEqual(gunzipSync((await raw('/tiny.js', 'gzip, identity;q=0')).bytes), Buffer.from('1'));
+  const incompressible = randomBytes(4096);
+  await writeFile(join(site, 'random.js'), incompressible);
+  const unchanged = await raw('/random.js', 'gzip');
+  assert.equal(unchanged.headers['content-encoding'], undefined); assert.deepEqual(unchanged.bytes, incompressible);
+  const concurrent = await Promise.all(Array.from({length: 8}, (_, index) => raw('/entry.js', index % 2 ? 'gzip' : 'identity')));
+  for (const [index, response] of concurrent.entries()) {
+    assert.deepEqual(index % 2 ? gunzipSync(response.bytes) : response.bytes, source);
+    assert.equal(response.headers['content-encoding'], index % 2 ? 'gzip' : undefined);
+  }
+  // There is no compressed response cache to return an earlier asset revision.
+  const next = Buffer.from('/* revised synthetic asset */\n'.repeat(300));
+  await writeFile(join(site, 'entry.js'), next);
+  assert.deepEqual(gunzipSync((await raw('/entry.js', 'gzip')).bytes), next);
+
+  for (const name of ['document.pdf', 'image.png', 'metadata.json', 'engine.wasm']) {
+    await writeFile(join(site, name), source);
+    const response = await raw('/' + name, 'gzip');
+    assert.equal(response.headers['content-encoding'], undefined); assert.equal(response.headers.vary, undefined);
+    assert.deepEqual(response.bytes, source);
+  }
+  for (const path of ['/', '/api/planner/status', '/__atepdf_beta/status', '/missing.js']) {
+    const response = await raw(path, 'gzip');
+    assert.equal(response.headers['content-encoding'], undefined, path);
+    assert.equal(response.headers['cache-control'], 'no-store');
+  }
+  await writeFile(join(repo, 'private.js'), source);
+  await symlink(join(repo, 'private.js'), join(site, 'escaped.js'));
+  assert.equal((await raw('/escaped.js', 'gzip')).status, 404);
+  await sleep(20); await writeFile(join(site, 'index.html'), '<title>changed synthetic build</title>');
+  const stale = await raw('/entry.js', 'gzip');
+  assert.equal(stale.status, 503); assert.equal(stale.headers['content-encoding'], undefined);
 });
 
 test('changed builds fail closed instead of mixing old gateway and new browser assets', async t => {

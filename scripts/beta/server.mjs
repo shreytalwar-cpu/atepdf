@@ -5,6 +5,7 @@ import {readFile, realpath, stat} from 'node:fs/promises';
 import {resolve, join, extname, sep, dirname} from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {readPrivateJSON} from './files.mjs';
+import {staticResponse} from './static-response.mjs';
 
 const mime = {'.html': 'text/html', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.pdf': 'application/pdf', '.wasm': 'application/wasm', '.ttf': 'font/ttf', '.woff2': 'font/woff2', '.svg': 'image/svg+xml'};
 const routes = new Set(['/api/planner', '/api/planner/status', '/api/planner/key', '/api/planner/pairing', '/api/native/pair', '/api/native/planner', '/api/native/planner/status', '/api/native/disconnect']);
@@ -111,6 +112,11 @@ try {
       const file = await realpath(resolve(root, '.' + (pathname === '/' ? '/index.html' : pathname)));
       if (!file.startsWith(root + sep) || !(await stat(file)).isFile()) throw new Error();
       response.setHeader('Content-Type', mime[extname(file)] || 'application/octet-stream');
+      if (['.js', '.mjs', '.css'].includes(extname(file))) {
+        const result = await staticResponse(await readFile(file), request.headers['accept-encoding']);
+        response.writeHead(result.status, result.headers);
+        response.end(request.method === 'HEAD' ? undefined : result.body); return;
+      }
       response.end(request.method === 'HEAD' ? undefined : await readFile(file));
     } catch { response.writeHead(404); response.end('Not found'); }
   };

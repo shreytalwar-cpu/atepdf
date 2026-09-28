@@ -33,7 +33,7 @@ def main():
     if not settings.exists():
         fd = os.open(settings, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
         with os.fdopen(fd, 'w') as stream:
-            json.dump({'enabled': False, 'model': 'gpt-5.6-luna', 'approvedRequests': 0}, stream, indent=2)
+            json.dump({'enabled': False, 'model': 'gpt-6-luna', 'approvedRequests': 0}, stream, indent=2)
     print('Key saved privately. Planning remains disabled until a bounded test run is approved.')
 
 

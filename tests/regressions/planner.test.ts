@@ -59,16 +59,27 @@ test('local credential: private permissions, no symlink following, budget persis
     await rm(join(dir,'openai-key'));await symlink(join(dir,'planner-settings.json'),join(dir,'openai-key'));assert.equal((await config.status()).connected,false);
   }finally{await rm(dir,{recursive:true,force:true});}
 });
-test('actual AI SDK adapter mocked HTTP: allowlisted request, store=false, structured output, no tools/uploads/telemetry and no retries',async()=>{
+test('actual AI SDK adapter mocked HTTP: complete tool call, no upload/output cap/retry',async()=>{
   const req=request();let calls=0;
   const fetcher:typeof fetch=async(url,init)=>{
     calls++;assert.equal(String(url),'https://api.openai.com/v1/responses');
-    const body=JSON.parse(String(init!.body));assert.equal(body.model,MODEL);assert.equal(body.store,false);assert.equal(body.max_output_tokens,2000);assert.equal(body.text.format.type,'json_schema');assert.equal(body.text.format.strict,true);assert.equal(body.tools,undefined);
-    assert.doesNotMatch(String(init!.body),/brief\.pdf|appendix\.pdf|checksum|file_data|image_url|sk-test-never-network/);
-    return Response.json({id:'resp_test',created_at:1,model:MODEL,status:'completed',error:null,incomplete_details:null,output:[{id:'msg_test',type:'message',role:'assistant',status:'completed',content:[{type:'output_text',text:JSON.stringify(quickPlan(req,'merge').planner),annotations:[]}]}],usage:{input_tokens:50,output_tokens:100,total_tokens:150,input_tokens_details:{cached_tokens:0},output_tokens_details:{reasoning_tokens:0}}});
+    const body=JSON.parse(String(init!.body));assert.equal(body.model,MODEL);assert.equal(body.store,false);assert.equal(body.max_output_tokens,undefined);assert.equal(body.tool_choice,'required');assert.deepEqual(body.tools.map((tool:{name:string})=>tool.name).sort(),['reply_in_chat','run_local_pdf_workflow','undo_last_change']);
+    assert.doesNotMatch(String(init!.body),/brief\.pdf|appendix\.pdf|file_data|image_url|sk-test-never-network/);
+    return Response.json({id:'resp_test',created_at:1,model:MODEL,status:'completed',error:null,incomplete_details:null,output:[{id:'fc_test',type:'function_call',status:'completed',call_id:'call_test',name:'run_local_pdf_workflow',arguments:JSON.stringify(quickPlan(req,'merge').planner)}],usage:{input_tokens:50,output_tokens:100,total_tokens:150,input_tokens_details:{cached_tokens:0},output_tokens_details:{reasoning_tokens:0}}});
   };
   const result=await planWithOpenAI(req,'sk-test-never-network',new AbortController().signal,fetcher);assert.equal(result.status,'plan');assert.equal(calls,1);
   let failedCalls=0;await assert.rejects(planWithOpenAI(req,'sk-test-never-network',new AbortController().signal,async()=>{failedCalls++;return Response.json({error:{message:'private upstream detail',type:'server_error'}},{status:500});}));assert.equal(failedCalls,1);
+});
+test('provider tool choices distinguish product answers and undo from executable plans',async()=>{
+  const req=request();
+  const output=(name:string,input:unknown)=>Response.json({id:'resp_test',created_at:1,model:MODEL,status:'completed',error:null,incomplete_details:null,output:[{id:'fc_test',type:'function_call',status:'completed',call_id:'call_test',name,arguments:JSON.stringify(input)}],usage:{input_tokens:50,output_tokens:50,total_tokens:100,input_tokens_details:{cached_tokens:0},output_tokens_details:{reasoning_tokens:0}}});
+  const answer=await planWithOpenAI(req,'sk-test-never-network',new AbortController().signal,async()=>output('reply_in_chat',{status:'answer',reasonCode:'product_information',message:'I can merge, make PDFs searchable, compress and remove pages on your device.',choices:[]}));
+  assert.equal(answer.status,'answer');assert.deepEqual(answer.steps,[]);
+  const {post}=await setup(async()=>answer);const accepted=await post(req);assert.equal(accepted.status,200);assert.equal((await accepted.json()).planner.clarification.question,answer.clarification?.question);
+  const undo=await planWithOpenAI(req,'sk-test-never-network',new AbortController().signal,async()=>output('undo_last_change',{}));
+  assert.equal(undo.status,'undo');assert.equal(undo.reasonCode,'undo_last_change');assert.deepEqual(undo.steps,[]);
+  const undoGateway=await setup(async()=>undo);assert.equal((await undoGateway.post(request())).status,200);
+  for(const bad of [{...answer,steps:quickPlan(req,'merge').planner.steps},{...answer,clarification:{question:'Open /Users/alice/private.pdf',choices:[]}},{...answer,status:'clarify',reasonCode:'ambiguous_reference',clarification:{question:'Which one?',choices:['file_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa']}}]){const gateway=await setup(async()=>bad as never);assert.equal((await gateway.post(request())).status,502);}
 });
 
 test('masked key endpoint saves only locally, refuses cross-origin/oversized/overwrite and never invokes the provider',async()=>{

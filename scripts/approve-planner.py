@@ -21,7 +21,7 @@ if key_path.is_symlink() or not key_path.is_file() or key_path.stat().st_mode & 
     raise SystemExit('A private local key is required.')
 requests = int(sys.argv[1])
 print(f'Approve at most {requests} OpenAI planning requests on this computer?')
-print('Model: gpt-5.6-luna. Each request has a 24 KB input-body limit, a 2,000 output-token limit, and no retries.')
+print('Model: gpt-6-luna. Each request has a 24 KB input-body limit and no retries. atepdf sets no output-token cap.')
 print('Requests are charged by OpenAI. Cancelled or failed calls still consume the local allowance. This does not set an OpenAI account spending cap.')
 if input('Type APPROVE to replace the remaining allowance: ') != 'APPROVE':
     raise SystemExit('No change.')
@@ -38,7 +38,7 @@ try:
             raise SystemExit('Refusing unsafe settings.')
         os.fchmod(stream.fileno(), 0o600)
         stream.truncate(0)
-        json.dump({'enabled': True, 'model': 'gpt-5.6-luna', 'approvedRequests': requests}, stream, indent=2)
+        json.dump({'enabled': True, 'model': 'gpt-6-luna', 'approvedRequests': requests}, stream, indent=2)
         stream.flush()
         os.fsync(stream.fileno())
 finally:

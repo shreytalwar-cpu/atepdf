@@ -8,6 +8,7 @@ test('large local PDFs: import → >40 MB merge → preview/save → remove → 
   const dir=await mkdtemp(join(tmpdir(),'atepdf-large-browser-'));const requests:{url:string;method:string}[]=[],errors:string[]=[];
   page.on('request',r=>requests.push({url:r.url(),method:r.method()}));page.on('pageerror',e=>errors.push(e.message));
   try{
+    await page.route('**/api/planner/status',route=>route.fulfill({json:{connected:false,enabled:false,remaining:0,token:'test-only-csrf',model:'gpt-6-luna'}}));
     const a=await largePDF('LARGE-A1'),b=await largePDF('LARGE-B1');expect(a.length).toBeGreaterThan(20_000_000);expect(b.length).toBeGreaterThan(20_000_000);
     await writeFile(join(dir,'large-a.pdf'),a);await writeFile(join(dir,'large-b.pdf'),b);
     await page.addInitScript(()=>Object.defineProperty(window,'showSaveFilePicker',{value:undefined,configurable:true}));

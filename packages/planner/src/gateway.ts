@@ -3,7 +3,7 @@ import requestValid from '../../contracts/src/generated/request';
 import {capabilities,validateLocalContext,type Request as PlannerRequest} from '../../contracts/src/protocol';
 import {assertInstructionSafe} from './privacy';
 import {bindResponse} from './schema';
-import {planWithOpenAI} from './provider';
+import {MODEL,planWithOpenAI} from './provider';
 import {LocalConfig} from './local-config';
 const LIMIT=24_000;
 export function validateRequest(value:unknown):PlannerRequest{
@@ -25,7 +25,7 @@ export function createGateway(config:Pick<LocalConfig,'status'|'reserve'> & Part
     if(!/^https?:$/.test(url.protocol)||!['localhost','127.0.0.1','[::1]'].includes(url.hostname)||host!==url.host)return json({error:'Local access only.'},403);
     const origin=request.headers.get('origin');
     if((origin&&origin!==url.origin)||request.headers.get('sec-fetch-site')==='cross-site')return json({error:'Use atepdf on this computer.'},403);
-    if(request.method==='GET'&&url.pathname==='/api/planner/status')return json({...await config.status(),token,model:'gpt-5.6-luna'});
+    if(request.method==='GET'&&url.pathname==='/api/planner/status')return json({...await config.status(),token,model:MODEL});
     if(request.method!=='POST')return json({error:'Method not allowed.'},405);
     if(origin!==url.origin||request.headers.get('x-atepdf-token')!==token)return json({error:'Refresh atepdf before planning.'},403);
     if(request.headers.get('content-type')?.split(';')[0]!=='application/json')return json({error:'Expected a plan request.'},415);

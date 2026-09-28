@@ -1,5 +1,7 @@
 # Planner and protocol evaluation — 2026-09-28
 
+Current update: ADR 0007 supersedes the earlier adapter settings documented below. The browser now uses GPT-6 Luna with required, mutually exclusive AI SDK tool calls for a local PDF workflow, undo or a basic product answer. atepdf sends no `max_output_tokens` cap; `store:false`, no retries, the private request projection and independent validation remain. A synthetic live product question returned `answer` with zero executable steps; a synthetic two-file merge returned a validated `merge_pdf` plan. The owner's request allowance was decremented once per call. Earlier 2,000-token and no-tools statements below are historical evidence of the prior adapter.
+
 Scope: fresh atepdf repository, shared protocol/compiler and the local development planner gateway. No old checkout was executed or changed. This pass made **zero model calls**, did not read the owner's saved credential, and did not change the exhausted paid allowance. The two earlier owner-approved live cases remain the entire live-model evidence set.
 
 ## Changes

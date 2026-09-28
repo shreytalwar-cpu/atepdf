@@ -1,6 +1,6 @@
 import {test,expect,type Page} from '@playwright/test';
 import {quickPlan,type Request as PlannerRequest} from '../../packages/contracts/src/protocol';
-const status={connected:true,enabled:true,remaining:2,token:'test-only-csrf',model:'gpt-5.6-luna'};
+const status={connected:true,enabled:true,remaining:2,token:'test-only-csrf',model:'gpt-6-luna'};
 async function ready(page:import('@playwright/test').Page,getStatus=()=>status){await page.route('**/api/planner/status',route=>route.fulfill({json:getStatus()}));await page.goto('/');await page.getByRole('button',{name:'Try the two sample PDFs'}).click();await expect(page.getByText('Your 2 PDFs are ready.',{exact:false})).toBeVisible();}
 async function send(page:Page,text:string){await page.getByRole('textbox',{name:'Tell atepdf what to do'}).fill(text);await page.getByRole('button',{name:'Send message'}).click();}
 async function noPlanningConsent(page:Page){
@@ -19,23 +19,35 @@ test('mocked planner transport: Send → redacted complete plan → real local r
   await expect(page.getByText('Your key is saved locally. Paid planning is paused',{exact:false})).toBeVisible();
   await page.getByRole('textbox',{name:'Tell atepdf what to do'}).fill('remove page 2');await page.getByRole('textbox',{name:'Tell atepdf what to do'}).press('Enter');await expect(page.getByTestId('result-facts')).toContainText('2 pages');expect(sent).toHaveLength(1);expect(errors).toEqual([]);
 });
+test('AI-enabled quick PDF action uses planner, while a product question replies in chat without changing files',async({page})=>{
+  const sent:PlannerRequest[]=[];
+  await page.route('**/api/planner',async route=>{
+    const req=route.request().postDataJSON() as PlannerRequest;sent.push(req);
+    if(sent.length===1){await route.fulfill({json:quickPlan(req,'merge')});return;}
+    await route.fulfill({json:{schemaVersion:'1.0',requestId:req.requestId,workspaceRevision:req.workspaceRevision,planner:{schemaVersion:'1.0',status:'answer',reasonCode:'product_information',steps:[],resultRefs:[],clarification:{question:'I can merge, remove pages, make scanned PDFs searchable, compress and save a new copy. Your originals stay unchanged.',choices:[]}}}});
+  });
+  await ready(page);await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');
+  await send(page,'What can atepdf do?');await expect(page.getByText('I can merge, remove pages, make scanned PDFs searchable, compress and save a new copy.',{exact:false})).toBeVisible();
+  expect(sent).toHaveLength(2);expect(sent[0].instruction).toBe('Merge my PDFs.');expect(sent[1].instruction).toBe('What can atepdf do?');await expect(page.getByTestId('current-result')).toHaveCount(1);await expect(page.getByTestId('previous-result')).toHaveCount(0);
+});
 test('direct planner cancellation ignores a late complete plan and keeps local quick actions usable',async({page})=>{
   let requests=0,finished=0,release!:()=>void;const gate=new Promise<void>(resolve=>{release=resolve;});
+  let enabled=false;
   await page.route('**/api/planner',async route=>{requests++;const req=route.request().postDataJSON() as PlannerRequest;await gate;await route.fulfill({json:quickPlan(req,'merge')}).catch(()=>{});finished++;});
-  await ready(page);await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');
+  await ready(page,()=>({...status,enabled}));await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');enabled=true;
   try{
     await send(page,'Please combine both documents');await expect(page.getByTestId('progress-message')).toContainText('Planning your request');
     await expect.poll(()=>requests).toBe(1);await noPlanningConsent(page);
     await page.getByRole('button',{name:'Cancel',exact:true}).click();await expect(page.getByText('Planning cancelled. No local files changed.')).toBeVisible();
     await expect(page.getByTestId('previous-result')).toHaveCount(0);await expect(page.getByTestId('result-facts')).toContainText('3 pages');
-    await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('previous-result')).toHaveCount(1);
+    enabled=false;await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('previous-result')).toHaveCount(1);
     release();await expect.poll(()=>finished).toBe(1);await expect(page.getByTestId('progress-message')).toHaveCount(0);
     await expect(page.getByTestId('previous-result')).toHaveCount(1);await expect(page.getByTestId('result-facts')).toContainText('3 pages');expect(requests).toBe(1);
   }finally{release();}
 });
 
 test('cancelling direct planner setup prevents any later model request',async({page})=>{
-  await ready(page);
+  await ready(page,()=>({...status,enabled:false}));
   let arrived!:()=>void,release!:()=>void,finished=0,requests=0;
   const started=new Promise<void>(resolve=>{arrived=resolve;}),gate=new Promise<void>(resolve=>{release=resolve;});
   await page.route('**/api/planner/status',async route=>{arrived();await gate;await route.fulfill({json:status}).catch(()=>{});finished++;});
@@ -62,7 +74,7 @@ for(const invalid of ['incomplete','stale','truncated JSON'] as const){
       else delete (envelope.planner as unknown as Record<string,unknown>).resultRefs;
       await route.fulfill({json:envelope});
     });
-    await ready(page);await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');
+    let enabled=false;await ready(page,()=>({...status,enabled}));await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');enabled=true;
     await send(page,'Please combine both documents');await expect.poll(()=>requests).toBe(1);
     const failure=page.getByTestId('assistant-message').last();
     await expect(failure).toContainText(invalid==='stale'?'Files changed.':invalid==='incomplete'?'Incomplete or invalid plan.':/JSON|Planning.*failed|Planning.*finish/i);
@@ -74,7 +86,7 @@ for(const invalid of ['incomplete','stale','truncated JSON'] as const){
 test('direct balanced-compression plan retains its image-quality choice before local execution',async({page})=>{
   let requests=0;
   await page.route('**/api/planner',async route=>{requests++;await route.fulfill({json:quickPlan(route.request().postDataJSON() as PlannerRequest,'compress')});});
-  await ready(page);await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');
+  let enabled=false;await ready(page,()=>({...status,enabled}));await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');enabled=true;
   await send(page,'Please optimize this document');await expect(page.getByRole('button',{name:'Create optimised copy',exact:true})).toBeVisible();
   await noPlanningConsent(page);await expect(page.getByTestId('previous-result')).toHaveCount(0);await expect(page.getByTestId('result-facts')).toContainText('3 pages');
   await page.getByRole('button',{name:'Create optimised copy',exact:true}).click();await expect(page.getByTestId('previous-result')).toHaveCount(1);await expect(page.getByTestId('result-facts')).toContainText('3 pages');expect(requests).toBe(1);

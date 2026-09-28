@@ -72,36 +72,47 @@ function useWorkspace() {
     catch (e) { say(e instanceof Error ? e.message : 'Files could not be opened.'); }
     finally { setLoading(false); }
   };
-  const execute = async (type: Action, page = 2) => {
-    if (operation.current) return;
-    operation.current = true;
+  const executeLocal = async (type: Action, page = 2) => {
     const previous = store.focus;
     try {
       await controller.quick(type, page);
       finish(previous, type === 'remove' ? `I removed physical page ${page}. Here’s the new copy.` : type === 'merge' ? 'I merged your PDFs in the order added. Here’s your PDF.' : type === 'ocr' ? 'Your searchable copy is ready.' : type === 'chain' ? 'Your merged, searchable and optimised copy is ready.' : 'I checked the optimised copy. Here’s the result.');
     } catch (e) { say(e instanceof Error ? e.message : 'This action could not finish.'); }
+  };
+  const execute = async (type: Action, page = 2) => {
+    if (operation.current) return;
+    operation.current = true;
+    try { await executeLocal(type,page); }
     finally { operation.current = false; }
   };
   const action = (type: Action, text: string, page = 2) => {
     if (busy || operation.current) return;
     setChoice(null); append({role: 'user', text});
+    if(Platform.OS==='web'){void preparePlanning(text,{type,page});return;}
     if ((type === 'compress' || type === 'chain') && store.originals.length) {
       const id = append({role: 'assistant', text: 'I can re-encode supported JPEG images at their original dimensions. Image quality may change; text and vectors stay intact. Some PDFs may not get smaller. Shall I create a new copy for you to preview?', choice: type, revision: store.revision});
       setChoice(id); return;
     }
     void execute(type, page);
   };
-  const undo = () => {
-    if (busy) return;
-    setChoice(null); append({role: 'user', text: 'Undo the last change.'});
+  const undoLocal = () => {
     if (!store.canUndo) { say('There’s no earlier result to restore yet. Your original files are unchanged.'); return; }
     controller.undo();
     append({role: 'assistant', text: 'I restored your previous result. Your original files are unchanged.', artifact: store.get(store.focus!).meta});
+  };
+  const undo = () => {
+    if (busy) return;
+    setChoice(null); append({role: 'user', text: 'Undo the last change.'});
+    undoLocal();
   };
   const submit = (draft: string) => {
     if (busy || operation.current || !draft.trim()) return;
     const text = draft.trim(), command = text.replace(/[.!]$/, '').toLowerCase();
     const remove = command.match(/^remove (?:physical )?page (\d+)(?: from (?:the )?(?:merged )?result)?$/);
+    if(Platform.OS==='web'){
+      const fallback=remove?{type:'remove' as const,page:Number(remove[1])}:['merge', 'merge pdfs', 'merge these pdfs'].includes(command)?{type:'merge' as const,page:2}:['make searchable','ocr'].includes(command)?{type:'ocr' as const,page:2}:command==='compress'?{type:'compress' as const,page:2}:command==='merge, ocr, compress'?{type:'chain' as const,page:2}:command==='undo'?{type:'undo' as const,page:2}:undefined;
+      setChoice(null);append({role:'user',text});void preparePlanning(text,fallback);return;
+    }
     if (command === 'undo') undo();
     else if (remove) action('remove', text, Number(remove[1]));
     else if (['merge', 'merge pdfs', 'merge these pdfs'].includes(command)) action('merge', text);
@@ -110,10 +121,10 @@ function useWorkspace() {
     else if (command === 'merge, ocr, compress') action('chain', text);
     else { setChoice(null); append({role:'user',text}); void preparePlanning(text); }
   };
-  const checkConnection=async(signal?:AbortSignal)=>{
+  const checkConnection=async(signal?:AbortSignal,quiet=false)=>{
     if(Platform.OS!=='web'){say('Use the available local quick actions in this native build. A secure native AI connection is still being tested.');return null;}
     try{const status=await plannerStatus(signal);signal?.throwIfAborted();setConnection(status);return status;}
-    catch(error){if(signal?.aborted)throw error;say('The local planner gateway is unavailable. You can still use the quick actions.');return null;}
+    catch(error){if(signal?.aborted)throw error;if(!quiet)say('The local planner gateway is unavailable. You can still use the quick actions.');return null;}
   };
   const refreshConnection=async()=>{
     try{setConnection(await plannerStatus());}
@@ -125,7 +136,7 @@ function useWorkspace() {
     if(!status.connected){const id=append({role:'assistant',text:'Connect OpenAI for optional AI planning. Enter your key in the secure field below. It is saved only by atepdf’s local server and never added to the conversation. Saving makes no OpenAI calls.',choice:'connect',token:status.token});setChoice(id);return;}
     say(status.enabled?`AI planning is ready for up to ${status.remaining} approved requests. Tell me what you’d like to do.`:status.connected?'Your key is saved locally. Paid planning is paused until you approve a request limit in the local setup. Quick actions work now.':'OpenAI is not connected yet. Use the masked local setup step to save your key on this computer. Don’t paste it into this chat. Quick actions work now.');
   };
-  const preparePlanning=async(text:string)=>{
+  const preparePlanning=async(text:string,fallback?:{type:Action|'undo';page:number})=>{
     if(operation.current)return;
     operation.current=true;setLoading(true);
     const abort=new AbortController();plannerAbort.current=abort;
@@ -133,15 +144,24 @@ function useWorkspace() {
       // One submission owns setup, planning and local execution. Only the
       // positive metadata projection crosses the planner boundary.
       const instruction=privateInstruction(text,store.list),request=controller.request(instruction);
-      const status=await checkConnection(abort.signal);
+      const status=await checkConnection(abort.signal,!!fallback);
       abort.signal.throwIfAborted();
-      if(!status)return;
-      if(!status.enabled){say(status.connected?'Your key is saved. AI planning is paused until a request limit is approved. You can use Merge, Compress, Make searchable, “remove page 2”, or “undo”.':'OpenAI is not connected yet. You can use Merge, Compress, Make searchable, “remove page 2”, or “undo” while the masked key setup is completed.');return;}
+      if(!status?.enabled){
+        if(fallback){
+          setLoading(false);
+          if(fallback.type==='undo')undoLocal();
+          else if((fallback.type==='compress'||fallback.type==='chain')&&store.originals.length){const id=append({role:'assistant',text:'I can re-encode supported JPEG images at their original dimensions. Image quality may change; text and vectors stay intact. Some PDFs may not get smaller. Shall I create a new copy for you to preview?',choice:fallback.type,revision:store.revision});setChoice(id);}
+          else await executeLocal(fallback.type,fallback.page);
+          return;
+        }
+        say(status?.connected?'Your key is saved. AI planning is paused until a request limit is approved.':'OpenAI is not connected yet.');return;
+      }
       setLoading(false);setPlanning(true);
       const result=await requestPlan(request,status.token,abort.signal);
       abort.signal.throwIfAborted();
       if(store.revision!==request.workspaceRevision)throw new Error('Your files changed. Please ask again.');
       // requestPlan validates clarification shape and response binding too.
+      if(result.planner.status==='undo'){undoLocal();return;}
       if(result.planner.status!=='plan'){say(result.planner.clarification!.question);return;}
       const envelope=validateEnvelope(result,request,store.revision);
       setPlanning(false);
@@ -217,7 +237,7 @@ function Screen(){
         {!nativeEngineReady&&<Text className="mx-5 text-xs text-muted-foreground">Native development preview · local PDF processing is not connected yet.</Text>}
         <Thread components={threadComponents}/>
       </DropSurface>
-      <Modal visible={workspace.privacy} transparent animationType={motion?'fade':'none'} onRequestClose={()=>workspace.setPrivacy(false)}><View className="flex-1 items-center justify-center bg-black/25 px-5"><View accessibilityViewIsModal role="dialog" className="w-full max-w-lg gap-4 rounded-3xl bg-background p-6"><Text accessibilityRole="header" className="text-xl font-semibold text-foreground">Processed on your device</Text><Text className="text-base leading-6 text-foreground">PDF files, previews and recognised text stay on this device. Local quick actions do not contact an AI provider.</Text><Text className="text-sm leading-6 text-muted-foreground">When you send a request, optional AI planning receives your instruction and anonymous file references, page counts and sizes. Filenames, passwords, paths, checksums and document contents are excluded. Your OpenAI key stays in the local server, outside the app.</Text><Text className="text-sm leading-6 text-muted-foreground">Save before closing. Chat and files stay in this session. Saving to a cloud folder or sharing through a chosen provider may transfer the saved file outside atepdf.</Text><Button primary onPress={()=>workspace.setPrivacy(false)}>Got it</Button></View></View></Modal>
+      <Modal visible={workspace.privacy} transparent animationType={motion?'fade':'none'} onRequestClose={()=>workspace.setPrivacy(false)}><View className="flex-1 items-center justify-center bg-black/25 px-5"><View accessibilityViewIsModal role="dialog" className="w-full max-w-lg gap-4 rounded-3xl bg-background p-6"><Text accessibilityRole="header" className="text-xl font-semibold text-foreground">Processed on your device</Text><Text className="text-base leading-6 text-foreground">PDF files, previews and recognised text stay on this device. PDF operations run in local engines.</Text><Text className="text-sm leading-6 text-muted-foreground">When AI is enabled, chat requests and quick actions send your instruction and anonymous file references, page counts and sizes for planning. Filenames, passwords, paths, checksums and document contents are excluded. Your OpenAI key stays in the local server, outside the app.</Text><Text className="text-sm leading-6 text-muted-foreground">Save before closing. Chat and files stay in this session. Saving to a cloud folder or sharing through a chosen provider may transfer the saved file outside atepdf.</Text><Button primary onPress={()=>workspace.setPrivacy(false)}>Got it</Button></View></View></Modal>
     </SafeAreaView>
   </AssistantRuntimeProvider></WorkspaceContext.Provider>;
 }

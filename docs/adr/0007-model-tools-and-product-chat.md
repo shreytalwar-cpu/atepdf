@@ -1,0 +1,7 @@
+# ADR 0007 — Model-selected local tools and product chat
+
+The owner chose GPT-6 Luna, removed atepdf's 2,000-output-token application cap, and asked that PDF requests and basic product questions pass through the LLM when enabled. This supersedes the earlier browser behavior where recognised PDF commands and quick-action buttons always bypassed AI. The saved local request allowance remains a separate bounded setting.
+
+The browser sends an instruction and a positive projection of anonymous file references, page counts and sizes to the local gateway. The Vercel AI SDK Responses adapter requires exactly one complete model tool call: `run_local_pdf_workflow`, `undo_last_change`, or `reply_in_chat`. Tool calls have no server-side `execute` callback. The gateway validates and binds the full response, then the browser independently validates current revision and performs any PDF work in its local controller. A chat reply has no executable steps or results. PDF bytes, previews, OCR text, filenames, paths, passwords and checksums never enter the planner request. Partial responses never execute. The model cannot claim local progress or output facts.
+
+When AI is unavailable, recognised quick actions continue locally. The native apps continue with local quick actions while secure native AI transport remains open. The existing image-quality choice still precedes balanced compression. Product answers are limited to known atepdf capabilities; document-content questions and unsupported operations do not access PDF contents through the model.

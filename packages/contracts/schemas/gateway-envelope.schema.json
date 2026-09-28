@@ -25,7 +25,9 @@
           "enum": [
             "plan",
             "clarify",
-            "unsupported"
+            "unsupported",
+            "answer",
+            "undo"
           ]
         },
         "reasonCode": {
@@ -37,7 +39,9 @@
             "excluded_operation",
             "content_required",
             "unavailable_capability",
-            "invalid_request"
+            "invalid_request",
+            "product_information",
+            "undo_last_change"
           ]
         },
         "steps": {
@@ -1162,7 +1166,7 @@
                 "question": {
                   "type": "string",
                   "minLength": 1,
-                  "maxLength": 240
+                  "maxLength": 600
                 },
                 "choices": {
                   "type": "array",

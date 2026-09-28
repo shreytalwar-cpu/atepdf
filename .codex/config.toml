@@ -1,0 +1,8 @@
+# Official Google Stitch remote MCP, scoped to AtePDF.
+# Setup: /usr/bin/python3 scripts/codex/stitch-auth.py --setup
+# The credential stays outside this repository.
+[mcp_servers.stitch]
+url = "https://stitch.googleapis.com/mcp"
+http_headers_helper = "/usr/bin/python3 /Users/shrey/Documents/ChatGPT/atepdf/scripts/codex/stitch-auth.py"
+startup_timeout_sec = 30
+tool_timeout_sec = 300

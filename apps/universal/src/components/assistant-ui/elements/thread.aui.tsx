@@ -33,19 +33,17 @@ import {
   useAuiState,
 } from "@assistant-ui/react-native";
 import * as Clipboard from "expo-clipboard";
-import {
-  ArrowUpIcon,
-  ArrowDownIcon,
-  AudioLinesIcon,
-  CheckIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  CopyIcon,
-  PencilIcon,
-  MicIcon,
-  PhoneIcon,
-  RefreshCwIcon,
-} from "lucide-react-native";
+import ArrowUpIcon from 'lucide-react-native/icons/arrow-up';
+import ArrowDownIcon from 'lucide-react-native/icons/arrow-down';
+import AudioLinesIcon from 'lucide-react-native/icons/audio-lines';
+import CheckIcon from 'lucide-react-native/icons/check';
+import ChevronLeftIcon from 'lucide-react-native/icons/chevron-left';
+import ChevronRightIcon from 'lucide-react-native/icons/chevron-right';
+import CopyIcon from 'lucide-react-native/icons/copy';
+import PencilIcon from 'lucide-react-native/icons/pencil';
+import MicIcon from 'lucide-react-native/icons/mic';
+import PhoneIcon from 'lucide-react-native/icons/phone';
+import RefreshCwIcon from 'lucide-react-native/icons/refresh-cw';
 import {
   type ComponentRef,
   type ComponentType,
@@ -160,12 +158,15 @@ export type ThreadViewportSnapshot = {
 export type ThreadViewport = ThreadViewportSnapshot & {
   /** Scrolls the message list until the message starts at the top of the viewport. */
   readonly scrollToMessage: (id: string) => void;
+  /** Reveals a measured native reading region after the keyboard changes the viewport. */
+  readonly revealNativeRegion: (top: number, bottom: number) => void;
 };
 
 type ThreadViewportStore = {
   readonly subscribe: (listener: () => void) => () => void;
   readonly getSnapshot: () => ThreadViewportSnapshot;
   readonly scrollToMessage: (id: string) => void;
+  readonly revealNativeRegion: (top: number, bottom: number) => void;
 };
 
 const EMPTY_COMPONENTS: ThreadComponents = {};
@@ -192,6 +193,7 @@ const ThreadViewportContext = createContext<ThreadViewportStore>({
   subscribe: () => () => {},
   getSnapshot: () => IDLE_VIEWPORT,
   scrollToMessage: () => {},
+  revealNativeRegion: () => {},
 });
 
 const createViewportStore = () => {
@@ -215,13 +217,13 @@ const createViewportStore = () => {
 
 /** What the thread's message list shows right now, for an element that overlays it. */
 export const useThreadViewport = (): ThreadViewport => {
-  const { subscribe, getSnapshot, scrollToMessage } = useContext(
+  const { subscribe, getSnapshot, scrollToMessage, revealNativeRegion } = useContext(
     ThreadViewportContext,
   );
   const snapshot = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
   return useMemo(
-    () => ({ ...snapshot, scrollToMessage }),
-    [snapshot, scrollToMessage],
+    () => ({ ...snapshot, scrollToMessage, revealNativeRegion }),
+    [snapshot, scrollToMessage, revealNativeRegion],
   );
 };
 
@@ -236,12 +238,14 @@ export const Thread: FC<ThreadProps> = ({
   const aui = useAui();
   const isEmpty = useAuiState(isNewChatView);
   const isRunning = useAuiState((s) => s.thread.isRunning);
+  const latestUserId = useAuiState((s) => s.thread.messages.findLast(message => message.role === 'user')?.id);
   const insets = useSafeAreaInsets();
   const viewportRef = useRef<ComponentRef<typeof View>>(null);
   const [viewportTop, setViewportTop] = useState(0);
   const [awayFromEnd, setAwayFromEnd] = useState(false);
   const [store] = useState(createViewportStore);
   const listRef = useRef<FlatList<ThreadMessage>>(null);
+  const followSubmission = useRef(true);
   const metricsRef = useRef({
     contentHeight: 0,
     viewportHeight: 0,
@@ -256,6 +260,40 @@ export const Thread: FC<ThreadProps> = ({
     | undefined
   >(undefined);
   const { Rail } = components;
+
+  const scrollToLatest = useCallback(() => {
+    followSubmission.current = true;
+    const {contentHeight, viewportHeight} = metricsRef.current;
+    // FlatList.scrollToEnd estimates the last row from measured cell lengths.
+    // PDF cards have variable heights; use the actual content measurement.
+    listRef.current?.scrollToOffset({offset:Math.max(0,contentHeight-viewportHeight),animated:false});
+  }, []);
+
+  useEffect(() => {
+    if (!latestUserId) return;
+    // Sending opts back into following. Layout changes are not reading intent:
+    // a short job can shrink its activity row before the result card appears.
+    scrollToLatest();
+  }, [latestUserId,scrollToLatest]);
+
+  useEffect(() => {
+    if (Platform.OS !== 'web' || isEmpty) return;
+    const node = listRef.current?.getNativeScrollRef() as unknown as HTMLElement | null;
+    if (!node?.addEventListener) return;
+    const reading = () => {followSubmission.current = false;};
+    const wheel = (event: WheelEvent) => {if (event.deltaY < 0) reading();};
+    const key = (event: KeyboardEvent) => {if (['ArrowUp','PageUp','Home'].includes(event.key)) reading();};
+    node.addEventListener('wheel',wheel,{passive:true});
+    node.addEventListener('pointerdown',reading);
+    node.addEventListener('focusin',reading);
+    node.addEventListener('keydown',key);
+    return () => {
+      node.removeEventListener('wheel',wheel);
+      node.removeEventListener('pointerdown',reading);
+      node.removeEventListener('focusin',reading);
+      node.removeEventListener('keydown',key);
+    };
+  }, [isEmpty]);
 
   useEffect(() => () => clearTimeout(jumpRef.current?.timer), []);
 
@@ -336,6 +374,7 @@ export const Thread: FC<ThreadProps> = ({
     (event: NativeSyntheticEvent<NativeScrollEvent>) => {
       const { contentOffset, contentSize, layoutMeasurement } =
         event.nativeEvent;
+      if (contentSize.height - layoutMeasurement.height - contentOffset.y <= 2) followSubmission.current = true;
       metricsRef.current = {
         contentHeight: contentSize.height,
         viewportHeight: layoutMeasurement.height,
@@ -349,31 +388,56 @@ export const Thread: FC<ThreadProps> = ({
   const onListContentSizeChange = useCallback(
     (_width: number, height: number) => {
       metricsRef.current.contentHeight = height;
+      if (followSubmission.current) scrollToLatest();
       publishDescent();
     },
-    [publishDescent],
+    [publishDescent,scrollToLatest],
   );
 
   const onListLayout = useCallback(
     (event: LayoutChangeEvent) => {
       const { height, y } = event.nativeEvent.layout;
       metricsRef.current.viewportHeight = height;
+      if (followSubmission.current) scrollToLatest();
       const snapshot = store.getSnapshot();
       if (height !== snapshot.height || y !== snapshot.top) {
         store.publish({ height, top: y });
       }
       publishDescent();
     },
-    [publishDescent, store],
+    [publishDescent, store, scrollToLatest],
   );
+
+  const revealNativeRegion = useCallback((top: number, bottom: number) => {
+    if (Platform.OS === 'web' || !Number.isFinite(top) || !Number.isFinite(bottom) || bottom <= top) return;
+    // Opening/reading a preview is explicit reading intent. A keyboard resize
+    // must not replace that anchor with the end of its enclosing result card.
+    followSubmission.current = false;
+    viewportRef.current?.measureInWindow((_x, y) => {
+      const {contentHeight, viewportHeight, scrollY} = metricsRef.current;
+      if (viewportHeight <= 0) return;
+      const visibleTop = y + store.getSnapshot().top + 2;
+      const visibleBottom = visibleTop + viewportHeight - 4;
+      const above = top - visibleTop, below = bottom - visibleBottom;
+      // If a region is taller than the available area, preserve its leading
+      // controls. Never scroll beyond measured content or change keyboard focus.
+      const delta = above < 0 ? above : below > 0 ? Math.min(below, above) : 0;
+      if (Math.abs(delta) < 1) return;
+      listRef.current?.scrollToOffset({
+        offset: Math.max(0, Math.min(Math.max(0, contentHeight - viewportHeight), scrollY + delta)),
+        animated: false,
+      });
+    });
+  }, [store]);
 
   const viewport = useMemo(
     () => ({
       subscribe: store.subscribe,
       getSnapshot: store.getSnapshot,
       scrollToMessage,
+      revealNativeRegion,
     }),
-    [store, scrollToMessage],
+    [store, scrollToMessage, revealNativeRegion],
   );
 
   useEffect(() => {
@@ -425,16 +489,21 @@ export const Thread: FC<ThreadProps> = ({
                     Rail && "pl-10",
                   )}
                   testID="conversation"
-                  // Animated run-start scrolls can race very short local jobs.
-                  // Keep the template's content/keyboard following and respect
-                  // readers who have intentionally scrolled up.
+                  // One owner follows measured content/keyboard changes. The
+                  // default handler can mistake a shrinking job row for a
+                  // deliberate upward scroll, leaving a fast result hidden.
+                  autoScroll={false}
                   scrollToBottomOnRunStart={false}
+                  scrollToBottomOnInitialize={false}
+                  scrollToBottomOnThreadSwitch={false}
                   showsVerticalScrollIndicator={false}
                   keyboardDismissMode="interactive"
                   keyboardShouldPersistTaps="handled"
                   onContentSizeChange={onListContentSizeChange}
                   onLayout={onListLayout}
                   onScroll={onListScroll}
+                  onScrollBeginDrag={()=>{followSubmission.current=false;}}
+                  onTouchStart={()=>{followSubmission.current=false;}}
                   {...(Rail
                     ? {
                         onScrollToIndexFailed,
@@ -457,7 +526,7 @@ export const Thread: FC<ThreadProps> = ({
               >
                 {awayFromEnd&&!isEmpty&&<Pressable
                   accessibilityRole="button" accessibilityLabel="Latest message"
-                  onPress={()=>listRef.current?.scrollToEnd({animated:false})}
+                  onPress={scrollToLatest}
                   className="atepdf-button absolute -top-14 right-5 z-10 size-11 items-center justify-center rounded-full border border-border bg-background"
                   style={{boxShadow:'0 3px 12px #18213b12'}}
                 ><Icon as={ArrowDownIcon} className="size-4 text-foreground"/></Pressable>}
@@ -799,13 +868,14 @@ const AssistantIndicator: FC = () => {
 const AssistantMessage: FC = () => {
   const {Activity}=useContext(ThreadComponentsContext);
   const running=useAuiState(s=>s.message.status?.type==='running');
+  const hasArtifact=useAuiState(s=>s.message.metadata.custom.hasArtifact===true);
   return (
   <StyledMessageRoot testID="assistant-message" className="aui-assistant-message-root">
     <View className="aui-assistant-message-content px-2 gap-3">
       {running&&Activity?<Activity/>:<><MessagePrimitive.Parts components={{ Text: UserText }} /><HostSlot name="MessageExtras" /><AssistantIndicator /></>}
       <MessageError />
     </View>
-    {!running&&<View className="aui-assistant-message-footer ms-2 flex-row items-center pt-1.5">
+    {!running&&!hasArtifact&&<View className="aui-assistant-message-footer ms-2 flex-row items-center pt-1.5">
       <AssistantActionBar />
     </View>}
   </StyledMessageRoot>

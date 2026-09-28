@@ -1,0 +1,20 @@
+/* React Native Web's unlayered styles outrank Tailwind's base layer. Keep the
+   keyboard indicator outside that layer so removing the input outline is safe. */
+.aui-composer-shell:focus-within {outline:2px solid var(--color-primary,#1769df);outline-offset:2px}
+
+/* Keep room for the conversation when short browser windows also use larger
+   text. Only chrome spacing and icon-only controls are bounded; text scales. */
+@media (max-height:600px) {
+  .atepdf-workspace > :first-child {padding:8px 16px;gap:8px}
+  .atepdf-workspace > :first-child [role=button] {min-height:44px;min-width:44px;height:auto}
+  .atepdf-workspace > :first-child [aria-label="OpenAI connection"],
+  .atepdf-workspace > :first-child [aria-label="Start over"] {width:44px;height:44px}
+  .aui-composer-shell {padding:8px;gap:4px}
+  .aui-composer-input {min-height:48px;max-height:96px;padding:8px 12px}
+  .aui-composer-action-wrapper [role=button] {width:44px;height:44px;min-width:44px;min-height:44px}
+  .aui-thread-viewport-footer {gap:8px;padding-inline:16px}
+  .aui-thread-viewport-footer [aria-label="Latest message"] {width:44px;height:44px;top:-56px;right:20px}
+  .aui-thread-viewport-footer > :has([data-testid=current-context]) {gap:4px;padding-bottom:0}
+  .aui-thread-viewport-footer > :has([data-testid=current-context]) [role=button] {min-height:44px;padding:8px 12px}
+  .aui-thread-viewport-footer > :has([data-testid=current-context]) > :last-child {min-height:28px;gap:6px}
+}

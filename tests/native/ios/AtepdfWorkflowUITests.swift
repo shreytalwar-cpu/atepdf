@@ -132,9 +132,10 @@ final class AtepdfWorkflowUITests: XCTestCase {
     let largeText = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
     let compactKeyboard = (app.frame.width > app.frame.height || largeText) && app.keyboards.firstMatch.exists
     if compactKeyboard {
-      XCTAssertFalse(app.staticTexts["Current result · \(count) pages"].exists, file: file, line: line)
+      XCTAssertFalse(app.staticTexts["current-context"].exists, file: file, line: line)
     } else {
-      XCTAssertTrue(app.staticTexts["Current result · \(count) pages"].exists, file: file, line: line)
+      XCTAssertTrue(app.staticTexts["current-context"].label.hasPrefix("Current:"), file: file, line: line)
+      XCTAssertTrue(app.staticTexts["current-context"].label.hasSuffix("\(count) pages"), file: file, line: line)
     }
   }
 
@@ -374,7 +375,7 @@ final class AtepdfWorkflowUITests: XCTestCase {
     XCTAssertLessThanOrEqual(app.buttons["Send message"].frame.maxY, app.keyboards.firstMatch.frame.minY + 1)
     XCTAssertGreaterThan(conversation.frame.height, 100)
     XCTAssertFalse(app.buttons["Merge"].exists)
-    XCTAssertFalse(app.staticTexts["Current result · 3 pages"].exists)
+    XCTAssertFalse(app.staticTexts["current-context"].exists)
     XCTAssertTrue(app.buttons["Send message"].isHittable)
     capture("ipad-landscape-keyboard-command")
     tap(app.buttons["Send message"]);wait(composer, "value == nil OR value == ''");assertPages(2)
@@ -647,6 +648,16 @@ final class AtepdfWorkflowUITests: XCTestCase {
   }
 
   func testBundledMergePreviewRemovalUndoAndShareDismissal() throws {
+    try bundledMergePreviewRemovalUndoAndShareDismissal(softwareKeyboardVisible: true)
+  }
+
+  /// Covers the complete local workflow when Simulator uses hardware input.
+  /// The software-keyboard test above retains its strict clearance requirement.
+  func testHardwareKeyboardBundledMergePreviewRemovalUndoAndShareDismissal() throws {
+    try bundledMergePreviewRemovalUndoAndShareDismissal(softwareKeyboardVisible: false)
+  }
+
+  private func bundledMergePreviewRemovalUndoAndShareDismissal(softwareKeyboardVisible: Bool) throws {
     addBundledSamples()
     wait(app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH 'Your 2 PDFs are ready.'")).firstMatch, "exists == true")
     XCTAssertTrue(app.staticTexts["brief.pdf"].exists)
@@ -681,14 +692,22 @@ final class AtepdfWorkflowUITests: XCTestCase {
     wait(composer, "value == 'remove page 2x'")
     composer.typeText(XCUIKeyboardKey.delete.rawValue)
     wait(composer, "value == 'remove page 2'")
-    let geometry = XCTAttachment(string: "conversation=\(conversation.frame)\ncomposer=\(composer.frame)\nsend=\(app.buttons["Send message"].frame)\nkeyboard=\(app.keyboards.firstMatch.frame)")
+    let geometry = XCTAttachment(string: "expectedInputConfiguration=\(softwareKeyboardVisible ? "visible-software-keyboard" : "hardware-keyboard-no-software-clearance-claim")\nconversation=\(conversation.frame)\ncomposer=\(composer.frame)\nsend=\(app.buttons["Send message"].frame)\nkeyboard=\(app.keyboards.firstMatch.frame)\nvisibleKeyboard=\(app.keyboards.firstMatch.frame.intersection(app.frame))")
     geometry.name = "keyboard-workspace-geometry"
     geometry.lifetime = .keepAlways
     add(geometry)
     XCTAssertGreaterThan(conversation.frame.height, 100, "Keyboard must leave usable conversation space")
-    XCTAssertGreaterThan(app.keyboards.firstMatch.frame.intersection(app.frame).height, 100, "A software keyboard must actually be visible for this layout check")
-    XCTAssertLessThanOrEqual(composer.frame.maxY, app.keyboards.firstMatch.frame.minY + 1)
-    XCTAssertLessThanOrEqual(app.buttons["Send message"].frame.maxY, app.keyboards.firstMatch.frame.minY + 1)
+    if softwareKeyboardVisible {
+      XCTAssertGreaterThan(app.keyboards.firstMatch.frame.intersection(app.frame).height, 100, "A software keyboard must actually be visible for this layout check")
+      XCTAssertLessThanOrEqual(composer.frame.maxY, app.keyboards.firstMatch.frame.minY + 1)
+      XCTAssertLessThanOrEqual(app.buttons["Send message"].frame.maxY, app.keyboards.firstMatch.frame.minY + 1)
+    } else {
+      XCTAssertEqual(app.keyboards.firstMatch.frame.intersection(app.frame).height, 0, "This separate test requires hardware input with no visible software keyboard")
+      XCTAssertTrue(app.frame.contains(composer.frame), "Hardware-input composer must be fully visible")
+      XCTAssertTrue(app.frame.contains(app.buttons["Send message"].frame), "Hardware-input Send control must be fully visible")
+      XCTAssertTrue(composer.isHittable)
+      XCTAssertTrue(app.buttons["Send message"].isHittable)
+    }
     capture("04-command-ready")
     tap(app.buttons["Send message"])
     wait(composer, "value == nil OR value == ''")

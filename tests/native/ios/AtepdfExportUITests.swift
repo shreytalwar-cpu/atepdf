@@ -43,6 +43,36 @@ final class AtepdfExportUITests: XCTestCase {
     return try XCTUnwrap(candidates.first, file: file, line: line)
   }
 
+  private func pickerHeading() throws -> (name: String, element: XCUIElement) {
+    let bar = try uniqueVisible(app.navigationBars.matching(identifier: "FullDocumentManagerViewControllerNavigationBar"),
+                                "visible system save navigation bar")
+    // The directory title is either the root's text or a folder's Actions Menu
+    // button. Both forms were observed in the actual iOS 27 picker. Hidden
+    // browsing-root container identities and the generic Back label are not
+    // evidence of the currently displayed directory.
+    let headings = bar.staticTexts.matching(NSPredicate(format: "label == 'On My iPhone'")).allElementsBoundByIndex
+      + bar.buttons.matching(NSPredicate(format: "label ENDSWITH ', Actions Menu'")).allElementsBoundByIndex
+    let visible = headings.filter { $0.exists && $0.isHittable }
+    XCTAssertEqual(visible.count, 1, "Expected one visible system directory heading")
+    let element = try XCTUnwrap(visible.first)
+    let suffix = ", Actions Menu"
+    let label = element.label
+    // Bind to the observed title, not its position: the parent may also have an
+    // Actions Menu button at index zero after navigating upward.
+    let exactHeading = bar.descendants(matching: .any).matching(NSPredicate(format: "label == %@", label)).firstMatch
+    return (label.hasSuffix(suffix) ? String(label.dropLast(suffix.count)) : label, exactHeading)
+  }
+
+  private func leaveVisibleQAFolder(_ heading: (name: String, element: XCUIElement)) throws {
+    let prefix = "atepdf-beta-"
+    XCTAssertTrue(heading.name.hasPrefix(prefix), "Only navigate upward from an identified local QA folder")
+    XCTAssertNotNil(UUID(uuidString: String(heading.name.dropFirst(prefix.count))), "The visible QA folder must have its exact UUID name")
+    let back = try uniqueVisible(app.buttons.matching(identifier: "BackButton"), "visible system picker parent control")
+    tap(back)
+    wait(heading.element, "exists == false OR hittable == false")
+    XCTAssertNotEqual(try pickerHeading().name, heading.name, "The observed parent action must change the visible directory")
+  }
+
   private func capture(_ name: String, application: XCUIApplication) {
     let hierarchy = XCTAttachment(string: application.debugDescription)
     hierarchy.name = name + "-hierarchy"
@@ -113,18 +143,17 @@ final class AtepdfExportUITests: XCTestCase {
     let localRootID = "DOC.browsingRoot Source: com.apple.FileProvider.LocalStorage, Title: On My iPhone"
     let localFolderID = "DOC.browsingRoot Source: com.apple.FileProvider.LocalStorage, Title: " + folder
     wait(app.navigationBars["FullDocumentManagerViewControllerNavigationBar"], "exists == true")
-    // Hidden browsing-root containers persist behind the current directory.
-    // Navigate the observed visible back control until its parent is Browse.
+    // Generic Back labels are allowed only after the visible heading identifies
+    // this test's local QA folder. Each observed parent action must change it.
     var atLocalRoot = false
     for _ in 0..<5 {
-      let back = try uniqueVisible(app.buttons.matching(identifier: "BackButton"), "visible picker parent")
-      if back.label == "Browse" { atLocalRoot = true; break }
-      XCTAssertTrue(back.label == "On My iPhone" || back.label.hasPrefix("atepdf-beta-"),
-                    "Only leave this test's local QA folder chain")
-      tap(back)
+      let heading = try pickerHeading()
+      if heading.name == "On My iPhone" { atLocalRoot = true; break }
+      capture("export-picker-parent-" + heading.name, application: app)
+      try leaveVisibleQAFolder(heading)
     }
     XCTAssertTrue(atLocalRoot, "Must reach the actual local root before creating a fresh folder")
-    _ = try uniqueVisible(app.staticTexts.matching(NSPredicate(format: "label == 'On My iPhone'")), "visible local root title")
+    XCTAssertEqual(try pickerHeading().name, "On My iPhone")
     wait(app.otherElements[localRootID], "exists == true")
     tap(app.buttons["OverflowBarButtonItem"])
     capture("export-system-save-folder-actions", application: app)
@@ -139,11 +168,18 @@ final class AtepdfExportUITests: XCTestCase {
     XCTAssertFalse(initialName.isEmpty)
     rename.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: initialName.count) + folder + "\n")
     wait(rename, "exists == false OR hittable == false")
-    // Return commits the name and enters the new folder automatically. The
-    // observed browsing-root identity proves both its provider and exact name.
+    // Return enters the new folder. Prove its direct parent by actually returning
+    // to the visible local root, finding the exact new cell, and entering again.
     wait(app.otherElements[localFolderID], "exists == true")
-    let directParent = try uniqueVisible(app.buttons.matching(identifier: "BackButton"), "new folder's visible parent")
-    XCTAssertEqual(directParent.label, "On My iPhone", "The new export folder must be a direct local-root child")
+    let newHeading = try pickerHeading()
+    XCTAssertEqual(newHeading.name, folder)
+    try leaveVisibleQAFolder(newHeading)
+    XCTAssertEqual(try pickerHeading().name, "On My iPhone", "The new export folder must be a direct local-root child")
+    let newFolderCell = app.cells[folder + ", Folder"]
+    reveal(newFolderCell, in: app.collectionViews["File View"])
+    capture("export-new-folder-at-local-root", application: app)
+    tap(newFolderCell)
+    XCTAssertEqual(try pickerHeading().name, folder)
     capture("export-local-destination-before-save", application: app)
     tap(app.buttons["DOCPicker.actionButton"])
     wait(app.staticTexts["Share sheet closed · check the destination you chose"], "exists == true")

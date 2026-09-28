@@ -18,7 +18,7 @@
   --color-destructive: #b4233a;
 }
 @layer base {
-  @media web {
+  @media screen {
     html, body, #root { height: 100%; overflow: hidden; }
     body { margin: 0; }
     button, textarea { font: inherit; }

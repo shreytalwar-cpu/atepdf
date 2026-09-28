@@ -1,6 +1,15 @@
 import {useState} from 'react';
 import {Animated,Pressable,Text,View} from 'react-native';
-import {Check,ChevronDown,ChevronUp,Circle,FileCheck2,Layers,ScanText,Shrink,Sparkles,X} from 'lucide-react-native';
+import Check from 'lucide-react-native/icons/check';
+import ChevronDown from 'lucide-react-native/icons/chevron-down';
+import ChevronUp from 'lucide-react-native/icons/chevron-up';
+import Circle from 'lucide-react-native/icons/circle';
+import FileCheck2 from 'lucide-react-native/icons/file-check-corner';
+import Layers from 'lucide-react-native/icons/layers';
+import ScanText from 'lucide-react-native/icons/scan-text';
+import Shrink from 'lucide-react-native/icons/shrink';
+import Sparkles from 'lucide-react-native/icons/sparkles';
+import X from 'lucide-react-native/icons/x';
 import type {JobState,JobStepStatus} from '@core/job-controller';
 import type {Operation} from '@contracts/protocol';
 import {Icon} from './ui/icon';

@@ -56,7 +56,7 @@ export function validateEnvelope(raw:unknown, request:Request, currentRevision:n
       if(step.operation==='select_pages') {
         const pages=step.params.pages as {mode:string;indices?:number[]};
         if(step.params.action!=='remove'||pages.mode!=='explicit'||!pages.indices?.length) throw new Error('Only explicit physical page removal is available.');
-        if(pages.indices.some(n=>n>count)) throw new Error('That physical page does not exist.');
+        if(pages.indices.some(n=>n>count)) throw new Error(`This PDF has ${count} ${count===1?'page':'pages'}. ${count===1?'A PDF must keep at least one page.':`Choose a page from 1 to ${count}.`} Your files are unchanged.`);
         count-=pages.indices.length;
       }
       if(step.operation==='ocr_pdf' && (JSON.stringify(step.params.languages)!=='["eng"]'||!request.ocrLanguages.includes('eng')||step.params.batchMode!=='single')) throw new Error('Only single-document English OCR is available.');

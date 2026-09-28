@@ -1,7 +1,18 @@
 import React, {createContext, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore} from 'react';
 import {View, Text, Image, Pressable, TextInput, ScrollView, Modal, Platform, Keyboard, useWindowDimensions} from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
-import {ArrowDownToLine, Check, FileText, FolderOpen, LockKeyhole, Plus, ScanText, Copy, Undo2, SquarePen, SlidersHorizontal, Eye} from 'lucide-react-native';
+import ArrowDownToLine from 'lucide-react-native/icons/arrow-down-to-line';
+import Check from 'lucide-react-native/icons/check';
+import FileText from 'lucide-react-native/icons/file-text';
+import FolderOpen from 'lucide-react-native/icons/folder-open';
+import LockKeyhole from 'lucide-react-native/icons/lock-keyhole';
+import Plus from 'lucide-react-native/icons/plus';
+import ScanText from 'lucide-react-native/icons/scan-text';
+import Copy from 'lucide-react-native/icons/copy';
+import Undo2 from 'lucide-react-native/icons/undo-2';
+import SquarePen from 'lucide-react-native/icons/square-pen';
+import SlidersHorizontal from 'lucide-react-native/icons/sliders-horizontal';
+import Eye from 'lucide-react-native/icons/eye';
 import type {LucideIcon} from 'lucide-react-native';
 import {AssistantRuntimeProvider, useExternalStoreRuntime, useAuiState, type ThreadMessageLike} from '@assistant-ui/react-native';
 import * as Clipboard from 'expo-clipboard';
@@ -16,11 +27,22 @@ import {JobActivity} from './src/components/JobActivity';
 import {useAnnounce,useMotion} from './src/components/assistant-ui/elements/surfaces';
 import {privateInstruction} from '@planner/privacy';
 import {plannerStatus,requestPlan,savePlannerKey,createNativePairing,pairNativePlanner,disconnectNativePlanner,plannerAvailable,type PlannerStatus} from './src/platform/planner';
-import {validateEnvelope,type Request as PlannerRequest,type Envelope} from '@contracts/protocol';
+import {validateEnvelope,type Request as PlannerRequest,type Envelope, type Step} from '@contracts/protocol';
 
 const formatSize = (n: number) => n < 1_000_000 ? `${(n / 1000).toFixed(1)} kB` : `${(n / 1_000_000).toFixed(2)} MB`;
+const pageCount = (count: number) => `${count} ${count === 1 ? 'page' : 'pages'}`;
+const localResultTitle = (type: Action, page = 2) => type === 'merge' ? 'Merged PDF' : type === 'remove' ? `PDF with page ${page} removed` : type === 'ocr' ? 'Searchable PDF' : type === 'chain' ? 'Searchable, optimised PDF' : 'Optimised PDF';
+function plannedResultTitle(steps: Step[]) {
+  const last = steps.at(-1);
+  if (last?.operation === 'select_pages') {
+    const pages = (last.params.pages as {indices: number[]}).indices;
+    return pages.length === 1 ? localResultTitle('remove', pages[0]) : `PDF with ${pages.length} pages removed`;
+  }
+  if (steps.some(step => step.operation === 'ocr_pdf') && last?.operation === 'compress_pdf') return localResultTitle('chain');
+  return localResultTitle(last?.operation === 'merge_pdf' ? 'merge' : last?.operation === 'ocr_pdf' ? 'ocr' : 'compress');
+}
 type Action = 'merge' | 'ocr' | 'remove' | 'compress' | 'chain';
-type Entry = {id: number; role: 'user' | 'assistant'; text: string; files?: {name: string; size: number}[]; artifact?: Artifact; choice?: 'compress' | 'chain' | 'clear' | 'execute' | 'connect' | 'native-link' | 'native-pair'; revision?: number; request?:PlannerRequest; envelope?:Envelope; token?:string};
+type Entry = {id: number; role: 'user' | 'assistant'; text: string; files?: {name: string; size: number}[]; artifact?: Artifact; resultTitle?: string; choice?: 'compress' | 'chain' | 'clear' | 'execute' | 'connect' | 'native-link' | 'native-pair' | 'connection-help'; revision?: number; request?:PlannerRequest; envelope?:Envelope; token?:string};
 function Button({children, onPress, disabled=false, primary=false, quiet=false, icon: Glyph, label}: {children?: React.ReactNode; onPress:()=>void; disabled?:boolean; primary?:boolean; quiet?:boolean; icon?:LucideIcon; label?:string}) {
   return <Pressable accessibilityRole="button" accessibilityLabel={label ?? (typeof children === 'string' ? children : undefined)} disabled={disabled} aria-disabled={disabled} onPress={onPress} className={`atepdf-button min-h-11 flex-row items-center justify-center gap-2 rounded-xl px-3 py-2 active:opacity-70 web:focus-visible:outline-2 web:focus-visible:outline-primary ${primary ? 'atepdf-button-primary bg-primary' : quiet ? 'bg-transparent' : 'border border-border bg-background'} ${disabled ? 'opacity-40' : ''}`}>
     {Glyph && <Icon as={Glyph} className={`size-4 ${primary ? 'text-primary-foreground' : 'text-foreground'}`}/>}<Text className={`text-sm font-medium ${primary ? 'text-primary-foreground' : 'text-foreground'}`}>{children}</Text>
@@ -36,23 +58,23 @@ function useWorkspace() {
   const [entries, setEntries] = useState<Entry[]>([]), [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState<number | null>(null), [privacy, setPrivacy] = useState(false), [choice, setChoice] = useState<number | null>(null);
   const [saving, setSaving] = useState<string | null>(null), [receipts, setReceipts] = useState<Record<string, string>>({});
-  const nextId = useRef(0), operation = useRef(false), stickToEnd = useRef(true);
+  const nextId = useRef(0), operation = useRef(false);
   const [planning,setPlanning]=useState(false),[connection,setConnection]=useState<PlannerStatus|null>(null);
   const plannerAbort=useRef<AbortController|null>(null);
   const busy = state.busy || loading || planning;
-  const current = entries.findLast(e => e.artifact)?.id;
+  const currentEntry = entries.findLast(e => e.artifact), current = currentEntry?.id;
   const focus = store.focus ? store.list.find(f => f.ref === store.focus) : null;
-  const append = (entry: Omit<Entry, 'id'>) => { const id = ++nextId.current; setEntries(previous => [...previous, {...entry, id}]); stickToEnd.current = true; return id; };
+  const append = (entry: Omit<Entry, 'id'>) => { const id = ++nextId.current; setEntries(previous => [...previous, {...entry, id}]); return id; };
   const say = (text: string) => append({role: 'assistant', text});
   useEffect(() => {
     if (Platform.OS !== 'web') return;
     const fn = (e: BeforeUnloadEvent) => { if (store.list.length || controller.state.busy) { e.preventDefault(); e.returnValue = ''; } };
     window.addEventListener('beforeunload', fn); return () => window.removeEventListener('beforeunload', fn);
   }, [store, controller]);
-  const finish = (previous: string | null, text: string) => {
+  const finish = (previous: string | null, text: string, resultTitle: string) => {
     if (controller.state.error) say(controller.state.error);
     else if (controller.state.stage === 'cancelled') say(controller.state.message);
-    else if (store.focus && store.focus !== previous) append({role: 'assistant', text, artifact: store.get(store.focus).meta});
+    else if (store.focus && store.focus !== previous) append({role: 'assistant', text, artifact: store.get(store.focus).meta, resultTitle});
     else say(controller.state.message || 'No new result was created.');
   };
   const importFiles = async (files: File[]) => {
@@ -77,7 +99,7 @@ function useWorkspace() {
     const previous = store.focus;
     try {
       await controller.quick(type, page);
-      finish(previous, type === 'remove' ? `I removed physical page ${page}. Here’s the new copy.` : type === 'merge' ? 'I merged your PDFs in the order added. Here’s your PDF.' : type === 'ocr' ? 'Your searchable copy is ready.' : type === 'chain' ? 'Your merged, searchable and optimised copy is ready.' : 'I checked the optimised copy. Here’s the result.');
+      finish(previous, type === 'remove' ? `I removed page ${page}. Here’s the new copy.` : type === 'merge' ? 'I merged your PDFs in the order added. Here’s your PDF.' : type === 'ocr' ? 'Your searchable copy is ready.' : type === 'chain' ? 'Your merged, searchable and optimised copy is ready.' : 'I checked the optimised copy. Here’s the result.', localResultTitle(type, page));
     } catch (e) { say(e instanceof Error ? e.message : 'This action could not finish.'); }
   };
   const execute = async (type: Action, page = 2) => {
@@ -99,7 +121,7 @@ function useWorkspace() {
   const undoLocal = () => {
     if (!store.canUndo) { say('There’s no earlier result to restore yet. Your original files are unchanged.'); return; }
     controller.undo();
-    append({role: 'assistant', text: 'I restored your previous result. Your original files are unchanged.', artifact: store.get(store.focus!).meta});
+    append({role: 'assistant', text: 'I restored your previous result. Your original files are unchanged.', artifact: store.get(store.focus!).meta, resultTitle: entries.findLast(entry => entry.artifact?.ref === store.focus)?.resultTitle});
   };
   const undo = () => {
     if (busy) return;
@@ -123,7 +145,7 @@ function useWorkspace() {
     else { setChoice(null); append({role:'user',text}); void preparePlanning(text); }
   };
   const checkConnection=async(signal?:AbortSignal,quiet=false)=>{
-    if(!plannerAvailable){say('AI connection is not available on this device yet. Local quick actions still work.');return null;}
+    if(!plannerAvailable){if(!quiet)say('AI connection is not available on this device yet. Local quick actions still work.');return null;}
     try{const status=await plannerStatus(signal);signal?.throwIfAborted();setConnection(status);return status;}
     catch(error){if(signal?.aborted)throw error;if(!quiet)say('The local planner gateway is unavailable. You can still use the quick actions.');return null;}
   };
@@ -145,7 +167,7 @@ function useWorkspace() {
       // One submission owns setup, planning and local execution. Only the
       // positive metadata projection crosses the planner boundary.
       const instruction=privateInstruction(text,store.list),request=controller.request(instruction);
-      const status=await checkConnection(abort.signal,!!fallback);
+      const status=await checkConnection(abort.signal,true);
       abort.signal.throwIfAborted();
       if(!status?.enabled){
         if(fallback){
@@ -155,7 +177,11 @@ function useWorkspace() {
           else await executeLocal(fallback.type,fallback.page);
           return;
         }
-        say(status?.connected?'Your key is saved. AI planning is paused until a request limit is approved.':'OpenAI is not connected yet.');return;
+        const help = /^(?:what (?:can you|can atepdf|do you) do|(?:how )?can you help(?: me)?|help|what (?:are your|are atepdf.?s) capabilities)[?.!]*$/i.test(text.trim());
+        const localHelp = `I can merge PDFs, remove pages${ocrAvailable ? ', make scanned English PDFs searchable' : ''}, and compress supported images inside a PDF. Add PDFs, then use the quick actions or type a request such as “remove page 2”.`;
+        const reason = !plannerAvailable ? 'AI planning is not available on this device yet.' : status?.connected ? 'AI planning is paused. Open AI connection to check the local request allowance.' : status ? 'OpenAI is not connected yet. You can connect it here for conversational help.' : 'The AI connection is unavailable. Check that atepdf’s local server is running, then try AI connection again.';
+        const id = append({role:'assistant', text: help ? `${localHelp}\n\n${reason}` : `${reason} You can still use Merge, Compress${ocrAvailable ? ' or Make searchable' : ''}. Your files are unchanged.`, choice:plannerAvailable?'connection-help':undefined});
+        setChoice(id);return;
       }
       setLoading(false);setPlanning(true);
       const result=await requestPlan(request,status.token,abort.signal);
@@ -174,14 +200,14 @@ function useWorkspace() {
       plannerAbort.current=null;
       const previous=store.focus;
       await controller.execute(envelope,request);
-      finish(previous,'Your new PDF is ready.');
+      finish(previous,'Your new PDF is ready.',plannedResultTitle(envelope.planner.steps));
     }catch(e){say(abort.signal.aborted?'Planning cancelled. No local files changed.':e instanceof Error?e.message:'This request could not finish. Your files are unchanged.');}
     finally{operation.current=false;setLoading(false);setPlanning(false);plannerAbort.current=null;if(plannerAvailable)void refreshConnection();}
   };
   const executePlanned=async(entry:Entry)=>{
     if(!entry.envelope||!entry.request||operation.current)return;
     operation.current=true;const previous=store.focus;
-    try{await controller.execute(entry.envelope,entry.request);finish(previous,'Your new copy is ready. I checked it with an independent PDF reader.');}
+    try{await controller.execute(entry.envelope,entry.request);finish(previous,'Your new copy is ready. I checked it with an independent PDF reader.',plannedResultTitle(entry.envelope.planner.steps));}
     catch(e){say(e instanceof Error?e.message:'The plan could not be applied.');}finally{operation.current=false;}
   };
   const cancel=()=>{plannerAbort.current?.abort();controller.cancel();};
@@ -189,7 +215,7 @@ function useWorkspace() {
     if (busy || choice !== entry.id) return;
     setChoice(null);
     if (entry.revision !== store.revision) { say('Your files changed. Please ask again so I use the current files.'); return; }
-    if(entry.choice==='connect'||entry.choice==='native-link'||entry.choice==='native-pair')return;
+    if(entry.choice==='connect'||entry.choice==='native-link'||entry.choice==='native-pair'||entry.choice==='connection-help')return;
     if(entry.choice==='execute'){void executePlanned(entry);return;}
     if (entry.choice === 'clear') {
       controller.clear(); setPreview(null); setReceipts({}); setEntries([]);
@@ -202,13 +228,13 @@ function useWorkspace() {
     catch (e) { setReceipts(previous => ({...previous, [artifact.ref]: e instanceof Error ? e.message : 'Saving failed. Try again.'})); }
     finally { setSaving(null); }
   };
-  return {controller, state, store, entries, busy, loading, current, focus, preview, setPreview, privacy, setPrivacy,
+  return {controller, state, store, entries, busy, loading, current, currentTitle:currentEntry?.resultTitle, focus, preview, setPreview, privacy, setPrivacy,
     choice, setChoice, saving, receipts, append, say, importFiles, pick, action, undo, submit, confirm, exportResult, planning, connection, connect, refreshConnection, cancel};
 }
 
 const WorkspaceContext=createContext<ReturnType<typeof useWorkspace>|null>(null);
 const useWorkspaceContext=()=>{const context=useContext(WorkspaceContext);if(!context)throw new Error('Workspace unavailable');return context;};
-const convertEntry=(entry:Entry):ThreadMessageLike=>({id:String(entry.id),role:entry.role,content:[{type:'text',text:entry.text}],metadata:{custom:{entryId:entry.id}},...(entry.id===-1?{status:{type:'running' as const}}:{})});
+const convertEntry=(entry:Entry):ThreadMessageLike=>({id:String(entry.id),role:entry.role,content:[{type:'text',text:entry.text}],metadata:{custom:{entryId:entry.id,hasArtifact:!!entry.artifact}},...(entry.id===-1?{status:{type:'running' as const}}:{})});
 function Processing(){const w=useWorkspaceContext();return <JobActivity state={w.state} planning={w.planning} loading={w.loading}/>;}
 const threadComponents={Welcome,MessageExtras,Activity:Processing,AddAttachment:AddFiles,Footer,...nativeComposerComponents};
 
@@ -238,7 +264,7 @@ function Screen(){
         {!nativeEngineReady&&<Text className="mx-5 text-xs text-muted-foreground">Native development preview · local PDF processing is not connected yet.</Text>}
         <Thread components={threadComponents}/>
       </DropSurface>
-      <Modal visible={workspace.privacy} transparent animationType={motion?'fade':'none'} onRequestClose={()=>workspace.setPrivacy(false)}><View className="flex-1 items-center justify-center bg-black/25 px-5"><View accessibilityViewIsModal role="dialog" className="w-full max-w-lg gap-4 rounded-3xl bg-background p-6"><Text accessibilityRole="header" className="text-xl font-semibold text-foreground">Processed on your device</Text><Text className="text-base leading-6 text-foreground">PDF files, previews and recognised text stay on this device. PDF operations run in local engines.</Text><Text className="text-sm leading-6 text-muted-foreground">When AI is enabled, chat requests and quick actions send your instruction and anonymous file references, page counts and sizes for planning. Filenames, passwords, paths, checksums and document contents are excluded. Your OpenAI key stays in the local server, outside the app.</Text><Text className="text-sm leading-6 text-muted-foreground">Save before closing. Chat and files stay in this session. Saving to a cloud folder or sharing through a chosen provider may transfer the saved file outside atepdf.</Text><Button primary onPress={()=>workspace.setPrivacy(false)}>Got it</Button></View></View></Modal>
+      <Modal accessibilityLabel={Platform.OS==='web'?'Processed on your device':undefined} visible={workspace.privacy} transparent animationType={motion?'fade':'none'} onRequestClose={()=>workspace.setPrivacy(false)}><SafeAreaView style={{flex:1}} className="bg-black/25"><ScrollView contentContainerStyle={{flexGrow:1,justifyContent:'center',padding:20}}><View accessibilityViewIsModal role={Platform.OS==='web'?undefined:'dialog'} className="w-full max-w-lg self-center gap-4 rounded-3xl bg-background p-6"><Text accessibilityRole="header" className="text-xl font-semibold text-foreground">Processed on your device</Text><Text className="text-base leading-6 text-foreground">PDF files, previews and recognised text stay on this device. PDF operations run in local engines.</Text><Text className="text-sm leading-6 text-muted-foreground">When AI is enabled, chat requests and quick actions send your instruction and anonymous file references, page counts and sizes for planning. Filenames, passwords, paths, checksums and document contents are excluded. Your OpenAI key stays in the local server, outside the app.</Text><Text className="text-sm leading-6 text-muted-foreground">Save before closing. Chat and files stay in this session. Saving to a cloud folder or sharing through a chosen provider may transfer the saved file outside atepdf.</Text><Button primary onPress={()=>workspace.setPrivacy(false)}>Got it</Button></View></ScrollView></SafeAreaView></Modal>
     </SafeAreaView>
   </AssistantRuntimeProvider></WorkspaceContext.Provider>;
 }
@@ -282,7 +308,7 @@ function Footer(){
   });
   return <View className="gap-2 pb-1">
     {scrollActions?<ScrollView horizontal style={{flexGrow:0}} showsHorizontalScrollIndicator={false} contentContainerStyle={{gap:8}}>{actions}</ScrollView>:<View className="flex-row justify-center gap-2">{actions}</View>}
-    <View className="min-h-7 flex-row items-center justify-center gap-1.5">{w.focus&&<FileText size={12} color="#5d6980"/>}<Text className="text-center text-xs text-muted-foreground">{w.focus?`Current result · ${w.focus.pageCount} pages`:w.entries.length?`${w.store.originals.length} originals in this chat`:'Your files stay on this device'}</Text></View>
+    <View className="min-h-7 flex-row items-center justify-center gap-1.5">{w.focus&&<FileText size={12} color="#5d6980"/>}<Text testID="current-context" className="flex-shrink text-center text-xs text-muted-foreground">{w.focus?`Current: ${w.currentTitle ?? 'Your PDF'} · ${pageCount(w.focus.pageCount)}`:w.entries.length?`${w.store.originals.length} originals in this chat`:'Your files stay on this device'}</Text></View>
   </View>;
 }
 function MessageExtras(){
@@ -292,10 +318,10 @@ function MessageExtras(){
   const artifact=entry.artifact;
   return <>
     {entry.files?.map((file,index)=><View key={index} className="max-w-full flex-row items-center gap-3 rounded-2xl border border-border bg-background px-4 py-3"><FileText color="#c45167" size={23}/><View className="min-w-0 flex-shrink"><Text className="text-sm font-medium text-foreground">{file.name}</Text><Text className="mt-1 text-xs text-muted-foreground">{formatSize(file.size)} · Original · {index+1}</Text></View></View>)}
-    {artifact&&<View testID={entry.id===w.current?'current-result':'previous-result'} className={`gap-4 rounded-[20px] border bg-background p-4 sm:p-5 ${entry.id===w.current?'border-[#d4dfed]':'border-border'}`}>
-      <View className="flex-row items-center gap-3"><View className="size-11 items-center justify-center rounded-xl bg-[#eef4ff]"><FileText size={23} color="#1769df"/></View><View className="min-w-0 flex-1"><Text accessibilityRole="header" className="text-base font-semibold text-foreground">Your PDF is ready</Text><Text testID={entry.id===w.current?'result-facts':undefined} className="mt-1 text-sm text-muted-foreground">{artifact.pageCount} pages · {formatSize(artifact.sizeBytes)}</Text></View><Check accessibilityLabel="Validated" size={18} color="#26715c"/></View>
+    {artifact&&<View testID={entry.id===w.current?'current-result':'previous-result'} className={`gap-3 sm:gap-4 rounded-[20px] border bg-background p-4 sm:p-5 ${entry.id===w.current?'border-[#d4dfed]':'border-border'}`}>
+      <View className="flex-row items-center gap-3"><View className={`size-11 items-center justify-center rounded-xl ${entry.id===w.current?'bg-[#eef4ff]':'bg-muted'}`}><FileText size={23} color={entry.id===w.current?'#1769df':'#5d6980'}/></View><View className="min-w-0 flex-1"><Text accessibilityRole="header" className="text-base font-semibold text-foreground">{entry.resultTitle ?? 'Your PDF'}</Text><Text testID={entry.id===w.current?'result-facts':undefined} className="mt-1 text-sm text-muted-foreground">{pageCount(artifact.pageCount)} · {formatSize(artifact.sizeBytes)}</Text><Text className="mt-1 text-xs font-medium text-muted-foreground">{entry.id===w.current?'Current result':'Earlier result'}</Text></View><Check accessibilityLabel="Validated" size={18} color="#26715c"/></View>
       {!!artifact.note&&<Text className="text-sm leading-5 text-muted-foreground">{artifact.note}</Text>}
-      <View className="flex-row flex-wrap items-center gap-2"><Button primary icon={ArrowDownToLine} disabled={!!w.saving} onPress={()=>void w.exportResult(artifact)}>{w.saving===artifact.ref?'Saving…':'Save PDF'}</Button><Button icon={Eye} onPress={()=>w.setPreview(w.preview===entry.id?null:entry.id)}>{w.preview===entry.id?'Hide preview':'Preview'}</Button>{entry.id===w.current&&<Button quiet icon={Undo2} disabled={w.busy||!w.store.canUndo} onPress={w.undo}>Undo</Button>}</View>
+      <View className="flex-row flex-wrap items-center gap-2"><Button primary={entry.id===w.current} icon={ArrowDownToLine} disabled={!!w.saving} onPress={()=>void w.exportResult(artifact)}>{w.saving===artifact.ref?'Saving…':'Save PDF'}</Button><Button icon={Eye} onPress={()=>w.setPreview(w.preview===entry.id?null:entry.id)}>{w.preview===entry.id?'Hide preview':'Preview'}</Button>{entry.id===w.current&&w.store.canUndo&&<Button quiet icon={Undo2} disabled={w.busy} onPress={w.undo}>Undo</Button>}</View>
       {!!w.receipts[artifact.ref]&&<Text accessibilityLiveRegion="polite" className="text-xs text-muted-foreground">{w.receipts[artifact.ref]}</Text>}
       {w.preview===entry.id&&<InlinePreview store={w.store} artifact={artifact} onClose={()=>w.setPreview(null)}/>}
       {entry.id===w.current&&<Text className="border-t border-border pt-3 text-sm text-muted-foreground">Tell me what you’d like to do next.</Text>}
@@ -304,7 +330,8 @@ function MessageExtras(){
     {entry.choice==='connect'&&w.choice===entry.id&&<KeyEntry token={entry.token!}/>}
     {entry.choice==='native-link'&&w.choice===entry.id&&<BrowserPairing token={entry.token!}/>}
     {entry.choice==='native-pair'&&w.choice===entry.id&&<NativePairing/>}
-    {entry.choice&&w.choice!==entry.id&&<Text className="text-xs text-muted-foreground">This question is closed.</Text>}
+    {plannerAvailable&&entry.choice==='connection-help'&&w.choice===entry.id&&<View className="items-start"><Button icon={SlidersHorizontal} disabled={w.busy} onPress={()=>void w.connect()}>AI connection</Button></View>}
+    {entry.choice&&entry.choice!=='connection-help'&&w.choice!==entry.id&&<Text className="text-xs text-muted-foreground">This question is closed.</Text>}
   </>;
 }
 

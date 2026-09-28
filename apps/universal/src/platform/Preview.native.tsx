@@ -1,8 +1,15 @@
 import {useEffect,useRef,useState} from 'react';
 import {AccessibilityInfo,ActivityIndicator,Image,Keyboard,Pressable,ScrollView,Text,View,useWindowDimensions} from 'react-native';
-import {ChevronLeft,ChevronRight,FileText,Minus,Plus,X,type LucideIcon} from 'lucide-react-native';
+import ChevronLeft from 'lucide-react-native/icons/chevron-left';
+import ChevronRight from 'lucide-react-native/icons/chevron-right';
+import FileText from 'lucide-react-native/icons/file-text';
+import Minus from 'lucide-react-native/icons/minus';
+import Plus from 'lucide-react-native/icons/plus';
+import X from 'lucide-react-native/icons/x';
+import type {LucideIcon} from 'lucide-react-native';
 import {File} from 'expo-file-system';
 import {Icon} from '../components/ui/icon';
+import {useThreadViewport} from '../components/assistant-ui/elements/thread.aui';
 import NativePDF from '../../modules/atepdf-pdf';
 import {temporaryPDF,removeTemporary} from './runtime.native';
 
@@ -15,14 +22,19 @@ function PreviewButton({label,icon,onPress,disabled=false}:{label:string;icon:Lu
 
 export default function Preview({bytes,count,onClose}:{bytes:Uint8Array;count:number;onClose:()=>void}){
   const {height:windowHeight,fontScale}=useWindowDimensions();
+  const threadViewport=useThreadViewport();
   const [page,setPage]=useState(1),[image,setImage]=useState<{uri:string;width:number;height:number}|null>(null),[error,setError]=useState(''),[loading,setLoading]=useState(true);
   const [width,setWidth]=useState(0),[zoom,setZoom]=useState(1),[reducedMotion,setReducedMotion]=useState(true),[keyboardHeight,setKeyboardHeight]=useState(()=>Keyboard.metrics()?.height??0);
   const rendering=useRef(true);
+  const previewRef=useRef<View>(null);
   const splitToolbar=fontScale>=1.3&&width<400;
+  const compactToolbar=keyboardHeight>0&&width>=560&&threadViewport.height>0&&threadViewport.height<260;
   // Reserve the same bounded space while loading and rendering. The actual page
   // fits inside it initially; zooming pans within the preview, never the chat.
-  const viewportHeight=Math.round(Math.max(104,Math.min(320,(windowHeight-keyboardHeight)*.34)));
-  const fit=image?Math.min(Math.max(1,width-24)/image.width,(viewportHeight-24)/image.height):1;
+  const ordinaryViewportHeight=Math.round(Math.max(104,Math.min(320,(windowHeight-keyboardHeight)*.34)));
+  const viewportHeight=compactToolbar?Math.max(104,Math.min(ordinaryViewportHeight,Math.floor(threadViewport.height)-52)):ordinaryViewportHeight;
+  const rasterPadding=compactToolbar?16:24;
+  const fit=image?Math.min(Math.max(1,width-rasterPadding)/image.width,(viewportHeight-rasterPadding)/image.height):1;
   useEffect(()=>{
     let active=true;
     void AccessibilityInfo.isReduceMotionEnabled().then(value=>{if(active)setReducedMotion(value);});
@@ -31,6 +43,20 @@ export default function Preview({bytes,count,onClose}:{bytes:Uint8Array;count:nu
     const hidden=Keyboard.addListener('keyboardDidHide',()=>setKeyboardHeight(0));
     return()=>{active=false;motion.remove();shown.remove();hidden.remove();};
   },[]);
+  useEffect(()=>{
+    if(!compactToolbar)return;
+    let active=true,secondFrame=0;
+    // keyboardDidShow is after the native keyboard transition. Two layout
+    // frames also let the compact controls/raster commit before measuring.
+    const firstFrame=requestAnimationFrame(()=>{
+      secondFrame=requestAnimationFrame(()=>{
+        previewRef.current?.measureInWindow((_x,y,_width,height)=>{
+          if(active)threadViewport.revealNativeRegion(y,y+height);
+        });
+      });
+    });
+    return()=>{active=false;cancelAnimationFrame(firstFrame);cancelAnimationFrame(secondFrame);};
+  },[compactToolbar,keyboardHeight,threadViewport.height,threadViewport.revealNativeRegion]);
   const navigate=(direction:-1|1)=>{
     const next=page+direction;if(rendering.current||next<1||next>count)return;
     // Claim the render slot before React commits the disabled button state.
@@ -46,7 +72,17 @@ export default function Preview({bytes,count,onClose}:{bytes:Uint8Array;count:nu
     })().catch(()=>{if(active)setError('This page could not be previewed. Your PDF is unchanged.');}).finally(()=>{if(file)removeTemporary(file);if(active){rendering.current=false;setLoading(false);}});
     return()=>{active=false;if(rendered)removeTemporary(rendered);};
   },[bytes,page]);
-  return <View accessibilityLabel="Read-only preview" className="overflow-hidden rounded-xl border border-border bg-background">
+  return <View ref={previewRef} collapsable={false} accessibilityLabel="Read-only preview" className="overflow-hidden rounded-xl border border-border bg-background">
+    {compactToolbar?<View className="min-h-11 flex-row items-center border-b border-border px-1">
+      <PreviewButton label="Previous page" icon={ChevronLeft} disabled={loading||page===1} onPress={()=>navigate(-1)}/>
+      <Text accessibilityLiveRegion="polite" className="flex-1 text-center text-sm tabular-nums text-foreground">Page {page} of {count}</Text>
+      <PreviewButton label="Next page" icon={ChevronRight} disabled={loading||page>=count} onPress={()=>navigate(1)}/>
+      <View className="mx-1 h-5 w-px bg-border"/>
+      <PreviewButton label="Zoom out" icon={Minus} disabled={loading||zoom<=1} onPress={()=>setZoom(value=>Math.max(1,value-.5))}/>
+      <PreviewButton label="Zoom in" icon={Plus} disabled={loading||zoom>=3} onPress={()=>setZoom(value=>Math.min(3,value+.5))}/>
+      <Pressable accessibilityRole="button" accessibilityLabel="Fit page" disabled={loading} accessibilityState={{disabled:loading}} onPress={()=>setZoom(1)} className="min-h-11 min-w-11 items-center justify-center rounded-lg px-2 active:bg-accent"><Text className="text-sm text-foreground">Fit</Text></Pressable>
+      <PreviewButton label="Close preview" icon={X} onPress={onClose}/>
+    </View>:<>
     <View className="min-h-12 flex-row items-center justify-between border-b border-border px-2">
       <Text className="flex-1 pl-2 text-sm font-semibold text-foreground">Read-only preview</Text>
       <Pressable accessibilityRole="button" accessibilityLabel="Fit page" disabled={loading} accessibilityState={{disabled:loading}} onPress={()=>setZoom(1)} className="min-h-11 min-w-11 items-center justify-center rounded-lg px-2 active:bg-accent"><Text className="text-sm text-foreground">Fit</Text></Pressable>
@@ -64,6 +100,7 @@ export default function Preview({bytes,count,onClose}:{bytes:Uint8Array;count:nu
         <PreviewButton label="Zoom in" icon={Plus} disabled={loading||zoom>=3} onPress={()=>setZoom(value=>Math.min(3,value+.5))}/>
       </View>
     </View>
+    </>}
     <View onLayout={event=>setWidth(event.nativeEvent.layout.width)} style={{height:viewportHeight}} className="overflow-hidden bg-muted">
       {image&&width>0?<ScrollView key={page} style={{flex:1}} minimumZoomScale={1} maximumZoomScale={3} zoomScale={zoom} centerContent pinchGestureEnabled
         contentInsetAdjustmentBehavior="never" automaticallyAdjustContentInsets={false} nestedScrollEnabled scrollEventThrottle={100}

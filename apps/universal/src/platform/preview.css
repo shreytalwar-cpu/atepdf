@@ -5,15 +5,16 @@
 @media(hover:hover) and (pointer:fine){.inline-preview button:hover:not(:disabled){background:var(--color-accent,#eef4ff)}}
 .inline-preview button:active:not(:disabled){background:var(--color-muted,#f2f4f8)}
 .inline-preview button:disabled{opacity:.35;cursor:default}
-.inline-preview button:focus-visible{outline:3px solid var(--color-primary,#267bff);outline-offset:-3px}
-.inline-toolbar{justify-content:space-between}
+.inline-preview button:focus-visible{outline:3px solid var(--color-primary,#1769df);outline-offset:-3px}
+.inline-toolbar{flex-wrap:wrap;justify-content:center}
+.inline-page-navigation{display:flex;align-items:center;justify-content:space-between;gap:4px;flex:1 0 174px}
+.inline-zoom-controls{display:flex;align-items:center;gap:4px;flex-shrink:0}
 .inline-page-count{font-variant-numeric:tabular-nums;white-space:nowrap;text-align:center}
-.inline-toolbar-divider{height:20px;width:1px;flex-shrink:0;background:var(--color-border,#e2e7ee);margin:0 4px}
 .inline-page{position:relative;height:clamp(160px,40dvh,400px);overflow:auto;overscroll-behavior:contain;background:var(--color-muted,#f2f4f8);padding:12px;box-sizing:border-box;scrollbar-gutter:stable}
 .inline-page canvas{display:block;margin:auto;max-width:none;background:#fff;box-shadow:0 2px 12px #18213b18}
 .inline-preview-status{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;pointer-events:none}
-.inline-preview-status p{display:flex;flex-direction:column;align-items:center;gap:12px;margin:0;text-align:center;font:13px/1.5 system-ui;color:var(--color-muted-foreground,#637089)}
+.inline-preview-status p{display:flex;flex-direction:column;align-items:center;gap:12px;margin:0;text-align:center;font:13px/1.5 system-ui;color:var(--color-muted-foreground,#5d6980)}
 .inline-preview-status p[role=alert]{color:var(--color-destructive,#b4233a)}
-.inline-preview-spinner{height:20px;width:20px;border:2px solid var(--color-border,#e2e7ee);border-top-color:var(--color-primary,#267bff);border-radius:50%;animation:preview-spin 800ms linear infinite}
+.inline-preview-spinner{height:20px;width:20px;border:2px solid var(--color-border,#e2e7ee);border-top-color:var(--color-primary,#1769df);border-radius:50%;animation:preview-spin 800ms linear infinite}
 @keyframes preview-spin{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){.inline-preview button{transition:none}.inline-preview-spinner{animation:none}}

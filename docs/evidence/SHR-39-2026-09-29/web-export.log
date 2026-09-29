@@ -1,0 +1,22 @@
+Starting Metro Bundler
+
+Web Bundled 6631ms index.ts (1089 modules)
+
+› Assets (3):
+assets/approved-8-mark-source-crop.8b708587521942c4118f8e6a3c3f84f8.png (35KB)
+assets/approved-atepdf-wordmark-source-crop.e129a61b59d2f9c2fdcb1f1b2521e212.png (34KB)
+assets/paper.1cb2ca1d4826879d6316a24bfbeecd07.png (688KB)
+
+› web bundles (6):
+_expo/static/css/global-3d19a08aa96887d1b98e0a6848d7afd8.css (24KB)
+_expo/static/css/preview-4a592c39668f775437665576652be491.css (2.5KB)
+_expo/static/css/workspace-9ca8942114a70307784c156bddc23a49.css (1.3KB)
+_expo/static/js/web/index-c9ffa807366b5a4c07271557c9cae229.js (18KB)
+_expo/static/js/web/index-f1fb50761f4fd7ab7f53535628d2a4b2.js (2.3MB)
+_expo/static/js/web/pdf-c413bfab9c89bab3d2992bdf0903b495.js (549KB)
+
+› Files (2):
+index.html (1.8KB)
+metadata.json (49B)
+
+Exported: /private/tmp/claude-501/-Users-shrey-Documents-ChatGPT-atepdf--claude-worktrees-workspace-state-persistence-8e257a/7faae2bf-3a50-474e-9a42-ed8e3967d5ad/scratchpad/web

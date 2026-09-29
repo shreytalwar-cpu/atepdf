@@ -1,0 +1,42 @@
+ok  missing key is reported without creating one
+ok  key created only when asked
+ok  ATW1 + nonce + ciphertext + tag layout
+ok  PDF bytes are not stored in plaintext
+ok  round trip returns identical PDF bytes
+ok  round trip hash matches
+ok  different generation in associated data is refused
+ok  flipped tag byte is refused
+ok  truncated file is refused
+ok  missing file is reported
+ok  wrong key is refused
+ok  locked keychain is not replaced by a new key
+ok  locked keychain reads report locked
+ok  rejects storage name ../escape
+ok  rejects storage name /etc/passwd
+ok  rejects storage name blobs/../head
+ok  rejects storage name blobs/file_a.pdf
+ok  rejects storage name staging/x.tmp
+ok  rejects storage name manifests/0.atw
+ok  rejects storage name head/x
+ok  head is replaced atomically by rename
+ok  no staging leftovers after successful writes
+ok  interrupted staging files are removed
+ok  listing ignores unexpected files
+ok  remove deletes a sealed file
+ok  symbolic links are not followed
+ok  directory root is 0700
+ok  directory blobs is 0700
+ok  directory manifests is 0700
+ok  directory staging is 0700
+ok  sealed blob is 0600
+ok  head is 0600
+ok  workspace directory is excluded from backup after replacement
+ok  query uses the Data Protection Keychain
+ok  query excludes synchronizable items
+ok  generic password item
+ok  key is WhenUnlockedThisDeviceOnly
+ok  keychain status mapping
+keychain-probe {"createStatus":"unavailable","rawAddOSStatus":-34018}
+ok  Swift opens a file sealed by the TypeScript test backend
+SHR-39 native workspace checks passed
+ok  TypeScript backend opens a file sealed by Swift; different associated data is refused

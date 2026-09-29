@@ -29,6 +29,9 @@ import {privateInstruction,hasRejectedSecretDraft,safeOrdinaryText,SECRET_CHAT_W
 import {isClarificationAnswer,pendingFromResponse,withPendingClarification} from '@planner/clarification';
 import {plannerStatus,requestPlan,savePlannerKey,createNativePairing,pairNativePlanner,disconnectNativePlanner,plannerAvailable,type PlannerStatus} from './src/platform/planner';
 import {validateEnvelope,type PendingClarification,type Request as PlannerRequest,type Envelope, type Step} from '@contracts/protocol';
+import {WorkspaceVault,blockedMessages,savedArtifacts,type WorkspaceSnapshot} from '@core/workspace-vault';
+import type {PersistedEntry} from '@core/workspace-checkpoint';
+import {createWorkspaceBackend} from './src/platform/workspace';
 
 const formatSize = (n: number) => n < 1_000_000 ? `${(n / 1000).toFixed(1)} kB` : `${(n / 1_000_000).toFixed(2)} MB`;
 const pageCount = (count: number) => `${count} ${count === 1 ? 'page' : 'pages'}`;
@@ -46,6 +49,8 @@ function plannedResultTitle(steps: Step[]) {
 type Action = 'merge' | 'ocr' | 'remove' | 'compress' | 'chain';
 const visibleConnection=(status:PlannerStatus)=>{const {token:_,...visible}=status;return visible;};
 type DisplayArtifact=Pick<Artifact,'ref'|'pageCount'|'sizeBytes'|'note'>;
+// request/envelope/revision are live, in-memory only. The durable projection
+// (toPersisted) keeps display facts and never these executable fields.
 type Entry = {id: number; role: 'user' | 'assistant'; text: string; files?: {name: string; size: number}[]; artifact?: DisplayArtifact; resultTitle?: string; choice?: 'compress' | 'chain' | 'clear' | 'execute' | 'connect' | 'native-link' | 'native-pair' | 'connection-help'; revision?: number; request?:PlannerRequest; envelope?:Envelope};
 function Button({children, onPress, disabled=false, primary=false, quiet=false, icon: Glyph, label}: {children?: React.ReactNode; onPress:()=>void; disabled?:boolean; primary?:boolean; quiet?:boolean; icon?:LucideIcon; label?:string}) {
   return <Pressable accessibilityRole="button" accessibilityLabel={label ?? (typeof children === 'string' ? children : undefined)} disabled={disabled} aria-disabled={disabled} onPress={onPress} className={`atepdf-button min-h-11 flex-row items-center justify-center gap-2 rounded-xl px-3 py-2 active:opacity-70 web:focus-visible:outline-2 web:focus-visible:outline-primary ${primary ? 'atepdf-button-primary bg-primary' : quiet ? 'bg-transparent' : 'border border-border bg-background'} ${disabled ? 'opacity-40' : ''}`}>
@@ -56,8 +61,18 @@ function InlinePreview({store, artifact, onClose}: {store:LocalFileStore; artifa
   const bytes=useMemo(()=>store.get(artifact.ref).bytes,[store,artifact.ref]);
   return <Preview bytes={bytes} count={artifact.pageCount} onClose={onClose}/>;
 }
+const toPersisted=(e:Entry):PersistedEntry=>({id:e.id,role:e.role,text:e.text,...(e.files?{files:e.files.map(f=>({name:f.name,size:f.size}))}:{}),...(e.artifact?{artifactRef:e.artifact.ref}:{}),...(e.resultTitle!==undefined?{resultTitle:e.resultTitle}:{}),...(e.choice?{choice:e.choice}:{})});
+type WorkspaceNotice={text:string;retry?:boolean};
+const SAVE_FAILED_NOTICE='atePDF couldn’t save the latest changes on this Mac. Your last saved workspace is kept.';
 function useWorkspace() {
   const [controller] = useState(createController);
+  const [backend] = useState(createWorkspaceBackend);
+  const vault = useRef<WorkspaceVault|null>(null);
+  const [restoring, setRestoring] = useState(backend !== null), [restoredDraft, setRestoredDraft] = useState<string|null>(null);
+  const [notice, setNotice] = useState<WorkspaceNotice|null>(null), [durable, setDurable] = useState(false);
+  // ready: restore finished; only then may chat/draft changes be checkpointed.
+  const ready = useRef(backend === null), opened = useRef(false);
+  const restoredEntries = useRef<Entry[]|null>(null), draftRef = useRef<string|null>(null), draftTimer = useRef<ReturnType<typeof setTimeout>|null>(null);
   const state = useSyncExternalStore(controller.subscribe, controller.snapshot, controller.snapshot), store = controller.store;
   const [entries, setEntries] = useState<Entry[]>([]), [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState<number | null>(null), [privacy, setPrivacy] = useState(false), [choice, setChoice] = useState<number | null>(null);
@@ -68,11 +83,55 @@ function useWorkspace() {
   const connectionToken=useRef<string|null>(null);
   const pendingClarification=useRef<PendingClarification|null>(null);
   const clearPending=()=>{pendingClarification.current=null;};
-  const busy = state.busy || loading || planning;
+  const busy = state.busy || loading || planning || restoring;
+  const entriesRef = useRef<Entry[]>(entries); entriesRef.current = entries;
   const currentEntry = entries.findLast(e => e.artifact), current = currentEntry?.id;
   const focus = store.focus ? store.list.find(f => f.ref === store.focus) : null;
   const append = (entry: Omit<Entry, 'id'>) => { const id = ++nextId.current; const artifact=entry.artifact?{ref:entry.artifact.ref,pageCount:entry.artifact.pageCount,sizeBytes:entry.artifact.sizeBytes,note:safeOrdinaryText(entry.artifact.note)}:undefined; setEntries(previous => [...previous, {...entry, text:safeOrdinaryText(entry.text), files:entry.files?.map(file=>({...file,name:safeOrdinaryText(file.name)})), artifact, id}]); return id; };
   const say = (text: string) => append({role: 'assistant', text});
+  // The controller's own commit saves its new state; chat and draft saves use the
+  // last durable store state so they never make an unconfirmed commit durable early.
+  const snapshot = (view: ReturnType<typeof controller.durableState> = controller.durableState(true)): WorkspaceSnapshot => ({...view, bytes: ref => store.get(ref).bytes, conversation: entriesRef.current.map(toPersisted), draft: draftRef.current});
+  const saveChat = () => { const v = vault.current; if (!ready.current || !v || v.mode !== 'writable') return; v.save(() => snapshot(controller.durableState(false))).catch(() => setNotice({text: SAVE_FAILED_NOTICE})); };
+  const noteDraft = (text: string) => {
+    const next = text.trim() ? text : null;
+    if (next === draftRef.current) return;
+    draftRef.current = next;
+    if (draftTimer.current) clearTimeout(draftTimer.current);
+    // Draft changes are coalesced; only the last completed checkpoint is promised.
+    draftTimer.current = setTimeout(saveChat, 800);
+  };
+  const openWorkspace = async () => {
+    if (!backend) return;
+    ready.current = false; setRestoring(true); setNotice(null); controller.setDurability(null); setDurable(false);
+    restoredEntries.current = entriesRef.current;
+    const v = new WorkspaceVault(backend, {redact: safeOrdinaryText}); vault.current = v;
+    try {
+      const outcome = await v.open();
+      if (outcome.kind === 'restored') {
+        const saved = outcome.checkpoint;
+        try { await controller.restore(savedArtifacts(saved, outcome.bytes), saved.originals, saved.history, saved.revision); }
+        catch { v.block(); setNotice({text: `${blockedMessages['missing-artifact']} New work in this session won’t be saved.`}); return; }
+        const restored: Entry[] = saved.conversation.map(p => { const meta = p.artifactRef ? store.get(p.artifactRef).meta : null; return {id: p.id, role: p.role, text: p.text, ...(p.files ? {files: p.files} : {}), ...(meta ? {artifact: {ref: meta.ref, pageCount: meta.pageCount, sizeBytes: meta.sizeBytes, note: safeOrdinaryText(meta.note)}} : {}), ...(p.resultTitle !== undefined ? {resultTitle: p.resultTitle} : {}), ...(p.choice ? {choice: p.choice} : {})}; });
+        nextId.current = restored.reduce((n, e) => Math.max(n, e.id), 0);
+        // A result committed just before quitting may not have its chat card yet.
+        if (store.focus && restored.findLast(e => e.artifact)?.artifact?.ref !== store.focus) { const meta = store.get(store.focus).meta; restored.push({id: ++nextId.current, role: 'assistant', text: 'Here’s your current result.', artifact: {ref: meta.ref, pageCount: meta.pageCount, sizeBytes: meta.sizeBytes, note: safeOrdinaryText(meta.note)}}); }
+        restoredEntries.current = restored; entriesRef.current = restored; setEntries(restored);
+        draftRef.current = saved.draft?.text ?? null; setRestoredDraft(draftRef.current);
+        if (outcome.recoveredPrevious) setNotice({text: 'atePDF couldn’t open your most recent save, so it restored the one before it.'});
+      } else if (outcome.kind === 'blocked') setNotice({text: `${blockedMessages[outcome.reason]} New work in this session won’t be saved.`, retry: outcome.retryable});
+      else if (outcome.kind === 'unavailable') setNotice({text: 'atePDF can’t save your workspace on this Mac right now. This session won’t be restored after you quit.'});
+      if (v.mode === 'writable') { controller.setDurability({save: () => v.save(() => snapshot()), clear: () => v.clear()}); setDurable(true); }
+    } finally { ready.current = true; setRestoring(false); }
+  };
+  useEffect(() => { if (opened.current) return; opened.current = true; void openWorkspace(); }, []);
+  useEffect(() => {
+    // Every committed chat change is checkpointed; the restored transcript itself is not a new activity.
+    if (restoring || entries === restoredEntries.current) return;
+    saveChat();
+  }, [entries, restoring]);
+  const canRetryRestore = !!notice?.retry && !entries.length && !store.list.length;
+  const retryRestore = () => { if (canRetryRestore && !busy) void openWorkspace(); };
   const showHelp = () => {
     if (busy) return;
     clearPending();
@@ -134,16 +193,17 @@ function useWorkspace() {
     }
     void execute(type, page);
   };
-  const undoLocal = () => {
+  const undoLocal = async () => {
     if (!store.canUndo) { say('There’s no earlier result to restore yet. Your original files are unchanged.'); return; }
-    controller.undo();
-    append({role: 'assistant', text: 'I restored your previous result. Your original files are unchanged.', artifact: store.get(store.focus!).meta, resultTitle: entries.findLast(entry => entry.artifact?.ref === store.focus)?.resultTitle});
+    await controller.undo();
+    if (controller.state.stage === 'failed' && controller.state.error) { say(controller.state.error); return; }
+    append({role: 'assistant', text: 'I restored your previous result. Your original files are unchanged.', artifact: store.get(store.focus!).meta, resultTitle: entriesRef.current.findLast(entry => entry.artifact?.ref === store.focus)?.resultTitle});
   };
   const undo = () => {
     if (busy) return;
     clearPending();
     setChoice(null); append({role: 'user', text: 'Undo the last change.'});
-    undoLocal();
+    void undoLocal();
   };
   const submit = (draft: string) => {
     if (busy || operation.current || !draft.trim()) return;
@@ -201,7 +261,7 @@ function useWorkspace() {
       if(!status?.enabled){
         if(fallback){
           setLoading(false);
-          if(fallback.type==='undo')undoLocal();
+          if(fallback.type==='undo')await undoLocal();
           else if((fallback.type==='compress'||fallback.type==='chain')&&store.originals.length){const id=append({role:'assistant',text:'I can re-encode supported JPEG images at their original dimensions. Image quality may change; text and vectors stay intact. Some PDFs may not get smaller. Shall I create a new copy for you to preview?',choice:fallback.type,revision:store.revision});setChoice(id);}
           else await executeLocal(fallback.type,fallback.page);
           return;
@@ -216,7 +276,7 @@ function useWorkspace() {
       abort.signal.throwIfAborted();
       if(store.revision!==request.workspaceRevision)throw new Error('Your files changed. Please ask again.');
       // requestPlan validates clarification shape and response binding too.
-      if(result.planner.status==='undo'){undoLocal();return;}
+      if(result.planner.status==='undo'){await undoLocal();return;}
       if(result.planner.status!=='plan'){
         if(result.planner.status==='clarify')pendingClarification.current=pendingFromResponse(request,result.planner);
         say(result.planner.clarification!.question);return;
@@ -249,7 +309,9 @@ function useWorkspace() {
     if(entry.choice==='connect'||entry.choice==='native-link'||entry.choice==='native-pair'||entry.choice==='connection-help')return;
     if(entry.choice==='execute'){void executePlanned(entry);return;}
     if (entry.choice === 'clear') {
-      clearPending();connectionToken.current=null;controller.clear(); setPreview(null); setReceipts({}); setEntries([]);
+      clearPending();connectionToken.current=null;if(vault.current?.mode==='writable')setNotice(null);
+      void Promise.resolve(controller.clear()).then(()=>{if(controller.state.stage==='failed'&&controller.state.error)setNotice({text:controller.state.error});});
+      setPreview(null); setReceipts({}); setEntries([]);
     } else if (entry.choice) { append({role: 'user', text: 'Yes, create an optimised copy.'}); void execute(entry.choice); }
   };
   const exportResult = async (artifact: DisplayArtifact) => {
@@ -260,7 +322,8 @@ function useWorkspace() {
     finally { setSaving(null); }
   };
   return {controller, state, store, entries, busy, loading, current, currentTitle:currentEntry?.resultTitle, focus, preview, setPreview, privacy, setPrivacy,
-    choice, setChoice, saving, receipts, append, say, showHelp, importFiles, pick, action, undo, submit, confirm, exportResult, planning, connection, connectionToken, connect, refreshConnection, cancel, clearPending};
+    choice, setChoice, saving, receipts, append, say, showHelp, importFiles, pick, action, undo, submit, confirm, exportResult, planning, connection, connectionToken, connect, refreshConnection, cancel, clearPending,
+    restoring, restoredDraft, noteDraft, notice, durable, canRetryRestore, retryRestore};
 }
 
 const WorkspaceContext=createContext<ReturnType<typeof useWorkspace>|null>(null);
@@ -281,6 +344,10 @@ function Screen(){
     onNew:async message=>{workspace.submit(message.content.filter(p=>p.type==='text').map(p=>p.text).join('\n'));},
     onCancel:async()=>{workspace.cancel();},
   });
+  // Restore the inert draft before the composer mounts; the native input reads it once.
+  const [composerReady,setComposerReady]=useState(!workspace.restoring);
+  useEffect(()=>{if(workspace.restoring)return;if(workspace.restoredDraft)runtime.thread.composer.setText(workspace.restoredDraft);setComposerReady(true);},[workspace.restoring]);
+  useEffect(()=>runtime.thread.composer.subscribe(()=>workspace.noteDraft(runtime.thread.composer.getState().text)),[runtime]);
   return <WorkspaceContext.Provider value={workspace}><AssistantRuntimeProvider runtime={runtime}>
     <SafeAreaView style={{flex:1,backgroundColor:"#fff"}} edges={['top','left','right']}>
       <DropSurface disabled={busy} onFiles={files=>void workspace.importFiles(files)}>
@@ -293,9 +360,10 @@ function Screen(){
           </View>
         </View>
         {!nativeEngineReady&&<Text className="mx-5 text-xs text-muted-foreground">Native development preview · local PDF processing is not connected yet.</Text>}
-        <Thread components={threadComponents}/>
+        {!!workspace.notice&&<View className="mx-5 flex-row flex-wrap items-center gap-2"><Text accessibilityLiveRegion="polite" className="flex-shrink text-xs text-muted-foreground">{workspace.notice.text}</Text>{workspace.canRetryRestore&&<Button quiet disabled={busy} onPress={workspace.retryRestore}>Try again</Button>}</View>}
+        {composerReady?<Thread components={threadComponents}/>:<View className="flex-1 items-center justify-center"><Text accessibilityLiveRegion="polite" className="text-sm text-muted-foreground">Restoring your workspace…</Text></View>}
       </DropSurface>
-      <Modal accessibilityLabel={Platform.OS==='web'?'Processed on your device':undefined} visible={workspace.privacy} transparent animationType={motion?'fade':'none'} onRequestClose={()=>workspace.setPrivacy(false)}><SafeAreaView style={{flex:1}} className="bg-black/25"><ScrollView contentContainerStyle={{flexGrow:1,justifyContent:'center',padding:20}}><View accessibilityViewIsModal role={Platform.OS==='web'?undefined:'dialog'} className="w-full max-w-lg self-center gap-4 rounded-3xl bg-background p-6"><Text accessibilityRole="header" className="text-xl font-semibold text-foreground">Processed on your device</Text><Text className="text-base leading-6 text-foreground">PDF files, previews and recognised text stay on this device. PDF operations run in local engines.</Text><Text className="text-sm leading-6 text-muted-foreground">Quick-action buttons run locally without AI planning. When AI is enabled, chat requests send your instruction and anonymous file references, page counts and sizes for planning. Filenames, passwords, paths, checksums and document contents are excluded. Your OpenAI key stays in the local server, outside the app.</Text><Text className="text-sm leading-6 text-muted-foreground">Save before closing. Chat and files stay in this session. Saving to a cloud folder or sharing through a chosen provider may transfer the saved file outside atepdf.</Text><Button primary onPress={()=>workspace.setPrivacy(false)}>Got it</Button></View></ScrollView></SafeAreaView></Modal>
+      <Modal accessibilityLabel={Platform.OS==='web'?'Processed on your device':undefined} visible={workspace.privacy} transparent animationType={motion?'fade':'none'} onRequestClose={()=>workspace.setPrivacy(false)}><SafeAreaView style={{flex:1}} className="bg-black/25"><ScrollView contentContainerStyle={{flexGrow:1,justifyContent:'center',padding:20}}><View accessibilityViewIsModal role={Platform.OS==='web'?undefined:'dialog'} className="w-full max-w-lg self-center gap-4 rounded-3xl bg-background p-6"><Text accessibilityRole="header" className="text-xl font-semibold text-foreground">Processed on your device</Text><Text className="text-base leading-6 text-foreground">PDF files, previews and recognised text stay on this device. PDF operations run in local engines.</Text><Text className="text-sm leading-6 text-muted-foreground">Quick-action buttons run locally without AI planning. When AI is enabled, chat requests send your instruction and anonymous file references, page counts and sizes for planning. Filenames, passwords, paths, checksums and document contents are excluded. Your OpenAI key stays in the local server, outside the app.</Text><Text className="text-sm leading-6 text-muted-foreground">{workspace.durable?'Chat, drafts and PDFs are kept encrypted on this Mac so you can continue after reopening atePDF. They are not synced or backed up by atePDF. Start over removes them.':'Save before closing. Chat and files stay in this session.'} Saving to a cloud folder or sharing through a chosen provider may transfer the saved file outside atepdf.</Text><Button primary onPress={()=>workspace.setPrivacy(false)}>Got it</Button></View></ScrollView></SafeAreaView></Modal>
     </SafeAreaView>
   </AssistantRuntimeProvider></WorkspaceContext.Provider>;
 }

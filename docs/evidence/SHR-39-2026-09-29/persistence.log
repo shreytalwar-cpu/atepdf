@@ -1,0 +1,22 @@
+✔ SHR-39 quit/relaunch round-trips actual PDF bytes, order, focus, Undo predecessor, chat, draft and revision (614.214708ms)
+✔ SHR-39 restore is inert: no model, network, transform or confirmation replay, and stale plans are rejected (169.607042ms)
+✔ SHR-39 serialized state holds no recognized secret, password, token or planner request/envelope and is encrypted at rest (244.210834ms)
+✔ SHR-39 storage failure never acknowledges a durable commit and the last good checkpoint survives (125.9235ms)
+✔ SHR-39 interrupted writes restore the previous complete generation and orphans are collected later (319.458417ms)
+✔ SHR-39 corrupt or truncated manifest falls back only to the preceding same-epoch generation (178.067125ms)
+✔ SHR-39 missing or corrupt artifacts never produce a partial workspace (362.08425ms)
+✔ SHR-39 a validly sealed blob whose bytes differ from the manifest hash is refused (195.509625ms)
+✔ SHR-39 a blob moved to another reference or generation fails authentication (190.0995ms)
+✔ SHR-39 future schema is rejected without fallback or downgrade writes (217.072083ms)
+✔ SHR-39 locked, missing, wrong or unavailable keychain keys fail safely without replacing the workspace (256.10275ms)
+✔ SHR-39 clearing publishes a new deletion epoch before collection and never falls back across it (226.534791ms)
+✔ SHR-39 imported blobs are immutable and only two generations are retained (118.583292ms)
+✔ SHR-39 headless leftovers other than an interrupted first checkpoint fail closed (207.625ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3575.681292

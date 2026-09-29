@@ -1,0 +1,31 @@
+{
+  "sourceCommit": "40f23ec2aaaf0e7522b1adc108c10f93d9f97d8d",
+  "builtAt": "2026-09-29T07:50:04.177284+00:00",
+  "configuration": "Release-maccatalyst",
+  "bundleIdentifier": "dev.atepdf.fresh.mac",
+  "signature": "local ad-hoc, development only",
+  "hardenedRuntime": false,
+  "strictSignatureVerification": "passed",
+  "entitlements": {
+    "com.apple.security.app-sandbox": true,
+    "com.apple.security.network.client": true,
+    "com.apple.security.files.user-selected.read-write": true
+  },
+  "nestedCodeObjects": 14,
+  "stagedFrameworkNormalizations": [
+    {
+      "framework": "React",
+      "identicalVersionCopies": true,
+      "builtBinarySha256BeforeSigning": "ad352f81fd4a5142e136791b9b0a00183edee21aab4dc078bea5363867cf5ff1"
+    },
+    {
+      "framework": "ReactNativeDependencies",
+      "identicalVersionCopies": true,
+      "builtBinarySha256BeforeSigning": "43bcab018ca428cecb60f55bd69fe3627c1de24f808e14fdce8dac004899bf01"
+    }
+  ],
+  "stagedExecutableSha256": "5730ee6b514fc7c87611099a98257d1b23e93c3776ae04b91663e1135dafad23",
+  "launchRequested": false,
+  "launchVerified": false,
+  "xcodeBuildLogSha256": "5e353521613f8813cd697c85457278b45424d211a28a80f26ec57be76e044270"
+}

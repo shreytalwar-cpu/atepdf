@@ -1,0 +1,4 @@
+Mac application built; strict signature and sandbox entitlement checks passed.
+App: /private/tmp/atepdf-mac-p90f_nq7/atepdf.app
+Evidence: .build/mac-last-build.json
+Development-only ad-hoc signature; outgoing network entitlement for the paired local planner.

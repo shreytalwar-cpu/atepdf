@@ -333,11 +333,17 @@ function useWorkspace() {
       // saves cancelled) until the clear settles. An empty workspace is shown only
       // once the new epoch is verified, and the chat/draft view is reset before
       // checkpointing resumes, so nothing from before can be saved into it.
+      const resetView = () => {
+        const empty: Entry[] = []; entriesRef.current = empty; restoredEntries.current = empty; draftRef.current = null;
+        connectionToken.current=null; setPreview(null); setReceipts({}); setEntries(empty); setClearCount(n => n + 1);
+      };
+      // Session-only (no saved workspace): nothing durable to wait for, so the view
+      // is reset immediately, exactly as before persistence existed.
+      if (!durable) { void controller.clear(); resetView(); return; }
       void checkpoints.exclusive(async () => {
         await controller.clear();
         if (controller.state.stage === 'failed' && controller.state.error) return controller.state.error;
-        const empty: Entry[] = []; entriesRef.current = empty; restoredEntries.current = empty; draftRef.current = null;
-        connectionToken.current=null; setPreview(null); setReceipts({}); setEntries(empty); setClearCount(n => n + 1);
+        resetView();
         const writable = vault.current?.mode === 'writable', incomplete = controller.state.message === CLEANUP_INCOMPLETE;
         setNotice(previous => incomplete ? {text: CLEANUP_INCOMPLETE, cleanup: true} : writable ? null : previous);
         return null;

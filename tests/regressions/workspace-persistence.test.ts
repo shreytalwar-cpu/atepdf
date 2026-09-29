@@ -11,7 +11,7 @@ import {aad,names,parseCheckpoint,WORKSPACE_FORMAT,type PersistedEntry,type Work
 import {quickPlan} from '../../packages/contracts/src/protocol';
 import {safeOrdinaryText} from '../../packages/planner/src/privacy';
 import type {EngineRequest,Inspection} from '../../packages/web-pdf/src/types';
-import {NodeVaultBackend,newKeychain,corrupt,type TestKeychain} from '../helpers/workspace-backend';
+import {NodeVaultBackend,newKeychain,corrupt,type TestKeychain,type Fault} from '../helpers/workspace-backend';
 import {CheckpointScheduler} from '../../packages/core/src/workspace-checkpoints';
 
 // Synthetic local data only: bundled fixture PDFs, a temporary directory and an
@@ -28,8 +28,9 @@ const services=(calls:Calls)=>({worker:async(r:EngineRequest)=>{if(r.kind==='ins
 const CANARY='hunter2-canary-7Qz';
 
 // One simulated app launch: fresh memory, the same private directory and keychain.
-async function launch(root:string,keychain:TestKeychain){
-  const backend=new NodeVaultBackend(root,keychain),vault=new WorkspaceVault(backend,{redact:safeOrdinaryText});
+// fault, when given, is active from before open() so launch-time failures are exercised.
+async function launch(root:string,keychain:TestKeychain,fault:Fault|null=null){
+  const backend=new NodeVaultBackend(root,keychain),vault=new WorkspaceVault(backend,{redact:safeOrdinaryText});backend.fault=fault;
   const calls:Calls={inspect:0,transform:0},store=new LocalFileStore(),controller=new JobController(store,services(calls));
   const chat:{conversation:PersistedEntry[];draft:string|null}={conversation:[],draft:null};
   const snapshot=():WorkspaceSnapshot=>({revision:store.revision,artifacts:store.list,bytes:ref=>store.get(ref).bytes,originals:store.originals,history:store.history,conversation:chat.conversation,draft:chat.draft});
@@ -516,8 +517,10 @@ test('SHR-39 P1-5 Start over does not claim removal until old PDF copies are ver
       assert.equal((app.vault as unknown as {cleanupPending:boolean}).cleanupPending,true,mode);
       assert.deepEqual((await app.backend.list('blobs')).sort(),oldBlobs,`${mode}: the copies really are still there`);
       // Relaunch while cleanup is still failing: empty workspace, never old data, cleanup still reported.
-      const stuck=await launch(root,keychain);stuck.backend.fault=app.backend.fault;
+      const stuck=await launch(root,keychain,app.backend.fault);
       assert.equal(stuck.outcome.kind,'restored');assert.equal(stuck.store.list.length,0);assert.deepEqual(stuck.chat.conversation,[]);
+      assert.equal((stuck.outcome as {cleanupPending?:boolean}).cleanupPending,true,`${mode}: launch-time cleanup failure is reported`);
+      assert.deepEqual((await app.backend.list('blobs')).sort(),oldBlobs,`${mode}: launch did not claim or fake removal`);
       // A later retry in the same session succeeds once removal works.
       app.backend.fault=null;app.chat.conversation=[];app.chat.draft=null;
       await app.say({role:'user',text:'after clear'});
@@ -588,4 +591,76 @@ test('SHR-39 P1-4 a failed Start over resumes checkpointing in the unchanged wor
     const next=await launch(root,keychain);assert.equal(next.store.list.length,1);assert.ok(next.chat.conversation.some(e=>e.text===CLEAR_FAILED));
     scheduler.dispose();
   }finally{await rm(root,{recursive:true,force:true});}
+});
+
+// ---- Third review P1 regressions (PR #81) ----------------------------------
+const cleanupState=(vault:WorkspaceVault)=>(vault as unknown as {cleanupPending:boolean}).cleanupPending;
+async function cleanupConstants(){return await cleanupModule as unknown as {CLEANUP_INCOMPLETE:string};}
+
+test('SHR-39 P1-6 a failed blob or manifest listing never reports cleanup as complete',async()=>{
+  const {CLEANUP_INCOMPLETE}=await cleanupConstants();
+  for(const directory of ['blobs','manifests'] as const){
+    const root=await scratch(),keychain=newKeychain();
+    try{
+      const app=await populated(root,keychain);const before=await tree(root);
+      app.backend.fault=(step,name)=>{if(step==='list'&&name===directory)throw Object.assign(new Error('synthetic EIO'),{code:'EIO'});};
+      await app.controller.clear();
+      assert.equal(app.controller.state.error,null,directory);assert.equal(app.store.list.length,0,directory);
+      assert.equal(app.controller.state.message,CLEANUP_INCOMPLETE,`${directory}: an unknown listing is not proof of removal`);
+      assert.equal(cleanupState(app.vault),true,directory);
+      app.backend.fault=null;
+      const remaining=Object.keys(before).filter(path=>path.startsWith(`${directory}/`)&&path!==names.manifest(app.vault.generation));
+      assert.ok(remaining.length,directory);
+      // Once listing works again, a retry removes and verifies.
+      app.chat.conversation=[];app.chat.draft=null;await app.say({role:'user',text:'after clear'});
+      assert.equal(cleanupState(app.vault),false,directory);assert.deepEqual(await app.backend.list('blobs'),[]);
+    }finally{await rm(root,{recursive:true,force:true});}
+  }
+});
+
+test('SHR-39 P1-6 an unlink whose directory sync fails keeps cleanup pending until a later sync confirms it',async()=>{
+  const {CLEANUP_INCOMPLETE}=await cleanupConstants();
+  const root=await scratch(),keychain=newKeychain();
+  try{
+    const app=await populated(root,keychain);
+    app.backend.fault=(step,name)=>{if(step==='remove-sync'&&name.startsWith('blobs/'))throw new Error('synthetic directory fsync failure');};
+    await app.controller.clear();
+    // The files are gone from the listing, but their removal is not durable yet.
+    assert.deepEqual(await app.backend.list('blobs'),[]);
+    assert.equal(app.controller.state.message,CLEANUP_INCOMPLETE);assert.equal(cleanupState(app.vault),true);
+    // A later checkpoint retries; the directory sync now succeeds and confirms it.
+    app.backend.fault=null;app.chat.conversation=[];app.chat.draft=null;await app.say({role:'user',text:'after clear'});
+    assert.equal(cleanupState(app.vault),false);
+  }finally{await rm(root,{recursive:true,force:true});}
+});
+
+test('SHR-39 P1-7 a manifest listing failure with a missing head blocks a committed text-only workspace',async()=>{
+  const root=await scratch(),keychain=newKeychain();
+  try{
+    const app=await launch(root,keychain);
+    await app.say({role:'user',text:'committed text-only workspace'});app.chat.draft='committed draft';await app.vault.save(app.snapshot);
+    assert.deepEqual(await app.backend.list('blobs'),[],'no PDF blobs at all');
+    await unlink(join(root,names.head));const before=await tree(root);assert.ok(Object.keys(before).some(path=>path.startsWith('manifests/')));
+    const listingFails:Fault=(step,name)=>{if(step==='list'&&name==='manifests')throw Object.assign(new Error('synthetic EACCES'),{code:'EACCES'});};
+    const next=await launch(root,keychain,listingFails);
+    assert.equal(next.outcome.kind,'blocked','never inferred empty from a failed listing');
+    assert.equal((next.outcome as {retryable?:boolean}).retryable,true);assert.equal(next.vault.mode,'blocked');
+    assert.deepEqual(await tree(root),before,'the committed manifest is untouched and no genesis head was written');
+    await assert.rejects(next.vault.save(next.snapshot));assert.deepEqual(await tree(root),before);
+    // With listing working, the lost head is still detected and the data preserved.
+    const again=await launch(root,keychain);assert.deepEqual(again.outcome,{kind:'blocked',reason:'corrupt',retryable:false});assert.deepEqual(await tree(root),before);
+  }finally{await rm(root,{recursive:true,force:true});}
+});
+
+test('SHR-39 P1-7 head existence and read failures fail closed instead of looking like a missing head',async()=>{
+  for(const step of ['exists','read'] as const){
+    const root=await scratch(),keychain=newKeychain();
+    try{
+      const app=await populated(root,keychain);const before=await tree(root);
+      const next=await launch(root,keychain,(s,name)=>{if(s===step&&name==='head')throw Object.assign(new Error('synthetic EIO'),{code:'EIO'});});
+      assert.equal(next.outcome.kind,'blocked',step);assert.equal((next.outcome as {retryable?:boolean}).retryable,true,step);
+      assert.deepEqual(await tree(root),before,`${step}: nothing written or removed`);
+      assert.equal((await launch(root,keychain)).store.focus,app.removed,`${step}: the workspace opens once storage is readable`);
+    }finally{await rm(root,{recursive:true,force:true});}
+  }
 });

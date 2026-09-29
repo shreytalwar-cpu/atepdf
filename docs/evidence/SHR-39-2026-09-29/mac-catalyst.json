@@ -46,5 +46,13 @@
     "mainJsbundleSha256": "518556c949187bb677d3a78579696d2ea3699eb6ab14c516a5aab1812e5fcc3f",
     "containsFixes": "AtepdfWorkspaceVault.swift compiled; Hermes bundle contains the new Start over and clear-unconfirmed strings",
     "runtimeObservation": "Launched the exact staged path: same 'can’t save your workspace on this Mac' notice; quit; no Application Support/atepdf directory and no genesis head written, because the ad-hoc build cannot obtain the Keychain key."
+  },
+  "thirdReviewBuild": {
+    "command": "scripts/native/mac-build.sh after the third-review Swift storage-query changes (locked pod install rerun in the worktree; tracked Podfile.lock/pbxproj artifacts reverted before commit)",
+    "result": "** BUILD SUCCEEDED **, strict signature verification passed",
+    "stagedApp": "/private/tmp/atepdf-mac-_8rwodp1/atepdf.app",
+    "binarySha256": "de8402b77753e2af630605875af6303bf51a0a9d63e9385b14ee26074ecd7d8e",
+    "sourceNote": "Built from the final Swift sources. A later App.tsx change (session-only Start over resets the view synchronously, as before persistence) was verified by expo export --platform ios and the browser specs, not by rebuilding this app.",
+    "runtimeObservation": "Launched the exact staged path: 'can’t save your workspace on this Mac' notice (key unavailable on the ad-hoc build); the new list/exists paths on a never-created workspace directory did not block; quit; no Application Support/atepdf directory written."
   }
 }

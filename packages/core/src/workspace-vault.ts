@@ -8,14 +8,19 @@ import {WORKSPACE_FORMAT,WORKSPACE_SCHEMA_VERSION,CheckpointError,aad,names,pars
 // head record is the single commit point.
 export type VaultKeyStatus='ready'|'missing'|'locked'|'unavailable';
 export type VaultReadResult={status:'ok';bytes:Uint8Array}|{status:'missing'|'auth'|'locked'};
+// Storage queries never turn an unknown state into an answer: only a definite
+// "no such file or directory" means absent or empty; every other failure throws.
 export interface WorkspaceVaultBackend{
   /** Load the key; with create=true a missing key is created. Never replaces an existing key. */
   keyStatus(create:boolean):Promise<VaultKeyStatus>;
+  /** False only when the file definitely does not exist; throws if that cannot be determined. */
   exists(name:string):Promise<boolean>;
   writeSealed(name:string,plain:Uint8Array,associatedData:string):Promise<void>;
+  /** 'missing' only when the file definitely does not exist; I/O failures throw. */
   readOpened(name:string,associatedData:string):Promise<VaultReadResult>;
+  /** [] only for a directory that does not exist or is empty; a failed listing throws. */
   list(directory:'blobs'|'manifests'):Promise<string[]>;
-  /** Unlink and sync the directory. A sync failure is a failure. */
+  /** Unlink (idempotent if already absent) and sync the directory. Resolves only when both succeed. */
   remove(name:string):Promise<void>;
   /** Remove interrupted staging files. They are never referenced by a head. */
   cleanStaging():Promise<void>;
@@ -312,22 +317,29 @@ export class WorkspaceVault{
     await this.#collect(keep,new Set([this.#generation,previous].filter((g):g is number=>g!==null)));
   }
   /**
-   * Remove every manifest and blob not kept, then list again to verify. Each file
-   * is attempted independently and the whole pass is retried a bounded number of
-   * times. Returns true only when no unreferenced file remains.
+   * Remove every manifest and blob not kept, and report true only when removal is
+   * verified: a successful listing of both directories shows no unreferenced file,
+   * and every removal attempted resolved (unlink and directory sync). A failed
+   * listing is an unknown state, never an empty one. A removal whose directory
+   * sync failed stays unconfirmed, even though the file no longer lists, until a
+   * later removal of that name (idempotent) syncs successfully.
    */
   async #collect(keepRefs:Set<string>,keepGenerations:Set<number>):Promise<boolean>{
     const unreferenced=async()=>[
       ...(await this.backend.list('manifests')).filter(name=>!keepGenerations.has(Number(/^manifests\/(\d+)\.atw$/.exec(name)?.[1]))),
       ...(await this.backend.list('blobs')).filter(name=>{const ref=/^blobs\/(.+)\.atw$/.exec(name)?.[1];return !ref||!keepRefs.has(ref);}),
     ];
-    for(let attempt=0;attempt<CLEANUP_ATTEMPTS;attempt++){
-      let left:string[];
-      try{left=await unreferenced();}catch{continue;}
-      if(!left.length){this.#cleanupPending=false;return true;}
-      for(const name of left)try{await this.backend.remove(name);}catch{/* verified by the next listing */}
+    const unconfirmed=new Set<string>();
+    for(let pass=0;pass<=CLEANUP_ATTEMPTS;pass++){
+      let listed:string[];
+      try{listed=await unreferenced();}catch{continue;}
+      const targets=new Set([...listed,...unconfirmed]);
+      if(!targets.size){this.#cleanupPending=false;return true;}
+      if(pass===CLEANUP_ATTEMPTS)break;
+      for(const name of targets){
+        try{await this.backend.remove(name);unconfirmed.delete(name);}catch{unconfirmed.add(name);}
+      }
     }
-    try{if(!(await unreferenced()).length){this.#cleanupPending=false;return true;}}catch{/* stays pending */}
     this.#cleanupPending=true;return false;
   }
   async #clear(){

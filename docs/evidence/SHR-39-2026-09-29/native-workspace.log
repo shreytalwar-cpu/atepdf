@@ -24,6 +24,15 @@ ok  interrupted staging files are removed
 ok  listing ignores unexpected files
 ok  remove deletes a sealed file
 ok  symbolic links are not followed
+ok  a workspace that was never created lists empty and has no head
+ok  an unreadable blob directory throws instead of listing empty
+ok  an unsearchable directory throws instead of reporting a missing file
+ok  an unreadable blob throws instead of reading as missing
+ok  an unreadable manifest directory throws instead of listing empty
+ok  an unreadable manifest file throws instead of reading as missing
+ok  an unlink whose directory sync fails is reported as a failed removal
+ok  the unlinked file no longer lists
+ok  removing it again is idempotent and confirms the removal with a successful directory sync
 ok  directory root is 0700
 ok  directory blobs is 0700
 ok  directory manifests is 0700

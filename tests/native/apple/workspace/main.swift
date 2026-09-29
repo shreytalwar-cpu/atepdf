@@ -74,6 +74,32 @@ try require(try vault.list("manifests").isEmpty, "remove deletes a sealed file")
 try manager.createSymbolicLink(at: root.appendingPathComponent("blobs/file_link.atw"), withDestinationURL: root.appendingPathComponent("blobs/file_a.atw"))
 try require(!(try vault.exists("blobs/file_link.atw")) && (try vault.readOpened("blobs/file_link.atw", associatedData: "pdf|a|1").status) == "missing", "symbolic links are not followed")
 
+// 2b. Storage queries fail closed: an unknown state is an error, never "empty" or "missing".
+let queries = AtepdfWorkspaceVault(root: scratch.appendingPathComponent("queries", isDirectory: true), keys: MemoryKeys(SymmetricKey(size: .bits256)))
+try require(try queries.list("blobs").isEmpty && !(try queries.exists("head")), "a workspace that was never created lists empty and has no head")
+try queries.writeSealed("blobs/file_q.atw", plain: Data([1, 2, 3]), associatedData: "q")
+try queries.writeSealed("manifests/1.atw", plain: Data([4]), associatedData: "m")
+func throwsIO(_ body: () throws -> Void) -> Bool { do { try body(); return false } catch { return true } }
+let qBlobs = queries.root.appendingPathComponent("blobs"), qManifests = queries.root.appendingPathComponent("manifests")
+chmod(qBlobs.path, 0o000)
+try require(throwsIO { _ = try queries.list("blobs") }, "an unreadable blob directory throws instead of listing empty")
+try require(throwsIO { _ = try queries.exists("blobs/file_q.atw") }, "an unsearchable directory throws instead of reporting a missing file")
+try require(throwsIO { _ = try queries.readOpened("blobs/file_q.atw", associatedData: "q") }, "an unreadable blob throws instead of reading as missing")
+chmod(qBlobs.path, 0o700)
+chmod(qManifests.path, 0o000)
+try require(throwsIO { _ = try queries.list("manifests") }, "an unreadable manifest directory throws instead of listing empty")
+chmod(qManifests.path, 0o700)
+chmod(qManifests.appendingPathComponent("1.atw").path, 0o000)
+try require(throwsIO { _ = try queries.readOpened("manifests/1.atw", associatedData: "m") }, "an unreadable manifest file throws instead of reading as missing")
+chmod(qManifests.appendingPathComponent("1.atw").path, 0o600)
+// Write and search but no read permission: unlink succeeds, the directory sync cannot open it.
+chmod(qBlobs.path, 0o300)
+try require(throwsIO { try queries.remove("blobs/file_q.atw") }, "an unlink whose directory sync fails is reported as a failed removal")
+chmod(qBlobs.path, 0o700)
+try require(!(try queries.exists("blobs/file_q.atw")) && (try queries.list("blobs")).isEmpty, "the unlinked file no longer lists")
+try queries.remove("blobs/file_q.atw")
+print("ok  removing it again is idempotent and confirms the removal with a successful directory sync")
+
 // 3. Owner-only permissions and backup exclusion of the whole workspace.
 for directory in ["", "blobs", "manifests", "staging"] {
   try require(try mode(root.appendingPathComponent(directory)) & 0o777 == 0o700, "directory \(directory.isEmpty ? "root" : directory) is 0700")

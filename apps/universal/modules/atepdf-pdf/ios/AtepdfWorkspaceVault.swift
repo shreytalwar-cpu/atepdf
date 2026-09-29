@@ -197,13 +197,26 @@ public final class AtepdfWorkspaceVault {
     // File replacement can reset resource values; reassert the exclusion.
     try excludeFromBackup(root)
   }
-  private func regularFile(_ url: URL) -> Bool {
+  /// Storage queries never turn an unknown state into an answer: only ENOENT
+  /// means absent. Any other lstat failure (EACCES, EIO, …) is thrown. A
+  /// non-regular entry, such as a symbolic link, is never followed or opened.
+  private func regularFile(_ url: URL) throws -> Bool {
     var info = stat()
-    return lstat(url.path, &info) == 0 && (info.st_mode & S_IFMT) == S_IFREG
+    if lstat(url.path, &info) != 0 {
+      if errno == ENOENT { return false }
+      throw Failure.io
+    }
+    return (info.st_mode & S_IFMT) == S_IFREG
+  }
+  private func directoryMissing(_ url: URL) throws -> Bool {
+    var info = stat()
+    if lstat(url.path, &info) == 0 { return false }
+    if errno == ENOENT { return true }
+    throw Failure.io
   }
 
   // MARK: Bridge operations
-  public func exists(_ name: String) throws -> Bool { regularFile(try url(name)) }
+  public func exists(_ name: String) throws -> Bool { try regularFile(try url(name)) }
   public func writeSealed(_ name: String, plain: Data, associatedData: String) throws {
     let target = try url(name)
     let (_, key) = currentKey()
@@ -213,7 +226,9 @@ public final class AtepdfWorkspaceVault {
   /// Status is "ok", "missing", "auth" (unopenable with this key/associated data) or "locked".
   public func readOpened(_ name: String, associatedData: String) throws -> (status: String, data: Data?) {
     let target = try url(name)
-    guard regularFile(target), let sealed = try? Data(contentsOf: target) else { return ("missing", nil) }
+    guard try regularFile(target) else { return ("missing", nil) }
+    let sealed = try Data(contentsOf: target) // a read failure is an error, not "missing"
+
     let (status, key) = currentKey()
     guard let key else { return (status == .locked ? "locked" : "auth", nil) }
     guard let plain = Self.open(sealed, key: key, associatedData: associatedData) else { return ("auth", nil) }
@@ -221,13 +236,20 @@ public final class AtepdfWorkspaceVault {
   }
   public func list(_ directory: String) throws -> [String] {
     guard directory == "blobs" || directory == "manifests" else { throw Failure.name }
-    let names = (try? FileManager.default.contentsOfDirectory(atPath: root.appendingPathComponent(directory).path)) ?? []
+    let path = root.appendingPathComponent(directory)
+    // A directory that was never created is empty; every other failure is thrown.
+    if try directoryMissing(path) { return [] }
+    let names = try FileManager.default.contentsOfDirectory(atPath: path.path)
     return names.map { "\(directory)/\($0)" }.filter(Self.validName)
   }
   public func remove(_ name: String) throws {
     let target = try url(name)
+    // Idempotent for an absent file, but only complete once the directory is synced,
+    // so a removal whose sync failed can be confirmed by removing it again.
     if unlink(target.path) != 0 && errno != ENOENT { throw Failure.io }
-    try syncDirectory(target.deletingLastPathComponent())
+    let directory = target.deletingLastPathComponent()
+    if try directoryMissing(directory) { return }
+    try syncDirectory(directory)
   }
   public func cleanStaging() throws {
     let staging = root.appendingPathComponent("staging")

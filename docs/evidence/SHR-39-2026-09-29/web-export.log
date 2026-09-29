@@ -1,6 +1,6 @@
 Starting Metro Bundler
 
-Web Bundled 5462ms index.ts (1090 modules)
+Web Bundled 648ms index.ts (684 modules)
 
 › Assets (3):
 assets/approved-8-mark-source-crop.8b708587521942c4118f8e6a3c3f84f8.png (35KB)
@@ -11,7 +11,7 @@ assets/paper.1cb2ca1d4826879d6316a24bfbeecd07.png (688KB)
 _expo/static/css/global-3d19a08aa96887d1b98e0a6848d7afd8.css (24KB)
 _expo/static/css/preview-4a592c39668f775437665576652be491.css (2.5KB)
 _expo/static/css/workspace-9ca8942114a70307784c156bddc23a49.css (1.3KB)
-_expo/static/js/web/index-1a4aec9aa5263b9a2a0eb792e2809501.js (2.3MB)
+_expo/static/js/web/index-6bfc5723d355d074b2eaabfd0cdb7c18.js (2.3MB)
 _expo/static/js/web/index-c1ffcc54cc6ed28228dc1284888bc9a4.js (18KB)
 _expo/static/js/web/pdf-a92c49afc1ed7410b6ca482ca9cbc7dc.js (549KB)
 

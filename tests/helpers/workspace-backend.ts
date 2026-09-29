@@ -12,7 +12,10 @@ export type TestKeychain={raw:Uint8Array|null;state:'ok'|'locked'|'unavailable'}
 // 'stage': fails before the target changes. 'rename': fails after the atomic rename
 // but before the directory sync completes (a sync failure). 'remove': fails to
 // unlink; returning 'skip' instead makes the removal report success but leave the file.
-export type Fault=(step:'stage'|'rename'|'remove',name:string)=>void|'skip';
+// 'remove-sync': the unlink happened but the directory sync failed. 'list', 'exists'
+// and 'read': the storage query itself fails (for example EIO or EACCES).
+export type FaultStep='stage'|'rename'|'remove'|'remove-sync'|'list'|'exists'|'read';
+export type Fault=(step:FaultStep,name:string)=>void|'skip';
 export const newKeychain=():TestKeychain=>({raw:null,state:'ok'});
 
 export class NodeVaultBackend implements WorkspaceVaultBackend{
@@ -30,7 +33,11 @@ export class NodeVaultBackend implements WorkspaceVaultBackend{
     if(!create)return 'missing';
     this.keychain.raw=crypto.getRandomValues(new Uint8Array(32));return 'ready';
   }
-  async exists(name:string){try{await stat(this.#path(name));return true;}catch{return false;}}
+  // Only a definite "no such file" means absent; any other failure is reported.
+  async exists(name:string){
+    const path=this.#path(name);this.fault?.('exists',name);
+    try{await stat(path);return true;}catch(error){if((error as {code?:string}).code==='ENOENT')return false;throw error;}
+  }
   async writeSealed(name:string,plain:Uint8Array,associatedData:string){
     const target=this.#path(name),key=await this.#key(),nonce=crypto.getRandomValues(new Uint8Array(12));
     const sealed=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv:nonce,additionalData:new TextEncoder().encode(associatedData)},key,new Uint8Array(plain)));
@@ -44,18 +51,27 @@ export class NodeVaultBackend implements WorkspaceVaultBackend{
   }
   async readOpened(name:string,associatedData:string):Promise<VaultReadResult>{
     let data:Uint8Array;
-    try{data=new Uint8Array(await readFile(this.#path(name)));}catch{return {status:'missing'};}
+    const path=this.#path(name);this.fault?.('read',name);
+    try{data=new Uint8Array(await readFile(path));}catch(error){if((error as {code?:string}).code==='ENOENT')return {status:'missing'};throw error;}
     let key:CryptoKey;
     try{key=await this.#key();}catch(e){return {status:(e as {locked?:boolean}).locked?'locked':'auth'};}
     if(data.length<MAGIC.length+12+16||MAGIC.some((b,i)=>data[i]!==b))return {status:'auth'};
     try{return {status:'ok',bytes:new Uint8Array(await crypto.subtle.decrypt({name:'AES-GCM',iv:data.slice(4,16),additionalData:new TextEncoder().encode(associatedData)},key,data.slice(16)))};}
     catch{return {status:'auth'};}
   }
-  async list(directory:'blobs'|'manifests'){try{return (await readdir(join(this.root,directory))).map(name=>`${directory}/${name}`).filter(name=>NAME.test(name));}catch{return [];}}
+  // A directory that was never created is empty; any other listing failure is thrown.
+  async list(directory:'blobs'|'manifests'){
+    this.fault?.('list',directory);
+    let entries:string[];
+    try{entries=await readdir(join(this.root,directory));}catch(error){if((error as {code?:string}).code==='ENOENT')return [];throw error;}
+    return entries.map(name=>`${directory}/${name}`).filter(name=>NAME.test(name));
+  }
   async remove(name:string){
     const target=this.#path(name);if(this.fault?.('remove',name)==='skip')return;
     await rm(target,{force:true});
-    const directory=await open(dirname(target),'r').catch(()=>null);if(directory)try{await directory.sync();}finally{await directory.close();}
+    // Idempotent for an absent file, and only complete once the directory is synced.
+    this.fault?.('remove-sync',name);
+    const directory=await open(dirname(target),'r');try{await directory.sync();}finally{await directory.close();}
   }
   async cleanStaging(){await rm(join(this.root,'staging'),{recursive:true,force:true});}
 }

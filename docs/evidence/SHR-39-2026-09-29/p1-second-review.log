@@ -1,8 +1,8 @@
-✔ SHR-39 P1-4 a chat or draft save queued behind Start over cannot resurrect old text (456.602167ms)
-✔ SHR-39 P1-5 Start over does not claim removal until old PDF copies are verified gone, and retries cleanup (551.968333ms)
-✔ SHR-39 P1-5 an incomplete cleanup is retried and verified at the next launch (278.627375ms)
-✔ SHR-39 P1-4 Start over suspends chat and draft checkpoints and resets the view before they resume (234.082125ms)
-✔ SHR-39 P1-4 a failed Start over resumes checkpointing in the unchanged workspace (156.247125ms)
+✔ SHR-39 P1-4 a chat or draft save queued behind Start over cannot resurrect old text (560.719709ms)
+✔ SHR-39 P1-5 Start over does not claim removal until old PDF copies are verified gone, and retries cleanup (533.788791ms)
+✔ SHR-39 P1-5 an incomplete cleanup is retried and verified at the next launch (246.776167ms)
+✔ SHR-39 P1-4 Start over suspends chat and draft checkpoints and resets the view before they resume (226.180833ms)
+✔ SHR-39 P1-4 a failed Start over resumes checkpointing in the unchanged workspace (133.5325ms)
 ℹ tests 5
 ℹ suites 0
 ℹ pass 5
@@ -10,4 +10,4 @@
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 1818.216667
+ℹ duration_ms 1849.047666

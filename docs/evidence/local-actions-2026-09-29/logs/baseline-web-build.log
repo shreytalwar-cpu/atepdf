@@ -1,0 +1,23 @@
+Starting Metro Bundler
+
+| (node:51628) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+Web Bundling failed 256ms index.ts (1 module)
+
+Error: Unable to resolve module expo from <temporary-checkout> expo could not be found within the project.
+[0m [90m 1 |[39m [36mimport[39m [32m'./global.css'[39m[33m;[39m
+ [90m 2 |[39m [36mimport[39m [32m'./src/platform/polyfills'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m {registerRootComponent} [36mfrom[39m [32m'expo'[39m[33m;[39m
+ [90m   |[39m                                      [31m[1m^[22m[39m
+ [90m 4 |[39m [36mimport[39m [33mApp[39m [36mfrom[39m [32m'./App'[39m[33m;[39m
+ [90m 5 |[39m registerRootComponent([33mApp[39m)[33m;[39m
+ [90m 6 |[39m[0m
+
+Import stack:
+
+ index.ts
+ | import "expo"
+
+ 
+ | import "./index.ts"
+

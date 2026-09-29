@@ -1,0 +1,933 @@
+{
+  "config": {
+    "argv": [
+      "<local-home-path>",
+      "<temporary-checkout>",
+      "test",
+      "tests/e2e/workflow.spec.ts",
+      "tests/e2e/planner.spec.ts",
+      "tests/e2e/local-actions.spec.ts"
+    ],
+    "configFile": "<temporary-checkout>",
+    "rootDir": "<temporary-checkout>",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<temporary-checkout>",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<temporary-checkout>",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "docs/evidence/browser-results-expo.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "local-actions.spec.ts",
+      "file": "local-actions.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "explicit local actions bypass planning: healthy",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1328,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-29T05:37:27.962Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "routing-counts",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoiaGVhbHRoeSIsIm1vZGVsQ2FsbHMiOjAsInN0YXR1c0NhbGxzIjowLCJhY3Rpb25zIjpbIm1lcmdlIiwib2NyIiwiY29tcHJlc3MiLCJ1bmRvIl19"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9b9daa01393ef8cca12f-d6a25cad065dce72a532",
+          "file": "local-actions.spec.ts",
+          "line": 11,
+          "column": 7
+        },
+        {
+          "title": "explicit local actions bypass planning: disabled",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1356,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-29T05:37:29.716Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "routing-counts",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoiZGlzYWJsZWQiLCJtb2RlbENhbGxzIjowLCJzdGF0dXNDYWxscyI6MCwiYWN0aW9ucyI6WyJtZXJnZSIsIm9jciIsImNvbXByZXNzIiwidW5kbyJdfQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9b9daa01393ef8cca12f-adfea237af6795f943f7",
+          "file": "local-actions.spec.ts",
+          "line": 11,
+          "column": 7
+        },
+        {
+          "title": "explicit local actions bypass planning: unavailable",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1500,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-29T05:37:31.080Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "routing-counts",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoidW5hdmFpbGFibGUiLCJtb2RlbENhbGxzIjowLCJzdGF0dXNDYWxscyI6MCwiYWN0aW9ucyI6WyJtZXJnZSIsIm9jciIsImNvbXByZXNzIiwidW5kbyJdfQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9b9daa01393ef8cca12f-66f0085c4c1ac5b9d83e",
+          "file": "local-actions.spec.ts",
+          "line": 11,
+          "column": 7
+        },
+        {
+          "title": "explicit local actions bypass planning: authentication",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1461,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-29T05:37:32.590Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "routing-counts",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoiYXV0aGVudGljYXRpb24iLCJtb2RlbENhbGxzIjowLCJzdGF0dXNDYWxscyI6MCwiYWN0aW9ucyI6WyJtZXJnZSIsIm9jciIsImNvbXByZXNzIiwidW5kbyJdfQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9b9daa01393ef8cca12f-c79b9eb658165f192f05",
+          "file": "local-actions.spec.ts",
+          "line": 11,
+          "column": 7
+        },
+        {
+          "title": "explicit local actions bypass planning: allowance",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1349,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-29T05:37:34.059Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "routing-counts",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoiYWxsb3dhbmNlIiwibW9kZWxDYWxscyI6MCwic3RhdHVzQ2FsbHMiOjAsImFjdGlvbnMiOlsibWVyZ2UiLCJvY3IiLCJjb21wcmVzcyIsInVuZG8iXX0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9b9daa01393ef8cca12f-3d0f065e05d3546a9c0f",
+          "file": "local-actions.spec.ts",
+          "line": 11,
+          "column": 7
+        },
+        {
+          "title": "explicit local actions bypass planning: provider failure",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1268,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-29T05:37:35.415Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "routing-counts",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoicHJvdmlkZXIgZmFpbHVyZSIsIm1vZGVsQ2FsbHMiOjAsInN0YXR1c0NhbGxzIjowLCJhY3Rpb25zIjpbIm1lcmdlIiwib2NyIiwiY29tcHJlc3MiLCJ1bmRvIl19"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9b9daa01393ef8cca12f-8609c78e13b022b2a4cd",
+          "file": "local-actions.spec.ts",
+          "line": 11,
+          "column": 7
+        },
+        {
+          "title": "explicit local actions bypass planning: pending status",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1229,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-29T05:37:36.690Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "routing-counts",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoicGVuZGluZyBzdGF0dXMiLCJtb2RlbENhbGxzIjowLCJzdGF0dXNDYWxscyI6MSwiYWN0aW9ucyI6WyJtZXJnZSIsIm9jciIsImNvbXByZXNzIiwidW5kbyJdfQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9b9daa01393ef8cca12f-d7ee2fbbbba78fa5a480",
+          "file": "local-actions.spec.ts",
+          "line": 11,
+          "column": 7
+        },
+        {
+          "title": "local recovery after a free-form planner error 401",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 716,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-29T05:37:37.925Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "routing-counts",
+                      "contentType": "application/json",
+                      "body": "eyJwcm92aWRlckVycm9yIjo0MDEsImZyZWVGb3JtQ2FsbHMiOjEsImxvY2FsQWN0aW9uQ2FsbHMiOjB9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9b9daa01393ef8cca12f-2d16a5b2b4973b4e7ff0",
+          "file": "local-actions.spec.ts",
+          "line": 63,
+          "column": 7
+        },
+        {
+          "title": "local recovery after a free-form planner error 429",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 800,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-29T05:37:38.646Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "routing-counts",
+                      "contentType": "application/json",
+                      "body": "eyJwcm92aWRlckVycm9yIjo0MjksImZyZWVGb3JtQ2FsbHMiOjEsImxvY2FsQWN0aW9uQ2FsbHMiOjB9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9b9daa01393ef8cca12f-02efde23dd425a35d32e",
+          "file": "local-actions.spec.ts",
+          "line": 63,
+          "column": 7
+        },
+        {
+          "title": "local recovery after a free-form planner error 503",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 776,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-29T05:37:39.453Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "routing-counts",
+                      "contentType": "application/json",
+                      "body": "eyJwcm92aWRlckVycm9yIjo1MDMsImZyZWVGb3JtQ2FsbHMiOjEsImxvY2FsQWN0aW9uQ2FsbHMiOjB9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9b9daa01393ef8cca12f-5a16912f75ebea116fad",
+          "file": "local-actions.spec.ts",
+          "line": 63,
+          "column": 7
+        },
+        {
+          "title": "missing local inputs are rejected and ambiguous typed requests remain planner requests",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "interrupted",
+                  "duration": 157571,
+                  "error": {
+                    "message": "Error: locator.click: Test ended.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Try the two sample PDFs' })\u001b[22m\n",
+                    "stack": "Error: locator.click: Test ended.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Try the two sample PDFs' })\u001b[22m\n\n    at <temporary-checkout>",
+                    "location": {
+                      "file": "<temporary-checkout>",
+                      "column": 68,
+                      "line": 96
+                    },
+                    "snippet": "  94 |   await expect(page.getByTestId('assistant-message').last()).toContainText(/Choose|invalid/i);\n  95 |   expect(calls).toBe(0);\n> 96 |   await page.getByLabel('Choose PDF files').setInputFiles(['tests/fixtures/brief.pdf','tests/fixtures/appendix.pdf']);\n     |                                                                    ^\n  97 |   await expect(page.getByText('Your 2 PDFs are ready.', {exact:false})).toBeVisible();\n  98 |   await page.getByRole('button', {name:'Compress', exact:true}).click();\n  99 |   await page.getByRole('button', {name:'Create optimised copy', exact:true}).click();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<temporary-checkout>",
+                        "column": 68,
+                        "line": 96
+                      },
+                      "message": "Error: locator.click: Test ended.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Try the two sample PDFs' })\u001b[22m\n\n\n  94 |   await expect(page.getByTestId('assistant-message').last()).toContainText(/Choose|invalid/i);\n  95 |   expect(calls).toBe(0);\n> 96 |   await page.getByLabel('Choose PDF files').setInputFiles(['tests/fixtures/brief.pdf','tests/fixtures/appendix.pdf']);\n     |                                                                    ^\n  97 |   await expect(page.getByText('Your 2 PDFs are ready.', {exact:false})).toBeVisible();\n  98 |   await page.getByRole('button', {name:'Compress', exact:true}).click();\n  99 |   await page.getByRole('button', {name:'Create optimised copy', exact:true}).click();\n    at <temporary-checkout>"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-29T05:37:40.234Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<temporary-checkout>"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<temporary-checkout>"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<temporary-checkout>",
+                    "column": 68,
+                    "line": 96
+                  }
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "9b9daa01393ef8cca12f-060a1e5664057b966e74",
+          "file": "local-actions.spec.ts",
+          "line": 84,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "planner.spec.ts",
+      "file": "planner.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "mocked planner transport: Send → redacted complete plan → real local result → follow-up",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "5d42237028e62295b8dc-0f7c063a842f5de22dc8",
+          "file": "planner.spec.ts",
+          "line": 11,
+          "column": 5
+        },
+        {
+          "title": "AI-enabled quick PDF action stays local, while a product question uses the planner without changing files",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "5d42237028e62295b8dc-73125ead847a02fde2b5",
+          "file": "planner.spec.ts",
+          "line": 22,
+          "column": 5
+        },
+        {
+          "title": "direct planner cancellation ignores a late complete plan and keeps local quick actions usable",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "5d42237028e62295b8dc-9a67db28392581f92b05",
+          "file": "planner.spec.ts",
+          "line": 32,
+          "column": 5
+        },
+        {
+          "title": "cancelling direct planner setup prevents any later model request",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "5d42237028e62295b8dc-950290e0ee1d298df8c6",
+          "file": "planner.spec.ts",
+          "line": 48,
+          "column": 5
+        },
+        {
+          "title": "direct planner incomplete response never changes a committed result",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "5d42237028e62295b8dc-744eb842552da1f2c761",
+          "file": "planner.spec.ts",
+          "line": 66,
+          "column": 7
+        },
+        {
+          "title": "direct planner stale response never changes a committed result",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "5d42237028e62295b8dc-4c3d42925811ab8e45cd",
+          "file": "planner.spec.ts",
+          "line": 66,
+          "column": 7
+        },
+        {
+          "title": "direct planner truncated JSON response never changes a committed result",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "5d42237028e62295b8dc-eee945b306e198be1d12",
+          "file": "planner.spec.ts",
+          "line": 66,
+          "column": 7
+        },
+        {
+          "title": "direct balanced-compression plan retains its image-quality choice before local execution",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "5d42237028e62295b8dc-749df377799be0138b1f",
+          "file": "planner.spec.ts",
+          "line": 85,
+          "column": 5
+        },
+        {
+          "title": "privacy rejection happens before transport, unknown instruction with no key stays honest",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "5d42237028e62295b8dc-cd402eb487d5f9a4bd87",
+          "file": "planner.spec.ts",
+          "line": 93,
+          "column": 5
+        },
+        {
+          "title": "masked local key setup keeps the key outside chat and model transport",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "5d42237028e62295b8dc-80090aca81b91563f2fc",
+          "file": "planner.spec.ts",
+          "line": 100,
+          "column": 5
+        },
+        {
+          "title": "native pairing code stays in a masked setup control and makes no model request",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "5d42237028e62295b8dc-242072bb8e1fc6bef156",
+          "file": "planner.spec.ts",
+          "line": 107,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "workflow.spec.ts",
+      "file": "workflow.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "real merge → preview/save → remove physical page 2 → undo; local-only network",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "c601ceb5ecfc8efa4a14-9c19752d164737016598",
+          "file": "workflow.spec.ts",
+          "line": 8,
+          "column": 5
+        },
+        {
+          "title": "responsive workspace, keyboard height, privacy and save cancellation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "c601ceb5ecfc8efa4a14-929b1015063c73783e86",
+          "file": "workflow.spec.ts",
+          "line": 23,
+          "column": 5
+        },
+        {
+          "title": "real merge → OCR → compression preserves text and produces a measured smaller PDF without egress",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "c601ceb5ecfc8efa4a14-51f7eb8eb74806cd4e40",
+          "file": "workflow.spec.ts",
+          "line": 30,
+          "column": 5
+        },
+        {
+          "title": "chat clarification, cancellation and discard guard keep committed results intact",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "c601ceb5ecfc8efa4a14-98d9fae7989c511ee516",
+          "file": "workflow.spec.ts",
+          "line": 41,
+          "column": 5
+        },
+        {
+          "title": "PDF drag feedback clears on leave and actual drop imports locally",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "c601ceb5ecfc8efa4a14-2ddbff821d0c2518966c",
+          "file": "workflow.spec.ts",
+          "line": 85,
+          "column": 5
+        },
+        {
+          "title": "keyboard composer and Latest message keep current results reachable",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "c601ceb5ecfc8efa4a14-8150b8537f7ef19c23b0",
+          "file": "workflow.spec.ts",
+          "line": 111,
+          "column": 5
+        },
+        {
+          "title": "one chat recipe commits only the final merge → OCR → compression result",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "c601ceb5ecfc8efa4a14-3ce47b7c9ae8758c889d",
+          "file": "workflow.spec.ts",
+          "line": 142,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-29T05:37:27.721Z",
+    "duration": 170201.588,
+    "expected": 10,
+    "skipped": 19,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

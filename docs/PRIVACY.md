@@ -6,6 +6,8 @@ Source-based record at `prototype-v0`, 29 September 2026. This is not a public p
 
 PDF processing runs on the device. The browser uses local workers/readers/OCR; Apple uses local PDFKit/Vision/ImageIO plus the shared writer. No cloud PDF-processing fallback is implemented. Store, controller and planner serialization are separate.
 
+The scoped 29 September correction makes explicit quick-action buttons local: they send no model-planning request and consume no provider allowance. Background/user-initiated connection controls are separate.
+
 The planner DTO positively projects opaque file refs, page counts, byte sizes, selections/focus, revision and supported capabilities. It does not serialize file bytes, preview images, extracted/OCR text, local filenames, paths, passwords or local checksums from artifacts. Only completed, validated responses can propose local operations. Output PDF bytes and document content are not automatically sent; later requests can include permitted metadata about retained results. User-entered instruction risks are described below.
 
 **Free-form instructions are a separate boundary.** They are sent to the provider when AI is enabled. Local guards alias known filenames and reject some paths, secrets and extracted-text matches, but cannot guarantee that arbitrary sensitive typed text or short document excerpts are detected. “Anonymous metadata” means opaque references, not formal anonymity: exact sizes/counts and session context can remain linkable. The current UI disclosure overstates exclusion guarantees; record this as a defect, not a reason to silently change the approved Send flow.

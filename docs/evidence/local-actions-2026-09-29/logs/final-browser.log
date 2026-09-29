@@ -1,0 +1,46 @@
+
+Running 29 tests using 1 worker
+
+(node:52591) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/e2e/local-actions.spec.ts:11:7 › explicit local actions bypass planning: healthy (1.3s)
+  ✓   2 tests/e2e/local-actions.spec.ts:11:7 › explicit local actions bypass planning: disabled (1.4s)
+  ✓   3 tests/e2e/local-actions.spec.ts:11:7 › explicit local actions bypass planning: unavailable (1.5s)
+  ✓   4 tests/e2e/local-actions.spec.ts:11:7 › explicit local actions bypass planning: authentication (1.5s)
+  ✓   5 tests/e2e/local-actions.spec.ts:11:7 › explicit local actions bypass planning: allowance (1.3s)
+  ✓   6 tests/e2e/local-actions.spec.ts:11:7 › explicit local actions bypass planning: provider failure (1.3s)
+  ✓   7 tests/e2e/local-actions.spec.ts:11:7 › explicit local actions bypass planning: pending status (1.2s)
+  ✓   8 tests/e2e/local-actions.spec.ts:63:7 › local recovery after a free-form planner error 401 (716ms)
+  ✓   9 tests/e2e/local-actions.spec.ts:63:7 › local recovery after a free-form planner error 429 (800ms)
+  ✓  10 tests/e2e/local-actions.spec.ts:63:7 › local recovery after a free-form planner error 503 (776ms)
+  ✘  11 tests/e2e/local-actions.spec.ts:84:5 › missing local inputs are rejected and ambiguous typed requests remain planner requests (2.6m)
+
+
+  1) tests/e2e/local-actions.spec.ts:84:5 › missing local inputs are rejected and ambiguous typed requests remain planner requests 
+
+    Test was interrupted.
+
+    Error: locator.click: Test ended.
+    Call log:
+      - waiting for getByRole('button', { name: 'Try the two sample PDFs' })
+
+
+      94 |   await expect(page.getByTestId('assistant-message').last()).toContainText(/Choose|invalid/i);
+      95 |   expect(calls).toBe(0);
+    > 96 |   await page.getByLabel('Choose PDF files').setInputFiles(['tests/fixtures/brief.pdf','tests/fixtures/appendix.pdf']);
+         |                                                                    ^
+      97 |   await expect(page.getByText('Your 2 PDFs are ready.', {exact:false})).toBeVisible();
+      98 |   await page.getByRole('button', {name:'Compress', exact:true}).click();
+      99 |   await page.getByRole('button', {name:'Create optimised copy', exact:true}).click();
+        at <temporary-checkout>
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/local-actions-missing-loca-6d97c-sts-remain-planner-requests/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/local-actions-missing-loca-6d97c-sts-remain-planner-requests/error-context.md
+
+  1 interrupted
+    tests/e2e/local-actions.spec.ts:84:5 › missing local inputs are rejected and ambiguous typed requests remain planner requests 
+  18 did not run
+  10 passed (2.8m)

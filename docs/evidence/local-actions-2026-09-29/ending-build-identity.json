@@ -1,0 +1,16 @@
+{
+  "head": "05bd7b126e7d0e5d4df97bf18a7f29af627ed2ca",
+  "branch": "codex/atepdf-chat-workflows",
+  "applicationAndTestSHA256": {
+    "apps/universal/App.tsx": "b6394f917126b729c0eaaaa3cb16b5aab2df0eca99787f97955755a874fb28ca",
+    "tests/e2e/local-actions.spec.ts": "5ba0599940b1aa1aa6c6f73e92abe8e4e41d3a29404bf5fa79effcd4ad55d98e",
+    "tests/e2e/planner.spec.ts": "7066409f86ed0abe05ddd23907476f8dfa9acef6e8fea08db27a8bd0a7066ce0"
+  },
+  "bundleSHA256": {
+    "apps/universal/dist-web/_expo/static/js/web/index-be4d2202abae16af36bb2dbeab74683f.js": "68dcc9989bdc6f8cad37dd99272597ae69b62620a81386747665f665fe7899e4",
+    "apps/universal/dist-web/_expo/static/js/web/pdf-50f2ec8e34576162255929524f6e72b4.js": "24d587b8b800f6392aadae433bf5e8277c3d23c471fe951fbce46748f1559270",
+    "apps/universal/dist-web/_expo/static/js/web/index-c618447c81ca2523d72316be933294d9.js": "5f494f37838ba346831aed10e4270aed2d976765b9683ea7cdafa695b54029fb",
+    "apps/universal/dist-native/_expo/static/js/ios/index-86ec65b6dd5221a8133a63c8efd83d38.hbc": "97580160a91db7019466fb5564aaba2c86f4cb05a32aca2118c6ed987f23168b"
+  },
+  "node": "v24.19.0"
+}

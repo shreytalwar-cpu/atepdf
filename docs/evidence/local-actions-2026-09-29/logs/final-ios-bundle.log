@@ -1,0 +1,35 @@
+Starting Metro Bundler
+
+| (node:52617) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:52617) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:52617) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:52617) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:52617) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:52617) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:52617) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+iOS Bundled 11759ms index.ts (1673 modules)
+
+› Assets (5):
+assets/approved-8-mark-source-crop.png (35KB)
+assets/approved-atepdf-wordmark-source-crop.png (34KB)
+assets/fixtures/appendix.pdf (2.1KB)
+assets/fixtures/brief.pdf (3.1KB)
+assets/paper.png (688KB)
+
+› ios bundles (1):
+_expo/static/js/ios/index-86ec65b6dd5221a8133a63c8efd83d38.hbc (4.8MB)
+
+› web bundles (1):
+_expo/static/css/global-d41d8cd98f00b204e9800998ecf8427e.css (0B)
+
+› Files (1):
+metadata.json (456B)
+
+Exported: dist-native

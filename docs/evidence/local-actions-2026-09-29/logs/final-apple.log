@@ -1,0 +1,79 @@
+CoreGraphics PDF has logged an error. Set environment variable "CG_PDF_VERBOSE" to learn more.
+Apple fixture phase: local OCR
+Apple fixture phase: OCR cancellation
+{
+  "appendixPages" : 1,
+  "briefPages" : 2,
+  "checks" : [
+    "PDF page count and marker order",
+    "CoreGraphics raster",
+    "20 pixel-anchor checks across resolutions, rotations and nonzero crop origin",
+    "rotation and crop geometry",
+    "local-only file URI and symlink boundary",
+    "Catalyst sandbox entitlement type and independent container",
+    "malformed and range failures",
+    "cooperative cancellation",
+    "JPEG dimensions and measured reduction",
+    "OCR phrase and absolute source-title position",
+    "digital text skip",
+    "immutable inputs"
+  ],
+  "codec" : "Apple ImageIO",
+  "elapsedSeconds" : 1.5101430416107178,
+  "jpegBytesAfter" : 250456,
+  "jpegBytesBefore" : 463149,
+  "limitations" : [
+    "macOS helper execution; Expo\/iOS integration tested separately",
+    "no physical device or release proof",
+    "CoreGraphics drawing is not interruptible mid-call"
+  ],
+  "ocr" : "Apple Vision English",
+  "ocrPages" : 1,
+  "ocrWords" : 66,
+  "originalHashesUnchanged" : {
+    "appendix.pdf" : "c8d1d72a3f899992b2fba5cd247171712447c4f4fa60cf0c69bd9d811137e7a7",
+    "brief.pdf" : "6e7d2ffe2d9bd72f2de172b1e91648b915952b28face2eec1a88cc88172c6d90",
+    "image-heavy.pdf" : "dea2e9c2d4d3326d974945f556c24b55c08e4d9f6833bbcfbe9b289330e4e773",
+    "mixed-text-and-scan.pdf" : "44972359f06ae6fb05d62450182ab33e2b1d2b2709429907ca9e4a098ea97b9c",
+    "scanned-note.pdf" : "19d8713895b5597021834c41b4190d12735800fd9482008823a2e6a786023874"
+  },
+  "passed" : true,
+  "platform" : "Version 27.0 (Build 26A428)",
+  "preview" : {
+    "height" : 1024,
+    "width" : 724
+  },
+  "reader" : "Apple PDFKit\/CoreGraphics",
+  "syntheticOnly" : true
+}
+{
+  "syntheticOnly": true,
+  "passed": true,
+  "writer": "pdf-lib",
+  "independentReaders": [
+    "Apple PDFKit",
+    "PDF.js"
+  ],
+  "ocr": "Apple Vision",
+  "codec": "Apple ImageIO",
+  "ocrTextSearchPassed": true,
+  "digitalTextUnchanged": true,
+  "ocrRenderIdentical": true,
+  "geometryUnchanged": true,
+  "codecCalls": 1,
+  "compressionBytesBefore": 7571813,
+  "compressionBytesAfter": 1125798,
+  "note": "Optimised 1 JPEG image at original dimensions. Text and vectors retained; review image quality.",
+  "controllerChain": [
+    "import",
+    "merge",
+    "ocr",
+    "compress",
+    "independent validate",
+    "remove physical page2",
+    "undo"
+  ],
+  "controllerChainPages": 4,
+  "originalHashesUnchanged": true,
+  "scope": "Native helper plus shared writer/controller, not iOS UI/device test"
+}

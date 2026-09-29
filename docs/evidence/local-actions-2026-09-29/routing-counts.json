@@ -1,0 +1,94 @@
+[
+  {
+    "mode": "healthy",
+    "modelCalls": 0,
+    "statusCalls": 0,
+    "actions": [
+      "merge",
+      "ocr",
+      "compress",
+      "undo"
+    ]
+  },
+  {
+    "mode": "disabled",
+    "modelCalls": 0,
+    "statusCalls": 0,
+    "actions": [
+      "merge",
+      "ocr",
+      "compress",
+      "undo"
+    ]
+  },
+  {
+    "mode": "unavailable",
+    "modelCalls": 0,
+    "statusCalls": 0,
+    "actions": [
+      "merge",
+      "ocr",
+      "compress",
+      "undo"
+    ]
+  },
+  {
+    "mode": "authentication",
+    "modelCalls": 0,
+    "statusCalls": 0,
+    "actions": [
+      "merge",
+      "ocr",
+      "compress",
+      "undo"
+    ]
+  },
+  {
+    "mode": "allowance",
+    "modelCalls": 0,
+    "statusCalls": 0,
+    "actions": [
+      "merge",
+      "ocr",
+      "compress",
+      "undo"
+    ]
+  },
+  {
+    "mode": "provider failure",
+    "modelCalls": 0,
+    "statusCalls": 0,
+    "actions": [
+      "merge",
+      "ocr",
+      "compress",
+      "undo"
+    ]
+  },
+  {
+    "mode": "pending status",
+    "modelCalls": 0,
+    "statusCalls": 1,
+    "actions": [
+      "merge",
+      "ocr",
+      "compress",
+      "undo"
+    ]
+  },
+  {
+    "providerError": 401,
+    "freeFormCalls": 1,
+    "localActionCalls": 0
+  },
+  {
+    "providerError": 429,
+    "freeFormCalls": 1,
+    "localActionCalls": 0
+  },
+  {
+    "providerError": 503,
+    "freeFormCalls": 1,
+    "localActionCalls": 0
+  }
+]

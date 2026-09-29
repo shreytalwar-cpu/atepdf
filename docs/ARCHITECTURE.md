@@ -1,6 +1,6 @@
 # Architecture
 
-Current source at `prototype-v0`, 29 September 2026. This records architecture; it does not authorize a replacement.
+Baseline `prototype-v0`, with the scoped quick-action correction of 29 September 2026. This records architecture; it does not authorize a replacement.
 
 ```mermaid
 flowchart TD
@@ -25,6 +25,8 @@ flowchart TD
 ```
 
 `apps/universal/App.tsx` owns presentation orchestration. The assistant-ui external-store adapter receives chat presentation entries, not automatically uploaded PDF attachments. Platform files under `src/platform` handle selection/drop, preview, planner connection and save. Native custom modules bridge PDF and planner transport. Mac uses Catalyst.
+
+Explicit quick-action buttons call `controller.quick()` directly, independent of planner transport, status, key and allowance. `quickPlan()` validates the local proposal and `JobController.execute()` revalidates it against the current revision, capabilities and local file facts before running engines. Image-quality-changing compression retains its revision-bound confirmation. Typed requests retain the existing `preparePlanning()` path and bounded local fallback; ambiguous text is not promoted to a quick action.
 
 `packages/core` owns immutable originals, artifact lineage, revision, undo history and serialized jobs. Import is atomic across the selected batch; execution stages a complete validated plan and commits a final output after independent reading. Cancellation and stale-plan checks protect committed state. Store and history are memory-only. Undo changes focus/history but does not evict stored byte buffers.
 

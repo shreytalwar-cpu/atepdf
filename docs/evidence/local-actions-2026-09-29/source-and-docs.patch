@@ -1,0 +1,121 @@
+diff --git a/apps/universal/App.tsx b/apps/universal/App.tsx
+index 4cccb6b..f0e9315 100644
+--- a/apps/universal/App.tsx
++++ b/apps/universal/App.tsx
+@@ -118,7 +118,8 @@ function useWorkspace() {
+   const action = (type: Action, text: string, page = 2) => {
+     if (busy || operation.current) return;
+     setChoice(null); append({role: 'user', text});
+-    if(plannerAvailable){void preparePlanning(text,{type,page});return;}
++    // Explicit actions already specify the operation. Compile locally through
++    // controller.quick; AI availability and connection checks are irrelevant.
+     if ((type === 'compress' || type === 'chain') && store.originals.length) {
+       const id = append({role: 'assistant', text: 'I can re-encode supported JPEG images at their original dimensions. Image quality may change; text and vectors stay intact. Some PDFs may not get smaller. Shall I create a new copy for you to preview?', choice: type, revision: store.revision});
+       setChoice(id); return;
+@@ -270,7 +271,7 @@ function Screen(){
+         {!nativeEngineReady&&<Text className="mx-5 text-xs text-muted-foreground">Native development preview · local PDF processing is not connected yet.</Text>}
+         <Thread components={threadComponents}/>
+       </DropSurface>
+-      <Modal accessibilityLabel={Platform.OS==='web'?'Processed on your device':undefined} visible={workspace.privacy} transparent animationType={motion?'fade':'none'} onRequestClose={()=>workspace.setPrivacy(false)}><SafeAreaView style={{flex:1}} className="bg-black/25"><ScrollView contentContainerStyle={{flexGrow:1,justifyContent:'center',padding:20}}><View accessibilityViewIsModal role={Platform.OS==='web'?undefined:'dialog'} className="w-full max-w-lg self-center gap-4 rounded-3xl bg-background p-6"><Text accessibilityRole="header" className="text-xl font-semibold text-foreground">Processed on your device</Text><Text className="text-base leading-6 text-foreground">PDF files, previews and recognised text stay on this device. PDF operations run in local engines.</Text><Text className="text-sm leading-6 text-muted-foreground">When AI is enabled, chat requests and quick actions send your instruction and anonymous file references, page counts and sizes for planning. Filenames, passwords, paths, checksums and document contents are excluded. Your OpenAI key stays in the local server, outside the app.</Text><Text className="text-sm leading-6 text-muted-foreground">Save before closing. Chat and files stay in this session. Saving to a cloud folder or sharing through a chosen provider may transfer the saved file outside atepdf.</Text><Button primary onPress={()=>workspace.setPrivacy(false)}>Got it</Button></View></ScrollView></SafeAreaView></Modal>
++      <Modal accessibilityLabel={Platform.OS==='web'?'Processed on your device':undefined} visible={workspace.privacy} transparent animationType={motion?'fade':'none'} onRequestClose={()=>workspace.setPrivacy(false)}><SafeAreaView style={{flex:1}} className="bg-black/25"><ScrollView contentContainerStyle={{flexGrow:1,justifyContent:'center',padding:20}}><View accessibilityViewIsModal role={Platform.OS==='web'?undefined:'dialog'} className="w-full max-w-lg self-center gap-4 rounded-3xl bg-background p-6"><Text accessibilityRole="header" className="text-xl font-semibold text-foreground">Processed on your device</Text><Text className="text-base leading-6 text-foreground">PDF files, previews and recognised text stay on this device. PDF operations run in local engines.</Text><Text className="text-sm leading-6 text-muted-foreground">Quick-action buttons run locally without AI planning. When AI is enabled, chat requests send your instruction and anonymous file references, page counts and sizes for planning. Filenames, passwords, paths, checksums and document contents are excluded. Your OpenAI key stays in the local server, outside the app.</Text><Text className="text-sm leading-6 text-muted-foreground">Save before closing. Chat and files stay in this session. Saving to a cloud folder or sharing through a chosen provider may transfer the saved file outside atepdf.</Text><Button primary onPress={()=>workspace.setPrivacy(false)}>Got it</Button></View></ScrollView></SafeAreaView></Modal>
+     </SafeAreaView>
+   </AssistantRuntimeProvider></WorkspaceContext.Provider>;
+ }
+diff --git a/docs/ARCHITECTURE.md b/docs/ARCHITECTURE.md
+index 22746ed..efb5d0e 100644
+--- a/docs/ARCHITECTURE.md
++++ b/docs/ARCHITECTURE.md
+@@ -1,6 +1,6 @@
+ # Architecture
+ 
+-Current source at `prototype-v0`, 29 September 2026. This records architecture; it does not authorize a replacement.
++Baseline `prototype-v0`, with the scoped quick-action correction of 29 September 2026. This records architecture; it does not authorize a replacement.
+ 
+ ```mermaid
+ flowchart TD
+@@ -26,6 +26,8 @@ flowchart TD
+ 
+ `apps/universal/App.tsx` owns presentation orchestration. The assistant-ui external-store adapter receives chat presentation entries, not automatically uploaded PDF attachments. Platform files under `src/platform` handle selection/drop, preview, planner connection and save. Native custom modules bridge PDF and planner transport. Mac uses Catalyst.
+ 
++Explicit quick-action buttons call `controller.quick()` directly, independent of planner transport, status, key and allowance. `quickPlan()` validates the local proposal and `JobController.execute()` revalidates it against the current revision, capabilities and local file facts before running engines. Image-quality-changing compression retains its revision-bound confirmation. Typed requests retain the existing `preparePlanning()` path and bounded local fallback; ambiguous text is not promoted to a quick action.
++
+ `packages/core` owns immutable originals, artifact lineage, revision, undo history and serialized jobs. Import is atomic across the selected batch; execution stages a complete validated plan and commits a final output after independent reading. Cancellation and stale-plan checks protect committed state. Store and history are memory-only. Undo changes focus/history but does not evict stored byte buffers.
+ 
+ `packages/contracts` contains the shared JSON schemas, generated validators, operation registry and synthetic corpus. `packages/web-pdf` contains the shared pdf-lib writer, conservative feature/content admission, browser worker and separate PDF.js inspection. Apple uses PDFKit/Vision/ImageIO through the local module. Independence means different writer and reader engines; it is not proof of identical pixels or preservation of every PDF semantic structure.
+diff --git a/docs/DECISIONS.md b/docs/DECISIONS.md
+index 5e11782..f7e2ef1 100644
+--- a/docs/DECISIONS.md
++++ b/docs/DECISIONS.md
+@@ -2,7 +2,7 @@
+ 
+ Canonical index at the 29 September 2026 freeze. No new product choices are made here.
+ 
+-1. The latest explicit owner instruction controls: **freeze, audit and document; no development, redesign, architecture changes, installs, new tests or removals.** The earlier build/polish goal is paused.
++1. The latest explicit owner instruction controls. The 29 September scoped exception permits only making existing explicit local PDF quick actions independent of AI, its regressions, required local verification and concise documentation. All unrelated development and the earlier build/polish goal remain frozen. See [the scoped checkpoint](IMPLEMENTATION_STATUS.md#29-september-scoped-quick-action-correction).
+ 2. This is a fresh independent atepdf repository. Old Attenlo remains read-only reference, never a dependency or write target. No production identity/entitlement/customer migration is inherited.
+ 3. The original v7 handoff remains unchanged. Its precedence/design/privacy/commercial rules apply except where later owner-approved decisions supersede them.
+ 4. Existing [ADRs](adr/) record the stack and workflow decisions below. Historical status reports retain their own date/source scope; a later pass does not validate an earlier or different binary automatically.
+@@ -15,7 +15,7 @@ Canonical index at the 29 September 2026 freeze. No new product choices are made
+ | 0003 | Official assistant-ui across active platforms | Supersedes “no assistant-ui initially”; no assistant-ui cloud/file uploader |
+ | 0004 | Remove arbitrary PDF byte caps | No 20 MB upload limit; resource/feature bounds remain |
+ | 0005 | Prioritize Apple and web | Android deferred, source preserved |
+-| 0006 | Seamless AI submission | Ordinary Send/quick actions need no repeated planning-warning card; meaningful quality choices remain |
++| 0006 | Seamless AI submission | Ordinary Send needs no repeated planning-warning card; explicit quick actions now compile locally under the scoped owner exception; meaningful quality choices remain |
+ | 0007 | GPT-6 Luna and complete tool selection | Remove app's 2,000-output-token cap; local PDF/undo/chat-reply tools; bounded request allowance still applies |
+ | 0008 | Development native pairing | One-use expiring pairing and memory-only bearer; not production account auth |
+ | 0009 | Explicit private TLS beta companion | Pinned local-network native transport; not a hosted production backend |
+diff --git a/docs/IMPLEMENTATION_STATUS.md b/docs/IMPLEMENTATION_STATUS.md
+index 97af574..2ff9c7a 100644
+--- a/docs/IMPLEMENTATION_STATUS.md
++++ b/docs/IMPLEMENTATION_STATUS.md
+@@ -4,7 +4,13 @@
+ 
+ This updates the retained integration tasks; it is not a second roadmap. Original technical/lifecycle/commercial tasks remain in the unmodified v7 pack. The M0/F01–F03 fresh-start interpretation controls. Owner approved React Native/Expo with assistant-ui and all workflows/results inside chat (ADRs 0001–0003), then deferred Android to focus on iOS/iPadOS, Mac and web (ADR 0005).
+ 
+-Owner update (ADRs 0007–0009): when AI is enabled in the browser or a paired Apple development app, typed PDF requests and quick-action buttons ask GPT-6 Luna to select a local PDF tool. Basic product questions use a separate chat-reply tool. Model tools are proposals only; completed responses pass contract and current-workspace validation before local execution. No 2,000-output-token application cap is sent. The saved request allowance remains bounded and separate. Native pairing includes an explicit private TLS beta companion (ADR 0009). Physical-device acceptance and production authentication remain open. Unpaired clients retain local quick actions.
++Owner update (ADRs 0007–0009): when AI is enabled in the browser or a paired Apple development app, typed PDF requests ask GPT-6 Luna to select a local PDF tool. Basic product questions use a separate chat-reply tool. Model tools are proposals only; completed responses pass contract and current-workspace validation before local execution. No 2,000-output-token application cap is sent. The saved request allowance remains bounded and separate. Native pairing includes an explicit private TLS beta companion (ADR 0009). Physical-device acceptance and production authentication remain open. Quick-action buttons compile locally regardless of AI connection state; see the scoped checkpoint below.
++
++## 29 September scoped quick-action correction
++
++Owner authority lifted the freeze only for this change, its regressions, local verification and documentation; all other development remains frozen. Under existing F03/F04/F05/F06/F07/F09 mappings, explicit Merge, Make searchable and Compress buttons now use `controller.quick()` without connection checks or planner transport. The existing local compiler and JobController retain full validation, quality confirmation, staged commit, cancellation, originals and Undo. Typed requests keep their previous planner/fallback behavior; no shortcuts or guessed parameters were added.
++
++The pre-fix regression observed one planning call for healthy Merge and an extra call after each mocked 401/429/503 failure. Current-source baseline: 72 core and 18 affected Chrome workflows passed. Final results and source/build identities are recorded in [scoped evidence](evidence/local-actions-2026-09-29/README.md). This closes only the quick-action routing defect, not other audit findings or native-device acceptance. No commit, publication or deployment was authorized or performed.
+ 
+ ## Retained task mapping
+ 
+diff --git a/docs/PRIVACY.md b/docs/PRIVACY.md
+index 5c29dab..cbcfa7e 100644
+--- a/docs/PRIVACY.md
++++ b/docs/PRIVACY.md
+@@ -6,6 +6,8 @@ Source-based record at `prototype-v0`, 29 September 2026. This is not a public p
+ 
+ PDF processing runs on the device. The browser uses local workers/readers/OCR; Apple uses local PDFKit/Vision/ImageIO plus the shared writer. No cloud PDF-processing fallback is implemented. Store, controller and planner serialization are separate.
+ 
++The scoped 29 September correction makes explicit quick-action buttons local: they send no model-planning request and consume no provider allowance. Background/user-initiated connection controls are separate.
++
+ The planner DTO positively projects opaque file refs, page counts, byte sizes, selections/focus, revision and supported capabilities. It does not serialize file bytes, preview images, extracted/OCR text, local filenames, paths, passwords or local checksums from artifacts. Only completed, validated responses can propose local operations. Output PDF bytes and document content are not automatically sent; later requests can include permitted metadata about retained results. User-entered instruction risks are described below.
+ 
+ **Free-form instructions are a separate boundary.** They are sent to the provider when AI is enabled. Local guards alias known filenames and reject some paths, secrets and extracted-text matches, but cannot guarantee that arbitrary sensitive typed text or short document excerpts are detected. “Anonymous metadata” means opaque references, not formal anonymity: exact sizes/counts and session context can remain linkable. The current UI disclosure overstates exclusion guarantees; record this as a defect, not a reason to silently change the approved Send flow.
+diff --git a/tests/e2e/planner.spec.ts b/tests/e2e/planner.spec.ts
+index 11e246a..2f607c7 100644
+--- a/tests/e2e/planner.spec.ts
++++ b/tests/e2e/planner.spec.ts
+@@ -19,16 +19,15 @@ test('mocked planner transport: Send → redacted complete plan → real local r
+   await expect(page.getByText('Your key is saved locally. Paid planning is paused',{exact:false})).toBeVisible();
+   await page.getByRole('textbox',{name:'Tell atepdf what to do'}).fill('remove page 2');await page.getByRole('textbox',{name:'Tell atepdf what to do'}).press('Enter');await expect(page.getByTestId('result-facts')).toContainText('2 pages');expect(sent).toHaveLength(1);expect(errors).toEqual([]);
+ });
+-test('AI-enabled quick PDF action uses planner, while a product question replies in chat without changing files',async({page})=>{
++test('AI-enabled quick PDF action stays local, while a product question uses the planner without changing files',async({page})=>{
+   const sent:PlannerRequest[]=[];
+   await page.route('**/api/planner',async route=>{
+     const req=route.request().postDataJSON() as PlannerRequest;sent.push(req);
+-    if(sent.length===1){await route.fulfill({json:quickPlan(req,'merge')});return;}
+     await route.fulfill({json:{schemaVersion:'1.0',requestId:req.requestId,workspaceRevision:req.workspaceRevision,planner:{schemaVersion:'1.0',status:'answer',reasonCode:'product_information',steps:[],resultRefs:[],clarification:{question:'I can merge, remove pages, make scanned PDFs searchable, compress and save a new copy. Your originals stay unchanged.',choices:[]}}}});
+   });
+   await ready(page);await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');
+   await send(page,'What can atepdf do?');await expect(page.getByText('I can merge, remove pages, make scanned PDFs searchable, compress and save a new copy.',{exact:false})).toBeVisible();
+-  expect(sent).toHaveLength(2);expect(sent[0].instruction).toBe('Merge my PDFs.');expect(sent[1].instruction).toBe('What can atepdf do?');await expect(page.getByTestId('current-result')).toHaveCount(1);await expect(page.getByTestId('previous-result')).toHaveCount(0);
++  expect(sent).toHaveLength(1);expect(sent[0].instruction).toBe('What can atepdf do?');await expect(page.getByTestId('current-result')).toHaveCount(1);await expect(page.getByTestId('previous-result')).toHaveCount(0);
+ });
+ test('direct planner cancellation ignores a late complete plan and keeps local quick actions usable',async({page})=>{
+   let requests=0,finished=0,release!:()=>void;const gate=new Promise<void>(resolve=>{release=resolve;});

@@ -6,7 +6,7 @@ import {join} from 'node:path';
 import {preflight,transform} from '../../packages/web-pdf/src/engine';
 import {LocalFileStore} from '../../packages/core/src/local-file-store';
 import {JobController} from '../../packages/core/src/job-controller';
-import {WorkspaceVault,savedArtifacts,STORAGE_WRITE_FAILED,type WorkspaceSnapshot} from '../../packages/core/src/workspace-vault';
+import {WorkspaceVault,savedArtifacts,STORAGE_WRITE_FAILED,STORAGE_UNCONFIRMED,CLEAR_FAILED,CLEAR_UNCONFIRMED,type WorkspaceSnapshot} from '../../packages/core/src/workspace-vault';
 import {aad,names,parseCheckpoint,WORKSPACE_FORMAT,type PersistedEntry,type WorkspaceCheckpoint} from '../../packages/core/src/workspace-checkpoint';
 import {quickPlan} from '../../packages/contracts/src/protocol';
 import {safeOrdinaryText} from '../../packages/planner/src/privacy';
@@ -302,11 +302,170 @@ test('SHR-39 imported blobs are immutable and only two generations are retained'
   }finally{await rm(root,{recursive:true,force:true});}
 });
 
-test('SHR-39 headless leftovers other than an interrupted first checkpoint fail closed',async()=>{
+test('SHR-39 stored data without a head fails closed and is preserved',async()=>{
   const root=await scratch(),keychain=newKeychain();
   try{
     await populated(root,keychain);await unlink(join(root,names.head));
     const before=await tree(root),next=await launch(root,keychain);
     assert.deepEqual(next.outcome,{kind:'blocked',reason:'corrupt',retryable:false});assert.deepEqual(await tree(root),before);
+  }finally{await rm(root,{recursive:true,force:true});}
+});
+
+// ---- Review P1 regressions (PR #81) ----------------------------------------
+const refsOf=(store:LocalFileStore)=>store.list.map(a=>a.ref).sort();
+async function headOnDisk(root:string,keychain:TestKeychain){
+  const result=await new NodeVaultBackend(root,keychain).readOpened(names.head,aad.head());
+  return result.status==='ok'?JSON.parse(new TextDecoder().decode(result.bytes)) as {generation:number;previousGeneration:number|null;deletionEpoch:number;workspaceID:string}:null;
+}
+
+test('SHR-39 P1-1 a failure after head replacement is reconciled; "not kept" is only said when relaunch cannot restore the change',async()=>{
+  const cases=[
+    {name:'head restored',failHeadRestore:false,failRemoval:false,expected:STORAGE_WRITE_FAILED},
+    {name:'head restore fails, manifest withdrawn',failHeadRestore:true,failRemoval:false,expected:STORAGE_WRITE_FAILED},
+    {name:'manifest removal fails, head restored',failHeadRestore:false,failRemoval:true,expected:STORAGE_WRITE_FAILED},
+    {name:'every reversal fails',failHeadRestore:true,failRemoval:true,expected:STORAGE_UNCONFIRMED},
+  ];
+  for(const c of cases){
+    const root=await scratch(),keychain=newKeychain();
+    try{
+      const app=await populated(root,keychain);const before=refsOf(app.store),focus=app.store.focus,revision=app.store.revision;
+      let headWrites=0;
+      app.backend.fault=(step,name)=>{
+        // The head is atomically replaced, then its directory sync fails.
+        if(name==='head'&&step==='rename'&&++headWrites===1)throw new Error('synthetic sync failure after head replacement');
+        if(name==='head'&&step==='stage'&&headWrites>=1&&c.failHeadRestore)throw new Error('synthetic reversal failure');
+        if(step==='remove'&&name.startsWith('manifests/')&&c.failRemoval)throw new Error('synthetic removal failure');
+      };
+      await app.controller.quick('merge');
+      const message=app.controller.state.error;
+      assert.equal(message,c.expected,c.name);
+      // The visible workspace is withdrawn either way; the revision still moves on.
+      assert.deepEqual(refsOf(app.store),before,c.name);assert.equal(app.store.focus,focus,c.name);assert.ok(app.store.revision>revision);
+      app.backend.fault=null;
+      const next=await launch(root,keychain);assert.equal(next.outcome.kind,'restored',c.name);
+      const restoredChange=refsOf(next.store).length!==before.length||next.store.focus!==focus;
+      if(message===STORAGE_WRITE_FAILED){
+        assert.equal(restoredChange,false,`${c.name}: a change reported as not kept must never be restored`);
+        assert.equal(app.vault.mode,'writable',c.name);
+        // Saving continues, and never reuses the generation a head may have named.
+        const generation=app.vault.generation;await app.say({role:'user',text:'continue'});assert.equal(app.vault.generation,generation+1);
+      }else{
+        assert.match(message!,/may reappear/);assert.doesNotMatch(message!,/wasn’t kept/);
+        assert.equal(app.vault.mode,'blocked');await assert.rejects(app.vault.save(app.snapshot));
+      }
+    }finally{await rm(root,{recursive:true,force:true});}
+  }
+});
+
+test('SHR-39 P1-1 a head write that fails before replacement is definitely unpublished; sync failures on blobs and manifests are failures',async()=>{
+  for(const fault of [{step:'stage',name:'head'},{step:'rename',name:'manifests/'},{step:'rename',name:'blobs/'}] as const){
+    const root=await scratch(),keychain=newKeychain();
+    try{
+      const app=await populated(root,keychain);const before=refsOf(app.store),head=await headOnDisk(root,keychain);
+      app.backend.fault=(step,name)=>{if(step===fault.step&&name.startsWith(fault.name))throw new Error('synthetic failure');};
+      await app.controller.quick('merge');
+      assert.equal(app.controller.state.error,STORAGE_WRITE_FAILED);assert.equal(app.vault.mode,'writable');
+      assert.deepEqual(await headOnDisk(root,keychain),head,'the acknowledged head is untouched');
+      app.backend.fault=null;const next=await launch(root,keychain);assert.deepEqual(refsOf(next.store),before);
+    }finally{await rm(root,{recursive:true,force:true});}
+  }
+});
+
+test('SHR-39 P1-1 the first save after genesis cannot be withdrawn by manifest removal alone',async()=>{
+  const root=await scratch(),keychain=newKeychain();
+  try{
+    const app=await launch(root,keychain);assert.equal(app.outcome.kind,'empty');
+    let headWrites=0;
+    app.backend.fault=(step,name)=>{if(name==='head'&&step==='rename'&&++headWrites===1)throw new Error('sync failure');if(name==='head'&&step==='stage'&&headWrites>=1)throw new Error('reversal failure');};
+    await app.controller.import([new File([await fixture('brief.pdf')],'brief.pdf')]);
+    assert.equal(app.controller.state.error,STORAGE_UNCONFIRMED);assert.equal(app.store.list.length,0);assert.equal(app.vault.mode,'blocked');
+    // The change was withdrawn from disk too, so relaunch fails closed rather than restoring it.
+    app.backend.fault=null;const next=await launch(root,keychain);assert.notEqual(next.outcome.kind,'restored');assert.equal(next.store.list.length,0);
+  }finally{await rm(root,{recursive:true,force:true});}
+});
+
+test('SHR-39 P1-2 a committed generation-1 workspace whose head is lost is preserved and blocked, never opened empty',async()=>{
+  const root=await scratch(),keychain=newKeychain();
+  try{
+    const app=await launch(root,keychain);
+    await app.controller.import([new File([await fixture('brief.pdf')],'brief.pdf')]);assert.equal(app.controller.state.error,null);
+    assert.equal(app.vault.generation,1);assert.deepEqual(await app.backend.list('manifests'),[names.manifest(1)]);
+    await unlink(join(root,names.head));
+    const before=await tree(root),next=await launch(root,keychain);
+    assert.deepEqual(next.outcome,{kind:'blocked',reason:'corrupt',retryable:false});
+    assert.equal(next.store.list.length,0);assert.equal(next.vault.mode,'blocked');
+    assert.deepEqual(await tree(root),before,'the generation-1 manifest and its PDF are kept byte for byte');
+    assert.ok(before[names.manifest(1)]);
+    await assert.rejects(next.vault.save(next.snapshot));await assert.rejects(next.vault.clear());assert.deepEqual(await tree(root),before);
+    // Blobs alone without a head are preserved too.
+    await unlink(join(root,names.manifest(1)));const blobsOnly=await tree(root);
+    assert.equal((await launch(root,keychain)).outcome.kind,'blocked');assert.deepEqual(await tree(root),blobsOnly);
+  }finally{await rm(root,{recursive:true,force:true});}
+});
+
+test('SHR-39 P1-2 the genesis head is the evidence that an interrupted first save was never committed',async()=>{
+  const root=await scratch(),keychain=newKeychain();
+  try{
+    const app=await launch(root,keychain);const genesis=await headOnDisk(root,keychain);
+    assert.equal(genesis?.generation,0);assert.equal(genesis?.previousGeneration,null);assert.deepEqual(await app.backend.list('manifests'),[]);
+    app.backend.fault=(step,name)=>{if(name==='head'&&step==='stage')throw new Error('power loss before the first head');};
+    await app.controller.import([new File([await fixture('brief.pdf')],'brief.pdf')]);assert.equal(app.controller.state.error,STORAGE_WRITE_FAILED);
+    assert.deepEqual(await app.backend.list('manifests'),[names.manifest(1)],'the uncommitted manifest is left on disk');
+    const next=await launch(root,keychain);
+    assert.equal(next.outcome.kind,'empty');assert.equal((await headOnDisk(root,keychain))?.workspaceID,genesis?.workspaceID);
+    // The orphan is only collected once a real first checkpoint is published.
+    await next.controller.import([new File([await fixture('appendix.pdf')],'appendix.pdf')]);assert.equal(next.controller.state.error,null);
+    assert.deepEqual(await next.backend.list('blobs'),next.store.list.map(a=>names.blob(a.ref)));
+  }finally{await rm(root,{recursive:true,force:true});}
+});
+
+test('SHR-39 P1-3 Start over empties the workspace only after the durable clear is verified',async()=>{
+  const root=await scratch(),keychain=newKeychain();
+  try{
+    const app=await populated(root,keychain);const visible:number[]=[];
+    app.backend.fault=(step,name)=>{if(name==='head'&&step==='stage')visible.push(app.store.list.length);};
+    await app.controller.clear();app.backend.fault=null;
+    assert.equal(app.controller.state.error,null);assert.ok(visible.length&&visible.every(n=>n>0),'files stay shown while the clear is written');
+    assert.equal(app.store.list.length,0);assert.equal(app.vault.deletionEpoch,1);assert.deepEqual(await app.backend.list('blobs'),[]);
+    const next=await launch(root,keychain);assert.equal(next.outcome.kind,'restored');assert.equal(next.store.list.length,0);
+  }finally{await rm(root,{recursive:true,force:true});}
+});
+
+test('SHR-39 P1-3 a failed or unconfirmed Start over keeps the workspace shown and never reports a clear that relaunch undoes',async()=>{
+  const cases=[
+    {name:'manifest write fails before publication',fault:(step:string,name:string)=>{if(name.startsWith('manifests/')&&step==='stage')throw new Error('x');},expected:CLEAR_FAILED,relaunchEmpty:false},
+    {name:'head write fails before replacement',fault:(step:string,name:string)=>{if(name==='head'&&step==='stage')throw new Error('x');},expected:CLEAR_FAILED,relaunchEmpty:false},
+    {name:'head replaced, sync fails, roll-forward succeeds',fault:(()=>{let n=0;return (step:string,name:string)=>{if(name==='head'&&step==='rename'&&++n===1)throw new Error('x');};})(),expected:null,relaunchEmpty:true},
+    {name:'head replaced, sync and roll-forward fail',fault:(step:string,name:string)=>{if(name==='head'&&step==='rename')throw new Error('x');},expected:CLEAR_UNCONFIRMED,relaunchEmpty:true},
+  ];
+  for(const c of cases){
+    const root=await scratch(),keychain=newKeychain();
+    try{
+      const app=await populated(root,keychain);const before=refsOf(app.store),focus=app.store.focus;
+      app.backend.fault=c.fault;await app.controller.clear();app.backend.fault=null;
+      assert.equal(app.controller.state.error,c.expected,c.name);
+      if(c.expected===null){assert.equal(app.store.list.length,0,c.name);}
+      else{
+        // Nothing is presented as deleted: the previous workspace is still shown.
+        assert.deepEqual(refsOf(app.store),before,c.name);assert.equal(app.store.focus,focus,c.name);
+        assert.equal(app.vault.mode,c.expected===CLEAR_UNCONFIRMED?'blocked':'writable',c.name);
+      }
+      const next=await launch(root,keychain);assert.equal(next.outcome.kind,'restored',c.name);
+      if(c.relaunchEmpty)assert.equal(next.store.list.length,0,`${c.name}: never pre-clear state once the new epoch head landed`);
+      else{assert.deepEqual(refsOf(next.store),before,c.name);assert.equal(next.store.focus,focus,c.name);}
+      if(c.expected===CLEAR_FAILED)assert.doesNotMatch(c.expected,/cleared here/);
+    }finally{await rm(root,{recursive:true,force:true});}
+  }
+});
+
+test('SHR-39 P1-3 no fallback across a deletion epoch after Start over',async()=>{
+  const root=await scratch(),keychain=newKeychain();
+  try{
+    const app=await populated(root,keychain);await app.controller.clear();assert.equal(app.controller.state.error,null);
+    app.chat.conversation=[];app.chat.draft=null;await app.say({role:'user',text:'new epoch'});
+    for(const generation of [app.vault.generation,app.vault.generation-1])await corrupt(join(root,names.manifest(generation)),bytes=>bytes.slice(0,8));
+    const next=await launch(root,keychain);
+    assert.deepEqual(next.outcome,{kind:'blocked',reason:'corrupt',retryable:false});assert.equal(next.store.list.length,0);
+    assert.deepEqual(await next.backend.list('blobs'),[],'pre-clear PDFs were collected after the new epoch was published');
   }finally{await rm(root,{recursive:true,force:true});}
 });

@@ -9,7 +9,6 @@ export type JobProgress={kind:'import'|'transform';currentStep:number|null;steps
 // Durable workspace hooks (ADR 0010). Without them the controller keeps its
 // existing in-memory session behavior.
 export type Durability={save:()=>Promise<void>;clear:()=>Promise<void>};
-export const CLEAR_NOT_SAVED='This conversation was cleared here, but atePDF couldn’t remove its saved copy on this device. It may reappear when atePDF opens again.';
 export type SavedArtifact={meta:Artifact;bytes:Uint8Array};
 export type JobState={busy:boolean;message:string;error:string|null;stage:'idle'|'importing'|'executing'|'validating'|'complete'|'cancelled'|'failed';progress?:JobProgress};
 const operationLabels:Record<Operation,string>={merge_pdf:'Merge PDFs',select_pages:'Remove pages',ocr_pdf:'Make searchable',compress_pdf:'Compress PDF'};
@@ -140,9 +139,14 @@ export class JobController {
     if(this.state.busy)return;
     if(!this.#durable){this.store.clear();this.update({message:'',error:null,stage:'idle',progress:undefined});return;}
     const durable=this.#durable;
-    // Clearing is not withdrawn on failure: the user asked for it, and the error
-    // says plainly that the saved copy may remain.
-    return this.#exclusive(async()=>{this.store.clear();this.update({message:'',stage:'idle',progress:undefined});this.#persisting=true;try{await durable.clear();}catch{throw new Error(CLEAR_NOT_SAVED);}finally{this.#persisting=false;}},{error:null});
+    // The workspace is emptied only after the new deletion epoch is durable. If
+    // that fails or cannot be confirmed, the current workspace stays as it is and
+    // the vault's message says what is known.
+    return this.#exclusive(async()=>{
+      this.#persisting=true;
+      try{await durable.clear();}finally{this.#persisting=false;}
+      this.store.clear();this.update({message:'',stage:'idle',progress:undefined});
+    },{error:null});
   }
   async #exclusive(work:()=>Promise<void>,start:Partial<JobState>){
     this.update({...start,busy:true});

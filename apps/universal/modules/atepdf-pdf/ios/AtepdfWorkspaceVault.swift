@@ -129,20 +129,43 @@ public final class AtepdfWorkspaceVault {
     }
     try excludeFromBackup(root)
   }
+  /// Set, then verify, the exclusion. A workspace whose exclusion cannot be
+  /// confirmed is not written.
   public func excludeFromBackup(_ url: URL) throws {
     var values = URLResourceValues()
     values.isExcludedFromBackup = true
     var target = url
     try target.setResourceValues(values)
+    guard isExcludedFromBackup(url) else { throw Failure.io }
   }
+  /// Foundation's read-back, or the exclusion marker Foundation stores on disk.
+  /// Some restricted sandboxes (for example a seatbelt command sandbox) let the
+  /// marker be written but make the resource-value read return false.
   public func isExcludedFromBackup(_ url: URL) -> Bool {
-    (try? url.resourceValues(forKeys: [.isExcludedFromBackupKey]).isExcludedFromBackup) == true
+    let state = backupExclusionState(url)
+    return state.resourceValue || state.marker
   }
-  private func syncDirectory(_ directory: URL) {
+  public func backupExclusionState(_ url: URL) -> (resourceValue: Bool, marker: Bool) {
+    var fresh = URL(fileURLWithPath: url.path)
+    fresh.removeAllCachedResourceValues()
+    let resourceValue = (try? fresh.resourceValues(forKeys: [.isExcludedFromBackupKey]).isExcludedFromBackup) == true
+    return (resourceValue, Self.backupExclusionMarker(url))
+  }
+  public static let backupMarkerName = "com.apple.metadata:com_apple_backup_excludeItem"
+  public static func backupExclusionMarker(_ url: URL) -> Bool {
+    let size = getxattr(url.path, backupMarkerName, nil, 0, 0, XATTR_NOFOLLOW)
+    guard size > 0 && size < 4096 else { return false }
+    var buffer = [UInt8](repeating: 0, count: size)
+    guard getxattr(url.path, backupMarkerName, &buffer, size, 0, XATTR_NOFOLLOW) == size,
+          let value = try? PropertyListSerialization.propertyList(from: Data(buffer), format: nil) as? String else { return false }
+    return value == "com.apple.backupd"
+  }
+  /// A directory entry change is only durable once the directory is synced.
+  private func syncDirectory(_ directory: URL) throws {
     let descriptor = Darwin.open(directory.path, O_RDONLY)
-    guard descriptor >= 0 else { return }
-    _ = fsync(descriptor)
-    close(descriptor)
+    guard descriptor >= 0 else { throw Failure.io }
+    defer { close(descriptor) }
+    guard fsync(descriptor) == 0 else { throw Failure.io }
   }
   /// Stage in the same volume, flush to storage, then atomically rename over the target.
   private func writeDurable(_ target: URL, _ data: Data) throws {
@@ -168,8 +191,9 @@ public final class AtepdfWorkspaceVault {
     guard close(descriptor) == 0 else { throw Failure.io }
     guard rename(staged.path, target.path) == 0 else { throw Failure.io }
     renamed = true
-    syncDirectory(target.deletingLastPathComponent())
-    syncDirectory(root.appendingPathComponent("staging"))
+    // The rename is visible now; a failed sync means it may not survive power loss.
+    try syncDirectory(target.deletingLastPathComponent())
+    try syncDirectory(root.appendingPathComponent("staging"))
     // File replacement can reset resource values; reassert the exclusion.
     try excludeFromBackup(root)
   }
@@ -203,6 +227,7 @@ public final class AtepdfWorkspaceVault {
   public func remove(_ name: String) throws {
     let target = try url(name)
     if unlink(target.path) != 0 && errno != ENOENT { throw Failure.io }
+    try syncDirectory(target.deletingLastPathComponent())
   }
   public func cleanStaging() throws {
     let staging = root.appendingPathComponent("staging")

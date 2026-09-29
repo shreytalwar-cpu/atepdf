@@ -1,22 +1,30 @@
-✔ SHR-39 quit/relaunch round-trips actual PDF bytes, order, focus, Undo predecessor, chat, draft and revision (614.214708ms)
-✔ SHR-39 restore is inert: no model, network, transform or confirmation replay, and stale plans are rejected (169.607042ms)
-✔ SHR-39 serialized state holds no recognized secret, password, token or planner request/envelope and is encrypted at rest (244.210834ms)
-✔ SHR-39 storage failure never acknowledges a durable commit and the last good checkpoint survives (125.9235ms)
-✔ SHR-39 interrupted writes restore the previous complete generation and orphans are collected later (319.458417ms)
-✔ SHR-39 corrupt or truncated manifest falls back only to the preceding same-epoch generation (178.067125ms)
-✔ SHR-39 missing or corrupt artifacts never produce a partial workspace (362.08425ms)
-✔ SHR-39 a validly sealed blob whose bytes differ from the manifest hash is refused (195.509625ms)
-✔ SHR-39 a blob moved to another reference or generation fails authentication (190.0995ms)
-✔ SHR-39 future schema is rejected without fallback or downgrade writes (217.072083ms)
-✔ SHR-39 locked, missing, wrong or unavailable keychain keys fail safely without replacing the workspace (256.10275ms)
-✔ SHR-39 clearing publishes a new deletion epoch before collection and never falls back across it (226.534791ms)
-✔ SHR-39 imported blobs are immutable and only two generations are retained (118.583292ms)
-✔ SHR-39 headless leftovers other than an interrupted first checkpoint fail closed (207.625ms)
-ℹ tests 14
+✔ SHR-39 quit/relaunch round-trips actual PDF bytes, order, focus, Undo predecessor, chat, draft and revision (1117.273833ms)
+✔ SHR-39 restore is inert: no model, network, transform or confirmation replay, and stale plans are rejected (156.586208ms)
+✔ SHR-39 serialized state holds no recognized secret, password, token or planner request/envelope and is encrypted at rest (196.742084ms)
+✔ SHR-39 storage failure never acknowledges a durable commit and the last good checkpoint survives (102.522542ms)
+✔ SHR-39 interrupted writes restore the previous complete generation and orphans are collected later (241.847958ms)
+✔ SHR-39 corrupt or truncated manifest falls back only to the preceding same-epoch generation (153.444667ms)
+✔ SHR-39 missing or corrupt artifacts never produce a partial workspace (389.020125ms)
+✔ SHR-39 a validly sealed blob whose bytes differ from the manifest hash is refused (179.224416ms)
+✔ SHR-39 a blob moved to another reference or generation fails authentication (159.5635ms)
+✔ SHR-39 future schema is rejected without fallback or downgrade writes (189.46225ms)
+✔ SHR-39 locked, missing, wrong or unavailable keychain keys fail safely without replacing the workspace (169.462208ms)
+✔ SHR-39 clearing publishes a new deletion epoch before collection and never falls back across it (156.503ms)
+✔ SHR-39 imported blobs are immutable and only two generations are retained (59.96575ms)
+✔ SHR-39 stored data without a head fails closed and is preserved (102.235416ms)
+✔ SHR-39 P1-1 a failure after head replacement is reconciled; "not kept" is only said when relaunch cannot restore the change (774.162292ms)
+✔ SHR-39 P1-1 a head write that fails before replacement is definitely unpublished; sync failures on blobs and manifests are failures (481.270792ms)
+✔ SHR-39 P1-1 the first save after genesis cannot be withdrawn by manifest removal alone (35.947583ms)
+✔ SHR-39 P1-2 a committed generation-1 workspace whose head is lost is preserved and blocked, never opened empty (35.147334ms)
+✔ SHR-39 P1-2 the genesis head is the evidence that an interrupted first save was never committed (48.657375ms)
+✔ SHR-39 P1-3 Start over empties the workspace only after the durable clear is verified (211.134292ms)
+✔ SHR-39 P1-3 a failed or unconfirmed Start over keeps the workspace shown and never reports a clear that relaunch undoes (742.005334ms)
+✔ SHR-39 P1-3 no fallback across a deletion epoch after Start over (151.112958ms)
+ℹ tests 22
 ℹ suites 0
-ℹ pass 14
+ℹ pass 22
 ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 3575.681292
+ℹ duration_ms 6024.22825

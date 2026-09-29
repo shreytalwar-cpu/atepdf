@@ -15,6 +15,7 @@ export interface WorkspaceVaultBackend{
   writeSealed(name:string,plain:Uint8Array,associatedData:string):Promise<void>;
   readOpened(name:string,associatedData:string):Promise<VaultReadResult>;
   list(directory:'blobs'|'manifests'):Promise<string[]>;
+  /** Unlink and sync the directory. A sync failure is a failure. */
   remove(name:string):Promise<void>;
   /** Remove interrupted staging files. They are never referenced by a head. */
   cleanStaging():Promise<void>;
@@ -41,12 +42,21 @@ export const blockedMessages:Record<BlockedReason,string>={
   'unsupported-schema':'Your saved workspace was created by a newer version of atePDF. Update atePDF to open it; nothing was changed.',
   storage:'atePDF couldn’t read its saved workspace on this Mac. The saved files were left untouched.',
 };
+// Failure messages are chosen by what is actually known about the durable head.
+// "Wasn't kept" / "nothing was removed" are only said when that is established.
 export const STORAGE_WRITE_FAILED='atePDF couldn’t save this change on this device, so it wasn’t kept. Your previously saved work is unchanged.';
+export const STORAGE_UNCONFIRMED='atePDF couldn’t confirm whether this change was saved on this device. It isn’t shown now, but it may reappear when atePDF opens again. Saving is paused until then.';
+export const CLEAR_FAILED='atePDF couldn’t clear your saved workspace, so nothing was removed. Your conversation and files are still here.';
+export const CLEAR_UNCONFIRMED='atePDF couldn’t confirm that your saved workspace was cleared, so this conversation is still shown. Saving is paused; reopen atePDF to see what was kept.';
 
 const encoder=new TextEncoder(),decoder=new TextDecoder('utf-8',{fatal:true});
 const encode=(value:unknown)=>encoder.encode(JSON.stringify(value));
 const sha256=async(bytes:Uint8Array)=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new Uint8Array(bytes)))].map(n=>n.toString(16).padStart(2,'0')).join('');
 class Blocked extends Error{constructor(readonly reason:BlockedReason){super(blockedMessages[reason]);}}
+// Where a head replacement ended: established as the new head (written, synced and
+// verified), established as not replacing the acknowledged head, or unknown.
+type Publication='published'|'unpublished'|'uncertain';
+const sameHead=(a:WorkspaceHead|null,b:WorkspaceHead|null)=>!!a&&!!b&&a.workspaceID===b.workspaceID&&a.generation===b.generation&&a.previousGeneration===b.previousGeneration&&a.deletionEpoch===b.deletionEpoch&&a.schemaVersion===b.schemaVersion;
 
 export class WorkspaceVault{
   mode:'closed'|'writable'|'blocked'|'unavailable'='closed';
@@ -62,7 +72,7 @@ export class WorkspaceVault{
   get generation(){return this.#generation;}
   get deletionEpoch(){return this.#epoch;}
 
-  /** Open and restore the newest valid checkpoint. Never writes except removing staging leftovers. */
+  /** Open and restore the newest valid checkpoint. Writes only staging cleanup and, for a brand-new workspace, the genesis head. */
   open():Promise<RestoreOutcome>{return this.#serial(()=>this.#open());}
   /** Mark the workspace unusable for writes, e.g. when restored PDFs fail revalidation. */
   block(){this.mode='blocked';}
@@ -77,19 +87,26 @@ export class WorkspaceVault{
     try{
       await this.backend.cleanStaging();
       if(!await this.backend.exists(names.head)){
-        // First launch, or an interrupted first checkpoint: nothing was committed.
-        // Only generation 1 can exist before the first head is published. Anything
-        // else means the head itself was lost: keep the files and fail closed.
-        if((await this.backend.list('manifests')).some(name=>name!==names.manifest(1)))throw new Blocked('corrupt');
+        // A head exists from before the first user data is written (the genesis
+        // head), so stored files without one mean the head was lost, not that a
+        // first save was interrupted. Keep everything and fail closed.
+        if((await this.backend.list('manifests')).length||(await this.backend.list('blobs')).length)throw new Blocked('corrupt');
         if(await this.backend.keyStatus(true)!=='ready'){this.mode='unavailable';return {kind:'unavailable'};}
-        await this.#collect(new Set());
-        this.#workspaceID=this.#newID();this.#generation=0;this.#previous=null;this.#epoch=0;this.#revision=0;
-        this.mode='writable';return {kind:'empty'};
+        const genesis:WorkspaceHead={format:WORKSPACE_FORMAT,schemaVersion:WORKSPACE_SCHEMA_VERSION,workspaceID:this.#newID(),generation:0,previousGeneration:null,deletionEpoch:0};
+        this.#head=null;
+        // An empty workspace either way: a failed genesis write only costs durability.
+        if(await this.#commitHead(genesis,'roll-forward')!=='published'){this.mode='unavailable';return {kind:'unavailable'};}
+        this.#adopt(genesis);this.mode='writable';return {kind:'empty'};
       }
       const key=await this.backend.keyStatus(false);
       // Never create a replacement key over an existing workspace.
       if(key!=='ready')throw new Blocked(key==='locked'?'key-locked':key==='missing'?'key-missing':'key-unavailable');
       const head=await this.#readHead();
+      if(head.generation===0){
+        // Genesis only: nothing was ever committed. Any manifest/blob beside it is
+        // an interrupted first save and is collected after the next checkpoint.
+        this.#adopt(head);this.mode='writable';return {kind:'empty'};
+      }
       let restored:{checkpoint:WorkspaceCheckpoint;bytes:Map<string,Uint8Array>},recoveredPrevious=false;
       try{restored=await this.#load(head,head.generation);}
       catch(error){
@@ -111,6 +128,10 @@ export class WorkspaceVault{
       this.mode='blocked';
       return {kind:'blocked',reason,retryable:reason==='key-locked'||reason==='key-unavailable'||reason==='storage'};
     }
+  }
+  #adopt(head:WorkspaceHead){
+    this.#head=head;this.#workspaceID=head.workspaceID;this.#epoch=head.deletionEpoch;this.#generation=head.generation;this.#previous=null;this.#revision=0;
+    this.#blobs=new Map();this.#refsByGeneration=new Map();
   }
   async #readHead():Promise<WorkspaceHead>{
     const result=await this.backend.readOpened(names.head,aad.head());
@@ -160,11 +181,11 @@ export class WorkspaceVault{
   }
   async #save(snapshot:WorkspaceSnapshot){
     if(this.mode!=='writable')throw new Error(STORAGE_WRITE_FAILED);
-    const generation=this.#generation+1;let headAttempted=false;
+    const generation=this.#generation+1;
+    let checkpoint:WorkspaceCheckpoint;const written=new Map<string,number>();
     try{
-      const checkpoint=this.#persisted(snapshot,generation);
+      checkpoint=this.#persisted(snapshot,generation);
       // 1. Immutable blobs: write each new artifact once, then prove it opens and matches.
-      const written=new Map<string,number>();
       for(const artifact of checkpoint.artifacts){
         if(this.#blobs.has(artifact.ref))continue;
         const bytes=snapshot.bytes(artifact.ref),associated=aad.blob(this.#workspaceID,artifact.ref,generation);
@@ -179,33 +200,65 @@ export class WorkspaceVault{
       await this.backend.writeSealed(names.manifest(generation),manifest,manifestAAD);
       const check=await this.backend.readOpened(names.manifest(generation),manifestAAD);
       if(check.status!=='ok'||decoder.decode(check.bytes)!==decoder.decode(manifest))throw new Error('Manifest verification failed.');
-      // 3. Commit point: atomically replace the head, keeping the previous generation.
-      headAttempted=true;
-      await this.#publish({format:WORKSPACE_FORMAT,schemaVersion:WORKSPACE_SCHEMA_VERSION,workspaceID:this.#workspaceID,generation,previousGeneration:this.#previous,deletionEpoch:this.#epoch});
-      for(const [ref,created] of written)this.#blobs.set(ref,created);
-      this.#refsByGeneration.set(generation,new Set(checkpoint.artifacts.map(a=>a.ref)));
-      const previous=this.#previous;this.#previous=generation;this.#generation=generation;this.#revision=snapshot.revision;
-      await this.#collectAfter(previous);
-    }catch(error){
-      // The previous head still names the last good checkpoint. Unreferenced files
-      // from this attempt are collected after a later successful checkpoint.
-      if(headAttempted)await this.#revertHead();
+    }catch{
+      // Definitely unpublished: the acknowledged head was never touched. Files from
+      // this attempt are unreferenced and collected after a later checkpoint.
       throw new Error(STORAGE_WRITE_FAILED);
     }
+    // 3. Commit point: atomically replace the head, keeping the previous generation.
+    const next:WorkspaceHead={format:WORKSPACE_FORMAT,schemaVersion:WORKSPACE_SCHEMA_VERSION,workspaceID:this.#workspaceID,generation,previousGeneration:this.#previous,deletionEpoch:this.#epoch};
+    const publication=await this.#commitHead(next,'withdraw');
+    if(publication!=='published'){
+      // This generation number may be named by a head on disk; never reuse it.
+      this.#generation=generation;
+      if(publication==='uncertain'){this.mode='blocked';throw new Error(STORAGE_UNCONFIRMED);}
+      throw new Error(STORAGE_WRITE_FAILED);
+    }
+    for(const [ref,created] of written)this.#blobs.set(ref,created);
+    this.#refsByGeneration.set(generation,new Set(checkpoint.artifacts.map(a=>a.ref)));
+    const previous=this.#previous;this.#previous=generation;this.#generation=generation;this.#revision=snapshot.revision;
+    await this.#collectAfter(previous);
   }
-  // A head write that may have landed but failed verification must not leave a
-  // reported failure durable. Put the last acknowledged head back, or stop writing.
-  async #revertHead(){
+  /**
+   * Replace the head and establish where that ended. Success needs the write,
+   * its file and directory syncs, and a matching read-back. After any failure the
+   * head is read again: if the acknowledged head is still there, the new one never
+   * replaced it. Otherwise the outcome is reconciled before anything is reported:
+   * - 'withdraw' (a save): make the new generation unrestorable by removing its
+   *   manifest, and put the acknowledged head back. Restoring the head is enough;
+   *   removal alone is enough when restore can fall back to the acknowledged
+   *   same-epoch generation.
+   * - 'roll-forward' (a clear or the genesis head): write the new head again.
+   * Only if reconciliation also fails is the outcome 'uncertain'.
+   */
+  async #commitHead(next:WorkspaceHead,recovery:'withdraw'|'roll-forward'):Promise<Publication>{
+    try{await this.#writeHead(next);return 'published';}catch{/* reconcile below */}
+    const onDisk=await this.#peekHead();
+    if(onDisk!=='unreadable'&&(onDisk===null?this.#head===null:sameHead(onDisk,this.#head)))return 'unpublished';
+    if(recovery==='roll-forward'){try{await this.#writeHead(next);return 'published';}catch{return 'uncertain';}}
+    let withdrawn=false;
     try{
-      if(this.#head)await this.#publish(this.#head);
-      else await this.backend.remove(names.head);
-    }catch{this.mode='blocked';}
+      await this.backend.remove(names.manifest(next.generation));
+      // Without a same-epoch predecessor, a head naming a removed manifest restores
+      // nothing usable, so removal alone does not re-establish the acknowledged state.
+      withdrawn=next.previousGeneration!==null&&!await this.backend.exists(names.manifest(next.generation));
+    }catch{/* try the head too */}
+    if(this.#head)try{await this.#writeHead(this.#head);withdrawn=true;}catch{/* reported below */}
+    return withdrawn?'unpublished':'uncertain';
   }
-  async #publish(head:WorkspaceHead){
+  async #writeHead(head:WorkspaceHead){
     await this.backend.writeSealed(names.head,encode(head),aad.head());
-    const check=await this.backend.readOpened(names.head,aad.head());
-    if(check.status!=='ok'||decoder.decode(check.bytes)!==JSON.stringify(head))throw new Error('Head verification failed.');
+    const check=await this.#peekHead();
+    if(check==='unreadable'||!sameHead(check,head))throw new Error('Head verification failed.');
     this.#head=head;
+  }
+  async #peekHead():Promise<WorkspaceHead|null|'unreadable'>{
+    try{
+      const result=await this.backend.readOpened(names.head,aad.head());
+      if(result.status==='missing')return null;
+      if(result.status!=='ok')return 'unreadable';
+      return parseHead(JSON.parse(decoder.decode(result.bytes)));
+    }catch{return 'unreadable';}
   }
   async #collectAfter(previous:number|null){
     const keep=new Set<string>();
@@ -221,21 +274,21 @@ export class WorkspaceVault{
   }
   async #clear(){
     if(this.mode!=='writable')throw new Error(STORAGE_WRITE_FAILED);
-    const generation=this.#generation+1,epoch=this.#epoch+1,now=this.#now().toISOString();let headAttempted=false;
+    const generation=this.#generation+1,epoch=this.#epoch+1,now=this.#now().toISOString();
     const empty:WorkspaceCheckpoint={format:WORKSPACE_FORMAT,schemaVersion:WORKSPACE_SCHEMA_VERSION,workspaceID:this.#workspaceID,generation,revision:this.#revision+1,deletionEpoch:epoch,savedAt:now,lastActivityAt:now,
       retention:{mode:this.#retention},artifacts:[],originals:[],history:[],focus:null,undoPredecessor:null,selection:[],collections:[],conversation:[],draft:null};
     try{
       const manifestAAD=aad.manifest(this.#workspaceID,generation);
       await this.backend.writeSealed(names.manifest(generation),encode(empty),manifestAAD);
       if((await this.backend.readOpened(names.manifest(generation),manifestAAD)).status!=='ok')throw new Error('Manifest verification failed.');
-      // Publish the new epoch before any deletion, with no fallback predecessor.
-      headAttempted=true;
-      await this.#publish({format:WORKSPACE_FORMAT,schemaVersion:WORKSPACE_SCHEMA_VERSION,workspaceID:this.#workspaceID,generation,previousGeneration:null,deletionEpoch:epoch});
-    }catch{
-      // Never put a pre-clear head back. If the clear may have landed, the durable
-      // state is unknown, so stop writing rather than guess.
-      if(headAttempted)this.mode='blocked';
-      throw new Error(STORAGE_WRITE_FAILED);
+    }catch{throw new Error(CLEAR_FAILED);}
+    // Publish the new epoch before any deletion, with no fallback predecessor. A
+    // pre-clear head is never put back: an unsettled clear is completed, or reported.
+    const publication=await this.#commitHead({format:WORKSPACE_FORMAT,schemaVersion:WORKSPACE_SCHEMA_VERSION,workspaceID:this.#workspaceID,generation,previousGeneration:null,deletionEpoch:epoch},'roll-forward');
+    if(publication!=='published'){
+      this.#generation=generation;
+      if(publication==='uncertain'){this.mode='blocked';throw new Error(CLEAR_UNCONFIRMED);}
+      throw new Error(CLEAR_FAILED);
     }
     this.#generation=generation;this.#previous=generation;this.#epoch=epoch;this.#revision++;
     this.#blobs.clear();this.#refsByGeneration=new Map([[generation,new Set()]]);

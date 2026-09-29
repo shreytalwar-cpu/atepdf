@@ -1,0 +1,40 @@
+✖ SHR-39 P1-1 a failure after head replacement is reconciled; "not kept" is only said when relaunch cannot restore the change (904.623875ms)
+✖ SHR-39 P1-1 a head write that fails before replacement is definitely unpublished; sync failures on blobs and manifests are failures (220.616416ms)
+✖ SHR-39 P1-1 the first save after genesis cannot be withdrawn by manifest removal alone (26.330709ms)
+✖ SHR-39 P1-2 a committed generation-1 workspace whose head is lost is preserved and blocked, never opened empty (37.873833ms)
+✖ SHR-39 P1-2 the genesis head is the evidence that an interrupted first save was never committed (0.982208ms)
+✖ SHR-39 P1-3 Start over empties the workspace only after the durable clear is verified (245.549333ms)
+✖ SHR-39 P1-3 a failed or unconfirmed Start over keeps the workspace shown and never reports a clear that relaunch undoes (205.988875ms)
+✔ SHR-39 P1-3 no fallback across a deletion epoch after Start over (251.656583ms)
+ℹ tests 8
+ℹ pass 1
+ℹ fail 7
+✖ failing tests:
+✖ SHR-39 P1-1 a failure after head replacement is reconciled; "not kept" is only said when relaunch cannot restore the change (904.623875ms)
+  AssertionError [ERR_ASSERTION]: head restore fails, manifest withdrawn: a change reported as not kept must never be restored
+✖ SHR-39 P1-1 a head write that fails before replacement is definitely unpublished; sync failures on blobs and manifests are failures (220.616416ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  + 'blocked'
+  - 'writable'
+✖ SHR-39 P1-1 the first save after genesis cannot be withdrawn by manifest removal alone (26.330709ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  + 'atePDF couldn’t save this change on this device, so it wasn’t kept. Your previously saved work is unchanged.'
+  - undefined
+✖ SHR-39 P1-2 a committed generation-1 workspace whose head is lost is preserved and blocked, never opened empty (37.873833ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  +   kind: 'empty'
+  -   kind: 'blocked',
+  -   reason: 'corrupt',
+  -   retryable: false
+    actual: { kind: 'empty' },
+    expected: { kind: 'blocked', reason: 'corrupt', retryable: false },
+✖ SHR-39 P1-2 the genesis head is the evidence that an interrupted first save was never committed (0.982208ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+✖ SHR-39 P1-3 Start over empties the workspace only after the durable clear is verified (245.549333ms)
+  AssertionError [ERR_ASSERTION]: files stay shown while the clear is written
+✖ SHR-39 P1-3 a failed or unconfirmed Start over keeps the workspace shown and never reports a clear that relaunch undoes (205.988875ms)
+  AssertionError [ERR_ASSERTION]: manifest write fails before publication
+  + actual - expected

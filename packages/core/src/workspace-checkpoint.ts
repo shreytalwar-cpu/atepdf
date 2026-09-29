@@ -66,7 +66,11 @@ export function parseHead(value:unknown):WorkspaceHead{
   const o=record(value,'head',['format','schemaVersion','workspaceID','generation','previousGeneration','deletionEpoch']);
   if(o.format!==WORKSPACE_FORMAT)invalid('head format');
   const version=schemaVersion(o.schemaVersion);
-  const generation=int(o.generation,'head generation',1),previous=o.previousGeneration===null?null:int(o.previousGeneration,'previous generation',1,generation-1);
+  // Generation 0 is the genesis head: written before any user data exists, it
+  // names no manifest. Its presence proves later files were never committed.
+  const generation=int(o.generation,'head generation',0);
+  let previous:number|null=null;
+  if(o.previousGeneration!==null){if(generation===0)invalid('genesis predecessor');previous=int(o.previousGeneration,'previous generation',1,generation-1);}
   return {format:WORKSPACE_FORMAT,schemaVersion:version,workspaceID:typeof o.workspaceID==='string'&&ID.test(o.workspaceID)?o.workspaceID:invalid('workspace ID'),generation,previousGeneration:previous,deletionEpoch:int(o.deletionEpoch,'deletion epoch')};
 }
 

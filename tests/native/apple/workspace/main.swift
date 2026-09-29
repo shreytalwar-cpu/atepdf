@@ -80,7 +80,15 @@ for directory in ["", "blobs", "manifests", "staging"] {
 }
 try require(try mode(root.appendingPathComponent("blobs/file_a.atw")) & 0o777 == 0o600, "sealed blob is 0600")
 try require(try mode(root.appendingPathComponent("head")) & 0o777 == 0o600, "head is 0600")
-try require(vault.isExcludedFromBackup(root), "workspace directory is excluded from backup after replacement")
+// The on-disk exclusion marker is asserted directly; Foundation's read-back is
+// reported, because restricted command sandboxes can hide it (see SHR-39 evidence).
+let exclusion = vault.backupExclusionState(root)
+try require(exclusion.marker, "workspace directory carries the backup-exclusion marker on disk after replacement")
+try require(vault.isExcludedFromBackup(root), "vault verifies the backup exclusion after replacement")
+print("info Foundation isExcludedFromBackup read-back: \(exclusion.resourceValue)")
+let unmarked = scratch.appendingPathComponent("unmarked", isDirectory: true)
+try manager.createDirectory(at: unmarked, withIntermediateDirectories: true)
+try require(!vault.isExcludedFromBackup(unmarked) && !AtepdfWorkspaceVault.backupExclusionMarker(unmarked), "a directory without the exclusion is not reported as excluded")
 
 // 4. Keychain attributes as shipped: Data Protection Keychain, never synchronized, device-only.
 let store = AtepdfKeychainWorkspaceKeyStore()

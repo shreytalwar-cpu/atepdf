@@ -1,0 +1,1 @@
+Swift/ErrorType.swift:254: Fatal error: Error raised at top level: Error Domain=atepdf-workspace-test Code=1 "workspace directory is excluded from backup after replacement" UserInfo={NSLocalizedDescription=workspace directory is excluded from backup after replacement}

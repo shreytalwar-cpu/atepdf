@@ -9,7 +9,9 @@ import type {VaultKeyStatus,VaultReadResult,WorkspaceVaultBackend} from '../../p
 // The "keychain" is an in-memory object that outlives a simulated relaunch.
 export const MAGIC=new TextEncoder().encode('ATW1');
 export type TestKeychain={raw:Uint8Array|null;state:'ok'|'locked'|'unavailable'};
-export type Fault=(step:'stage'|'rename',name:string)=>void;
+// 'stage': fails before the target changes. 'rename': fails after the atomic rename
+// but before the directory sync completes (a sync failure). 'remove': fails to unlink.
+export type Fault=(step:'stage'|'rename'|'remove',name:string)=>void;
 export const newKeychain=():TestKeychain=>({raw:null,state:'ok'});
 
 export class NodeVaultBackend implements WorkspaceVaultBackend{
@@ -49,7 +51,11 @@ export class NodeVaultBackend implements WorkspaceVaultBackend{
     catch{return {status:'auth'};}
   }
   async list(directory:'blobs'|'manifests'){try{return (await readdir(join(this.root,directory))).map(name=>`${directory}/${name}`).filter(name=>NAME.test(name));}catch{return [];}}
-  async remove(name:string){await rm(this.#path(name),{force:true});}
+  async remove(name:string){
+    const target=this.#path(name);this.fault?.('remove',name);
+    await rm(target,{force:true});
+    const directory=await open(dirname(target),'r').catch(()=>null);if(directory)try{await directory.sync();}finally{await directory.close();}
+  }
   async cleanStaging(){await rm(join(this.root,'staging'),{recursive:true,force:true});}
 }
 export async function corrupt(path:string,mutate:(bytes:Uint8Array)=>Uint8Array){await writeFile(path,mutate(new Uint8Array(await readFile(path))));}

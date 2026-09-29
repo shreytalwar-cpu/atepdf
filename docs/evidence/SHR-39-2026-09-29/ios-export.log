@@ -1,0 +1,21 @@
+Starting Metro Bundler
+
+iOS Bundled 10294ms index.ts (1678 modules)
+
+› Assets (5):
+assets/approved-8-mark-source-crop.png (35KB)
+assets/approved-atepdf-wordmark-source-crop.png (34KB)
+assets/fixtures/appendix.pdf (2.1KB)
+assets/fixtures/brief.pdf (3.1KB)
+assets/paper.png (688KB)
+
+› ios bundles (1):
+_expo/static/js/ios/index-070e948ee3df07af09f8866f5ecd7bfa.hbc (5MB)
+
+› web bundles (1):
+_expo/static/css/global-d41d8cd98f00b204e9800998ecf8427e.css (0B)
+
+› Files (1):
+metadata.json (456B)
+
+Exported: /private/tmp/claude-501/-Users-shrey-Documents-ChatGPT-atepdf--claude-worktrees-workspace-state-persistence-8e257a/7faae2bf-3a50-474e-9a42-ed8e3967d5ad/scratchpad/ios

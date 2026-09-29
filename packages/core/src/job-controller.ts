@@ -1,5 +1,6 @@
 import {buildRequest,quickPlan,validateEnvelope,type Request,type Envelope,type Operation} from '@contracts/protocol';
 import {LocalFileStore,type Artifact,type StoreMark} from './local-file-store';
+import {CLEANUP_INCOMPLETE} from './workspace-vault';
 import type {EngineRequest,EngineResult,Inspection,OCRPage} from '@pdf/types';
 type Services={capabilities?:Operation[];worker:(request:EngineRequest,signal:AbortSignal,progress?:(text:string)=>void)=>Promise<EngineResult|{pages:number}>;inspect:(bytes:Uint8Array,signal:AbortSignal)=>Promise<Inspection>;recognize:(bytes:Uint8Array,inspection:Inspection,signal:AbortSignal,progress:(text:string)=>void)=>Promise<OCRPage[]>};
 // Browser File objects need no cleanup; native picker handles own disposable cache copies.
@@ -8,7 +9,7 @@ export type JobStepStatus='pending'|'active'|'validating'|'complete'|'cancelled'
 export type JobProgress={kind:'import'|'transform';currentStep:number|null;steps:{label:string;operation?:Operation;status:JobStepStatus}[]};
 // Durable workspace hooks (ADR 0010). Without them the controller keeps its
 // existing in-memory session behavior.
-export type Durability={save:()=>Promise<void>;clear:()=>Promise<void>};
+export type Durability={save:()=>Promise<void>;clear:()=>Promise<{cleanupComplete:boolean}>};
 export type SavedArtifact={meta:Artifact;bytes:Uint8Array};
 export type JobState={busy:boolean;message:string;error:string|null;stage:'idle'|'importing'|'executing'|'validating'|'complete'|'cancelled'|'failed';progress?:JobProgress};
 const operationLabels:Record<Operation,string>={merge_pdf:'Merge PDFs',select_pages:'Remove pages',ocr_pdf:'Make searchable',compress_pdf:'Compress PDF'};
@@ -143,9 +144,11 @@ export class JobController {
     // that fails or cannot be confirmed, the current workspace stays as it is and
     // the vault's message says what is known.
     return this.#exclusive(async()=>{
-      this.#persisting=true;
-      try{await durable.clear();}finally{this.#persisting=false;}
-      this.store.clear();this.update({message:'',stage:'idle',progress:undefined});
+      this.#persisting=true;let cleanupComplete:boolean;
+      try{({cleanupComplete}=await durable.clear());}finally{this.#persisting=false;}
+      // The clear is durable, so the workspace is emptied either way; removal of
+      // the old copies is only implied when it was verified.
+      this.store.clear();this.update({message:cleanupComplete?'':CLEANUP_INCOMPLETE,stage:'idle',progress:undefined});
     },{error:null});
   }
   async #exclusive(work:()=>Promise<void>,start:Partial<JobState>){

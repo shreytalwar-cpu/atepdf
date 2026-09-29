@@ -12,6 +12,7 @@ import {quickPlan} from '../../packages/contracts/src/protocol';
 import {safeOrdinaryText} from '../../packages/planner/src/privacy';
 import type {EngineRequest,Inspection} from '../../packages/web-pdf/src/types';
 import {NodeVaultBackend,newKeychain,corrupt,type TestKeychain} from '../helpers/workspace-backend';
+import {CheckpointScheduler} from '../../packages/core/src/workspace-checkpoints';
 
 // Synthetic local data only: bundled fixture PDFs, a temporary directory and an
 // in-memory stand-in for the device-local Keychain. No network, no providers.
@@ -467,5 +468,124 @@ test('SHR-39 P1-3 no fallback across a deletion epoch after Start over',async()=
     const next=await launch(root,keychain);
     assert.deepEqual(next.outcome,{kind:'blocked',reason:'corrupt',retryable:false});assert.equal(next.store.list.length,0);
     assert.deepEqual(await next.backend.list('blobs'),[],'pre-clear PDFs were collected after the new epoch was published');
+  }finally{await rm(root,{recursive:true,force:true});}
+});
+
+// ---- Second review P1 regressions (PR #81) ---------------------------------
+const cleanupModule=import('../../packages/core/src/workspace-vault');
+// A workspace whose chat and draft reference no PDF, so an old-epoch snapshot is
+// valid on its own after a clear (the reviewer's reproduction).
+async function chattyWorkspace(root:string,keychain:TestKeychain){
+  const app=await launch(root,keychain);
+  await app.controller.import([new File([await fixture('brief.pdf')],'brief.pdf')]);assert.equal(app.controller.state.error,null);
+  await app.say({role:'user',text:'old chat that Start over must remove'});
+  app.chat.draft='old draft that Start over must remove';await app.vault.save(app.snapshot);
+  return app;
+}
+
+test('SHR-39 P1-4 a chat or draft save queued behind Start over cannot resurrect old text',async()=>{
+  const root=await scratch(),keychain=newKeychain();
+  try{
+    const app=await chattyWorkspace(root,keychain);
+    // Start over begins; a draft timer or chat effect queues a save behind it.
+    const clearing=app.controller.clear();const queued=app.vault.save(app.snapshot);
+    await clearing;
+    assert.equal(app.controller.state.error,null);assert.equal(app.store.list.length,0);
+    const outcome=await queued.then(()=>'saved',(error:Error)=>error.name);
+    // The App empties its chat and draft once the clear is confirmed.
+    app.chat.conversation=[];app.chat.draft=null;
+    assert.equal(outcome,'StaleSaveError','a save from the pre-clear epoch must not publish');
+    const next=await launch(root,keychain);
+    assert.equal(next.outcome.kind,'restored');assert.deepEqual(next.chat.conversation,[]);assert.equal(next.chat.draft,null);
+    const {raw}=await decrypted(root,keychain);assert.ok(!raw.includes('must remove'),'no old chat or draft in the published manifest');
+  }finally{await rm(root,{recursive:true,force:true});}
+});
+
+test('SHR-39 P1-5 Start over does not claim removal until old PDF copies are verified gone, and retries cleanup',async()=>{
+  const {CLEANUP_INCOMPLETE}=await cleanupModule as unknown as {CLEANUP_INCOMPLETE:string};
+  for(const mode of ['throw','skip'] as const){
+    const root=await scratch(),keychain=newKeychain();
+    try{
+      const app=await populated(root,keychain);const oldBlobs=(await app.backend.list('blobs')).sort();assert.ok(oldBlobs.length);
+      app.backend.fault=(step,name)=>{if(step==='remove'&&name.startsWith('blobs/')){if(mode==='skip')return 'skip';throw new Error('synthetic removal failure');}};
+      await app.controller.clear();
+      // The clear itself is durable (new epoch), so the workspace is empty, but the
+      // result is reported truthfully as incomplete, never as a clean removal.
+      assert.equal(app.controller.state.error,null,mode);assert.equal(app.store.list.length,0,mode);
+      assert.equal(app.controller.state.message,CLEANUP_INCOMPLETE,mode);
+      assert.equal((app.vault as unknown as {cleanupPending:boolean}).cleanupPending,true,mode);
+      assert.deepEqual((await app.backend.list('blobs')).sort(),oldBlobs,`${mode}: the copies really are still there`);
+      // Relaunch while cleanup is still failing: empty workspace, never old data, cleanup still reported.
+      const stuck=await launch(root,keychain);stuck.backend.fault=app.backend.fault;
+      assert.equal(stuck.outcome.kind,'restored');assert.equal(stuck.store.list.length,0);assert.deepEqual(stuck.chat.conversation,[]);
+      // A later retry in the same session succeeds once removal works.
+      app.backend.fault=null;app.chat.conversation=[];app.chat.draft=null;
+      await app.say({role:'user',text:'after clear'});
+      assert.equal((app.vault as unknown as {cleanupPending:boolean}).cleanupPending,false,mode);
+      assert.deepEqual(await app.backend.list('blobs'),[],`${mode}: retry removed the old copies`);
+    }finally{await rm(root,{recursive:true,force:true});}
+  }
+});
+
+test('SHR-39 P1-5 an incomplete cleanup is retried and verified at the next launch',async()=>{
+  const root=await scratch(),keychain=newKeychain();
+  try{
+    const app=await populated(root,keychain);
+    app.backend.fault=(step,name)=>{if(step==='remove'&&name.startsWith('blobs/'))throw new Error('synthetic removal failure');};
+    await app.controller.clear();assert.ok((await app.backend.list('blobs')).length);
+    // Relaunch with removal still failing: reported, not hidden.
+    const failing=new NodeVaultBackend(root,keychain);failing.fault=app.backend.fault;
+    const blockedVault=new WorkspaceVault(failing,{redact:safeOrdinaryText});const stillPending=await blockedVault.open();
+    assert.equal(stillPending.kind,'restored');assert.equal((stillPending as {cleanupPending?:boolean}).cleanupPending,true);
+    // Relaunch with removal working: cleaned and verified during open.
+    const next=await launch(root,keychain);
+    assert.equal((next.outcome as {cleanupPending?:boolean}).cleanupPending,false);
+    assert.deepEqual(await next.backend.list('blobs'),[]);assert.equal((next.vault as unknown as {cleanupPending:boolean}).cleanupPending,false);
+  }finally{await rm(root,{recursive:true,force:true});}
+});
+
+const pause=(ms:number)=>new Promise(resolve=>setTimeout(resolve,ms));
+test('SHR-39 P1-4 Start over suspends chat and draft checkpoints and resets the view before they resume',async()=>{
+  const root=await scratch(),keychain=newKeychain();
+  try{
+    const app=await chattyWorkspace(root,keychain);const errors:unknown[]=[];let saves=0;
+    const scheduler=new CheckpointScheduler(async()=>{saves++;await app.vault.save(app.snapshot);},error=>errors.push(error),20);
+    // A draft edit just before Start over leaves a pending draft checkpoint.
+    app.chat.draft='typed just before Start over';scheduler.draft();assert.equal(scheduler.draftPending,true);
+    const error=await scheduler.exclusive(async()=>{
+      assert.equal(scheduler.draftPending,false,'the pending draft checkpoint is cancelled');
+      // Chat effects and draft edits while the clear is running are not scheduled.
+      app.chat.conversation=[...app.chat.conversation,{id:99,role:'assistant',text:'late message from before the clear'}];scheduler.now();scheduler.draft();
+      assert.equal(scheduler.draftPending,false);
+      await app.controller.clear();
+      if(app.controller.state.error)return app.controller.state.error;
+      app.chat.conversation=[];app.chat.draft=null; // the view is reset before checkpoints resume
+      return null;
+    });
+    assert.equal(error,null);await pause(60);assert.equal(saves,0,'nothing was checkpointed during Start over');
+    // New activity after the clear is saved in the new epoch only.
+    app.chat.conversation=[{id:1,role:'user',text:'fresh start'}];scheduler.now();await pause(60);
+    assert.equal(saves,1);assert.deepEqual(errors,[]);
+    const next=await launch(root,keychain);
+    assert.deepEqual(next.chat.conversation.map(e=>e.text),['fresh start']);assert.equal(next.chat.draft,null);assert.equal(next.store.list.length,0);
+    const {raw}=await decrypted(root,keychain);
+    for(const old of ['must remove','typed just before','late message'])assert.ok(!raw.includes(old),`no "${old}" after Start over`);
+    scheduler.dispose();
+  }finally{await rm(root,{recursive:true,force:true});}
+});
+
+test('SHR-39 P1-4 a failed Start over resumes checkpointing in the unchanged workspace',async()=>{
+  const root=await scratch(),keychain=newKeychain();
+  try{
+    const app=await chattyWorkspace(root,keychain);const errors:unknown[]=[];
+    const scheduler=new CheckpointScheduler(()=>app.vault.save(app.snapshot),error=>errors.push(error),20);
+    app.backend.fault=(step,name)=>{if(name.startsWith('manifests/')&&step==='stage')throw new Error('synthetic failure');};
+    const error=await scheduler.exclusive(async()=>{await app.controller.clear();return app.controller.state.error;});
+    app.backend.fault=null;
+    assert.equal(error,CLEAR_FAILED);assert.equal(scheduler.suspended,false);assert.equal(app.store.list.length,1);
+    app.chat.conversation=[...app.chat.conversation,{id:50,role:'assistant',text:CLEAR_FAILED}];scheduler.now();await pause(60);
+    assert.deepEqual(errors,[]);
+    const next=await launch(root,keychain);assert.equal(next.store.list.length,1);assert.ok(next.chat.conversation.some(e=>e.text===CLEAR_FAILED));
+    scheduler.dispose();
   }finally{await rm(root,{recursive:true,force:true});}
 });

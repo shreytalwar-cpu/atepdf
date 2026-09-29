@@ -10,8 +10,9 @@ import type {VaultKeyStatus,VaultReadResult,WorkspaceVaultBackend} from '../../p
 export const MAGIC=new TextEncoder().encode('ATW1');
 export type TestKeychain={raw:Uint8Array|null;state:'ok'|'locked'|'unavailable'};
 // 'stage': fails before the target changes. 'rename': fails after the atomic rename
-// but before the directory sync completes (a sync failure). 'remove': fails to unlink.
-export type Fault=(step:'stage'|'rename'|'remove',name:string)=>void;
+// but before the directory sync completes (a sync failure). 'remove': fails to
+// unlink; returning 'skip' instead makes the removal report success but leave the file.
+export type Fault=(step:'stage'|'rename'|'remove',name:string)=>void|'skip';
 export const newKeychain=():TestKeychain=>({raw:null,state:'ok'});
 
 export class NodeVaultBackend implements WorkspaceVaultBackend{
@@ -52,7 +53,7 @@ export class NodeVaultBackend implements WorkspaceVaultBackend{
   }
   async list(directory:'blobs'|'manifests'){try{return (await readdir(join(this.root,directory))).map(name=>`${directory}/${name}`).filter(name=>NAME.test(name));}catch{return [];}}
   async remove(name:string){
-    const target=this.#path(name);this.fault?.('remove',name);
+    const target=this.#path(name);if(this.fault?.('remove',name)==='skip')return;
     await rm(target,{force:true});
     const directory=await open(dirname(target),'r').catch(()=>null);if(directory)try{await directory.sync();}finally{await directory.close();}
   }

@@ -18,3 +18,5 @@ function WebComposerInput(){
   />;
 }
 export const nativeComposerComponents={ComposerInput:WebComposerInput};
+// The web input is controlled by composer state, so clearing that state is enough.
+export function resetComposerInput(){}

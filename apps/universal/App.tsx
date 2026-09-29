@@ -22,14 +22,15 @@ import type {LocalFileStore, Artifact} from '@core/local-file-store';
 import {createController, chooseFiles, sampleFiles, save, nativeEngineReady, ocrAvailable} from './src/platform/runtime';
 import Preview from './src/platform/Preview';
 import DropSurface from './src/platform/DropSurface';
-import {nativeComposerComponents} from './src/platform/ComposerInput';
+import {nativeComposerComponents,resetComposerInput} from './src/platform/ComposerInput';
 import {JobActivity} from './src/components/JobActivity';
 import {useAnnounce,useMotion} from './src/components/assistant-ui/elements/surfaces';
 import {privateInstruction,hasRejectedSecretDraft,safeOrdinaryText,SECRET_CHAT_WARNING} from '@planner/privacy';
 import {isClarificationAnswer,pendingFromResponse,withPendingClarification} from '@planner/clarification';
 import {plannerStatus,requestPlan,savePlannerKey,createNativePairing,pairNativePlanner,disconnectNativePlanner,plannerAvailable,type PlannerStatus} from './src/platform/planner';
 import {validateEnvelope,type PendingClarification,type Request as PlannerRequest,type Envelope, type Step} from '@contracts/protocol';
-import {WorkspaceVault,blockedMessages,savedArtifacts,type WorkspaceSnapshot} from '@core/workspace-vault';
+import {WorkspaceVault,blockedMessages,savedArtifacts,CLEANUP_INCOMPLETE,type WorkspaceSnapshot} from '@core/workspace-vault';
+import {CheckpointScheduler} from '@core/workspace-checkpoints';
 import type {PersistedEntry} from '@core/workspace-checkpoint';
 import {createWorkspaceBackend} from './src/platform/workspace';
 
@@ -62,7 +63,9 @@ function InlinePreview({store, artifact, onClose}: {store:LocalFileStore; artifa
   return <Preview bytes={bytes} count={artifact.pageCount} onClose={onClose}/>;
 }
 const toPersisted=(e:Entry):PersistedEntry=>({id:e.id,role:e.role,text:e.text,...(e.files?{files:e.files.map(f=>({name:f.name,size:f.size}))}:{}),...(e.artifact?{artifactRef:e.artifact.ref}:{}),...(e.resultTitle!==undefined?{resultTitle:e.resultTitle}:{}),...(e.choice?{choice:e.choice}:{})});
-type WorkspaceNotice={text:string;retry?:boolean};
+// cleanup: shown until removal of old copies is verified, then cleared.
+type WorkspaceNotice={text:string;retry?:boolean;cleanup?:boolean};
+const CLEANUP_PENDING_NOTICE='Some of atePDF’s earlier PDF copies couldn’t be removed from this Mac yet. They stay encrypted and can’t be opened in atePDF; it will keep trying to remove them.';
 const SAVE_FAILED_NOTICE='atePDF couldn’t save the latest changes on this Mac. Your last saved workspace is kept.';
 const SAVE_PAUSED_NOTICE='atePDF couldn’t confirm what was last saved on this Mac, so saving is paused until atePDF opens again.';
 // Start over copy states what each mode actually removes.
@@ -76,7 +79,12 @@ function useWorkspace() {
   const [notice, setNotice] = useState<WorkspaceNotice|null>(null), [durable, setDurable] = useState(false);
   // ready: restore finished; only then may chat/draft changes be checkpointed.
   const ready = useRef(backend === null), opened = useRef(false);
-  const restoredEntries = useRef<Entry[]|null>(null), draftRef = useRef<string|null>(null), draftTimer = useRef<ReturnType<typeof setTimeout>|null>(null);
+  const restoredEntries = useRef<Entry[]|null>(null), draftRef = useRef<string|null>(null);
+  // Chat/draft checkpoints; suspended for the whole Start over transaction.
+  const runChatSave = useRef<() => Promise<void>>(async () => {}), chatSaveFailed = useRef<() => void>(() => {});
+  const [checkpoints] = useState(() => new CheckpointScheduler(() => runChatSave.current(), () => chatSaveFailed.current()));
+  useEffect(() => () => checkpoints.dispose(), [checkpoints]);
+  const [clearCount, setClearCount] = useState(0);
   const state = useSyncExternalStore(controller.subscribe, controller.snapshot, controller.snapshot), store = controller.store;
   const [entries, setEntries] = useState<Entry[]>([]), [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState<number | null>(null), [privacy, setPrivacy] = useState(false), [choice, setChoice] = useState<number | null>(null);
@@ -97,14 +105,17 @@ function useWorkspace() {
   // last durable store state so they never make an unconfirmed commit durable early.
   const snapshot = (view: ReturnType<typeof controller.durableState> = controller.durableState(true)): WorkspaceSnapshot => ({...view, bytes: ref => store.get(ref).bytes, conversation: entriesRef.current.map(toPersisted), draft: draftRef.current});
   const saveFailed = (v: WorkspaceVault) => setNotice({text: v.mode === 'blocked' ? SAVE_PAUSED_NOTICE : SAVE_FAILED_NOTICE});
-  const saveChat = () => { const v = vault.current; if (!ready.current || !v || v.mode !== 'writable') return; v.save(() => snapshot(controller.durableState(false))).catch(() => saveFailed(v)); };
+  // A cleanup notice stays until the vault has verified the old copies are gone.
+  const cleanupSettled = (v: WorkspaceVault) => { if (!v.cleanupPending) setNotice(previous => previous?.cleanup ? null : previous); };
+  runChatSave.current = async () => { const v = vault.current; if (!ready.current || !v || v.mode !== 'writable') return; await v.save(() => snapshot(controller.durableState(false))); cleanupSettled(v); };
+  chatSaveFailed.current = () => { if (vault.current) saveFailed(vault.current); };
+  const saveChat = () => checkpoints.now();
   const noteDraft = (text: string) => {
     const next = text.trim() ? text : null;
     if (next === draftRef.current) return;
     draftRef.current = next;
-    if (draftTimer.current) clearTimeout(draftTimer.current);
     // Draft changes are coalesced; only the last completed checkpoint is promised.
-    draftTimer.current = setTimeout(saveChat, 800);
+    checkpoints.draft();
   };
   const openWorkspace = async () => {
     if (!backend) return;
@@ -124,9 +135,12 @@ function useWorkspace() {
         restoredEntries.current = restored; entriesRef.current = restored; setEntries(restored);
         draftRef.current = saved.draft?.text ?? null; setRestoredDraft(draftRef.current);
         if (outcome.recoveredPrevious) setNotice({text: 'atePDF couldn’t open your most recent save, so it restored the one before it.'});
+        else if (outcome.cleanupPending) setNotice({text: CLEANUP_PENDING_NOTICE, cleanup: true});
+      } else if (outcome.kind === 'empty') {
+        if (outcome.cleanupPending) setNotice({text: CLEANUP_PENDING_NOTICE, cleanup: true});
       } else if (outcome.kind === 'blocked') setNotice({text: `${blockedMessages[outcome.reason]} New work in this session won’t be saved.`, retry: outcome.retryable});
       else if (outcome.kind === 'unavailable') setNotice({text: 'atePDF can’t save your workspace on this Mac right now. This session won’t be restored after you quit.'});
-      if (v.mode === 'writable') { controller.setDurability({save: () => v.save(() => snapshot()).catch(error => { if (v.mode === 'blocked') saveFailed(v); throw error; }), clear: () => v.clear()}); setDurable(true); }
+      if (v.mode === 'writable') { controller.setDurability({save: () => v.save(() => snapshot()).then(() => cleanupSettled(v), error => { if (v.mode === 'blocked') saveFailed(v); throw error; }), clear: () => v.clear()}); setDurable(true); }
     } finally { ready.current = true; setRestoring(false); }
   };
   useEffect(() => { if (opened.current) return; opened.current = true; void openWorkspace(); }, []);
@@ -315,14 +329,19 @@ function useWorkspace() {
     if(entry.choice==='execute'){void executePlanned(entry);return;}
     if (entry.choice === 'clear') {
       clearPending();
-      // Show an empty workspace only once the durable clear is verified. Otherwise
-      // keep what is shown and say what is known about the saved copy.
-      void (async () => {
+      // One transaction: chat/draft checkpoints are suspended (and pending draft
+      // saves cancelled) until the clear settles. An empty workspace is shown only
+      // once the new epoch is verified, and the chat/draft view is reset before
+      // checkpointing resumes, so nothing from before can be saved into it.
+      void checkpoints.exclusive(async () => {
         await controller.clear();
-        if (controller.state.stage === 'failed' && controller.state.error) { say(controller.state.error); if (vault.current?.mode === 'blocked') setNotice({text: SAVE_PAUSED_NOTICE}); return; }
-        connectionToken.current=null; if (vault.current?.mode === 'writable') setNotice(null);
-        setPreview(null); setReceipts({}); setEntries([]);
-      })();
+        if (controller.state.stage === 'failed' && controller.state.error) return controller.state.error;
+        const empty: Entry[] = []; entriesRef.current = empty; restoredEntries.current = empty; draftRef.current = null;
+        connectionToken.current=null; setPreview(null); setReceipts({}); setEntries(empty); setClearCount(n => n + 1);
+        const writable = vault.current?.mode === 'writable', incomplete = controller.state.message === CLEANUP_INCOMPLETE;
+        setNotice(previous => incomplete ? {text: CLEANUP_INCOMPLETE, cleanup: true} : writable ? null : previous);
+        return null;
+      }).then(error => { if (!error) return; say(error); if (vault.current?.mode === 'blocked') setNotice({text: SAVE_PAUSED_NOTICE}); });
     } else if (entry.choice) { append({role: 'user', text: 'Yes, create an optimised copy.'}); void execute(entry.choice); }
   };
   const exportResult = async (artifact: DisplayArtifact) => {
@@ -334,7 +353,7 @@ function useWorkspace() {
   };
   return {controller, state, store, entries, busy, loading, current, currentTitle:currentEntry?.resultTitle, focus, preview, setPreview, privacy, setPrivacy,
     choice, setChoice, saving, receipts, append, say, showHelp, importFiles, pick, action, undo, submit, confirm, exportResult, planning, connection, connectionToken, connect, refreshConnection, cancel, clearPending,
-    restoring, restoredDraft, noteDraft, notice, durable, canRetryRestore, retryRestore};
+    restoring, restoredDraft, noteDraft, notice, durable, canRetryRestore, retryRestore, clearCount};
 }
 
 const WorkspaceContext=createContext<ReturnType<typeof useWorkspace>|null>(null);
@@ -359,6 +378,8 @@ function Screen(){
   const [composerReady,setComposerReady]=useState(!workspace.restoring);
   useEffect(()=>{if(workspace.restoring)return;if(workspace.restoredDraft)runtime.thread.composer.setText(workspace.restoredDraft);setComposerReady(true);},[workspace.restoring]);
   useEffect(()=>runtime.thread.composer.subscribe(()=>workspace.noteDraft(runtime.thread.composer.getState().text)),[runtime]);
+  // Start over also removes the unsent draft from the composer.
+  useEffect(()=>{if(workspace.clearCount){runtime.thread.composer.setText('');resetComposerInput();}},[workspace.clearCount]);
   return <WorkspaceContext.Provider value={workspace}><AssistantRuntimeProvider runtime={runtime}>
     <SafeAreaView style={{flex:1,backgroundColor:"#fff"}} edges={['top','left','right']}>
       <DropSurface disabled={busy} onFiles={files=>void workspace.importFiles(files)}>

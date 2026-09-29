@@ -22,9 +22,11 @@ export interface WorkspaceVaultBackend{
 }
 
 export type BlockedReason='key-missing'|'key-locked'|'key-unavailable'|'corrupt'|'missing-artifact'|'unsupported-schema'|'storage';
+// cleanupPending: files no longer referenced by the workspace (for example PDF
+// copies from before a Start over) could not be verified as removed yet.
 export type RestoreOutcome=
-  |{kind:'empty'}
-  |{kind:'restored';checkpoint:WorkspaceCheckpoint;bytes:Map<string,Uint8Array>;recoveredPrevious:boolean}
+  |{kind:'empty';cleanupPending:boolean}
+  |{kind:'restored';checkpoint:WorkspaceCheckpoint;bytes:Map<string,Uint8Array>;recoveredPrevious:boolean;cleanupPending:boolean}
   |{kind:'blocked';reason:BlockedReason;retryable:boolean}
   |{kind:'unavailable'};
 export type WorkspaceSnapshot={
@@ -47,12 +49,16 @@ export const blockedMessages:Record<BlockedReason,string>={
 export const STORAGE_WRITE_FAILED='atePDF couldn’t save this change on this device, so it wasn’t kept. Your previously saved work is unchanged.';
 export const STORAGE_UNCONFIRMED='atePDF couldn’t confirm whether this change was saved on this device. It isn’t shown now, but it may reappear when atePDF opens again. Saving is paused until then.';
 export const CLEAR_FAILED='atePDF couldn’t clear your saved workspace, so nothing was removed. Your conversation and files are still here.';
+export const CLEANUP_INCOMPLETE='This conversation was cleared, but some of atePDF’s earlier PDF copies couldn’t be removed from this Mac yet. They stay encrypted and can’t be opened in atePDF; it will keep trying to remove them.';
 export const CLEAR_UNCONFIRMED='atePDF couldn’t confirm that your saved workspace was cleared, so this conversation is still shown. Saving is paused; reopen atePDF to see what was kept.';
 
 const encoder=new TextEncoder(),decoder=new TextDecoder('utf-8',{fatal:true});
 const encode=(value:unknown)=>encoder.encode(JSON.stringify(value));
 const sha256=async(bytes:Uint8Array)=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new Uint8Array(bytes)))].map(n=>n.toString(16).padStart(2,'0')).join('');
 class Blocked extends Error{constructor(readonly reason:BlockedReason){super(blockedMessages[reason]);}}
+/** A save created before a Start over; it belongs to a cleared workspace and is never written. */
+export class StaleSaveError extends Error{constructor(){super('This change belongs to a cleared workspace and was not saved.');this.name='StaleSaveError';}}
+const CLEANUP_ATTEMPTS=3;
 // Where a head replacement ended: established as the new head (written, synced and
 // verified), established as not replacing the acknowledged head, or unknown.
 type Publication='published'|'unpublished'|'uncertain';
@@ -63,6 +69,7 @@ export class WorkspaceVault{
   #head:WorkspaceHead|null=null;
   #workspaceID='';#generation=0;#previous:number|null=null;#epoch=0;#revision=0;
   #retention:RetentionMode='keep';
+  #cleanupPending=false;
   // Immutable blobs already durable, with the generation that sealed them.
   #blobs=new Map<string,number>();
   #refsByGeneration=new Map<number,Set<string>>();
@@ -71,15 +78,28 @@ export class WorkspaceVault{
   constructor(private backend:WorkspaceVaultBackend,options:Options){this.#redact=options.redact;this.#now=options.now??(()=>new Date());this.#newID=options.newID??(()=>crypto.randomUUID());}
   get generation(){return this.#generation;}
   get deletionEpoch(){return this.#epoch;}
+  /** True while unreferenced files (such as PDF copies from before a Start over) remain unverified as removed. */
+  get cleanupPending(){return this.#cleanupPending;}
 
   /** Open and restore the newest valid checkpoint. Writes only staging cleanup and, for a brand-new workspace, the genesis head. */
   open():Promise<RestoreOutcome>{return this.#serial(()=>this.#open());}
   /** Mark the workspace unusable for writes, e.g. when restored PDFs fail revalidation. */
   block(){this.mode='blocked';}
-  /** Serialize one full checkpoint. Resolves only after the new head is durable. */
-  save(snapshot:()=>WorkspaceSnapshot):Promise<void>{return this.#serial(()=>this.#save(snapshot()));}
-  /** Publish an empty workspace in a new deletion epoch, then collect old files. */
-  clear():Promise<void>{return this.#serial(()=>this.#clear());}
+  /**
+   * Serialize one full checkpoint. Resolves only after the new head is durable.
+   * A save is bound to the deletion epoch it was requested in: if a Start over
+   * commits first, it is refused with StaleSaveError and nothing is written.
+   */
+  save(snapshot:()=>WorkspaceSnapshot):Promise<void>{
+    const epoch=this.#epoch;
+    return this.#serial(()=>{if(this.#epoch!==epoch)throw new StaleSaveError();return this.#save(snapshot());});
+  }
+  /**
+   * Publish an empty workspace in a new deletion epoch, then remove and verify
+   * the removal of every older file. cleanupComplete is false when some old
+   * files remain; they are retried after later checkpoints and at launch.
+   */
+  clear():Promise<{cleanupComplete:boolean}>{return this.#serial(()=>this.#clear());}
 
   #serial<T>(work:()=>Promise<T>):Promise<T>{const next=this.#queue.then(work,work);this.#queue=next.catch(()=>undefined);return next;}
 
@@ -96,16 +116,17 @@ export class WorkspaceVault{
         this.#head=null;
         // An empty workspace either way: a failed genesis write only costs durability.
         if(await this.#commitHead(genesis,'roll-forward')!=='published'){this.mode='unavailable';return {kind:'unavailable'};}
-        this.#adopt(genesis);this.mode='writable';return {kind:'empty'};
+        this.#adopt(genesis);this.mode='writable';return {kind:'empty',cleanupPending:false};
       }
       const key=await this.backend.keyStatus(false);
       // Never create a replacement key over an existing workspace.
       if(key!=='ready')throw new Blocked(key==='locked'?'key-locked':key==='missing'?'key-missing':'key-unavailable');
       const head=await this.#readHead();
       if(head.generation===0){
-        // Genesis only: nothing was ever committed. Any manifest/blob beside it is
-        // an interrupted first save and is collected after the next checkpoint.
-        this.#adopt(head);this.mode='writable';return {kind:'empty'};
+        // Genesis only: nothing was ever committed, so any manifest/blob beside it
+        // is an interrupted first save and is removed now.
+        this.#adopt(head);this.mode='writable';
+        return {kind:'empty',cleanupPending:!await this.#collect(new Set(),new Set())};
       }
       let restored:{checkpoint:WorkspaceCheckpoint;bytes:Map<string,Uint8Array>},recoveredPrevious=false;
       try{restored=await this.#load(head,head.generation);}
@@ -122,7 +143,21 @@ export class WorkspaceVault{
       this.#blobs=new Map(checkpoint.artifacts.map(a=>[a.ref,a.blobGeneration]));
       this.#refsByGeneration=new Map([[checkpoint.generation,new Set(checkpoint.artifacts.map(a=>a.ref))]]);
       this.mode='writable';
-      return {kind:'restored',checkpoint,bytes,recoveredPrevious};
+      // Retry cleanup of anything the head no longer references. After a fallback
+      // the newest manifest is unreadable, so its files are kept as evidence.
+      let cleanupPending=false;
+      if(!recoveredPrevious){
+        const keepRefs=new Set(checkpoint.artifacts.map(a=>a.ref)),keepGenerations=new Set([head.generation]);
+        if(head.previousGeneration!==null){
+          keepGenerations.add(head.previousGeneration);
+          const previous=await this.#refsOf(head,head.previousGeneration);
+          if(previous)for(const ref of previous)keepRefs.add(ref);
+          else cleanupPending=true; // an unreadable predecessor: leave its blobs alone
+        }
+        if(!cleanupPending)cleanupPending=!await this.#collect(keepRefs,keepGenerations);
+        else this.#cleanupPending=true;
+      }
+      return {kind:'restored',checkpoint,bytes,recoveredPrevious,cleanupPending};
     }catch(error){
       const reason=error instanceof Blocked?error.reason:'storage';
       this.mode='blocked';
@@ -132,6 +167,14 @@ export class WorkspaceVault{
   #adopt(head:WorkspaceHead){
     this.#head=head;this.#workspaceID=head.workspaceID;this.#epoch=head.deletionEpoch;this.#generation=head.generation;this.#previous=null;this.#revision=0;
     this.#blobs=new Map();this.#refsByGeneration=new Map();
+  }
+  async #refsOf(head:WorkspaceHead,generation:number):Promise<Set<string>|null>{
+    try{
+      const result=await this.backend.readOpened(names.manifest(generation),aad.manifest(head.workspaceID,generation));
+      if(result.status!=='ok')return null;
+      const checkpoint=parseCheckpoint(JSON.parse(decoder.decode(result.bytes)));
+      return checkpoint.workspaceID===head.workspaceID&&checkpoint.generation===generation?new Set(checkpoint.artifacts.map(a=>a.ref)):null;
+    }catch{return null;}
   }
   async #readHead():Promise<WorkspaceHead>{
     const result=await this.backend.readOpened(names.head,aad.head());
@@ -265,12 +308,27 @@ export class WorkspaceVault{
     for(const generation of [this.#generation,previous])for(const ref of generation===null?[]:this.#refsByGeneration.get(generation)??[])keep.add(ref);
     for(const generation of [...this.#refsByGeneration.keys()])if(generation!==this.#generation&&generation!==previous)this.#refsByGeneration.delete(generation);
     for(const ref of [...this.#blobs.keys()])if(!keep.has(ref))this.#blobs.delete(ref);
-    // Cleanup failure never undoes a published checkpoint.
-    try{await this.#collect(keep,new Set([this.#generation,previous].filter((g):g is number=>g!==null)));}catch{/* retried after the next checkpoint */}
+    // Cleanup failure never undoes a published checkpoint; it stays pending and is retried.
+    await this.#collect(keep,new Set([this.#generation,previous].filter((g):g is number=>g!==null)));
   }
-  async #collect(keepRefs:Set<string>,keepGenerations=new Set<number>()){
-    for(const name of await this.backend.list('manifests')){const generation=Number(/^manifests\/(\d+)\.atw$/.exec(name)?.[1]);if(!keepGenerations.has(generation))await this.backend.remove(name);}
-    for(const name of await this.backend.list('blobs')){const ref=/^blobs\/(.+)\.atw$/.exec(name)?.[1];if(!ref||!keepRefs.has(ref))await this.backend.remove(name);}
+  /**
+   * Remove every manifest and blob not kept, then list again to verify. Each file
+   * is attempted independently and the whole pass is retried a bounded number of
+   * times. Returns true only when no unreferenced file remains.
+   */
+  async #collect(keepRefs:Set<string>,keepGenerations:Set<number>):Promise<boolean>{
+    const unreferenced=async()=>[
+      ...(await this.backend.list('manifests')).filter(name=>!keepGenerations.has(Number(/^manifests\/(\d+)\.atw$/.exec(name)?.[1]))),
+      ...(await this.backend.list('blobs')).filter(name=>{const ref=/^blobs\/(.+)\.atw$/.exec(name)?.[1];return !ref||!keepRefs.has(ref);}),
+    ];
+    for(let attempt=0;attempt<CLEANUP_ATTEMPTS;attempt++){
+      let left:string[];
+      try{left=await unreferenced();}catch{continue;}
+      if(!left.length){this.#cleanupPending=false;return true;}
+      for(const name of left)try{await this.backend.remove(name);}catch{/* verified by the next listing */}
+    }
+    try{if(!(await unreferenced()).length){this.#cleanupPending=false;return true;}}catch{/* stays pending */}
+    this.#cleanupPending=true;return false;
   }
   async #clear(){
     if(this.mode!=='writable')throw new Error(STORAGE_WRITE_FAILED);
@@ -292,7 +350,8 @@ export class WorkspaceVault{
     }
     this.#generation=generation;this.#previous=generation;this.#epoch=epoch;this.#revision++;
     this.#blobs.clear();this.#refsByGeneration=new Map([[generation,new Set()]]);
-    try{await this.#collect(new Set(),new Set([generation]));}catch{/* retried after the next checkpoint */}
+    // The clear is durable now. Removal of the old copies is only claimed once verified.
+    return {cleanupComplete:await this.#collect(new Set(),new Set([generation]))};
   }
 }
 export const savedArtifacts=(checkpoint:WorkspaceCheckpoint,bytes:Map<string,Uint8Array>)=>checkpoint.artifacts.map(a=>{

@@ -1,11 +1,11 @@
-✔ SHR-39 P1-1 a failure after head replacement is reconciled; "not kept" is only said when relaunch cannot restore the change (1465.228833ms)
-✔ SHR-39 P1-1 a head write that fails before replacement is definitely unpublished; sync failures on blobs and manifests are failures (569.344292ms)
-✔ SHR-39 P1-1 the first save after genesis cannot be withdrawn by manifest removal alone (24.989333ms)
-✔ SHR-39 P1-2 a committed generation-1 workspace whose head is lost is preserved and blocked, never opened empty (28.467834ms)
-✔ SHR-39 P1-2 the genesis head is the evidence that an interrupted first save was never committed (57.031209ms)
-✔ SHR-39 P1-3 Start over empties the workspace only after the durable clear is verified (152.993041ms)
-✔ SHR-39 P1-3 a failed or unconfirmed Start over keeps the workspace shown and never reports a clear that relaunch undoes (684.205459ms)
-✔ SHR-39 P1-3 no fallback across a deletion epoch after Start over (184.249041ms)
+✔ SHR-39 P1-1 a failure after head replacement is reconciled; "not kept" is only said when relaunch cannot restore the change (1487.562125ms)
+✔ SHR-39 P1-1 a head write that fails before replacement is definitely unpublished; sync failures on blobs and manifests are failures (760.949417ms)
+✔ SHR-39 P1-1 the first save after genesis cannot be withdrawn by manifest removal alone (44.924959ms)
+✔ SHR-39 P1-2 a committed generation-1 workspace whose head is lost is preserved and blocked, never opened empty (40.25075ms)
+✔ SHR-39 P1-2 the genesis head is the evidence that an interrupted first save was never committed (67.182ms)
+✔ SHR-39 P1-3 Start over empties the workspace only after the durable clear is verified (273.37825ms)
+✔ SHR-39 P1-3 a failed or unconfirmed Start over keeps the workspace shown and never reports a clear that relaunch undoes (1039.635958ms)
+✔ SHR-39 P1-3 no fallback across a deletion epoch after Start over (324.603041ms)
 ℹ tests 8
 ℹ suites 0
 ℹ pass 8
@@ -13,4 +13,4 @@
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 3498.336833
+ℹ duration_ms 4194.51575

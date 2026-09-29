@@ -2,7 +2,34 @@
 
 Base: `origin/main` at `4c22232b67345be7a19712c46fe6b49e1a43505a` (clean), branch `shreytalwar/shr-39-checkpoint-and-restore-the-previous-mac-workspace-locally`. Implements the approved ADR 0010 contract; no redesign, no database, no new dependency. Synthetic/local data only; no provider, paid or network calls.
 
-First review round: PR #81 head `5d86e86`. Review fixes (this revision) tested source SHA-256: `workspace-checkpoint.ts` `8db0a6fc…e766735e`, `workspace-vault.ts` `b81336ec…9c25d940`, `job-controller.ts` `25550cd2…462094fc`, `App.tsx` `6175ab59…b23a5f70`, `AtepdfWorkspaceVault.swift` `47314bff…ffe80523`. See [PR #81 review fixes](#pr-81-review-fixes) for what changed after the first round.
+First review round: PR #81 head `5d86e86`. Review fixes (this revision) tested source SHA-256: `workspace-checkpoint.ts` `8db0a6fc…e766735e`, `workspace-vault.ts` `b81336ec…9c25d940`, `job-controller.ts` `25550cd2…462094fc`, `App.tsx` `6175ab59…b23a5f70`, `AtepdfWorkspaceVault.swift` `47314bff…ffe80523`. See [PR #81 review fixes](#pr-81-review-fixes) for what changed after the first round. Second-round fixes (on top of `0604901`) tested source SHA-256: `workspace-vault.ts` `3e3a4c8e…cd2bae69`, `workspace-checkpoints.ts` `2f7a353f…7d2bf65a`, `job-controller.ts` `e1ed89a3…4286f991`, `App.tsx` `57883a6a…a9f07c80`, `ComposerInput.native.tsx` `4787a308…1b088429`; see [PR #81 second review fixes](#pr-81-second-review-fixes).
+
+## PR #81 second review fixes
+
+The second review found two more P1 defects in Start over. Both were reproduced on `0604901`: the new tests fail there ([original-0604901-p1-4-5.log](original-0604901-p1-4-5.log)), and a probe shows the exact end state ([original-0604901-probe.log](original-0604901-probe.log)). Focused regressions: [p1-second-review.log](p1-second-review.log), **5/5**.
+
+**P1-4: a queued chat or draft save could undo Start over.** *Reproduced:* Start over succeeded (no controller error, no files shown), but a save queued behind it was *published* into the new epoch, and relaunch restored `["old chat that Start over must remove"]` and the old draft. *Fix:*
+- **Vault fence:** `WorkspaceVault.save()` captures the deletion epoch when the save is requested and refuses to write (`StaleSaveError`, nothing written) if a clear committed first.
+- **App suspension:** chat and draft checkpoints go through a new `CheckpointScheduler` (`packages/core/src/workspace-checkpoints.ts`). Start over runs inside `scheduler.exclusive()`. That cancels any pending draft timer, ignores chat/draft checkpoint requests while the clear runs, and resumes only after the App has reset its chat and draft view to empty (synchronously, before resuming).
+- **Draft reset:** the composer draft is cleared too. The native input is told explicitly via `resetComposerInput()`, because it is uncontrolled.
+- **Failure path:** a failed Start over resumes checkpointing in the unchanged workspace.
+
+*Tests:*
+- `P1-4 a chat or draft save queued behind Start over cannot resurrect old text`: the reviewer's exact race.
+- `P1-4 Start over suspends chat and draft checkpoints and resets the view before they resume`: covers a pending draft timer, chat/draft activity during the clear, no save during the transaction, only new-epoch text after it, and no old text in the published manifest.
+- `P1-4 a failed Start over resumes checkpointing in the unchanged workspace`.
+
+**P1-5: Start over could imply removal while old encrypted PDF copies remained.** *Reproduced:* with blob removal failing, the clear reported no error and no message and relaunch showed an empty workspace, but 4 old encrypted blobs were still on disk and the key was still present. *Fix:*
+- **Verified cleanup:** cleanup is now explicit and verified. `#collect` removes each unreferenced manifest and blob independently, lists again to verify, and retries the pass a bounded number of times. It reports success only when nothing unreferenced remains.
+- **Tracked state:** the vault tracks `cleanupPending`. `clear()` returns `{cleanupComplete}`. The controller still empties the workspace, because the clear itself is durable, but sets the truthful `CLEANUP_INCOMPLETE` message instead of implying removal. The App shows it as a notice ("some of atePDF’s earlier PDF copies couldn’t be removed from this Mac yet. They stay encrypted and can’t be opened in atePDF; it will keep trying to remove them.").
+- **Retries:** cleanup is retried after every later checkpoint and at every launch. On launch, anything the head and its predecessor don't reference is removed and verified, and the outcome carries `cleanupPending`. The notice clears only once a retry verifies removal.
+- **Evidence kept after a fallback:** after a fallback restore, the unreadable newest manifest's files are kept as evidence rather than collected.
+
+*Tests:*
+- `P1-5 Start over does not claim removal until old PDF copies are verified gone, and retries cleanup`: removal that throws, and removal that silently leaves the file; checks the truthful message, that the copies really remain, that relaunch shows an empty workspace (never old data), and that a same-session retry verifies removal.
+- `P1-5 an incomplete cleanup is retried and verified at the next launch`: relaunch with removal still failing reports `cleanupPending`; relaunch with removal working cleans up during open and verifies.
+
+Mutation checks: removing the epoch fence, the scheduler suspension, or the cleanup verification each makes the corresponding new test fail.
 
 ## PR #81 review fixes
 
@@ -54,15 +81,17 @@ Each `node` command used `PATH=/Users/shrey/.cache/codex-runtimes/codex-primary-
 
 | Command | Result |
 | --- | --- |
-| `node --import tsx --test --test-name-pattern=P1 tests/regressions/workspace-persistence.test.ts` | **8/8 passed** (review regressions); [p1-regressions.log](p1-regressions.log). The same tests against `5d86e86`: 7 of 8 fail, as described above ([original-code-p1.log](original-code-p1.log)). |
-| `node --import tsx --test tests/regressions/workspace-persistence.test.ts` | **22/22 passed**; [persistence.log](persistence.log) |
-| `node --import tsx --test tests/regressions/*.test.ts` | **98/98 passed** (76 existing + 22 SHR-39); [core.log](core.log) |
+| `node --import tsx --test --test-name-pattern="P1-[45]" tests/regressions/workspace-persistence.test.ts` | **5/5 passed** (second review); [p1-second-review.log](p1-second-review.log). Against `0604901`: 3 of 3 then-existing fail ([original-0604901-p1-4-5.log](original-0604901-p1-4-5.log)). |
+| `node --import tsx --test --test-name-pattern="P1-[123] " tests/regressions/workspace-persistence.test.ts` | **8/8 passed** (first review); [p1-regressions.log](p1-regressions.log). The same tests against `5d86e86`: 7 of 8 fail ([original-code-p1.log](original-code-p1.log)). |
+| `node --import tsx --test tests/regressions/workspace-persistence.test.ts` | **27/27 passed**; [persistence.log](persistence.log) |
+| `node --import tsx --test tests/regressions/*.test.ts` | **103/103 passed** (76 existing + 27 SHR-39); [core.log](core.log) |
 | `node --import tsx tests/native/apple/workspace/run.ts` | Exit 0; **42 Swift checks + TS↔Swift interop**; [native-workspace.log](native-workspace.log). The same command inside `codex sandbox -c sandbox_mode="workspace-write"`: exit 0, 42 checks; [native-workspace-codex-sandbox.log](native-workspace-codex-sandbox.log). |
 | `node node_modules/typescript/bin/tsc --noEmit -p apps/universal/tsconfig.json` | Exit 0 |
 | `node node_modules/typescript/bin/tsc --noEmit -p apps/web/tsconfig.json` | Exit 0 |
 | `node scripts/assets.mjs` then `expo export --platform web` (from `apps/universal`, output in session scratch) | Exit 0; [web-export.log](web-export.log) |
+| `expo export --platform ios` (from `apps/universal`, output in session scratch) | Exit 0; [ios-export.log](ios-export.log). Compiles the native JS bundle, including `ComposerInput.native.tsx`. Not a device or runtime run. |
 | Playwright `tests/e2e/planner.spec.ts tests/e2e/local-actions.spec.ts` against a fresh export of this revision on `127.0.0.1:43291` (temporary config, mocked planner routes) | **28/28 passed**, twice; [browser.log](browser.log). A run made while the Catalyst build was saturating the CPU failed 27/28 ([browser-under-build-load.log](browser-under-build-load.log)): the existing Start over test asserts `not.toContainText` on the conversation element, which disappears once the welcome screen shows. The test passed 3/3 in isolation and in both uncontended full runs. The UI reached the correct cleared state in the failed run. In the first round, a run failed 25/28 only because the export lacked the generated `/engines` worker (fixed by `scripts/assets.mjs`, ignored output). |
-| `scripts/native/mac-build.sh` | **BUILD SUCCEEDED** for both rounds, Release Mac Catalyst arm64, strict signature verification passed; [mac-catalyst.json](mac-catalyst.json) |
+| `scripts/native/mac-build.sh` | Not rerun for the second review: no Swift or native storage code changed (`git diff 0604901 -- apps/universal/modules` is empty). **BUILD SUCCEEDED** for both earlier rounds, Release Mac Catalyst arm64, strict signature verification passed; [mac-catalyst.json](mac-catalyst.json) |
 | `git diff --check` | Exit 0 |
 
 Persistence tests (real fixture PDFs through the real web-pdf engine and PDF.js inspection, temp directories, in-memory Keychain stand-in): quit/relaunch round trip of bytes/hashes, original order, history, focus, Undo predecessor, conversation, draft, revision/generation; one Undo after relaunch is durable; inert restore with `fetch` stubbed (0 calls), 0 transform calls and stale pre-relaunch plan rejected; no canary/password/token/`requestId`/planner fields in the decrypted manifest and no plaintext on disk; storage write failure withdraws import/transform/Undo; interrupted writes at four boundaries restore the previous generation and orphans are collected; truncated/corrupt manifest fallback only within an epoch, both-damaged fails closed with no writes; missing, corrupt, swapped and validly-sealed-but-wrong-hash blobs fail closed; future schema refused without downgrade writes; locked/unavailable/missing/wrong key fail safely and no replacement key is created; clear publishes a new epoch and never falls back across it; blobs are immutable and two generations retained; headless leftovers fail closed. Mutation checks (removing redaction, fallback, hash check or rollback) each made the relevant test fail.
@@ -77,7 +106,7 @@ Persistence tests (real fixture PDFs through the real web-pdf engine and PDF.js 
 
 - **Successful durable restore inside the real Mac app was not verified.** The current ad-hoc development signing has no application identifier/keychain access group, so the Data Protection Keychain is unavailable and the app correctly stays session-only. A signed build with the final team/channel identity is required (SHR-41, SHR-91). Keychain item attributes as stored, backup exclusion on the real container, crash/force-quit at each write boundary, disk-full, sleep/wake and Keychain lock on the real app remain SHR-41 work.
 - iOS/iPadOS and web intentionally stay session-only in this issue. No iOS export or device run was performed.
-- Clear keeps the existing workspace key (key rotation/retirement, retention expiry, storage usage, and Clear History UI are SHR-40). A failed or unconfirmed Start over leaves the workspace shown; an unconfirmed one pauses saving until relaunch, and there is no in-app discard path for that state yet (SHR-40).
+- Clear keeps the existing workspace key (key rotation/retirement, retention expiry, storage usage, and Clear History UI are SHR-40). So while cleanup is incomplete, the remaining encrypted copies could still be decrypted with that key by code holding it. The UI says the copies remain and are retried; it does not claim they are unreadable to the key. Cleanup retries are bounded per attempt and repeat on later checkpoints and launches; there is no background timer. A failed or unconfirmed Start over leaves the workspace shown; an unconfirmed one pauses saving until relaunch, and there is no in-app discard path for that state yet (SHR-40).
 - The reconciliation paths (sync failure after rename, failed withdrawal, failed roll-forward) are exercised with the Node test backend's fault injection and by code review of the Swift write/sync/remove order. They were not fault-injected in the real Mac app (SHR-41).
 - The Start over UI sequencing in `App.tsx` is covered by controller/vault tests plus the browser Start over specs (session-only path). No React/native UI test drives the durable failure branches.
 - PDF bytes cross the React Native bridge as base64 and every new blob is read back once to verify; large-workspace cost is unmeasured (SHR-43/SHR-34).

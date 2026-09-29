@@ -9,6 +9,17 @@ public final class AtepdfPdfModule: Module {
   private let cancellation = AtepdfPDFCancellation()
   #if targetEnvironment(macCatalyst)
   private let exportOwner = UUID()
+  // Durable workspace I/O is serialized separately from PDF work.
+  private let workspaceQueue = DispatchQueue(label: "dev.atepdf.local.workspace", qos: .userInitiated)
+  private lazy var workspace: AtepdfWorkspaceVault? = {
+    guard let root = try? AtepdfWorkspaceVault.defaultRoot() else { return nil }
+    return AtepdfWorkspaceVault(root: root, keys: AtepdfKeychainWorkspaceKeyStore())
+  }()
+  private func requireWorkspace() throws -> AtepdfWorkspaceVault {
+    try requireIsolatedStorage()
+    guard let workspace else { throw AtepdfWorkspaceVault.Failure.io }
+    return workspace
+  }
   #endif
   private var storageIsolated: Bool {
     guard let caches = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else { return false }
@@ -34,6 +45,15 @@ public final class AtepdfPdfModule: Module {
                           outputRoot: caches.appendingPathComponent("atepdf-preview", isDirectory: true))
   }()
 
+  // SHR-39 persists the workspace on Mac only; iOS keeps its session-only behavior.
+  private var workspaceAvailable: Bool {
+    #if targetEnvironment(macCatalyst)
+    return storageIsolated
+    #else
+    return false
+    #endif
+  }
+
   private var exportAvailable: Bool {
     #if targetEnvironment(macCatalyst)
     return true
@@ -45,13 +65,40 @@ public final class AtepdfPdfModule: Module {
   public func definition() -> ModuleDefinition {
     Name("AtepdfPdf")
     Constants(["readerAvailable": true, "ocrAvailable": true, "storageIsolated": self.storageIsolated,
-               "exportAvailable": self.exportAvailable])
+               "exportAvailable": self.exportAvailable, "workspaceAvailable": self.workspaceAvailable])
     #if targetEnvironment(macCatalyst)
     AsyncFunction("exportPDFAsync") { (uri: String) async throws -> String in
       try self.requireIsolatedStorage()
       let source = try self.engine.exportSource(uri)
       return try await AtepdfPDFExporter.shared.export(source, owner: self.exportOwner)
     }
+    AsyncFunction("workspaceKeyStatusAsync") { (create: Bool) -> String in
+      try self.requireWorkspace().keyStatus(create: create).rawValue
+    }.runOnQueue(workspaceQueue)
+    AsyncFunction("workspaceExistsAsync") { (name: String) -> Bool in
+      try self.requireWorkspace().exists(name)
+    }.runOnQueue(workspaceQueue)
+    AsyncFunction("workspaceWriteSealedAsync") { (name: String, base64: String, associatedData: String) in
+      guard let plain = Data(base64Encoded: base64) else { throw AtepdfWorkspaceVault.Failure.format }
+      try self.requireWorkspace().writeSealed(name, plain: plain, associatedData: associatedData)
+    }.runOnQueue(workspaceQueue)
+    AsyncFunction("workspaceReadOpenedAsync") { (name: String, associatedData: String) -> [String: Any] in
+      let result = try self.requireWorkspace().readOpened(name, associatedData: associatedData)
+      guard let data = result.data else { return ["status": result.status] }
+      return ["status": result.status, "base64": data.base64EncodedString()]
+    }.runOnQueue(workspaceQueue)
+    AsyncFunction("workspaceListAsync") { (directory: String) -> [String] in
+      try self.requireWorkspace().list(directory)
+    }.runOnQueue(workspaceQueue)
+    AsyncFunction("workspaceRemoveAsync") { (name: String) in
+      try self.requireWorkspace().remove(name)
+    }.runOnQueue(workspaceQueue)
+    AsyncFunction("workspaceSyncDirectoryAsync") { (directory: String) in
+      try self.requireWorkspace().syncWorkspaceDirectory(directory)
+    }.runOnQueue(workspaceQueue)
+    AsyncFunction("workspaceCleanStagingAsync") {
+      try self.requireWorkspace().cleanStaging()
+    }.runOnQueue(workspaceQueue)
     #endif
     AsyncFunction("inspectAsync") { (uri: String) -> [String: Any] in
       try self.requireIsolatedStorage()

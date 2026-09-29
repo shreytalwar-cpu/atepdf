@@ -1,0 +1,66 @@
+{
+  "issue": "SHR-39",
+  "host": {
+    "macOS": "27.0 (26A428)",
+    "arch": "arm64",
+    "xcode": "Xcode-beta 27.0 (27A266a)"
+  },
+  "podInstall": {
+    "command": "bundle exec pod install (pinned CocoaPods 1.16.2 from scripts/native-tools/Gemfile, RUBYOPT=-rlogger, BUNDLE_FROZEN=true, CP_HOME_DIR cloned into the worktree's ignored .build)",
+    "scope": "Worktree-only APFS clone of the ignored Pods directory; locked Podfile, no new dependency. Needed so the Pods project lists AtepdfWorkspaceVault.swift.",
+    "trackedSideEffects": "Podfile.lock and atepdf.xcodeproj/project.pbxproj path rewrites caused by the worktree's node_modules location; reverted with git checkout before commit and not part of this change."
+  },
+  "build": {
+    "command": "scripts/native/mac-build.sh",
+    "result": "** BUILD SUCCEEDED ** (Release, Mac Catalyst arm64), strict signature verification passed",
+    "stagedApp": "/private/tmp/atepdf-mac-wk_n3jhq/atepdf.app",
+    "identifier": "dev.atepdf.fresh.mac",
+    "signature": "local ad-hoc, development only",
+    "entitlements": [
+      "com.apple.security.app-sandbox",
+      "com.apple.security.network.client",
+      "com.apple.security.files.user-selected.read-write"
+    ],
+    "binarySha256": "72cf23113a647cb0b94c3083bec77ee7374811fca5958f178e984d5bbbddb1e3",
+    "mainJsbundleSha256": "01cbbf3f08c1a1a4090acc927d101d1f070095cc2d8beb4caff3cbd74efb4b87",
+    "containsSHR39": "AtepdfWorkspaceVault.swift compiled (named in build log); binary contains workspace module functions; Hermes bundle contains the restore/notice strings"
+  },
+  "runtimeObservation": {
+    "method": "Launched the exact staged path with open -n; observed with background computer-use accessibility screenshots; quit through the app menu.",
+    "launch1": "Header notice shown: \"atePDF can’t save your workspace on this Mac right now. This session won’t be restored after you quit.\" Bundled sample import still worked in memory (2 originals, 3 pages).",
+    "afterQuit": "No process running; no atepdf directory created in ~/Library/Containers/dev.atepdf.fresh.mac/Data/Library/Application Support.",
+    "launch2": "Empty welcome state with the same notice; nothing restored and nothing replayed.",
+    "interpretation": "Expected fail-safe. The ad-hoc build has no application-identifier or keychain-access-groups entitlement, so the Data Protection Keychain refuses the workspace key (host probe: SecItemAdd OSStatus -34018, errSecMissingEntitlement). The app therefore runs session-only and says so, rather than writing unprotected state."
+  },
+  "notVerified": [
+    "Successful durable save/quit/relaunch/restore inside the real Mac app: requires a signed build with a team-scoped application identifier/keychain access group (SHR-41, channel identity SHR-91).",
+    "Live Keychain item attributes (kSecAttrAccessible, non-synchronizable) as stored by the signed app.",
+    "Backup exclusion and permissions on the real container path (verified only in the host Swift harness on a temporary directory).",
+    "Forced termination at each write boundary, disk-full, sleep/wake and Keychain lock on the real app."
+  ],
+  "reviewFixBuild": {
+    "command": "scripts/native/mac-build.sh (after the PR #81 review fixes; locked pod install rerun in the worktree, tracked Podfile.lock/pbxproj reordering and checksum artifacts reverted before commit)",
+    "result": "** BUILD SUCCEEDED **, strict signature verification passed",
+    "stagedApp": "/private/tmp/atepdf-mac-316td2ie/atepdf.app",
+    "binarySha256": "1b7cf7b3b44351865b210da2922475a6b8fb32a6e532a0ac321fef09570ac74f",
+    "mainJsbundleSha256": "518556c949187bb677d3a78579696d2ea3699eb6ab14c516a5aab1812e5fcc3f",
+    "containsFixes": "AtepdfWorkspaceVault.swift compiled; Hermes bundle contains the new Start over and clear-unconfirmed strings",
+    "runtimeObservation": "Launched the exact staged path: same 'can’t save your workspace on this Mac' notice; quit; no Application Support/atepdf directory and no genesis head written, because the ad-hoc build cannot obtain the Keychain key."
+  },
+  "thirdReviewBuild": {
+    "command": "scripts/native/mac-build.sh after the third-review Swift storage-query changes (locked pod install rerun in the worktree; tracked Podfile.lock/pbxproj artifacts reverted before commit)",
+    "result": "** BUILD SUCCEEDED **, strict signature verification passed",
+    "stagedApp": "/private/tmp/atepdf-mac-_8rwodp1/atepdf.app",
+    "binarySha256": "de8402b77753e2af630605875af6303bf51a0a9d63e9385b14ee26074ecd7d8e",
+    "sourceNote": "Built from the final Swift sources. A later App.tsx change (session-only Start over resets the view synchronously, as before persistence) was verified by expo export --platform ios and the browser specs, not by rebuilding this app.",
+    "runtimeObservation": "Launched the exact staged path: 'can’t save your workspace on this Mac' notice (key unavailable on the ad-hoc build); the new list/exists paths on a never-created workspace directory did not block; quit; no Application Support/atepdf directory written."
+  },
+  "fourthReviewBuild": {
+    "command": "scripts/native/mac-build.sh after adding syncWorkspaceDirectory / workspaceSyncDirectoryAsync (locked pod install rerun in the worktree; tracked Podfile.lock/pbxproj artifacts reverted before commit)",
+    "result": "** BUILD SUCCEEDED **, strict signature verification passed",
+    "stagedApp": "/private/tmp/atepdf-mac-fi8qd0v3/atepdf.app",
+    "binarySha256": "3ea3e6fec389661c5143c86157ba3d5beee37ec9cb02371a5ceaa8b990f53f79",
+    "containsFix": "binary contains the workspaceSyncDirectoryAsync module function",
+    "runtimeObservation": "Launched the exact staged path: 'can’t save your workspace on this Mac' notice (key unavailable on the ad-hoc build); quit; no Application Support/atepdf directory written."
+  }
+}

@@ -1,0 +1,6 @@
+PROBE1 controller error: null visible files: 0
+PROBE1 queued save: published
+PROBE1 relaunch chat: ["old chat that Start over must remove"] draft: "old draft that Start over must remove"
+PROBE2 controller error: null message: "" visible files: 0
+PROBE2 relaunch files: 0 old encrypted blobs on disk: 4 key present: true
+✔ PROBE original behaviour (741.875084ms)

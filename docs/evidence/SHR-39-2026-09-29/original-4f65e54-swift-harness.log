@@ -1,0 +1,1 @@
+Swift/ErrorType.swift:254: Fatal error: Error raised at top level: Error Domain=atepdf-workspace-test Code=1 "an unreadable blob directory throws instead of listing empty" UserInfo={NSLocalizedDescription=an unreadable blob directory throws instead of listing empty}

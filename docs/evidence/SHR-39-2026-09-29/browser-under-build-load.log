@@ -1,0 +1,61 @@
+
+Running 28 tests using 1 worker
+
+  ✓   1 tests/e2e/local-actions.spec.ts:11:7 › explicit local actions bypass planning: healthy (2.5s)
+  ✓   2 tests/e2e/local-actions.spec.ts:11:7 › explicit local actions bypass planning: disabled (2.0s)
+  ✓   3 tests/e2e/local-actions.spec.ts:11:7 › explicit local actions bypass planning: unavailable (2.3s)
+  ✓   4 tests/e2e/local-actions.spec.ts:11:7 › explicit local actions bypass planning: authentication (1.8s)
+  ✓   5 tests/e2e/local-actions.spec.ts:11:7 › explicit local actions bypass planning: allowance (2.2s)
+  ✓   6 tests/e2e/local-actions.spec.ts:11:7 › explicit local actions bypass planning: provider failure (1.6s)
+  ✓   7 tests/e2e/local-actions.spec.ts:11:7 › explicit local actions bypass planning: pending status (1.7s)
+  ✓   8 tests/e2e/local-actions.spec.ts:63:7 › local recovery after a free-form planner error 401 (955ms)
+  ✓   9 tests/e2e/local-actions.spec.ts:63:7 › local recovery after a free-form planner error 429 (1.1s)
+  ✓  10 tests/e2e/local-actions.spec.ts:63:7 › local recovery after a free-form planner error 503 (1.1s)
+  ✓  11 tests/e2e/local-actions.spec.ts:84:5 › missing local inputs are rejected and ambiguous typed requests remain planner requests (901ms)
+  ✓  12 tests/e2e/planner.spec.ts:11:5 › mocked planner transport: Send → redacted complete plan → real local result → follow-up (1.2s)
+  ✓  13 tests/e2e/planner.spec.ts:22:5 › clarification reply carries the original bounded task into a second model request (1.4s)
+  ✓  14 tests/e2e/planner.spec.ts:39:5 › a new unrelated request cannot complete an old clarification (1.2s)
+  ✓  15 tests/e2e/planner.spec.ts:52:5 › cancel and Start over clear a pending clarification (1.9s)
+  ✓  16 tests/e2e/planner.spec.ts:67:5 › AI-enabled quick PDF action stays local, while a product question uses the planner without changing files (1.1s)
+  ✓  17 tests/e2e/planner.spec.ts:77:5 › direct planner cancellation ignores a late complete plan and keeps local quick actions usable (1.4s)
+  ✓  18 tests/e2e/planner.spec.ts:93:5 › cancelling direct planner setup prevents any later model request (1.2s)
+  ✓  19 tests/e2e/planner.spec.ts:111:7 › direct planner incomplete response never changes a committed result (1.7s)
+  ✓  20 tests/e2e/planner.spec.ts:111:7 › direct planner stale response never changes a committed result (1.9s)
+  ✓  21 tests/e2e/planner.spec.ts:111:7 › direct planner truncated JSON response never changes a committed result (1.2s)
+  ✓  22 tests/e2e/planner.spec.ts:130:5 › direct balanced-compression plan retains its image-quality choice before local execution (1.9s)
+  ✓  23 tests/e2e/planner.spec.ts:138:5 › privacy rejection happens before transport, unknown instruction with no key stays honest (547ms)
+  ✓  24 tests/e2e/planner.spec.ts:145:5 › recognized secret is stopped before ordinary transcript retention (1.4s)
+  ✘  25 tests/e2e/planner.spec.ts:157:5 › secret clarification answer is excluded without consuming the pending task; unrelated text and reset stay safe (22.3s)
+  ✓  26 tests/e2e/planner.spec.ts:191:5 › recognized secret in a mocked provider failure is withheld from chat receipts (2.2s)
+  ✓  27 tests/e2e/planner.spec.ts:203:5 › masked local key setup keeps the key outside chat and model transport (621ms)
+  ✓  28 tests/e2e/planner.spec.ts:210:5 › native pairing code stays in a masked setup control and makes no model request (488ms)
+
+
+  1) tests/e2e/planner.spec.ts:157:5 › secret clarification answer is excluded without consuming the pending task; unrelated text and reset stay safe
+
+    Error: expect(locator).not.toContainText(expected) failed
+
+    Locator: getByTestId('conversation')
+    Expected substring: not "Sensitive value removed"
+    Timeout: 20000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "not toContainText" getByTestId('conversation') with timeout 20000ms
+      - waiting for getByTestId('conversation')
+
+
+      185 |   await send(page,canary);await expect.poll(()=>page.getByText('Keep keys and passwords out of chat.',{exact:false}).count()).toBe(3);expect(sent).toHaveLength(5);
+      186 |   await page.getByRole('button',{name:'Start over'}).click();await page.getByRole('button',{name:'Clear session'}).click();
+    > 187 |   await expect(page.getByTestId('conversation')).not.toContainText('Sensitive value removed');
+          |                                                      ^
+      188 |   await page.getByRole('button',{name:'Try the two sample PDFs'}).click();await expect(page.getByText('Your 2 PDFs are ready.',{exact:false})).toBeVisible();
+      189 |   await send(page,'Page 2');await expect.poll(()=>sent.length).toBe(6);expect(sent[5].pendingClarification).toBeNull();
+      190 | });
+        at /Users/shrey/Documents/ChatGPT/atepdf/.claude/worktrees/workspace-state-persistence-8e257a/tests/e2e/planner.spec.ts:187:54
+
+    Error Context: ../../../../../../../../private/tmp/claude-501/-Users-shrey-Documents-ChatGPT-atepdf--claude-worktrees-workspace-state-persistence-8e257a/7faae2bf-3a50-474e-9a42-ed8e3967d5ad/scratchpad/pw-out/planner-secret-clarificati-b2859-ed-text-and-reset-stay-safe/error-context.md
+
+  1 failed
+    tests/e2e/planner.spec.ts:157:5 › secret clarification answer is excluded without consuming the pending task; unrelated text and reset stay safe
+  27 passed (1.1m)

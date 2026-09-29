@@ -1,0 +1,24 @@
+✔ SHR-39 P1-5 Start over does not claim removal until old PDF copies are verified gone, and retries cleanup (1174.719542ms)
+✔ SHR-39 P1-5 an incomplete cleanup is retried and verified at the next launch (239.051125ms)
+✖ SHR-39 P1-6 a failed blob or manifest listing never reports cleanup as complete (221.109125ms)
+✖ SHR-39 P1-6 an unlink whose directory sync fails keeps cleanup pending until a later sync confirms it (226.683916ms)
+✖ SHR-39 P1-7 a manifest listing failure with a missing head blocks a committed text-only workspace (57.242458ms)
+✖ SHR-39 P1-7 head existence and read failures fail closed instead of looking like a missing head (216.584084ms)
+ℹ tests 6
+ℹ pass 2
+ℹ fail 4
+✖ failing tests:
+✖ SHR-39 P1-6 a failed blob or manifest listing never reports cleanup as complete (221.109125ms)
+  AssertionError [ERR_ASSERTION]: blobs: an unknown listing is not proof of removal
+  + actual - expected
+  + ''
+  - 'This conversation was cleared, but some of atePDF’s earlier PDF copies couldn’t be removed from this Mac yet. They stay encrypted and can’t be opened in atePDF; it will keep trying to remove them.'
+✖ SHR-39 P1-6 an unlink whose directory sync fails keeps cleanup pending until a later sync confirms it (226.683916ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  + ''
+  - 'This conversation was cleared, but some of atePDF’s earlier PDF copies couldn’t be removed from this Mac yet. They stay encrypted and can’t be opened in atePDF; it will keep trying to remove them.'
+✖ SHR-39 P1-7 a manifest listing failure with a missing head blocks a committed text-only workspace (57.242458ms)
+  AssertionError [ERR_ASSERTION]: never inferred empty from a failed listing
+✖ SHR-39 P1-7 head existence and read failures fail closed instead of looking like a missing head (216.584084ms)
+  AssertionError [ERR_ASSERTION]: exists

@@ -1,4 +1,4 @@
-import {useRef} from 'react';
+import {useEffect,useRef} from 'react';
 import {TextInput} from 'react-native';
 import {useAui,useAuiEvent} from '@assistant-ui/react-native';
 import {hasRecognizedSecret,SENSITIVE_DRAFT_MARKER} from '@planner/privacy';
@@ -8,10 +8,15 @@ import {hasRecognizedSecret,SENSITIVE_DRAFT_MARKER} from '@planner/privacy';
  * controlled value corrupted fast input in the real iOS UI regression.
  * No edit/retry/voice prefill is enabled in atepdf's current native interface.
  */
+// Start over removes the unsent draft. The input is uncontrolled, so it is told
+// explicitly rather than mirroring composer state back into it.
+const resets=new Set<()=>void>();
+export function resetComposerInput(){resets.forEach(reset=>reset());}
 function NativeComposerInput(){
   const aui=useAui(),input=useRef<TextInput>(null);
   const initial=useRef(aui.composer.getState().text);
   useAuiEvent('composer.send',()=>{input.current?.clear();});
+  useEffect(()=>{const reset=()=>input.current?.clear();resets.add(reset);return()=>{resets.delete(reset);};},[]);
   return <TextInput ref={input} defaultValue={initial.current}
     onChangeText={text=>{
       if(hasRecognizedSecret(text)){

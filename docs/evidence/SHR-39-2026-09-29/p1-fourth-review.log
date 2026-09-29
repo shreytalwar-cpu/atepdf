@@ -1,0 +1,10 @@
+✔ SHR-39 P1-8 an unconfirmed removal stays pending across later saves until a confirming remove and sync succeed (710.824959ms)
+✔ SHR-39 P1-8 the confirmation requirement survives a relaunch: launch cleanup needs a successful directory sync (251.344125ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1150.634959

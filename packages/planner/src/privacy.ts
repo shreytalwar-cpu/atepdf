@@ -1,8 +1,14 @@
 import type {Artifact} from '@core/local-file-store';
 const escaped = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const recognizedSecret = /sk-[a-z0-9_-]{12,}|\b(?:api[_ -]?key|password|passphrase|passcode|secret|access[_ -]?token)\s*["']?\s*(?:[:=]|is\b)\s*["']?\S+|\bbearer\s+[a-z0-9._-]{12,}/i;
+export const SENSITIVE_DRAFT_MARKER = '[Sensitive value removed]';
+export const SECRET_CHAT_WARNING = 'Keep keys and passwords out of chat. Use a dedicated secure field when requested.';
+export const hasRecognizedSecret = (text: string) => recognizedSecret.test(text);
+export const hasRejectedSecretDraft = (text: string) => text.includes(SENSITIVE_DRAFT_MARKER) || hasRecognizedSecret(text);
+export const safeOrdinaryText = (text: string) => hasRejectedSecretDraft(text) ? 'Sensitive value removed from chat.' : text;
 export function assertInstructionSafe(text: string) {
   if (!text.trim() || text.length > 1000) throw new Error('Keep your instruction under 1,000 characters.');
-  if (/sk-[a-z0-9_-]{12,}|\b(?:api[_ -]?key|password|passphrase|passcode|secret|access[_ -]?token)\s*["']?\s*(?:[:=]|is\b)\s*\S+|\bbearer\s+[a-z0-9._-]{12,}/i.test(text)) throw new Error('Keep keys and passwords out of chat. They stay in secure local controls.');
+  if (hasRejectedSecretDraft(text)) throw new Error(SECRET_CHAT_WARNING);
   if (/(?:[a-z][a-z0-9+.-]*:\/\/|(?:data|file|blob|content|asset|ph):|(?:[a-z]:[\\/])|(?:^|[\s"'([{=:])[~.]?\.?\/\S+|\\\\)/i.test(text)) throw new Error('Use the attached file references instead of URLs or paths.');
   if (/%[a-f0-9]{2}|\\(?:u[a-f0-9]{4}|x[a-f0-9]{2})|[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f\u200b-\u200f\u202a-\u202e\u2060-\u206f]/i.test(text)) throw new Error('Use a plain-text PDF instruction without encoded data or hidden characters.');
   if (/[a-z0-9+/]{80,}={0,2}|[a-f0-9]{64}/i.test(text)) throw new Error('That looks like encoded file data or a checksum. Use a short instruction instead.');

@@ -142,6 +142,64 @@ test('privacy rejection happens before transport, unknown instruction with no ke
   await page.getByRole('button',{name:'OpenAI connection'}).click();await expect(page.getByText('Connect OpenAI for optional AI planning.',{exact:false})).toBeVisible();await expect(page.getByRole('button',{name:'Plan this request'})).toHaveCount(0);expect(posted).toEqual([]);
 });
 
+test('recognized secret is stopped before ordinary transcript retention',async({page})=>{
+  const canary=['password','=','shr71','-synthetic-value'].join('');
+  const posted:string[]=[];
+  page.on('request',request=>{if(request.method()==='POST'&&request.url().includes('/api/planner'))posted.push(request.url());});
+  await ready(page);
+  await page.getByRole('textbox',{name:'Tell atepdf what to do'}).fill(`Use ${canary} to unlock the PDF`);
+  expect((await page.getByRole('textbox',{name:'Tell atepdf what to do'}).inputValue()).includes(canary),'recognized secret retained in draft').toBe(false);
+  await page.getByRole('button',{name:'Send message'}).click();
+  await expect(page.getByText('Keep keys and passwords out of chat.',{exact:false})).toBeVisible();
+  expect((await page.getByTestId('conversation').textContent())?.includes(canary), 'recognized secret retained in transcript').toBe(false);
+  expect(posted).toEqual([]);
+});
+test('secret clarification answer is excluded without consuming the pending task; unrelated text and reset stay safe',async({page})=>{
+  const canary=['api key','=','shr71','-synthetic-value'].join('');
+  const sent:PlannerRequest[]=[];
+  await page.route('**/api/planner',async route=>{
+    const req=route.request().postDataJSON() as PlannerRequest;sent.push(req);
+    const planner=req.pendingClarification?quickPlan(req,'remove',2).planner:req.instruction==='Remove a page from the current result.'?
+      {schemaVersion:'1.0',status:'clarify',reasonCode:'missing_parameter',steps:[],resultRefs:[],clarification:{question:'Which page should I remove?',choices:['Page 1','Page 2']}}:
+      {schemaVersion:'1.0',status:'answer',reasonCode:'product_information',steps:[],resultRefs:[],clarification:{question:'I can help with local PDF work.',choices:[]}};
+    await route.fulfill({json:{schemaVersion:'1.0',requestId:req.requestId,workspaceRevision:req.workspaceRevision,planner}});
+  });
+  await ready(page);
+  await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');
+  await send(page,'Remove a page from the current result.');await expect(page.getByText('Which page should I remove?')).toBeVisible();
+  await page.getByRole('textbox',{name:'Tell atepdf what to do'}).fill(canary);
+  expect((await page.getByRole('textbox',{name:'Tell atepdf what to do'}).inputValue()).includes(canary),'recognized secret retained in clarification draft').toBe(false);
+  await page.getByRole('button',{name:'Send message'}).click();
+  await expect(page.getByText('Keep keys and passwords out of chat.',{exact:false})).toBeVisible();
+  expect(sent).toHaveLength(1);
+  expect((await page.getByTestId('conversation').textContent())?.includes(canary),'recognized secret retained in clarification transcript').toBe(false);
+  await send(page,'Page 2');await expect.poll(()=>sent.length).toBe(2);
+  expect(sent[1].pendingClarification).toMatchObject({originalInstruction:'Remove a page from the current result.',question:'Which page should I remove?'});
+  expect(JSON.stringify(sent).includes(canary),'recognized secret entered planner request or pending context').toBe(false);
+  await expect(page.getByTestId('result-facts')).toContainText('2 pages');
+  await send(page,'Remove a page from the current result.');await expect.poll(()=>sent.length).toBe(3);
+  await send(page,canary);expect(sent).toHaveLength(3);
+  await send(page,'cancel');await expect(page.getByText('Okay. That request is cancelled. Your files are unchanged.')).toBeVisible();expect(sent).toHaveLength(3);
+  await send(page,'Page 2');await expect.poll(()=>sent.length).toBe(4);expect(sent[3].pendingClarification).toBeNull();
+  await send(page,'What can atepdf do?');await expect.poll(()=>sent.length).toBe(5);
+  await send(page,canary);await expect.poll(()=>page.getByText('Keep keys and passwords out of chat.',{exact:false}).count()).toBe(3);expect(sent).toHaveLength(5);
+  await page.getByRole('button',{name:'Start over'}).click();await page.getByRole('button',{name:'Clear session'}).click();
+  await expect(page.getByTestId('conversation')).not.toContainText('Sensitive value removed');
+  await page.getByRole('button',{name:'Try the two sample PDFs'}).click();await expect(page.getByText('Your 2 PDFs are ready.',{exact:false})).toBeVisible();
+  await send(page,'Page 2');await expect.poll(()=>sent.length).toBe(6);expect(sent[5].pendingClarification).toBeNull();
+});
+test('recognized secret in a mocked provider failure is withheld from chat receipts',async({page})=>{
+  const canary=['password','=','shr71','-provider-failure'].join('');let calls=0;
+  await page.route('**/api/planner',async route=>{calls++;await route.fulfill({status:502,json:{error:`Provider failed: ${canary}`}});});
+  await ready(page);await send(page,'Please combine both documents');
+  await expect(page.getByText('Sensitive value removed from chat.')).toBeVisible();
+  expect(calls).toBe(1);
+  expect((await page.getByTestId('conversation').textContent())?.includes(canary),'recognized secret appeared in an error receipt').toBe(false);
+  await page.context().grantPermissions(['clipboard-read','clipboard-write']);
+  await page.getByTestId('assistant-message').last().getByRole('button',{name:'Copy'}).click();
+  expect((await page.evaluate(()=>navigator.clipboard.readText())).includes(canary),'recognized secret appeared in copied chat text').toBe(false);
+});
+
 test('masked local key setup keeps the key outside chat and model transport',async({page})=>{
   const canary='sk-synthetic-local-key-not-a-real-secret',saved:string[]=[],modelPosts:string[]=[];
   await page.route('**/api/planner/status',route=>route.fulfill({json:{...status,connected:false,enabled:false,remaining:0}}));

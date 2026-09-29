@@ -33,6 +33,7 @@ import {
   useAuiState,
 } from "@assistant-ui/react-native";
 import * as Clipboard from "expo-clipboard";
+import {safeOrdinaryText} from '@planner/privacy';
 import ArrowUpIcon from 'lucide-react-native/icons/arrow-up';
 import ArrowDownIcon from 'lucide-react-native/icons/arrow-down';
 import AudioLinesIcon from 'lucide-react-native/icons/audio-lines';
@@ -228,7 +229,7 @@ export const useThreadViewport = (): ThreadViewport => {
 };
 
 const copyToClipboard = async (text: string) => {
-  await Clipboard.setStringAsync(text);
+  await Clipboard.setStringAsync(safeOrdinaryText(text));
 };
 
 export const Thread: FC<ThreadProps> = ({

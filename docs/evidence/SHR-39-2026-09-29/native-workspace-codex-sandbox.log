@@ -33,6 +33,10 @@ ok  an unreadable manifest file throws instead of reading as missing
 ok  an unlink whose directory sync fails is reported as a failed removal
 ok  the unlinked file no longer lists
 ok  removing it again is idempotent and confirms the removal with a successful directory sync
+ok  explicit directory syncs succeed on readable workspace directories
+ok  a directory sync that cannot open the directory throws
+ok  only workspace data directories can be synced by name
+ok  syncing a directory that was never created has nothing to commit
 ok  directory root is 0700
 ok  directory blobs is 0700
 ok  directory manifests is 0700

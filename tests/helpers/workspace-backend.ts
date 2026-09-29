@@ -14,12 +14,17 @@ export type TestKeychain={raw:Uint8Array|null;state:'ok'|'locked'|'unavailable'}
 // unlink; returning 'skip' instead makes the removal report success but leave the file.
 // 'remove-sync': the unlink happened but the directory sync failed. 'list', 'exists'
 // and 'read': the storage query itself fails (for example EIO or EACCES).
-export type FaultStep='stage'|'rename'|'remove'|'remove-sync'|'list'|'exists'|'read';
+// 'dir-sync': an explicit directory sync (syncDirectory) fails.
+export type FaultStep='stage'|'rename'|'remove'|'remove-sync'|'list'|'exists'|'read'|'dir-sync';
 export type Fault=(step:FaultStep,name:string)=>void|'skip';
 export const newKeychain=():TestKeychain=>({raw:null,state:'ok'});
 
+// Every removal and explicit directory sync is logged with whether it fully succeeded,
+// so tests can count the confirming calls rather than only read a final flag.
+export type StorageCall={op:'remove'|'syncDirectory';name:string;ok:boolean};
 export class NodeVaultBackend implements WorkspaceVaultBackend{
   fault:Fault|null=null;
+  calls:StorageCall[]=[];
   constructor(readonly root:string,readonly keychain:TestKeychain){}
   #path(name:string){if(!NAME.test(name))throw new Error('Rejected storage name.');return join(this.root,name);}
   async #key(){
@@ -67,11 +72,25 @@ export class NodeVaultBackend implements WorkspaceVaultBackend{
     return entries.map(name=>`${directory}/${name}`).filter(name=>NAME.test(name));
   }
   async remove(name:string){
-    const target=this.#path(name);if(this.fault?.('remove',name)==='skip')return;
-    await rm(target,{force:true});
-    // Idempotent for an absent file, and only complete once the directory is synced.
-    this.fault?.('remove-sync',name);
-    const directory=await open(dirname(target),'r');try{await directory.sync();}finally{await directory.close();}
+    let ok=false;
+    try{
+      const target=this.#path(name);if(this.fault?.('remove',name)==='skip'){ok=true;return;}
+      await rm(target,{force:true});
+      // Idempotent for an absent file, and only complete once the directory is synced.
+      this.fault?.('remove-sync',name);
+      const directory=await open(dirname(target),'r');try{await directory.sync();}finally{await directory.close();}
+      ok=true;
+    }finally{this.calls.push({op:'remove',name,ok});}
+  }
+  async syncDirectory(directory:'blobs'|'manifests'){
+    let ok=false;
+    try{
+      this.fault?.('dir-sync',directory);
+      let handle;
+      try{handle=await open(join(this.root,directory),'r');}catch(error){if((error as {code?:string}).code==='ENOENT'){ok=true;return;}throw error;}
+      try{await handle.sync();}finally{await handle.close();}
+      ok=true;
+    }finally{this.calls.push({op:'syncDirectory',name:directory,ok});}
   }
   async cleanStaging(){await rm(join(this.root,'staging'),{recursive:true,force:true});}
 }

@@ -251,6 +251,15 @@ public final class AtepdfWorkspaceVault {
     if try directoryMissing(directory) { return }
     try syncDirectory(directory)
   }
+  /// fsync a workspace directory. This durably commits earlier entry changes in it,
+  /// including unlinks by an earlier process whose own sync failed. A directory
+  /// that does not exist has nothing to commit.
+  public func syncWorkspaceDirectory(_ directory: String) throws {
+    guard directory == "blobs" || directory == "manifests" else { throw Failure.name }
+    let path = root.appendingPathComponent(directory)
+    if try directoryMissing(path) { return }
+    try syncDirectory(path)
+  }
   public func cleanStaging() throws {
     let staging = root.appendingPathComponent("staging")
     for name in (try? FileManager.default.contentsOfDirectory(atPath: staging.path)) ?? [] where name.hasSuffix(".tmp") {

@@ -6,8 +6,8 @@ import NativePDF from '../../modules/atepdf-pdf';
 // existing session-only behavior on iPhone, iPad and Android.
 export function createWorkspaceBackend():WorkspaceVaultBackend|null{
   const m=NativePDF;
-  if(m?.workspaceAvailable!==true||!m.workspaceKeyStatusAsync||!m.workspaceExistsAsync||!m.workspaceWriteSealedAsync||!m.workspaceReadOpenedAsync||!m.workspaceListAsync||!m.workspaceRemoveAsync||!m.workspaceCleanStagingAsync)return null;
-  const {workspaceKeyStatusAsync,workspaceExistsAsync,workspaceWriteSealedAsync,workspaceReadOpenedAsync,workspaceListAsync,workspaceRemoveAsync,workspaceCleanStagingAsync}=m;
+  if(m?.workspaceAvailable!==true||!m.workspaceKeyStatusAsync||!m.workspaceExistsAsync||!m.workspaceWriteSealedAsync||!m.workspaceReadOpenedAsync||!m.workspaceListAsync||!m.workspaceRemoveAsync||!m.workspaceSyncDirectoryAsync||!m.workspaceCleanStagingAsync)return null;
+  const {workspaceKeyStatusAsync,workspaceExistsAsync,workspaceWriteSealedAsync,workspaceReadOpenedAsync,workspaceListAsync,workspaceRemoveAsync,workspaceSyncDirectoryAsync,workspaceCleanStagingAsync}=m;
   return {
     keyStatus:create=>workspaceKeyStatusAsync(create),
     exists:name=>workspaceExistsAsync(name),
@@ -20,6 +20,7 @@ export function createWorkspaceBackend():WorkspaceVaultBackend|null{
     },
     list:directory=>workspaceListAsync(directory),
     remove:name=>workspaceRemoveAsync(name),
+    syncDirectory:directory=>workspaceSyncDirectoryAsync(directory),
     cleanStaging:()=>workspaceCleanStagingAsync(),
   };
 }

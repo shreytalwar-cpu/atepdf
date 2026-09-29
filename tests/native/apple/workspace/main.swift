@@ -99,6 +99,16 @@ chmod(qBlobs.path, 0o700)
 try require(!(try queries.exists("blobs/file_q.atw")) && (try queries.list("blobs")).isEmpty, "the unlinked file no longer lists")
 try queries.remove("blobs/file_q.atw")
 print("ok  removing it again is idempotent and confirms the removal with a successful directory sync")
+try queries.syncWorkspaceDirectory("blobs")
+try queries.syncWorkspaceDirectory("manifests")
+print("ok  explicit directory syncs succeed on readable workspace directories")
+chmod(qBlobs.path, 0o300)
+try require(throwsIO { try queries.syncWorkspaceDirectory("blobs") }, "a directory sync that cannot open the directory throws")
+chmod(qBlobs.path, 0o700)
+let fresh = AtepdfWorkspaceVault(root: scratch.appendingPathComponent("fresh-sync", isDirectory: true), keys: MemoryKeys(SymmetricKey(size: .bits256)))
+try fresh.syncWorkspaceDirectory("blobs")
+try require(throwsIO { try fresh.syncWorkspaceDirectory("staging") }, "only workspace data directories can be synced by name")
+print("ok  syncing a directory that was never created has nothing to commit")
 
 // 3. Owner-only permissions and backup exclusion of the whole workspace.
 for directory in ["", "blobs", "manifests", "staging"] {

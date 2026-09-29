@@ -54,5 +54,13 @@
     "binarySha256": "de8402b77753e2af630605875af6303bf51a0a9d63e9385b14ee26074ecd7d8e",
     "sourceNote": "Built from the final Swift sources. A later App.tsx change (session-only Start over resets the view synchronously, as before persistence) was verified by expo export --platform ios and the browser specs, not by rebuilding this app.",
     "runtimeObservation": "Launched the exact staged path: 'can’t save your workspace on this Mac' notice (key unavailable on the ad-hoc build); the new list/exists paths on a never-created workspace directory did not block; quit; no Application Support/atepdf directory written."
+  },
+  "fourthReviewBuild": {
+    "command": "scripts/native/mac-build.sh after adding syncWorkspaceDirectory / workspaceSyncDirectoryAsync (locked pod install rerun in the worktree; tracked Podfile.lock/pbxproj artifacts reverted before commit)",
+    "result": "** BUILD SUCCEEDED **, strict signature verification passed",
+    "stagedApp": "/private/tmp/atepdf-mac-fi8qd0v3/atepdf.app",
+    "binarySha256": "3ea3e6fec389661c5143c86157ba3d5beee37ec9cb02371a5ceaa8b990f53f79",
+    "containsFix": "binary contains the workspaceSyncDirectoryAsync module function",
+    "runtimeObservation": "Launched the exact staged path: 'can’t save your workspace on this Mac' notice (key unavailable on the ad-hoc build); quit; no Application Support/atepdf directory written."
   }
 }

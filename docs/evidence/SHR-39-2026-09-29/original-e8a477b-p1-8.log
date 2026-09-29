@@ -1,0 +1,10 @@
+✖ SHR-39 P1-8 an unconfirmed removal stays pending across later saves until a confirming remove and sync succeed (876.170292ms)
+✖ SHR-39 P1-8 the confirmation requirement survives a relaunch: launch cleanup needs a successful directory sync (234.300459ms)
+ℹ tests 2
+ℹ pass 0
+ℹ fail 2
+✖ failing tests:
+✖ SHR-39 P1-8 an unconfirmed removal stays pending across later saves until a confirming remove and sync succeed (876.170292ms)
+  AssertionError [ERR_ASSERTION]: absent from the listing is not durable confirmation
+✖ SHR-39 P1-8 the confirmation requirement survives a relaunch: launch cleanup needs a successful directory sync (234.300459ms)
+  AssertionError [ERR_ASSERTION]: not complete without durable confirmation

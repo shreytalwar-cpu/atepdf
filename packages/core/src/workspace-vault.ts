@@ -22,6 +22,8 @@ export interface WorkspaceVaultBackend{
   list(directory:'blobs'|'manifests'):Promise<string[]>;
   /** Unlink (idempotent if already absent) and sync the directory. Resolves only when both succeed. */
   remove(name:string):Promise<void>;
+  /** fsync a workspace directory, durably committing earlier entry changes in it (including another process's unlinks). Resolves for a directory that does not exist. */
+  syncDirectory(directory:'blobs'|'manifests'):Promise<void>;
   /** Remove interrupted staging files. They are never referenced by a head. */
   cleanStaging():Promise<void>;
 }
@@ -75,6 +77,10 @@ export class WorkspaceVault{
   #workspaceID='';#generation=0;#previous:number|null=null;#epoch=0;#revision=0;
   #retention:RetentionMode='keep';
   #cleanupPending=false;
+  // Removals that may have happened but are not durably confirmed (the unlink ran,
+  // the directory sync did not succeed). Carried across every later cleanup in this
+  // session until an idempotent remove of that name (unlink + sync) succeeds.
+  #unconfirmed=new Set<string>();
   // Immutable blobs already durable, with the generation that sealed them.
   #blobs=new Map<string,number>();
   #refsByGeneration=new Map<number,Set<string>>();
@@ -131,7 +137,7 @@ export class WorkspaceVault{
         // Genesis only: nothing was ever committed, so any manifest/blob beside it
         // is an interrupted first save and is removed now.
         this.#adopt(head);this.mode='writable';
-        return {kind:'empty',cleanupPending:!await this.#collect(new Set(),new Set())};
+        return {kind:'empty',cleanupPending:!await this.#collect(new Set(),new Set(),true)};
       }
       let restored:{checkpoint:WorkspaceCheckpoint;bytes:Map<string,Uint8Array>},recoveredPrevious=false;
       try{restored=await this.#load(head,head.generation);}
@@ -159,7 +165,7 @@ export class WorkspaceVault{
           if(previous)for(const ref of previous)keepRefs.add(ref);
           else cleanupPending=true; // an unreadable predecessor: leave its blobs alone
         }
-        if(!cleanupPending)cleanupPending=!await this.#collect(keepRefs,keepGenerations);
+        if(!cleanupPending)cleanupPending=!await this.#collect(keepRefs,keepGenerations,true);
         else this.#cleanupPending=true;
       }
       return {kind:'restored',checkpoint,bytes,recoveredPrevious,cleanupPending};
@@ -286,7 +292,9 @@ export class WorkspaceVault{
     if(recovery==='roll-forward'){try{await this.#writeHead(next);return 'published';}catch{return 'uncertain';}}
     let withdrawn=false;
     try{
+      this.#unconfirmed.add(names.manifest(next.generation));
       await this.backend.remove(names.manifest(next.generation));
+      this.#unconfirmed.delete(names.manifest(next.generation));
       // Without a same-epoch predecessor, a head naming a removed manifest restores
       // nothing usable, so removal alone does not re-establish the acknowledged state.
       withdrawn=next.previousGeneration!==null&&!await this.backend.exists(names.manifest(next.generation));
@@ -317,27 +325,41 @@ export class WorkspaceVault{
     await this.#collect(keep,new Set([this.#generation,previous].filter((g):g is number=>g!==null)));
   }
   /**
-   * Remove every manifest and blob not kept, and report true only when removal is
-   * verified: a successful listing of both directories shows no unreferenced file,
-   * and every removal attempted resolved (unlink and directory sync). A failed
-   * listing is an unknown state, never an empty one. A removal whose directory
-   * sync failed stays unconfirmed, even though the file no longer lists, until a
-   * later removal of that name (idempotent) syncs successfully.
+   * Remove every manifest and blob not kept, and report true only with positive,
+   * durable confirmation:
+   * - a successful listing of both directories shows no unreferenced file (a failed
+   *   listing is unknown, never empty);
+   * - every name whose removal is unconfirmed, from this or any earlier cleanup in
+   *   this session, has since had an idempotent remove (unlink + directory sync)
+   *   succeed. Absence from a listing alone never confirms a removal;
+   * - at launch (confirmDirectories), both directories are also synced after the
+   *   clean listing. A previous process may have unlinked a file without a
+   *   successful sync; syncing the directory durably commits that unlink, and an
+   *   unlink lost to a crash reappears in the listing and is removed again. So the
+   *   obligation survives restarts without a separate on-disk record.
    */
-  async #collect(keepRefs:Set<string>,keepGenerations:Set<number>):Promise<boolean>{
-    const unreferenced=async()=>[
-      ...(await this.backend.list('manifests')).filter(name=>!keepGenerations.has(Number(/^manifests\/(\d+)\.atw$/.exec(name)?.[1]))),
-      ...(await this.backend.list('blobs')).filter(name=>{const ref=/^blobs\/(.+)\.atw$/.exec(name)?.[1];return !ref||!keepRefs.has(ref);}),
-    ];
-    const unconfirmed=new Set<string>();
+  async #collect(keepRefs:Set<string>,keepGenerations:Set<number>,confirmDirectories=false):Promise<boolean>{
+    const kept=(name:string)=>{
+      const generation=/^manifests\/(\d+)\.atw$/.exec(name)?.[1],ref=/^blobs\/(.+)\.atw$/.exec(name)?.[1];
+      return generation!==undefined?keepGenerations.has(Number(generation)):ref!==undefined&&keepRefs.has(ref);
+    };
+    const unreferenced=async()=>[...await this.backend.list('manifests'),...await this.backend.list('blobs')].filter(name=>!kept(name));
+    for(const name of [...this.#unconfirmed])if(kept(name))this.#unconfirmed.delete(name);
+    let directoriesConfirmed=!confirmDirectories;
     for(let pass=0;pass<=CLEANUP_ATTEMPTS;pass++){
       let listed:string[];
       try{listed=await unreferenced();}catch{continue;}
-      const targets=new Set([...listed,...unconfirmed]);
-      if(!targets.size){this.#cleanupPending=false;return true;}
+      const targets=new Set([...listed,...this.#unconfirmed]);
+      if(!targets.size){
+        if(!directoriesConfirmed){
+          try{await this.backend.syncDirectory('manifests');await this.backend.syncDirectory('blobs');directoriesConfirmed=true;}
+          catch{continue;}
+        }
+        this.#cleanupPending=false;return true;
+      }
       if(pass===CLEANUP_ATTEMPTS)break;
       for(const name of targets){
-        try{await this.backend.remove(name);unconfirmed.delete(name);}catch{unconfirmed.add(name);}
+        try{await this.backend.remove(name);this.#unconfirmed.delete(name);}catch{this.#unconfirmed.add(name);}
       }
     }
     this.#cleanupPending=true;return false;

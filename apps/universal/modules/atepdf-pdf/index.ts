@@ -14,6 +14,7 @@ export type NativePDFModule={
   workspaceReadOpenedAsync?(name:string,associatedData:string):Promise<{status:'ok'|'missing'|'auth'|'locked';base64?:string}>;
   workspaceListAsync?(directory:'blobs'|'manifests'):Promise<string[]>;
   workspaceRemoveAsync?(name:string):Promise<void>;
+  workspaceSyncDirectoryAsync?(directory:'blobs'|'manifests'):Promise<void>;
   workspaceCleanStagingAsync?():Promise<void>;
   inspectAsync(uri:string):Promise<Inspection>;
   renderPageAsync(uri:string,page:number,maxDimension:number):Promise<{uri:string;width:number;height:number}>;

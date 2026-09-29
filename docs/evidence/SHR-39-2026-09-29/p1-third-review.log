@@ -1,7 +1,7 @@
-✔ SHR-39 P1-6 a failed blob or manifest listing never reports cleanup as complete (855.71425ms)
-✔ SHR-39 P1-6 an unlink whose directory sync fails keeps cleanup pending until a later sync confirms it (218.837708ms)
-✔ SHR-39 P1-7 a manifest listing failure with a missing head blocks a committed text-only workspace (36.02225ms)
-✔ SHR-39 P1-7 head existence and read failures fail closed instead of looking like a missing head (421.828ms)
+✔ SHR-39 P1-6 a failed blob or manifest listing never reports cleanup as complete (869.487834ms)
+✔ SHR-39 P1-6 an unlink whose directory sync fails keeps cleanup pending until a later sync confirms it (250.896959ms)
+✔ SHR-39 P1-7 a manifest listing failure with a missing head blocks a committed text-only workspace (42.707833ms)
+✔ SHR-39 P1-7 head existence and read failures fail closed instead of looking like a missing head (429.926208ms)
 ℹ tests 4
 ℹ suites 0
 ℹ pass 4
@@ -9,4 +9,4 @@
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 1677.886333
+ℹ duration_ms 1727.888042

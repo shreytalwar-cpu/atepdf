@@ -664,3 +664,47 @@ test('SHR-39 P1-7 head existence and read failures fail closed instead of lookin
     }finally{await rm(root,{recursive:true,force:true});}
   }
 });
+
+// ---- Fourth review P1 regression (PR #81) ----------------------------------
+const confirmations=(backend:NodeVaultBackend,from=0)=>backend.calls.slice(from).filter(call=>call.ok);
+
+test('SHR-39 P1-8 an unconfirmed removal stays pending across later saves until a confirming remove and sync succeed',async()=>{
+  const {CLEANUP_INCOMPLETE}=await cleanupConstants();
+  const root=await scratch(),keychain=newKeychain();
+  try{
+    const app=await populated(root,keychain);const oldBlobs=(await app.backend.list('blobs')).sort();
+    const syncFails:Fault=(step,name)=>{if(step==='remove-sync'&&name.startsWith('blobs/'))throw new Error('synthetic directory fsync failure');};
+    // 1-2. Unlink succeeds, directory sync fails: pending, and the files no longer list.
+    app.backend.fault=syncFails;await app.controller.clear();
+    assert.equal(app.controller.state.message,CLEANUP_INCOMPLETE);assert.equal(cleanupState(app.vault),true);
+    assert.deepEqual(await app.backend.list('blobs'),[]);
+    app.chat.conversation=[];app.chat.draft=null;
+    // A later save while the sync still fails: absence from the listing is not confirmation.
+    await app.say({role:'user',text:'still failing'});
+    assert.equal(cleanupState(app.vault),true,'absent from the listing is not durable confirmation');
+    // 3. A later save once syncing works: each unconfirmed blob gets a confirming remove + sync first.
+    app.backend.fault=null;const mark=app.backend.calls.length;
+    await app.say({role:'user',text:'sync works again'});
+    const confirmed=confirmations(app.backend,mark).filter(call=>call.op==='remove'&&call.name.startsWith('blobs/')).map(call=>call.name).sort();
+    assert.deepEqual(confirmed,oldBlobs,'a successful confirming remove (unlink + directory sync) for every unconfirmed blob');
+    assert.equal(cleanupState(app.vault),false);
+  }finally{await rm(root,{recursive:true,force:true});}
+});
+
+test('SHR-39 P1-8 the confirmation requirement survives a relaunch: launch cleanup needs a successful directory sync',async()=>{
+  const root=await scratch(),keychain=newKeychain();
+  try{
+    const app=await populated(root,keychain);
+    app.backend.fault=(step,name)=>{if(step==='remove-sync'&&name.startsWith('blobs/'))throw new Error('synthetic directory fsync failure');};
+    await app.controller.clear();assert.equal(cleanupState(app.vault),true);assert.deepEqual(await app.backend.list('blobs'),[]);
+    // 4. Relaunch while directory syncs still fail: the blobs do not list, yet cleanup stays pending.
+    const failing=await launch(root,keychain,(step,name)=>{if((step==='dir-sync'||step==='remove-sync')&&(name==='blobs'||name.startsWith('blobs/')))throw new Error('synthetic directory fsync failure');});
+    assert.equal(failing.outcome.kind,'restored');assert.equal((failing.outcome as {cleanupPending?:boolean}).cleanupPending,true,'not complete without durable confirmation');
+    assert.ok(failing.backend.calls.some(call=>call.op==='syncDirectory'&&call.name==='blobs'&&!call.ok),'launch attempted the confirming sync');
+    // 5. Relaunch with syncing working: confirming syncs of both directories succeed before cleanup is complete.
+    const next=await launch(root,keychain);
+    const syncs=confirmations(next.backend).filter(call=>call.op==='syncDirectory').map(call=>call.name).sort();
+    assert.deepEqual(syncs,['blobs','manifests'],'one successful confirming sync per directory');
+    assert.equal((next.outcome as {cleanupPending?:boolean}).cleanupPending,false);assert.equal(cleanupState(next.vault),false);
+  }finally{await rm(root,{recursive:true,force:true});}
+});

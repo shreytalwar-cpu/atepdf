@@ -93,6 +93,9 @@ public final class AtepdfPdfModule: Module {
     AsyncFunction("workspaceRemoveAsync") { (name: String) in
       try self.requireWorkspace().remove(name)
     }.runOnQueue(workspaceQueue)
+    AsyncFunction("workspaceSyncDirectoryAsync") { (directory: String) in
+      try self.requireWorkspace().syncWorkspaceDirectory(directory)
+    }.runOnQueue(workspaceQueue)
     AsyncFunction("workspaceCleanStagingAsync") {
       try self.requireWorkspace().cleanStaging()
     }.runOnQueue(workspaceQueue)

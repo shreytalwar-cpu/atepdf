@@ -26,8 +26,9 @@ import {nativeComposerComponents} from './src/platform/ComposerInput';
 import {JobActivity} from './src/components/JobActivity';
 import {useAnnounce,useMotion} from './src/components/assistant-ui/elements/surfaces';
 import {privateInstruction} from '@planner/privacy';
+import {isClarificationAnswer,pendingFromResponse,withPendingClarification} from '@planner/clarification';
 import {plannerStatus,requestPlan,savePlannerKey,createNativePairing,pairNativePlanner,disconnectNativePlanner,plannerAvailable,type PlannerStatus} from './src/platform/planner';
-import {validateEnvelope,type Request as PlannerRequest,type Envelope, type Step} from '@contracts/protocol';
+import {validateEnvelope,type PendingClarification,type Request as PlannerRequest,type Envelope, type Step} from '@contracts/protocol';
 
 const formatSize = (n: number) => n < 1_000_000 ? `${(n / 1000).toFixed(1)} kB` : `${(n / 1_000_000).toFixed(2)} MB`;
 const pageCount = (count: number) => `${count} ${count === 1 ? 'page' : 'pages'}`;
@@ -62,6 +63,8 @@ function useWorkspace() {
   const nextId = useRef(0), operation = useRef(false);
   const [planning,setPlanning]=useState(false),[connection,setConnection]=useState<PlannerStatus|null>(null);
   const plannerAbort=useRef<AbortController|null>(null);
+  const pendingClarification=useRef<PendingClarification|null>(null);
+  const clearPending=()=>{pendingClarification.current=null;};
   const busy = state.busy || loading || planning;
   const currentEntry = entries.findLast(e => e.artifact), current = currentEntry?.id;
   const focus = store.focus ? store.list.find(f => f.ref === store.focus) : null;
@@ -69,6 +72,7 @@ function useWorkspace() {
   const say = (text: string) => append({role: 'assistant', text});
   const showHelp = () => {
     if (busy) return;
+    clearPending();
     setChoice(null);
     append({role:'user',text:'What can I do with my PDFs?'});
     say(localCapabilityHelp);
@@ -86,7 +90,7 @@ function useWorkspace() {
   };
   const importFiles = async (files: File[]) => {
     if (!files.length || operation.current) return;
-    operation.current = true; setChoice(null);
+    operation.current = true; setChoice(null);clearPending();
     append({role: 'user', text: `I’ve added ${files.length === 1 ? 'a PDF' : `${files.length} PDFs`}.`, files: files.map(f => ({name: f.name, size: f.size}))});
     try {
       await controller.import(files);
@@ -117,6 +121,7 @@ function useWorkspace() {
   };
   const action = (type: Action, text: string, page = 2) => {
     if (busy || operation.current) return;
+    clearPending();
     setChoice(null); append({role: 'user', text});
     // Explicit actions already specify the operation. Compile locally through
     // controller.quick; AI availability and connection checks are irrelevant.
@@ -133,12 +138,19 @@ function useWorkspace() {
   };
   const undo = () => {
     if (busy) return;
+    clearPending();
     setChoice(null); append({role: 'user', text: 'Undo the last change.'});
     undoLocal();
   };
   const submit = (draft: string) => {
     if (busy || operation.current || !draft.trim()) return;
     const text = draft.trim(), command = text.replace(/[.!]$/, '').toLowerCase();
+    const pending=pendingClarification.current;
+    if(pending){
+      clearPending();
+      if(/^(?:cancel|never mind|stop)(?:[.!])?$/i.test(text)){setChoice(null);append({role:'user',text});say('Okay. That request is cancelled. Your files are unchanged.');return;}
+      if(isClarificationAnswer(text,pending)){setChoice(null);append({role:'user',text});void preparePlanning(text,undefined,pending);return;}
+    }
     const remove = command.match(/^remove (?:physical )?page (\d+)(?: from (?:the )?(?:merged )?result)?$/);
     if(plannerAvailable){
       const fallback=remove?{type:'remove' as const,page:Number(remove[1])}:['merge', 'merge pdfs', 'merge these pdfs'].includes(command)?{type:'merge' as const,page:2}:['make searchable','ocr'].includes(command)?{type:'ocr' as const,page:2}:command==='compress'?{type:'compress' as const,page:2}:command==='merge, ocr, compress'?{type:'chain' as const,page:2}:command==='undo'?{type:'undo' as const,page:2}:undefined;
@@ -167,14 +179,16 @@ function useWorkspace() {
     if(!status.connected){const id=append({role:'assistant',text:'Connect OpenAI for optional AI planning. Enter your key in the secure field below. It is saved only by atepdf’s local server and never added to the conversation. Saving makes no OpenAI calls.',choice:'connect',token:status.token});setChoice(id);return;}
     const id=append({role:'assistant',text:status.enabled?`AI planning is ready for up to ${status.remaining} approved requests. Tell me what you’d like to do.`:'Your key is saved locally. Paid planning is paused until you approve a request limit in the local setup. Quick actions work now.',choice:'native-link',token:status.token});setChoice(id);
   };
-  const preparePlanning=async(text:string,fallback?:{type:Action|'undo';page:number})=>{
+  const preparePlanning=async(text:string,fallback?:{type:Action|'undo';page:number},continuation?:PendingClarification)=>{
     if(operation.current)return;
     operation.current=true;setLoading(true);
     const abort=new AbortController();plannerAbort.current=abort;
     try{
       // One submission owns setup, planning and local execution. Only the
       // positive metadata projection crosses the planner boundary.
-      const instruction=privateInstruction(text,store.list),request=controller.request(instruction);
+      const instruction=privateInstruction(text,store.list);
+      const currentRequest=controller.request(instruction);
+      const request=continuation?withPendingClarification(currentRequest,continuation):currentRequest;
       const status=await checkConnection(abort.signal,true);
       abort.signal.throwIfAborted();
       if(!status?.enabled){
@@ -196,7 +210,10 @@ function useWorkspace() {
       if(store.revision!==request.workspaceRevision)throw new Error('Your files changed. Please ask again.');
       // requestPlan validates clarification shape and response binding too.
       if(result.planner.status==='undo'){undoLocal();return;}
-      if(result.planner.status!=='plan'){say(result.planner.clarification!.question);return;}
+      if(result.planner.status!=='plan'){
+        if(result.planner.status==='clarify')pendingClarification.current=pendingFromResponse(request,result.planner);
+        say(result.planner.clarification!.question);return;
+      }
       const envelope=validateEnvelope(result,request,store.revision);
       setPlanning(false);
       // Retain a choice only when the requested operation can change image
@@ -217,7 +234,7 @@ function useWorkspace() {
     try{await controller.execute(entry.envelope,entry.request);finish(previous,'Your new copy is ready. I checked it with an independent PDF reader.',plannedResultTitle(entry.envelope.planner.steps));}
     catch(e){say(e instanceof Error?e.message:'The plan could not be applied.');}finally{operation.current=false;}
   };
-  const cancel=()=>{plannerAbort.current?.abort();controller.cancel();};
+  const cancel=()=>{clearPending();plannerAbort.current?.abort();controller.cancel();};
   const confirm = (entry: Entry) => {
     if (busy || choice !== entry.id) return;
     setChoice(null);
@@ -225,7 +242,7 @@ function useWorkspace() {
     if(entry.choice==='connect'||entry.choice==='native-link'||entry.choice==='native-pair'||entry.choice==='connection-help')return;
     if(entry.choice==='execute'){void executePlanned(entry);return;}
     if (entry.choice === 'clear') {
-      controller.clear(); setPreview(null); setReceipts({}); setEntries([]);
+      clearPending();controller.clear(); setPreview(null); setReceipts({}); setEntries([]);
     } else if (entry.choice) { append({role: 'user', text: 'Yes, create an optimised copy.'}); void execute(entry.choice); }
   };
   const exportResult = async (artifact: Artifact) => {
@@ -236,7 +253,7 @@ function useWorkspace() {
     finally { setSaving(null); }
   };
   return {controller, state, store, entries, busy, loading, current, currentTitle:currentEntry?.resultTitle, focus, preview, setPreview, privacy, setPrivacy,
-    choice, setChoice, saving, receipts, append, say, showHelp, importFiles, pick, action, undo, submit, confirm, exportResult, planning, connection, connect, refreshConnection, cancel};
+    choice, setChoice, saving, receipts, append, say, showHelp, importFiles, pick, action, undo, submit, confirm, exportResult, planning, connection, connect, refreshConnection, cancel, clearPending};
 }
 
 const WorkspaceContext=createContext<ReturnType<typeof useWorkspace>|null>(null);
@@ -265,7 +282,7 @@ function Screen(){
           <View className="flex-row items-center gap-1">
             <Pressable accessibilityRole="button" accessibilityLabel="Processed on your device" onPress={()=>workspace.setPrivacy(true)} className="atepdf-button min-h-11 min-w-11 flex-row items-center justify-center gap-2 rounded-full bg-[#edf9f4] px-3"><LockKeyhole size={15} color="#26715c"/>{width>=430&&<Text className="text-xs text-[#26715c]">Processed on your device</Text>}</Pressable>
             {plannerAvailable&&<Pressable accessibilityRole="button" accessibilityLabel={Platform.OS==='web'?'OpenAI connection':'AI connection'} accessibilityHint="Manage optional AI planning" disabled={busy} onPress={()=>void workspace.connect()} className={`atepdf-button size-11 items-center justify-center rounded-full ${busy?'opacity-40':''}`}><SlidersHorizontal size={19} color="#5d6980"/></Pressable>}
-            {!!entries.length&&<Pressable accessibilityRole="button" accessibilityLabel="Start over" disabled={busy} onPress={()=>{workspace.append({role:'user',text:'Start over.'});const id=workspace.append({role:'assistant',text:'Save any results you want to keep first. Shall I clear this conversation and its local files? Your originals on your device will stay unchanged.',choice:'clear',revision:workspace.store.revision});workspace.setChoice(id);}} className={`atepdf-button size-11 items-center justify-center rounded-full ${busy?'opacity-40':''}`}><SquarePen size={19} color="#5d6980"/></Pressable>}
+            {!!entries.length&&<Pressable accessibilityRole="button" accessibilityLabel="Start over" disabled={busy} onPress={()=>{workspace.clearPending();workspace.append({role:'user',text:'Start over.'});const id=workspace.append({role:'assistant',text:'Save any results you want to keep first. Shall I clear this conversation and its local files? Your originals on your device will stay unchanged.',choice:'clear',revision:workspace.store.revision});workspace.setChoice(id);}} className={`atepdf-button size-11 items-center justify-center rounded-full ${busy?'opacity-40':''}`}><SquarePen size={19} color="#5d6980"/></Pressable>}
           </View>
         </View>
         {!nativeEngineReady&&<Text className="mx-5 text-xs text-muted-foreground">Native development preview · local PDF processing is not connected yet.</Text>}

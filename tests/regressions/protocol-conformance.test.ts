@@ -8,11 +8,14 @@ import {LocalFileStore} from '../../packages/core/src/local-file-store';
 const files=[{ref:'file_a',kind:'pdf' as const,pageCount:3,sizeBytes:3000,encrypted:false as const},{ref:'file_b',kind:'pdf' as const,pageCount:2,sizeBytes:2000,encrypted:false as const}];
 const request=()=>buildRequest({revision:2,files,selected:files.map(f=>f.ref),focus:null,originals:files.map(f=>f.ref)},'Combine the two PDFs.');
 const envelope=(req:Request,planner:unknown)=>({schemaVersion:'1.0',requestId:req.requestId,workspaceRevision:req.workspaceRevision,planner});
+// Retained seed rows predate the optional clarification state. Exercise their
+// original plan assertions against a complete current request contract.
+const retainedRequest=(row:{request:Request})=>({...row.request,pendingClarification:null});
 
 test('protocol corpus: all 21 retained adversarial plans fail before execution',async()=>{
   const rows=(await readFile('packages/contracts/corpus/invalid_plan_cases.jsonl','utf8')).trim().split('\n').map(line=>JSON.parse(line));
   assert.equal(rows.length,21);
-  for(const row of rows)assert.throws(()=>validateEnvelope(envelope(row.request,row.response),row.request,row.request.workspaceRevision),undefined,row.id);
+  for(const row of rows){const req=retainedRequest(row);assert.throws(()=>validateEnvelope(envelope(req,row.response),req,req.workspaceRevision),undefined,row.id);}
 });
 
 test('protocol seed corpus: 25 supported golden plans preserve exact order, negation and operation sequence',async()=>{
@@ -21,9 +24,9 @@ test('protocol seed corpus: 25 supported golden plans preserve exact order, nega
   const rows=(await readFile('packages/contracts/corpus/planner_seed_cases.jsonl','utf8')).trim().split('\n').map(line=>JSON.parse(line));
   assert.equal(rows.length,118);
   const checked=rows.filter(row=>supported.has(row.id));assert.equal(checked.length,25);
-  for(const row of checked){const accepted=validateEnvelope(envelope(row.request,row.expected),row.request,row.request.workspaceRevision);assert.deepEqual(accepted.planner,row.expected,row.id);}
+  for(const row of checked){const req=retainedRequest(row);const accepted=validateEnvelope(envelope(req,row.expected),req,req.workspaceRevision);assert.deepEqual(accepted.planner,row.expected,row.id);}
   for(const id of ['SEED-002','SEED-003','SEED-018','SEED-051','SEED-073','SEED-074','SEED-117']){
-    const row=rows.find(item=>item.id===id);assert.throws(()=>validateEnvelope(envelope(row.request,row.expected),row.request,row.request.workspaceRevision),undefined,id);
+    const row=rows.find(item=>item.id===id);const req=retainedRequest(row);assert.throws(()=>validateEnvelope(envelope(req,row.expected),req,req.workspaceRevision),undefined,id);
   }
 });
 

@@ -6,7 +6,8 @@ export type Step = { id: string; operation: Operation; inputs: string[]; outputR
 export type Plan = { schemaVersion: '1.0'; status: 'plan'; reasonCode: null; steps: Step[]; resultRefs: string[]; clarification: null };
 export type Envelope = { schemaVersion: '1.0'; requestId: string; workspaceRevision: number; planner: Plan };
 export type ManifestFile = {ref:string; kind:'pdf'; pageCount:number; sizeBytes:number; encrypted:false};
-export type Request = {schemaVersion:'1.0'; requestId:string; workspaceRevision:number; locale:string; instruction:string; files:ManifestFile[]; selectionRefs:string[]; focusedResultRef:string|null; originalRefs:string[]; previousActionIds:Operation[]; capabilities:Operation[]; previousPlan:null; ocrLanguages:string[]};
+export type PendingClarification = {originalRequestId:string;workspaceRevision:number;originalInstruction:string;question:string;choices:string[];answers:{question:string;answer:string}[];selectionRefs:string[];focusedResultRef:string|null;originalRefs:string[]};
+export type Request = {schemaVersion:'1.0'; requestId:string; workspaceRevision:number; locale:string; instruction:string; files:ManifestFile[]; selectionRefs:string[]; focusedResultRef:string|null; originalRefs:string[]; pendingClarification:PendingClarification|null; previousActionIds:Operation[]; capabilities:Operation[]; previousPlan:null; ocrLanguages:string[]};
 export const capabilities: Operation[] = ['merge_pdf','select_pages','ocr_pdf','compress_pdf'];
 export function validateLocalContext(request: Request): void {
   if (!requestValid(request)) throw new Error('Invalid instruction or local manifest.');
@@ -15,6 +16,8 @@ export function validateLocalContext(request: Request): void {
   if (refs.size !== request.files.length) throw new Error('Duplicate file reference.');
   if (request.files.some(file => file.kind !== 'pdf' || file.encrypted || !Number.isSafeInteger(file.pageCount) || file.pageCount < 1 || file.pageCount > 100)) throw new Error('Unsupported local file.');
   if ([...request.selectionRefs, ...request.originalRefs, ...(request.focusedResultRef ? [request.focusedResultRef] : [])].some(ref => !refs.has(ref))) throw new Error('Unknown file reference.');
+  const pending=request.pendingClarification;
+  if(pending&&(pending.originalRequestId===request.requestId||pending.workspaceRevision!==request.workspaceRevision||pending.focusedResultRef!==request.focusedResultRef||JSON.stringify(pending.selectionRefs)!==JSON.stringify(request.selectionRefs)||JSON.stringify(pending.originalRefs)!==JSON.stringify(request.originalRefs)))throw new Error('Clarification is stale. Please ask again.');
 }
 export function buildRequest(context: {revision:number; files:ManifestFile[]; selected:string[]; focus:string|null; originals:string[]}, instruction:string): Request {
   // Positive projection: never spread a local file model into a network DTO.
@@ -23,7 +26,7 @@ export function buildRequest(context: {revision:number; files:ManifestFile[]; se
     workspaceRevision:context.revision, locale:'en-IN', instruction,
     files:context.files.map(f=>({ref:f.ref,kind:'pdf',pageCount:f.pageCount,sizeBytes:f.sizeBytes,encrypted:false})),
     selectionRefs:[...context.selected],focusedResultRef:context.focus,originalRefs:[...context.originals],
-    previousActionIds:[],capabilities:[...capabilities],previousPlan:null,ocrLanguages:['eng'],
+    pendingClarification:null,previousActionIds:[],capabilities:[...capabilities],previousPlan:null,ocrLanguages:['eng'],
   };
   validateLocalContext(request);
   return request;

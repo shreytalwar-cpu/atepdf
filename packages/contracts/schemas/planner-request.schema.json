@@ -105,6 +105,102 @@
       "maxItems": 100,
       "uniqueItems": true
     },
+    "pendingClarification": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "originalRequestId": {
+              "type": "string",
+              "pattern": "^req_[a-f0-9]{32}$"
+            },
+            "workspaceRevision": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "originalInstruction": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            },
+            "question": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600
+            },
+            "choices": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "maxItems": 6
+            },
+            "answers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "question": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 600
+                  },
+                  "answer": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1000
+                  }
+                },
+                "required": ["question", "answer"],
+                "additionalProperties": false
+              },
+              "maxItems": 3
+            },
+            "selectionRefs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^(file|out)_[A-Za-z0-9_]{1,64}$"
+              },
+              "maxItems": 100,
+              "uniqueItems": true
+            },
+            "focusedResultRef": {
+              "anyOf": [
+                {"type": "string", "pattern": "^(file|out)_[A-Za-z0-9_]{1,64}$"},
+                {"type": "null"}
+              ]
+            },
+            "originalRefs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^(file|out)_[A-Za-z0-9_]{1,64}$"
+              },
+              "maxItems": 100,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "originalRequestId",
+            "workspaceRevision",
+            "originalInstruction",
+            "question",
+            "choices",
+            "answers",
+            "selectionRefs",
+            "focusedResultRef",
+            "originalRefs"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
     "previousActionIds": {
       "type": "array",
       "items": {
@@ -1302,6 +1398,7 @@
     "selectionRefs",
     "focusedResultRef",
     "originalRefs",
+    "pendingClarification",
     "previousActionIds",
     "capabilities",
     "previousPlan",

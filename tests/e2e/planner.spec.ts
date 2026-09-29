@@ -19,6 +19,51 @@ test('mocked planner transport: Send → redacted complete plan → real local r
   await expect(page.getByText('Your key is saved locally. Paid planning is paused',{exact:false})).toBeVisible();
   await page.getByRole('textbox',{name:'Tell atepdf what to do'}).fill('remove page 2');await page.getByRole('textbox',{name:'Tell atepdf what to do'}).press('Enter');await expect(page.getByTestId('result-facts')).toContainText('2 pages');expect(sent).toHaveLength(1);expect(errors).toEqual([]);
 });
+test('clarification reply carries the original bounded task into a second model request',async({page})=>{
+  const sent:PlannerRequest[]=[];
+  await page.route('**/api/planner',async route=>{
+    const req=route.request().postDataJSON() as PlannerRequest;sent.push(req);
+    if(!('pendingClarification' in req)||!req.pendingClarification){
+      await route.fulfill({json:{schemaVersion:'1.0',requestId:req.requestId,workspaceRevision:req.workspaceRevision,planner:{schemaVersion:'1.0',status:'clarify',reasonCode:'missing_parameter',steps:[],resultRefs:[],clarification:{question:'Which page should I remove?',choices:['Page 1','Page 2']}}}});return;
+    }
+    await route.fulfill({json:quickPlan(req,'remove',2)});
+  });
+  await ready(page);
+  await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');
+  await send(page,'Remove a page from the current result.');await expect(page.getByText('Which page should I remove?')).toBeVisible();
+  await send(page,'Page 2');await expect.poll(()=>sent.length).toBe(2);
+  expect(sent[1].pendingClarification).toMatchObject({originalInstruction:'Remove a page from the current result.',question:'Which page should I remove?',choices:['Page 1','Page 2'],workspaceRevision:sent[0].workspaceRevision});
+  await expect(page.getByTestId('result-facts')).toContainText('2 pages');
+  expect(JSON.stringify(sent)).not.toMatch(/brief\.pdf|appendix\.pdf|checksum|inspection|password/);
+});
+test('a new unrelated request cannot complete an old clarification',async({page})=>{
+  const sent:PlannerRequest[]=[];
+  await page.route('**/api/planner',async route=>{
+    const req=route.request().postDataJSON() as PlannerRequest;sent.push(req);
+    await route.fulfill({json:{schemaVersion:'1.0',requestId:req.requestId,workspaceRevision:req.workspaceRevision,planner:req.instruction==='Remove a page from the current result.'?{schemaVersion:'1.0',status:'clarify',reasonCode:'missing_parameter',steps:[],resultRefs:[],clarification:{question:'Which page should I remove?',choices:['Page 1','Page 2']}}:{schemaVersion:'1.0',status:'answer',reasonCode:'product_information',steps:[],resultRefs:[],clarification:{question:'I can work with your PDFs on this device.',choices:[]}}}});
+  });
+  await ready(page);await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');
+  await send(page,'Remove a page from the current result.');await expect(page.getByText('Which page should I remove?')).toBeVisible();
+  await send(page,'What can atepdf do?');await expect(page.getByText('I can work with your PDFs on this device.')).toBeVisible();
+  await send(page,'Page 2');await expect.poll(()=>sent.length).toBe(3);
+  expect(sent.map(req=>req.pendingClarification)).toEqual([null,null,null]);
+  await expect(page.getByTestId('result-facts')).toContainText('3 pages');
+});
+test('cancel and Start over clear a pending clarification',async({page})=>{
+  const sent:PlannerRequest[]=[];
+  await page.route('**/api/planner',async route=>{
+    const req=route.request().postDataJSON() as PlannerRequest;sent.push(req);
+    await route.fulfill({json:{schemaVersion:'1.0',requestId:req.requestId,workspaceRevision:req.workspaceRevision,planner:{schemaVersion:'1.0',status:'clarify',reasonCode:'missing_parameter',steps:[],resultRefs:[],clarification:{question:'Which page should I remove?',choices:['Page 1','Page 2']}}}});
+  });
+  await ready(page);await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');
+  await send(page,'Remove a page from the current result.');await expect(page.getByText('Which page should I remove?')).toBeVisible();
+  await send(page,'cancel');await expect(page.getByText('Okay. That request is cancelled. Your files are unchanged.')).toBeVisible();
+  await send(page,'Page 2');await expect.poll(()=>sent.length).toBe(2);expect(sent[1].pendingClarification).toBeNull();
+  await page.getByRole('button',{name:'Start over'}).click();await page.getByRole('button',{name:'Clear session'}).click();
+  await expect(page.getByTestId('current-result')).toHaveCount(0);
+  await page.getByRole('button',{name:'Try the two sample PDFs'}).click();await expect(page.getByText('Your 2 PDFs are ready.',{exact:false})).toBeVisible();
+  await send(page,'Page 2');await expect.poll(()=>sent.length).toBe(3);expect(sent[2].pendingClarification).toBeNull();
+});
 test('AI-enabled quick PDF action stays local, while a product question uses the planner without changing files',async({page})=>{
   const sent:PlannerRequest[]=[];
   await page.route('**/api/planner',async route=>{

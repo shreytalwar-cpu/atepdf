@@ -2,15 +2,20 @@
 
 > **Owner freeze, 29 September 2026:** exploratory development and the earlier build/polish goal are paused. This document preserves the retained task mapping and historical evidence. Its later “next task” and “plan remains active” wording is historical and does not authorize execution. Current truth, recommendations and unresolved decisions are consolidated in [PROTOTYPE_V0_AUDIT.md](PROTOTYPE_V0_AUDIT.md) and [DECISIONS.md](DECISIONS.md). No application/test changes are authorized by the audit.
 
+> **Latest owner direction — v1 specification adoption:** [PRODUCT_V1.md](PRODUCT_V1.md) is the approved target; this task changes documentation only. Mac-first launch/acceptance, both Mac channels and intentional AI orchestration supersede older priority/routing instructions below. The preceding uncommitted local-bypass implementation and its tests are preserved as current source, **not v1 conformance**. No code reversion or defect fix occurs here. Historical Mac deferrals and “next task” instructions are evidence of earlier scope, not present product priorities. Existing F/M/G mappings remain; no Linear issues or new roadmap are created.
+
+
 This updates the retained integration tasks; it is not a second roadmap. Original technical/lifecycle/commercial tasks remain in the unmodified v7 pack. The M0/F01–F03 fresh-start interpretation controls. Owner approved React Native/Expo with assistant-ui and all workflows/results inside chat (ADRs 0001–0003), then deferred Android to focus on iOS/iPadOS, Mac and web (ADR 0005).
 
 Owner update (ADRs 0007–0009): when AI is enabled in the browser or a paired Apple development app, typed PDF requests ask GPT-6 Luna to select a local PDF tool. Basic product questions use a separate chat-reply tool. Model tools are proposals only; completed responses pass contract and current-workspace validation before local execution. No 2,000-output-token application cap is sent. The saved request allowance remains bounded and separate. Native pairing includes an explicit private TLS beta companion (ADR 0009). Physical-device acceptance and production authentication remain open. Quick-action buttons compile locally regardless of AI connection state; see the scoped checkpoint below.
 
 ## 29 September scoped quick-action correction
 
+**Historical checkpoint; product objective now superseded by v1 D-04/CONV-01.** The following records work actually performed before specification adoption. Its source/evidence remain; do not infer authority to repeat or extend AI bypass, or claim the current code matches v1 routing.
+
 Owner authority lifted the freeze only for this change, its regressions, local verification and documentation; all other development remains frozen. Under existing F03/F04/F05/F06/F07/F09 mappings, explicit Merge, Make searchable and Compress buttons now use `controller.quick()` without connection checks or planner transport. The existing local compiler and JobController retain full validation, quality confirmation, staged commit, cancellation, originals and Undo. Typed requests keep their previous planner/fallback behavior; no shortcuts or guessed parameters were added.
 
-The pre-fix regression observed one planning call for healthy Merge and an extra call after each mocked 401/429/503 failure. Current-source baseline: 72 core and 18 affected Chrome workflows passed. Final results and source/build identities are recorded in [scoped evidence](evidence/local-actions-2026-09-29/README.md). This closes only the quick-action routing defect, not other audit findings or native-device acceptance. No commit, publication or deployment was authorized or performed.
+The pre-fix regression observed one planning call for healthy Merge and an extra call after each mocked 401/429/503 failure. Current-source baseline: 72 core and 18 affected Chrome workflows passed. Final results and source/build identities are recorded in [scoped evidence](evidence/local-actions-2026-09-29/README.md). Under that earlier task it addressed the requested routing behavior; the latest owner specification treats enabled-AI routing as intentional. These tests do not close a v1 routing or recovery acceptance gate, other audit findings or native-device acceptance. No commit, publication or deployment was authorized or performed.
 
 ## Retained task mapping
 

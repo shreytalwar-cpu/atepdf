@@ -2,6 +2,10 @@
 
 Frozen source: `prototype-v0`, 29 September 2026. **No test, build or application was run during this audit, and no test was added.** Existing test definitions and selected historical result files were read. Counts below are not fresh passes.
 
+## Approved target and current evidence
+
+[PRODUCT_V1.md Section 16](PRODUCT_V1.md#16-verification-and-release-gates) governs v1 release acceptance, with Mac as launch/acceptance platform. The historical baseline and proposed tests below are not a new implementation instruction or a passed v1 gate. The later [quick-action checkpoint](IMPLEMENTATION_STATUS.md#29-september-scoped-quick-action-correction) tested the prior bypass task; its objective is now superseded by D-04/CONV-01, while source and evidence remain unchanged. No application test or build was run in this documentation-adoption task.
+
 ## Existing layers
 
 | Layer | What exists | Historical proof and limits |

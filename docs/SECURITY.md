@@ -2,6 +2,10 @@
 
 Canonical internal security record at `prototype-v0`, 29 September 2026. No penetration test, vulnerability-feed query, secret-history scan, runtime exploit or production assurance was performed. Full source citations and conditions are in [the security audit](audit/SECURITY_PRIVACY_AI_COMMERCE_AUDIT.md).
 
+## Approved target authority
+
+[PRODUCT_V1.md](PRODUCT_V1.md), especially Sections 9–11 and 14–16, defines target privacy/secret, persistence, production-service and Mac release requirements. Findings below remain findings; adopting those requirements does not fix them or certify compliance. Current restrictions remain until separately authorized changes implement and verify the required boundaries.
+
 ## Implemented controls
 
 - Independent new development identities; local-only browser hosts; no inherited production/customer integration found in reviewed application source. Private configuration and environment contents were deliberately not inspected.

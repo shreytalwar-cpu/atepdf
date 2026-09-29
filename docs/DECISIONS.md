@@ -1,12 +1,16 @@
 # Decisions and precedence
 
-Canonical index at the 29 September 2026 freeze. No new product choices are made here.
+Updated 29 September 2026 for adoption of the owner-supplied [PRODUCT_V1.md](PRODUCT_V1.md). This is an authority/reconciliation index, not another specification or implementation authorization.
 
-1. The latest explicit owner instruction controls. The 29 September scoped exception permits only making existing explicit local PDF quick actions independent of AI, its regressions, required local verification and concise documentation. All unrelated development and the earlier build/polish goal remain frozen. See [the scoped checkpoint](IMPLEMENTATION_STATUS.md#29-september-scoped-quick-action-correction).
-2. This is a fresh independent atepdf repository. Old Attenlo remains read-only reference, never a dependency or write target. No production identity/entitlement/customer migration is inherited.
-3. The original v7 handoff remains unchanged. Its precedence/design/privacy/commercial rules apply except where later owner-approved decisions supersede them.
-4. Existing [ADRs](adr/) record the stack and workflow decisions below. Historical status reports retain their own date/source scope; a later pass does not validate an earlier or different binary automatically.
-5. [PROTOTYPE_V0_AUDIT.md](PROTOTYPE_V0_AUDIT.md) is the current factual audit index. [IMPLEMENTATION_STATUS.md](IMPLEMENTATION_STATUS.md) remains the retained M/F/G task mapping, with its execution instructions paused.
+1. Latest explicit owner instructions control. The current task is documentation/context adoption only; the earlier quick-action bypass direction is superseded as product direction. No runtime reversion, new implementation or general audit is authorized.
+2. For product intent, `PRODUCT_V1.md` is authoritative, followed by compatible architecture decisions, implementation guidance and historical handoffs. Its requirements describe the approved destination, not completed work. Applicable security/tool-use restrictions remain binding.
+3. [AUDIT_PROTOTYPE_V0.md](AUDIT_PROTOTYPE_V0.md) and [PROTOTYPE_V0_AUDIT.md](PROTOTYPE_V0_AUDIT.md) remain unchanged evidence of their audited snapshot. [PRODUCT.md](PRODUCT.md) records implementation truth; [IMPLEMENTATION_STATUS.md](IMPLEMENTATION_STATUS.md) records subsequent evidence and retains M/F/G mappings. Neither overrides the approved target.
+4. Existing [ADRs](adr/) and the original v7 handoff retain provenance. Incompatible product decisions are superseded as mapped below; their original wording is not fresh authority. Do not delete historical audits, evidence or handoffs.
+5. Runtime-facing `AI_PRODUCT_KNOWLEDGE.md`, generated knowledge and tool descriptions must describe tested current capabilities, not the target. Specification IDs are requirement references, not invented Linear tickets.
+
+Fresh independent atepdf repository; Attenlo remains read-only reference. No production identity/customer migration is inherited. Preserve the existing foundation, brand and layout; Mac-first is not permission for a rewrite. All implementation, external issues, spending and release require a separately bounded task.
+
+## ADR status by subject
 
 | ADR | Recorded decision | Consequence |
 |---|---|---|
@@ -14,14 +18,29 @@ Canonical index at the 29 September 2026 freeze. No new product choices are made
 | 0002 | Conversational workflow | Instructions, choices, progress, results, preview/save/undo stay in chat |
 | 0003 | Official assistant-ui across active platforms | Supersedes “no assistant-ui initially”; no assistant-ui cloud/file uploader |
 | 0004 | Remove arbitrary PDF byte caps | No 20 MB upload limit; resource/feature bounds remain |
-| 0005 | Prioritize Apple and web | Android deferred, source preserved |
-| 0006 | Seamless AI submission | Ordinary Send needs no repeated planning-warning card; explicit quick actions now compile locally under the scoped owner exception; meaningful quality choices remain |
-| 0007 | GPT-6 Luna and complete tool selection | Remove app's 2,000-output-token cap; local PDF/undo/chat-reply tools; bounded request allowance still applies |
+| 0005 | Prioritize Apple and web | Launch priority superseded by D-01/D-02: Mac first, both channels; preserve web/iPhone/iPad, Android deferred |
+| 0006 | Seamless AI submission | Historical routine command consent; v1 PRIV-02–07 require disclosure and separate operation-specific content-transfer permission; quality choices remain |
+| 0007 | GPT-6 Luna and complete tool selection | Intentional enabled-AI orchestration reaffirmed by D-04; specific production model/provider remains OPEN-09; development allowance is not v1 commercial quota |
 | 0008 | Development native pairing | One-use expiring pairing and memory-only bearer; not production account auth |
 | 0009 | Explicit private TLS beta companion | Pinned local-network native transport; not a hosted production backend |
 
-The owner selected everyday users doing occasional PDF tasks. Approved brand is lowercase atepdf and the rounded gradient 8, name/logo only from the brand board. Local PDF processing, immutable originals, independent validation, no partial plan execution and no cloud processing fallback remain binding.
+## Superseded direction and current-source gaps
 
-## Open decision register
+| Earlier direction or unresolved statement | Approved target / disposition |
+|---|---|
+| Web/iPhone/iPad/Mac co-priority or browser-first acceptance | D-01/D-02 and MAC-01: Mac launches through both Mac App Store and direct distribution; other app launches cannot delay it. Preserve existing implementations; Android deferred. |
+| Handoff deterministic quick-action bypass; latest local-bypass task | D-04 and CONV-01: enabled-AI quick-action orchestration is intentional. Do not independently bypass it. The previous task was implemented as uncommitted work and remains in the working tree; its objective is now superseded, not its historical evidence erased. Restoring routing requires a separate code task. |
+| Treat enabled-provider failure as proof AI routing itself is defective | Routing and outage/recovery are separate. CONV-07/08 and OPEN-09 govern later decisions; no automatic fallback or quota policy is chosen here. |
+| Optional developer-owned key/pairing as consumer product model | D-03/ARCH-03 require atePDF-supplied AI; existing key/gateway/pairing are prototype mechanisms, not production services. |
+| Permanent blanket no-content-transfer product policy / routine Send consent as sufficient | PRIV-01–11 retain local-first defaults, no silent fallback and a strict operation-specific informed permission boundary for future content/derived-content transfers. Passwords never enter model context. Current exclusions remain; consent language alone authorizes no cloud-processing service or transmission. |
+| Recovery, local understanding, 13 tools and conversational continuity undecided | D-10–12, Sections 6–11: approved requirements; current memory-only state, limited tools and context gaps remain implementation deficits. Protect/Unlock require secure local secret controls. |
+| Old pricing/free-tier hypotheses, registration allowance, AI-only paid boundary or unlimited manual tools | D-07–09/BILL-01–10: limited guest experience, no registration top-up, paid monthly/annual Pro; exhaustion blocks new work but preserves access/export/recovery/deletion/privacy/subscription controls. Exact prices/allowances remain unapproved. Old numeric hypotheses are not defaults. |
+| Subscription vs one-time model and AI cost ownership unresolved | Monthly/annual Pro and company-supplied AI are settled; lifetime/credit packs are excluded. Payment/account/channel implementations remain open. |
+| Editing as an optional v1 expansion | D-17/Section 4.2: existing-text edits, added text, drawing, signatures, form filling, redaction and annotation creation are v2. Preserving existing structures is a distinct compatibility requirement. |
+| Existing touch/mobile acceptance as launch evidence | Sections 13/16 require actual Mac acceptance. Historical browser/simulator/helper results retain their limits; no newly passed gate is claimed. |
 
-No owner decision currently settles production auth/key custody, session persistence/recovery, broad PDF feature support, browser/OS support floors, offline install behavior, final native distribution/signing, accessibility acceptance, analytics, seller/purchases/pricing or public deployment. Recommendations in the audit are proposals requiring prioritization, not implicit approval.
+## Remaining decisions and reconciliation limits
+
+[Section 19](PRODUCT_V1.md#19-open-decisions-and-bounded-investigations), OPEN-01–10, is the single open-decision register: minimum Mac/hardware, allowance/accounting, prices/Pro limits, payment/seller/account/channel design, persistence/retention, local-understanding method, OCR/formats/encryption/compatibility, consent UX, production provider/infrastructure/outage policy, updater/territory/privacy/analytics/support details. Do not choose defaults to close a document.
+
+Known source/target mismatch: explicit buttons currently bypass AI because of the preserved prior uncommitted change; the supplied specification describes that task as withdrawn. Adoption records its supersession but does not pretend the code was reverted. Other implementation gaps remain as documented. Historical handoffs, ADRs and audit findings intentionally retain old wording; this register and `PRODUCT_V1.md` settle their product authority. Existing runtime knowledge remains unchanged, not promoted to v1 claims. No application behavior, test, audit finding or acceptance status changes in this adoption task.

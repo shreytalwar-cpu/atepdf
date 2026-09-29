@@ -25,7 +25,7 @@ import DropSurface from './src/platform/DropSurface';
 import {nativeComposerComponents} from './src/platform/ComposerInput';
 import {JobActivity} from './src/components/JobActivity';
 import {useAnnounce,useMotion} from './src/components/assistant-ui/elements/surfaces';
-import {privateInstruction} from '@planner/privacy';
+import {privateInstruction,hasRejectedSecretDraft,safeOrdinaryText,SECRET_CHAT_WARNING} from '@planner/privacy';
 import {isClarificationAnswer,pendingFromResponse,withPendingClarification} from '@planner/clarification';
 import {plannerStatus,requestPlan,savePlannerKey,createNativePairing,pairNativePlanner,disconnectNativePlanner,plannerAvailable,type PlannerStatus} from './src/platform/planner';
 import {validateEnvelope,type PendingClarification,type Request as PlannerRequest,type Envelope, type Step} from '@contracts/protocol';
@@ -44,13 +44,15 @@ function plannedResultTitle(steps: Step[]) {
   return localResultTitle(last?.operation === 'merge_pdf' ? 'merge' : last?.operation === 'ocr_pdf' ? 'ocr' : 'compress');
 }
 type Action = 'merge' | 'ocr' | 'remove' | 'compress' | 'chain';
-type Entry = {id: number; role: 'user' | 'assistant'; text: string; files?: {name: string; size: number}[]; artifact?: Artifact; resultTitle?: string; choice?: 'compress' | 'chain' | 'clear' | 'execute' | 'connect' | 'native-link' | 'native-pair' | 'connection-help'; revision?: number; request?:PlannerRequest; envelope?:Envelope; token?:string};
+const visibleConnection=(status:PlannerStatus)=>{const {token:_,...visible}=status;return visible;};
+type DisplayArtifact=Pick<Artifact,'ref'|'pageCount'|'sizeBytes'|'note'>;
+type Entry = {id: number; role: 'user' | 'assistant'; text: string; files?: {name: string; size: number}[]; artifact?: DisplayArtifact; resultTitle?: string; choice?: 'compress' | 'chain' | 'clear' | 'execute' | 'connect' | 'native-link' | 'native-pair' | 'connection-help'; revision?: number; request?:PlannerRequest; envelope?:Envelope};
 function Button({children, onPress, disabled=false, primary=false, quiet=false, icon: Glyph, label}: {children?: React.ReactNode; onPress:()=>void; disabled?:boolean; primary?:boolean; quiet?:boolean; icon?:LucideIcon; label?:string}) {
   return <Pressable accessibilityRole="button" accessibilityLabel={label ?? (typeof children === 'string' ? children : undefined)} disabled={disabled} aria-disabled={disabled} onPress={onPress} className={`atepdf-button min-h-11 flex-row items-center justify-center gap-2 rounded-xl px-3 py-2 active:opacity-70 web:focus-visible:outline-2 web:focus-visible:outline-primary ${primary ? 'atepdf-button-primary bg-primary' : quiet ? 'bg-transparent' : 'border border-border bg-background'} ${disabled ? 'opacity-40' : ''}`}>
     {Glyph && <Icon as={Glyph} className={`size-4 ${primary ? 'text-primary-foreground' : 'text-foreground'}`}/>}<Text className={`text-sm font-medium ${primary ? 'text-primary-foreground' : 'text-foreground'}`}>{children}</Text>
   </Pressable>;
 }
-function InlinePreview({store, artifact, onClose}: {store:LocalFileStore; artifact:Artifact; onClose:()=>void}) {
+function InlinePreview({store, artifact, onClose}: {store:LocalFileStore; artifact:DisplayArtifact; onClose:()=>void}) {
   const bytes=useMemo(()=>store.get(artifact.ref).bytes,[store,artifact.ref]);
   return <Preview bytes={bytes} count={artifact.pageCount} onClose={onClose}/>;
 }
@@ -61,14 +63,15 @@ function useWorkspace() {
   const [preview, setPreview] = useState<number | null>(null), [privacy, setPrivacy] = useState(false), [choice, setChoice] = useState<number | null>(null);
   const [saving, setSaving] = useState<string | null>(null), [receipts, setReceipts] = useState<Record<string, string>>({});
   const nextId = useRef(0), operation = useRef(false);
-  const [planning,setPlanning]=useState(false),[connection,setConnection]=useState<PlannerStatus|null>(null);
+  const [planning,setPlanning]=useState(false),[connection,setConnection]=useState<Omit<PlannerStatus,'token'>|null>(null);
   const plannerAbort=useRef<AbortController|null>(null);
+  const connectionToken=useRef<string|null>(null);
   const pendingClarification=useRef<PendingClarification|null>(null);
   const clearPending=()=>{pendingClarification.current=null;};
   const busy = state.busy || loading || planning;
   const currentEntry = entries.findLast(e => e.artifact), current = currentEntry?.id;
   const focus = store.focus ? store.list.find(f => f.ref === store.focus) : null;
-  const append = (entry: Omit<Entry, 'id'>) => { const id = ++nextId.current; setEntries(previous => [...previous, {...entry, id}]); return id; };
+  const append = (entry: Omit<Entry, 'id'>) => { const id = ++nextId.current; const artifact=entry.artifact?{ref:entry.artifact.ref,pageCount:entry.artifact.pageCount,sizeBytes:entry.artifact.sizeBytes,note:safeOrdinaryText(entry.artifact.note)}:undefined; setEntries(previous => [...previous, {...entry, text:safeOrdinaryText(entry.text), files:entry.files?.map(file=>({...file,name:safeOrdinaryText(file.name)})), artifact, id}]); return id; };
   const say = (text: string) => append({role: 'assistant', text});
   const showHelp = () => {
     if (busy) return;
@@ -144,7 +147,10 @@ function useWorkspace() {
   };
   const submit = (draft: string) => {
     if (busy || operation.current || !draft.trim()) return;
-    const text = draft.trim(), command = text.replace(/[.!]$/, '').toLowerCase();
+    const text = draft.trim();
+    // Reject before either a transcript append or clarification binding.
+    if (hasRejectedSecretDraft(text)) { say(SECRET_CHAT_WARNING); return; }
+    const command = text.replace(/[.!]$/, '').toLowerCase();
     const pending=pendingClarification.current;
     if(pending){
       clearPending();
@@ -166,18 +172,19 @@ function useWorkspace() {
   };
   const checkConnection=async(signal?:AbortSignal,quiet=false)=>{
     if(!plannerAvailable){if(!quiet)say('AI connection is not available on this device yet. Local quick actions still work.');return null;}
-    try{const status=await plannerStatus(signal);signal?.throwIfAborted();setConnection(status);return status;}
+    try{const status=await plannerStatus(signal);signal?.throwIfAborted();setConnection(visibleConnection(status));return status;}
     catch(error){if(signal?.aborted)throw error;if(!quiet)say('The local planner gateway is unavailable. You can still use the quick actions.');return null;}
   };
   const refreshConnection=async()=>{
-    try{setConnection(await plannerStatus());}
+    try{setConnection(visibleConnection(await plannerStatus()));}
     catch{setConnection(previous=>previous?{...previous,enabled:false}:null);}
   };
   const connect=async()=>{
     const status=await checkConnection();if(!status)return;
+    connectionToken.current=status.token;
     if(Platform.OS!=='web'){const id=append({role:'assistant',text:status.pairingRequired?'Create a pairing code in atepdf on your Mac, then paste it below. On iPhone or iPad, keep both devices on the same Wi-Fi and use the private beta connection.':'This app is paired with the planner on your Mac.',choice:'native-pair'});setChoice(id);return;}
-    if(!status.connected){const id=append({role:'assistant',text:'Connect OpenAI for optional AI planning. Enter your key in the secure field below. It is saved only by atepdf’s local server and never added to the conversation. Saving makes no OpenAI calls.',choice:'connect',token:status.token});setChoice(id);return;}
-    const id=append({role:'assistant',text:status.enabled?`AI planning is ready for up to ${status.remaining} approved requests. Tell me what you’d like to do.`:'Your key is saved locally. Paid planning is paused until you approve a request limit in the local setup. Quick actions work now.',choice:'native-link',token:status.token});setChoice(id);
+    if(!status.connected){const id=append({role:'assistant',text:'Connect OpenAI for optional AI planning. Enter your key in the secure field below. It is saved only by atepdf’s local server and never added to the conversation. Saving makes no OpenAI calls.',choice:'connect'});setChoice(id);return;}
+    const id=append({role:'assistant',text:status.enabled?`AI planning is ready for up to ${status.remaining} approved requests. Tell me what you’d like to do.`:'Your key is saved locally. Paid planning is paused until you approve a request limit in the local setup. Quick actions work now.',choice:'native-link'});setChoice(id);
   };
   const preparePlanning=async(text:string,fallback?:{type:Action|'undo';page:number},continuation?:PendingClarification)=>{
     if(operation.current)return;
@@ -242,18 +249,18 @@ function useWorkspace() {
     if(entry.choice==='connect'||entry.choice==='native-link'||entry.choice==='native-pair'||entry.choice==='connection-help')return;
     if(entry.choice==='execute'){void executePlanned(entry);return;}
     if (entry.choice === 'clear') {
-      clearPending();controller.clear(); setPreview(null); setReceipts({}); setEntries([]);
+      clearPending();connectionToken.current=null;controller.clear(); setPreview(null); setReceipts({}); setEntries([]);
     } else if (entry.choice) { append({role: 'user', text: 'Yes, create an optimised copy.'}); void execute(entry.choice); }
   };
-  const exportResult = async (artifact: Artifact) => {
+  const exportResult = async (artifact: DisplayArtifact) => {
     if (saving) return;
     setSaving(artifact.ref);
     try { const outcome = await save(store.get(artifact.ref).bytes); setReceipts(previous => ({...previous, [artifact.ref]: outcome === 'shared' ? 'Share sheet closed · check the destination you chose' : outcome === 'saved' ? 'Saved to your device' : outcome === 'cancelled' ? 'Ready · save cancelled' : 'Download started · check your downloads'})); }
-    catch (e) { setReceipts(previous => ({...previous, [artifact.ref]: e instanceof Error ? e.message : 'Saving failed. Try again.'})); }
+    catch (e) { setReceipts(previous => ({...previous, [artifact.ref]: safeOrdinaryText(e instanceof Error ? e.message : 'Saving failed. Try again.')})); }
     finally { setSaving(null); }
   };
   return {controller, state, store, entries, busy, loading, current, currentTitle:currentEntry?.resultTitle, focus, preview, setPreview, privacy, setPrivacy,
-    choice, setChoice, saving, receipts, append, say, showHelp, importFiles, pick, action, undo, submit, confirm, exportResult, planning, connection, connect, refreshConnection, cancel, clearPending};
+    choice, setChoice, saving, receipts, append, say, showHelp, importFiles, pick, action, undo, submit, confirm, exportResult, planning, connection, connectionToken, connect, refreshConnection, cancel, clearPending};
 }
 
 const WorkspaceContext=createContext<ReturnType<typeof useWorkspace>|null>(null);
@@ -353,8 +360,8 @@ function MessageExtras(){
       {entry.id===w.current&&<Text className="border-t border-border pt-3 text-sm text-muted-foreground">Tell me what you’d like to do next.</Text>}
     </View>}
     {entry.choice&&['clear','compress','chain','execute'].includes(entry.choice)&&w.choice===entry.id&&<View className="flex-row flex-wrap gap-2"><Button primary disabled={w.busy} onPress={()=>w.confirm(entry)}>{entry.choice==='clear'?'Clear session':'Create optimised copy'}</Button><Button disabled={w.busy} onPress={()=>{w.setChoice(null);w.append({role:'user',text:'Keep things as they are.'});w.say('Okay. Your current files and result are unchanged.');}}>Keep working</Button></View>}
-    {entry.choice==='connect'&&w.choice===entry.id&&<KeyEntry token={entry.token!}/>}
-    {entry.choice==='native-link'&&w.choice===entry.id&&<BrowserPairing token={entry.token!}/>}
+    {entry.choice==='connect'&&w.choice===entry.id&&w.connectionToken.current&&<KeyEntry token={w.connectionToken.current}/>}
+    {entry.choice==='native-link'&&w.choice===entry.id&&w.connectionToken.current&&<BrowserPairing token={w.connectionToken.current}/>}
     {entry.choice==='native-pair'&&w.choice===entry.id&&<NativePairing/>}
     {plannerAvailable&&entry.choice==='connection-help'&&w.choice===entry.id&&<View className="items-start"><Button icon={SlidersHorizontal} disabled={w.busy} onPress={()=>void w.connect()}>AI connection</Button></View>}
     {entry.choice&&entry.choice!=='connection-help'&&w.choice!==entry.id&&<Text className="text-xs text-muted-foreground">This question is closed.</Text>}

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {mkdtemp,mkdir,writeFile,chmod,symlink,readFile,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
-import {privateInstruction,assertInstructionSafe} from '../../packages/planner/src/privacy';
+import {privateInstruction,assertInstructionSafe,hasRecognizedSecret,hasRejectedSecretDraft,safeOrdinaryText,SENSITIVE_DRAFT_MARKER} from '../../packages/planner/src/privacy';
 import {createGateway,validateRequest} from '../../packages/planner/src/gateway';
 import {LocalConfig} from '../../packages/planner/src/local-config';
 import {planWithOpenAI,MODEL} from '../../packages/planner/src/provider';
@@ -11,6 +11,7 @@ import {PRODUCT_KNOWLEDGE} from '../../packages/planner/src/generated/product-kn
 import {requestPlan} from '../../packages/planner/src/client';
 import {buildRequest,quickPlan} from '../../packages/contracts/src/protocol';
 import {isClarificationAnswer,pendingFromResponse,withPendingClarification} from '../../packages/planner/src/clarification';
+import {validateNonPlanResponse} from '../../packages/planner/src/reply';
 import type {Artifact} from '../../packages/core/src/local-file-store';
 const files=[{ref:'file_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',kind:'pdf' as const,pageCount:2,sizeBytes:3000,encrypted:false as const},{ref:'file_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',kind:'pdf' as const,pageCount:1,sizeBytes:2000,encrypted:false as const}];
 const request=()=>buildRequest({revision:2,files,selected:files.map(f=>f.ref),focus:null,originals:files.map(f=>f.ref)},'Combine the two PDFs in the order added.');
@@ -29,6 +30,21 @@ test('planner privacy: exact filename aliasing, local snippet/path/password/byte
   assert.throws(()=>privateInstruction('merge Customer [A]+.pdf',[artifact,{...artifact,ref:files[1].ref}]));
   const projected=validateRequest(request());assert.equal(Object.hasOwn(projected.files[0],'name'),false);assert.throws(()=>validateRequest({...projected,files:[{...files[0],name:'secret.pdf'}]}));
   assert.throws(()=>assertInstructionSafe('x'.repeat(1001)));
+});
+test('recognized secret guard excludes synthetic values while preserving ordinary instructions',()=>{
+  const password=['password','=','shr71','-synthetic-value'].join('');
+  const key=['sk-','shr71','syntheticlongvalue'].join('');
+  for(const value of [password,key]){
+    assert.equal(hasRecognizedSecret(value),true);
+    assert.equal(hasRejectedSecretDraft(value),true);
+    assert.equal(safeOrdinaryText(`Save failed: ${value}`),'Sensitive value removed from chat.');
+    assert.throws(()=>assertInstructionSafe(value));
+  }
+  assert.equal(hasRejectedSecretDraft(SENSITIVE_DRAFT_MARKER),true);
+  assert.equal(hasRecognizedSecret('Please explain password protection before I decide.'),false);
+  assert.equal(safeOrdinaryText('Please explain password protection before I decide.'),'Please explain password protection before I decide.');
+  assert.throws(()=>validateNonPlanResponse(clarify(`Which page? ${password}`)),/Unsafe chat response/);
+  assert.throws(()=>validateNonPlanResponse(clarify('Which page?',[key])),/Unsafe chat response/);
 });
 test('bounded clarification preserves original task, refs and answers through the existing provider and plan validator',async()=>{
   const context={revision:2,files,selected:files.map(f=>f.ref),focus:files[0].ref,originals:files.map(f=>f.ref)};

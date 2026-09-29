@@ -98,11 +98,24 @@ actor AtepdfPlannerTransport {
   }
   static func admittedBody(_ body: String) throws -> Data {
     let data = Data(body.utf8)
-    let keys: Set<String> = ["schemaVersion","requestId","workspaceRevision","locale","instruction","files","selectionRefs","focusedResultRef","originalRefs","previousActionIds","capabilities","previousPlan","ocrLanguages"]
+    let keys: Set<String> = ["schemaVersion","requestId","workspaceRevision","locale","instruction","files","selectionRefs","focusedResultRef","originalRefs","pendingClarification","previousActionIds","capabilities","previousPlan","ocrLanguages"]
     let fileKeys: Set<String> = ["ref","kind","pageCount","sizeBytes","encrypted"]
     guard data.count <= 24_000, let object = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
           Set(object.keys) == keys, let instruction = object["instruction"] as? String, !instruction.isEmpty, instruction.count <= 1000,
           let files = object["files"] as? [[String: Any]], files.count <= 40, files.allSatisfy({ Set($0.keys) == fileKeys }) else { throw Failure.request }
+    if !(object["pendingClarification"] is NSNull) {
+      let pendingKeys: Set<String> = ["originalRequestId","workspaceRevision","originalInstruction","question","choices","answers","selectionRefs","focusedResultRef","originalRefs"]
+      guard let pending = object["pendingClarification"] as? [String: Any], Set(pending.keys) == pendingKeys,
+            let original = pending["originalInstruction"] as? String, !original.isEmpty, original.count <= 1000,
+            let question = pending["question"] as? String, !question.isEmpty, question.count <= 600,
+            let choices = pending["choices"] as? [String], choices.count <= 6, choices.allSatisfy({ !$0.isEmpty && $0.count <= 100 }),
+            let answers = pending["answers"] as? [[String: Any]], answers.count <= 3,
+            answers.allSatisfy({ answer in
+              guard Set(answer.keys) == ["question","answer"], let question = answer["question"] as? String,
+                    let text = answer["answer"] as? String else { return false }
+              return !question.isEmpty && question.count <= 600 && !text.isEmpty && text.count <= 1000
+            }) else { throw Failure.request }
+    }
     return data
   }
   func pair(id: String, code: String) async throws {

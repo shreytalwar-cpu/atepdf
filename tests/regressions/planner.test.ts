@@ -10,9 +10,11 @@ import {planWithOpenAI,MODEL} from '../../packages/planner/src/provider';
 import {PRODUCT_KNOWLEDGE} from '../../packages/planner/src/generated/product-knowledge';
 import {requestPlan} from '../../packages/planner/src/client';
 import {buildRequest,quickPlan} from '../../packages/contracts/src/protocol';
+import {isClarificationAnswer,pendingFromResponse,withPendingClarification} from '../../packages/planner/src/clarification';
 import type {Artifact} from '../../packages/core/src/local-file-store';
 const files=[{ref:'file_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',kind:'pdf' as const,pageCount:2,sizeBytes:3000,encrypted:false as const},{ref:'file_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',kind:'pdf' as const,pageCount:1,sizeBytes:2000,encrypted:false as const}];
 const request=()=>buildRequest({revision:2,files,selected:files.map(f=>f.ref),focus:null,originals:files.map(f=>f.ref)},'Combine the two PDFs in the order added.');
+const clarify=(question:string,choices:string[]=[])=>( {schemaVersion:'1.0' as const,status:'clarify' as const,reasonCode:'ambiguous_reference' as const,steps:[],resultRefs:[],clarification:{question,choices}} );
 test('AI product knowledge is embedded from the maintained document, not a separate stale facts list',async()=>{
   assert.equal(PRODUCT_KNOWLEDGE,(await readFile('docs/AI_PRODUCT_KNOWLEDGE.md','utf8')).trim());
   assert.match(PRODUCT_KNOWLEDGE,/Android development is deferred/);
@@ -27,6 +29,55 @@ test('planner privacy: exact filename aliasing, local snippet/path/password/byte
   assert.throws(()=>privateInstruction('merge Customer [A]+.pdf',[artifact,{...artifact,ref:files[1].ref}]));
   const projected=validateRequest(request());assert.equal(Object.hasOwn(projected.files[0],'name'),false);assert.throws(()=>validateRequest({...projected,files:[{...files[0],name:'secret.pdf'}]}));
   assert.throws(()=>assertInstructionSafe('x'.repeat(1001)));
+});
+test('bounded clarification preserves original task, refs and answers through the existing provider and plan validator',async()=>{
+  const context={revision:2,files,selected:files.map(f=>f.ref),focus:files[0].ref,originals:files.map(f=>f.ref)};
+  const first=buildRequest(context,'Remove a page from the current result.');
+  const pending=pendingFromResponse(first,clarify('Which page should I remove?',['Page 1','Page 2']));
+  assert.equal(isClarificationAnswer('Page 2',pending),true);
+  assert.equal(isClarificationAnswer('Merge both PDFs',pending),false);
+  const second=withPendingClarification(buildRequest(context,'Page 2'),pending);
+  let seen=0;const {post}=await setup(async projected=>{
+    seen++;assert.equal(projected.instruction,'Page 2');assert.deepEqual(projected.pendingClarification,pending);
+    assert.equal(Object.hasOwn(projected.pendingClarification!,'files'),false);
+    return quickPlan(projected,'remove',2).planner;
+  });
+  const response=await post(second);assert.equal(response.status,200);assert.equal((await response.json()).planner.steps[0].operation,'select_pages');assert.equal(seen,1);
+  const thirdPending=pendingFromResponse(second,clarify('Which of the two pages?',['Page 1','Page 2']));
+  assert.deepEqual(thirdPending.answers,[{question:'Which page should I remove?',answer:'Page 2'}]);
+  assert.equal(thirdPending.originalInstruction,first.instruction);
+});
+test('mocked AI SDK receives only bounded pending context for a continuation',async()=>{
+  const context={revision:2,files,selected:files.map(f=>f.ref),focus:files[0].ref,originals:files.map(f=>f.ref)};
+  const first=buildRequest(context,'Remove a page from the current result.');
+  const req=withPendingClarification(buildRequest(context,'Page 2'),pendingFromResponse(first,clarify('Which page?',['Page 1','Page 2'])));
+  let calls=0;
+  const fetcher:typeof fetch=async(_url,init)=>{
+    calls++;const body=JSON.parse(String(init!.body));
+    const userPrompt=JSON.stringify(body.input.find((item:{role:string})=>item.role==='user'));
+    assert.match(userPrompt,/pendingClarification/);
+    assert.match(userPrompt,/Remove a page from the current result/);
+    assert.doesNotMatch(userPrompt,/brief\.pdf|appendix\.pdf|document bytes|inspection|checksum/);
+    return Response.json({id:'resp_clarify',created_at:1,model:MODEL,status:'completed',error:null,incomplete_details:null,output:[{id:'fc_clarify',type:'function_call',status:'completed',call_id:'call_clarify',name:'run_local_pdf_workflow',arguments:JSON.stringify(quickPlan(req,'remove',2).planner)}],usage:{input_tokens:50,output_tokens:50,total_tokens:100,input_tokens_details:{cached_tokens:0},output_tokens_details:{reasoning_tokens:0}}});
+  };
+  assert.equal((await planWithOpenAI(req,'sk-test-never-network',new AbortController().signal,fetcher)).status,'plan');assert.equal(calls,1);
+});
+test('stale, malformed and unsafe clarification context fails before provider invocation',async()=>{
+  const context={revision:2,files,selected:files.map(f=>f.ref),focus:files[0].ref,originals:files.map(f=>f.ref)};
+  const first=buildRequest(context,'Remove a page.');
+  const pending=pendingFromResponse(first,clarify('Which page?',['Page 1','Page 2']));
+  assert.throws(()=>withPendingClarification(buildRequest({...context,revision:3},'Page 2'),pending),/stale/i);
+  assert.throws(()=>withPendingClarification(buildRequest({...context,focus:files[1].ref},'Page 2'),pending),/stale/i);
+  let seen=0;const {post}=await setup(async r=>{seen++;return quickPlan(r,'remove',2).planner;});
+  const base=withPendingClarification(buildRequest(context,'Page 2'),pending);
+  for(const corrupted of [
+    {...base,pendingClarification:{...pending,workspaceRevision:3}},
+    {...base,pendingClarification:{...pending,originalRefs:[files[1].ref,files[0].ref]}},
+    {...base,pendingClarification:{...pending,originalInstruction:'password=synthetic-secret'}},
+    {...base,pendingClarification:{...pending,question:'Open /Users/example/private.pdf'}},
+    {...base,pendingClarification:{...pending,extra:'document bytes'}},
+  ])assert.equal((await post(corrupted)).status,400);
+  assert.equal(seen,0);
 });
 test('gateway: host/origin/token/content-type and disabled state cannot call provider',async()=>{
   let calls=0;const {post,gateway}=await setup(async r=>{calls++;return quickPlan(r,'merge').planner;},0);

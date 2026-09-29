@@ -6,7 +6,7 @@ import Foundation
     let a = "file_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", b = "file_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
     let value: [String: Any] = ["schemaVersion":"1.0", "requestId":"req_"+UUID().uuidString.replacingOccurrences(of:"-",with:"").lowercased(), "workspaceRevision":2,"locale":"en-IN","instruction":instruction,
       "files":[["ref":a,"kind":"pdf","pageCount":2,"sizeBytes":3000,"encrypted":false],["ref":b,"kind":"pdf","pageCount":1,"sizeBytes":2000,"encrypted":false]],
-      "selectionRefs":[a,b],"focusedResultRef":NSNull(),"originalRefs":[a,b],"previousActionIds":[],"previousPlan":NSNull(),"capabilities":["merge_pdf","select_pages","ocr_pdf","compress_pdf"],"ocrLanguages":["eng"]]
+      "selectionRefs":[a,b],"focusedResultRef":NSNull(),"originalRefs":[a,b],"pendingClarification":NSNull(),"previousActionIds":[],"previousPlan":NSNull(),"capabilities":["merge_pdf","select_pages","ocr_pdf","compress_pdf"],"ocrLanguages":["eng"]]
     return String(data:try! JSONSerialization.data(withJSONObject:value),encoding:.utf8)!
   }
   static func main() async throws {
@@ -29,6 +29,19 @@ import Foundation
     try check(connected.contains("\"enabled\":true") && !connected.contains("token"),"paired status excludes credential")
     let plan = try await transport.plan(id:UUID().uuidString,body:request("Merge in the order added"))
     try check(plan.contains("merge_pdf"),"complete merge response")
+    var continued = try JSONSerialization.jsonObject(with: Data(request("Merge in the order added").utf8)) as! [String: Any]
+    let originalRequestId = continued["requestId"] as! String
+    let refs = continued["originalRefs"] as! [String]
+    continued["requestId"] = "req_" + UUID().uuidString.replacingOccurrences(of:"-",with:"").lowercased()
+    continued["instruction"] = "In the order added"
+    continued["pendingClarification"] = ["originalRequestId":originalRequestId,"workspaceRevision":2,"originalInstruction":"Merge the two PDFs.","question":"Which order?","choices":["In the order added"],"answers":[],"selectionRefs":refs,"focusedResultRef":NSNull(),"originalRefs":refs] as [String: Any]
+    var unsafeContinuation = continued
+    var unsafePending = continued["pendingClarification"] as! [String: Any]
+    unsafePending["bytes"] = "PRIVATE-CANARY"
+    unsafeContinuation["pendingClarification"] = unsafePending
+    do { _ = try AtepdfPlannerTransport.admittedBody(String(data:JSONSerialization.data(withJSONObject:unsafeContinuation),encoding:.utf8)!);throw NSError(domain:"accepted nested document bytes",code:1) } catch is AtepdfPlannerTransport.Failure {}
+    let continuation = try await transport.plan(id:UUID().uuidString,body:String(data:JSONSerialization.data(withJSONObject:continued),encoding:.utf8)!)
+    try check(continuation.contains("merge_pdf"),"bounded clarification reaches the synthetic provider")
     let answer = try await transport.plan(id:UUID().uuidString,body:request("What can atepdf do?"))
     try check(answer.contains("product_information"),"product answer")
     for instruction in ["Synthetic redirect","Synthetic oversized response"] {

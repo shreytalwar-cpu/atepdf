@@ -25,7 +25,7 @@ const request = instruction => ({
   schemaVersion: '1.0', requestId: `req_${randomUUID().replaceAll('-', '')}`,
   workspaceRevision: 2, locale: 'en-IN', instruction,
   files: refs.map((ref, index) => ({ref, kind: 'pdf', pageCount: 2 - index, sizeBytes: 3000 - index * 1000, encrypted: false})),
-  selectionRefs: refs, focusedResultRef: null, originalRefs: refs,
+  selectionRefs: refs, focusedResultRef: null, originalRefs: refs, pendingClarification: null,
   previousActionIds: [], previousPlan: null,
   capabilities: ['merge_pdf', 'select_pages', 'ocr_pdf', 'compress_pdf'], ocrLanguages: ['eng'],
 });

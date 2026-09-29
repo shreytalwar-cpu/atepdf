@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
-import {readFile,lstat,mkdtemp,rm} from 'node:fs/promises';
+import {copyFile,mkdir,readFile,lstat,mkdtemp,rm} from 'node:fs/promises';
 import {resolve,dirname,sep} from 'node:path';
 import {tmpdir} from 'node:os';
 import {fileURLToPath} from 'node:url';
@@ -64,12 +64,29 @@ test('SHR-45 local generator reproduces deterministic outputs when its optional 
   {skip:!process.env.ATEPDF_CORPUS_PYTHON},async()=>{
   const output=await mkdtemp(resolve(tmpdir(),'atepdf-shr45-corpus-'));
   try{
-    const run=spawnSync(process.env.ATEPDF_CORPUS_PYTHON!,[resolve(corpus,'generate.py'),'--output-dir',output],
-      {cwd:root,encoding:'utf8',timeout:10000,maxBuffer:64*1024});
-    assert.equal(run.error,undefined,String(run.error));
-    assert.equal(run.status,0,run.stderr);
+    const currentOutput=resolve(output,'current-output');
+    const isolatedRoot=resolve(output,'isolated-checkout');
+    const isolatedScript=resolve(isolatedRoot,'tests/fixtures/corpus/generate.py');
+    const isolatedImage=resolve(isolatedRoot,'tests/fixtures/image-input.png');
+    const isolatedOutput=resolve(output,'isolated-output');
+    await mkdir(dirname(isolatedScript),{recursive:true});
+    await mkdir(dirname(isolatedImage),{recursive:true});
+    await copyFile(resolve(corpus,'generate.py'),isolatedScript);
+    await copyFile(resolve(root,'tests/fixtures/image-input.png'),isolatedImage);
+    for(const [script,destination,cwd] of [
+      [resolve(corpus,'generate.py'),currentOutput,root],
+      [isolatedScript,isolatedOutput,isolatedRoot],
+    ]){
+      const run=spawnSync(process.env.ATEPDF_CORPUS_PYTHON!,[script,'--output-dir',destination],
+        {cwd,encoding:'utf8',timeout:10000,maxBuffer:64*1024});
+      assert.equal(run.error,undefined,String(run.error));
+      assert.equal(run.status,0,run.stderr);
+    }
     for(const fixture of manifest.fixtures.filter((item:{path:string})=>item.path.startsWith('tests/fixtures/corpus/')&&item.id!=='encrypted-aes256')){
-      const generated=await readFile(resolve(output,fixture.path.split('/').at(-1)!));
+      const name=fixture.path.split('/').at(-1)!;
+      const generated=await readFile(resolve(currentOutput,name));
+      const isolated=await readFile(resolve(isolatedOutput,name));
+      assert.ok(generated.equals(isolated),`${fixture.id} must reproduce from a different source path`);
       assert.equal(createHash('sha256').update(generated).digest('hex'),fixture.sha256,fixture.id);
     }
   }finally{await rm(output,{recursive:true,force:true});}

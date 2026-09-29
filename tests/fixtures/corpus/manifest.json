@@ -50,7 +50,7 @@
       "id": "geometry-font", "path": "tests/fixtures/corpus/geometry-font.pdf",
       "tags": ["geometry", "font", "image-and-text", "mixed-size"],
       "provenance": {"origin": "generated_local", "source": "tests/fixtures/corpus/generate.py; embedded Bitstream Vera from ReportLab 4.4.9 (license in tests/fixtures/corpus/bitstream-vera-license.txt); synthetic image-input.png", "generation": "python3 tests/fixtures/corpus/generate.py", "permission": "Locally authored content; embedded Bitstream Vera redistributable under bundled license; synthetic raster"},
-      "sha256": "78d746e65f238f27b27ebc3aa4f7659727220af8728862f383038502682253db", "pageCount": 3,
+      "sha256": "fe0762826b3b62e7ef3bbc9892f856720a2da3cd01a9503ba299ef3b9ebfebf9", "pageCount": 3,
       "pageOrder": ["GEOMETRY-1", "GEOMETRY-2", "GEOMETRY-3"], "visibleMarkers": ["GEOMETRY-1", "GEOMETRY-2", "GEOMETRY-3"],
       "features": ["text", "image_and_text", "embedded_font", "mixed_geometry", "rotation", "nonzero_media_origin", "nonzero_crop_origin", "multi_page"], "readerExpectation": "readable",
       "operationExpectations": [{"operation": "merge_pdf", "disposition": "preserve_or_refuse", "basis": "approved_product_policy", "reason": "PDF-03/04 require geometry, text, raster and font preservation or specific refusal; actual support awaits SHR-46"}]

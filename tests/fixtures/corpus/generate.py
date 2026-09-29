@@ -23,6 +23,7 @@ from pypdf.generic import (
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
+from reportlab.lib.utils import ImageReader
 import reportlab
 
 
@@ -131,7 +132,8 @@ def geometry_font_pdf() -> bytes:
     def draw(pdf):
         pdf.setFont("SHR45Vera", 20)
         pdf.drawString(60, 740, "GEOMETRY-1 embedded Vera + raster")
-        pdf.drawImage(str(ROOT / "tests/fixtures/image-input.png"), 60, 430, width=140, height=200)
+        image = ImageReader(io.BytesIO((ROOT / "tests/fixtures/image-input.png").read_bytes()))
+        pdf.drawImage(image, 60, 430, width=140, height=200)
         pdf.showPage()
         pdf.setPageSize((792, 612))
         pdf.setFont("SHR45Vera", 20)
@@ -209,7 +211,6 @@ def blank_noisy_scan_pdf() -> bytes:
             x = (index * 173) % 400
             y = (index * 251) % 550
             noisy.putpixel((x, y), (95, 95, 95))
-        from reportlab.lib.utils import ImageReader
         for image in (blank, noisy):
             pdf.drawImage(ImageReader(image), 0, 0, width=595.28, height=841.89)
             pdf.showPage()

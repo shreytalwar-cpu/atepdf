@@ -26,7 +26,7 @@ To regenerate the new fixtures with those local libraries from the repository ro
 python3 tests/fixtures/corpus/generate.py --output-dir /tmp/atepdf-shr45-regenerated
 ```
 
-The eight non-encrypted outputs are byte-deterministic at these generator versions. AES salt and IV are intentionally random; retain the committed encrypted file and its manifest hash for routine tests. The test-only password appears only in fixture generation/metadata and test code. Never enter it into ordinary atePDF chat or send it to a provider.
+The eight non-encrypted outputs are byte-deterministic at these generator versions, including when regenerated from a different checkout path. The geometry fixture passes the source image bytes to ReportLab so its PDF resource name does not depend on the image's absolute path. AES salt and IV are intentionally random; retain the committed encrypted file and its manifest hash for routine tests. The test-only password appears only in fixture generation/metadata and test code. Never enter it into ordinary atePDF chat or send it to a provider.
 
 Routine corpus validation uses the repository's existing Node dependencies and no network access:
 
@@ -34,7 +34,7 @@ Routine corpus validation uses the repository's existing Node dependencies and n
 node --import tsx --test tests/regressions/pdf-corpus.test.ts
 ```
 
-For an additional local byte-regeneration check, set `ATEPDF_CORPUS_PYTHON` to a Python that already has the three generator libraries, then run the same test. The damaged fixture is opened **only in a child process** limited to 128 MiB, five seconds and 64 KiB of captured output; it is never fed to a normal app/engine workflow by this corpus test. The 100/101-page fixtures are small bounded page trees, not memory bombs.
+For an additional local byte-regeneration check, set `ATEPDF_CORPUS_PYTHON` to a Python that already has the three generator libraries, then run the same test. That test regenerates the eight deterministic files from both the repository and a separate temporary source path, comparing bytes and manifest hashes. The damaged fixture is opened **only in a child process** limited to 128 MiB, five seconds and 64 KiB of captured output; it is never fed to a normal app/engine workflow by this corpus test. The 100/101-page fixtures are small bounded page trees, not memory bombs.
 
 Independent inspection on the committed inputs used Poppler `pdfinfo` 26.05.0, pypdf 6.10.0 and PDF.js 6.3.289; the corpus test repeats PDF.js page/order checks and actual structural checks. Representative results:
 

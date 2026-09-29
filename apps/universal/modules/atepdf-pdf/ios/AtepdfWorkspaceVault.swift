@@ -260,6 +260,39 @@ public final class AtepdfWorkspaceVault {
     if try directoryMissing(path) { return }
     try syncDirectory(path)
   }
+  /// Measured size of every workspace file (SHR-40 storage usage): "head",
+  /// "manifests/…" and "blobs/…" by name, and one "staging" total. Regular files only,
+  /// measured with lstat, so a symbolic link is never followed or counted. Only this
+  /// workspace root is examined: external originals and exported files are never in it.
+  /// A directory that was never created is empty; any other failure is thrown.
+  public func usage() throws -> [(name: String, bytes: Int64)] {
+    func size(_ url: URL) throws -> Int64? {
+      var info = stat()
+      if lstat(url.path, &info) != 0 {
+        if errno == ENOENT { return nil }
+        throw Failure.io
+      }
+      return (info.st_mode & S_IFMT) == S_IFREG ? Int64(info.st_size) : nil
+    }
+    func entries(_ directory: String) throws -> [String] {
+      let path = root.appendingPathComponent(directory)
+      if try directoryMissing(path) { return [] }
+      return try FileManager.default.contentsOfDirectory(atPath: path.path)
+    }
+    var out: [(name: String, bytes: Int64)] = []
+    if let head = try size(root.appendingPathComponent("head")) { out.append(("head", head)) }
+    for directory in ["manifests", "blobs"] {
+      for entry in try entries(directory) {
+        let name = "\(directory)/\(entry)"
+        guard Self.validName(name), let bytes = try size(root.appendingPathComponent(name)) else { continue }
+        out.append((name, bytes))
+      }
+    }
+    var staging: Int64 = 0
+    for entry in try entries("staging") { staging += try size(root.appendingPathComponent("staging/\(entry)")) ?? 0 }
+    if staging > 0 { out.append(("staging", staging)) }
+    return out
+  }
   public func cleanStaging() throws {
     let staging = root.appendingPathComponent("staging")
     for name in (try? FileManager.default.contentsOfDirectory(atPath: staging.path)) ?? [] where name.hasSuffix(".tmp") {

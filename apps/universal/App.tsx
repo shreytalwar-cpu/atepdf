@@ -1,5 +1,5 @@
 import React, {createContext, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore} from 'react';
-import {View, Text, Image, Pressable, TextInput, ScrollView, Modal, Platform, Keyboard, useWindowDimensions} from 'react-native';
+import {View, Text, Image, Pressable, TextInput, ScrollView, Platform, Keyboard, AppState, useWindowDimensions} from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import ArrowDownToLine from 'lucide-react-native/icons/arrow-down-to-line';
 import Check from 'lucide-react-native/icons/check';
@@ -29,10 +29,12 @@ import {privateInstruction,hasRejectedSecretDraft,safeOrdinaryText,SECRET_CHAT_W
 import {isClarificationAnswer,pendingFromResponse,withPendingClarification} from '@planner/clarification';
 import {plannerStatus,requestPlan,savePlannerKey,createNativePairing,pairNativePlanner,disconnectNativePlanner,plannerAvailable,type PlannerStatus} from './src/platform/planner';
 import {validateEnvelope,type PendingClarification,type Request as PlannerRequest,type Envelope, type Step} from '@contracts/protocol';
-import {WorkspaceVault,blockedMessages,savedArtifacts,CLEANUP_INCOMPLETE,type WorkspaceSnapshot} from '@core/workspace-vault';
+import {WorkspaceVault,WorkspaceExpiredError,blockedMessages,expiredMessage,savedArtifacts,CLEANUP_INCOMPLETE,type WorkspaceSnapshot} from '@core/workspace-vault';
 import {CheckpointScheduler} from '@core/workspace-checkpoints';
-import type {PersistedEntry} from '@core/workspace-checkpoint';
-import {createWorkspaceBackend} from './src/platform/workspace';
+import {DAY_MS,RETENTION_DAYS,type PersistedEntry,type RetentionMode} from '@core/workspace-checkpoint';
+import {createWorkspaceBackend,workspaceClock} from './src/platform/workspace';
+import {temporaryFiles} from './src/platform/temporary';
+import {PrivacyStorage,type RetentionImpact,type StorageView} from './src/components/PrivacyStorage';
 
 const formatSize = (n: number) => n < 1_000_000 ? `${(n / 1000).toFixed(1)} kB` : `${(n / 1_000_000).toFixed(2)} MB`;
 const pageCount = (count: number) => `${count} ${count === 1 ? 'page' : 'pages'}`;
@@ -71,18 +73,31 @@ const SAVE_PAUSED_NOTICE='atePDF couldn’t confirm what was last saved on this 
 // Start over copy states what each mode actually removes.
 const CLEAR_QUESTION_SESSION='Save any results you want to keep first. Shall I clear this conversation and its local files? Your originals on your device will stay unchanged.';
 const CLEAR_QUESTION_SAVED='Save any results you want to keep first. Shall I clear this conversation and atePDF’s saved copies of its PDFs, results and draft on this Mac? Files you added and PDFs you saved elsewhere stay unchanged.';
+// SHR-40 notices. Removal is only stated once verified; otherwise what remains is said.
+const UNAVAILABLE_NOTICE='atePDF can’t save your workspace on this Mac right now. This session won’t be restored after you quit.';
+const DELETED_STATUS='atePDF’s local data was deleted from this Mac.';
+const DELETE_INCOMPLETE='Your workspace was deleted, but some of atePDF’s encrypted files couldn’t be removed from this Mac yet. They can’t be opened in atePDF; it will keep trying to remove them.';
+const TEMPORARY_INCOMPLETE='Your workspace was deleted, but some temporary files couldn’t be removed yet. atePDF removes them the next time it opens.';
+const QUIT_CLEANUP_INCOMPLETE='atePDF stopped saving this workspace, but some of its earlier encrypted files couldn’t be removed from this Mac yet. They can’t be opened in atePDF; it will keep trying to remove them.';
+const expiredNotice=(mode:RetentionMode,cleanupComplete:boolean)=>`${expiredMessage(mode)}${cleanupComplete?'':' Some of its encrypted files couldn’t be removed yet; atePDF will keep trying.'}`;
 function useWorkspace() {
   const [controller] = useState(createController);
   const [backend] = useState(createWorkspaceBackend);
   const vault = useRef<WorkspaceVault|null>(null);
   const [restoring, setRestoring] = useState(backend !== null), [restoredDraft, setRestoredDraft] = useState<string|null>(null);
   const [notice, setNotice] = useState<WorkspaceNotice|null>(null), [durable, setDurable] = useState(false);
+  // Retention setting of the open workspace; null while it can't be changed (restoring, blocked, unavailable).
+  const [retention, setRetention] = useState<RetentionMode|null>(null);
+  const [storage, setStorage] = useState<StorageView>({measuring: false, workspace: null, temporary: null});
+  const [deleting, setDeleting] = useState(false), [storageStatus, setStorageStatus] = useState<string|null>(null);
+  // A clear, expiry or deletion transaction is running.
+  const [resetting, setResetting] = useState(false);
   // ready: restore finished; only then may chat/draft changes be checkpointed.
   const ready = useRef(backend === null), opened = useRef(false);
   const restoredEntries = useRef<Entry[]|null>(null), draftRef = useRef<string|null>(null);
   // Chat/draft checkpoints; suspended for the whole Start over transaction.
-  const runChatSave = useRef<() => Promise<void>>(async () => {}), chatSaveFailed = useRef<() => void>(() => {});
-  const [checkpoints] = useState(() => new CheckpointScheduler(() => runChatSave.current(), () => chatSaveFailed.current()));
+  const runChatSave = useRef<() => Promise<void>>(async () => {}), chatSaveFailed = useRef<(error: unknown) => void>(() => {});
+  const [checkpoints] = useState(() => new CheckpointScheduler(() => runChatSave.current(), error => chatSaveFailed.current(error)));
   useEffect(() => () => checkpoints.dispose(), [checkpoints]);
   const [clearCount, setClearCount] = useState(0);
   const state = useSyncExternalStore(controller.subscribe, controller.snapshot, controller.snapshot), store = controller.store;
@@ -95,7 +110,9 @@ function useWorkspace() {
   const connectionToken=useRef<string|null>(null);
   const pendingClarification=useRef<PendingClarification|null>(null);
   const clearPending=()=>{pendingClarification.current=null;};
-  const busy = state.busy || loading || planning || restoring;
+  // working: a job, import or planning request is active. busy also covers restore and resets.
+  const working = state.busy || loading || planning, busy = working || restoring || resetting;
+  const busyRef = useRef(busy); busyRef.current = busy;
   const entriesRef = useRef<Entry[]>(entries); entriesRef.current = entries;
   const currentEntry = entries.findLast(e => e.artifact), current = currentEntry?.id;
   const focus = store.focus ? store.list.find(f => f.ref === store.focus) : null;
@@ -104,11 +121,11 @@ function useWorkspace() {
   // The controller's own commit saves its new state; chat and draft saves use the
   // last durable store state so they never make an unconfirmed commit durable early.
   const snapshot = (view: ReturnType<typeof controller.durableState> = controller.durableState(true)): WorkspaceSnapshot => ({...view, bytes: ref => store.get(ref).bytes, conversation: entriesRef.current.map(toPersisted), draft: draftRef.current});
-  const saveFailed = (v: WorkspaceVault) => setNotice({text: v.mode === 'blocked' ? SAVE_PAUSED_NOTICE : SAVE_FAILED_NOTICE});
+  const saveFailed = (v: WorkspaceVault) => setNotice({text: v.blockedReason === 'clock' ? blockedMessages.clock : v.mode === 'blocked' ? SAVE_PAUSED_NOTICE : SAVE_FAILED_NOTICE});
   // A cleanup notice stays until the vault has verified the old copies are gone.
   const cleanupSettled = (v: WorkspaceVault) => { if (!v.cleanupPending) setNotice(previous => previous?.cleanup ? null : previous); };
   runChatSave.current = async () => { const v = vault.current; if (!ready.current || !v || v.mode !== 'writable') return; await v.save(() => snapshot(controller.durableState(false))); cleanupSettled(v); };
-  chatSaveFailed.current = () => { if (vault.current) saveFailed(vault.current); };
+  chatSaveFailed.current = error => { if (error instanceof WorkspaceExpiredError) { runExpiry(async () => ({kind: 'expired', mode: error.mode, cleanupComplete: error.cleanupComplete})); return; } if (vault.current) saveFailed(vault.current); };
   const saveChat = () => checkpoints.now();
   const noteDraft = (text: string) => {
     const next = text.trim() ? text : null;
@@ -117,11 +134,23 @@ function useWorkspace() {
     // Draft changes are coalesced; only the last completed checkpoint is promised.
     checkpoints.draft();
   };
+  // Connect the controller's commits to a writable vault. Called after open and after
+  // Delete local data, which can turn a blocked workspace into a new writable one.
+  const attach = (v: WorkspaceVault) => {
+    if (v.mode !== 'writable') { controller.setDurability(null); setDurable(false); setRetention(null); return; }
+    controller.setDurability({save: () => v.save(() => snapshot()).then(() => cleanupSettled(v), error => {
+      // An expired workspace is emptied once the job that tried to save has settled.
+      if (error instanceof WorkspaceExpiredError) runExpiry(async () => ({kind: 'expired', mode: error.mode, cleanupComplete: error.cleanupComplete}));
+      else if (v.mode === 'blocked') saveFailed(v);
+      throw error;
+    }), clear: () => v.clear()});
+    setDurable(true); setRetention(v.retention);
+  };
   const openWorkspace = async () => {
     if (!backend) return;
-    ready.current = false; setRestoring(true); setNotice(null); controller.setDurability(null); setDurable(false);
+    ready.current = false; setRestoring(true); setNotice(null); controller.setDurability(null); setDurable(false); setRetention(null);
     restoredEntries.current = entriesRef.current;
-    const v = new WorkspaceVault(backend, {redact: safeOrdinaryText}); vault.current = v;
+    const v = new WorkspaceVault(backend, {redact: safeOrdinaryText, now: workspaceClock()}); vault.current = v;
     try {
       const outcome = await v.open();
       if (outcome.kind === 'restored') {
@@ -138,9 +167,10 @@ function useWorkspace() {
         else if (outcome.cleanupPending) setNotice({text: CLEANUP_PENDING_NOTICE, cleanup: true});
       } else if (outcome.kind === 'empty') {
         if (outcome.cleanupPending) setNotice({text: CLEANUP_PENDING_NOTICE, cleanup: true});
-      } else if (outcome.kind === 'blocked') setNotice({text: `${blockedMessages[outcome.reason]} New work in this session won’t be saved.`, retry: outcome.retryable});
-      else if (outcome.kind === 'unavailable') setNotice({text: 'atePDF can’t save your workspace on this Mac right now. This session won’t be restored after you quit.'});
-      if (v.mode === 'writable') { controller.setDurability({save: () => v.save(() => snapshot()).then(() => cleanupSettled(v), error => { if (v.mode === 'blocked') saveFailed(v); throw error; }), clear: () => v.clear()}); setDurable(true); }
+      } else if (outcome.kind === 'expired') setNotice({text: expiredNotice(outcome.retention, !outcome.cleanupPending), cleanup: outcome.cleanupPending});
+      else if (outcome.kind === 'blocked') setNotice({text: `${blockedMessages[outcome.reason]} New work in this session won’t be saved.`, retry: outcome.retryable});
+      else if (outcome.kind === 'unavailable') setNotice({text: UNAVAILABLE_NOTICE});
+      attach(v);
     } finally { ready.current = true; setRestoring(false); }
   };
   useEffect(() => { if (opened.current) return; opened.current = true; void openWorkspace(); }, []);
@@ -151,8 +181,107 @@ function useWorkspace() {
   }, [entries, restoring]);
   const canRetryRestore = !!notice?.retry && !entries.length && !store.list.length;
   const retryRestore = () => { if (canRetryRestore && !busy) void openWorkspace(); };
+  // Empty the chat/draft view (and anything built on it) after a durable clear.
+  const resetView = () => {
+    const empty: Entry[] = []; entriesRef.current = empty; restoredEntries.current = empty; draftRef.current = null;
+    connectionToken.current=null; pendingClarification.current=null; setChoice(null); setPreview(null); setReceipts({}); setEntries(empty); setClearCount(n => n + 1);
+  };
+  // Stop and join active work: planning is aborted, jobs are cancelled (a commit that
+  // is already saving finishes or is withdrawn), and in-flight handlers finish first.
+  const stopWork = async () => {
+    clearPending(); plannerAbort.current?.abort(); controller.cancel();
+    await controller.settle();
+    for (let i = 0; operation.current && i < 200; i++) await new Promise(resolve => setTimeout(resolve, 25));
+  };
+  const refreshStorage = async () => {
+    const v = vault.current; if (!backend) return;
+    setStorage(previous => ({...previous, measuring: true}));
+    let workspace: StorageView['workspace'] = null;
+    try { workspace = v ? await v.usage() : null; } catch { /* shown as not measurable, never as zero */ }
+    setStorage({measuring: false, workspace, temporary: temporaryFiles ? temporaryFiles.usage() : 0});
+  };
+  // Retention expiry (ADR 0010): at launch (in the vault), on return to atePDF, before
+  // an action, and when a save finds the period has passed. The whole workspace goes.
+  const expiring = useRef(false), privacyOpen = useRef(false); privacyOpen.current = privacy;
+  type Expiry = {kind: 'current'} | {kind: 'clock'} | {kind: 'expired'; mode: RetentionMode; cleanupComplete: boolean};
+  function runExpiry(work: () => Promise<Expiry>) {
+    if (expiring.current) return; expiring.current = true;
+    void checkpoints.exclusive(async () => {
+      setResetting(true);
+      try {
+        await stopWork();
+        const result = await work();
+        if (result.kind === 'clock') { setNotice({text: blockedMessages.clock}); setRetention(null); return; }
+        if (result.kind !== 'expired') return;
+        await controller.clear(async () => ({cleanupComplete: result.cleanupComplete}));
+        resetView(); setNotice({text: expiredNotice(result.mode, result.cleanupComplete), cleanup: !result.cleanupComplete});
+      } finally { setResetting(false); }
+    }).catch(() => { /* another workspace change is running; the next check repeats this */ }).finally(() => { expiring.current = false; if (privacyOpen.current) void refreshStorage(); });
+  }
+  /** True when the workspace is due (or its age unknown), so the requested action must not run. */
+  const expiryDue = () => {
+    const v = vault.current;
+    if (!v || v.mode !== 'writable' || v.expiryState() === 'current') return false;
+    runExpiry(() => v.expireIfDue()); return true;
+  };
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', next => { if (next === 'active' && !busyRef.current) expiryDue(); });
+    return () => subscription.remove();
+  }, []);
+  const retentionImpact = (mode: RetentionMode): RetentionImpact => {
+    const v = vault.current; if (!v || v.mode !== 'writable' || mode === v.retention) return null;
+    if (mode === 'quit') return {kind: 'quit'};
+    const idle = v.idleIfExpiring(mode, entriesRef.current.length > 0 || store.list.length > 0 || !!draftRef.current);
+    return idle === null ? null : {kind: 'expire', days: RETENTION_DAYS[mode] ?? 0, idleDays: Math.floor(idle / DAY_MS)};
+  };
+  const changeRetention = (mode: RetentionMode) => {
+    const v = vault.current; if (!v || v.mode !== 'writable' || busy) return;
+    setStorageStatus(null);
+    void checkpoints.exclusive(async () => {
+      setResetting(true);
+      try {
+        const change = await v.setRetention(mode, () => snapshot(controller.durableState(false)));
+        if (change.kind === 'expired') {
+          await controller.clear(async () => ({cleanupComplete: change.cleanupComplete}));
+          resetView(); setNotice({text: expiredNotice(mode, change.cleanupComplete), cleanup: !change.cleanupComplete});
+        } else if (change.kind === 'cleared' && !change.cleanupComplete) setNotice({text: QUIT_CLEANUP_INCOMPLETE, cleanup: true});
+      } finally { setResetting(false); }
+    }).catch(error => { setStorageStatus(error instanceof Error ? error.message : 'atePDF couldn’t change this setting.'); if (v.mode === 'blocked') saveFailed(v); })
+      .finally(() => { setRetention(v.mode === 'writable' ? v.retention : null); void refreshStorage(); });
+  };
+  // Delete local data: every atePDF-managed workspace file and temporary copy. Active
+  // work is stopped first; external originals and saved PDFs are never touched.
+  const deleteLocalData = () => {
+    const v = vault.current; if (!v || deleting || saving || restoring) return;
+    setDeleting(true); setStorageStatus(null);
+    void checkpoints.exclusive(async () => {
+      setResetting(true);
+      try {
+        await stopWork();
+        await controller.clear(() => v.deleteAll());
+        if (controller.state.stage === 'failed' && controller.state.error) return {error: controller.state.error, complete: false};
+        resetView();
+        return {error: null, complete: controller.state.message !== CLEANUP_INCOMPLETE};
+      } finally { setResetting(false); }
+    }).then(result => {
+      if (result.error) { setStorageStatus(result.error); if (v.mode === 'blocked' && v.blockedReason === null) setNotice({text: SAVE_PAUSED_NOTICE}); return; }
+      // Only after the workspace is gone: nothing can be reading these copies now.
+      const temporaryCleared = temporaryFiles ? temporaryFiles.clear() : true;
+      attach(v);
+      setNotice(!result.complete ? {text: DELETE_INCOMPLETE, cleanup: true} : v.mode === 'unavailable' ? {text: UNAVAILABLE_NOTICE} : null);
+      setStorageStatus(!result.complete ? DELETE_INCOMPLETE : !temporaryCleared ? TEMPORARY_INCOMPLETE : DELETED_STATUS);
+    }, error => setStorageStatus(error instanceof Error ? error.message : 'atePDF couldn’t delete its local data.'))
+      .finally(() => { setDeleting(false); void refreshStorage(); });
+  };
+  useEffect(() => { if (privacy) { setStorageStatus(null); void refreshStorage(); } }, [privacy]);
+  useEffect(() => {
+    if (Platform.OS !== 'web') return;
+    // Command-comma opens Privacy & storage, as Settings does in Mac apps.
+    const fn = (e: KeyboardEvent) => { if ((e.metaKey || e.ctrlKey) && e.key === ',') { e.preventDefault(); setPrivacy(true); } };
+    window.addEventListener('keydown', fn); return () => window.removeEventListener('keydown', fn);
+  }, []);
   const showHelp = () => {
-    if (busy) return;
+    if (busy || expiryDue()) return;
     clearPending();
     setChoice(null);
     append({role:'user',text:'What can I do with my PDFs?'});
@@ -181,7 +310,7 @@ function useWorkspace() {
     finally { operation.current = false; }
   };
   const pick = async (sample = false) => {
-    if (operation.current) return;
+    if (operation.current || expiryDue()) return;
     setLoading(true);
     try { await importFiles(await (sample ? sampleFiles() : chooseFiles())); }
     catch (e) { say(e instanceof Error ? e.message : 'Files could not be opened.'); }
@@ -201,7 +330,7 @@ function useWorkspace() {
     finally { operation.current = false; }
   };
   const action = (type: Action, text: string, page = 2) => {
-    if (busy || operation.current) return;
+    if (busy || operation.current || expiryDue()) return;
     clearPending();
     setChoice(null); append({role: 'user', text});
     // Explicit actions already specify the operation. Compile locally through
@@ -219,13 +348,13 @@ function useWorkspace() {
     append({role: 'assistant', text: 'I restored your previous result. Your original files are unchanged.', artifact: store.get(store.focus!).meta, resultTitle: entriesRef.current.findLast(entry => entry.artifact?.ref === store.focus)?.resultTitle});
   };
   const undo = () => {
-    if (busy) return;
+    if (busy || expiryDue()) return;
     clearPending();
     setChoice(null); append({role: 'user', text: 'Undo the last change.'});
     void undoLocal();
   };
   const submit = (draft: string) => {
-    if (busy || operation.current || !draft.trim()) return;
+    if (busy || operation.current || !draft.trim() || expiryDue()) return;
     const text = draft.trim();
     // Reject before either a transcript append or clarification binding.
     if (hasRejectedSecretDraft(text)) { say(SECRET_CHAT_WARNING); return; }
@@ -333,10 +462,6 @@ function useWorkspace() {
       // saves cancelled) until the clear settles. An empty workspace is shown only
       // once the new epoch is verified, and the chat/draft view is reset before
       // checkpointing resumes, so nothing from before can be saved into it.
-      const resetView = () => {
-        const empty: Entry[] = []; entriesRef.current = empty; restoredEntries.current = empty; draftRef.current = null;
-        connectionToken.current=null; setPreview(null); setReceipts({}); setEntries(empty); setClearCount(n => n + 1);
-      };
       // Session-only (no saved workspace): nothing durable to wait for, so the view
       // is reset immediately, exactly as before persistence existed.
       if (!durable) { void controller.clear(); resetView(); return; }
@@ -357,9 +482,15 @@ function useWorkspace() {
     catch (e) { setReceipts(previous => ({...previous, [artifact.ref]: safeOrdinaryText(e instanceof Error ? e.message : 'Saving failed. Try again.')})); }
     finally { setSaving(null); }
   };
-  return {controller, state, store, entries, busy, loading, current, currentTitle:currentEntry?.resultTitle, focus, preview, setPreview, privacy, setPrivacy,
+  // The workspace is kept on disk between launches (not Delete when atePDF quits).
+  const keeping = durable && retention !== 'quit';
+  const retentionNote = !backend ? null : restoring ? 'Available once your workspace opens.' : durable ? null
+    : vault.current?.mode === 'blocked' ? 'This can’t be changed until your saved workspace opens. You can still delete it below.'
+    : 'atePDF can’t save your workspace on this Mac right now, so nothing is kept after you quit.';
+  return {controller, state, store, entries, busy, working, loading, current, currentTitle:currentEntry?.resultTitle, focus, preview, setPreview, privacy, setPrivacy,
     choice, setChoice, saving, receipts, append, say, showHelp, importFiles, pick, action, undo, submit, confirm, exportResult, planning, connection, connectionToken, connect, refreshConnection, cancel, clearPending,
-    restoring, restoredDraft, noteDraft, notice, durable, canRetryRestore, retryRestore, clearCount};
+    restoring, restoredDraft, noteDraft, notice, durable, keeping, canRetryRestore, retryRestore, clearCount,
+    capable: backend !== null, retention, retentionNote, retentionImpact, changeRetention, storage, deleteLocalData, deleting, storageStatus};
 }
 
 const WorkspaceContext=createContext<ReturnType<typeof useWorkspace>|null>(null);
@@ -392,16 +523,22 @@ function Screen(){
         <View className="flex-row items-center justify-between gap-3 px-4 py-2 md:px-8 md:py-4">
           <View className="flex-row items-center gap-2"><Image source={require('./assets/approved-8-mark-source-crop.png')} resizeMode="contain" style={{width:28,height:37}}/><Image accessibilityLabel="atepdf" source={require('./assets/approved-atepdf-wordmark-source-crop.png')} resizeMode="contain" style={{width:90,height:30}}/></View>
           <View className="flex-row items-center gap-1">
-            <Pressable accessibilityRole="button" accessibilityLabel="Processed on your device" onPress={()=>workspace.setPrivacy(true)} className="atepdf-button min-h-11 min-w-11 flex-row items-center justify-center gap-2 rounded-full bg-[#edf9f4] px-3"><LockKeyhole size={15} color="#26715c"/>{width>=430&&<Text className="text-xs text-[#26715c]">Processed on your device</Text>}</Pressable>
+            <Pressable accessibilityRole="button" accessibilityLabel="Processed on your device" accessibilityHint={workspace.capable?'Privacy, storage and how long your workspace is kept':undefined} onPress={()=>workspace.setPrivacy(true)} className="atepdf-button min-h-11 min-w-11 flex-row items-center justify-center gap-2 rounded-full bg-[#edf9f4] px-3"><LockKeyhole size={15} color="#26715c"/>{width>=430&&<Text className="text-xs text-[#26715c]">Processed on your device</Text>}</Pressable>
             {plannerAvailable&&<Pressable accessibilityRole="button" accessibilityLabel={Platform.OS==='web'?'OpenAI connection':'AI connection'} accessibilityHint="Manage optional AI planning" disabled={busy} onPress={()=>void workspace.connect()} className={`atepdf-button size-11 items-center justify-center rounded-full ${busy?'opacity-40':''}`}><SlidersHorizontal size={19} color="#5d6980"/></Pressable>}
-            {!!entries.length&&<Pressable accessibilityRole="button" accessibilityLabel="Start over" disabled={busy} onPress={()=>{workspace.clearPending();workspace.append({role:'user',text:'Start over.'});const id=workspace.append({role:'assistant',text:workspace.durable?CLEAR_QUESTION_SAVED:CLEAR_QUESTION_SESSION,choice:'clear',revision:workspace.store.revision});workspace.setChoice(id);}} className={`atepdf-button size-11 items-center justify-center rounded-full ${busy?'opacity-40':''}`}><SquarePen size={19} color="#5d6980"/></Pressable>}
+            {!!entries.length&&<Pressable accessibilityRole="button" accessibilityLabel="Start over" disabled={busy} onPress={()=>{workspace.clearPending();workspace.append({role:'user',text:'Start over.'});const id=workspace.append({role:'assistant',text:workspace.keeping?CLEAR_QUESTION_SAVED:CLEAR_QUESTION_SESSION,choice:'clear',revision:workspace.store.revision});workspace.setChoice(id);}} className={`atepdf-button size-11 items-center justify-center rounded-full ${busy?'opacity-40':''}`}><SquarePen size={19} color="#5d6980"/></Pressable>}
           </View>
         </View>
         {!nativeEngineReady&&<Text className="mx-5 text-xs text-muted-foreground">Native development preview · local PDF processing is not connected yet.</Text>}
         {!!workspace.notice&&<View className="mx-5 flex-row flex-wrap items-center gap-2"><Text accessibilityLiveRegion="polite" className="flex-shrink text-xs text-muted-foreground">{workspace.notice.text}</Text>{workspace.canRetryRestore&&<Button quiet disabled={busy} onPress={workspace.retryRestore}>Try again</Button>}</View>}
         {composerReady?<Thread components={threadComponents}/>:<View className="flex-1 items-center justify-center"><Text accessibilityLiveRegion="polite" className="text-sm text-muted-foreground">Restoring your workspace…</Text></View>}
       </DropSurface>
-      <Modal accessibilityLabel={Platform.OS==='web'?'Processed on your device':undefined} visible={workspace.privacy} transparent animationType={motion?'fade':'none'} onRequestClose={()=>workspace.setPrivacy(false)}><SafeAreaView style={{flex:1}} className="bg-black/25"><ScrollView contentContainerStyle={{flexGrow:1,justifyContent:'center',padding:20}}><View accessibilityViewIsModal role={Platform.OS==='web'?undefined:'dialog'} className="w-full max-w-lg self-center gap-4 rounded-3xl bg-background p-6"><Text accessibilityRole="header" className="text-xl font-semibold text-foreground">Processed on your device</Text><Text className="text-base leading-6 text-foreground">PDF files, previews and recognised text stay on this device. PDF operations run in local engines.</Text><Text className="text-sm leading-6 text-muted-foreground">Quick-action buttons run locally without AI planning. When AI is enabled, chat requests send your instruction and anonymous file references, page counts and sizes for planning. Filenames, passwords, paths, checksums and document contents are excluded. Your OpenAI key stays in the local server, outside the app.</Text><Text className="text-sm leading-6 text-muted-foreground">{workspace.durable?'Chat, drafts and PDFs are kept encrypted on this Mac so you can continue after reopening atePDF. They are not synced or backed up by atePDF. Start over removes them from atePDF on this Mac; it is not secure erasure.':'Save before closing. Chat and files stay in this session.'} Saving to a cloud folder or sharing through a chosen provider may transfer the saved file outside atepdf.</Text><Button primary onPress={()=>workspace.setPrivacy(false)}>Got it</Button></View></ScrollView></SafeAreaView></Modal>
+      <PrivacyStorage visible={workspace.privacy} onClose={()=>workspace.setPrivacy(false)} motion={motion} capable={workspace.capable}
+        retention={workspace.retention} retentionNote={workspace.retentionNote} busy={workspace.working} exporting={!!workspace.saving} ready={!workspace.restoring} storage={workspace.storage}
+        impact={workspace.retentionImpact} onRetention={workspace.changeRetention} onDelete={workspace.deleteLocalData} deleting={workspace.deleting} status={workspace.storageStatus}>
+        <Text className="text-base leading-6 text-foreground">PDF files, previews and recognised text stay on this device. PDF operations run in local engines.</Text>
+        <Text className="text-sm leading-6 text-muted-foreground">Quick-action buttons run locally without AI planning. When AI is enabled, chat requests send your instruction and anonymous file references, page counts and sizes for planning. Filenames, passwords, paths, checksums and document contents are excluded. Your OpenAI key stays in the local server, outside the app.</Text>
+        <Text className="text-sm leading-6 text-muted-foreground">{workspace.keeping?'Chat, drafts and PDFs are kept encrypted on this Mac so you can continue after reopening atePDF. They are not synced or backed up by atePDF. Start over removes them from atePDF on this Mac; it is not secure erasure.':workspace.durable?'Chat, drafts and PDFs stay in memory only and are gone when you quit atePDF.':'Save before closing. Chat and files stay in this session.'} Saving to a cloud folder or sharing through a chosen provider may transfer the saved file outside atepdf.</Text>
+      </PrivacyStorage>
     </SafeAreaView>
   </AssistantRuntimeProvider></WorkspaceContext.Provider>;
 }

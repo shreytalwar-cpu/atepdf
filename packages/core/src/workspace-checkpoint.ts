@@ -8,6 +8,10 @@ export const WORKSPACE_FORMAT='atepdf.workspace';
 export const WORKSPACE_SCHEMA_VERSION=1;
 export const RETENTION_MODES=['keep','30d','7d','quit'] as const;
 export type RetentionMode=typeof RETENTION_MODES[number];
+// The finite modes expire the whole workspace this long after the last user
+// activity that changed it (ADR 0010). Keep and quit never expire by age.
+export const RETENTION_DAYS:Partial<Record<RetentionMode,number>>={'30d':30,'7d':7};
+export const DAY_MS=86_400_000;
 // Display-only record of a question that was asked. Restored questions are
 // always closed; the choice kind never re-arms an action after relaunch.
 export const CLOSED_CHOICES=['compress','chain','clear','execute','connect','native-link','native-pair','connection-help'] as const;
@@ -22,7 +26,10 @@ export type WorkspaceCheckpoint={
   artifacts:PersistedArtifact[];originals:string[];history:string[];focus:string|null;undoPredecessor:string|null;selection:string[];collections:PersistedCollection[];
   conversation:PersistedEntry[];draft:{text:string}|null;
 };
-export type WorkspaceHead={format:typeof WORKSPACE_FORMAT;schemaVersion:number;workspaceID:string;generation:number;previousGeneration:number|null;deletionEpoch:number};
+// retention: the setting committed with this head (SHR-40). The head is the commit
+// point, so it stays authoritative when restore falls back to the previous generation,
+// whose manifest may hold an older setting. Heads written before SHR-40 have none.
+export type WorkspaceHead={format:typeof WORKSPACE_FORMAT;schemaVersion:number;workspaceID:string;generation:number;previousGeneration:number|null;deletionEpoch:number;retention?:RetentionMode};
 
 export const LIMITS={artifacts:200,entries:5000,text:20_000,name:512,files:20,pages:5000,blobBytes:2_000_000_000};
 export const REF=/^(file|out)_[A-Za-z0-9_]{1,64}$/;
@@ -63,7 +70,7 @@ function inspection(v:unknown,what:string):Inspection{
 }
 
 export function parseHead(value:unknown):WorkspaceHead{
-  const o=record(value,'head',['format','schemaVersion','workspaceID','generation','previousGeneration','deletionEpoch']);
+  const o=record(value,'head',['format','schemaVersion','workspaceID','generation','previousGeneration','deletionEpoch'],['retention']);
   if(o.format!==WORKSPACE_FORMAT)invalid('head format');
   const version=schemaVersion(o.schemaVersion);
   // Generation 0 is the genesis head: written before any user data exists, it
@@ -71,7 +78,9 @@ export function parseHead(value:unknown):WorkspaceHead{
   const generation=int(o.generation,'head generation',0);
   let previous:number|null=null;
   if(o.previousGeneration!==null){if(generation===0)invalid('genesis predecessor');previous=int(o.previousGeneration,'previous generation',1,generation-1);}
-  return {format:WORKSPACE_FORMAT,schemaVersion:version,workspaceID:typeof o.workspaceID==='string'&&ID.test(o.workspaceID)?o.workspaceID:invalid('workspace ID'),generation,previousGeneration:previous,deletionEpoch:int(o.deletionEpoch,'deletion epoch')};
+  const head:WorkspaceHead={format:WORKSPACE_FORMAT,schemaVersion:version,workspaceID:typeof o.workspaceID==='string'&&ID.test(o.workspaceID)?o.workspaceID:invalid('workspace ID'),generation,previousGeneration:previous,deletionEpoch:int(o.deletionEpoch,'deletion epoch')};
+  if(o.retention!==undefined)head.retention=oneOf(o.retention,RETENTION_MODES,'head retention mode');
+  return head;
 }
 
 // Strict parse and cross-reference validation. A checkpoint that passes is
@@ -82,8 +91,6 @@ export function parseCheckpoint(value:unknown):WorkspaceCheckpoint{
   const version=schemaVersion(o.schemaVersion);
   const retention=record(o.retention,'retention',['mode']);
   const mode=oneOf(retention.mode,RETENTION_MODES,'retention mode');
-  // Delete-when-quit never writes durable state, so a durable copy of it is unsafe.
-  if(mode==='quit')invalid('ephemeral workspace was written durably');
   const generation=int(o.generation,'generation',1);
   const artifacts=list(o.artifacts,'artifacts',LIMITS.artifacts).map((a,i):PersistedArtifact=>{
     const x=record(a,`artifact ${i+1}`,['ref','name','sizeBytes','pageCount','sha256','original','note','inspection','blobGeneration']);
@@ -120,6 +127,9 @@ export function parseCheckpoint(value:unknown):WorkspaceCheckpoint{
     return entry;
   });
   const draft=o.draft===null?null:{text:str(record(o.draft,'draft',['text']).text,'draft')};
+  // Delete when atePDF quits keeps the session in memory only. Its durable record is
+  // the preference alone: a quit-mode checkpoint holding workspace content is unsafe.
+  if(mode==='quit'&&(artifacts.length||conversation.length||draft||collections.length))invalid('ephemeral workspace was written durably');
   const savedAt=time(o.savedAt,'saved time'),lastActivityAt=time(o.lastActivityAt,'activity time');
   return {format:WORKSPACE_FORMAT,schemaVersion:version,workspaceID:typeof o.workspaceID==='string'&&ID.test(o.workspaceID)?o.workspaceID:invalid('workspace ID'),generation,revision:int(o.revision,'revision'),deletionEpoch:int(o.deletionEpoch,'deletion epoch'),
     savedAt,lastActivityAt,retention:{mode},artifacts,originals,history,focus,undoPredecessor:predecessor,selection,collections,conversation,draft};

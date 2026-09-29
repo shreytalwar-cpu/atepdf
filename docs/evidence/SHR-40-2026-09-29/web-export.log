@@ -1,0 +1,22 @@
+Starting Metro Bundler
+
+Web Bundled 5514ms index.ts (1093 modules)
+
+› Assets (3):
+assets/approved-8-mark-source-crop.8b708587521942c4118f8e6a3c3f84f8.png (35KB)
+assets/approved-atepdf-wordmark-source-crop.e129a61b59d2f9c2fdcb1f1b2521e212.png (34KB)
+assets/paper.1cb2ca1d4826879d6316a24bfbeecd07.png (688KB)
+
+› web bundles (6):
+_expo/static/css/global-4c83d2372b9932b9aa340f00668d48f1.css (24KB)
+_expo/static/css/preview-4a592c39668f775437665576652be491.css (2.5KB)
+_expo/static/css/workspace-9ca8942114a70307784c156bddc23a49.css (1.3KB)
+_expo/static/js/web/index-8209adab3c85bd2741b57cd5f15c0c28.js (2.3MB)
+_expo/static/js/web/index-9c055ac84a53e9e6ad2c7cc1fd096d6b.js (18KB)
+_expo/static/js/web/pdf-042401db6a63561ce343845a60acb565.js (549KB)
+
+› Files (2):
+index.html (1.8KB)
+metadata.json (49B)
+
+Exported: dist-web

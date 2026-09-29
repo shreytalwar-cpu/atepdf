@@ -58,6 +58,17 @@ export class JobController {
     finally{clearTimeout(deadline);this.#abort=null;this.update({busy:false});}
   }
   cancel(){if(!this.#persisting)this.#abort?.abort();}
+  /**
+   * Cancel active work and wait until it has settled: cancelled, failed, or (when it
+   * was already saving its commit) committed or withdrawn. Clearing, expiry and
+   * Delete local data join active work this way before they touch the workspace.
+   */
+  async settle(){
+    while(this.state.busy){
+      this.cancel();
+      await new Promise<void>(resolve=>{const off=this.subscribe(()=>{if(!this.state.busy){off();resolve();}});});
+    }
+  }
   async import(files:LocalInputFile[]){
     try{await this.locked('importing',async signal=>{
       const revision=this.store.revision;
@@ -136,16 +147,21 @@ export class JobController {
     if(!this.#durable){this.store.undo();this.update({message:'Previous result restored.',error:null,stage:'complete',progress:undefined});return;}
     return this.#exclusive(async()=>{await this.durably(()=>this.store.undo());this.update({message:'Previous result restored.',error:null,stage:'complete',progress:undefined});},{error:null});
   }
-  clear():void|Promise<void>{
+  /**
+   * Empty the workspace. `operation` replaces the durable Start over (for example
+   * Delete local data, or a workspace the vault has already expired); without it the
+   * durability hook's clear runs, and without either the session is emptied in memory.
+   */
+  clear(operation?:()=>Promise<{cleanupComplete:boolean}>):void|Promise<void>{
     if(this.state.busy)return;
-    if(!this.#durable){this.store.clear();this.update({message:'',error:null,stage:'idle',progress:undefined});return;}
-    const durable=this.#durable;
+    const durable=operation??this.#durable?.clear;
+    if(!durable){this.store.clear();this.update({message:'',error:null,stage:'idle',progress:undefined});return;}
     // The workspace is emptied only after the new deletion epoch is durable. If
     // that fails or cannot be confirmed, the current workspace stays as it is and
     // the vault's message says what is known.
     return this.#exclusive(async()=>{
       this.#persisting=true;let cleanupComplete:boolean;
-      try{({cleanupComplete}=await durable.clear());}finally{this.#persisting=false;}
+      try{({cleanupComplete}=await durable());}finally{this.#persisting=false;}
       // The clear is durable, so the workspace is emptied either way; removal of
       // the old copies is only implied when it was verified.
       this.store.clear();this.update({message:cleanupComplete?'':CLEANUP_INCOMPLETE,stage:'idle',progress:undefined});

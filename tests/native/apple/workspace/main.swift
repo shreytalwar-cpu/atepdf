@@ -2,7 +2,7 @@ import Foundation
 import CryptoKit
 import Security
 
-// Synthetic host checks for AtepdfWorkspaceVault (SHR-39). Compiled with swiftc
+// Synthetic host checks for AtepdfWorkspaceVault (SHR-39; storage usage SHR-40). Compiled with swiftc
 // against the shipped source. This is not Mac Catalyst app acceptance: the
 // Keychain probe runs from an unsigned command-line tool (see SHR-41).
 func require(_ condition: @autoclosure () throws -> Bool, _ message: String) throws {
@@ -156,9 +156,33 @@ if created == .ready, let createdKey {
 }
 print("keychain-probe \(String(data: try JSONSerialization.data(withJSONObject: live, options: [.sortedKeys]), encoding: .utf8)!)")
 
+// 7. Storage usage (SHR-40): workspace files only, measured with lstat.
+let usageRoot = scratch.appendingPathComponent("usage/Workspace", isDirectory: true)
+let usageVault = AtepdfWorkspaceVault(root: usageRoot, keys: MemoryKeys(SymmetricKey(size: .bits256)))
+try require(try usageVault.usage().isEmpty, "a workspace that was never created uses no storage")
+try usageVault.writeSealed("head", plain: Data(repeating: 1, count: 10), associatedData: "head")
+try usageVault.writeSealed("manifests/1.atw", plain: Data(repeating: 2, count: 100), associatedData: "m")
+try usageVault.writeSealed("blobs/file_a.atw", plain: pdf, associatedData: "b")
+try Data(repeating: 3, count: 7).write(to: usageRoot.appendingPathComponent("staging/interrupted.tmp"))
+// Neither a symbolic link to a user's file nor an unrelated file is counted or followed.
+let userFile = scratch.appendingPathComponent("usage/User Documents/Large original.pdf")
+try manager.createDirectory(at: userFile.deletingLastPathComponent(), withIntermediateDirectories: true)
+try Data(repeating: 9, count: 1_000_000).write(to: userFile)
+let userHash = hex(Data(SHA256.hash(data: try Data(contentsOf: userFile))))
+try manager.createSymbolicLink(at: usageRoot.appendingPathComponent("blobs/file_link.atw"), withDestinationURL: userFile)
+try Data(repeating: 4, count: 50).write(to: usageRoot.appendingPathComponent("blobs/notes.txt"))
+let measured = Dictionary(uniqueKeysWithValues: try usageVault.usage().map { ($0.name, $0.bytes) })
+try require(measured == ["head": 42, "manifests/1.atw": 132, "blobs/file_a.atw": Int64(pdf.count + 32), "staging": 7], "usage reports each sealed workspace file's on-disk size and staging, nothing else")
+try require(hex(Data(SHA256.hash(data: try Data(contentsOf: userFile)))) == userHash, "measuring never changes a file outside the workspace")
+try manager.setAttributes([.posixPermissions: 0o000], ofItemAtPath: usageRoot.appendingPathComponent("blobs").path)
+var usageFailed = false
+do { _ = try usageVault.usage() } catch { usageFailed = true }
+try manager.setAttributes([.posixPermissions: 0o700], ofItemAtPath: usageRoot.appendingPathComponent("blobs").path)
+try require(usageFailed, "an unreadable workspace directory is an error, never zero usage")
+
 // 6. Interop with the TypeScript backend format, using a synthetic shared key.
 let interop = AtepdfWorkspaceVault(root: scratch.appendingPathComponent("interop"), keys: MemoryKeys(sharedKey))
 try interop.writeSealed("blobs/file_swift.atw", plain: pdf, associatedData: "atepdf.workspace/v1|pdf|interop|file_swift|1")
 let fromNode = try interop.readOpened("blobs/file_node.atw", associatedData: "atepdf.workspace/v1|pdf|interop|file_node|1")
 try require(fromNode.status == "ok" && fromNode.data == pdf, "Swift opens a file sealed by the TypeScript test backend")
-print("SHR-39 native workspace checks passed")
+print("SHR-39/SHR-40 native workspace checks passed")

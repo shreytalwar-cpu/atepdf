@@ -1,0 +1,31 @@
+{
+  "syntheticOnly": true,
+  "passed": true,
+  "writer": "pdf-lib",
+  "independentReaders": [
+    "Apple PDFKit",
+    "PDF.js"
+  ],
+  "ocr": "Apple Vision",
+  "codec": "Apple ImageIO",
+  "ocrTextSearchPassed": true,
+  "digitalTextUnchanged": true,
+  "ocrRenderIdentical": true,
+  "geometryUnchanged": true,
+  "codecCalls": 1,
+  "compressionBytesBefore": 7571813,
+  "compressionBytesAfter": 1125798,
+  "note": "Optimised 1 JPEG image at original dimensions. Text and vectors retained; review image quality.",
+  "controllerChain": [
+    "import",
+    "merge",
+    "ocr",
+    "compress",
+    "independent validate",
+    "remove physical page2",
+    "undo"
+  ],
+  "controllerChainPages": 4,
+  "originalHashesUnchanged": true,
+  "scope": "Native helper plus shared writer/controller, not iOS UI/device test"
+}

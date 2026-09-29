@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "fixtures": [
+    {
+      "id": "ordinary-brief", "path": "tests/fixtures/usability/brief.pdf",
+      "tags": ["ordinary", "digital-text", "multi-page", "order-sensitive"],
+      "provenance": {"origin": "generated_local", "source": "Neutral fictional Community Makers Morning study input; tests/fixtures/usability/README.md", "generation": "node tests/fixtures/usability/generate.mjs", "permission": "Original synthetic material authored for atePDF; no customer or third-party document"},
+      "sha256": "a96268f0b140302c62dbf5747558f6af4adff4628247066dfc7d8aba6f88b702", "pageCount": 2,
+      "pageOrder": ["Event Overview", "Venue and Materials"], "visibleMarkers": ["Event Overview", "Venue and Materials"],
+      "features": ["text", "multi_page"], "readerExpectation": "readable",
+      "operationExpectations": [{"operation": "merge_pdf", "disposition": "unknown", "basis": "unknown", "reason": "The neutral study defines an expected order, but app execution with these exact inputs awaits SHR-46"}]
+    },
+    {
+      "id": "ordinary-appendix", "path": "tests/fixtures/usability/appendix.pdf",
+      "tags": ["ordinary", "digital-text", "order-sensitive"],
+      "provenance": {"origin": "generated_local", "source": "Neutral fictional Community Makers Morning study input; tests/fixtures/usability/README.md", "generation": "node tests/fixtures/usability/generate.mjs", "permission": "Original synthetic material authored for atePDF; no customer or third-party document"},
+      "sha256": "7032fca149367388889994751fff118003c5a2cef90f97e0eaa4722bc5587e56", "pageCount": 1,
+      "pageOrder": ["Morning Schedule"], "visibleMarkers": ["Morning Schedule"],
+      "features": ["text"], "readerExpectation": "readable",
+      "operationExpectations": [{"operation": "merge_pdf", "disposition": "unknown", "basis": "unknown", "reason": "The neutral study defines an expected order, but app execution with these exact inputs awaits SHR-46"}]
+    },
+    {
+      "id": "raster-note", "path": "tests/fixtures/scanned-note.pdf",
+      "tags": ["scan", "ocr", "raster-only"],
+      "provenance": {"origin": "archived_synthetic", "source": "Retained synthetic startup pack at atepdf_codex_build_pack/fixtures/startup/scanned-note.pdf", "generation": "Original generator was not retained; recover exact bytes with git show b56275d:tests/fixtures/scanned-note.pdf > /tmp/atepdf-shr45-scanned-note.pdf", "permission": "Synthetic local handoff fixture; no customer or private upload"},
+      "sha256": "19d8713895b5597021834c41b4190d12735800fd9482008823a2e6a786023874", "pageCount": 1,
+      "pageOrder": ["S1 raster note"], "visibleMarkers": ["Paperwork made simple"],
+      "features": ["raster_only"], "readerExpectation": "readable",
+      "operationExpectations": [{"operation": "ocr_pdf", "disposition": "unknown", "basis": "unknown", "reason": "Source is suitable for an OCR case; operation result and placement belong to SHR-46/48"}]
+    },
+    {
+      "id": "hybrid-note", "path": "tests/fixtures/mixed-text-and-scan.pdf",
+      "tags": ["hybrid", "ocr", "order-sensitive"],
+      "provenance": {"origin": "archived_synthetic", "source": "Retained synthetic startup pack at atepdf_codex_build_pack/fixtures/startup/mixed-text-and-scan.pdf", "generation": "Original generator was not retained; recover exact bytes with git show b56275d:tests/fixtures/mixed-text-and-scan.pdf > /tmp/atepdf-shr45-mixed-text-and-scan.pdf", "permission": "Synthetic local handoff fixture; no customer or private upload"},
+      "sha256": "44972359f06ae6fb05d62450182ab33e2b1d2b2709429907ca9e4a098ea97b9c", "pageCount": 3,
+      "pageOrder": ["A1 digital", "S1 raster", "B1 digital"], "visibleMarkers": ["A1", "Paperwork made simple", "B1"],
+      "features": ["hybrid", "multi_page"], "readerExpectation": "readable",
+      "operationExpectations": [{"operation": "ocr_pdf", "disposition": "unknown", "basis": "unknown", "reason": "Targeted scanned page and unchanged digital pages need operation-specific SHR-46/48 evidence"}]
+    },
+    {
+      "id": "image-heavy", "path": "tests/fixtures/image-heavy.pdf",
+      "tags": ["image-heavy", "compression", "raster"],
+      "provenance": {"origin": "generated_local", "source": "Synthetic tests/fixtures/image-input.png with fixed-seed noise", "generation": "python3 scripts/make-compression-fixture.py (requires existing Pillow, numpy, reportlab)", "permission": "Original synthetic raster and locally generated PDF; no customer or third-party document"},
+      "sha256": "dea2e9c2d4d3326d974945f556c24b55c08e4d9f6833bbcfbe9b289330e4e773", "pageCount": 1,
+      "pageOrder": ["image-heavy raster"], "visibleMarkers": ["Paperwork made simple"],
+      "features": ["image_heavy"], "readerExpectation": "readable",
+      "operationExpectations": [{"operation": "compress_pdf", "disposition": "unknown", "basis": "unknown", "reason": "SHR-46 must classify compression outcome and image preservation for this exact input"}]
+    },
+    {
+      "id": "geometry-font", "path": "tests/fixtures/corpus/geometry-font.pdf",
+      "tags": ["geometry", "font", "image-and-text", "mixed-size"],
+      "provenance": {"origin": "generated_local", "source": "tests/fixtures/corpus/generate.py; embedded Bitstream Vera from ReportLab 4.4.9 (license in tests/fixtures/corpus/bitstream-vera-license.txt); synthetic image-input.png", "generation": "python3 tests/fixtures/corpus/generate.py", "permission": "Locally authored content; embedded Bitstream Vera redistributable under bundled license; synthetic raster"},
+      "sha256": "fe0762826b3b62e7ef3bbc9892f856720a2da3cd01a9503ba299ef3b9ebfebf9", "pageCount": 3,
+      "pageOrder": ["GEOMETRY-1", "GEOMETRY-2", "GEOMETRY-3"], "visibleMarkers": ["GEOMETRY-1", "GEOMETRY-2", "GEOMETRY-3"],
+      "features": ["text", "image_and_text", "embedded_font", "mixed_geometry", "rotation", "nonzero_media_origin", "nonzero_crop_origin", "multi_page"], "readerExpectation": "readable",
+      "operationExpectations": [{"operation": "merge_pdf", "disposition": "preserve_or_refuse", "basis": "approved_product_policy", "reason": "PDF-03/04 require geometry, text, raster and font preservation or specific refusal; actual support awaits SHR-46"}]
+    },
+    {
+      "id": "interactive", "path": "tests/fixtures/corpus/interactive.pdf",
+      "tags": ["annotation", "links", "outline", "form"],
+      "provenance": {"origin": "generated_local", "source": "Locally authored ReportLab and pypdf structure in tests/fixtures/corpus/generate.py", "generation": "python3 tests/fixtures/corpus/generate.py", "permission": "Entire document and example.invalid URI are synthetic; no customer or external document"},
+      "sha256": "88f98f1ba4ce99b784ed17205faae80edc5e3cfca54c14cb0f7e2c79e09cfc64", "pageCount": 2,
+      "pageOrder": ["INTERACTIVE-1", "INTERACTIVE-2"], "visibleMarkers": ["INTERACTIVE-1", "INTERACTIVE-2"],
+      "features": ["text", "multi_page", "annotations", "uri_link", "internal_link", "outlines", "acroform"], "readerExpectation": "readable",
+      "operationExpectations": [{"operation": "merge_pdf", "disposition": "preserve_or_refuse", "basis": "approved_product_policy", "reason": "PDF-02/03 require actual annotation, destination, outline and form preservation or specific refusal; SHR-46 decides support"}]
+    },
+    {
+      "id": "tagged", "path": "tests/fixtures/corpus/tagged.pdf",
+      "tags": ["tagged", "structure-tree", "accessibility"],
+      "provenance": {"origin": "generated_local", "source": "Hand-authored marked-content and parent-tree objects in tests/fixtures/corpus/generate.py", "generation": "python3 tests/fixtures/corpus/generate.py", "permission": "Locally authored synthetic document with no external source"},
+      "sha256": "dbf408294a099c53be62c7cec80dfbd296bd2bd1c3025ab0554daf517ca55ffd", "pageCount": 1,
+      "pageOrder": ["TAGGED-1"], "visibleMarkers": ["TAGGED-1"],
+      "features": ["text", "tagged"], "readerExpectation": "readable",
+      "operationExpectations": [{"operation": "merge_pdf", "disposition": "preserve_or_refuse", "basis": "approved_product_policy", "reason": "PDF-02/03 require meaningful tag preservation or specific refusal; support remains for SHR-46"}]
+    },
+    {
+      "id": "blank-noisy-scans", "path": "tests/fixtures/corpus/blank-noisy-scan.pdf",
+      "tags": ["scan", "blank-candidate", "noisy-scan", "ocr"],
+      "provenance": {"origin": "generated_local", "source": "Fixed-pixel PIL rasters embedded by ReportLab in tests/fixtures/corpus/generate.py", "generation": "python3 tests/fixtures/corpus/generate.py", "permission": "Locally authored synthetic blank-looking and noisy raster pages"},
+      "sha256": "bb3b284b705793aedc55b718e8d6509ae22dcf503ae4758ec06fe8c02a5c905b", "pageCount": 2,
+      "pageOrder": ["blank-looking scan", "SCAN-NOISE-2 raster"], "visibleMarkers": ["SCAN-NOISE-2"],
+      "features": ["raster_only", "blank_scan", "noisy_scan", "multi_page"], "readerExpectation": "readable",
+      "operationExpectations": [{"operation": "ocr_pdf", "disposition": "unknown", "basis": "unknown", "reason": "Blank detection, noisy OCR and per-page handling require later SHR-46/67 classification"}]
+    },
+    {
+      "id": "encoded-dimension-mismatch", "path": "tests/fixtures/corpus/encoded-dimension-mismatch.pdf",
+      "tags": ["image", "encoded-dimension", "parser-edge"],
+      "provenance": {"origin": "generated_local", "source": "32x24 synthetic JPEG stored in a PDF XObject declaring 40x24; tests/fixtures/corpus/generate.py", "generation": "python3 tests/fixtures/corpus/generate.py", "permission": "Locally authored bounded synthetic image and PDF"},
+      "sha256": "6ee79d14dc041008459dd890d421c9eb68501080c5bd261135ce1596c863fd0a", "pageCount": 1,
+      "pageOrder": ["MISMATCH-1"], "visibleMarkers": ["MISMATCH-1"],
+      "features": ["image_and_text", "encoded_dimension_mismatch"], "readerExpectation": "readable",
+      "operationExpectations": [{"operation": "compress_pdf", "disposition": "unknown", "basis": "unknown", "reason": "Actual decode/admission and no-corruption behavior await bounded SHR-46/48 checks"}]
+    },
+    {
+      "id": "encrypted-aes256", "path": "tests/fixtures/corpus/encrypted.pdf",
+      "tags": ["encrypted", "password", "protected"],
+      "provenance": {"origin": "generated_local", "source": "Synthetic single-page ReportLab PDF encrypted by pypdf AES-256 in tests/fixtures/corpus/generate.py", "generation": "python3 tests/fixtures/corpus/generate.py (AES salt/IV intentionally change each run)", "permission": "Locally authored synthetic protected document; credentials are fixture-only"},
+      "sha256": "78b89cf85f4841dcd4c228ceb3289c9c2d5c124ea6094ec72b51530201337116", "pageCount": 1,
+      "pageOrder": ["ENCRYPTED-1"], "visibleMarkers": ["ENCRYPTED-1"],
+      "features": ["encrypted_aes256", "text"], "readerExpectation": "password_required", "testPassword": "SHR45_fixture_user_only",
+      "operationExpectations": [{"operation": "unlock_pdf", "disposition": "unknown", "basis": "unknown", "reason": "Correct/wrong password and output interoperability are future SHR-46/52 work, not current acceptance"}]
+    },
+    {
+      "id": "boundary-100", "path": "tests/fixtures/corpus/boundary-100.pdf",
+      "tags": ["boundary", "page-count", "in-limit"],
+      "provenance": {"origin": "generated_local", "source": "Hand-authored 100-page raw PDF in tests/fixtures/corpus/generate.py", "generation": "python3 tests/fixtures/corpus/generate.py", "permission": "Locally authored bounded synthetic content"},
+      "sha256": "4588d6a7ac6f520893eff2369ad5a9b40e5a2189efebfb9530f6127e63a6ce2c", "pageCount": 100,
+      "pageOrder": {"prefix": "BOUNDARY-", "start": 1, "digits": 3}, "visibleMarkers": ["BOUNDARY-001", "BOUNDARY-100"],
+      "features": ["text", "multi_page", "page_limit_100"], "readerExpectation": "readable",
+      "operationExpectations": [{"operation": "import", "disposition": "unknown", "basis": "unknown", "reason": "Current 100-page source limit is not an approved v1 policy; actual operation outcome awaits SHR-46"}]
+    },
+    {
+      "id": "boundary-101", "path": "tests/fixtures/corpus/boundary-101.pdf",
+      "tags": ["boundary", "page-count", "over-limit"],
+      "provenance": {"origin": "generated_local", "source": "Hand-authored 101-page raw PDF in tests/fixtures/corpus/generate.py", "generation": "python3 tests/fixtures/corpus/generate.py", "permission": "Locally authored bounded synthetic content"},
+      "sha256": "7f086f63c7402210c4c5c0348ffdac0dda89b606720be0d786dd58f3ce51364d", "pageCount": 101,
+      "pageOrder": {"prefix": "BOUNDARY-", "start": 1, "digits": 3}, "visibleMarkers": ["BOUNDARY-001", "BOUNDARY-101"],
+      "features": ["text", "multi_page", "over_page_limit_101"], "readerExpectation": "readable",
+      "operationExpectations": [{"operation": "import", "disposition": "unknown", "basis": "unknown", "reason": "The prototype source limit is 100 pages, but this fixture's actual safe-refusal result and v1 limit decision await SHR-46"}]
+    },
+    {
+      "id": "damaged-missing-page", "path": "tests/fixtures/corpus/damaged-missing-page.pdf",
+      "tags": ["damaged", "missing-object", "parser-edge"],
+      "provenance": {"origin": "generated_local", "source": "Finite raw PDF page tree with /Count 1 and a missing Kid 99 0 R; tests/fixtures/corpus/generate.py", "generation": "python3 tests/fixtures/corpus/generate.py", "permission": "Locally authored bounded malformed bytes, no external content"},
+      "sha256": "350f3bb170ebbd679baff6b3b1533371e76c5323537eec9928aded465c2807f7", "pageCount": 1,
+      "pageOrder": ["intended missing page 1"], "visibleMarkers": [],
+      "features": ["missing_page_object"], "readerExpectation": "damaged",
+      "operationExpectations": [{"operation": "import", "disposition": "preserve_or_refuse", "basis": "approved_product_policy", "reason": "PDF-03/04 require no silent corruption or partial import; exact parser outcome awaits isolated SHR-46 testing"}]
+    }
+  ]
+}

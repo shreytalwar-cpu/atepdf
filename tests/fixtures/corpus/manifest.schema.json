@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "atepdf-shr45-corpus-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "fixtures"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "fixtures": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/fixture"}}
+  },
+  "$defs": {
+    "fixture": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "path", "tags", "provenance", "sha256", "pageCount", "pageOrder", "visibleMarkers", "features", "readerExpectation", "operationExpectations"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z][a-z0-9-]+$"},
+        "path": {"type": "string", "pattern": "^tests/fixtures/(corpus/|usability/)?[a-z0-9-]+\\.pdf$"},
+        "tags": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 2}},
+        "provenance": {
+          "type": "object", "additionalProperties": false,
+          "required": ["origin", "source", "generation", "permission"],
+          "properties": {
+            "origin": {"enum": ["generated_local", "archived_synthetic"]},
+            "source": {"type": "string", "minLength": 8},
+            "generation": {"type": "string", "minLength": 8},
+            "permission": {"type": "string", "minLength": 8}
+          }
+        },
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "pageCount": {"type": "integer", "minimum": 1, "maximum": 101},
+        "pageOrder": {"oneOf": [
+          {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 2}},
+          {"type": "object", "additionalProperties": false, "required": ["prefix", "start", "digits"], "properties": {
+            "prefix": {"type": "string", "minLength": 2}, "start": {"type": "integer", "minimum": 1}, "digits": {"type": "integer", "minimum": 1, "maximum": 5}
+          }}
+        ]},
+        "visibleMarkers": {"type": "array", "items": {"type": "string", "minLength": 2}},
+        "features": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": [
+          "text", "multi_page", "raster_only", "hybrid", "image_heavy", "image_and_text", "blank_scan", "noisy_scan",
+          "annotations", "uri_link", "internal_link", "outlines", "acroform", "tagged", "embedded_font",
+          "mixed_geometry", "rotation", "nonzero_media_origin", "nonzero_crop_origin", "encrypted_aes256",
+          "encoded_dimension_mismatch", "page_limit_100", "over_page_limit_101", "missing_page_object"
+        ]}},
+        "readerExpectation": {"enum": ["readable", "password_required", "damaged"]},
+        "testPassword": {"type": "string", "minLength": 8},
+        "operationExpectations": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false,
+          "required": ["operation", "disposition", "basis", "reason"], "properties": {
+            "operation": {"type": "string", "minLength": 2},
+            "disposition": {"enum": ["supported", "refused", "preserve_or_refuse", "unknown"]},
+            "basis": {"enum": ["approved_product_policy", "observed_prototype", "unknown"]},
+            "reason": {"type": "string", "minLength": 8}
+          }
+        }}
+      }
+    }
+  }
+}

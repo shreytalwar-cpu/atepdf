@@ -36,6 +36,8 @@ First establish a reproducible baseline on the frozen source in an isolated envi
 
 ## Difficult-PDF minimum corpus
 
+The [SHR-45 synthetic corpus](../tests/fixtures/corpus/README.md) now indexes reusable ordinary and difficult inputs with hashes, provenance and structural checks. Its presence does not classify any transform as compatible; the operation matrix and saved-output verification remain SHR-46 work.
+
 | Family | Current boundary | Minimum missing regression evidence |
 |---|---|---|
 | Encrypted | Refuses encryption/locked documents; no password entry | Real password-protected AES and owner-restricted files, malformed encryption; safe refusal |

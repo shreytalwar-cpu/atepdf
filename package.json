@@ -16,7 +16,9 @@
     "expo:preview": "node scripts/serve-expo.mjs",
     "connect:openai": "python3 scripts/connect-openai.py",
     "expo:bundles:android": "node scripts/contracts.mjs && cd apps/universal && EXPO_NO_TELEMETRY=1 expo export --platform android --output-dir dist-android",
-    "test:native:apple": "node tests/native/apple/run.mjs"
+    "test:native:apple": "node tests/native/apple/run.mjs",
+    "eval:orchestration": "node --import tsx tests/evals/orchestration/run.mts",
+    "test:eval:orchestration": "node --import tsx --test tests/regressions/orchestration-eval.test.ts"
   },
   "dependencies": {
     "@ai-sdk/openai": "4.0.78",

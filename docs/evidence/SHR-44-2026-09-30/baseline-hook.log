@@ -1,0 +1,212 @@
+✖ delayed sample + Cancel: no import, chat or save after invalidation (59.437125ms)
+✖ delayed sample + Start Over: no import, chat or save after invalidation (63.294583ms)
+✖ old picker callback after a new import: newest selection remains authoritative (33.503916ms)
+✖ pending setup completion after reset cannot append chat or restore focus (58.161125ms)
+✖ pending export saved after reset: no stale receipt or error (54.223667ms)
+✖ pending export shared after reset: no stale receipt or error (49.298ms)
+✖ pending export failure after reset: no stale receipt or error (54.117583ms)
+✖ repeated cancel while sample is pending is idempotent and silent on late rejection (42.831667ms)
+✖ old callback after Undo cannot alter the current result hash or append an import (62.70575ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 0
+ℹ fail 9
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 640.746708
+
+✖ failing tests:
+
+test at tests/regressions/workspace-ownership.test.ts:2:2118
+✖ delayed sample + Cancel: no import, chat or save after invalidation (59.437125ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (/Users/shrey/.codex/worktrees/shr-44-async-ownership/atepdf/tests/regressions/workspace-ownership.test.ts:16:210)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/regressions/workspace-ownership.test.ts:2:2118
+✖ delayed sample + Start Over: no import, chat or save after invalidation (63.294583ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (/Users/shrey/.codex/worktrees/shr-44-async-ownership/atepdf/tests/regressions/workspace-ownership.test.ts:16:210)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/regressions/workspace-ownership.test.ts:2:2897
+✖ old picker callback after a new import: newest selection remains authoritative (33.503916ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      'new.pdf',
+  +   'old.pdf'
+    ]
+  
+      at TestContext.<anonymous> (/Users/shrey/.codex/worktrees/shr-44-async-ownership/atepdf/tests/regressions/workspace-ownership.test.ts:22:157)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'new.pdf', 'old.pdf' ],
+    expected: [ 'new.pdf' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/regressions/workspace-ownership.test.ts:2:3598
+✖ pending setup completion after reset cannot append chat or restore focus (58.161125ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   {
+  +     artifact: undefined,
+  +     choice: 'native-pair',
+  +     files: undefined,
+  +     id: 2,
+  +     role: 'assistant',
+  +     text: 'This app is paired with the planner on your Mac.'
+  +   }
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (/Users/shrey/.codex/worktrees/shr-44-async-ownership/atepdf/tests/regressions/workspace-ownership.test.ts:28:163)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ { role: 'assistant', text: 'This app is paired with the planner on your Mac.', choice: 'native-pair', files: undefined, artifact: undefined, id: 2 } ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/regressions/workspace-ownership.test.ts:2:4379
+✖ pending export saved after reset: no stale receipt or error (54.223667ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + {
+  +   out_old: 'Saved to your device'
+  + }
+  - {}
+  
+      at TestContext.<anonymous> (/Users/shrey/.codex/worktrees/shr-44-async-ownership/atepdf/tests/regressions/workspace-ownership.test.ts:34:193)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { out_old: 'Saved to your device' },
+    expected: {},
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/regressions/workspace-ownership.test.ts:2:4379
+✖ pending export shared after reset: no stale receipt or error (49.298ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + {
+  +   out_old: 'Share sheet closed · check the destination you chose'
+  + }
+  - {}
+  
+      at TestContext.<anonymous> (/Users/shrey/.codex/worktrees/shr-44-async-ownership/atepdf/tests/regressions/workspace-ownership.test.ts:34:193)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { out_old: 'Share sheet closed · check the destination you chose' },
+    expected: {},
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/regressions/workspace-ownership.test.ts:2:4379
+✖ pending export failure after reset: no stale receipt or error (54.117583ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + {
+  +   out_old: 'old error'
+  + }
+  - {}
+  
+      at TestContext.<anonymous> (/Users/shrey/.codex/worktrees/shr-44-async-ownership/atepdf/tests/regressions/workspace-ownership.test.ts:34:193)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { out_old: 'old error' },
+    expected: {},
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/regressions/workspace-ownership.test.ts:2:5213
+✖ repeated cancel while sample is pending is idempotent and silent on late rejection (42.831667ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   {
+  +     artifact: undefined,
+  +     files: undefined,
+  +     id: 1,
+  +     role: 'assistant',
+  +     text: 'old failed fetch'
+  +   }
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (/Users/shrey/.codex/worktrees/shr-44-async-ownership/atepdf/tests/regressions/workspace-ownership.test.ts:39:181)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ { role: 'assistant', text: 'old failed fetch', files: undefined, artifact: undefined, id: 1 } ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/regressions/workspace-ownership.test.ts:2:5910
+✖ old callback after Undo cannot alter the current result hash or append an import (62.70575ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'out_second'
+  - 'out_first'
+         ^
+  
+      at TestContext.<anonymous> (/Users/shrey/.codex/worktrees/shr-44-async-ownership/atepdf/tests/regressions/workspace-ownership.test.ts:45:248)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'out_second',
+    expected: 'out_first',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

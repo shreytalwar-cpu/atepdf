@@ -101,9 +101,9 @@ export class WorkspaceVault{
    * A save is bound to the deletion epoch it was requested in: if a Start over
    * commits first, it is refused with StaleSaveError and nothing is written.
    */
-  save(snapshot:()=>WorkspaceSnapshot):Promise<void>{
+  save(snapshot:()=>WorkspaceSnapshot,current:()=>boolean=()=>true):Promise<void>{
     const epoch=this.#epoch;
-    return this.#serial(()=>{if(this.#epoch!==epoch)throw new StaleSaveError();return this.#save(snapshot());});
+    return this.#serial(()=>{if(this.#epoch!==epoch||!current())throw new StaleSaveError();return this.#save(snapshot(),current);});
   }
   /**
    * Publish an empty workspace in a new deletion epoch, then remove and verify
@@ -233,7 +233,7 @@ export class WorkspaceVault{
         return entry;
       }),draft});
   }
-  async #save(snapshot:WorkspaceSnapshot){
+  async #save(snapshot:WorkspaceSnapshot,current:()=>boolean=()=>true){
     if(this.mode!=='writable')throw new Error(STORAGE_WRITE_FAILED);
     const generation=this.#generation+1;
     let checkpoint:WorkspaceCheckpoint;const written=new Map<string,number>();
@@ -259,6 +259,9 @@ export class WorkspaceVault{
       // this attempt are unreferenced and collected after a later checkpoint.
       throw new Error(STORAGE_WRITE_FAILED);
     }
+    // An invalidated save may have written staged copies, but never publish them
+    // as current. Collect only unreferenced app-owned copies under the same lock.
+    if(!current()){await this.#collectAfter(this.#head?.previousGeneration??null);throw new StaleSaveError();}
     // 3. Commit point: atomically replace the head, keeping the previous generation.
     const next:WorkspaceHead={format:WORKSPACE_FORMAT,schemaVersion:WORKSPACE_SCHEMA_VERSION,workspaceID:this.#workspaceID,generation,previousGeneration:this.#previous,deletionEpoch:this.#epoch};
     const publication=await this.#commitHead(next,'withdraw');

@@ -78,7 +78,7 @@ N, M      := positive integer (1-based PHYSICAL page number), N <= M
 |---|---|
 | Numbering | Physical page position, 1-based. Printed page labels (roman numerals, "page 5" printed on the 7th sheet) are not interpreted. If the user's number could be a label, the assistant asks. |
 | Ranges | Inclusive. A reversed range (`5-2`) is refused with a clarification, not reinterpreted. |
-| Duplicates | Set tools (Remove, Rotate, Split ranges, PDF to Images, Extract Text) merge duplicates and echo the resolved set. Reorder refuses duplicates (section 5.4). |
+| Duplicates | Set tools (Remove, Rotate, PDF to Images, Extract Text) merge duplicates and echo the resolved set. Split ranges are **not** a set: they are an ordered list of part boundaries, so they are never merged, sorted or collapsed, and any overlap, including a repeated range, is refused (section 5.2). Reorder refuses duplicates (section 5.4). |
 | Out of range | Refused, naming the page count: *"This PDF has 12 pages. Choose pages from 1 to 12."* |
 | Empty result | Refused, for example `even` on a 1-page PDF. |
 | Semantic selectors | `blank page candidates`, `scanned pages` and similar resolve **locally** (UNDERSTAND-04, SHR-66/67) to an explicit set, which is shown for confirmation when uncertain. They are never passed to an engine unresolved. |
@@ -89,7 +89,7 @@ N, M      := positive integer (1-based PHYSICAL page number), N <= M
 - **Single-file tools** create one new result. The original stays immutable (PDF-01).
 - **Split and PDF to Images** return a **collection** (TOOL-14, SHR-54) with a count, names, order, per-item size and save state. Collections export to a user-chosen folder with collision handling. There is no ZIP.
 - **Extract Text** returns one `.txt` result (section 5.12).
-- **No-benefit outcomes create no new result.** A Compress run that is not smaller is reported, and the current file stays current (section 5.6).
+- **No-benefit outcomes create no new result.** A Compress run that is not smaller is reported, and the current file stays current (section 5.6). Inside a multi-step plan, the current intermediate result carries forward so later steps continue.
 - **Batch "per file" is out of v1.** One source document per job for Compress, OCR, Rotate, Reorder, Remove, Protect, Unlock, Extract Text and Remove Metadata. A multi-step plan may chain tools (for example Images to PDF → Merge).
 
 ### 3.4 Verification baseline (PDF-04/05)
@@ -151,8 +151,12 @@ Today, Merge and Remove write the pdf-lib producer string and drop the source ti
   - `each_page`: one file per page.
   - `fixed_size N`: every N pages; the last part may be shorter. N must be ≥1 and < the page count.
   - `ranges`: one file per range, in the order given.
-- **Ranges.** Overlapping ranges are refused, since they would duplicate pages. Pages not covered by any range are **not** output, and the receipt lists them ("Pages 9–12 weren't included"). A single range yields one file; this covers "extract pages 2–4".
-- **Refusals.** A 1-page PDF; an empty, reversed or out-of-range selection; a split that would reproduce the whole document as one part.
+- **Ranges.** Each range is one part, and each range's boundaries are kept exactly as given.
+  - Parts are produced in the order the ranges were supplied, not sorted: `4-6, 1-3` yields part 1 = pages 4–6 and part 2 = pages 1–3. The collection keeps that order; file names still use the physical page numbers.
+  - Ranges are never merged or de-duplicated. Any overlap would duplicate pages, so it is refused with a question about which part owns the shared pages: `1-3, 3-5` asks whether page 3 belongs to the first part or the second. A repeated identical range (`1-3, 1-3`) is an overlap and is refused the same way.
+  - Pages not covered by any range are **not** output, and the receipt lists them ("Pages 9–12 weren't included").
+  - A single range yields one file; this covers "extract pages 2–4".
+- **Refusals.** A 1-page PDF; an empty, reversed (`5-2`) or out-of-range selection; overlapping ranges, including a repeated range; a split that would reproduce the whole document as one part.
 - **Naming.** `<source stem>-pages-<a>-<b>.pdf` for a range and `<source stem>-page-<n>.pdf` for a single page, using physical page numbers. Numbers are zero-padded to the digit width of the source page count so Finder sorts them correctly. Export collisions need an explicit choice (PDF-01).
 - **Verification.** Each part's identity/order equals its source slice, and the collection is complete (count and names).
 
@@ -188,6 +192,7 @@ Today, Merge and Remove write the pdf-lib producer string and drop the source ti
 
 - **Target size.** Best effort. atePDF runs the approved profile once, reports the actual size and says whether the target was met (UX-02). It never escalates to a stronger quality loss without asking again, and never predicts a size in advance.
 - **No benefit (both profiles).** If the output is not smaller, **no new result is created**: *"This PDF is already about as small as I can make it without lowering quality further. I kept your current file."* (Today a copy is committed; gap G4.)
+  - In a multi-step plan (for example Merge → Compress), a no-benefit Compress step keeps the current intermediate result, and later steps continue from it. It does not discard an earlier successful step's result and does not create a redundant standalone copy. The receipt says compression gave no benefit.
 - **Image-heavy files.** Only eligible JPEG images change. CMYK, grayscale, masked, JPEG 2000, JBIG2 and Flate images are left untouched, and the receipt says so ("Some images were left as they were"). SHR-46 shows image-heavy 7,571,813 → 269,048 bytes.
 - **Malformed images.** An encoded/declared dimension mismatch is refused with a specific message until SHR-65/48 verifies pass-through. The 3 SHR-46 cases are UNVERIFIED.
 - **Wording.** Always "best effort" and actual numbers. Never "guaranteed" or "up to X%".
@@ -204,12 +209,14 @@ Today, Merge and Remove write the pdf-lib producer string and drop the source ti
 - **Overlay.** Invisible text over the page, aligned to word boxes. Appearance must be unchanged: rendering comparison, SHR-48.
 - **Confidence and review.**
   - Per-page success replaces today's all-or-nothing behaviour. Pages that pass may be committed. Pages that fail the confidence or reliability checks are left without added text and listed for review. The job is refused only if no page can be safely recognised.
+  - **Page refusal vs job refusal.** A page refusal (low confidence, unsupported language or script, rotated scan, offset crop box, hybrid page) leaves that page exactly as it was and lets the other pages continue. A job refusal (no page can be safely recognised, over the OCR page limit, or refused input under 3.1) commits nothing.
+  - **All original pages stay.** In a mixed document (for example recognised pages, a low-confidence page, a rotated scan and a digital-text page), the output keeps every original page in its original order. Only pages that passed gain invisible text. Page count and page identity equal the source.
   - The receipt shows per-page status: recognised / low confidence / not recognised.
   - A readable review surface ("Review text") shows the recognised text per page in a selectable, VoiceOver-readable view (MAC-03).
   - Floor and low-confidence thresholds are **pending SHR-64 calibration**; the current floor is 0.45 average confidence. The final OCR page limit is pending SHR-64/SHR-78.
 - **Unsupported.**
   - Other languages and scripts: CJK, Arabic/RTL, Cyrillic, Thai, Devanagari and others. Vision lists them on the host, but overlay placement, encoding and RTL/vertical order are unverified.
-  - Rotated scanned pages and offset crop boxes, until separately evidenced.
+  - Rotated scanned pages and offset crop boxes, until separately evidenced. In a document, these are page refusals: the page stays unchanged and is listed.
   - French, German, Spanish, Italian and Portuguese are **not** in the launch promise. They may be added later only after fixture and Mac evidence.
   - Handwriting: no claim.
 - **Resource.** Pages needing OCR per job: currently 15, provisional, **pending SHR-78**. The render budget is the shared decoded-pixel limit.
@@ -302,10 +309,13 @@ This section is contract only. The actual encryption algorithm/profile, handler 
 
   The tool says clearly: **"Remove Metadata is not anonymisation."** It is also not redaction or sanitisation (TOOL-13).
 - **Refused.** Signed input (3.1); complex input (shared guard).
-- **Verification.** The output must independently verify that the intended metadata is gone.
-  - The saved file's trailer has no `/Info`.
-  - No object carries `/Type /Metadata` or `/Subtype /XML`, and a raw-byte scan finds no residual Info keys or `<x:xmpmeta`.
-  - Pages, identity and text are unchanged.
+- **Verification (structural oracle).** The output must independently verify that the intended metadata is gone. The oracle checks the targeted structures, not arbitrary bytes:
+  - The saved file's trailer has no `/Info`, or its Info dictionary is empty: no standard field and no custom key remains.
+  - The document catalog has no `/Metadata`, and no page object has `/Metadata`. The same holds for any other object whose `/Metadata` the rewrite targeted under profile B (images, fonts, other objects).
+  - The source's Info dictionary and targeted XMP streams are unreachable from the trailer, and the saved file holds no orphaned copies of them (full rewrite, no incremental revisions).
+  - Pages, identity, content streams and text are unchanged, **including text that merely looks like metadata** (for example visible page text reading "/Author", "/Title" or "x:xmpmeta").
+  - A raw-byte scan for Info key names or `<x:xmpmeta` is a **diagnostic clue only**. A hit is investigated against the checks above; it is not by itself a failure, because admitted content must be preserved. Removal is never broadened to unrelated content streams, text or XML to make a scan come back clean.
+  - Passing this oracle proves that the listed metadata was removed. It does not make the document anonymous.
 
 ## 6. Resource envelopes: technical safety vs commercial (TOOLPROF-7)
 
@@ -346,18 +356,18 @@ A generic "Something went wrong" is never an acceptable refusal. Every refusal s
 | Tool | Success (all include independent verification, 3.4) | Safe refusal conditions | Example refusal wording |
 |---|---|---|---|
 | Merge | Output = concatenation of sources in the stated order; geometry preserved | <2 inputs; repeated input; over limits; complex/encrypted/signed input | "This file has form fields I can't safely keep when merging yet. I haven't changed anything." |
-| Split | Complete collection; each part equals its slice; names/order correct | 1-page PDF; empty/reversed/overlapping/out-of-range ranges; one part equal to the whole | "Those ranges overlap at page 4. Should page 4 go in the first part or the second?" |
+| Split | Complete collection; each part equals its slice; parts in the supplied range order; uncovered pages listed in the receipt; names correct | 1-page PDF; empty/reversed/out-of-range ranges; overlapping ranges, including a repeated range (never collapsed); one part equal to the whole | "Those ranges overlap at page 4. Should page 4 go in the first part or the second?" |
 | Remove Pages | Remaining pages = source minus selection, order kept | All pages selected; out of range; unconfirmed uncertain selector | "That would remove every page. A PDF needs at least one page — which should I keep?" |
 | Reorder | Position i holds source page order[i] | Duplicate/missing/out-of-range pages; semantic sort | "Page 3 is listed twice. I can't duplicate pages — where should page 3 go?" |
 | Rotate | Selected pages' `/Rotate` = old + delta mod 360; others identical | Non-quarter angle; absolute "upright" without a direction | "I can rotate by 90°, 180° or 270°. Which way should these pages turn?" |
-| Compress | Output smaller than input and valid; actual size reported; target met/missed stated | Malformed image data; complex input. (Not smaller → no new result, which is not an error.) | "One image in this PDF is encoded inconsistently, so I can't safely recompress it. I haven't changed the file." |
-| OCR | Text added only to text-empty pages; appearance unchanged; per-page status shown | No recognisable page; unsupported language/script; rotated scan; over page limit | "I can only recognise English text so far. This page looks like it's in Japanese, so I left it unchanged." |
+| Compress | Output smaller than input and valid; actual size reported; target met/missed stated | Malformed image data; complex input. (Not smaller → no new result from this step; the current or intermediate result carries forward, which is not an error.) | "One image in this PDF is encoded inconsistently, so I can't safely recompress it. I haven't changed the file." |
+| OCR | All original pages present in original order; text added only to text-empty pages that passed; appearance unchanged; per-page status shown | **Page refusal** (page left unchanged and listed; other pages continue): low confidence; unsupported language/script; rotated scan; hybrid page. **Job refusal** (nothing committed): no page can be safely recognised; over page limit; refused input (3.1) | "I can only recognise English text so far. This page looks like it's in Japanese, so I left it unchanged." |
 | Images to PDF | One page per image, in order, orientation correct, aspect kept | Unsupported/multi-frame/corrupt image; over pixel budget | "IMG_0042 is an animated GIF. I can only use single images — could you pick one frame or another file?" |
 | PDF to Images | Complete, ordered, correctly named image set at the stated resolution | Resolution over budget (asks); out-of-range pages | "Page 3 is very large, so 300 dpi would be too big to render safely. The most I can do is 180 dpi — use that?" |
 | Protect | Reader refuses without the password and opens with it; content unchanged | Already encrypted; signed; not the last step | "This PDF already has a password. Unlock it first, then I can protect it with a new one." |
 | Unlock | Opens without a password; content equals the decrypted source | Wrong password; unsupported encryption; restrictions without the owner password | "That password didn't open the PDF. Nothing was changed — try again in the secure field." |
 | Extract Text | Valid UTF-8 `.txt`; page markers; text per page matches independent extraction | Complex/encrypted input; (pages without text → offer OCR, not an error) | "Pages 2 and 5 are scans with no text layer. Should I make them searchable first?" |
-| Remove Metadata | No Info, no XMP, no residue; content unchanged | Signed/complex input | "This PDF is digitally signed, and changing it would break the signature. Can you use an unsigned copy?" |
+| Remove Metadata | Structural oracle (5.13): trailer Info removed or empty; catalog, page and other targeted `/Metadata` removed and unreachable, with no orphaned copies; content and text unchanged, including metadata-looking text | Signed/complex input | "This PDF is digitally signed, and changing it would break the signature. Can you use an unsigned copy?" |
 
 ## 9. Fixture and test acceptance map
 
@@ -366,20 +376,20 @@ The SHR-45 fixtures are in `tests/fixtures/corpus/manifest.json`. Every implemen
 | Tool (SHR) | Existing SHR-45 fixtures | SHR-46 coverage today | Required new fixtures / tests before the claim |
 |---|---|---|---|
 | Merge (stabilise; SHR-47, SHR-50, SHR-83) | ordinary-brief, ordinary-appendix, geometry-font, image-heavy, raster-note, hybrid-note, interactive, tagged, encrypted-aes256, boundary-100/101, damaged-missing-page, encoded-dimension-mismatch | 7 SUPPORTED, 5 SAFELY_REJECTED (incl. damaged admission), 1 FAILED, 1 UNVERIFIED | 3+ input order; repeated input refusal; specific encrypted refusal (fix FAILED); signed fixture; Mac native run |
-| Split (SHR-55, SHR-54) | ordinary-brief, hybrid-note, geometry-font, boundary-100 | NOT_IMPLEMENTED | Each mode; overlap/reversed/uncovered/1-page refusals; names; collection export with collisions |
+| Split (SHR-55, SHR-54) | ordinary-brief, hybrid-note, geometry-font, boundary-100 | NOT_IMPLEMENTED | Each mode; names; collection export with collisions. Range contract cases (12-page source): repeated range `1-3, 1-3` refused, not collapsed; overlapping `1-3, 3-5` refused with a page-3 ownership question; supplied order `4-6, 1-3` gives two parts in that order; omitted pages `1-3, 7-8` gives two parts and a receipt listing pages 4–6 and 9–12; reversed range `5-2`, out-of-range, whole-document single part and 1-page refusals |
 | Remove (stabilise; SHR-47, SHR-67) | ordinary-brief, hybrid-note, geometry-font, boundary-100, blank-noisy-scans | 5 SUPPORTED, 2 SAFELY_REJECTED, 7 NOT_RUN | Swapped same-size page detection; all-pages refusal; confirmed semantic selector |
 | Reorder (SHR-56) | hybrid-note (A1/S1/B1 distinguishable), geometry-font, boundary-100 | NOT_IMPLEMENTED | Full permutation, move, reverse; duplicate/missing refusal; same-size scan swap |
 | Rotate (SHR-57) | geometry-font (page 2 already 90°; offset boxes), raster-note | NOT_IMPLEMENTED | All three angles; cumulative normalisation (270+180→90); boxes unchanged; rotate→OCR refusal |
-| Compress (SHR-65) | image-heavy, ordinary-brief/appendix (no benefit), raster-note, hybrid-note, geometry-font, boundary-100, encoded-dimension-mismatch | 8 SUPPORTED, 4 SAFELY_REJECTED, 1 FAILED, 1 UNVERIFIED | CMYK/gray/masked/JPEG 2000 images left untouched; target met/missed; no-new-result on no benefit; mismatch refusal |
-| OCR (SHR-64) | raster-note, hybrid-note, blank-noisy-scans, ordinary-brief, geometry-font, boundary-100 | 7 SUPPORTED, 5 SAFELY_REJECTED, 1 FAILED, 1 UNVERIFIED — **Tesseract web only** | **Mac Vision** run; accented-Latin/typographic scan; partial-confidence document; >15-page scan; rotated scan; non-Latin refusal; placement check (SHR-48) |
+| Compress (SHR-65) | image-heavy, ordinary-brief/appendix (no benefit), raster-note, hybrid-note, geometry-font, boundary-100, encoded-dimension-mismatch | 8 SUPPORTED, 4 SAFELY_REJECTED, 1 FAILED, 1 UNVERIFIED | CMYK/gray/masked/JPEG 2000 images left untouched; target met/missed; no-new-result on no benefit; no-benefit step inside a plan (for example Merge → Compress) keeps the merged intermediate, with no redundant copy; mismatch refusal |
+| OCR (SHR-64) | raster-note, hybrid-note, blank-noisy-scans, ordinary-brief, geometry-font, boundary-100 | 7 SUPPORTED, 5 SAFELY_REJECTED, 1 FAILED, 1 UNVERIFIED — **Tesseract web only** | **Mac Vision** run; accented-Latin/typographic scan; partial-confidence document; mixed document (recognised, low-confidence, rotated-scan and digital-text pages) keeps every original page in order, adds text only to passing pages and lists per-page status; no-safe-page job refusal; >15-page scan; rotated scan; non-Latin refusal; placement check (SHR-48) |
 | Images to PDF (SHR-58) | `tests/fixtures/image-input.png` only | NOT_IMPLEMENTED | JPEG with EXIF orientation 6/8; HEIC 4032×3024; PNG with alpha; 16-bit PNG; grayscale; CMYK JPEG; animated GIF/multi-page TIFF refusal; truncated image; dimension bomb; RAW/PSD refusal; Intel HEIC decode |
 | PDF to Images (SHR-59, SHR-54) | ordinary-brief, geometry-font, raster-note, image-heavy, boundary-100 | NOT_IMPLEMENTED | 72/150/300 dpi dimensions; over-budget page asks; naming; white background; collection export |
 | Protect (SHR-60, SHR-52, SHR-53) | ordinary-brief; encrypted-aes256 (already-encrypted refusal) | NOT_IMPLEMENTED | Independent open/deny proof; Unicode/127-byte password; signed refusal; last-step rule |
 | Unlock (SHR-61, SHR-52, SHR-53) | encrypted-aes256 (correct and wrong password) | 1 NOT_IMPLEMENTED | Owner-password-only fixture; legacy RC4/AES-128 per SHR-52; public-key refusal; PDF-07 storage check |
 | Extract Text (SHR-62) | ordinary-brief, ordinary-appendix, hybrid-note, raster-note, geometry-font | NOT_IMPLEMENTED | Multi-column order caveat; non-Latin digital text (UTF-8); ligatures; empty-page markers; OCR offer path |
-| Remove Metadata (SHR-63) | ordinary-brief/appendix (Title, Author, Producer); corpus fixtures (Title, Author) | NOT_IMPLEMENTED | Metadata-rich fixture: all Info keys + custom key, catalog and object XMP, orphaned Info from an incremental update, JPEG with EXIF GPS (documents non-removal); raw-byte residue scan; signed refusal |
+| Remove Metadata (SHR-63) | ordinary-brief/appendix (Title, Author, Producer); corpus fixtures (Title, Author) | NOT_IMPLEMENTED | Metadata-rich fixture: all Info keys + custom key, catalog and object XMP, orphaned Info from an incremental update, JPEG with EXIF GPS (documents non-removal); the 5.13 structural oracle (trailer Info, catalog/page/targeted `/Metadata` reachability, no orphans), with any raw-byte scan recorded as a diagnostic only; metadata-looking-text case: a simple admitted PDF whose visible page text contains "/Author", "/Title" and "x:xmpmeta" keeps its pages and text unchanged while its actual Info and XMP are removed; signed refusal |
 
-**Corpus gaps shared across tools.** Signed/certified PDF, owner-restricted-only encryption, non-Latin text (scanned and digital), a PDF with page labels, a metadata-rich PDF, a multi-column layout, image-input formats, and large page counts (for example 250 and 500 pages) for SHR-78 measurement. This ADR does not add fixtures.
+**Corpus gaps shared across tools.** Signed/certified PDF, owner-restricted-only encryption, non-Latin text (scanned and digital), a PDF with page labels, a metadata-rich PDF, a simple PDF whose visible text looks like metadata syntax, a multi-column layout, image-input formats, and large page counts (for example 250 and 500 pages) for SHR-78 measurement. This ADR does not add fixtures.
 
 ## 10. Observed gaps recorded for triage (not fixed here)
 
@@ -510,6 +520,11 @@ Sections 4, 5 and 8 are approved. Each launch claim stays withheld until its imp
 | Remove Metadata | Approved full Info/XMP profile. Explicitly not anonymisation. |
 
 **Linked PDFs (ADR 0013).** Use the approved Merge simple HTTP/HTTPS-link contract. Public support remains withheld until SHR-50 implements and verifies it. Linked-PDF support is not broadened beyond ADR 0013.
+
+**Post-approval consistency corrections (batch cross-review, 30 September 2026).** These align the contract text with choices the owner already approved. They are not new decisions, add no tool support and do not claim owner re-approval. The approval record above is unchanged.
+- **TOOLPROF-9 (Split), S51-01.** Section 3.2 had listed Split ranges among the duplicate-collapsing set tools, which contradicted the approved Split constraint. Split ranges are now an ordered list of part boundaries: parts in supplied order, any overlap (including a repeated range) refused with an ownership question, uncovered pages omitted and listed. Sections 3.2, 5.2, 8 and 9 are synchronised. TOOLPROF-5's "set-like tools may collapse duplicates" does not cover Split ranges.
+- **TOOLPROF-6 (Remove Metadata), S51-02.** The verification oracle required raw bytes free of Info-key tokens and `x:xmpmeta`, and no `/Subtype /XML` object, which contradicted the approved preservation of content. It is now a structural oracle on the trailer Info dictionary and the targeted `/Metadata` streams and their reachability. Raw-byte scans are diagnostic only. Sections 5.13, 8 and 9 use the same oracle. Removal is not broadened, and the tool remains non-anonymising.
+- **TOOLPROF-1 (OCR) and TOOLPROF-2 (Compress) clarifications.** Page refusal is distinguished from job refusal, and every original page stays in a mixed OCR result. A no-benefit Compress step inside a plan keeps the current intermediate result so later steps continue.
 
 Approval does not implement any tool, change runtime claims, merge this PR or mark SHR-51 Done. SHR-51 stays In Review until PR #101 merges.
 

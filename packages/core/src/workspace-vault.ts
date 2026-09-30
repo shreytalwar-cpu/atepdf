@@ -312,11 +312,15 @@ export class WorkspaceVault{
       // Checked again on what was actually loaded (a fallback, or a newest manifest
       // the early read could not open), so no path restores an expired workspace.
       const late=await this.#retentionOutcome();if(late)return late;
+      // Staging belongs to no generation, so it is cleaned whichever checkpoint
+      // restored, a fallback included. Until verified empty it stays pending, is
+      // counted in usage and is retried at every later cleanup.
+      let cleanupPending=!await this.#sweepStaging();
       // Retry cleanup of anything the head no longer references. After a fallback
       // the newest manifest is unreadable, so its files are kept as evidence.
-      let cleanupPending=false;
       if(!recoveredPrevious){
         const keepRefs=new Set(checkpoint.artifacts.map(a=>a.ref)),keepGenerations=new Set([head.generation]);
+        let predecessorRead=true;
         if(head.previousGeneration!==null){
           keepGenerations.add(head.previousGeneration);
           const previous=await this.#readCheckpoint(head,head.previousGeneration);
@@ -324,11 +328,11 @@ export class WorkspaceVault{
             const refs=new Set(previous.artifacts.map(a=>a.ref));
             this.#refsByGeneration.set(head.previousGeneration,refs);
             for(const ref of refs)keepRefs.add(ref);
-          }else cleanupPending=true; // an unreadable predecessor: leave its blobs alone
+          }else predecessorRead=false; // an unreadable predecessor: leave its blobs alone
         }
-        if(!cleanupPending)cleanupPending=!await this.#collect(keepRefs,keepGenerations,{confirm:true,staging:true});
-        else this.#cleanupPending=true;
+        cleanupPending=predecessorRead?!await this.#collect(keepRefs,keepGenerations,{confirm:true}):true;
       }
+      this.#cleanupPending=cleanupPending;
       return {kind:'restored',checkpoint,bytes,recoveredPrevious,cleanupPending};
     }catch(error){
       const reason=error instanceof Blocked?error.reason:'storage';
@@ -559,11 +563,7 @@ export class WorkspaceVault{
    *   pending, and the staging bytes stay visible in usage until a retry succeeds.
    */
   async #collect(keepRefs:Set<string>,keepGenerations:Set<number>,options:{confirm?:boolean;staging?:boolean}={}):Promise<boolean>{
-    if(options.staging||this.#stagingPending){
-      let cleaned=false;
-      for(let attempt=0;attempt<CLEANUP_ATTEMPTS&&!cleaned;attempt++){try{await this.backend.cleanStaging();cleaned=true;}catch{/* retried below, or later */}}
-      this.#stagingPending=!cleaned;
-    }
+    if(options.staging||this.#stagingPending)await this.#sweepStaging();
     const kept=(name:string)=>{
       const generation=/^manifests\/(\d+)\.atw$/.exec(name)?.[1],ref=/^blobs\/(.+)\.atw$/.exec(name)?.[1];
       return generation!==undefined?keepGenerations.has(Number(generation)):ref!==undefined&&keepRefs.has(ref);
@@ -589,6 +589,12 @@ export class WorkspaceVault{
     }
     this.#cleanupPending=true;return false;
   }
+  /** Remove staging files; true only once the backend verifies staging is empty. Until then it stays pending and is retried at every later cleanup. */
+  async #sweepStaging():Promise<boolean>{
+    let cleaned=false;
+    for(let attempt=0;attempt<CLEANUP_ATTEMPTS&&!cleaned;attempt++){try{await this.backend.cleanStaging();cleaned=true;}catch{/* retried below, or later */}}
+    this.#stagingPending=!cleaned;return cleaned;
+  }
   async #clear(mode:RetentionMode):Promise<boolean>{
     if(this.mode!=='writable')throw new Error(STORAGE_WRITE_FAILED);
     const generation=this.#generation+1,epoch=this.#epoch+1;
@@ -613,17 +619,23 @@ export class WorkspaceVault{
   }
   /**
    * Remove a workspace that could not be opened, without its key: the head first
-   * (confirmed by unlink and directory sync), so every later crash leaves stored
+   * (confirmed by unlink, directory sync and an independent check that it is gone), so every later crash leaves stored
    * files without a head, which launch keeps blocked and never restores. Then every
    * manifest, blob and staging file, then a new genesis head when the key allows.
    */
   async #wipe():Promise<{cleanupComplete:boolean}>{
-    try{await this.backend.remove(names.head);}
-    catch{
-      let present=true;
-      try{present=await this.backend.exists(names.head);}catch{/* unknown: report as unconfirmed below */present=false;}
-      throw new Error(present?DELETE_FAILED:DELETE_UNCONFIRMED);
+    // A resolved remove() is not proof: the head is gone only when a remove that also
+    // synced is followed by an independent query that finds no head. A head still
+    // present, or of unknown presence, is never reported deleted: nothing more is
+    // removed and the workspace stays blocked exactly as it was.
+    let head:'gone'|'present'|'unknown'='unknown';
+    for(let attempt=0;attempt<CLEANUP_ATTEMPTS&&head!=='gone';attempt++){
+      let synced=true,present:boolean|null=null;
+      try{await this.backend.remove(names.head);}catch{synced=false;}
+      try{present=await this.backend.exists(names.head);}catch{/* unknown */}
+      head=present===true?'present':present===false&&synced?'gone':'unknown';
     }
+    if(head!=='gone')throw new Error(head==='present'?DELETE_FAILED:DELETE_UNCONFIRMED);
     this.#fence++;this.#head=null;this.#blockedReason=null;
     const cleanupComplete=await this.#collect(new Set(),new Set(),{confirm:true,staging:true});
     // Leftovers beside a genesis head are removed at the next launch (see #open).

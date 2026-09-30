@@ -209,3 +209,51 @@ test('temporary files that cannot be measured never produce an exact-looking tot
   await expect(usage).toContainText('Temporary files and previewsCouldn’t be measured');
   await expect(usage).toContainText(/TotalAt least \d/);
 });
+
+// Final review B3: a connection-status response that arrives after Delete local data or
+// Start over belongs to the emptied workspace. It adds no message and saves nothing;
+// a connection check started in the new session still works.
+const notConnected={connected:false,enabled:false,remaining:0,token:'synthetic-connection'};
+const CONNECT_PROMPT=/Connect OpenAI for optional AI planning/;
+async function holdFirstStatus(page:Page){
+  let release:()=>void=()=>{};const gate=new Promise<void>(resolve=>{release=resolve;});const state={requests:0,answered:0};
+  await page.route('**/api/planner/status',async route=>{const first=++state.requests===1;if(first)await gate;await route.fulfill({json:notConnected});state.answered++;});
+  return {state,release};
+}
+async function staleResponseIsInert(page:Page,held:{state:{requests:number;answered:number};release:()=>void},after:{writes:number;stored:string[]}){
+  held.release();
+  await expect.poll(()=>held.state.answered).toBe(1);
+  await page.waitForTimeout(1500);
+  await expect(page.getByRole('heading',{name:'Drop files here'})).toBeVisible();
+  await expect(page.getByText(CONNECT_PROMPT)).toHaveCount(0);
+  expect(await writes(page)).toBe(after.writes);expect(await stored(page)).toEqual(after.stored);
+  // A connection check started in the new session is answered normally, once.
+  await page.getByRole('button',{name:'OpenAI connection'}).click();
+  await expect(page.getByText(CONNECT_PROMPT)).toHaveCount(1);
+  expect(held.state.requests).toBe(2);
+  // Nothing from the stale response comes back after a relaunch either.
+  await page.reload();
+  await expect(page.getByText(/I’ve added/)).toHaveCount(0);await expect(page.getByText(/PDFs are ready/)).toHaveCount(0);
+}
+test('B3 a connection response that arrives after Delete local data adds no message and saves nothing',async({page})=>{
+  await samples(page);
+  const held=await holdFirstStatus(page);
+  await page.getByRole('button',{name:'OpenAI connection'}).click();
+  await expect.poll(()=>held.state.requests).toBe(1);
+  await deleteNow(page);
+  const after={writes:await writes(page),stored:await stored(page)};
+  expect(after.stored.filter(name=>name.startsWith('blobs/'))).toEqual([]);
+  await staleResponseIsInert(page,held,after);
+});
+test('B3 a connection response that arrives after Start over adds no message and saves nothing',async({page})=>{
+  await samples(page);
+  const held=await holdFirstStatus(page);
+  await page.getByRole('button',{name:'OpenAI connection'}).click();
+  await expect.poll(()=>held.state.requests).toBe(1);
+  await page.getByRole('button',{name:'Start over'}).click();
+  await page.getByRole('button',{name:'Clear session'}).click();
+  await expect(page.getByRole('heading',{name:'Drop files here'})).toBeVisible();
+  await expect.poll(async()=>(await stored(page)).filter(name=>name.startsWith('blobs/')).length).toBe(0);
+  const after={writes:await writes(page),stored:await stored(page)};
+  await staleResponseIsInert(page,held,after);
+});

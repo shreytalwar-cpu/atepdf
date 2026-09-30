@@ -632,3 +632,89 @@ test('SHR-40 P1-2 a staging file left by a failed write is removed and verified 
     assert.deepEqual(await stagingFiles(root),[]);assert.equal(app.vault.cleanupPending,false);
   }finally{await done(root,outside);}
 });
+
+// Final review B1: Delete local data on an unopenable workspace never trusts remove() for
+// the head. Its absence is checked independently before anything is reported deleted.
+test('SHR-40 B1 a head removal that reports success but leaves the head is verified, and unlock/relaunch never restores the old conversation',async()=>{
+  const {root,outside,keychain,clock}=await scratch();
+  try{
+    const app=await launch(root,keychain,clock);await populated(app,outside);
+    const {checkpoint}=await decrypted(root,keychain);assert.ok(checkpoint.conversation.length>0);
+    keychain.state='locked';
+    const blocked=await launch(root,keychain,clock);
+    assert.deepEqual(blocked.outcome,{kind:'blocked',reason:'key-locked',retryable:true});
+    // The review case: remove(head) says it succeeded but leaves the head, and every
+    // cleanup listing fails.
+    let lies=0;
+    blocked.backend.fault=(step,name)=>{if(step==='remove'&&name===names.head&&!lies++)return 'skip';if(step==='list')failing('EIO');};
+    assert.deepEqual(await blocked.vault.deleteAll(),{cleanupComplete:false});
+    // The key becomes available and atePDF relaunches: the actual restored state is empty.
+    blocked.backend.fault=null;keychain.state='ok';
+    const relaunched=await launch(root,keychain,clock);
+    assert.deepEqual(relaunched.chat.conversation,[]);assert.equal(relaunched.chat.draft,null);assert.equal(relaunched.store.list.length,0);
+    assert.deepEqual(relaunched.outcome,{kind:'blocked',reason:'corrupt',retryable:false});
+    assert.equal(relaunched.vault.mode,'blocked');
+    // Why: the false success was caught, the head removed again and independently found gone.
+    assert.equal(lies,2);
+    assert.equal(blocked.backend.calls.filter(c=>c.op==='remove'&&c.name===names.head).length,2);
+    assert.equal(await blocked.backend.exists(names.head),false);
+    // Deleting again finishes the job; still nothing from before comes back.
+    assert.deepEqual(await relaunched.vault.deleteAll(),{cleanupComplete:true});
+    const fresh=await launch(root,keychain,clock);
+    assert.deepEqual(fresh.outcome,{kind:'empty',retention:'keep',cleanupPending:false});assert.deepEqual(fresh.chat.conversation,[]);assert.equal(fresh.store.list.length,0);
+  }finally{await done(root,outside);}
+});
+
+test('SHR-40 B1 a head that stays present, or whose presence is unknown, is never reported deleted and nothing else is removed',async()=>{
+  const {root,outside,keychain,clock}=await scratch();
+  try{
+    const app=await launch(root,keychain,clock);await populated(app,outside);
+    const {checkpoint}=await decrypted(root,keychain);
+    keychain.state='locked';
+    const blocked=await launch(root,keychain,clock),before=await tree(root);
+    // Every head removal claims success but leaves the file; listings fail as well.
+    blocked.backend.fault=(step,name)=>{if(step==='remove'&&name===names.head)return 'skip';if(step==='list')failing('EIO');};
+    await assert.rejects(blocked.vault.deleteAll(),new RegExp(DELETE_FAILED));
+    assert.deepEqual(await tree(root),before);
+    assert.equal(blocked.vault.mode,'blocked');assert.equal(blocked.vault.blockedReason,'key-locked');
+    // Whether the head is gone can't be determined: fail closed, still nothing more removed.
+    blocked.backend.fault=(step,name)=>{if(step==='remove'&&name===names.head)return 'skip';if(step==='exists'&&name===names.head)failing('EIO');};
+    await assert.rejects(blocked.vault.deleteAll(),new RegExp(DELETE_UNCONFIRMED));
+    assert.deepEqual(await tree(root),before);assert.equal(blocked.vault.mode,'blocked');
+    // A save queued behind the failed delete is still refused: no new workspace was started.
+    await assert.rejects(blocked.vault.save(blocked.snapshot));assert.deepEqual(await tree(root),before);
+    // The user was told nothing was removed, and nothing was: after unlock the workspace
+    // opens whole, exactly as it was, never partially.
+    keychain.state='ok';
+    const relaunched=await launch(root,keychain,clock);
+    assert.equal(relaunched.outcome.kind,'restored');assert.deepEqual(relaunched.chat.conversation,checkpoint.conversation);assert.equal(relaunched.store.list.length,checkpoint.artifacts.length);
+  }finally{await done(root,outside);}
+});
+
+// Final review B2: the staging cleanup obligation does not depend on which generation restored.
+test('SHR-40 B2 a fallback restore keeps staging cleanup pending and counted until a later save removes it',async()=>{
+  const {root,outside,keychain,clock}=await scratch();
+  try{
+    const app=await launch(root,keychain,clock);await populated(app,outside);
+    const {head,checkpoint}=await decrypted(root,keychain),backend=new NodeVaultBackend(root,keychain);
+    const previousFile=await backend.readOpened(names.manifest(head.previousGeneration!),aad.manifest(checkpoint.workspaceID,head.previousGeneration!));
+    assert.equal(previousFile.status,'ok');
+    const previous=parseCheckpoint(JSON.parse(new TextDecoder().decode((previousFile as {bytes:Uint8Array}).bytes)));
+    // Newest manifest corrupt, preceding generation valid, interrupted staging bytes present.
+    await corrupt(join(root,names.manifest(head.generation)),bytes=>{bytes[bytes.length-1]^=1;return bytes;});
+    await withStagingLeftover(root);
+    const fallback=await launch(root,keychain,clock,{fault:step=>{if(step==='staging-list')failing('EACCES');}});
+    // The previous generation restored.
+    assert.equal(fallback.outcome.kind,'restored');assert.equal((fallback.outcome as {recoveredPrevious:boolean}).recoveredPrevious,true);
+    assert.deepEqual(fallback.chat.conversation,previous.conversation);assert.equal(fallback.chat.draft,previous.draft?.text??null);
+    assert.deepEqual(fallback.store.list.map(a=>a.ref).sort(),previous.artifacts.map(a=>a.ref).sort());
+    // Staging could not be cleaned: pending, and its bytes are reported as still to remove.
+    assert.equal((fallback.outcome as {cleanupPending:boolean}).cleanupPending,true);assert.equal(fallback.vault.cleanupPending,true);
+    assert.deepEqual(await stagingFiles(root),['interrupted.tmp']);
+    const usage=await fallback.vault.usage();assert.equal(usage.pending,64);assert.equal(usage.unopened,0);
+    // Cleanup is allowed again; the next save retries it, removes the bytes and clears the flag.
+    fallback.backend.fault=null;
+    await fallback.say({role:'user',text:'Carry on.'});
+    assert.deepEqual(await stagingFiles(root),[]);assert.equal(fallback.vault.cleanupPending,false);assert.equal((await fallback.vault.usage()).pending,0);
+  }finally{await done(root,outside);}
+});

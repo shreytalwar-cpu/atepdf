@@ -111,7 +111,7 @@ function useWorkspace() {
   const [saving, setSaving] = useState<string | null>(null), [receipts, setReceipts] = useState<Record<string, string>>({});
   const nextId = useRef(0), operation = useRef(false);
   const [planning,setPlanning]=useState(false),[connection,setConnection]=useState<Omit<PlannerStatus,'token'>|null>(null);
-  const plannerAbort=useRef<AbortController|null>(null);
+  const plannerAbort=useRef<AbortController|null>(null),connectionAbort=useRef<AbortController|null>(null);
   const connectionToken=useRef<string|null>(null);
   const pendingClarification=useRef<PendingClarification|null>(null);
   const clearPending=()=>{pendingClarification.current=null;};
@@ -194,7 +194,7 @@ function useWorkspace() {
   // Stop and join active work: planning is aborted, jobs are cancelled (a commit that
   // is already saving finishes or is withdrawn), and in-flight handlers finish first.
   const stopWork = async () => {
-    clearPending(); plannerAbort.current?.abort(); controller.cancel();
+    clearPending(); plannerAbort.current?.abort(); connectionAbort.current?.abort(); controller.cancel();
     await controller.settle();
     for (let i = 0; operation.current && i < 200; i++) await new Promise(resolve => setTimeout(resolve, 25));
   };
@@ -397,17 +397,25 @@ function useWorkspace() {
     else if (command === 'merge, ocr, compress') action('chain', text);
     else { setChoice(null); append({role:'user',text}); void preparePlanning(text); }
   };
-  const checkConnection=async(signal?:AbortSignal,quiet=false)=>{
+  // Connection status completions are bound to the workspace session they started in
+  // (current): one that settles after Start over, expiry or Delete local data changes
+  // no chat, connection state or saved workspace. Aborting is only an optimisation.
+  const checkConnection=async(signal?:AbortSignal,quiet=false,current=session.ticket())=>{
     if(!plannerAvailable){if(!quiet)say('AI connection is not available on this device yet. Local quick actions still work.');return null;}
-    try{const status=await plannerStatus(signal);signal?.throwIfAborted();setConnection(visibleConnection(status));return status;}
-    catch(error){if(signal?.aborted)throw error;if(!quiet)say('The local planner gateway is unavailable. You can still use the quick actions.');return null;}
+    try{const status=await plannerStatus(signal);signal?.throwIfAborted();if(!current())return null;setConnection(visibleConnection(status));return status;}
+    catch(error){if(signal?.aborted)throw error;if(!quiet&&current())say('The local planner gateway is unavailable. You can still use the quick actions.');return null;}
   };
-  const refreshConnection=async()=>{
-    try{setConnection(visibleConnection(await plannerStatus()));}
-    catch{setConnection(previous=>previous?{...previous,enabled:false}:null);}
+  /** True while the session that requested it (current) is still the active one. */
+  const refreshConnection=async(current=session.ticket())=>{
+    try{const status=visibleConnection(await plannerStatus());if(current())setConnection(status);}
+    catch{if(current())setConnection(previous=>previous?{...previous,enabled:false}:null);}
+    return current();
   };
   const connect=async()=>{
-    const status=await checkConnection();if(!status)return;
+    const current=session.ticket(),abort=new AbortController();connectionAbort.current?.abort();connectionAbort.current=abort;
+    let status:PlannerStatus|null;
+    try{status=await checkConnection(abort.signal,false,current);}catch{return;}
+    if(!status||!current())return;
     connectionToken.current=status.token;
     if(Platform.OS!=='web'){const id=append({role:'assistant',text:status.pairingRequired?'Create a pairing code in atepdf on your Mac, then paste it below. On iPhone or iPad, keep both devices on the same Wi-Fi and use the private beta connection.':'This app is paired with the planner on your Mac.',choice:'native-pair'});setChoice(id);return;}
     if(!status.connected){const id=append({role:'assistant',text:'Connect OpenAI for optional AI planning. Enter your key in the secure field below. It is saved only by atepdf’s local server and never added to the conversation. Saving makes no OpenAI calls.',choice:'connect'});setChoice(id);return;}
@@ -509,7 +517,7 @@ function useWorkspace() {
     : 'atePDF can’t save your workspace on this Mac right now, so nothing is kept after you quit.';
   return {controller, state, store, entries, busy, working, loading, current, currentTitle:currentEntry?.resultTitle, focus, preview, setPreview, privacy, setPrivacy,
     choice, setChoice, saving, receipts, append, say, showHelp, importFiles, pick, action, undo, submit, confirm, exportResult, planning, connection, connectionToken, connect, refreshConnection, cancel, clearPending,
-    restoring, restoredDraft, noteDraft, notice, durable, keeping, canRetryRestore, retryRestore, clearCount,
+    ticket: () => session.ticket(), restoring, restoredDraft, noteDraft, notice, durable, keeping, canRetryRestore, retryRestore, clearCount,
     capable: backend !== null, retention, retentionNote, retentionImpact, changeRetention, storage, deleteLocalData, deleting, storageStatus};
 }
 
@@ -638,15 +646,15 @@ function BrowserPairing({token}:{token:string}){
 }
 function NativePairing(){
   const w=useWorkspaceContext(),[code,setCode]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState('');
-  const pair=async()=>{setBusy(true);setError('');try{await pairNativePlanner(code);setCode('');await w.refreshConnection();w.setChoice(null);w.say('Connected to the local planner. Tell me what you’d like to do.');}catch{setCode('');setError('Pairing did not finish. Create a fresh code in the browser and try again.');}finally{setBusy(false);}};
-  const disconnect=async()=>{setBusy(true);try{await disconnectNativePlanner();await w.refreshConnection();w.setChoice(null);w.say('Disconnected. Local quick actions still work.');}finally{setBusy(false);}};
+  const pair=async()=>{const current=w.ticket();setBusy(true);setError('');try{await pairNativePlanner(code);setCode('');if(!await w.refreshConnection(current))return;w.setChoice(null);w.say('Connected to the local planner. Tell me what you’d like to do.');}catch{setCode('');setError('Pairing did not finish. Create a fresh code in the browser and try again.');}finally{setBusy(false);}};
+  const disconnect=async()=>{const current=w.ticket();setBusy(true);try{await disconnectNativePlanner();if(!await w.refreshConnection(current))return;w.setChoice(null);w.say('Disconnected. Local quick actions still work.');}finally{setBusy(false);}};
   return <View className="gap-3 rounded-2xl border border-border p-4">{w.connection?.pairingRequired?<><Text className="text-sm font-medium text-foreground">Pairing code</Text><TextInput accessibilityLabel="Pairing code" secureTextEntry autoComplete="off" autoCorrect={false} autoCapitalize="none" textContentType="none" value={code} onChangeText={setCode} editable={!busy} placeholder="Paste pairing code" className="min-h-12 rounded-xl border border-border px-3 py-2 text-base text-foreground"/><Button primary disabled={busy||!code.trim()} onPress={()=>void pair()}>Connect this app</Button><Text className="text-xs text-muted-foreground">This connection lasts for this app session. Keep atepdf running on your Mac.</Text></>:<Button disabled={busy} onPress={()=>void disconnect()}>Disconnect this app</Button>}{!!error&&<Text className="text-sm text-destructive">{error}</Text>}</View>;
 }
 function KeyEntry({token}:{token:string}){
   const w=useWorkspaceContext();const [key,setKey]=useState(''),[saving,setSaving]=useState(false),[error,setError]=useState('');
   const saveKey=async()=>{
-    if(saving||!key.trim())return;setSaving(true);setError('');
-    try{await savePlannerKey(key.trim(),token);setKey('');w.setChoice(null);void w.refreshConnection();w.say('Your key is saved on this computer. Paid planning is paused until you approve a request limit. Local quick actions work as usual.');}
+    if(saving||!key.trim())return;const current=w.ticket();setSaving(true);setError('');
+    try{await savePlannerKey(key.trim(),token);setKey('');if(!current())return;w.setChoice(null);void w.refreshConnection(current);w.say('Your key is saved on this computer. Paid planning is paused until you approve a request limit. Local quick actions work as usual.');}
     catch{setKey('');setError('The key could not be saved. Check its format or your existing local setup.');}
     finally{setSaving(false);}
   };

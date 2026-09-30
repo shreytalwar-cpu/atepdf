@@ -1,6 +1,6 @@
 # ADR 0011 — Supported Mac and macOS launch envelope (SHR-34)
 
-**Status:** Proposed (revision 2), awaiting Shrey's approval. Nothing here is a public compatibility promise until approved and verified.  **Source:** `origin/main` `29f56ea919e73c12cdbd1c36f5f74cf37622347c` (30 September 2026).  **Authority:** `PRODUCT_V1.md` OPEN-01, MAC-01–04, ARCH-01, G-07; [SHR-34](https://linear.app/shrey-talwar/issue/SHR-34/decide-the-supported-mac-and-macos-launch-envelope) (parent SHR-26); SHR-16 baseline; approved SHR-105 design system (OD-6 Mac idiom pending engineering confirmation); Shrey's revision direction of 30 September 2026.  **Evidence:** [docs/evidence/SHR-34-2026-09-30](../evidence/SHR-34-2026-09-30/README.md).
+**Status:** **Approved** by Shrey on 30 September 2026 (revision 2, ENV-1 to ENV-7; section 13). The public wording remains provisional until the section 9 runtime acceptance passes; nothing here is a verified compatibility claim yet.  **Source:** `origin/main` `29f56ea919e73c12cdbd1c36f5f74cf37622347c` (30 September 2026).  **Authority:** `PRODUCT_V1.md` OPEN-01, MAC-01–04, ARCH-01, G-07; [SHR-34](https://linear.app/shrey-talwar/issue/SHR-34/decide-the-supported-mac-and-macos-launch-envelope) (parent SHR-26); SHR-16 baseline; approved SHR-105 design system (OD-6 Mac idiom pending engineering confirmation); Shrey's revision direction of 30 September 2026.  **Evidence:** [docs/evidence/SHR-34-2026-09-30](../evidence/SHR-34-2026-09-30/README.md).
 
 The existing Expo / React Native / Mac Catalyst architecture stays (ARCH-01). This ADR recommends which Macs and macOS versions v1 supports, and what must be tested before that support is claimed. It changes no project setting.
 
@@ -110,7 +110,7 @@ Preferably the machine is 2018–2020 class with 8 GB, runs the minimum macOS, a
 
 ## 6. Setapp
 
-Shrey has said Setapp is an intended distribution channel. **This conflicts with `PRODUCT_V1.md` §4.2**, which currently states that Setapp is not an approved v1 channel. Per `PRODUCT_V1.md` §2, a channel change needs an explicit owner decision recorded with its rationale, so it is listed as **ENV-7** below. `PRODUCT_V1.md` is not edited by this ADR.
+Setapp is an intended v1 distribution channel (**ENV-7, approved**). This supersedes the earlier `PRODUCT_V1.md` §4.2 exclusion, and §4.2 has been updated in the same change. Setapp acceptance has **not** been obtained.
 
 For the envelope:
 
@@ -199,7 +199,7 @@ Environments:
 - **Free disk:** no public number until SHR-78 measures.
 - **Distribution:**
   - Universal builds for the Mac App Store and direct download.
-  - Setapp is intended (pending ENV-7) and prefers Universal; channel requirements are verified in SHR-91.
+  - Setapp is an intended channel (ENV-7, approved) and prefers Universal; channel requirements are verified in SHR-91.
 - **Actual tested hardware:** MacBook Air M5 (Mac17,3), 16 GB, macOS 27.0, and only for the items marked tested in section 9.
 - **Build-compatible but unverified:**
   - macOS 14–26 on Apple Silicon;
@@ -222,16 +222,18 @@ Environments:
 | SHR-74 save/export | Same OS × architecture coverage; independent reopen and hash checks. |
 | SHR-75 window/keyboard/focus | Build on the Mac idiom. Full keyboard journey on Apple Silicon min/latest; basic check on Intel. |
 | SHR-78 runtime/performance | Owns section 7 measurements on the M5, an 8 GB Apple Silicon Mac and the Intel Mac. Proposes budgets for approval. |
-| SHR-91 signing/update | Universal release build (separate from the host-only dev script), Catalyst-only floor enforcement and stale-value cleanup. A team-signed identity is a prerequisite for encrypted-persistence testing. Includes the Setapp channel requirements (after ENV-7) and a documented arm64-only fallback. |
+| SHR-91 signing/update | Universal release build (separate from the host-only dev script), Catalyst-only macOS 14.0 floor enforcement and stale-value cleanup. A team-signed identity is a prerequisite for encrypted-persistence testing. Includes verifying the Setapp channel requirements (ENV-7) and a documented arm64-only fallback. |
 | SHR-51 support profiles | Budgets per architecture from SHR-78; OCR language checks on min/latest OS and on Intel. |
 | SHR-52 encryption | The engine must build for arm64 **and** x86_64 Mac Catalyst and pass on the Intel lane. |
 | SHR-66 local understanding | The required v1 path must work on macOS 14 and Intel. macOS 15/26 Vision APIs and FoundationModels are optional, availability-gated or have a fallback, unless SHR-66 proves that impractical. |
 | SHR-106 Mac idiom/UI | Switch to the Mac idiom first (`theme.scale` 1.0). Design for pre-Tahoe and Tahoe window chrome (14–27). Ship the legacy icon set alongside Icon Composer layers. Visual acceptance on min/latest and Intel. |
 | SHR-38/39/41 persistence | Keychain behaviour is verified on team-signed builds on the minimum and latest macOS and on Intel. |
 
-## 12. Still blocking approval or launch
+## 12. Still open (validation, not approval)
 
-1. **ENV-7:** Setapp contradicts `PRODUCT_V1.md` §4.2 until you record the channel decision.
+Nothing blocks the recorded decision. These remain before launch claims:
+
+1. *(Resolved: ENV-7 approved and `PRODUCT_V1.md` §4.2 updated.)*
 2. **No test hardware or lanes** exist yet for the minimum macOS, an 8 GB Apple Silicon Mac or an Intel Mac. Those are required before launch claims, not before approving this decision.
 3. **The Catalyst-only floor mechanism** for Option B is unverified.
 4. **The Mac idiom** has not been visually checked.
@@ -242,16 +244,16 @@ Environments:
 
 ## 13. OWNER DECISION
 
-Pending. Shrey to approve or change each item:
+**Approved by Shrey on 30 September 2026.** Every item was approved as recommended:
 
-| ID | Decision | Recommendation |
+| ID | Decision | Approved outcome |
 |---|---|---|
-| ENV-1 | Minimum macOS | **14.0 Sonoma** (Option B); alternative 13.3 Ventura (Option A, needs no project change, adds 2017 Intel hardware and one more release to test) |
-| ENV-2 | CPU | **Universal arm64 + x86_64** launch target, with Intel support conditional on real Intel runtime acceptance; Apple Silicon only is a separate fallback decision |
-| ENV-3 | RAM/disk | 8 GB minimum and 16 GB recommended stay **internal hypotheses**; no public disk number until SHR-78 measures |
-| ENV-4 | Test coverage | Provide, as separate bounded tasks: a minimum-macOS lane (device or VM), an 8 GB Apple Silicon Mac, and one actual Intel Mac (preferably 2018–2020, 8 GB, able to run macOS 14 and 26) |
-| ENV-5 | Mac idiom | Technically viable, no blocker found; final visual and interaction acceptance deferred to SHR-106/SHR-75 |
-| ENV-6 | Public wording | Provisional until section 9 acceptance passes: "macOS 14 or later. Mac with Apple silicon or Intel processor." (Apple silicon only if Intel acceptance fails) |
-| ENV-7 | Setapp channel | Record Setapp as an intended v1 distribution channel, superseding the `PRODUCT_V1.md` §4.2 exclusion; channel requirements to be verified in SHR-91 |
+| ENV-1 | Minimum macOS | **Approved: macOS 14.0 Sonoma** (Option B). Option A (13.3) not chosen. |
+| ENV-2 | CPU | **Approved: Universal arm64 + x86_64** launch target. Intel support is conditional on real Intel runtime acceptance before public launch. Apple Silicon remains the primary development/performance target. Apple Silicon only is the fallback if real Intel testing reveals a material issue. |
+| ENV-3 | RAM/disk | **Approved:** 8 GB minimum and 16 GB recommended remain internal engineering hypotheses only. No public disk-space requirement until SHR-78 measures it. |
+| ENV-4 | Test coverage | **Approved:** a minimum-macOS (14.0) test lane, access to an 8 GB Apple Silicon Mac, and access to one real Intel Mac are required. These are validation requirements for launch claims, not blockers to recording this decision. |
+| ENV-5 | Mac idiom | **Approved:** Catalyst Mac idiom is technically viable with no blocker found. Final visual/interaction acceptance stays with SHR-106 / SHR-75. |
+| ENV-6 | Public wording | **Approved (provisional):** "macOS 14 or later. Mac with Apple silicon or Intel processor." Provisional until the required runtime acceptance is complete. |
+| ENV-7 | Setapp channel | **Approved:** Setapp is an intended atePDF v1 distribution channel; `PRODUCT_V1.md` §4.2 updated. Setapp requirements still need verification in SHR-91; no Setapp acceptance has been obtained. |
 
-SHR-34 stays In Review until Shrey records these decisions.
+OPEN-01 (minimum macOS, CPU and hardware envelope) is settled by this decision; its runtime evidence remains owed by SHR-73/74/75/76/78/91. SHR-34 stays In Review until PR #93 merges.

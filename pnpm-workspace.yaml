@@ -2,3 +2,7 @@
 allowBuilds:
   esbuild: true
   tesseract.js: false
+
+# pnpm 11 enforcement; never download/switch a mismatched package manager.
+engineStrict: true
+pmOnFail: error

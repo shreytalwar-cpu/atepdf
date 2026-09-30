@@ -119,10 +119,16 @@ test('gateway: partial, unavailable operation and future refs never form an exec
   }
 });
 test('gateway: concurrent requests, timeout and cancellation stop planning without retry or provider-error disclosure',async()=>{
-  let calls=0;const {post,config}=await setup(async(_r,_key,signal)=>{calls++;return await new Promise((_,reject)=>signal.addEventListener('abort',()=>reject(new Error('sk-LEAK-CANARY')),{once:true}));},2,30);
-  const first=post(request());await new Promise(resolve=>setTimeout(resolve,5));assert.equal((await post(request())).status,429);
+  let calls=0,entered=()=>{};
+  const nextEntry=()=>new Promise<void>(resolve=>{entered=resolve;});
+  const {post,config}=await setup(async(_r,_key,signal)=>{
+    calls++;entered();
+    return await new Promise((_,reject)=>signal.addEventListener('abort',()=>reject(new Error('sk-LEAK-CANARY')),{once:true}));
+  },2,1000);
+  const firstEntered=nextEntry(),first=post(request());await firstEntered;assert.equal((await post(request())).status,429);
   const result=await first;assert.equal(result.status,502);assert.doesNotMatch(await result.text(),/LEAK/);assert.equal(calls,1);assert.equal((await config.status()).remaining,1);
-  const abort=new AbortController();const cancelled=post(request(),{},abort.signal);setTimeout(()=>abort.abort(),5);assert.equal((await cancelled).status,499);assert.equal(calls,2);
+  const abort=new AbortController(),secondEntered=nextEntry(),cancelled=post(request(),{},abort.signal);
+  await secondEntered;abort.abort();assert.equal((await cancelled).status,499);assert.equal(calls,2);
 });
 test('local credential: private permissions, no symlink following, budget persists across gateway restarts',async()=>{
   const dir=await mkdtemp(join(tmpdir(),'atepdf-key-test-'));await chmod(dir,0o700);const config=new LocalConfig(dir);

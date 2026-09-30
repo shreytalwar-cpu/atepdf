@@ -152,6 +152,12 @@ test('SHR-47 matrix v2 cannot treat historical missing production-gate evidence 
   assert.equal(validate(old),false,'missing actual receipt cannot count as supported');
   for(const row of old.cases)if(row.execution.pageIdentity.required&&row.classification==='SUPPORTED')
     row.execution.pageIdentity={required:true,status:'passed',receipt:{version:1,operation:row.operation,status:'passed'}};
+  assert.equal(validate(old),false,'an unbound or incomplete receipt cannot count as supported');
+  for(const row of old.cases)if(row.execution.pageIdentity.receipt)
+    Object.assign(row.execution.pageIdentity.receipt,{revision:1,pages:row.result.pageCount,reader:'pdfjs-raster96-v1'});
   assert.equal(validate(old),true,JSON.stringify(validate.errors));
+  const supported=old.cases.find((row:any)=>row.execution.pageIdentity.receipt);
+  supported.execution.pageIdentity.receipt.operation=supported.operation==='merge_pdf'?'select_pages':'merge_pdf';
+  assert.equal(validate(old),false,'a receipt for a different operation cannot count as supported');
   // Test values above demonstrate schema shape only; they are not saved evidence.
 });

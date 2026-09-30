@@ -9,6 +9,7 @@ import {build} from 'esbuild';
 import {chromium} from '@playwright/test';
 import Ajv2020 from 'ajv/dist/2020.js';
 import {capabilities} from '../../packages/contracts/src/protocol';
+import type {PageVerificationReceipt} from '../../packages/core/src/page-verification';
 import {classify,observe,sha256,summarizeCases,verifyOutput,type Observation} from './matrix-core';
 
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'../..');
@@ -18,7 +19,7 @@ type Fixture={id:string;path:string;sha256:string;pageCount:number;pageOrder:unk
   readerExpectation:string;operationExpectations:{operation:string;disposition:string;basis:string;reason:string}[]};
 type BrowserResult={admission:{status:string;reason:string|null};error:string|null;stage:string;
   promoted:boolean;originalsUnchanged:boolean;output:string|null;note:string|null;ocr:{page:number;words:string[]}[];
-  pageVerification:{version:number;operation:string;status:string}|null};
+  pageVerification:PageVerificationReceipt|null};
 type Row=Record<string,unknown>&{id:string;fixtureId:string;operation:string;classification:string;reason:string|null};
 
 async function assets(temp:string){
@@ -136,7 +137,10 @@ export async function runMatrix(outputDir:string){
       }
       row.admission=got.admission;
       const requiresPageIdentity=operation==='merge_pdf'||operation==='select_pages';
-      const gatePassed=got.pageVerification?.version===1&&got.pageVerification.operation===operation&&got.pageVerification.status==='passed';
+      const receipt=got.pageVerification;
+      const gatePassed=receipt?.version===1&&receipt.operation===operation&&receipt.status==='passed'&&
+        Number.isInteger(receipt.revision)&&receipt.revision>=0&&Number.isInteger(receipt.pages)&&
+        receipt.pages>0&&receipt.pages<=100&&receipt.reader==='pdfjs-raster96-v1';
       row.execution={status:got.admission.status==='rejected'?'not_run':got.error?'failed':'completed',
         reason:got.error,note:got.note,recognizedPages:got.ocr,pageIdentity:{required:requiresPageIdentity,
           status:!requiresPageIdentity?'not_required':got.admission.status==='rejected'?'not_run':gatePassed?'passed':'failed',receipt:got.pageVerification}};

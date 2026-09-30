@@ -242,9 +242,13 @@
               ]
             },
             "receipt": {
-              "type": [
-                "object",
-                "null"
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/$defs/pageReceipt"
+                }
               ]
             }
           }
@@ -624,20 +628,7 @@
                         "const": "passed"
                       },
                       "receipt": {
-                        "type": "object",
-                        "required": [
-                          "version",
-                          "operation",
-                          "status"
-                        ],
-                        "properties": {
-                          "version": {
-                            "const": 1
-                          },
-                          "status": {
-                            "const": "passed"
-                          }
-                        }
+                        "$ref": "#/$defs/pageReceipt"
                       }
                     }
                   }
@@ -645,8 +636,119 @@
               }
             }
           }
+        },
+        {
+          "if": {
+            "properties": {
+              "operation": {
+                "const": "merge_pdf"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "execution": {
+                "properties": {
+                  "pageIdentity": {
+                    "properties": {
+                      "receipt": {
+                        "if": {
+                          "type": "object"
+                        },
+                        "then": {
+                          "properties": {
+                            "operation": {
+                              "const": "merge_pdf"
+                            }
+                          },
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operation": {
+                "const": "select_pages"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "execution": {
+                "properties": {
+                  "pageIdentity": {
+                    "properties": {
+                      "receipt": {
+                        "if": {
+                          "type": "object"
+                        },
+                        "then": {
+                          "properties": {
+                            "operation": {
+                              "const": "select_pages"
+                            }
+                          },
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
         }
       ]
+    },
+    "pageReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "operation",
+        "revision",
+        "pages",
+        "status",
+        "reader"
+      ],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "operation": {
+          "enum": [
+            "merge_pdf",
+            "select_pages"
+          ]
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "pages": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "status": {
+          "const": "passed"
+        },
+        "reader": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
     }
   }
 }

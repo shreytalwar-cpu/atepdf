@@ -1,15 +1,17 @@
 {
   "schema": "atepdf.service-protocol-cases/1",
-  "source": "docs/adr/0014-consumer-ai-service.md sections 3, 4, 11, 12, 13, 14, 17 and 18",
-  "status": "Approved architecture (ADR 0014, AI-1 to AI-10 approved 30 September 2026). Numeric limits are the provisional values in ADR 0014 sections 13-14; tests read them from the single LIMITS constant that SHR-80/81 define, not from literals.",
+  "source": "docs/adr/0016-consumer-ai-service.md sections 3, 4, 7, 9, 11, 12, 13, 14, 17 and 18",
+  "status": "Approved architecture (ADR 0016, formerly numbered 0014; AI-1 to AI-10 approved 30 September 2026; revision 3 cross-review corrections S79-01 to S79-07 added S45-S80 and updated S03, S04, S19, S22, S27, S29, S31, S37 and S44). Numeric limits are the provisional values in ADR 0016 sections 11, 13 and 14; tests read them from the single LIMITS constant and MODEL_TABLE rows that SHR-80/81 define, not from literals. Allowance units and settle/release outcomes come from SHR-84; these cases assert holds are atomic and resolved exactly once, not an amount.",
   "notes": [
     "Every case runs against a mocked atePDF API (Vercel Function code run locally), a local or mocked Supabase (Auth + Postgres) and a mocked OpenAI. No live provider call, real credential, deployment or real user data.",
     "Identifiers and hosts are synthetic (*.example.test). Provider responses are fixtures.",
     "Every DENY or error case asserts zero provider calls unless 'providerCalls' says otherwise, and zero allowance consumption unless 'allowance' says otherwise.",
-    "Every case asserts that no API log line, no Postgres row and no Supabase log fixture contains the instruction text, clarification text, refs, the provider response body or the bearer token (canary strings)."
+    "Every case asserts that no API log line, no Postgres row and no Supabase log fixture contains the instruction text, clarification text, refs, the provider response body or the bearer token (canary strings).",
+    "Cases S45-S80 need transactional evidence against real local Postgres (Supabase local) with concurrent sessions, not only mocks, in SHR-80/81/86. They are acceptance mappings, not executed tests.",
+    "'Hold' is the commercial allowance hold (ADR 0016 section 11.1); 'W' is the per-attempt worst-case provider cost and 'envelope' is W x maxProviderAttempts (section 11.2)."
   ],
   "baseline": {
-    "identity": "guest installation inst_A (Supabase anonymous user U_A, guest subject S_A) with a valid 15-minute access token; allowance available",
+    "identity": "guest installation inst_A with installation key K_A (public key registered), Supabase anonymous guest principal U_A with an active guest session binding, guest subject S_A; valid 15-minute access token whose session_id is live in auth.sessions; allowance available",
     "hostedDisclosureAck": "current",
     "serviceDisclosureVersion": "matches the app's bundled RecipientDisclosure records",
     "request": "valid class-H PlanRequest/2 with installationId inst_A, instruction 'merge these', two refs, requestId K1",
@@ -31,12 +33,12 @@
     {
       "id": "S03",
       "change": "Expired Supabase access token",
-      "expect": "401 token_expired; the client refreshes its Supabase session and retries once with the same requestId"
+      "expect": "401 token_expired; the client refreshes its Supabase session (session_id unchanged) and retries once with the same requestId"
     },
     {
       "id": "S04",
       "change": "Token of installation inst_B presents installationId inst_A",
-      "expect": "403 installation_not_linked; no admission; no read of inst_A state"
+      "expect": "403 installation_not_linked (no active session binding for inst_A and this session); no admission; no read of inst_A state"
     },
     {
       "id": "S05",
@@ -111,7 +113,7 @@
     {
       "id": "S19",
       "change": "Provider returns HTTP 500 before any body",
-      "expect": "API retries once to the same provider, model, endpoint and disclosure route if the deadline allows; if the retry succeeds 200; providerCalls 2; one reservation only"
+      "expect": "API begins attempt 2 within the reserved envelope if the deadline allows; if it succeeds 200; providerCalls 2; one envelope reservation and one allowance hold only; attempt 1 (no usage) stays booked at W permanently, attempt 2 booked at actual usage; unused envelope released"
     },
     {
       "id": "S20",
@@ -126,7 +128,7 @@
     {
       "id": "S22",
       "change": "Provider exceeds PROVIDER_TIMEOUT",
-      "expect": "504 provider_timeout; upstream aborted; reservation held at worst case until usage reconciliation, then released; no allowance consumption"
+      "expect": "504 provider_timeout; upstream aborted; the attempt stays booked at W permanently (no usage returned); the allowance hold is resolved once under SHR-84 with no consumption for a timeout"
     },
     {
       "id": "S23",
@@ -151,7 +153,7 @@
     {
       "id": "S27",
       "change": "Client cancels while provider call in flight",
-      "expect": "Relay aborts upstream fetch; 499 cancelled recorded; late provider result discarded; no allowance consumption"
+      "expect": "Relay aborts upstream fetch; 499 cancelled recorded; late provider result discarded; allowance hold released (no consumption) unless SHR-84 approves a different cancellation rule; any sent attempt stays booked at W unless usage arrived"
     },
     {
       "id": "S28",
@@ -161,7 +163,7 @@
     {
       "id": "S29",
       "change": "Network drops after relay sent the response (client never receives it); user taps Try again",
-      "expect": "New requestId and idempotencyKey K2 with supersedes=K1; relay links them so the SHR-84 charging rule consumes at most one workflow unit"
+      "expect": "New requestId K2 with supersedes=K1; K2 continues K1's workflow and reuses its allowance hold, so at most one workflow unit is charged; K2 has its own spend envelope because it is a new provider call"
     },
     {
       "id": "S30",
@@ -171,7 +173,7 @@
     {
       "id": "S31",
       "change": "Vercel function crashes or is redeployed mid-request",
-      "expect": "Client receives a connection error and makes one automatic retry with the same requestId; the orphaned lease expires after 60 s; no second reservation"
+      "expect": "Client's one automatic retry with the same requestId gets 409 in_progress (or 409 already_completed once the lease expired and the request is abandoned); no second reservation or hold; the orphaned lease expires after 60 s and frees concurrency only; begun attempts stay booked at W; the client shows 'Interrupted. Nothing changed.'"
     },
     {
       "id": "S32",
@@ -201,7 +203,7 @@
     {
       "id": "S37",
       "change": "Guest installation links to an existing account",
-      "expect": "Link requires both the account token and the installation's anonymous session; consumed guest usage stays consumed; no new allowance (D-07); inst_A then acts as the account subject"
+      "expect": "Link requires the account token (live session) and an installation-key signature over a single-use link challenge; consumed guest usage stays consumed on S_A; no new allowance (D-07); inst_A then acts as the account subject while the account binding is active"
     },
     {
       "id": "S38",
@@ -236,7 +238,223 @@
     {
       "id": "S44",
       "change": "Provider fixture reports usage.input_tokens_details.cache_write_tokens",
-      "expect": "cache_write_tokens never exceeds the fixed developer-prefix length; the user message is never written to the prompt cache"
+      "expect": "cache_write_tokens never exceeds the token count of the whole visible fixed prefix before the breakpoint (tool definitions + developer message + framing, counted with the pinned tokenizer), not merely the developer string; the user message is never written to the prompt cache; a fixture alone does not prove real provider cache behaviour"
+    },
+    {
+      "id": "S45",
+      "group": "allowance_hold",
+      "change": "Account subject with exactly one available unit; two linked installations submit new workflows concurrently",
+      "expect": "Admissions serialize on the subject ledger row; exactly one gets a hold and 200; the other 402 allowance_exhausted with providerCalls 0; one hold row total"
+    },
+    {
+      "id": "S46",
+      "group": "allowance_hold",
+      "change": "Same requestId sent again during and after admission (transport retry)",
+      "expect": "409 in_progress / already_completed; no second hold, no second envelope; hold count for the workflow stays 1"
+    },
+    {
+      "id": "S47",
+      "group": "allowance_hold",
+      "change": "Clarification answer K2 with pendingClarification.originalRequestId=K1, while available units are 0",
+      "expect": "K2 continues K1's workflow and reuses its hold; admitted without a new unit; exactly one unit held for the workflow"
+    },
+    {
+      "id": "S48",
+      "group": "allowance_hold",
+      "change": "User cancels a workflow before any plan or result is returned",
+      "expect": "Hold resolved exactly once via release_hold (no consumption, consistent with S27) unless SHR-84 approves a different rule; a second release or settle is a no-op"
+    },
+    {
+      "id": "S49",
+      "group": "allowance_hold",
+      "change": "Provider attempt succeeded but complete_request cannot commit (ledger error)",
+      "expect": "No plan returned (internal, not retryable; 'Interrupted. Nothing changed.'); attempts stay booked at W; the hold is left for reap_abandoned and resolved exactly once under SHR-84's rule for workflows that returned nothing"
+    },
+    {
+      "id": "S50",
+      "group": "allowance_hold",
+      "change": "link_installation for inst_A runs concurrently with an admission on guest subject S_A",
+      "expect": "Serialized by the installation lock and subject locks in a fixed order; the admitted request's hold stays on the subject that created it and is settled or released there; nothing copied or duplicated; the carry-over rule counts active holds as consumed; no new allowance"
+    },
+    {
+      "id": "S51",
+      "group": "allowance_hold",
+      "change": "Try again (supersedes) versus a genuinely new instruction versus a forged continuation",
+      "expect": "supersedes=K1 of the same installation reuses K1's hold; a new instruction creates a new workflow and needs a new hold; supersedes or originalRequestId pointing at another installation's request is refused 403 installation_not_linked and reuses nothing"
+    },
+    {
+      "id": "S52",
+      "group": "spend_envelope",
+      "change": "Provider returns 200 with a valid tool call but no usage block",
+      "expect": "Plan returned; the attempt stays booked at W permanently; alert emitted for missing usage"
+    },
+    {
+      "id": "S53",
+      "group": "spend_envelope",
+      "change": "Function process crashes after begin_attempt committed and the request was sent, before complete_request",
+      "expect": "Lease expires after 60 s and frees concurrency only; reap_abandoned marks the request abandoned; the begun attempt stays booked at W; the unbegun remainder of the envelope is released; the hold is resolved exactly once"
+    },
+    {
+      "id": "S54",
+      "group": "spend_envelope",
+      "change": "Client cancels after the attempt was sent to the provider",
+      "expect": "Upstream aborted; the sent attempt stays booked at W unless usage arrives; spend is never released because of the cancel"
+    },
+    {
+      "id": "S55",
+      "group": "spend_envelope",
+      "change": "Relay completed and booked actual usage, but the API response to the client was lost; user taps Try again",
+      "expect": "First request stays completed at actual cost; the Try again is a new requestId with its own envelope (a real new provider call) and reuses the workflow hold"
+    },
+    {
+      "id": "S56",
+      "group": "spend_envelope",
+      "change": "Lease expired and the request was reaped as abandoned; the frozen function later calls complete_request with provider usage",
+      "expect": "Late usage may lower the attempt from W to actual (per-attempt evidence); the request stays abandoned; no plan is delivered; concurrency is not re-taken; the hold is not resolved a second time"
+    },
+    {
+      "id": "S57",
+      "group": "spend_envelope",
+      "change": "Request admitted at 23:59:59.9 UTC on the last day of a month and completed at 00:00:02 UTC",
+      "expect": "Reservation, attempt charges and actual cost all stay in the admission day and month buckets; the new day and month start at zero; reconciliation never moves cost into the new buckets"
+    },
+    {
+      "id": "S58",
+      "group": "spend_envelope",
+      "change": "Postgres unavailable at admission, at begin_attempt for the permitted retry, or at completion",
+      "expect": "Admission: fail closed, service_paused, providerCalls 0. Retry: no begin_attempt, no send, provider_unavailable. Completion: as S49"
+    },
+    {
+      "id": "S59",
+      "group": "spend_envelope",
+      "change": "The same requestId is sent 1,000 times, concurrently and sequentially",
+      "expect": "At most one request row, one envelope, one hold and maxProviderAttempts provider calls in total; every other send gets 409"
+    },
+    {
+      "id": "S60",
+      "group": "spend_envelope",
+      "change": "Provider request whose pinned-tokenizer input count exceeds maxInputTokens, or the tokenizer is unavailable, or a completed attempt reports usage.input_tokens above the counted value",
+      "expect": "Over the ceiling: 413 request_too_expensive, providerCalls 0. Tokenizer unavailable: fail closed. Usage above the counted value: booked at actual, alert, admission for that model row paused until corrected"
+    },
+    {
+      "id": "S61",
+      "group": "spend_envelope",
+      "change": "MODEL_TABLE row whose W x maxProviderAttempts exceeds its maxRequestCostMicros",
+      "expect": "Relay refuses to start; health check fails closed"
+    },
+    {
+      "id": "S62",
+      "group": "session_revocation",
+      "change": "Account signed in on inst_A and inst_B; from inst_B the user signs out inst_A in the session list; inst_A then sends a request with its still-unexpired JWT",
+      "expect": "401 session_revoked at admission, providerCalls 0; inst_B's session keeps working; inst_A falls back to its guest session and guest subject"
+    },
+    {
+      "id": "S63",
+      "group": "session_revocation",
+      "change": "Account deleted while inst_A and inst_B hold unexpired account JWTs",
+      "expect": "Both refused at once (401 session_revoked); both installations keep their guest subjects and consumed guest ledgers; account rows deleted"
+    },
+    {
+      "id": "S64",
+      "group": "session_revocation",
+      "change": "'Sign out everywhere'",
+      "expect": "Every account binding revoked and signOut scope global; all account JWTs refused at next admission; guest sessions and guest subjects unaffected"
+    },
+    {
+      "id": "S65",
+      "group": "session_revocation",
+      "change": "Replay: a captured account JWT is presented with another installationId, after its session was revoked, and after expiry",
+      "expect": "Other installation: 403 installation_not_linked. Revoked session: 401 session_revoked. Expired: 401 token_expired. providerCalls 0 in each"
+    },
+    {
+      "id": "S66",
+      "group": "session_revocation",
+      "change": "Refresh after sign-out, and refresh-token reuse outside Supabase's reuse interval",
+      "expect": "Refresh rejected by Supabase; a reused refresh token terminates the whole session; subsequent admissions 401 session_revoked; the app falls back to its guest session"
+    },
+    {
+      "id": "S67",
+      "group": "session_revocation",
+      "change": "auth.sessions or session_bindings cannot be read during admission",
+      "expect": "Fail closed: service_paused, providerCalls 0; never admit on JWT signature and expiry alone; the relay caches no session validity"
+    },
+    {
+      "id": "S68",
+      "group": "session_revocation",
+      "change": "Request admitted, then the session is revoked before completion",
+      "expect": "The admitted request may complete and return; the next admission from that session is refused 401 session_revoked"
+    },
+    {
+      "id": "S69",
+      "group": "installation_lifecycle",
+      "change": "First hosted use, then a second register for the same installation ID or by the same anonymous user",
+      "expect": "First: installation, guest subject and guest binding created in one transaction under the global new-guest cap; allowance attached per SHR-84. Second: 409; no second guest subject; no allowance top-up"
+    },
+    {
+      "id": "S70",
+      "group": "installation_lifecycle",
+      "change": "Anonymous guest uses allowance -> email one-time code creates account A1 -> link -> work as A1 -> sign out -> guest request -> sign in again (code) -> link -> delete account",
+      "expect": "After sign-out: authenticated as the original S_A with its consumed allowance, no A1 paid authority, no new allowance. After re-sign-in: acts as A1 again. After deletion: inst_A acts as S_A; guest ledger intact; A1 rows deleted; old A1 JWTs refused. The anonymous user U_A is never converted"
+    },
+    {
+      "id": "S71",
+      "group": "installation_lifecycle",
+      "change": "Guest inst_B signs into existing account A1 (already linked to inst_A)",
+      "expect": "Link requires A1's live session and inst_B's installation proof; consumed usage on S_B stays consumed; the carry-over rule (ADR 0014 G03, SHR-84/86) is applied once; no new allowance"
+    },
+    {
+      "id": "S72",
+      "group": "installation_lifecycle",
+      "change": "Guest session lost (refresh token revoked or anonymous user cleaned up) while the installation key remains",
+      "expect": "New anonymous user V; rebind with a single-use rebind challenge signature and a new public key signed by the old key; same inst_A and S_A; U_A's bindings revoked; old key refused afterwards; a wrong or replayed signature is 403 and counts toward the block rule"
+    },
+    {
+      "id": "S73",
+      "group": "installation_lifecycle",
+      "change": "App reinstalled with Keychain items intact; then reinstalled after the Keychain items were removed",
+      "expect": "Intact: same installation, installation key, guest subject and (if still valid) account session. Removed: new installation and guest subject under the global cap (accepted BILL-06 imperfection); purchases unaffected"
+    },
+    {
+      "id": "S74",
+      "group": "installation_lifecycle",
+      "change": "inst_A was signed out remotely while the app was deleted; the app is reinstalled",
+      "expect": "The stored account session fails at admission (session_revoked) or refresh; the app falls back to its guest session and S_A; no paid authority"
+    },
+    {
+      "id": "S75",
+      "group": "installation_lifecycle",
+      "change": "Remote sign-out, local sign-out, link and rebind race on the same installation",
+      "expect": "Serialized by the installation row lock; the final state is exactly one binding outcome; no request is admitted under a binding after its revocation commits"
+    },
+    {
+      "id": "S76",
+      "group": "installation_lifecycle",
+      "change": "inst_A has an active account binding and the client sends /v1/plan with its guest token",
+      "expect": "403 account_session_required; no parallel guest pool; providerCalls 0"
+    },
+    {
+      "id": "S77",
+      "group": "installation_lifecycle",
+      "change": "Static inspection of the app bundles and the Mac's Keychain items",
+      "expect": "Only the Supabase publishable key; no service-role/secret key, database credential, OpenAI key or HMAC salt; the private installation key is never sent in any request"
+    },
+    {
+      "id": "S78",
+      "group": "login",
+      "change": "Account sign-in in each account-capable build",
+      "expect": "Email one-time code only (signInWithOtp + verifyOtp); no magic link, no password; production email blocked until custom SMTP is configured and its recipient record is complete; codes rate-limited per email and installation"
+    },
+    {
+      "id": "S79",
+      "group": "login",
+      "change": "All v1 flows with Sign in with Apple absent; App Store purchase without an atePDF account",
+      "expect": "Every v1 flow passes without Sign in with Apple; the App Store purchase needs no atePDF account (SELL-3); the Setapp build offers no sign-in"
+    },
+    {
+      "id": "S80",
+      "group": "region",
+      "change": "Deployment configuration and a simulated iad1 outage",
+      "expect": "Exactly one Function region (iad1); Function Failover off; no functionFailoverRegions at project or function level; deployment summary shows no failover region (production gate). In the mock outage the client gets the unreachable state and no execution happens elsewhere"
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "schema": "atepdf.cost-model/2",
-  "source": "docs/adr/0014-consumer-ai-service.md section 15",
+  "source": "docs/adr/0016-consumer-ai-service.md section 15 (enforced bound: section 11.2)",
   "labels": {
     "MEASURED": "measured in this repository on 2026-09-30",
     "DOCUMENTED": "vendor primary documentation retrieved 2026-09-30",
@@ -65,7 +65,7 @@
   "platformFixedUsdPerMonth": {
     "vercelPro": 20,
     "supabasePro": 25,
-    "note": "DOCUMENTED list prices; outside the AI provider spend caps; custom SMTP provider cost UNKNOWN (SHR-85)"
+    "note": "DOCUMENTED list prices; outside the AI provider spend caps; custom SMTP provider for email one-time codes not yet chosen, cost UNKNOWN"
   },
   "estimateAssumptions": {
     "fixedPrefixTokens": 4200,
@@ -115,7 +115,7 @@
       "clarification": 0.00021,
       "multiStep": 0.0004,
       "blendedWithResidency": 0.00028,
-      "worstCaseWithResidency": 0.00385
+      "perCaseNote": "simple/followUp/clarification/multiStep are before the +10% residency uplift; blendedWithResidency includes it; all are no-retry expected estimates"
     },
     "usdPerUserMonth": {
       "note": "workflow counts illustrative, not approved allowances (SHR-84)",
@@ -169,5 +169,21 @@
     "globalDailyUsd": 5,
     "globalMonthlyUsd": 50,
     "openaiProjectHardBudgetUsd": 55
+  },
+  "enforcedBound": {
+    "label": "arithmetic from DOCUMENTED prices and ENFORCED ceilings (ADR 0016 section 11.2)",
+    "gpt-6-luna": {
+      "maxInputTokens": 12000,
+      "maxOutputTokens": 4000,
+      "inputRateUsedUsdPer1M": 0.125,
+      "inputRateNote": "cache-write rate, the highest input rate",
+      "outputUsdPer1M": 0.5,
+      "uplift": 1.1,
+      "perAttemptWorstCaseUsd": 0.00385,
+      "maxProviderAttempts": 2,
+      "envelopeUsd": 0.0077,
+      "maxRequestCostUsd": 0.01
+    },
+    "note": "Input tokens are counted with the pinned tokenizer over the whole provider request before sending; a character-to-token ratio is not used as the bound. Attempts without provider usage stay booked at the per-attempt worst case."
   }
 }

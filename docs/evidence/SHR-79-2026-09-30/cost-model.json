@@ -1,6 +1,6 @@
 {
-  "schema": "atepdf.cost-model/1",
-  "source": "docs/adr/0013-consumer-ai-service.md section 15",
+  "schema": "atepdf.cost-model/2",
+  "source": "docs/adr/0014-consumer-ai-service.md section 15",
   "labels": {
     "MEASURED": "measured in this repository on 2026-09-30",
     "DOCUMENTED": "vendor primary documentation retrieved 2026-09-30",
@@ -28,40 +28,27 @@
       "fourStepPlan": 1350,
       "clarification": 140
     },
-    "method": "offline tsx script importing packages/planner/src/schema.ts and product-knowledge.ts on origin/main ff3e291; synthetic refs; no provider call"
+    "method": "offline tsx script importing packages/planner/src/schema.ts and product-knowledge.ts; synthetic refs; no provider call"
   },
   "documentedPricesUsdPer1M": {
     "retrieved": "2026-09-30",
     "standardShortContext": {
-      "gpt-6.1-sol": {
-        "input": 2.0,
-        "cachedInput": 0.1,
-        "cacheWrite": 2.5,
-        "output": 10.0
-      },
       "gpt-6-luna": {
         "input": 0.1,
         "cachedInput": 0.01,
         "cacheWrite": 0.125,
         "output": 0.5
       },
-      "gpt-6-astra": {
-        "input": 10.0,
-        "cachedInput": 1.0,
-        "cacheWrite": 12.5,
-        "output": 50.0
+      "gpt-6.1-sol": {
+        "input": 2.0,
+        "cachedInput": 0.1,
+        "cacheWrite": 2.5,
+        "output": 10.0
       },
       "claude-sonnet-5-5": {
         "input": 2.0,
         "cacheHit": 0.2,
-        "cacheWrite5m": 2.5,
         "output": 10.0
-      },
-      "claude-opus-5-5": {
-        "input": 4.0,
-        "cacheHit": 0.2,
-        "cacheWrite5m": 5.0,
-        "output": 20.0
       },
       "gemini-3.8-flash": {
         "input2026": 0.75,
@@ -70,10 +57,15 @@
         "output2027": 7.5
       }
     },
+    "cacheRules": "GPT-5.6 and later: cache write 1.25x uncached input; read 0.1x (0.05x for GPT-6.1 Sol); explicit mode writes end at the last breakpoint; content after it billed at the uncached rate with no write charge",
     "uplifts": {
-      "openaiDataResidency": "+10% for models released on or after 2026-03-05",
-      "anthropicUsInference": "x1.1"
+      "openaiDataResidency": "+10% for models released on or after 2026-03-05"
     }
+  },
+  "platformFixedUsdPerMonth": {
+    "vercelPro": 20,
+    "supabasePro": 25,
+    "note": "DOCUMENTED list prices; outside the AI provider spend caps; custom SMTP provider cost UNKNOWN (SHR-85)"
   },
   "estimateAssumptions": {
     "fixedPrefixTokens": 4200,
@@ -93,16 +85,20 @@
       "clarification": 60,
       "multiStep": 450
     },
-    "reasoningTokensSolLow": {
-      "simple": 300,
-      "followUp": 300,
-      "clarification": 200,
-      "multiStep": 800,
-      "note": "UNKNOWN; not published; replace with SHR-108 measurements"
+    "reasoningTokens": {
+      "lunaNone": 0,
+      "low": {
+        "simple": 300,
+        "followUp": 300,
+        "clarification": 200,
+        "multiStep": 800,
+        "note": "UNKNOWN; replace with SHR-108 measurements"
+      }
     },
-    "reasoningTokensLunaNone": 0,
     "prefixCacheHitRate": 0.8,
-    "cacheMissPricedAt": "cache-write rate",
+    "cacheMissPricedAt": "cache-write rate on the fixed prefix only",
+    "userMessage": "always uncached",
+    "residencyUplift": 1.1,
     "callMix": {
       "simple": 0.45,
       "followUp": 0.25,
@@ -111,49 +107,67 @@
     },
     "callsPerWorkflow": 1.5
   },
-  "estimateUsdPerCall": {
-    "gpt-6.1-sol": {
-      "simple": 0.0072,
-      "followUp": 0.0086,
-      "clarification": 0.0059,
-      "multiStep": 0.0158,
-      "blended": 0.0081,
-      "worstCase": 0.065
-    },
-    "gpt-6-luna": {
-      "simple": 0.0002,
-      "followUp": 0.0003,
-      "clarification": 0.0002,
+  "expectedProduction": {
+    "config": "gpt-6-luna, effort none",
+    "usdPerCall": {
+      "simple": 0.00022,
+      "followUp": 0.00029,
+      "clarification": 0.00021,
       "multiStep": 0.0004,
-      "blended": 0.0003,
-      "worstCase": 0.0032
+      "blendedWithResidency": 0.00028,
+      "worstCaseWithResidency": 0.00385
     },
-    "claude-sonnet-5-5": {
-      "blended": 0.0085,
-      "note": "before ~30% tokenizer difference"
-    },
-    "gemini-3.8-flash": {
-      "blended2026": 0.003,
-      "blended2027": 0.006
-    }
-  },
-  "estimateUsdPerUserMonth": {
-    "note": "workflow counts are illustrative, not approved allowances (SHR-84)",
-    "gpt-6.1-sol": {
-      "guest10": 0.12,
-      "light20": 0.24,
-      "normal100": 1.22,
-      "heavy500": 6.11
-    },
-    "gpt-6-luna": {
+    "usdPerUserMonth": {
+      "note": "workflow counts illustrative, not approved allowances (SHR-84)",
       "guest10": 0.004,
       "light20": 0.01,
       "normal100": 0.04,
-      "heavy500": 0.2
+      "heavy500": 0.21
+    },
+    "callsCoveredBy": {
+      "monthlyCap50": 176678,
+      "dailyCap5": 17667
     }
   },
-  "hosting": {
-    "cloudflareWorkersPaidUsdPerMonth": 5,
-    "includedRequests": 10000000
+  "lunaLowEffort": {
+    "usdPerCallBlendedWithResidency": 0.00046,
+    "usdPerUserMonth": {
+      "guest10": 0.007,
+      "light20": 0.014,
+      "normal100": 0.07,
+      "heavy500": 0.35
+    },
+    "callsCoveredBy": {
+      "monthlyCap50": 107758,
+      "dailyCap5": 10775
+    }
+  },
+  "contingencyAndEvalOnly": {
+    "config": "gpt-6.1-sol, effort low",
+    "usdPerCallBlendedWithResidency": 0.0089,
+    "worstCaseWithResidency": 0.077,
+    "usdPerUserMonth": {
+      "guest10": 0.13,
+      "light20": 0.27,
+      "normal100": 1.34,
+      "heavy500": 6.68
+    },
+    "callsCoveredBy": {
+      "monthlyCap50": 5616
+    }
+  },
+  "ceilings": {
+    "maxOutputTokens": 4000,
+    "maxRequestCostUsd": {
+      "gpt-6-luna": 0.01,
+      "gpt-6.1-sol-eval": 0.1
+    },
+    "perSubjectDailyUsd": {
+      "guest": 0.25,
+      "account": 1.0
+    },
+    "globalDailyUsd": 5,
+    "globalMonthlyUsd": 50,
+    "openaiProjectHardBudgetUsd": 55
   }
 }

@@ -1,134 +1,198 @@
 {
   "schema": "atepdf.recipient-disclosure-drafts/1",
-  "source": "docs/adr/0013-consumer-ai-service.md section 7",
-  "status": "Proposed (SHR-79). Every record is incomplete; under ADR 0012 PRIV-7 the gate denies all production transfer until each unknownField is resolved and the record is verified against live account configuration.",
+  "source": "docs/adr/0014-consumer-ai-service.md section 7",
+  "status": "Architecture approved (ADR 0014). Every record is incomplete; under ADR 0012 PRIV-7 the gate denies all production transfer until each unknownField is resolved and the record is verified against live account configuration.",
+  "instructionRoute": [
+    "atepdf-service",
+    "vercel",
+    "openai-api"
+  ],
+  "identityStateRecipients": [
+    "supabase"
+  ],
   "records": [
     {
-      "recipientId": "atepdf-relay",
+      "recipientId": "atepdf-service",
       "displayName": "atePDF AI",
-      "legalEntity": "UNKNOWN",
-      "role": "relay operator (controller of relay records)",
+      "legalEntity": "UNKNOWN (seller/operator entity open: SHR-85, OPEN-04)",
+      "role": "service operator; controller of service records",
+      "onInstructionRoute": true,
       "endpoints": [
-        "UNKNOWN: relay host not registered"
+        "UNKNOWN: API host not registered"
       ],
+      "receives": "class H + H-09",
       "plaintextReaders": [
-        "atePDF relay code (memory only)",
-        "Cloudflare (see cloudflare-workers)"
+        "atePDF API code (Vercel Function memory only)"
       ],
-      "dataRegion": "Cloudflare location nearest the user (global edge); Durable Object storage in the US jurisdiction (proposed)",
+      "dataRegion": "Vercel iad1 (US East); Supabase us-east-1",
       "retention": {
         "payload": "not stored",
-        "storedState": "subject ID, counters, idempotency state; keyed HMAC of request body <= 15 minutes",
-        "abuseMonitoring": "none",
-        "logs": "contentless lines 7 days; contentless daily aggregates 400 days",
-        "backups": "UNKNOWN: Durable Object recovery window not verified"
+        "storedState": "Postgres identity/entitlement/ledger/idempotency/lease/counter/budget rows; no instruction, plan or document data",
+        "logs": "one contentless line per request (1 day, Vercel); requests rows 30 days; contentless daily aggregates 400 days",
+        "backups": "Supabase daily backups 7 days (Pro)"
       },
       "trainingUse": "none",
-      "dataSharingProgramme": "not applicable",
-      "humanReview": "no content retained to review",
-      "relayLogFields": "ADR 0013 section 17",
+      "humanReview": "no content retained",
       "subprocessors": [
-        "cloudflare-workers",
+        "vercel",
+        "supabase",
         "openai-api"
       ],
-      "deletion": "subject records deleted on installation/account deletion (policy in SHR-95)",
-      "outageFailover": "no secondary relay host",
-      "endUserIdentifier": "holds inst_/acct_; forwards only HMAC safety_identifier to the provider",
+      "deletion": "installation/account deletion removes rows; backups age out after 7 days (policy: SHR-95)",
+      "outageFailover": "no secondary host; no provider/model/region failover",
+      "endUserIdentifier": "holds installation/account/subject IDs; forwards only an HMAC safety_identifier to OpenAI",
       "unknownFields": [
         "legalEntity",
-        "endpoints",
-        "retention.backups"
+        "endpoints"
       ],
       "sources": [
-        "docs/adr/0013-consumer-ai-service.md"
+        "docs/adr/0014-consumer-ai-service.md"
       ],
       "verifiedAt": "2026-09-30",
       "verifiedBy": "SHR-79 agent (documentation only; no live account configuration exists)",
       "status": "incomplete",
-      "disclosureVersion": "draft-atepdf-relay-2026-09-30"
+      "disclosureVersion": "draft-atepdf-service-2026-09-30-r2"
     },
     {
-      "recipientId": "cloudflare-workers",
-      "displayName": "Cloudflare",
-      "legalEntity": "Cloudflare, Inc.",
-      "role": "processor hosting the relay; terminates TLS and runs relay code",
+      "recipientId": "vercel",
+      "displayName": "Vercel",
+      "legalEntity": "Vercel Inc. (Delaware)",
+      "role": "processor hosting the atePDF API; terminates TLS and runs its code",
+      "onInstructionRoute": true,
       "endpoints": [
-        "same host as atepdf-relay (Workers custom domain)"
+        "same host as atepdf-service (Vercel custom domain)"
       ],
+      "receives": "class H + H-09 in transit and function memory",
       "plaintextReaders": [
-        "Cloudflare edge infrastructure"
+        "Vercel infrastructure (hosted on AWS)"
       ],
-      "dataRegion": "global edge; regional execution requires the Enterprise Data Localization Suite (not proposed); Durable Object jurisdiction US",
+      "dataRegion": "functions pinned to iad1; Vercel documents automatic rerouting to the next closest region during regional downtime (iad1 order includes cle1, yul1, sfo1, dub1); whether Pro can prevent it: UNKNOWN; log storage region: UNKNOWN",
       "retention": {
-        "payload": "none written by atePDF code",
-        "storedState": "only what atePDF code writes",
+        "payload": "UNKNOWN: request-body capture is not documented either way",
+        "runtimeLogs": "method, path, query string, status, host, user agent, client IP, region, firewall result, function metadata, outgoing sub-requests and all console output; 1 day on Pro with the project excluded from Observability Plus (30 days if Plus applies; Plus is on by default for Pro teams created on or after 2026-04-03); cannot be disabled",
         "abuseMonitoring": "UNKNOWN",
-        "logs": "Workers invocation logs disabled (they capture request metadata and headers by default); Workers Logs 7 days on Paid for atePDF's own lines",
         "backups": "UNKNOWN"
       },
-      "trainingUse": "none (processor under DPA)",
-      "dataSharingProgramme": "not applicable",
+      "trainingUse": "paid Pro opted out of Vercel AI-training data use by default (March 2026 terms changelog); verify in Team Settings > Data Preferences",
       "humanReview": "UNKNOWN",
       "subprocessors": {
-        "listUrl": "https://www.cloudflare.com/gdpr/subprocessors/",
-        "contentsReviewed": false
+        "listUrl": "https://security.vercel.com/subprocessors",
+        "contentsReviewed": false,
+        "note": "includes AWS and several AI providers; which touch runtime data is UNKNOWN"
       },
-      "deletion": "per Cloudflare customer DPA",
-      "outageFailover": "no failover to another host",
-      "endUserIdentifier": "sees inst_/acct_ in transit",
+      "deletion": "per Vercel DPA: deleted within a commercially reasonable timeframe after termination",
+      "outageFailover": "platform regional rerouting only",
+      "endUserIdentifier": "sees IDs and bearer token in transit",
       "unknownFields": [
+        "retention.payload",
         "retention.abuseMonitoring",
         "retention.backups",
+        "dataRegion.outageRerouting",
+        "dataRegion.logs",
         "humanReview",
         "subprocessors.contents"
       ],
       "sources": [
-        "https://developers.cloudflare.com/workers/platform/pricing/",
-        "https://developers.cloudflare.com/workers/platform/limits/",
-        "https://developers.cloudflare.com/workers/observability/logs/workers-logs/",
-        "https://developers.cloudflare.com/durable-objects/reference/data-location/",
-        "https://developers.cloudflare.com/data-localization/",
-        "https://www.cloudflare.com/cloudflare-customer-dpa/"
+        "https://vercel.com/docs/logs/runtime",
+        "https://vercel.com/docs/observability/observability-plus",
+        "https://vercel.com/docs/functions/configuring-functions/region",
+        "https://vercel.com/docs/environment-variables/sensitive-environment-variables",
+        "https://vercel.com/docs/spend-management",
+        "https://vercel.com/docs/limits/fair-use-guidelines",
+        "https://vercel.com/legal/dpa",
+        "https://security.vercel.com/subprocessors"
       ],
       "verifiedAt": "2026-09-30",
       "verifiedBy": "SHR-79 agent (documentation only; no live account configuration exists)",
       "status": "incomplete",
-      "disclosureVersion": "draft-cloudflare-workers-2026-09-30"
+      "disclosureVersion": "draft-vercel-2026-09-30-r2"
+    },
+    {
+      "recipientId": "supabase",
+      "displayName": "Supabase",
+      "legalEntity": "Supabase Pte. Ltd. (Singapore)",
+      "role": "processor for identity (Auth) and service state (Postgres)",
+      "onInstructionRoute": false,
+      "endpoints": [
+        "UNKNOWN: project ref not created (Auth API from the Mac; pooled Postgres from Vercel)"
+      ],
+      "receives": "H-09 only: installation/account/subject IDs, request IDs, states, counters, timestamps; Auth sees client IP and user agent on auth calls; email address or Apple identity if an account is created",
+      "plaintextReaders": [
+        "Supabase (hosted on AWS)"
+      ],
+      "dataRegion": "us-east-1 project (fixed at creation); backup location UNKNOWN",
+      "retention": {
+        "payload": "never receives instruction or document data",
+        "authLogs": "auth and audit logs incl. IP and user agent, 7 days on Pro; database audit copy toggled off",
+        "apiGatewayLogs": "not used by the relay (Data API not called)",
+        "postgresLogs": "DDL and failing statement text, 7 days; relay role log_statement none",
+        "backups": "daily backups 7 days (Pro)"
+      },
+      "trainingUse": "none stated (processor)",
+      "humanReview": "UNKNOWN",
+      "subprocessors": {
+        "listUrl": "https://supabase.com/legal/customer-resources/subprocessor-list",
+        "contentsReviewed": true,
+        "note": "June 2026 list includes AWS, Cloudflare, Google, Fly.io, Vercel, Upstash, Sentry, Braintrust, OpenAI; which touch this project's data is UNKNOWN"
+      },
+      "deletion": "auth.admin.deleteUser cascades sessions and linked rows; backups age out after 7 days",
+      "outageFailover": "none (API fails closed)",
+      "endUserIdentifier": "holds IDs",
+      "unknownFields": [
+        "endpoints",
+        "dataRegion.backups",
+        "humanReview",
+        "subprocessors.dataScope"
+      ],
+      "sources": [
+        "https://supabase.com/pricing",
+        "https://supabase.com/docs/guides/auth/auth-anonymous",
+        "https://supabase.com/docs/guides/auth/audit-logs",
+        "https://supabase.com/docs/guides/database/postgres/postgres-log-config",
+        "https://supabase.com/docs/guides/platform/backups",
+        "https://supabase.com/legal/dpa",
+        "https://supabase.com/legal/customer-resources/subprocessor-list"
+      ],
+      "verifiedAt": "2026-09-30",
+      "verifiedBy": "SHR-79 agent (documentation only; no live account configuration exists)",
+      "status": "incomplete",
+      "disclosureVersion": "draft-supabase-2026-09-30-r2"
     },
     {
       "recipientId": "openai-api",
       "displayName": "OpenAI",
       "legalEntity": "OpenAI OpCo, LLC (non-EEA customers); OpenAI Ireland Ltd (EEA/Swiss customers)",
       "role": "model provider (processor of API customer content)",
+      "onInstructionRoute": true,
       "endpoints": [
         "UNKNOWN: pinned host of the US data-residency project, fixed when the project exists"
       ],
+      "receives": "class H context + HMAC safety_identifier",
       "plaintextReaders": [
         "OpenAI",
         "OpenAI subprocessors per its list"
       ],
-      "dataRegion": "US data-residency project proposed (AI-4); default region of abuse-monitoring logs UNKNOWN",
+      "dataRegion": "US data-residency project; default region of abuse-monitoring logs UNKNOWN",
       "retention": {
-        "applicationState": "none with store:false on /v1/responses (default store is true)",
+        "applicationState": "none with store:false on /v1/responses (store defaults to true)",
         "abuseMonitoring": "up to 30 days unless longer retention is required by law (removed only with approved ZDR or Modified Abuse Monitoring)",
-        "promptCache": "in_memory: around 5-10 minutes of inactivity, up to one hour; extended: up to 24 hours; in_memory support for gpt-6.1-sol UNKNOWN",
-        "logs": "abuse-monitoring logs as above",
+        "promptCache": "GPT-5.6 and later: prompt_cache_options.ttl '30m' (only value, default); a cached prefix stays eligible at least 30 minutes after its last write or reuse and 'OpenAI may retain it longer' (upper bound UNKNOWN); explicit mode with the breakpoint after atePDF's fixed developer prefix means the user message is not written to the cache; cache entries are encrypted KV tensors in GPU-local storage",
         "backups": "UNKNOWN"
       },
       "trainingUse": "not used to train or improve models unless the organisation explicitly opts in",
-      "dataSharingProgramme": "off (must be verified at deploy)",
+      "dataSharingProgramme": "off (verified at deploy)",
       "humanReview": "UNKNOWN: not stated for default organisations; classifier-flagged content may be retained and human-reviewed under Safety Retention",
       "subprocessors": {
         "listUrl": "https://platform.openai.com/subprocessors",
         "contentsReviewed": false
       },
       "deletion": "no per-request deletion of abuse logs; customer data returned or deleted at contract end (DPA 2.11)",
-      "outageFailover": "none: no other provider, model or region",
-      "endUserIdentifier": "safety_identifier = HMAC-SHA256(PROVIDER_ID_SALT, subjectId) truncated to 32 hex",
+      "outageFailover": "none: no other provider, model, endpoint or region",
+      "endUserIdentifier": "safety_identifier = HMAC-SHA256(PROVIDER_ID_SALT, subject) truncated to 32 hex",
       "unknownFields": [
         "endpoints",
         "dataRegion.abuseLogs",
-        "retention.promptCache.in_memory_support",
+        "retention.promptCache.upperBound",
         "retention.backups",
         "humanReview",
         "subprocessors.contents"
@@ -137,21 +201,29 @@
         "https://developers.openai.com/api/docs/guides/your-data",
         "https://developers.openai.com/api/docs/guides/prompt-caching",
         "https://developers.openai.com/api/docs/pricing",
-        "https://developers.openai.com/api/docs/models/gpt-6.1-sol",
         "https://developers.openai.com/api/docs/models/gpt-6-luna",
+        "https://developers.openai.com/api/docs/models/gpt-6.1-sol",
         "https://developers.openai.com/api/docs/guides/safety-best-practices",
         "https://cdn.openai.com/pdf/openai-data-processing-addendum.pdf"
       ],
       "verifiedAt": "2026-09-30",
       "verifiedBy": "SHR-79 agent (documentation only; no live account configuration exists)",
       "status": "incomplete",
-      "disclosureVersion": "draft-openai-api-2026-09-30"
+      "disclosureVersion": "draft-openai-api-2026-09-30-r2"
     }
   ],
   "conditional": [
     {
+      "recipientId": "email-otp-provider",
+      "status": "not drafted; custom SMTP provider chosen by SHR-85 receives email addresses"
+    },
+    {
+      "recipientId": "apple-sign-in",
+      "status": "not drafted; only if SHR-85 adopts Sign in with Apple"
+    },
+    {
       "recipientId": "apple-devicecheck",
-      "status": "not drafted; only if AI-5 adopts DeviceCheck after an on-device test"
+      "status": "not drafted; only after an on-device test and owner approval"
     }
   ]
 }

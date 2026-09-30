@@ -1,62 +1,242 @@
 {
   "schema": "atepdf.service-protocol-cases/1",
-  "source": "docs/adr/0013-consumer-ai-service.md sections 3, 4, 11, 12, 13, 14 and 18",
-  "status": "Proposed (SHR-79). Not approved. Numeric limits are the proposed defaults in ADR 0013 section 14 and must be read from the single policy constant that SHR-80/81 define; tests reference the constant, not the literal.",
+  "source": "docs/adr/0014-consumer-ai-service.md sections 3, 4, 11, 12, 13, 14, 17 and 18",
+  "status": "Approved architecture (ADR 0014, AI-1 to AI-10 approved 30 September 2026). Numeric limits are the provisional values in ADR 0014 sections 13-14; tests read them from the single LIMITS constant that SHR-80/81 define, not from literals.",
   "notes": [
-    "Every case runs against a mocked relay and a mocked provider. No live provider call, real credential or real user data.",
+    "Every case runs against a mocked atePDF API (Vercel Function code run locally), a local or mocked Supabase (Auth + Postgres) and a mocked OpenAI. No live provider call, real credential, deployment or real user data.",
     "Identifiers and hosts are synthetic (*.example.test). Provider responses are fixtures.",
     "Every DENY or error case asserts zero provider calls unless 'providerCalls' says otherwise, and zero allowance consumption unless 'allowance' says otherwise.",
-    "Every case asserts that no relay log line contains the instruction text, refs mapped to names, clarification text or the provider response body (canary strings)."
+    "Every case asserts that no API log line, no Postgres row and no Supabase log fixture contains the instruction text, clarification text, refs, the provider response body or the bearer token (canary strings)."
   ],
   "baseline": {
-    "identity": "guest installation inst_A with a valid access token, allowance available",
+    "identity": "guest installation inst_A (Supabase anonymous user U_A, guest subject S_A) with a valid 15-minute access token; allowance available",
     "hostedDisclosureAck": "current",
-    "relayDisclosureVersion": "matches the app's bundled RecipientDisclosure records",
-    "request": "valid class-H PlanRequest/2, instruction 'merge these', two refs, idempotencyKey K1",
-    "provider": "returns one valid strict tool call within 3 s",
+    "serviceDisclosureVersion": "matches the app's bundled RecipientDisclosure records",
+    "request": "valid class-H PlanRequest/2 with installationId inst_A, instruction 'merge these', two refs, requestId K1",
+    "provider": "gpt-6-luna fixture returns one valid strict tool call within 3 s",
     "globalBudget": "below every threshold",
     "killSwitch": "off"
   },
   "cases": [
-    {"id": "S01", "change": "Baseline", "expect": "200 plan; providerCalls 1; one reservation committed per SHR-84 charging rule; log line has requestId, model, tokens, latency, outcome only"},
-    {"id": "S02", "change": "No Authorization header", "expect": "401 auth_required; providerCalls 0"},
-    {"id": "S03", "change": "Expired access token", "expect": "401 token_expired; client refreshes with installation key signature and retries once with the same idempotencyKey"},
-    {"id": "S04", "change": "Token of installation inst_B presented with inst_A's idempotency key K1 that is already in flight", "expect": "Keys are scoped per subject: treated as a new key for inst_B; no cross-identity read of inst_A state"},
-    {"id": "S05", "change": "Revoked installation (abuse block)", "expect": "403 identity_blocked; message does not say 'upgrade'"},
-    {"id": "S06", "change": "Body larger than MAX_REQUEST_BYTES", "expect": "413 request_too_large; body not parsed; providerCalls 0"},
-    {"id": "S07", "change": "Unknown top-level field (e.g. fileName or debugContext)", "expect": "400 unclassified_field (ADR 0012 check 1); providerCalls 0"},
-    {"id": "S08", "change": "Exact sizeBytes instead of sizeBucket", "expect": "400 unclassified_field (ADR 0012 D22)"},
-    {"id": "S09", "change": "Instruction contains a recognized secret pattern", "expect": "400 never_transfer; instruction not logged; providerCalls 0"},
-    {"id": "S10", "change": "Client disclosureVersion differs from relay's current version", "expect": "409 disclosure_changed; providerCalls 0; client shows the class-A disclosure again"},
-    {"id": "S11", "change": "Same idempotencyKey K1 replayed after S01 completed", "expect": "409 already_completed; providerCalls 0; no second allowance consumption; response body not stored so not replayed"},
-    {"id": "S12", "change": "Same idempotencyKey K1 sent while the first attempt is still in flight", "expect": "409 in_progress; providerCalls stays 1"},
-    {"id": "S13", "change": "Same idempotencyKey K1 with a different request digest", "expect": "422 idempotency_mismatch; providerCalls 0"},
-    {"id": "S14", "change": "Second concurrent request from inst_A with a new key while K1 in flight", "expect": "429 concurrency_limit (technical); message 'Wait for the current request'; never 'upgrade'"},
-    {"id": "S15", "change": "Per-identity request frequency above RATE_PER_MINUTE", "expect": "429 rate_limited with Retry-After; providerCalls 0"},
-    {"id": "S16", "change": "Guest allowance exhausted (commercial)", "expect": "402 allowance_exhausted; providerCalls 0; client shows the approved exhaustion copy; existing files remain available"},
-    {"id": "S17", "change": "Global daily spend reservation would exceed GLOBAL_DAILY_CAP", "expect": "503 service_paused (budget); providerCalls 0; message does not say 'upgrade'; alert emitted"},
-    {"id": "S18", "change": "Kill switch on", "expect": "503 service_paused; providerCalls 0"},
-    {"id": "S19", "change": "Provider returns HTTP 500 before any body", "expect": "Relay retries once to the same provider/model/route if RELAY_DEADLINE allows; if the retry succeeds 200; providerCalls 2; one reservation only"},
-    {"id": "S20", "change": "Provider returns 429", "expect": "503 provider_busy with Retry-After; no relay retry; no failover; reservation released"},
-    {"id": "S21", "change": "Provider returns 400/401/403/404", "expect": "502 provider_config_error; no retry; alert emitted; reservation released; provider error body not logged or returned"},
-    {"id": "S22", "change": "Provider exceeds PROVIDER_TIMEOUT", "expect": "504 provider_timeout; upstream aborted; reservation held at worst case until usage reconciliation, then released; no allowance consumption"},
-    {"id": "S23", "change": "Provider returns zero tool calls, two tool calls, or schema-invalid arguments", "expect": "502 invalid_model_output; no retry; no partial plan returned; tokens still counted as internal cost"},
-    {"id": "S24", "change": "Provider response truncated at max_output_tokens", "expect": "502 invalid_model_output; nothing executes"},
-    {"id": "S25", "change": "Provider response larger than MAX_RESPONSE_BYTES", "expect": "502 invalid_model_output; body discarded"},
-    {"id": "S26", "change": "Provider output contains a plan step 'upload' or a consent claim", "expect": "Rejected by schema at relay and again by client; no grant created (ADR 0012 D23)"},
-    {"id": "S27", "change": "Client cancels while provider call in flight", "expect": "Relay aborts upstream fetch; 499 cancelled recorded; late provider result discarded; no allowance consumption"},
-    {"id": "S28", "change": "Response arrives after client workspaceRevision changed", "expect": "Client discards (requestId/revision binding); nothing executes; client does not auto-resend"},
-    {"id": "S29", "change": "Network drops after relay sent the response (client never receives it); user taps Try again", "expect": "New requestId and idempotencyKey K2 with supersedes=K1; relay links them so the SHR-84 charging rule consumes at most one workflow unit"},
-    {"id": "S30", "change": "App relaunches with a request that was in flight", "expect": "Nothing is resent automatically; the conversation shows 'Interrupted. Nothing changed.' with a Try again control"},
-    {"id": "S31", "change": "Relay instance restarts mid-request", "expect": "Client receives a connection error; one automatic client retry with the same key (AUTO_RETRY_LIMIT hosted = 1); relay sees in_progress or unknown; unknown is treated as new only if the reservation record is absent"},
-    {"id": "S32", "change": "Client offline", "expect": "No request attempted; 'Can't reach atePDF AI. Nothing was sent.'; existing files, preview, export, Undo, deletion and settings keep working"},
-    {"id": "S33", "change": "Request asks the relay to use a different model or endpoint (client-supplied field)", "expect": "400 unclassified_field; the relay chooses the model from server config only"},
-    {"id": "S34", "change": "OPENAI_BASE_URL or any endpoint override present in the relay environment", "expect": "Relay refuses to start (pinned provider host), health check fails closed"},
-    {"id": "S35", "change": "Per-request worst-case cost estimate above MAX_REQUEST_COST", "expect": "413 request_too_expensive before the provider call"},
-    {"id": "S36", "change": "Guest registration burst from one network above REGISTRATIONS_PER_IP_HOUR", "expect": "429 registration_rate_limited; IP address used only in the rate-limit key and never stored in logs"},
-    {"id": "S37", "change": "Guest upgrades to an account", "expect": "Remaining guest allowance state is linked, not reset or topped up (D-07); installation keeps working under the account token"},
-    {"id": "S38", "change": "Provider end-user identifier", "expect": "Provider request carries only HMAC(PROVIDER_USER_SALT, subjectId); never installationId, accountId, IP, device identifier or App Attest data"},
-    {"id": "S39", "change": "Provider request body", "expect": "Exactly the pinned system prompt version, tool definitions version and the class-H user message; store=false; no metadata field; no previous_response_id"},
-    {"id": "S40", "change": "Model config switched to a candidate that is not in the approved routing table", "expect": "Relay refuses to start; approved models are an allowlist bound to the disclosure version"}
+    {
+      "id": "S01",
+      "change": "Baseline",
+      "expect": "200 plan; providerCalls 1; one requests row (no body, no digest) completed; lease released; one log line with requestId, subject, model, tokens, latency, outcome only"
+    },
+    {
+      "id": "S02",
+      "change": "No Authorization header",
+      "expect": "401 auth_required; providerCalls 0"
+    },
+    {
+      "id": "S03",
+      "change": "Expired Supabase access token",
+      "expect": "401 token_expired; the client refreshes its Supabase session and retries once with the same requestId"
+    },
+    {
+      "id": "S04",
+      "change": "Token of installation inst_B presents installationId inst_A",
+      "expect": "403 installation_not_linked; no admission; no read of inst_A state"
+    },
+    {
+      "id": "S05",
+      "change": "Revoked installation (abuse block)",
+      "expect": "403 identity_blocked; message does not say 'upgrade'"
+    },
+    {
+      "id": "S06",
+      "change": "Body larger than MAX_REQUEST_BYTES",
+      "expect": "413 request_too_large; body not parsed; providerCalls 0"
+    },
+    {
+      "id": "S07",
+      "change": "Unknown top-level field (e.g. fileName or debugContext)",
+      "expect": "400 unclassified_field (ADR 0012 check 1); providerCalls 0"
+    },
+    {
+      "id": "S08",
+      "change": "Exact sizeBytes instead of sizeBucket",
+      "expect": "400 unclassified_field (ADR 0012 D22)"
+    },
+    {
+      "id": "S09",
+      "change": "Instruction contains a recognized secret pattern",
+      "expect": "400 never_transfer; instruction not logged; providerCalls 0"
+    },
+    {
+      "id": "S10",
+      "change": "Client disclosureVersion differs from relay's current version",
+      "expect": "409 disclosure_changed; providerCalls 0; client shows the class-A disclosure again"
+    },
+    {
+      "id": "S11",
+      "change": "Same idempotencyKey K1 replayed after S01 completed",
+      "expect": "409 already_completed; providerCalls 0; no second allowance consumption; response body not stored so not replayed"
+    },
+    {
+      "id": "S12",
+      "change": "Same idempotencyKey K1 sent while the first attempt is still in flight",
+      "expect": "409 in_progress; providerCalls stays 1"
+    },
+    {
+      "id": "S13",
+      "change": "Same requestId K1 re-sent with a different body",
+      "expect": "Treated as key K1: 409 in_progress or already_completed; providerCalls unchanged; no body digest or copy is stored to compare"
+    },
+    {
+      "id": "S14",
+      "change": "Second concurrent request from inst_A with a new key while K1 in flight",
+      "expect": "429 concurrency_limit (technical); message 'Wait for the current request'; never 'upgrade'"
+    },
+    {
+      "id": "S15",
+      "change": "Per-identity request frequency above RATE_PER_MINUTE",
+      "expect": "429 rate_limited with Retry-After; providerCalls 0"
+    },
+    {
+      "id": "S16",
+      "change": "Guest allowance exhausted (commercial)",
+      "expect": "402 allowance_exhausted; providerCalls 0; client shows the approved exhaustion copy; existing files remain available"
+    },
+    {
+      "id": "S17",
+      "change": "Global daily spend reservation would exceed GLOBAL_DAILY_CAP",
+      "expect": "503 service_paused (budget); providerCalls 0; message does not say 'upgrade'; alert emitted"
+    },
+    {
+      "id": "S18",
+      "change": "Kill switch on",
+      "expect": "503 service_paused; providerCalls 0"
+    },
+    {
+      "id": "S19",
+      "change": "Provider returns HTTP 500 before any body",
+      "expect": "API retries once to the same provider, model, endpoint and disclosure route if the deadline allows; if the retry succeeds 200; providerCalls 2; one reservation only"
+    },
+    {
+      "id": "S20",
+      "change": "Provider returns 429",
+      "expect": "503 provider_busy with Retry-After; no relay retry; no failover; reservation released"
+    },
+    {
+      "id": "S21",
+      "change": "Provider returns 400/401/403/404",
+      "expect": "502 provider_config_error; no retry; alert emitted; reservation released; provider error body not logged or returned"
+    },
+    {
+      "id": "S22",
+      "change": "Provider exceeds PROVIDER_TIMEOUT",
+      "expect": "504 provider_timeout; upstream aborted; reservation held at worst case until usage reconciliation, then released; no allowance consumption"
+    },
+    {
+      "id": "S23",
+      "change": "Provider returns zero tool calls, two tool calls, or schema-invalid arguments",
+      "expect": "502 invalid_model_output; no retry; no partial plan returned; tokens still counted as internal cost"
+    },
+    {
+      "id": "S24",
+      "change": "Provider response truncated at max_output_tokens",
+      "expect": "502 invalid_model_output; nothing executes"
+    },
+    {
+      "id": "S25",
+      "change": "Provider response larger than MAX_RESPONSE_BYTES",
+      "expect": "502 invalid_model_output; body discarded"
+    },
+    {
+      "id": "S26",
+      "change": "Provider output contains a plan step 'upload' or a consent claim",
+      "expect": "Rejected by schema at relay and again by client; no grant created (ADR 0012 D23)"
+    },
+    {
+      "id": "S27",
+      "change": "Client cancels while provider call in flight",
+      "expect": "Relay aborts upstream fetch; 499 cancelled recorded; late provider result discarded; no allowance consumption"
+    },
+    {
+      "id": "S28",
+      "change": "Response arrives after client workspaceRevision changed",
+      "expect": "Client discards (requestId/revision binding); nothing executes; client does not auto-resend"
+    },
+    {
+      "id": "S29",
+      "change": "Network drops after relay sent the response (client never receives it); user taps Try again",
+      "expect": "New requestId and idempotencyKey K2 with supersedes=K1; relay links them so the SHR-84 charging rule consumes at most one workflow unit"
+    },
+    {
+      "id": "S30",
+      "change": "App relaunches with a request that was in flight",
+      "expect": "Nothing is resent automatically; the conversation shows 'Interrupted. Nothing changed.' with a Try again control"
+    },
+    {
+      "id": "S31",
+      "change": "Vercel function crashes or is redeployed mid-request",
+      "expect": "Client receives a connection error and makes one automatic retry with the same requestId; the orphaned lease expires after 60 s; no second reservation"
+    },
+    {
+      "id": "S32",
+      "change": "Client offline",
+      "expect": "No request attempted; 'Can't reach atePDF AI. Nothing was sent.'; existing files, preview, export, Undo, deletion and settings keep working"
+    },
+    {
+      "id": "S33",
+      "change": "Request asks the relay to use a different model or endpoint (client-supplied field)",
+      "expect": "400 unclassified_field; the relay chooses the model from server config only"
+    },
+    {
+      "id": "S34",
+      "change": "OPENAI_BASE_URL or any endpoint override present in the API environment",
+      "expect": "Relay refuses to start (pinned provider host), health check fails closed"
+    },
+    {
+      "id": "S35",
+      "change": "Per-request worst-case cost estimate above MAX_REQUEST_COST",
+      "expect": "413 request_too_expensive before the provider call"
+    },
+    {
+      "id": "S36",
+      "change": "Anonymous sign-in burst from one network above the Supabase per-IP limit, or new installations above the global daily cap",
+      "expect": "Supabase Auth refuses further anonymous sign-ins (429); POST /v1/installations returns 429 registration_rate_limited above the global cap; atePDF stores no IP"
+    },
+    {
+      "id": "S37",
+      "change": "Guest installation links to an existing account",
+      "expect": "Link requires both the account token and the installation's anonymous session; consumed guest usage stays consumed; no new allowance (D-07); inst_A then acts as the account subject"
+    },
+    {
+      "id": "S38",
+      "change": "Provider end-user identifier",
+      "expect": "Provider request carries only safety_identifier = HMAC(PROVIDER_ID_SALT, subject); never installationId, subject, auth user ID, email, IP or device identifier"
+    },
+    {
+      "id": "S39",
+      "change": "Provider request body",
+      "expect": "Exactly: model gpt-6-luna; reasoning.effort none; developer message with the pinned prompt as one input_text block carrying prompt_cache_breakpoint {mode: explicit}; user message = context JSON after it; prompt_cache_options {mode: explicit, ttl: 30m}; store false; max_output_tokens 4000; three strict tools; no instructions, prompt_cache_retention, prompt_cache_key, metadata, previous_response_id or conversation"
+    },
+    {
+      "id": "S40",
+      "change": "Model config switched to a candidate that is not in the approved routing table",
+      "expect": "Relay refuses to start; approved models are an allowlist bound to the disclosure version"
+    },
+    {
+      "id": "S41",
+      "change": "Mac calls the Supabase Data API for any atePDF table with the publishable key or its own JWT",
+      "expect": "Denied: atePDF tables are in a schema not exposed to the Data API, RLS on, no anon/authenticated grants"
+    },
+    {
+      "id": "S42",
+      "change": "Relay database role attempts a direct SELECT/INSERT on any table",
+      "expect": "Permission denied; the role can only EXECUTE the named SECURITY DEFINER functions"
+    },
+    {
+      "id": "S43",
+      "change": "Canary: a synthetic instruction containing a unique marker string is planned end to end in staging",
+      "expect": "The marker is absent from Vercel runtime logs, Supabase API/Postgres/Auth logs, every Postgres table and the log line; present only in the mocked provider request"
+    },
+    {
+      "id": "S44",
+      "change": "Provider fixture reports usage.input_tokens_details.cache_write_tokens",
+      "expect": "cache_write_tokens never exceeds the fixed developer-prefix length; the user message is never written to the prompt cache"
+    }
   ]
 }

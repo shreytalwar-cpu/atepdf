@@ -29,7 +29,10 @@ try{
   const browser=await chromium.launch();const version=browser.version();await browser.close();
   const child=spawn(process.execPath,['node_modules/@playwright/test/cli.js','test','--config','scripts/verification/playwright.config.mts'],
     {stdio:'inherit',env:{...process.env,ATEPDF_BASE_URL:url,ATEPDF_VERIFICATION_URL:url}});
+  const terminate=()=>child.kill('SIGTERM');
+  process.once('SIGTERM',terminate);process.once('SIGINT',terminate);
   const [status,signal]=await once(child,'exit');
+  process.removeListener('SIGTERM',terminate);process.removeListener('SIGINT',terminate);
   await mkdir('.build',{recursive:true});
   const html=await readFile(resolve(root,'index.html'),'utf8');
   const scripts={};

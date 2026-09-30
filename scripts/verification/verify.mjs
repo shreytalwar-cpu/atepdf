@@ -17,6 +17,7 @@ const commit=git('rev-parse','HEAD');
 if(process.env.VERIFY_EXPECTED_SHA&&process.env.VERIFY_EXPECTED_SHA!==commit)throw new Error('Checkout does not match VERIFY_EXPECTED_SHA');
 const manifest=JSON.parse(readFileSync(join(root,'package.json'),'utf8'));
 if(process.version!==`v${manifest.engines.node}`)throw new Error(`Use Node ${manifest.engines.node}; got ${process.version}`);
+if(readFileSync(join(root,'.node-version'),'utf8').trim()!==manifest.engines.node||manifest.packageManager!==`pnpm@${manifest.engines.pnpm}`)throw new Error('Runtime pins disagree');
 const pm=spawnSync('pnpm',['--version'],{cwd:root,encoding:'utf8'});
 if(pm.status!==0||pm.stdout.trim()!==manifest.engines.pnpm)throw new Error(`Use plain pnpm ${manifest.engines.pnpm} on PATH. Disable wrappers that switch versions or install on script invocation.`);
 const reportDir=join(root,'.build/verification',`${mode}-${commit.slice(0,12)}-${Date.now()}`);
@@ -67,6 +68,7 @@ try{
     contracts();typechecks();
     const tests=readdirSync(join(scratch,'tests/regressions')).filter(file=>file.endsWith('.test.ts')).sort().map(file=>`tests/regressions/${file}`);
     node('shared-core-regressions',['--import','tsx','--test',...tests]);
+    node('beta-test-gateway-build',['scripts/build-gateway.mjs']);
     node('beta-unit-tests',['--test','scripts/beta/beta.test.mjs']);
     // Syntax-check all added JavaScript, including code not selected by this mode.
     for(const file of ['verify','browser'])node(`syntax-${file}`,['--check',`scripts/verification/${file}.mjs`]);
@@ -76,7 +78,7 @@ try{
     // Downloads only the locked Playwright browser. Linux OS libraries are runner prerequisites.
     run('playwright-browser','pnpm',['exec','playwright','install','chromium']);
     node('engine-assets',['scripts/assets.mjs']);
-    node('expo-web-export',['node_modules/expo/bin/cli','export','--platform','web','--output-dir','dist-web'],{cwd:join(scratch,'apps/universal')});
+    node('expo-web-export',['../../node_modules/expo/bin/cli','export','--platform','web','--output-dir','dist-web'],{cwd:join(scratch,'apps/universal')});
     node('web-budget',['scripts/check-web-budget.mjs']);
     node('safe-browser-checks',['scripts/verification/browser.mjs'],{timeout:900_000});
     const output=join(scratch,'.build/verification-browser.json');
@@ -110,6 +112,9 @@ try{
     if(process.platform!=='darwin')throw new Error('Native checks require macOS with selected Xcode; this is not an optional skip.');
     contracts();run('xcode-version','xcodebuild',['-version']);
     node('apple-helper',['tests/native/apple/run.mjs']);
+    record.native={scope:'Host helper and transport compilation, not Mac UI or production signing',
+      engine:JSON.parse(readFileSync(join(scratch,'docs/evidence/native/apple-engine-tests.json'),'utf8')),
+      shared:JSON.parse(readFileSync(join(scratch,'docs/evidence/native/apple-shared-writer-tests.json'),'utf8'))};
     run('swift-planner-compile','xcrun',['swiftc','-module-cache-path',join(scratch,'.build/swift-cache'),'-parse-as-library',
       'apps/universal/modules/atepdf-planner/ios/AtepdfPlannerTransport.swift','tests/native/planner/main.swift','-o',join(scratch,'.build/native-planner-tests')]);
     // Fixed-port Swift transport execution remains an explicit isolated manual step.

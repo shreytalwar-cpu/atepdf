@@ -37,7 +37,7 @@ Start source for SHR-90: `37e970025eaff9be35a2b8d5fa0291d9c7eef0a5`, latest fetc
 | Package layout | One root lockfile importer; source-module `packages/` and duplicated universal manifest; not independently installed workspaces | Preserve root install |
 | Build scripts | `pnpm-workspace.yaml` permits esbuild installer and declines Tesseract postinstall; no blanket lifecycle-script enabling | Frozen install |
 | Shared/core | `node --import tsx --test tests/regressions/*.test.ts` (verifier expands sorted file list without shell globs) | Mandatory PR |
-| Beta/unit | `node --test scripts/beta/beta.test.mjs`; synthetic local hosts/OpenSSL fixture certificates | Mandatory PR |
+| Beta/unit | First `node scripts/build-gateway.mjs` (required ignored gateway build); then `node --test scripts/beta/beta.test.mjs`; synthetic local hosts/OpenSSL fixture certificates | Mandatory PR |
 | TypeScript | `node node_modules/typescript/bin/tsc --noEmit --incremental false -p apps/web/tsconfig.json`; repeat for `apps/universal/tsconfig.json` and `tests/compatibility/tsconfig.json` | Mandatory PR |
 | Generated validators | `node scripts/contracts.mjs --check` compares expected locked-Ajv standalone JS/declarations without writing | Mandatory PR |
 | Generated knowledge | `node scripts/embed-product-knowledge.mjs --check` | Mandatory PR; runtime facts unchanged |
@@ -58,6 +58,7 @@ SHR-16's fragile assumptions addressed here:
 - Its pnpm wrapper attempted registry lookup and a noninteractive dependency purge. Version pins and direct installed Node tool invocations avoid wrapper-driven test execution.
 - It reused installed dependencies/Pods; a dependency symlink failed Metro resolution. Each mode now installs locked packages inside the source snapshot. Native Pods still need separate clean-machine validation.
 - Restricted loopback produced `EPERM`; these tests need ordinary local listening permission, not provider access.
+- Beta unit fixtures import the ignored built gateway; the core lane explicitly builds it before testing.
 - Default Playwright configuration uses installed Chrome, a fixed port and `reuseExistingServer:true`, and writes tracked historical evidence. PR smoke uses locked Chromium, an owned ephemeral server with no real gateway, and writes within a disposable snapshot.
 - Generator output had internal regular-expression identifier drift in two validators. Regeneration changes identifiers only; validation logic is byte-identical after consistent identifier renaming. This PR does not change schema/product semantics.
 

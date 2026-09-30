@@ -225,7 +225,7 @@ export async function runMatrix(outputDir:string){
       'tests/compatibility/matrix-core.ts','tests/compatibility/browser-entry.ts',
       'tests/compatibility/run.mts','tests/compatibility/damaged-child.mts','tests/compatibility/matrix.schema.v2.json'];
     const sourceHashes=Object.fromEntries(await Promise.all(runtimeFiles.map(async path=>[path,sha256(await readFile(join(root,path)))])));
-    const matrix={schemaVersion:2,source:{commit:execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),
+    const matrix={schemaVersion:2,source:{commit:execFileSync('/usr/bin/git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),
       files:sourceHashes,manifestSha256:sha256(manifestBytes)},environment:{node:process.version,
       browser:browser.version(),platform:process.platform,architecture:process.arch,nativeApp:'NOT_RUN',
       externalRequests:blockedRequests.length},operationInventory:registry.operations.map((op:{id:string})=>({

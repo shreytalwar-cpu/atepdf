@@ -1,0 +1,36 @@
+{
+  "pdfLibVersion": "1.17.1",
+  "pdfjsVersion": "6.3.289",
+  "cases": [
+    {
+      "case": "empty",
+      "opens": false,
+      "error": "PasswordException",
+      "passwordResponseCode": 1
+    },
+    {
+      "case": "wrong",
+      "opens": false,
+      "error": "PasswordException",
+      "passwordResponseCode": 2
+    },
+    {
+      "case": "user",
+      "opens": true,
+      "pages": 1,
+      "markerMatches": true
+    },
+    {
+      "case": "owner",
+      "opens": true,
+      "pages": 1,
+      "markerMatches": true
+    }
+  ],
+  "pdfLibLoad": {
+    "name": "Error",
+    "constructor": "Error",
+    "message": "Input document to `PDFDocument.load` is encrypted. You can use `PDFDocument.load(..., { ignoreEncryption: true })` if you wish to load the document anyways."
+  },
+  "pdfLibIgnoreEncryptionIsEncrypted": true
+}

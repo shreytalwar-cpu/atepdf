@@ -1,0 +1,70 @@
+{
+  "fixture": "tests/fixtures/corpus/encrypted.pdf",
+  "sha256": "78b89cf85f4841dcd4c228ceb3289c9c2d5c124ea6094ec72b51530201337116",
+  "pypdfVersion": "6.10.0",
+  "cryptographyVersion": "50.0.1",
+  "popplerVersion": "pdfinfo version 26.05.0",
+  "encryptionDictionary": {
+    "/Filter": "/Standard",
+    "/V": "5",
+    "/R": "6",
+    "/Length": "256",
+    "/P": "4294967292",
+    "/EncryptMetadata": "None",
+    "/StmF": "/StdCF",
+    "/StrF": "/StdCF",
+    "/CF": "{'/StdCF': {'/AuthEvent': '/DocOpen', '/CFM': '/AESV3', '/Length': 32}}"
+  },
+  "cases": [
+    {
+      "case": "empty",
+      "pypdfMatch": 0,
+      "pypdfPages": null,
+      "pypdfMarkerMatches": false,
+      "poppler": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Command Line Error: Incorrect password\n"
+      }
+    },
+    {
+      "case": "wrong",
+      "pypdfMatch": 0,
+      "pypdfPages": null,
+      "pypdfMarkerMatches": false,
+      "poppler": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Command Line Error: Incorrect password\n"
+      }
+    },
+    {
+      "case": "user",
+      "pypdfMatch": 1,
+      "pypdfPages": 1,
+      "pypdfMarkerMatches": true,
+      "poppler": {
+        "exit": 0,
+        "stdout": "Title:           SHR-45 synthetic encrypted fixture\nProducer:        pypdf\nCustom Metadata: no\nMetadata Stream: no\nTagged:          no\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           1\nEncrypted:       yes (print:yes copy:yes change:yes addNotes:yes algorithm:AES-256)\nPage size:       595.28 x 841.89 pts (A4)\nPage rot:        0\nFile size:       1871 bytes\nOptimized:       no\nPDF version:     1.3\n",
+        "stderr": ""
+      }
+    },
+    {
+      "case": "owner",
+      "pypdfMatch": 2,
+      "pypdfPages": 1,
+      "pypdfMarkerMatches": true,
+      "poppler": {
+        "exit": 0,
+        "stdout": "Title:           SHR-45 synthetic encrypted fixture\nProducer:        pypdf\nCustom Metadata: no\nMetadata Stream: no\nTagged:          no\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           1\nEncrypted:       yes (print:yes copy:yes change:yes addNotes:yes algorithm:AES-256)\nPage size:       595.28 x 841.89 pts (A4)\nPage rot:        0\nFile size:       1871 bytes\nOptimized:       no\nPDF version:     1.3\n",
+        "stderr": ""
+      }
+    }
+  ],
+  "render": {
+    "exit": 0,
+    "stderr": "Fontconfig error: Cannot load default config file: File not found\n\nFontconfig error: No writable cache directories\n\t/Users/ec2-user/work/codex-native-deps/019e749a-1b9d-4d7d-9e1e-26f1c533bed8/poppler/prefix/var/cache/fontconfig\n\t/Users/shrey/.cache/fontconfig\n\nFontconfig error: No writable cache directories\n\t/Users/ec2-user/work/codex-native-deps/019e749a-1b9d-4d7d-9e1e-26f1c533bed8/poppler/prefix/var/cache/fontconfig\n\t/Users/shrey/.cache/fontconfig\n",
+    "pngSha256": "40946c45e94e18718c5f455370b02e507b5ec14c34419c018f58c7e6c74976c6"
+  },
+  "fixtureUnchanged": true
+}

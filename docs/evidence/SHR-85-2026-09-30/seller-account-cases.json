@@ -1,7 +1,7 @@
 {
   "schema": "atepdf.seller-account-cases/1",
   "source": "docs/adr/0014-seller-payments-account-ownership.md section 18",
-  "status": "Partially approved by Shrey on 30 September 2026: SELL-2 to SELL-10 approved (SELL-4 with modification); SELL-1 (legal seller) pending owner facts, awaiting Apple and Setapp responses. Revision 2 (owner-authorized cross-review corrections S85-01 to S85-03): relink/recovery cases R01-R07, unknown cross-channel ownership cases X07-X11 and shared installation lifecycle cases I01-I07 (mapped to ADR 0016 cases); G04-G06, D07, X04 and X06 updated. Policy cases for SHR-86/87/88/89 tests, not evidence that anything is implemented.",
+  "status": "Partially approved by Shrey on 30 September 2026: SELL-2 to SELL-10 approved (SELL-4 with modification); SELL-1 (legal seller) pending owner facts, awaiting Apple and Setapp responses. Revision 2 (owner-authorized cross-review corrections S85-01 to S85-03): relink/recovery cases R01-R07, unknown cross-channel ownership cases X07-X11 and shared installation lifecycle cases I01-I07 (mapped to ADR 0016 cases); G04-G06, D07, X04 and X06 updated. Policy cases for SHR-86/87/88/89 tests, not evidence that anything is implemented. Independent-verification corrections (30 September 2026): I04/I05 mirror ADR 0016 B1/B2 (S62, S70); R08 added for first link of a never-linked App Store purchase.",
   "policy": {
     "account_required": {
       "guest_use": false,
@@ -299,6 +299,12 @@
       "expected": "Pro from that purchase only on the new owner; guest and account allowances unchanged by the move"
     },
     {
+      "id": "R08",
+      "group": "purchase_relink_recovery",
+      "situation": "Account B presents a forwarded signed App Store transaction (JWS) for a purchase that has never been linked",
+      "expected": "Refused without a matching appAccountToken or fresh on-device StoreKit proof from the purchasing Apple Account; no link; audit of the refused attempt"
+    },
+    {
       "id": "S01",
       "group": "setapp",
       "situation": "Setapp build launch, active member",
@@ -355,14 +361,14 @@
     {
       "id": "I04",
       "group": "installation_lifecycle",
-      "situation": "Sign-out, then sign-in again",
-      "expected": "Back to the original guest subject without paid authority or new allowance; sign-in restores account access (ADR 0016 S70)"
+      "situation": "Sign-out (online, and offline followed by reconnect), then sign-in again",
+      "expected": "Back to the original guest subject without paid authority or new allowance; an offline sign-out keeps the account session sign-out-pending and completes the server sign-out at the next contact before any guest request, and a binding whose session no longer exists counts as revoked, so the guest request is admitted; sign-in with a fresh email code restores account access (ADR 0016 S70)"
     },
     {
       "id": "I05",
       "group": "installation_lifecycle",
       "situation": "Remote sign-out of one installation from the session list; then 'sign out everywhere'",
-      "expected": "Old JWT refused at the next request while other sessions work; then all refused; each installation on its own guest subject (ADR 0016 S62, S64)"
+      "expected": "Old JWT refused at the next request while other sessions work; the signed-out installation cannot re-link with its still-live session (401 session_revoked) and regains account access only through a fresh email code; then all refused; each installation on its own guest subject (ADR 0016 S62, S64)"
     },
     {
       "id": "I06",

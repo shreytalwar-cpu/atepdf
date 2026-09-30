@@ -14,6 +14,7 @@ import {isClarificationAnswer,pendingFromResponse,withPendingClarification} from
 import {createGateway} from '../../packages/planner/src/gateway';
 import {preflight,transform} from '../../packages/web-pdf/src/engine';
 import type {Inspection,EngineRequest} from '../../packages/web-pdf/src/types';
+import {independentPDF as independent} from '../helpers/independent-pdf';
 import {NodeVaultBackend,newKeychain} from '../helpers/workspace-backend';
 
 // Metadata sequences deliberately exercise catalog/projection rather than memory
@@ -147,7 +148,7 @@ test('SHR-42: ambiguous earlier results retain every candidate up to the unchang
 
 test('SHR-42: required active sets over 40 refuse without arbitrary subset, billing or retention changes',async()=>{
   const {store,controller}=await seed(2,41),before=store.mark();
-  assert.throws(()=>controller.request('Compress an earlier result'),{message:CONTEXT_RESOURCE_REFUSAL});
+  assert.throws(()=>controller.request('Compress an earlier result'),/Which earlier result/);
   assert.throws(()=>controller.request('Merge all results'),{message:CONTEXT_RESOURCE_REFUSAL});
   const all=store.list.filter(f=>!f.original).map(f=>f.ref);
   assert.throws(()=>controller.request(`Merge ${all.join(' and ')}`),{message:CONTEXT_RESOURCE_REFUSAL});
@@ -184,11 +185,6 @@ test('SHR-42: unrelated historical metadata does not reach the gateway provider;
   assert.throws(()=>validateEnvelope(bad,request,store.revision),/Unknown/);
 });
 
-async function independent(bytes:Uint8Array):Promise<Inspection>{
-  const {getDocument}=await import('pdfjs-dist/legacy/build/pdf.mjs');
-  const task=getDocument({data:bytes.slice(),useSystemFonts:true,verbosity:0}),doc=await task.promise;
-  try{const pages=[];for(let n=1;n<=doc.numPages;n++){const page=await doc.getPage(n),v=page.getViewport({scale:1}),text=await page.getTextContent();pages.push({text:text.items.map(i=>'str'in i?i.str:'').join(' ').replace(/\s+/g,' ').trim(),width:v.width,height:v.height,rotation:page.rotate});}return {pages};}finally{await task.destroy();}
-}
 const engine={worker:async(r:EngineRequest)=>r.kind==='inspect'?{pages:(await preflight(r.bytes)).getPageCount()}:transform(r,()=>{}),inspect:independent,recognize:async()=>[]};
 
 test('SHR-42: actual PDF follow-up and Undo work beyond 100 retained refs; saved history restores stable result numbers',async()=>{
@@ -220,4 +216,34 @@ test('SHR-42: actual PDF follow-up and Undo work beyond 100 retained refs; saved
     assert.equal(validateRequest(next.request('Compress current result')).files.length,1);
     await next.undo();assert.equal(nextStore.focus,previous);assert.equal(nextStore.get(early).meta.checksum,store.get(early).meta.checksum);
   }finally{await rm(directory,{recursive:true,force:true});}
+});
+
+
+test('SHR-42: adverbs and counts preserve user intent and candidate projection',async()=>{
+  const {controller,store}=await seed(3,4);
+  for(const instruction of ['Compress the result first, then make it searchable','Merge the files first, then compress','Merge these 2 files','Merge all 3 files','Split into 2 files','Split this into 2 files']){
+    const request=validateRequest(controller.request(instruction));assert.equal(request.instruction,instruction);
+    assert.deepEqual(request.originalRefs,instruction.startsWith('Compress')?[]:store.originals);
+  }
+  const single=await seed(1);assert.equal(validateRequest(single.controller.request('Split this into 2 files')).originalRefs.length,1);
+  for(const instruction of ['Compress the first PDF','Compress PDF 2','Compress file two','Compress the 2nd PDF','Compress document no. 2'])assert.deepEqual(validateRequest(controller.request(instruction)).originalRefs,store.originals);
+  assert.throws(()=>controller.request('Compress result two'),/Which result/);
+  for(const instruction of ['Compress file_final','Compress out_of_order'])assert.equal(validateRequest(controller.request(instruction)).instruction,instruction);
+});
+test('SHR-42: latest means focus after Undo; earlier ambiguity asks for a bounded choice',async()=>{
+  const {controller,store}=await seed(2,45);await controller.undo();
+  for(const word of ['last','latest','current'])assert.deepEqual(requestRefs(validateRequest(controller.request(`Compress the ${word} result`))),[store.focus]);
+  for(const text of ['Compress an earlier result','Compress another result','Compress an old result','Undo to the old result'])assert.throws(()=>controller.request(text),/Which earlier result/);
+});
+test('SHR-42: clarification word ordinals use the captured candidates rather than global file order',async()=>{
+  const {controller}=await seed(5);
+  const request=controller.request('Merge files 4 and 5'),pending=pendingFromResponse(request,clarify);
+  const answer=controller.request('The second file',pending);assert.ok(answer.instruction.includes(ref(true,5)));assert.deepEqual(answer.originalRefs,[ref(true,4),ref(true,5)]);
+});
+test('SHR-42: short raw instruction may expand beyond 1000 characters without relaxing raw limit',async()=>{
+  const {controller,store}=await seed(40);
+  const raw='Merge '+Array.from({length:40},(_,i)=>`file ${i+1}`).join(' and ');
+  assert.ok(raw.length<1000);const request=validateRequest(controller.request(privateInstruction(raw,store.list)));assert.ok(request.instruction.length>1000);assert.equal(request.files.length,40);
+  const pending=pendingFromResponse(request,clarify);assert.doesNotThrow(()=>validateRequest(withPendingClarification(controller.request('The first file',pending),pending)));
+  assert.throws(()=>privateInstruction('x'.repeat(1001),store.list),/1,000/);
 });

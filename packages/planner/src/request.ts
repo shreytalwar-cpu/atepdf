@@ -6,7 +6,7 @@ export function validateRequest(value:unknown):PlannerRequest{
   if(!requestValid(value))throw new Error('Invalid request.');
   const r=value as PlannerRequest;
   validateLocalContext(r);
-  assertInstructionSafe(r.instruction);
+  assertInstructionSafe(r.instruction,true);
   validatePendingClarification(r);
   if(r.files.length>PLANNER_REFERENCE_LIMIT)throw new Error('This request exceeds the active file reference limit. Choose fewer files; existing work is still available.');
   if(!/^req_[a-f0-9]{32}$/.test(r.requestId)||r.files.some(f=>!/^(file|out)_[a-f0-9]{32}$/.test(f.ref))||r.previousPlan!==null||r.previousActionIds.length||r.locale!=='en-IN'||r.ocrLanguages.some(language=>language!=='eng')||(!r.capabilities.includes('ocr_pdf')&&r.ocrLanguages.length>0)||r.capabilities.some(c=>!capabilities.includes(c)))throw new Error('Unsupported context.');

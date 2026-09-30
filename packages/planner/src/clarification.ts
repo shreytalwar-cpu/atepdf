@@ -46,10 +46,10 @@ export function validatePendingClarification(request:Request):void{
   const pending=request.pendingClarification;
   if(!pending)return;
   validateLocalContext(request);
-  assertInstructionSafe(pending.originalInstruction);
+  assertInstructionSafe(pending.originalInstruction,true);
   validateNonPlanResponse({schemaVersion:'1.0',status:'clarify',reasonCode:'ambiguous_reference',steps:[],resultRefs:[],clarification:{question:pending.question,choices:pending.choices}});
   for(const answer of pending.answers){
     validateNonPlanResponse({schemaVersion:'1.0',status:'clarify',reasonCode:'ambiguous_reference',steps:[],resultRefs:[],clarification:{question:answer.question,choices:[]}});
-    assertInstructionSafe(answer.answer);
+    assertInstructionSafe(answer.answer,true);
   }
 }

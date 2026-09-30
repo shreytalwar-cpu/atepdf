@@ -39,6 +39,7 @@ for(const capability of capabilities)assert.ok(ids.has(capability),`Runtime capa
 // The broad retained catalogue is a specification, not an executable-tool claim.
 for(const [file,schemaFile]of [
   ['tests/fixtures/corpus/manifest.json','tests/fixtures/corpus/manifest.schema.json'],
+  ['docs/evidence/SHR-47-2026-09-30/matrix/matrix.json','tests/compatibility/matrix.schema.v2.json'],
   ['docs/evidence/SHR-46-2026-09-30/matrix.json','tests/compatibility/matrix.schema.json'],
 ]){
   const validate=ajv.compile(await json(schemaFile));

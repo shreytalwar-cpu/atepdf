@@ -233,7 +233,8 @@ test('SHR-42: imports invalidate captured clarification before sending, and file
   const originalSecond=sent[0].selectionRefs[1];
   await page.locator('input[type=file]').setInputFiles(['tests/fixtures/brief.pdf']);
   await expect(page.getByText('Your 3 PDFs are ready.',{exact:false})).toBeVisible();
-  await send(page,'The second one');await expect(page.getByText('Clarification is stale. Please ask again.')).toBeVisible();
+  await expect(page.getByText('Original · 3',{exact:false})).toBeVisible();
+  await expect(page.getByTestId('clarification-question')).toHaveCount(0);
   expect(sent).toHaveLength(1);expect(sent[0].selectionRefs).toHaveLength(2);
   await send(page,'Remove page 1 from file 2');await expect.poll(()=>sent.length).toBe(2);
   expect(sent[1].selectionRefs).toEqual([originalSecond]);expect(sent[1].files.map(f=>f.ref)).toEqual([originalSecond]);
@@ -241,4 +242,14 @@ test('SHR-42: imports invalidate captured clarification before sending, and file
   // The selected original is appendix.pdf, which has one page.
   await expect(page.getByTestId('assistant-message').last()).toContainText('This PDF must keep at least one page.');
   await expect(page.getByTestId('current-result')).toHaveCount(0);
+});
+
+
+test('SHR-42: visible result numbers stay stable through Undo and a new commit',async({page})=>{
+  await ready(page,()=>({...status,enabled:false}));
+  await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('current-result').getByText('Result 1',{exact:true})).toBeVisible();
+  await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('current-result').getByText('Result 2',{exact:true})).toBeVisible();
+  await page.getByRole('button',{name:'Undo',exact:true}).last().click();await expect(page.getByTestId('current-result').getByText('Result 1',{exact:true})).toBeVisible();
+  await expect(page.getByTestId('previous-result').getByText('Result 2',{exact:true})).toBeVisible();
+  await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('current-result').getByText('Result 3',{exact:true})).toBeVisible();
 });

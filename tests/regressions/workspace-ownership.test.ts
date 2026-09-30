@@ -9,7 +9,8 @@ import {NodeVaultBackend,newKeychain} from '../helpers/workspace-backend';
 import {WorkspaceVault,type WorkspaceSnapshot} from '../../packages/core/src/workspace-vault';
 import {WorkspaceSession,CheckpointScheduler} from '../../packages/core/src/workspace-checkpoints';
 import {workspaceHook,deferred} from '../helpers/workspace-hook';
-const inspection={pages:[{width:612,height:792,rotation:0,text:''}]};
+import {syntheticInspection} from '../helpers/synthetic-inspection';
+const inspection=syntheticInspection(1);
 const services={worker:async()=>({pages:1}),inspect:async()=>inspection,recognize:async()=>[]};
 const file=(name='old.pdf',release=()=>{})=>({name,size:1,arrayBuffer:async()=>new Uint8Array([1]).buffer,release}) as unknown as File;
 function reset(w:any){const id=w.append({role:'assistant',text:'clear',choice:'clear',revision:w.store.revision});w.setChoice(id);return id;}

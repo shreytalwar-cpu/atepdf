@@ -5,6 +5,8 @@ import {dirname,join,resolve,delimiter,isAbsolute} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {tmpdir} from 'node:os';
 
+import {childEnvironment,assertEvidence} from './policy.mjs';
+import {runChild} from './process.mjs';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'../..');
 const mode=process.argv[2]||'all';
 // Supported verification hosts are macOS and Ubuntu. Use fixed system tools,
@@ -18,13 +20,15 @@ function packageManagerExecutable(){
       if(statSync(directory).mode&0o022)continue;
       accessSync(candidate,constants.X_OK);const path=realpathSync(candidate);
       if(!statSync(path).isFile()||statSync(path).mode&0o022)continue;
-      return path;
+      if(/^#![^\n]*\b(?:ba|z|da)?sh\b/.test(readFileSync(path,'utf8').slice(0,200)))continue;
+      return {path,directory};
     }catch{ /* Try the next explicitly provisioned runtime directory. */ }
   }
   throw new Error('Provision pnpm 11.19.0 in a trusted absolute directory on PATH (not group/world writable).');
 }
-const pnpmBin=packageManagerExecutable();
-const toolEnv={...process.env,PATH:[dirname(process.execPath),dirname(pnpmBin),'/usr/bin','/bin','/usr/sbin','/sbin'].join(delimiter)};
+const pnpmTool=packageManagerExecutable(),pnpmBin=pnpmTool.path;
+const toolPath=[dirname(process.execPath),pnpmTool.directory,dirname(pnpmBin),'/usr/bin','/bin','/usr/sbin','/sbin'].join(delimiter);
+const toolEnv=childEnvironment(process.env,toolPath);
 if(!['all','core','browser','failures','native'].includes(mode))throw new Error('Usage: node scripts/verification/verify.mjs [all|core|browser|failures|native]');
 const git=(...args)=>{
   const result=spawnSync(gitBin,args,{cwd:root,env:toolEnv,encoding:'utf8'});
@@ -42,17 +46,22 @@ const reportDir=join(root,'.build/verification',`${mode}-${commit.slice(0,12)}-$
 mkdirSync(reportDir,{recursive:true});
 const scratch=mkdtempSync(join(tmpdir(),'atepdf-verify-'));
 const sha256=bytes=>createHash('sha256').update(bytes).digest('hex');
-const record={commit,mode,startedAt:new Date().toISOString(),node:process.version,pnpm:pm.stdout.trim(),
+mkdirSync(join(scratch,'tmp'));mkdirSync(join(scratch,'cache'));writeFileSync(join(scratch,'empty.npmrc'),'');
+const cancellation=new AbortController();
+const onSignal=()=>{cancellation.abort();process.exitCode=1;};
+process.once('SIGTERM',onSignal);process.once('SIGINT',onSignal);
+const parents=git('rev-list','--parents','-n','1',commit).split(' ').slice(1);
+const record={commit,parents,mode,startedAt:new Date().toISOString(),node:process.version,pnpm:pm.stdout.trim(),
   platform:process.platform,architecture:process.arch,workflow:process.env.GITHUB_WORKFLOW_REF||null,
   workflowCommit:process.env.GITHUB_WORKFLOW_SHA||null,prHead:process.env.VERIFY_PR_HEAD_SHA||null,
   runID:process.env.GITHUB_RUN_ID||null,executables:{node:process.execPath,git:gitBin,pnpm:pnpmBin,tar:tarBin},files:{},commands:[],passed:false};
-const env={...toolEnv,CI:'true',EXPO_NO_TELEMETRY:'1',NEXT_TELEMETRY_DISABLED:'1',
-  OPENAI_API_KEY:'',ATEPDF_BASE_URL:'',ATEPDF_CORPUS_PYTHON:''};
-function run(name,command,args,{cwd=scratch,timeout=600_000,expectFailure=false,diagnostic}={}){
+const env=childEnvironment(process.env,toolPath,scratch);
+const features={evals:false,permission:false,tls:false};
+async function run(name,command,args,{cwd=scratch,timeout=600_000,expectFailure=false,diagnostic}={}){
   console.log(`Verification: ${name}`);
   const log=join(reportDir,`${record.commands.length+1}-${name}.log`);
   const fd=openSync(log,'w');const started=Date.now();
-  const result=spawnSync(command,args,{cwd,env,stdio:['ignore',fd,fd],timeout,killSignal:'SIGTERM'});closeSync(fd);
+  let result;try{result=await runChild(command,args,{cwd,env,stdio:['ignore',fd,fd]},{timeout,signal:cancellation.signal});}finally{closeSync(fd);}
   const entry={name,command:[command,...args],cwd:cwd===scratch?'isolated committed snapshot':cwd,
     exitCode:result.status,signal:result.signal,error:result.error?.message||null,elapsedMs:Date.now()-started,
     expectFailure,log:log.slice(reportDir.length+1),logSha256:sha256(readFileSync(log))};
@@ -65,48 +74,53 @@ function run(name,command,args,{cwd=scratch,timeout=600_000,expectFailure=false,
   if(output.trim())console.log(output.slice(-3000));
 }
 const node=(name,args,options)=>run(name,process.execPath,args,options);
-function typechecks(){
+async function typechecks(){
   for(const [name,config]of [['web','apps/web/tsconfig.json'],['universal','apps/universal/tsconfig.json'],['compatibility','tests/compatibility/tsconfig.json']])
-    node(`typescript-${name}`,['node_modules/typescript/bin/tsc','--noEmit','--incremental','false','-p',config]);
+    await node(`typescript-${name}`,['node_modules/typescript/bin/tsc','--noEmit','--incremental','false','-p',config]);
+  if(features.evals){await node('typescript-orchestration',['node_modules/typescript/bin/tsc','--noEmit','--incremental','false','-p','tests/evals/orchestration/tsconfig.json']);await node('orchestration-cli-smoke',['--import','tsx','tests/evals/orchestration/run.mts','--split','dev','--output','.build/orchestration-smoke']);}
 }
-function contracts(){node('generated-contracts',['scripts/contracts.mjs','--check']);node('generated-knowledge',['scripts/embed-product-knowledge.mjs','--check']);node('schemas-catalogue-evals',['--import','tsx','scripts/verification/schemas.mts']);}
+async function contracts(){await node('generated-contracts',['scripts/contracts.mjs','--check']);await node('generated-knowledge',['scripts/embed-product-knowledge.mjs','--check']);await node('schemas-catalogue-evals',['--import','tsx','scripts/verification/schemas.mts']);}
 try{
   const archive=join(reportDir,'source.tar');const fd=openSync(archive,'w');
   const exported=spawnSync(gitBin,['archive','--format=tar',commit],{cwd:root,stdio:['ignore',fd,'pipe']});closeSync(fd);
   if(exported.status!==0)throw new Error('Cannot export the exact committed source');
   record.archiveSha256=sha256(readFileSync(archive));
-  run('export-source',tarBin,['-xf',archive,'-C',scratch]);rmSync(archive);
-  for(const path of ['package.json','pnpm-lock.yaml','pnpm-workspace.yaml','.node-version','.npmrc',
-    'scripts/verification/verify.mjs','scripts/verification/schemas.mts','scripts/verification/browser.mjs',
+  await run('export-source',tarBin,['-xf',archive,'-C',scratch]);rmSync(archive);
+  for(const path of ['package.json','pnpm-lock.yaml','pnpm-workspace.yaml','.node-version',
+    'scripts/verification/verify.mjs','scripts/verification/policy.mjs','scripts/verification/process.mjs','scripts/verification/schemas.mts','scripts/verification/browser.mjs',
     'scripts/verification/playwright.config.mts','scripts/contracts.mjs','scripts/embed-product-knowledge.mjs',
     '.github/workflows/verify.yml'])record.files[path]=sha256(readFileSync(join(scratch,path)));
-  run('frozen-install',pnpmBin,['install','--frozen-lockfile']);
+  if(sha256(readFileSync(fileURLToPath(import.meta.url)))!==record.files['scripts/verification/verify.mjs'])throw new Error('Running verification harness differs from committed archive');
+  features.evals=existsSync(join(scratch,'tests/evals/orchestration/tsconfig.json'));
+  features.permission=existsSync(join(scratch,'tests/native/planner/permission-main.swift'));
+  features.tls=existsSync(join(scratch,'tests/native/planner/tls-main.swift'));
+  await run('frozen-install',pnpmBin,['install','--frozen-lockfile']);
   if(mode==='all'||mode==='core'){
-    contracts();typechecks();
+    await contracts();await typechecks();
     const tests=readdirSync(join(scratch,'tests/regressions')).filter(file=>file.endsWith('.test.ts')).sort().map(file=>`tests/regressions/${file}`);
-    node('shared-core-regressions',['--import','tsx','--test',...tests]);
-    node('beta-test-gateway-build',['scripts/build-gateway.mjs']);
-    node('beta-unit-tests',['--test','scripts/beta/beta.test.mjs']);
+    await node('shared-core-regressions',['--import','tsx','--test',...tests]);
+    await node('beta-test-gateway-build',['scripts/build-gateway.mjs']);
+    await node('beta-unit-tests',['--test','scripts/beta/beta.test.mjs']);
     // Syntax-check all added JavaScript, including code not selected by this mode.
-    for(const file of ['verify','browser'])node(`syntax-${file}`,['--check',`scripts/verification/${file}.mjs`]);
+    for(const file of ['verify','browser'])await node(`syntax-${file}`,['--check',`scripts/verification/${file}.mjs`]);
   }
   if(mode==='all'||mode==='browser'){
-    contracts();
+    await contracts();
     // Downloads only the locked Playwright browser. Linux OS libraries are runner prerequisites.
-    run('playwright-browser',pnpmBin,['exec','playwright','install','chromium']);
-    node('engine-assets',['scripts/assets.mjs']);
-    node('expo-web-export',['../../node_modules/expo/bin/cli','export','--platform','web','--output-dir','dist-web'],{cwd:join(scratch,'apps/universal')});
-    node('web-budget',['scripts/check-web-budget.mjs']);
-    node('safe-browser-checks',['scripts/verification/browser.mjs'],{timeout:900_000});
+    await run('playwright-browser',pnpmBin,['exec','playwright','install','chromium']);
+    await node('engine-assets',['scripts/assets.mjs']);
+    await node('expo-web-export',['../../node_modules/expo/bin/cli','export','--platform','web','--output-dir','dist-web'],{cwd:join(scratch,'apps/universal')});
+    await node('web-budget',['scripts/check-web-budget.mjs']);
+    await node('safe-browser-checks',['scripts/verification/browser.mjs'],{timeout:900_000});
     const output=join(scratch,'.build/verification-browser.json');
     record.browser=JSON.parse(readFileSync(output,'utf8'));
   }
   if(mode==='failures'){
-    contracts();typechecks();
+    await contracts();await typechecks();
     async function mutate(name,path,change,args,diagnostic){
       const full=join(scratch,path),before=readFileSync(full);const after=change(before.toString());writeFileSync(full,after);
       record.commands.push({name:`mutation-${name}`,path,beforeSha256:sha256(before),afterSha256:sha256(after)});
-      try{node(name,args,{expectFailure:true,diagnostic});}finally{writeFileSync(full,before);}
+      try{await node(name,args,{expectFailure:true,diagnostic});}finally{writeFileSync(full,before);}
     }
     await mutate('reject-typescript','packages/core/src/local-file-store.ts',s=>s+'\nconst shr90IntentionalTypeError: string = 90;\n',
       ['node_modules/typescript/bin/tsc','--noEmit','--incremental','false','-p','apps/web/tsconfig.json'],'TS2322');
@@ -122,23 +136,27 @@ try{
       ['--import','tsx','scripts/verification/schemas.mts'],'manifest.json');
     await mutate('reject-regression','tests/regressions/commerce.test.ts',s=>s+"\ntest('SHR-90 deliberate failure',()=>assert.fail('SHR90_SENTINEL'));\n",
       ['--import','tsx','--test','tests/regressions/commerce.test.ts'],'SHR90_SENTINEL');
-    contracts();typechecks();
-    node('restored-regression',['--import','tsx','--test','tests/regressions/commerce.test.ts']);
+    await contracts();await typechecks();
+    await node('restored-regression',['--import','tsx','--test','tests/regressions/commerce.test.ts']);
   }
-  if(mode==='native'){
+  if(mode==='native'||mode==='all'){
     if(process.platform!=='darwin')throw new Error('Native checks require macOS with selected Xcode; this is not an optional skip.');
-    contracts();run('xcode-version','/usr/bin/xcodebuild',['-version']);
-    node('apple-helper',['tests/native/apple/run.mjs']);
+    await contracts();await run('xcode-version','/usr/bin/xcodebuild',['-version']);
+    await node('apple-helper',['tests/native/apple/run.mjs']);
     record.native={scope:'Host helper and transport compilation, not Mac UI or production signing',
       engine:JSON.parse(readFileSync(join(scratch,'docs/evidence/native/apple-engine-tests.json'),'utf8')),
       shared:JSON.parse(readFileSync(join(scratch,'docs/evidence/native/apple-shared-writer-tests.json'),'utf8'))};
-    run('swift-planner-compile','/usr/bin/xcrun',['swiftc','-module-cache-path',join(scratch,'.build/swift-cache'),'-parse-as-library',
+    await run('swift-planner-compile','/usr/bin/xcrun',['swiftc','-module-cache-path',join(scratch,'.build/swift-cache'),'-parse-as-library',
       'apps/universal/modules/atepdf-planner/ios/AtepdfPlannerTransport.swift','tests/native/planner/main.swift','-o',join(scratch,'.build/native-planner-tests')]);
+    if(features.permission)for(const release of [false,true])await run(`swift-permission-${release?'release':'debug'}-compile`,'/usr/bin/xcrun',['swiftc',...(!release?['-D','DEBUG']:[]),'-module-cache-path',join(scratch,'.build/swift-cache'),'-parse-as-library','apps/universal/modules/atepdf-planner/ios/AtepdfPlannerTransport.swift','tests/native/planner/permission-main.swift','-o',join(scratch,`.build/permission-${release?'release':'debug'}`)]);
+    if(features.tls)await run('swift-tls-debug-compile','/usr/bin/xcrun',['swiftc','-D','DEBUG','-module-cache-path',join(scratch,'.build/swift-cache'),'-parse-as-library','apps/universal/modules/atepdf-planner/ios/AtepdfPlannerTransport.swift','tests/native/planner/tls-main.swift','-o',join(scratch,'.build/tls-debug')]);
     // Fixed-port Swift transport execution remains an explicit isolated manual step.
   }
+  assertEvidence(record,readFileSync(fileURLToPath(import.meta.url)),readFileSync(join(scratch,'scripts/verification/verify.mjs')),features);
   record.passed=true;
 }catch(error){record.error=error.message;process.exitCode=1;console.error(error.message);}
 finally{
+  process.removeListener('SIGTERM',onSignal);process.removeListener('SIGINT',onSignal);
   const browserReport=join(scratch,'.build/verification-browser.json');
   if(existsSync(browserReport))record.browser=JSON.parse(readFileSync(browserReport,'utf8'));
   record.finishedAt=new Date().toISOString();

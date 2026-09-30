@@ -1,5 +1,7 @@
 # Design system
 
+> **Superseded visual direction (SHR-105, owner-approved 30 September 2026):** the approved v1 visual identity and interaction system is in [docs/design/](design/README.md). Its visual rules replace this page's "no redesign", palette, name-casing, logo, sidebar and dark-mode statements as listed in [MIGRATION_MAP.md](design/MIGRATION_MAP.md). The behavioural references below (UX_STATE_CONTRACT) remain in force. This incumbent text is kept as history until SHR-106 implements the new system and updates this entrypoint.
+
 Canonical entrypoint for the incumbent design, 29 September 2026. **No redesign is authorized.** The approved v1 Mac experience, brief onboarding and concise assistant voice are defined in [PRODUCT_V1.md Section 13](PRODUCT_V1.md#13-mac-experience-and-assistant-voice), MAC-01–04/UX-01–04. Existing mobile/browser layouts and historical state contracts are implementation references, not competing launch priorities or proof of Mac acceptance. Preserve the name/8 identity and conversational layout; no asset or runtime wording is changed by this adoption.
 
 The detailed source-derived tokens, typography, layout, components and motion live in [apps/universal/DESIGN.md](../apps/universal/DESIGN.md). The behavioral contract is [UX_STATE_CONTRACT.md](UX_STATE_CONTRACT.md). Preserve these as detailed references rather than creating a conflicting second token set.

@@ -6,9 +6,9 @@ import {join} from 'node:path';
 import {preflight,transform} from '../../packages/web-pdf/src/engine';
 import {LocalFileStore} from '../../packages/core/src/local-file-store';
 import {JobController} from '../../packages/core/src/job-controller';
-import {WorkspaceVault,savedArtifacts,StaleSaveError,WorkspaceExpiredError,CLEAR_FAILED,DELETE_FAILED,DELETE_UNCONFIRMED,blockedMessages,type WorkspaceSnapshot} from '../../packages/core/src/workspace-vault';
+import {WorkspaceVault,savedArtifacts,StaleSaveError,WorkspaceExpiredError,CLEAR_FAILED,CLEANUP_INCOMPLETE,DELETE_FAILED,DELETE_UNCONFIRMED,blockedMessages,type WorkspaceSnapshot} from '../../packages/core/src/workspace-vault';
 import {aad,names,parseCheckpoint,DAY_MS,type PersistedEntry,type WorkspaceCheckpoint} from '../../packages/core/src/workspace-checkpoint';
-import {CheckpointScheduler} from '../../packages/core/src/workspace-checkpoints';
+import {CheckpointScheduler,WorkspaceSession} from '../../packages/core/src/workspace-checkpoints';
 import {safeOrdinaryText,hasRejectedSecretDraft} from '../../packages/planner/src/privacy';
 import type {EngineRequest,Inspection} from '../../packages/web-pdf/src/types';
 import {NodeVaultBackend,newKeychain,corrupt,type TestKeychain,type Fault} from '../helpers/workspace-backend';
@@ -196,7 +196,7 @@ test('SHR-40 a shorter setting applies to the existing age at once; changing the
   }finally{await done(root,outside);}
 });
 
-test('SHR-40 a clock earlier than saved times fails closed without deleting or extending; Keep is unaffected',async()=>{
+test('SHR-40 P1-3 a clock earlier than any saved time, by any amount, fails closed without deleting or extending; Keep is unaffected',async()=>{
   const {root,outside,keychain,clock}=await scratch();
   try{
     const app=await launch(root,keychain,clock);await populated(app,outside);await app.vault.setRetention('7d',app.snapshot);
@@ -206,8 +206,25 @@ test('SHR-40 a clock earlier than saved times fails closed without deleting or e
     assert.deepEqual(skewed.outcome,{kind:'blocked',reason:'clock',retryable:true});assert.equal(skewed.vault.blockedReason,'clock');
     assert.match(blockedMessages.clock,/date/);assert.deepEqual(await tree(root),before);
     await assert.rejects(skewed.vault.save(skewed.snapshot));assert.deepEqual(await tree(root),before);
-    // A small, ordinary adjustment is tolerated.
-    clock.t=T0-60_000;assert.equal((await launch(root,keychain,clock)).outcome.kind,'restored');
+    // No tolerance: a one-minute, even a one-millisecond, rollback fails closed too.
+    for(const back of [60_000,1]){
+      clock.t=T0-back;
+      assert.deepEqual((await launch(root,keychain,clock)).outcome,{kind:'blocked',reason:'clock',retryable:true});
+      assert.deepEqual(await tree(root),before);
+    }
+    clock.t=T0;assert.equal((await launch(root,keychain,clock)).outcome.kind,'restored');
+    // Earlier than the save time alone is enough: a setting change saved at T0+1 day
+    // keeps the activity time T0, and a clock at T0+12 h (after the activity) still blocks.
+    clock.t=T0+DAY_MS;const later=await launch(root,keychain,clock);await later.vault.setRetention('30d',later.snapshot);
+    const {checkpoint:rewritten}=await decrypted(root,keychain);
+    assert.equal(rewritten.lastActivityAt,new Date(T0).toISOString());assert.equal(rewritten.savedAt,new Date(T0+DAY_MS).toISOString());
+    clock.t=T0+DAY_MS/2;assert.deepEqual((await launch(root,keychain,clock)).outcome,{kind:'blocked',reason:'clock',retryable:true});
+    // A running workspace refuses to save, and does not expire, once the clock goes back.
+    clock.t=T0+DAY_MS;const running=await launch(root,keychain,clock);assert.equal(running.outcome.kind,'restored');
+    clock.t=T0+DAY_MS-1;
+    assert.equal(running.vault.expiryState(),'clock');assert.deepEqual(await running.vault.expireIfDue(),{kind:'clock'});
+    await assert.rejects(running.vault.save(running.snapshot));
+    assert.ok((await blobs(root)).length>0);
     // An invalid clock is unknown age too.
     clock.t=Number.NaN;assert.equal((await launch(root,keychain,clock)).outcome.kind,'blocked');
     // Corrected clock: restored as before.
@@ -542,5 +559,76 @@ test('SHR-40 an expired workspace reached through the same-epoch fallback is exp
     const expired=await launch(root,keychain,clock);
     assert.equal(expired.outcome.kind,'expired');assert.equal(expired.store.list.length,0);
     assert.equal((await launch(root,keychain,clock)).store.list.length,0);
+  }finally{await done(root,outside);}
+});
+
+test('SHR-40 P1-1 a completion ticket goes stale once the workspace is emptied, and only then',async()=>{
+  const session=new WorkspaceSession(),before=session.ticket();
+  assert.equal(before(),true);
+  session.advance();
+  assert.equal(before(),false);
+  const after=session.ticket();assert.equal(after(),true);assert.equal(before(),false);
+  // The App gate this backs (pick → import) is exercised end to end in tests/e2e/retention.spec.ts,
+  // with a held sample download and a held file chooser completing after Delete local data.
+});
+
+// P1-2: staging files (interrupted writes) are part of the truthful cleanup accounting.
+const stagingFiles=async(root:string)=>(await readdir(join(root,'staging')).catch(()=>[] as string[])).sort();
+async function withStagingLeftover(root:string){await mkdir(join(root,'staging'),{recursive:true});await writeFile(join(root,'staging','interrupted.tmp'),new Uint8Array(64));}
+const failing=(code:string):never=>{throw Object.assign(new Error(code),{code});};
+
+test('SHR-40 P1-2 a staging listing or unlink failure keeps Delete local data incomplete, visible as pending, until a later cleanup removes it',async()=>{
+  for(const fault of ['staging-list','staging-remove','staging-skip'] as const){
+    const {root,outside,keychain,clock}=await scratch();
+    try{
+      const app=await launch(root,keychain,clock);await populated(app,outside);
+      await withStagingLeftover(root);
+      app.backend.fault=step=>{if(fault==='staging-skip'&&step==='staging-remove')return 'skip';if(step===fault)failing('EACCES');};
+      await app.controller.clear(()=>app.vault.deleteAll());app.chat.conversation=[];app.chat.draft=null;
+      // The workspace itself is gone (new epoch), but deletion is not reported complete.
+      assert.equal(app.controller.state.message,CLEANUP_INCOMPLETE,fault);assert.equal(app.vault.cleanupPending,true,fault);
+      assert.deepEqual(await blobs(root),[],fault);assert.deepEqual(await stagingFiles(root),['interrupted.tmp'],fault);
+      // The retained bytes are shown as waiting to be removed, not hidden.
+      const usage=await app.vault.usage();assert.equal(usage.pending,64,fault);assert.equal(usage.originals+usage.results,0,fault);
+      // A later save while the failure persists keeps it pending.
+      await app.say({role:'user',text:'Hello again.'});assert.equal(app.vault.cleanupPending,true,fault);
+      // The next cleanup after the failure clears removes it; only then is the warning cleared.
+      app.backend.fault=null;
+      await app.say({role:'user',text:'And again.'});
+      assert.equal(app.vault.cleanupPending,false,fault);assert.deepEqual(await stagingFiles(root),[],fault);assert.equal((await app.vault.usage()).pending,0,fault);
+    }finally{await done(root,outside);}
+  }
+});
+
+test('SHR-40 P1-2 a staging directory sync failure is unconfirmed, and relaunch retries staging cleanup before reporting it complete',async()=>{
+  const {root,outside,keychain,clock}=await scratch();
+  try{
+    const app=await launch(root,keychain,clock);await populated(app,outside);
+    await withStagingLeftover(root);
+    app.backend.fault=step=>{if(step==='staging-sync')failing('EIO');};
+    assert.deepEqual(await app.vault.deleteAll(),{cleanupComplete:false});assert.equal(app.vault.cleanupPending,true);
+    // Launch retries it; the unlink alone is not proof, the sync must succeed.
+    const failingLaunch=await launch(root,keychain,clock,{fault:step=>{if(step==='staging-sync')failing('EIO');}});
+    assert.equal((failingLaunch.outcome as {cleanupPending:boolean}).cleanupPending,true);
+    const relaunched=await launch(root,keychain,clock);
+    assert.equal((relaunched.outcome as {cleanupPending:boolean}).cleanupPending,false);assert.deepEqual(await stagingFiles(root),[]);
+    // Start over includes staging too.
+    await withStagingLeftover(root);
+    relaunched.backend.fault=step=>{if(step==='staging-list')failing('EIO');};
+    await relaunched.controller.clear();assert.equal(relaunched.controller.state.message,CLEANUP_INCOMPLETE);
+  }finally{await done(root,outside);}
+});
+
+test('SHR-40 P1-2 a staging file left by a failed write is removed and verified at the next save',async()=>{
+  const {root,outside,keychain,clock}=await scratch();
+  try{
+    const app=await launch(root,keychain,clock);await populated(app,outside);
+    app.backend.fault=(step,name)=>{if(step==='stage'&&name.startsWith('manifests/'))failing('ENOSPC');};
+    await assert.rejects(app.say({role:'user',text:'This save fails.'}));
+    assert.equal((await stagingFiles(root)).length,1);
+    assert.ok((await app.vault.usage()).pending>0);
+    app.backend.fault=null;
+    await app.say({role:'user',text:'This one works.'});
+    assert.deepEqual(await stagingFiles(root),[]);assert.equal(app.vault.cleanupPending,false);
   }finally{await done(root,outside);}
 });

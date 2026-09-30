@@ -293,10 +293,24 @@ public final class AtepdfWorkspaceVault {
     if staging > 0 { out.append(("staging", staging)) }
     return out
   }
+  /// Remove every file in staging (interrupted writes, never referenced by a head),
+  /// sync the directory and verify it is empty. A staging directory that was never
+  /// created is clean. A listing, unlink, sync or verification failure throws, so a
+  /// failure is never reported as cleaned (SHR-40). A staging path that is not a real
+  /// directory, such as a symbolic link, is never followed.
   public func cleanStaging() throws {
     let staging = root.appendingPathComponent("staging")
-    for name in (try? FileManager.default.contentsOfDirectory(atPath: staging.path)) ?? [] where name.hasSuffix(".tmp") {
-      unlink(staging.appendingPathComponent(name).path)
+    var info = stat()
+    if lstat(staging.path, &info) != 0 {
+      if errno == ENOENT { return }
+      throw Failure.io
     }
+    guard (info.st_mode & S_IFMT) == S_IFDIR else { throw Failure.io }
+    var failed = false
+    for name in try FileManager.default.contentsOfDirectory(atPath: staging.path) {
+      if unlink(staging.appendingPathComponent(name).path) != 0 && errno != ENOENT { failed = true }
+    }
+    try syncDirectory(staging)
+    guard !failed, try FileManager.default.contentsOfDirectory(atPath: staging.path).isEmpty else { throw Failure.io }
   }
 }

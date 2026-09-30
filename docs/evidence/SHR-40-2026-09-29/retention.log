@@ -1,32 +1,36 @@
-✔ SHR-40 the default is Keep until I delete it: no age expiry, however long atePDF is closed (515.458042ms)
-✔ SHR-40 7 days: expiry is measured from the last change, not from launches, and removes the whole workspace (221.848416ms)
-✔ SHR-40 30 days: a change renews the age; expiry at 30 days after the last change (235.190625ms)
-✔ SHR-40 while atePDF runs: expiry on return or before an action, and a late save cannot renew an expired workspace (203.444333ms)
-✔ SHR-40 expireIfDue expires at once; saves queued behind it are refused rather than written into the new epoch (221.3925ms)
-✔ SHR-40 a shorter setting applies to the existing age at once; changing the setting is not activity (366.983834ms)
-✔ SHR-40 a clock earlier than saved times fails closed without deleting or extending; Keep is unaffected (248.731666ms)
-✔ SHR-40 Delete when atePDF quits clears durable state first, then keeps the session in memory only (177.722792ms)
-✔ SHR-40 a crash while switching to Delete when atePDF quits never brings back the earlier workspace (169.627ms)
-✔ SHR-40 switching from Delete when atePDF quits back to a durable mode saves only the current session (220.060291ms)
-✔ SHR-40 Start over keeps the retention setting; Delete local data resets it to Keep until I delete it (424.374625ms)
-✔ SHR-40 Delete local data removes every managed file, leaves external originals and exports byte-identical, and survives relaunch (192.37775ms)
-✔ SHR-40 repeated Delete local data and Start over are safe and idempotent (250.776792ms)
-✔ SHR-40 Delete local data joins active work: a running job is cancelled first and nothing it produced survives (661.970209ms)
-✔ SHR-40 a job already saving its commit settles before Delete local data, which then removes it (251.005709ms)
-✔ SHR-40 Delete local data works when the saved workspace cannot be opened (missing key, damage, newer version) (567.28475ms)
-✔ SHR-40 deleting an unopenable workspace removes the head first and reports failure truthfully (211.937834ms)
-✔ SHR-40 a failed Delete local data on an open workspace removes nothing and says so (173.476875ms)
-✔ SHR-40 permission and storage failures during deletion leave cleanup pending, never claimed, and it finishes later (191.36875ms)
-✔ SHR-40 storage usage counts only atePDF-managed workspace files, by category, and excludes external files (194.213709ms)
-✔ SHR-40 retention changes keep SHR-71 protections: no recognized secret is written by a mode change or the switch back from quit (320.058166ms)
-✔ SHR-40 a quit-mode checkpoint may hold the preference only (153.5695ms)
-✔ SHR-40 an expired workspace is deleted even when one of its PDFs is missing or damaged (184.056667ms)
-✔ SHR-40 an expired workspace reached through the same-epoch fallback is expired, not restored (219.720209ms)
-ℹ tests 24
+✔ SHR-40 the default is Keep until I delete it: no age expiry, however long atePDF is closed (853.20125ms)
+✔ SHR-40 7 days: expiry is measured from the last change, not from launches, and removes the whole workspace (249.423209ms)
+✔ SHR-40 30 days: a change renews the age; expiry at 30 days after the last change (245.880208ms)
+✔ SHR-40 while atePDF runs: expiry on return or before an action, and a late save cannot renew an expired workspace (200.314208ms)
+✔ SHR-40 expireIfDue expires at once; saves queued behind it are refused rather than written into the new epoch (191.906333ms)
+✔ SHR-40 a shorter setting applies to the existing age at once; changing the setting is not activity (343.045625ms)
+✔ SHR-40 P1-3 a clock earlier than any saved time, by any amount, fails closed without deleting or extending; Keep is unaffected (275.047666ms)
+✔ SHR-40 Delete when atePDF quits clears durable state first, then keeps the session in memory only (180.1445ms)
+✔ SHR-40 a crash while switching to Delete when atePDF quits never brings back the earlier workspace (188.911167ms)
+✔ SHR-40 switching from Delete when atePDF quits back to a durable mode saves only the current session (206.887417ms)
+✔ SHR-40 Start over keeps the retention setting; Delete local data resets it to Keep until I delete it (385.992625ms)
+✔ SHR-40 Delete local data removes every managed file, leaves external originals and exports byte-identical, and survives relaunch (199.676042ms)
+✔ SHR-40 repeated Delete local data and Start over are safe and idempotent (305.034541ms)
+✔ SHR-40 Delete local data joins active work: a running job is cancelled first and nothing it produced survives (681.73825ms)
+✔ SHR-40 a job already saving its commit settles before Delete local data, which then removes it (254.091917ms)
+✔ SHR-40 Delete local data works when the saved workspace cannot be opened (missing key, damage, newer version) (628.504375ms)
+✔ SHR-40 deleting an unopenable workspace removes the head first and reports failure truthfully (205.322875ms)
+✔ SHR-40 a failed Delete local data on an open workspace removes nothing and says so (183.741917ms)
+✔ SHR-40 permission and storage failures during deletion leave cleanup pending, never claimed, and it finishes later (208.9075ms)
+✔ SHR-40 storage usage counts only atePDF-managed workspace files, by category, and excludes external files (219.434792ms)
+✔ SHR-40 retention changes keep SHR-71 protections: no recognized secret is written by a mode change or the switch back from quit (342.394625ms)
+✔ SHR-40 a quit-mode checkpoint may hold the preference only (142.398042ms)
+✔ SHR-40 an expired workspace is deleted even when one of its PDFs is missing or damaged (231.235125ms)
+✔ SHR-40 an expired workspace reached through the same-epoch fallback is expired, not restored (259.528083ms)
+✔ SHR-40 P1-1 a completion ticket goes stale once the workspace is emptied, and only then (0.198416ms)
+✔ SHR-40 P1-2 a staging listing or unlink failure keeps Delete local data incomplete, visible as pending, until a later cleanup removes it (696.447916ms)
+✔ SHR-40 P1-2 a staging directory sync failure is unconfirmed, and relaunch retries staging cleanup before reporting it complete (218.84775ms)
+✔ SHR-40 P1-2 a staging file left by a failed write is removed and verified at the next save (154.734083ms)
+ℹ tests 28
 ℹ suites 0
-ℹ pass 24
+ℹ pass 28
 ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 6724.502416
+ℹ duration_ms 8451.717

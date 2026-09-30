@@ -57,6 +57,13 @@ ok  a workspace that was never created uses no storage
 ok  usage reports each sealed workspace file's on-disk size and staging, nothing else
 ok  measuring never changes a file outside the workspace
 ok  an unreadable workspace directory is an error, never zero usage
+ok  staging cleanup removes every staging file and verifies it is empty
+ok  a staging directory that was never created is clean
+ok  a staging file that cannot be unlinked is an error, and it stays
+ok  an unreadable staging directory is an error, never clean
+ok  retained staging bytes stay visible in usage
+ok  a later retry removes the retained staging file
+ok  a symbolic-link staging directory is refused and its target left untouched
 ok  Swift opens a file sealed by the TypeScript test backend
 SHR-39/SHR-40 native workspace checks passed
 ok  TypeScript backend opens a file sealed by Swift; different associated data is refused

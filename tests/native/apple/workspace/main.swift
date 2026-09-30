@@ -180,6 +180,37 @@ do { _ = try usageVault.usage() } catch { usageFailed = true }
 try manager.setAttributes([.posixPermissions: 0o700], ofItemAtPath: usageRoot.appendingPathComponent("blobs").path)
 try require(usageFailed, "an unreadable workspace directory is an error, never zero usage")
 
+// 8. Staging cleanup is verified, and failures are reported (SHR-40 P1-2).
+let stagingDir = usageRoot.appendingPathComponent("staging")
+try Data(repeating: 5, count: 9).write(to: stagingDir.appendingPathComponent("second.tmp"))
+try usageVault.cleanStaging()
+try require(try manager.contentsOfDirectory(atPath: stagingDir.path).isEmpty && (try usageVault.usage()).allSatisfy { $0.name != "staging" }, "staging cleanup removes every staging file and verifies it is empty")
+let neverStaged = AtepdfWorkspaceVault(root: scratch.appendingPathComponent("usage/Never", isDirectory: true), keys: MemoryKeys())
+try neverStaged.cleanStaging()
+try require(true, "a staging directory that was never created is clean")
+try Data(repeating: 6, count: 11).write(to: stagingDir.appendingPathComponent("locked.tmp"))
+try manager.setAttributes([.posixPermissions: 0o500], ofItemAtPath: stagingDir.path)
+var unlinkFailed = false
+do { try usageVault.cleanStaging() } catch { unlinkFailed = true }
+try require(unlinkFailed && manager.fileExists(atPath: stagingDir.appendingPathComponent("locked.tmp").path), "a staging file that cannot be unlinked is an error, and it stays")
+try manager.setAttributes([.posixPermissions: 0o000], ofItemAtPath: stagingDir.path)
+var listingFailed = false
+do { try usageVault.cleanStaging() } catch { listingFailed = true }
+try manager.setAttributes([.posixPermissions: 0o700], ofItemAtPath: stagingDir.path)
+try require(listingFailed, "an unreadable staging directory is an error, never clean")
+try require((try usageVault.usage()).contains { $0.name == "staging" && $0.bytes == 11 }, "retained staging bytes stay visible in usage")
+try usageVault.cleanStaging()
+try require(try manager.contentsOfDirectory(atPath: stagingDir.path).isEmpty, "a later retry removes the retained staging file")
+let symlinkRoot = scratch.appendingPathComponent("usage/Linked", isDirectory: true)
+try manager.createDirectory(at: symlinkRoot, withIntermediateDirectories: true)
+let outsideDir = scratch.appendingPathComponent("usage/Outside staging", isDirectory: true)
+try manager.createDirectory(at: outsideDir, withIntermediateDirectories: true)
+try Data(repeating: 7, count: 13).write(to: outsideDir.appendingPathComponent("user.tmp"))
+try manager.createSymbolicLink(at: symlinkRoot.appendingPathComponent("staging"), withDestinationURL: outsideDir)
+var symlinkRefused = false
+do { try AtepdfWorkspaceVault(root: symlinkRoot, keys: MemoryKeys()).cleanStaging() } catch { symlinkRefused = true }
+try require(symlinkRefused && manager.fileExists(atPath: outsideDir.appendingPathComponent("user.tmp").path), "a symbolic-link staging directory is refused and its target left untouched")
+
 // 6. Interop with the TypeScript backend format, using a synthetic shared key.
 let interop = AtepdfWorkspaceVault(root: scratch.appendingPathComponent("interop"), keys: MemoryKeys(sharedKey))
 try interop.writeSealed("blobs/file_swift.atw", plain: pdf, associatedData: "atepdf.workspace/v1|pdf|interop|file_swift|1")

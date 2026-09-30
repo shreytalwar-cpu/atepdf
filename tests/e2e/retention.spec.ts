@@ -17,7 +17,7 @@ async function install(page:Page){
     const backend={
       keyStatus:async()=>'ready',
       exists:async(name:string)=>files.has(name),
-      writeSealed:async(name:string,plain:Uint8Array,aad:string)=>{files.set(name,{aad,plain:new Uint8Array(plain)});persist();},
+      writeSealed:async(name:string,plain:Uint8Array,aad:string)=>{files.set(name,{aad,plain:new Uint8Array(plain)});persist();(window as unknown as {__atepdfWrites:number}).__atepdfWrites++;},
       readOpened:async(name:string,aad:string)=>{const f=files.get(name);if(!f)return {status:'missing'};if(f.aad!==aad)return {status:'auth'};return {status:'ok',bytes:new Uint8Array(f.plain)};},
       list:async(directory:string)=>[...files.keys()].filter(name=>name.startsWith(`${directory}/`)),
       remove:async(name:string)=>{files.delete(name);persist();},
@@ -25,10 +25,11 @@ async function install(page:Page){
       cleanStaging:async()=>{},
       usage:async()=>[...files].map(([name,f])=>({name,bytes:f.plain.length+32})),
     };
-    let temporary=4096;
-    (window as unknown as Record<string,unknown>).__ATEPDF_TEST_WORKSPACE__={backend,now:()=>new Date(clock()),temporary:{usage:()=>temporary,clear:()=>{temporary=0;return true;}}};
+    let temporary=4096;(window as unknown as {__atepdfWrites:number}).__atepdfWrites=0;
+    (window as unknown as Record<string,unknown>).__ATEPDF_TEST_WORKSPACE__={backend,now:()=>new Date(clock()),temporary:{usage:()=>sessionStorage.getItem('atepdf-test-temporary-unknown')?null:temporary,clear:()=>{temporary=0;return true;}}};
   },T0);
 }
+const writes=(page:Page)=>page.evaluate(()=>(window as unknown as {__atepdfWrites:number}).__atepdfWrites);
 const stored=(page:Page)=>page.evaluate(()=>Object.keys(JSON.parse(sessionStorage.getItem('atepdf-test-vault')||'{}')).sort());
 const setClock=(page:Page,t:number)=>page.evaluate(value=>sessionStorage.setItem('atepdf-test-clock',String(value)),t);
 async function samples(page:Page){
@@ -152,4 +153,59 @@ test('7 days: an idle workspace is deleted before the next action, and a shorter
   await dialog.getByRole('button',{name:'Done'}).click();
   await expect(page.getByRole('heading',{name:'Drop files here'})).toBeVisible();
   expect((await stored(page)).filter(name=>name.startsWith('blobs/'))).toEqual([]);
+});
+
+// P1-1: a picker or sample completion that arrives after Delete local data began must
+// not import, add to the conversation or save into the new, empty workspace.
+async function deleteNow(page:Page){
+  const dialog=await openSettings(page);
+  await dialog.getByRole('button',{name:'Delete Local Data…'}).click();
+  await expect(dialog).toContainText('The current task will be stopped first.');
+  await dialog.getByRole('button',{name:'Delete',exact:true}).click();
+  await expect(dialog.getByTestId('storage-status')).toHaveText('atePDF’s local data was deleted from this Mac.');
+  await dialog.getByRole('button',{name:'Done'}).click();
+}
+test('P1-1 a sample download that finishes after Delete local data is discarded: nothing imported, shown or saved',async({page})=>{
+  let release:()=>void=()=>{};const gate=new Promise<void>(resolve=>{release=resolve;});let held=0;
+  await page.route('**/fixtures/*.pdf',async route=>{held++;await gate;await route.continue();});
+  await page.getByRole('button',{name:'Try the two sample PDFs'}).click();
+  await expect.poll(()=>held).toBeGreaterThan(0);
+  await deleteNow(page);
+  const afterDelete={writes:await writes(page),stored:await stored(page)};
+  release();
+  await expect.poll(()=>held).toBe(2);
+  // Give the stale completion every chance to land.
+  await page.waitForTimeout(1500);
+  await expect(page.getByRole('heading',{name:'Drop files here'})).toBeVisible();
+  await expect(page.getByText(/I’ve added/)).toHaveCount(0);await expect(page.getByText(/PDFs are ready/)).toHaveCount(0);
+  expect(await writes(page)).toBe(afterDelete.writes);expect(await stored(page)).toEqual(afterDelete.stored);
+  expect(afterDelete.stored.filter(name=>name.startsWith('blobs/'))).toEqual([]);
+  await page.reload();
+  await expect(page.getByRole('heading',{name:'Drop files here'})).toBeVisible();await expect(page.getByText(/I’ve added/)).toHaveCount(0);
+});
+test('P1-1 a file chooser that completes after Delete local data is discarded: nothing imported, shown or saved',async({page})=>{
+  await samples(page);
+  const chooser=page.waitForEvent('filechooser');
+  await page.getByRole('button',{name:'Add files'}).click();
+  const pending=await chooser;
+  await deleteNow(page);
+  // The conversation is gone; the chooser itself is still open until the user answers it.
+  await expect(page.getByText(/Your 2 PDFs are ready/)).toHaveCount(0);
+  const afterDelete={writes:await writes(page),stored:await stored(page)};
+  await pending.setFiles('tests/fixtures/appendix.pdf');
+  await page.waitForTimeout(1500);
+  await expect(page.getByRole('heading',{name:'Drop files here'})).toBeVisible();
+  await expect(page.getByText(/I’ve added/)).toHaveCount(0);
+  expect(await writes(page)).toBe(afterDelete.writes);expect(await stored(page)).toEqual(afterDelete.stored);
+  expect(afterDelete.stored.filter(name=>name.startsWith('blobs/'))).toEqual([]);
+  await page.reload();
+  await expect(page.getByRole('heading',{name:'Drop files here'})).toBeVisible();await expect(page.getByText(/I’ve added/)).toHaveCount(0);
+});
+
+test('temporary files that cannot be measured never produce an exact-looking total',async({page})=>{
+  await samples(page);
+  await page.evaluate(()=>sessionStorage.setItem('atepdf-test-temporary-unknown','1'));
+  const dialog=await openSettings(page),usage=dialog.getByTestId('storage-usage');
+  await expect(usage).toContainText('Temporary files and previewsCouldn’t be measured');
+  await expect(usage).toContainText(/TotalAt least \d/);
 });

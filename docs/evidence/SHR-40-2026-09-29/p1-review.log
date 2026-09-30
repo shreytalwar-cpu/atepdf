@@ -1,0 +1,13 @@
+✔ SHR-40 P1-3 a clock earlier than any saved time, by any amount, fails closed without deleting or extending; Keep is unaffected (611.266417ms)
+✔ SHR-40 P1-1 a completion ticket goes stale once the workspace is emptied, and only then (0.128291ms)
+✔ SHR-40 P1-2 a staging listing or unlink failure keeps Delete local data incomplete, visible as pending, until a later cleanup removes it (611.965292ms)
+✔ SHR-40 P1-2 a staging directory sync failure is unconfirmed, and relaunch retries staging cleanup before reporting it complete (199.091791ms)
+✔ SHR-40 P1-2 a staging file left by a failed write is removed and verified at the next save (173.119417ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1754.309875

@@ -30,7 +30,7 @@ import {isClarificationAnswer,pendingFromResponse,withPendingClarification} from
 import {plannerStatus,requestPlan,savePlannerKey,createNativePairing,pairNativePlanner,disconnectNativePlanner,plannerAvailable,type PlannerStatus} from './src/platform/planner';
 import {validateEnvelope,type PendingClarification,type Request as PlannerRequest,type Envelope, type Step} from '@contracts/protocol';
 import {WorkspaceVault,WorkspaceExpiredError,blockedMessages,expiredMessage,savedArtifacts,CLEANUP_INCOMPLETE,type WorkspaceSnapshot} from '@core/workspace-vault';
-import {CheckpointScheduler} from '@core/workspace-checkpoints';
+import {CheckpointScheduler,WorkspaceSession} from '@core/workspace-checkpoints';
 import {DAY_MS,RETENTION_DAYS,type PersistedEntry,type RetentionMode} from '@core/workspace-checkpoint';
 import {createWorkspaceBackend,workspaceClock} from './src/platform/workspace';
 import {temporaryFiles} from './src/platform/temporary';
@@ -72,7 +72,9 @@ const SAVE_FAILED_NOTICE='atePDF couldn’t save the latest changes on this Mac.
 const SAVE_PAUSED_NOTICE='atePDF couldn’t confirm what was last saved on this Mac, so saving is paused until atePDF opens again.';
 // Start over copy states what each mode actually removes.
 const CLEAR_QUESTION_SESSION='Save any results you want to keep first. Shall I clear this conversation and its local files? Your originals on your device will stay unchanged.';
-const CLEAR_QUESTION_SAVED='Save any results you want to keep first. Shall I clear this conversation and atePDF’s saved copies of its PDFs, results and draft on this Mac? Files you added and PDFs you saved elsewhere stay unchanged.';
+// Start over clears this workspace but keeps the Keep workspace setting; Delete local
+// data (Privacy & storage) also resets that setting to Keep until I delete it.
+const CLEAR_QUESTION_SAVED='Save any results you want to keep first. Shall I clear this conversation and atePDF’s saved copies of its PDFs, results and draft on this Mac? Files you added and PDFs you saved elsewhere stay unchanged, and your Keep workspace setting stays as it is.';
 // SHR-40 notices. Removal is only stated once verified; otherwise what remains is said.
 const UNAVAILABLE_NOTICE='atePDF can’t save your workspace on this Mac right now. This session won’t be restored after you quit.';
 const DELETED_STATUS='atePDF’s local data was deleted from this Mac.';
@@ -99,6 +101,9 @@ function useWorkspace() {
   const runChatSave = useRef<() => Promise<void>>(async () => {}), chatSaveFailed = useRef<(error: unknown) => void>(() => {});
   const [checkpoints] = useState(() => new CheckpointScheduler(() => runChatSave.current(), error => chatSaveFailed.current(error)));
   useEffect(() => () => checkpoints.dispose(), [checkpoints]);
+  // Picker, sample and drop completions carry a ticket; emptying the workspace voids it.
+  const [session] = useState(() => new WorkspaceSession());
+  const releaseFiles = (files: File[]) => Promise.allSettled(files.map(file => Promise.resolve().then(() => (file as File & {release?: () => void | Promise<void>}).release?.())));
   const [clearCount, setClearCount] = useState(0);
   const state = useSyncExternalStore(controller.subscribe, controller.snapshot, controller.snapshot), store = controller.store;
   const [entries, setEntries] = useState<Entry[]>([]), [loading, setLoading] = useState(false);
@@ -206,6 +211,7 @@ function useWorkspace() {
   type Expiry = {kind: 'current'} | {kind: 'clock'} | {kind: 'expired'; mode: RetentionMode; cleanupComplete: boolean};
   function runExpiry(work: () => Promise<Expiry>) {
     if (expiring.current) return; expiring.current = true;
+    session.advance();
     void checkpoints.exclusive(async () => {
       setResetting(true);
       try {
@@ -242,6 +248,7 @@ function useWorkspace() {
       try {
         const change = await v.setRetention(mode, () => snapshot(controller.durableState(false)));
         if (change.kind === 'expired') {
+          session.advance();
           await controller.clear(async () => ({cleanupComplete: change.cleanupComplete}));
           resetView(); setNotice({text: expiredNotice(mode, change.cleanupComplete), cleanup: !change.cleanupComplete});
         } else if (change.kind === 'cleared' && !change.cleanupComplete) setNotice({text: QUIT_CLEANUP_INCOMPLETE, cleanup: true});
@@ -254,6 +261,8 @@ function useWorkspace() {
   const deleteLocalData = () => {
     const v = vault.current; if (!v || deleting || saving || restoring) return;
     setDeleting(true); setStorageStatus(null);
+    // From here on, a picker, sample or drop that was still pending is discarded.
+    session.advance();
     void checkpoints.exclusive(async () => {
       setResetting(true);
       try {
@@ -298,22 +307,32 @@ function useWorkspace() {
     else if (store.focus && store.focus !== previous) append({role: 'assistant', text, artifact: store.get(store.focus).meta, resultTitle});
     else say(controller.state.message || 'No new result was created.');
   };
-  const importFiles = async (files: File[]) => {
+  // current: the ticket of the workspace these files were chosen for. A stale ticket
+  // (Start over, expiry or Delete local data began meanwhile) imports nothing.
+  const importFiles = async (files: File[], current = session.ticket()) => {
+    if (!current()) { await releaseFiles(files); return; }
     if (!files.length || operation.current) return;
     operation.current = true; setChoice(null);clearPending();
     append({role: 'user', text: `I’ve added ${files.length === 1 ? 'a PDF' : `${files.length} PDFs`}.`, files: files.map(f => ({name: f.name, size: f.size}))});
     try {
       await controller.import(files);
+      if (!current()) return;
       if (controller.state.error || controller.state.stage === 'cancelled') say(controller.state.error || controller.state.message);
       else say(`Your ${store.originals.length} ${store.originals.length === 1 ? 'PDF is' : 'PDFs are'} ready. ${store.originals.map(r => store.get(r).meta.pageCount).reduce((a, b) => a + b, 0)} pages in total. ${focus ? 'Follow-ups still use the current result; Merge uses all originals in the order added.' : 'What would you like to do? Merge uses the order you added them.'}`);
-    } catch (e) { say(e instanceof Error ? e.message : 'Files could not be opened.'); }
+    } catch (e) { if (current()) say(e instanceof Error ? e.message : 'Files could not be opened.'); }
     finally { operation.current = false; }
   };
   const pick = async (sample = false) => {
     if (operation.current || expiryDue()) return;
+    // The picker or sample download can finish after the workspace was emptied.
+    const current = session.ticket();
     setLoading(true);
-    try { await importFiles(await (sample ? sampleFiles() : chooseFiles())); }
-    catch (e) { say(e instanceof Error ? e.message : 'Files could not be opened.'); }
+    try {
+      const files = await (sample ? sampleFiles() : chooseFiles());
+      if (!current()) { await releaseFiles(files); return; }
+      await importFiles(files, current);
+    }
+    catch (e) { if (current()) say(e instanceof Error ? e.message : 'Files could not be opened.'); }
     finally { setLoading(false); }
   };
   const executeLocal = async (type: Action, page = 2) => {
@@ -464,6 +483,7 @@ function useWorkspace() {
       // checkpointing resumes, so nothing from before can be saved into it.
       // Session-only (no saved workspace): nothing durable to wait for, so the view
       // is reset immediately, exactly as before persistence existed.
+      session.advance();
       if (!durable) { void controller.clear(); resetView(); return; }
       void checkpoints.exclusive(async () => {
         await controller.clear();

@@ -11,9 +11,14 @@ function each(directory:Directory,visit:(file:File)=>void){
   if(!directory.exists)return;
   for(const entry of directory.list()){if(entry instanceof File)visit(entry);else if(entry instanceof Directory)each(entry,visit);}
 }
+// File.size reads 0 for a file it cannot read, so each size comes from info(): a file
+// whose size is unknown makes the whole total unknown (null) rather than looking exact.
 const usage=()=>{
-  try{let bytes=0;for(const root of roots())each(root,file=>{bytes+=file.size;});return bytes;}
-  catch{return null;}
+  try{
+    let bytes=0,known=true;
+    for(const root of roots())each(root,file=>{const info=file.info();if(!info.exists)return;if(typeof info.size==='number')bytes+=info.size;else known=false;});
+    return known?bytes:null;
+  }catch{return null;}
 };
 export const temporaryFiles:TemporaryFiles|null=NativePDF?.storageIsolated===true?{
   usage,

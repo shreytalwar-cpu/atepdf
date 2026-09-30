@@ -25,6 +25,15 @@
     "workspaceDirectory": "No atepdf directory was created in ~/Library/Containers/dev.atepdf.fresh.mac/Data/Library/Application Support during or after the run: the ad-hoc build still cannot obtain the Keychain key (errSecMissingEntitlement, see SHR-39), so it runs session-only and writes nothing.",
     "uiNotObserved": "The panel was not inspected in the Mac app in this session: background window capture failed ('Failed to start stream due to audio/video capture failure'), the full-screen control prompt was not answered, and a System Events accessibility query did not return within 60 s. Panel rendering, wording, Tab/Space/Enter keyboard use, focus moving to Cancel and Escape were verified in the shared UI through the browser suite (tests/e2e/retention.spec.ts) instead."
   },
+  "reviewFixBuild": {
+    "command": "scripts/native/mac-build.sh after the PR #83 review fixes (Swift cleanStaging now verifies and throws; locked pod install rerun, tracked Podfile.lock/pbxproj artifacts reverted before commit)",
+    "result": "Mac application built; strict signature and sandbox entitlement checks passed",
+    "stagedApp": "/private/tmp/atepdf-mac-tb7v6los/atepdf.app",
+    "binarySha256": "bd5dca726c6d9d207b1e8c3c8110685b95b8974a66696558b6a2f13e540d720c",
+    "mainJsbundleSha256": "31a3d9a2680708b8deb8537d9859a5cc399add213547fad2dc8603cab0c1d33a",
+    "containsFixes": "binary contains workspaceUsageAsync; Hermes bundle contains the new 'At least ' total and the Start over / Delete local data setting wording (stored as UTF-16)",
+    "runtimeObservation": "Launched the exact staged path; process ran; no atepdf directory in the container's Application Support (ad-hoc build has no Keychain key); terminated with SIGTERM. The panel UI was not inspected (same capture limitation as the first round)."
+  },
   "notVerified": [
     "Mac keyboard/focus of Privacy & storage inside the Catalyst app (Full Keyboard Access, Tab order, VoiceOver labels).",
     "Retention, expiry, Delete when atePDF quits and Delete local data against the real Application Support container and Keychain: needs a signed build with a keychain access group (SHR-41, channel identity SHR-91).",

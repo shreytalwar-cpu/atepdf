@@ -1,6 +1,6 @@
 Starting Metro Bundler
 
-iOS Bundled 10451ms index.ts (1680 modules)
+iOS Bundled 10416ms index.ts (1680 modules)
 
 › Assets (5):
 assets/approved-8-mark-source-crop.png (35KB)
@@ -10,7 +10,7 @@ assets/fixtures/brief.pdf (3.1KB)
 assets/paper.png (688KB)
 
 › ios bundles (1):
-_expo/static/js/ios/index-12d9a8aeb13525e8dccc8e84b0194350.hbc (5MB)
+_expo/static/js/ios/index-298bcd79777785a945408ee47a57c4b0.hbc (5MB)
 
 › web bundles (1):
 _expo/static/css/global-d41d8cd98f00b204e9800998ecf8427e.css (0B)

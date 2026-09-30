@@ -24,7 +24,12 @@ export interface WorkspaceVaultBackend{
   remove(name:string):Promise<void>;
   /** fsync a workspace directory, durably committing earlier entry changes in it (including another process's unlinks). Resolves for a directory that does not exist. */
   syncDirectory(directory:'blobs'|'manifests'):Promise<void>;
-  /** Remove interrupted staging files. They are never referenced by a head. */
+  /**
+   * Remove every file in the staging directory (interrupted writes, never referenced
+   * by a head), sync the directory and verify it is empty. Resolves for a staging
+   * directory that does not exist; throws if listing, removal, the sync or the
+   * verification fails, so a failure is never reported as cleaned.
+   */
   cleanStaging():Promise<void>;
   /**
    * On-disk size of every workspace file: 'head', 'manifests/…' and 'blobs/…' by name,
@@ -69,8 +74,7 @@ export type WorkspaceUsage={
   unopened:number;
   total:number;
 };
-// Allowed clock skew before a clock earlier than saved times is treated as unknown age.
-export const CLOCK_TOLERANCE_MS=5*60_000;
+
 
 export const blockedMessages:Record<BlockedReason,string>={
   'key-locked':'atePDF can’t open your saved workspace while this Mac’s keychain is locked. Unlock it, then try again.',
@@ -127,6 +131,9 @@ export class WorkspaceVault{
   // including after Delete local data starts a new workspace whose epoch restarts at 0.
   #fence=0;
   #cleanupPending=false;
+  // Staging files (interrupted writes) that are not yet verified removed. Retried at
+  // every later cleanup until removal is confirmed.
+  #stagingPending=false;
   // Removals that may have happened but are not durably confirmed (the unlink ran,
   // the directory sync did not succeed). Carried across every later cleanup in this
   // session until an idempotent remove of that name (unlink + sync) succeeds.
@@ -178,15 +185,16 @@ export class WorkspaceVault{
   /**
    * Whether the retained workspace has outlived a finite retention setting. Keep until
    * I delete it and Delete when atePDF quits never expire by age, and an empty
-   * workspace has nothing to expire. A clock earlier than the saved times (beyond a
-   * small tolerance) or an invalid clock means the age is unknown: 'clock', never
+   * workspace has nothing to expire. A clock earlier than the last activity or save
+   * time, by any amount, or an invalid clock means the age is unknown: 'clock', never
    * a silent extension.
    */
   expiryState(now=this.#now().getTime()):ExpiryState{return this.#age(this.#retention,this.#content,now);}
   #age(mode:RetentionMode,content:boolean,now:number):ExpiryState{
     const days=RETENTION_DAYS[mode];
     if(!days||!content)return 'current';
-    if(!Number.isFinite(now)||now<Math.max(this.#lastActivity,this.#savedAt)-CLOCK_TOLERANCE_MS)return 'clock';
+    // Any clock earlier than a time already written means the age is unknown (ADR 0010).
+    if(!Number.isFinite(now)||now<this.#lastActivity||now<this.#savedAt)return 'clock';
     return now-this.#lastActivity>=days*DAY_MS?'due':'current';
   }
   /**
@@ -248,9 +256,7 @@ export class WorkspaceVault{
   deleteAll():Promise<{cleanupComplete:boolean}>{
     return this.#serial(async()=>{
       if(this.mode==='writable'){
-        const cleanupComplete=await this.#clear('keep');
-        await this.backend.cleanStaging().catch(()=>undefined);
-        return {cleanupComplete};
+        return {cleanupComplete:await this.#clear('keep')};
       }
       return this.#wipe();
     });
@@ -258,18 +264,23 @@ export class WorkspaceVault{
   /** Sizes of the files atePDF manages for this workspace, by category. Throws if storage can't be measured. */
   usage():Promise<WorkspaceUsage>{return this.#serial(()=>this.#usage());}
 
+  /** A write that fails may leave a staging file behind; the next cleanup removes and verifies it. */
+  async #write(name:string,plain:Uint8Array,associatedData:string){
+    try{await this.backend.writeSealed(name,plain,associatedData);}
+    catch(error){this.#stagingPending=true;throw error;}
+  }
   #serial<T>(work:()=>Promise<T>):Promise<T>{const next=this.#queue.then(work,work);this.#queue=next.catch(()=>undefined);return next;}
   #blockClock(){this.mode='blocked';this.#blockedReason='clock';}
 
   async #open():Promise<RestoreOutcome>{
     try{
-      await this.backend.cleanStaging();
       if(!await this.backend.exists(names.head)){
         // A head exists from before the first user data is written (the genesis
         // head), so stored files without one mean the head was lost, not that a
         // first save was interrupted. Keep everything and fail closed.
         if((await this.backend.list('manifests')).length||(await this.backend.list('blobs')).length)throw new Blocked('corrupt');
-        return await this.#genesis()?{kind:'empty',retention:'keep',cleanupPending:false}:{kind:'unavailable'};
+        if(!await this.#genesis())return {kind:'unavailable'};
+        return {kind:'empty',retention:'keep',cleanupPending:!await this.#collect(new Set(),new Set(),{confirm:true,staging:true})};
       }
       const key=await this.backend.keyStatus(false);
       // Never create a replacement key over an existing workspace.
@@ -279,7 +290,7 @@ export class WorkspaceVault{
         // Genesis only: nothing was ever committed, so any manifest/blob beside it
         // is an interrupted first save and is removed now.
         this.#adopt(head);this.mode='writable';
-        return {kind:'empty',retention:'keep',cleanupPending:!await this.#collect(new Set(),new Set(),true)};
+        return {kind:'empty',retention:'keep',cleanupPending:!await this.#collect(new Set(),new Set(),{confirm:true,staging:true})};
       }
       // An expired workspace is deleted, not opened. Its age is checked before any
       // PDF is read, so a missing or damaged PDF cannot keep an expired workspace alive.
@@ -315,7 +326,7 @@ export class WorkspaceVault{
             for(const ref of refs)keepRefs.add(ref);
           }else cleanupPending=true; // an unreadable predecessor: leave its blobs alone
         }
-        if(!cleanupPending)cleanupPending=!await this.#collect(keepRefs,keepGenerations,true);
+        if(!cleanupPending)cleanupPending=!await this.#collect(keepRefs,keepGenerations,{confirm:true,staging:true});
         else this.#cleanupPending=true;
       }
       return {kind:'restored',checkpoint,bytes,recoveredPrevious,cleanupPending};
@@ -435,7 +446,7 @@ export class WorkspaceVault{
         if(this.#blobs.has(artifact.ref))continue;
         const bytes=snapshot.bytes(artifact.ref),associated=aad.blob(this.#workspaceID,artifact.ref,generation);
         if(bytes.length!==artifact.sizeBytes||await sha256(bytes)!==artifact.sha256)throw new Error('Artifact changed before checkpoint.');
-        await this.backend.writeSealed(names.blob(artifact.ref),bytes,associated);
+        await this.#write(names.blob(artifact.ref),bytes,associated);
         const check=await this.backend.readOpened(names.blob(artifact.ref),associated);
         if(check.status!=='ok'||await sha256(check.bytes)!==artifact.sha256)throw new Error('Artifact verification failed.');
         written.set(artifact.ref,generation);
@@ -459,7 +470,7 @@ export class WorkspaceVault{
     try{
       // 2. Complete manifest, verified before anything points to it.
       const manifest=encode(checkpoint),manifestAAD=aad.manifest(this.#workspaceID,generation);
-      await this.backend.writeSealed(names.manifest(generation),manifest,manifestAAD);
+      await this.#write(names.manifest(generation),manifest,manifestAAD);
       const check=await this.backend.readOpened(names.manifest(generation),manifestAAD);
       if(check.status!=='ok'||decoder.decode(check.bytes)!==decoder.decode(manifest))throw new Error('Manifest verification failed.');
     }catch{throw new Error(STORAGE_WRITE_FAILED);}
@@ -508,7 +519,7 @@ export class WorkspaceVault{
     return withdrawn?'unpublished':'uncertain';
   }
   async #writeHead(head:WorkspaceHead){
-    await this.backend.writeSealed(names.head,encode(head),aad.head());
+    await this.#write(names.head,encode(head),aad.head());
     const check=await this.#peekHead();
     if(check==='unreadable'||!sameHead(check,head))throw new Error('Head verification failed.');
     this.#head=head;
@@ -537,20 +548,29 @@ export class WorkspaceVault{
    * - every name whose removal is unconfirmed, from this or any earlier cleanup in
    *   this session, has since had an idempotent remove (unlink + directory sync)
    *   succeed. Absence from a listing alone never confirms a removal;
-   * - at launch (confirmDirectories), both directories are also synced after the
+   * - at launch (options.confirm), both directories are also synced after the
    *   clean listing. A previous process may have unlinked a file without a
    *   successful sync; syncing the directory durably commits that unlink, and an
    *   unlink lost to a crash reappears in the listing and is removed again. So the
-   *   obligation survives restarts without a separate on-disk record.
+   *   obligation survives restarts without a separate on-disk record;
+   * - staging (options.staging: launch, clear, deletion; and every later cleanup
+   *   while an earlier staging cleanup is unconfirmed or a write failed) is removed and
+   *   verified empty by the backend. A failed listing, unlink or sync keeps cleanup
+   *   pending, and the staging bytes stay visible in usage until a retry succeeds.
    */
-  async #collect(keepRefs:Set<string>,keepGenerations:Set<number>,confirmDirectories=false):Promise<boolean>{
+  async #collect(keepRefs:Set<string>,keepGenerations:Set<number>,options:{confirm?:boolean;staging?:boolean}={}):Promise<boolean>{
+    if(options.staging||this.#stagingPending){
+      let cleaned=false;
+      for(let attempt=0;attempt<CLEANUP_ATTEMPTS&&!cleaned;attempt++){try{await this.backend.cleanStaging();cleaned=true;}catch{/* retried below, or later */}}
+      this.#stagingPending=!cleaned;
+    }
     const kept=(name:string)=>{
       const generation=/^manifests\/(\d+)\.atw$/.exec(name)?.[1],ref=/^blobs\/(.+)\.atw$/.exec(name)?.[1];
       return generation!==undefined?keepGenerations.has(Number(generation)):ref!==undefined&&keepRefs.has(ref);
     };
     const unreferenced=async()=>[...await this.backend.list('manifests'),...await this.backend.list('blobs')].filter(name=>!kept(name));
     for(const name of [...this.#unconfirmed])if(kept(name))this.#unconfirmed.delete(name);
-    let directoriesConfirmed=!confirmDirectories;
+    let directoriesConfirmed=!options.confirm;
     for(let pass=0;pass<=CLEANUP_ATTEMPTS;pass++){
       let listed:string[];
       try{listed=await unreferenced();}catch{continue;}
@@ -560,7 +580,7 @@ export class WorkspaceVault{
           try{await this.backend.syncDirectory('manifests');await this.backend.syncDirectory('blobs');directoriesConfirmed=true;}
           catch{continue;}
         }
-        this.#cleanupPending=false;return true;
+        this.#cleanupPending=this.#stagingPending;return !this.#stagingPending;
       }
       if(pass===CLEANUP_ATTEMPTS)break;
       for(const name of targets){
@@ -575,7 +595,7 @@ export class WorkspaceVault{
     const empty=this.#empty(generation,epoch,this.#revision+1,mode);
     try{
       const manifestAAD=aad.manifest(this.#workspaceID,generation);
-      await this.backend.writeSealed(names.manifest(generation),encode(empty),manifestAAD);
+      await this.#write(names.manifest(generation),encode(empty),manifestAAD);
       if((await this.backend.readOpened(names.manifest(generation),manifestAAD)).status!=='ok')throw new Error('Manifest verification failed.');
     }catch{throw new Error(CLEAR_FAILED);}
     // Publish the new epoch before any deletion, with no fallback predecessor. A
@@ -589,7 +609,7 @@ export class WorkspaceVault{
     this.#generation=generation;this.#previous=generation;this.#epoch=epoch;this.#revision++;this.#fence++;
     this.#blobs.clear();this.#refsByGeneration=new Map([[generation,new Set()]]);this.#track(empty);
     // The clear is durable now. Removal of the old copies is only claimed once verified.
-    return this.#collect(new Set(),new Set([generation]));
+    return this.#collect(new Set(),new Set([generation]),{staging:true});
   }
   /**
    * Remove a workspace that could not be opened, without its key: the head first
@@ -605,8 +625,7 @@ export class WorkspaceVault{
       throw new Error(present?DELETE_FAILED:DELETE_UNCONFIRMED);
     }
     this.#fence++;this.#head=null;this.#blockedReason=null;
-    await this.backend.cleanStaging().catch(()=>undefined);
-    const cleanupComplete=await this.#collect(new Set(),new Set(),true);
+    const cleanupComplete=await this.#collect(new Set(),new Set(),{confirm:true,staging:true});
     // Leftovers beside a genesis head are removed at the next launch (see #open).
     try{await this.#genesis();}catch{this.mode='unavailable';}
     return {cleanupComplete};

@@ -79,7 +79,7 @@ export function PrivacyStorage({visible,onClose,motion,capable,children,retentio
   };
   const usage=storage.workspace,unopened=usage?.unopened??0;
   const note=retentionNote??(busy?'You can change this when the current task finishes.':retention==='quit'?'This session isn’t saved on this Mac.':retention==='30d'||retention==='7d'?'atePDF checks when it opens, when you return to it and before new work. It can’t delete anything while it isn’t running.':null);
-  const deleteBody=`This removes atePDF’s saved conversation, drafts, imported PDF copies, results, page text, previews and temporary files from this Mac, and sets Keep workspace back to Keep until I delete it.${busy?' The current task will be stopped first.':''}${unopened?' It includes the saved workspace atePDF couldn’t open.':''} Files you added from elsewhere and PDFs you saved aren’t touched. This isn’t secure erasure, and it doesn’t remove copies in backups made by other apps.`;
+  const deleteBody=`This removes atePDF’s saved conversation, drafts, imported PDF copies, results, page text, previews and temporary files from this Mac, and sets Keep workspace back to Keep until I delete it (Start over in the conversation keeps your setting).${busy?' The current task will be stopped first.':''}${unopened?' It includes the saved workspace atePDF couldn’t open.':''} Files you added from elsewhere and PDFs you saved aren’t touched. This isn’t secure erasure, and it doesn’t remove copies in backups made by other apps.`;
   return <Modal accessibilityLabel={Platform.OS==='web'?title:undefined} visible={visible} transparent animationType={motion?'fade':'none'} onRequestClose={()=>{if(confirm)setConfirm(null);else onClose();}}>
     <SafeAreaView style={{flex:1}} className="bg-black/25"><ScrollView contentContainerStyle={{flexGrow:1,justifyContent:'center',padding:20}}>
       <View accessibilityViewIsModal role={Platform.OS==='web'?undefined:'dialog'} className="w-full max-w-lg self-center gap-4 rounded-3xl bg-background p-6">
@@ -114,7 +114,8 @@ export function PrivacyStorage({visible,onClose,motion,capable,children,retentio
                 {usage.pending>0&&<Row label="Waiting to be removed" value={formatBytes(usage.pending)}/>}
               </>}
               <Row label="Temporary files and previews" value={storage.temporary===null?'Couldn’t be measured':formatBytes(storage.temporary)}/>
-              <Row strong label="Total" value={formatBytes(usage.total+(storage.temporary??0))}/>
+              {/* Never an exact-looking total when part of it could not be measured. */}
+              <Row strong label="Total" value={storage.temporary===null?`At least ${formatBytes(usage.total)}`:formatBytes(usage.total+storage.temporary)}/>
             </View>}
             <Text className="text-xs leading-5 text-muted-foreground">Sizes of the files atePDF keeps in its own storage on this Mac. Files you added from elsewhere and PDFs you saved aren’t counted.</Text>
             {confirm?.kind==='delete'

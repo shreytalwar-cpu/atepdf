@@ -309,7 +309,7 @@ function useWorkspace() {
       // One submission owns setup, planning and local execution. Only the
       // positive metadata projection crosses the planner boundary.
       const instruction=privateInstruction(text,store.list);
-      const currentRequest=controller.request(instruction);
+      const currentRequest=controller.request(instruction,continuation);
       const request=continuation?withPendingClarification(currentRequest,continuation):currentRequest;
       const status=await checkConnection(abort.signal,true,current);
       abort.signal.throwIfAborted();if(!current())return;

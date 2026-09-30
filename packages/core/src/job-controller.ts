@@ -1,4 +1,5 @@
-import {buildRequest,quickPlan,validateEnvelope,type Request,type Envelope,type Operation} from '@contracts/protocol';
+import {buildRequest,quickPlan,validateEnvelope,type Request,type Envelope,type Operation,type PendingClarification} from '@contracts/protocol';
+import {activeRequestContext} from './request-context';
 import {LocalFileStore,type Artifact,type StoreMark} from './local-file-store';
 import {CLEANUP_INCOMPLETE,StaleSaveError} from './workspace-vault';
 import type {EngineRequest,EngineResult,Inspection,OCRPage} from '@pdf/types';
@@ -107,10 +108,14 @@ export class JobController {
       await releaseInputFiles(files);
     }
   }
-  request(instruction='Local quick action'):Request{const request=buildRequest({revision:this.store.revision,files:this.store.list.map(f=>({ref:f.ref,kind:'pdf',pageCount:f.pageCount,sizeBytes:f.sizeBytes,encrypted:false})),selected:this.store.originals,focus:this.store.focus,originals:this.store.originals},instruction);if(this.services.capabilities){request.capabilities=[...this.services.capabilities];if(!request.capabilities.includes('ocr_pdf'))request.ocrLanguages=[];}return request;}
+  request(instruction='Local quick action',pending?:PendingClarification):Request{
+    const context=activeRequestContext({revision:this.store.revision,files:this.store.list.map(f=>({ref:f.ref,kind:'pdf',pageCount:f.pageCount,sizeBytes:f.sizeBytes,encrypted:false,original:f.original})),originals:this.store.originals,history:this.store.history,focus:this.store.focus},instruction,pending);
+    const request=buildRequest(context,context.instruction);
+    if(this.services.capabilities){request.capabilities=[...this.services.capabilities];if(!request.capabilities.includes('ocr_pdf'))request.ocrLanguages=[];}
+    return request;
+  }
   async quick(action:Parameters<typeof quickPlan>[1],page=2,target:number|null=null){
-    const request=this.request();
-    try{await this.execute(quickPlan(request,action,page,target),request);}catch(e){this.update({error:e instanceof Error?e.message:'Action unavailable.'});}
+    try{const request=this.request(action==='merge'||action==='chain'?'Merge originals':action==='remove'?`Remove page ${page} from the current result`:action==='ocr'?'Make the current result searchable':'Compress the current result');await this.execute(quickPlan(request,action,page,target),request);}catch(e){this.update({error:e instanceof Error?e.message:'Action unavailable.'});}
   }
   async execute(raw:unknown,request:Request){
     // Keep the accepted recipe and context fixed throughout asynchronous engine work.

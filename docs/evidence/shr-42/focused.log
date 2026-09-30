@@ -1,0 +1,42 @@
+✔ SHR-42: crossing the audited 40-reference boundary retains history and admits current-result planning (58.972041ms)
+✔ SHR-42: crossing the audited 100-reference boundary retains history and admits current-result planning (44.42325ms)
+✔ SHR-42: multiple import batches preserve global file numbers after many results (50.47075ms)
+✔ SHR-42: early file aliases and explicit file lists never rebind to projected positions (74.135875ms)
+✔ SHR-42: earlier result identity survives follow-ups, Undo and reselecting an undone artifact (33.4445ms)
+✔ SHR-42: bounded ambiguous candidates and clarification retain the intended selection (38.234792ms)
+✔ SHR-42: imports cannot retarget a clarification; stale answers refuse and global numbering survives (38.858ms)
+✔ SHR-42: Undo and commit invalidate pending revision without losing candidates (1.387875ms)
+✔ SHR-42: ambiguous earlier results retain every candidate up to the unchanged envelope (9.404709ms)
+✔ SHR-42: required active sets over 40 refuse without arbitrary subset, billing or retention changes (11.813708ms)
+✔ SHR-42: planner payload excludes unrelated historical refs, names, OCR, facts and metadata (44.668291ms)
+✔ SHR-42: unrelated historical metadata does not reach the gateway provider; out-of-projection plans reject (87.833916ms)
+✔ SHR-42: actual PDF follow-up and Undo work beyond 100 retained refs; saved history restores stable result numbers (3165.468667ms)
+✔ AI product knowledge is embedded from the maintained document, not a separate stale facts list (11.902333ms)
+✔ planner privacy: exact filename aliasing, local snippet/path/password/bytes rejection and positive manifest projection (14.201667ms)
+✔ recognized secret guard excludes synthetic values while preserving ordinary instructions (0.754375ms)
+✔ bounded clarification preserves original task, refs and answers through the existing provider and plan validator (49.2085ms)
+✔ mocked AI SDK receives only bounded pending context for a continuation (106.732542ms)
+✔ stale, malformed and unsafe clarification context fails before provider invocation (2.913541ms)
+✔ gateway: host/origin/token/content-type and disabled state cannot call provider (4.069292ms)
+✔ gateway: malformed, oversized, unknown fields, unsupported context and document canaries fail before provider (2.42875ms)
+✔ gateway: complete bound plan, duplicate rejection, hard request cap and no automatic follow-up calls (1.998333ms)
+✔ gateway: partial, unavailable operation and future refs never form an executable response (1.595042ms)
+✔ gateway: concurrent requests, timeout and cancellation stop planning without retry or provider-error disclosure (40.200333ms)
+✔ local credential: private permissions, no symlink following, budget persists across gateway restarts (34.433292ms)
+✔ actual AI SDK adapter mocked HTTP: complete tool call, no upload/output cap/retry (9.246375ms)
+✔ provider tool choices distinguish product answers and undo from executable plans (8.420208ms)
+✔ masked key endpoint saves only locally, refuses cross-origin/oversized/overwrite and never invokes the provider (19.23175ms)
+✔ planner accepts metadata for large local PDFs without receiving bytes or filenames (0.422875ms)
+✔ privacy canaries: quoted paths, native URIs, encoded separators, hidden characters and JSON-shaped secrets reject (1.233291ms)
+✔ gateway: hostile fetch context and stale tokens fail before any reservation (0.744958ms)
+✔ gateway: provider failures consume only their reserved call and never disclose provider bodies (1.530209ms)
+✔ client: incomplete streaming JSON never resolves; cancelled or malformed complete envelopes reject (13.778041ms)
+✔ local configuration: invalid allowances and malformed keys cannot enable paid calls (13.325791ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4767.675042

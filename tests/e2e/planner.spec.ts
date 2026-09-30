@@ -219,3 +219,26 @@ test('native pairing code stays in a masked setup control and makes no model req
   await page.goto('/');await page.getByRole('button',{name:'OpenAI connection'}).click();await page.getByRole('button',{name:'Create pairing code'}).click();
   const field=page.getByRole('textbox',{name:'Native pairing code'});await expect(field).toHaveAttribute('type','password');await expect(field).toHaveValue(code);await expect(page.getByTestId('conversation')).not.toContainText(code);expect(issued).toBe(1);expect(modelCalls).toBe(0);
 });
+
+
+test('SHR-42: imports invalidate captured clarification before sending, and file numbering stays global',async({page})=>{
+  const sent:PlannerRequest[]=[];
+  await page.route('**/api/planner',async route=>{
+    const req=route.request().postDataJSON() as PlannerRequest;sent.push(req);
+    if(sent.length===1){await route.fulfill({json:{schemaVersion:'1.0',requestId:req.requestId,workspaceRevision:req.workspaceRevision,planner:{schemaVersion:'1.0',status:'clarify',reasonCode:'ambiguous_reference',steps:[],resultRefs:[],clarification:{question:'Which PDF should I use?',choices:['First selected PDF','Second selected PDF']}}}});return;}
+    await route.fulfill({json:{schemaVersion:'1.0',requestId:req.requestId,workspaceRevision:req.workspaceRevision,planner:{schemaVersion:'1.0',status:'unsupported',reasonCode:'excluded_operation',steps:[],resultRefs:[],clarification:{question:'This PDF must keep at least one page.',choices:[]}}}});
+  });
+  await ready(page);
+  await send(page,'Remove page 1 from one of the files');await expect(page.getByText('Which PDF should I use?')).toBeVisible();
+  const originalSecond=sent[0].selectionRefs[1];
+  await page.locator('input[type=file]').setInputFiles(['tests/fixtures/brief.pdf']);
+  await expect(page.getByText('Your 3 PDFs are ready.',{exact:false})).toBeVisible();
+  await send(page,'The second one');await expect(page.getByText('Clarification is stale. Please ask again.')).toBeVisible();
+  expect(sent).toHaveLength(1);expect(sent[0].selectionRefs).toHaveLength(2);
+  await send(page,'Remove page 1 from file 2');await expect.poll(()=>sent.length).toBe(2);
+  expect(sent[1].selectionRefs).toEqual([originalSecond]);expect(sent[1].files.map(f=>f.ref)).toEqual([originalSecond]);
+  expect(sent[1].pendingClarification).toBeNull();expect(sent[1].instruction).toContain(originalSecond);
+  // The selected original is appendix.pdf, which has one page.
+  await expect(page.getByTestId('assistant-message').last()).toContainText('This PDF must keep at least one page.');
+  await expect(page.getByTestId('current-result')).toHaveCount(0);
+});

@@ -23,6 +23,7 @@ Fresh independent atepdf repository; Attenlo remains read-only reference. No pro
 | 0007 | GPT-6 Luna and complete tool selection | Intentional enabled-AI orchestration reaffirmed by D-04; specific production model/provider remains OPEN-09; development allowance is not v1 commercial quota |
 | 0008 | Development native pairing | One-use expiring pairing and memory-only bearer; not production account auth |
 | 0009 | Explicit private TLS beta companion | Pinned local-network native transport; not a hosted production backend |
+| 0011 | Mac launch envelope (SHR-34) — **approved 30 September 2026** | macOS 14.0 minimum; Universal arm64 + x86_64 with Intel support conditional on real Intel runtime acceptance (Apple Silicon only is the fallback); 8 GB/16 GB internal hypotheses only, no public disk number until SHR-78; Mac idiom viable (UX acceptance in SHR-106/75); provisional wording "macOS 14 or later. Mac with Apple silicon or Intel processor."; Setapp an intended v1 channel (PRODUCT_V1 §4.2 updated; acceptance pending SHR-91). Settles OPEN-01's envelope; no project setting changed yet |
 
 ## Superseded direction and current-source gaps
 

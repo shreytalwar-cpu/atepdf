@@ -1,6 +1,6 @@
 # SHR-79 evidence — consumer AI service, provider data policy and operating budget (30 September 2026)
 
-**Source:** `origin/main` `7853973`.  **Decision record:** [ADR 0016](../../adr/0016-consumer-ai-service.md), approved by Shrey on 30 September 2026 (AI-1 to AI-10; revision 2 with Vercel + Supabase, GPT-6 Luna and a Supabase-based identity model; revision 3 with the owner-authorized cross-review corrections S79-01 to S79-07). Numbering history: revision 1 was numbered ADR 0013, which now belongs to SHR-49's approved complex-PDF decision; revision 2 was numbered ADR 0014, which now belongs to SHR-85 (seller, payments and account ownership). The coordinated scheme is 0013 SHR-49, 0014 SHR-85, 0015 SHR-51, 0016 SHR-79.
+**Source:** `origin/main` `7853973`.  **Decision record:** [ADR 0016](../../adr/0016-consumer-ai-service.md), approved by Shrey on 30 September 2026 (AI-1 to AI-10; revision 2 with Vercel + Supabase, GPT-6 Luna and a Supabase-based identity model; revision 3 with the owner-authorized cross-review corrections S79-01 to S79-07, then the independent-verification corrections B1, B2 and N1–N3). Numbering history: revision 1 was numbered ADR 0013, which now belongs to SHR-49's approved complex-PDF decision; revision 2 was numbered ADR 0014, which now belongs to SHR-85 (seller, payments and account ownership). The coordinated scheme is 0013 SHR-49, 0014 SHR-85, 0015 SHR-51, 0016 SHR-79.
 
 | File | Content |
 |---|---|

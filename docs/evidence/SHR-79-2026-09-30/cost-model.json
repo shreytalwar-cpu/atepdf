@@ -168,7 +168,11 @@
     },
     "globalDailyUsd": 5,
     "globalMonthlyUsd": 50,
-    "openaiProjectHardBudgetUsd": 55
+    "openaiProjectHardBudgetUsd": 55,
+    "maxProviderAttempts": {
+      "gpt-6-luna": 2,
+      "gpt-6.1-sol-eval": 1
+    }
   },
   "enforcedBound": {
     "label": "arithmetic from DOCUMENTED prices and ENFORCED ceilings (ADR 0016 section 11.2)",
@@ -184,6 +188,18 @@
       "envelopeUsd": 0.0077,
       "maxRequestCostUsd": 0.01
     },
-    "note": "Input tokens are counted with the pinned tokenizer over the whole provider request before sending; a character-to-token ratio is not used as the bound. Attempts without provider usage stay booked at the per-attempt worst case."
+    "gpt-6.1-sol-eval": {
+      "maxInputTokens": 12000,
+      "maxOutputTokens": 4000,
+      "inputRateUsedUsdPer1M": 2.5,
+      "inputRateNote": "cache-write rate, the highest input rate",
+      "outputUsdPer1M": 10.0,
+      "uplift": 1.1,
+      "perAttemptWorstCaseUsd": 0.077,
+      "maxProviderAttempts": 1,
+      "envelopeUsd": 0.077,
+      "maxRequestCostUsd": 0.1
+    },
+    "note": "Input tokens are counted with the pinned tokenizer over the whole provider request before sending; a character-to-token ratio is not used as the bound. Attempts without provider usage stay booked at the per-attempt worst case. The Sol eval row allows one attempt (no relay retry) so its envelope fits its ceiling (S61)."
   }
 }

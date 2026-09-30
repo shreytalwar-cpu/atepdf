@@ -1,7 +1,7 @@
 {
   "schema": "atepdf.service-protocol-cases/1",
   "source": "docs/adr/0016-consumer-ai-service.md sections 3, 4, 7, 9, 11, 12, 13, 14, 17 and 18",
-  "status": "Approved architecture (ADR 0016, formerly numbered 0014; AI-1 to AI-10 approved 30 September 2026; revision 3 cross-review corrections S79-01 to S79-07 added S45-S80 and updated S03, S04, S19, S22, S27, S29, S31, S37 and S44). Numeric limits are the provisional values in ADR 0016 sections 11, 13 and 14; tests read them from the single LIMITS constant and MODEL_TABLE rows that SHR-80/81 define, not from literals. Allowance units and settle/release outcomes come from SHR-84; these cases assert holds are atomic and resolved exactly once, not an amount.",
+  "status": "Approved architecture (ADR 0016, formerly numbered 0014; AI-1 to AI-10 approved 30 September 2026; revision 3 cross-review corrections S79-01 to S79-07 added S45-S80 and updated S03, S04, S19, S22, S27, S29, S31, S37 and S44). Numeric limits are the provisional values in ADR 0016 sections 11, 13 and 14; tests read them from the single LIMITS constant and MODEL_TABLE rows that SHR-80/81 define, not from literals. Allowance units and settle/release outcomes come from SHR-84; these cases assert holds are atomic and resolved exactly once, not an amount. Independent-verification corrections B1, B2 and N2 (30 September 2026) extended S50, S62, S70 and S76.",
   "notes": [
     "Every case runs against a mocked atePDF API (Vercel Function code run locally), a local or mocked Supabase (Auth + Postgres) and a mocked OpenAI. No live provider call, real credential, deployment or real user data.",
     "Identifiers and hosts are synthetic (*.example.test). Provider responses are fixtures.",
@@ -274,7 +274,7 @@
       "id": "S50",
       "group": "allowance_hold",
       "change": "link_installation for inst_A runs concurrently with an admission on guest subject S_A",
-      "expect": "Serialized by the installation lock and subject locks in a fixed order; the admitted request's hold stays on the subject that created it and is settled or released there; nothing copied or duplicated; the carry-over rule counts active holds as consumed; no new allowance"
+      "expect": "Serialized by the installation lock and subject locks in a fixed order; the admitted request's hold stays on the subject that created it and is settled or released there; nothing copied or duplicated; the carry-over rule counts active holds as consumed; no new allowance; a continuation of that workflow (Try again or clarification answer) admitted after the link, now acting as the account subject, reuses the existing hold or charge on S_A and holds no second unit"
     },
     {
       "id": "S51",
@@ -346,7 +346,7 @@
       "id": "S62",
       "group": "session_revocation",
       "change": "Account signed in on inst_A and inst_B; from inst_B the user signs out inst_A in the session list; inst_A then sends a request with its still-unexpired JWT",
-      "expect": "401 session_revoked at admission, providerCalls 0; inst_B's session keeps working; inst_A falls back to its guest session and guest subject"
+      "expect": "401 session_revoked at admission, providerCalls 0; inst_B's session keeps working; inst_A falls back to its guest session and guest subject; inst_A then calling /v1/installations/link with the same still-live session and a valid link signature gets 401 session_revoked and no binding"
     },
     {
       "id": "S63",
@@ -393,8 +393,8 @@
     {
       "id": "S70",
       "group": "installation_lifecycle",
-      "change": "Anonymous guest uses allowance -> email one-time code creates account A1 -> link -> work as A1 -> sign out -> guest request -> sign in again (code) -> link -> delete account",
-      "expect": "After sign-out: authenticated as the original S_A with its consumed allowance, no A1 paid authority, no new allowance. After re-sign-in: acts as A1 again. After deletion: inst_A acts as S_A; guest ledger intact; A1 rows deleted; old A1 JWTs refused. The anonymous user U_A is never converted"
+      "change": "Anonymous guest uses allowance -> email one-time code creates account A1 -> link -> work as A1 -> sign out -> guest request -> sign in again (code) -> link -> delete account; variant: sign out while offline, then reconnect and send a guest request",
+      "expect": "After sign-out: authenticated as the original S_A with its consumed allowance, no A1 paid authority, no new allowance. After re-sign-in: acts as A1 again. After deletion: inst_A acts as S_A; guest ledger intact; A1 rows deleted; old A1 JWTs refused. The anonymous user U_A is never converted. Offline variant: sign-out -> reconnect -> the pending sign-out call revokes the binding before any guest request, then the guest request is admitted as S_A, no A1 authority, no new allowance"
     },
     {
       "id": "S71",
@@ -429,8 +429,8 @@
     {
       "id": "S76",
       "group": "installation_lifecycle",
-      "change": "inst_A has an active account binding and the client sends /v1/plan with its guest token",
-      "expect": "403 account_session_required; no parallel guest pool; providerCalls 0"
+      "change": "inst_A has an active account binding and the client sends /v1/plan with its guest token; variants: the bound account session no longer exists in auth.sessions; the Mac lost the still-live account session from its Keychain",
+      "expect": "403 account_session_required; no parallel guest pool; providerCalls 0; if the bound session no longer exists in auth.sessions, admission revokes the binding, clears linked_account and admits the guest request as S_A; if the Mac lost the account session, sign-out with the guest token and a valid sign_out installation proof revokes the binding and the next guest request is admitted as S_A with no account authority"
     },
     {
       "id": "S77",

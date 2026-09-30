@@ -1,7 +1,35 @@
 {
   "schema": "atepdf.consent-policy-cases/1",
   "source": "docs/adr/0012-pre-send-privacy-consent.md section 12",
-  "status": "Proposed; pending owner approval of PRIV-1 to PRIV-7",
+  "status": "Approved by Shrey on 30 September 2026 (PRIV-1 to PRIV-7; PRIV-5 without an email-address warning)",
+  "policyConstants": {
+    "GRANT_TTL_SECONDS": 300,
+    "STANDING_PERMISSIONS": false,
+    "FILE_SIZE_BUCKETS": [
+      "<1MB",
+      "1-10MB",
+      "10-50MB",
+      ">50MB"
+    ],
+    "PAGE_COUNTS": "active_projection_only",
+    "SENSITIVE_INSTRUCTION_WARNINGS": [
+      "payment_card_luhn",
+      "iban_checksum",
+      "long_identifier_run"
+    ],
+    "SENSITIVE_INSTRUCTION_NO_WARNING": [
+      "ordinary_email_address"
+    ],
+    "LONG_IDENTIFIER_RUN_MIN_DIGITS": 9,
+    "DOCUMENT_TEXT_OVERLAP_WINDOW_WORDS": 5,
+    "AUTO_RETRY_LIMIT": {
+      "hosted": 1,
+      "content": 0
+    },
+    "LOCAL_LOG_RETENTION_DAYS": 7,
+    "PRODUCT_ANALYTICS": false,
+    "APPROVED_CONTENT_PURPOSES_V1": []
+  },
   "evaluationOrder": [
     "unclassified_field",
     "never_transfer",
@@ -149,6 +177,25 @@
       "expected": {
         "outcome": "ALLOW",
         "usesConsumed": 1
+      }
+    },
+    {
+      "id": "P05",
+      "kind": "hosted",
+      "change": "instruction \"email the merged file to jane@example.test\": ordinary email address, no other signal",
+      "expected": {
+        "inlineCheckShown": false,
+        "outcome": "ALLOW",
+        "note": "PRIV-5 owner modification: no separate warning for an ordinary email address"
+      }
+    },
+    {
+      "id": "P06",
+      "kind": "hosted",
+      "change": "instruction \"remove pages 2-7 and compress below 5 MB\": page range and size numbers",
+      "expected": {
+        "inlineCheckShown": false,
+        "outcome": "ALLOW"
       }
     },
     {
@@ -378,7 +425,7 @@
         "outcome": "DENY",
         "reason": "unclassified_field",
         "outboundBytes": 0,
-        "conditionalOn": "PRIV-1 recommended option"
+        "decision": "PRIV-1"
       }
     },
     {
@@ -482,6 +529,30 @@
         "outcome": "DENY",
         "reason": "recipient_undisclosed",
         "outboundBytes": 0
+      }
+    },
+    {
+      "id": "D33",
+      "kind": "hosted",
+      "change": "instruction contains a checksum-valid IBAN",
+      "expected": {
+        "inlineCheckShown": true,
+        "outboundBytesBeforeConfirm": 0,
+        "afterSendAnyway": {
+          "outcome": "ALLOW"
+        }
+      }
+    },
+    {
+      "id": "D34",
+      "kind": "hosted",
+      "change": "instruction contains an unbroken 12-digit identifier run (not a page, range, date or size)",
+      "expected": {
+        "inlineCheckShown": true,
+        "outboundBytesBeforeConfirm": 0,
+        "afterSendAnyway": {
+          "outcome": "ALLOW"
+        }
       }
     }
   ]

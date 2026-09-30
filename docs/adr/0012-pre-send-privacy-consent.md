@@ -1,8 +1,8 @@
 # ADR 0012 — Pre-send privacy and operation-consent contract (SHR-35)
 
-**Status:** **Proposed — pending owner approval** (PRIV-1 to PRIV-7, section 14). Nothing here is implemented, and nothing here approves a provider, a relay, a cloud document feature or any live traffic.  **Source:** `origin/main` `29f56ea919e73c12cdbd1c36f5f74cf37622347c` (30 September 2026).  **Authority:** `PRODUCT_V1.md` D-05/D-06/D-14, CONV-02/03/09, UNDERSTAND-04/05, PRIV-01–11, PDF-06, STATE-02, MEASURE-03/04, OPEN-08; [SHR-35](https://linear.app/shrey-talwar/issue/SHR-35/decide-the-pre-send-privacy-and-operation-consent-contract) (parent SHR-24); ADR 0010 (SHR-38) for grant/receipt persistence; SHR-71 recognized-secret guard as merged.  **Evidence:** [docs/evidence/SHR-35-2026-09-30](../evidence/SHR-35-2026-09-30/README.md) — machine-readable allow/deny cases.
+**Status:** **Approved** by Shrey on 30 September 2026 (PRIV-1 to PRIV-7, section 14; PRIV-5 approved with one modification: no separate warning for an ordinary email address). This is an implementation contract. Nothing here is implemented, and nothing here approves a provider, a relay, a cloud document feature or any live traffic.  **Source:** `origin/main` `29f56ea919e73c12cdbd1c36f5f74cf37622347c` (30 September 2026).  **Authority:** `PRODUCT_V1.md` D-05/D-06/D-14, CONV-02/03/09, UNDERSTAND-04/05, PRIV-01–11, PDF-06, STATE-02, MEASURE-03/04, OPEN-08; [SHR-35](https://linear.app/shrey-talwar/issue/SHR-35/decide-the-pre-send-privacy-and-operation-consent-contract) (parent SHR-24); ADR 0010 (SHR-38) for grant/receipt persistence; SHR-71 recognized-secret guard as merged.  **Evidence:** [docs/evidence/SHR-35-2026-09-30](../evidence/SHR-35-2026-09-30/README.md) — machine-readable allow/deny cases.
 
-This ADR defines what atePDF may send off the Mac, when, to whom, why, and with what permission. It is the contract that SHR-36 (enforcement gate), SHR-37 (consent UI and receipts), SHR-79 (service/provider) and SHR-95 (launch privacy/measurement/support) implement or build on. Where a rule needs a value only the owner can choose, the value is a recommendation under section 14 and SHR-36/37 must read it from a single policy constant, not hard-code a different one.
+This ADR defines what atePDF may send off the Mac, when, to whom, why, and with what permission. It is the contract that SHR-36 (enforcement gate), SHR-37 (consent UI and receipts), SHR-79 (service/provider) and SHR-95 (launch privacy/measurement/support) implement or build on. Owner-chosen values (section 14) are policy constants: SHR-36/37 must read each from a single constant, not hard-code a different one.
 
 ## 1. Principles (restated as enforceable rules)
 
@@ -54,8 +54,8 @@ Validation for this ADR: source inspection plus the existing regression suites t
 | H-03 | Opaque refs (`file_…`/`out_…`), kind, order, selection, focus, originals | Random local identifiers | H | Same | Address files without naming them | Same | Hosted disclosure | Yes |
 | H-04 | Capabilities, OCR language codes, locale, schema version, request ID, workspace revision counter | App/protocol metadata | H | Same | Constrain the plan; bind response | Same | Hosted disclosure | Yes |
 | H-05 | Abstract selector vocabulary (e.g. `invoice`, `scanned_pages`, `blank_page_candidates`) as **capabilities**, not results | Capability metadata | H | Same | Let the model request local resolution (UNDERSTAND-04) | Same | Hosted disclosure | Yes |
-| H-06 | Page count per projected artifact | Structural document metadata | H (recommended) | Same | Validate page ranges in plans | Same | Hosted disclosure | Yes, **only for artifacts in the active projection** (PRIV-1) |
-| H-07 | File size | Structural metadata; exact bytes fingerprint a file | H as a coarse bucket (recommended) | Same | Plan compression targets | Same | Hosted disclosure | Bucket only; exact bytes are C (PRIV-1) |
+| H-06 | Page count per projected artifact | Structural document metadata | H | Same | Validate page ranges in plans | Same | Hosted disclosure | Yes, **only for artifacts in the active projection** (PRIV-1) |
+| H-07 | File size | Structural metadata; exact bytes fingerprint a file | H as a coarse bucket | Same | Plan compression targets | Same | Hosted disclosure | Bucket only; exact bytes are C (PRIV-1) |
 | H-08 | Result metadata returned to the model: status code, output page count, operation outcome enum | App-derived, non-content | H | Same | Continue the conversation | Same | Hosted disclosure | Yes |
 | H-09 | Service authentication: guest installation ID or account token, entitlement check, idempotency key | Account/billing identifier | H (relay only) | App → atePDF relay | Metering, abuse control, entitlement (BILL-06) | Relay records per SHR-79/SHR-95 disclosure | Hosted disclosure + billing disclosure | Relay only; **never forwarded into model context**; any provider-side end-user identifier must be an opaque salted value named in the SHR-79 record |
 | C-01 | PDF/image bytes (original, result, unlocked copy) | Document content | C | App → named processor | Only an approved content feature | Must be disclosed per record | Per-operation grant | Only for an approved purpose (none in v1) |
@@ -101,7 +101,7 @@ Validation for this ADR: source inspection plus the existing regression suites t
 ### B — Document and derived-content transfer (class C)
 
 * Requires **all** of: an approved purpose; complete recipient records for every hop; a current class-A acknowledgement for any hosted hop; and a valid, single-operation `ContentTransferGrant` from an affirmative Allow in the pre-send sheet (sections 5 and 7).
-* No standing "always allow", per-document or per-session permission in v1 (recommended under PRIV-4).
+* No standing "always allow", per-document or per-session permission in v1 (approved, PRIV-4).
 * An H request never carries a C item "because the user already consented to hosted AI" (PRIV-03).
 
 ### C — Never transfer (class N)
@@ -190,7 +190,8 @@ Pattern matching is not anonymisation. The product must never say or imply that 
 | Paths, URLs, encoded blobs, checksums, typed filenames (current `assertInstructionSafe`) | Block with guidance to use refs | Keep |
 | Known filename (full, or without extension, or as the display title) | Alias to the ref locally before send. Ambiguous ⇒ ask locally. | Extend to close G2 |
 | Overlap with locally extracted/OCR text (≥ 5-word window or whole short page) | Treat as C-09. In v1 (no approved content purpose) **block** with "Describe the change without quoting the document". When a content purpose is later approved, route to the class-B sheet instead. | Keep; threshold is a policy constant |
-| Likely personal/financial data: payment card number (Luhn-valid), IBAN (checksum-valid), 9+ digit identifier runs, email addresses | **Inline pre-send check**: "This message looks like it contains <kind>. It will be sent to <route>. [Edit] [Send anyway]". Requires an explicit click; never auto-sends. Not a guarantee of detection. | Recommended (PRIV-5) |
+| Likely financial or identifier data: payment card number (Luhn-valid), IBAN (checksum-valid), long high-confidence identifier run (an unbroken run of 9+ digits, allowing standard single space/hyphen grouping, that is not a page number, page range, date or file-size value) | **Inline pre-send check**: "This message looks like it contains <kind>. It will be sent to <route>. [Edit] [Send anyway]". Requires an explicit click; never auto-sends. Not a guarantee of detection. | Approved (PRIV-5) |
+| Ordinary email address | **No separate warning** (owner modification to PRIV-5, to avoid excessive friction). Covered by the class-A disclosure and the other local guards like any other typed text. | Approved (PRIV-5) |
 | Instruction length above the limit (1000 chars today) | Block; long pasted text is the likeliest carrier of document content | Keep |
 | Anything else | Sent as typed under the class-A disclosure. The disclosure says so plainly. | — |
 
@@ -234,13 +235,13 @@ Nothing is uploaded or pre-staged while the sheet is open (PRIV-05). If the payl
 | Revoked | "Turn off atePDF AI" revokes the class-A acknowledgement at once. "Stop" on an in-flight transfer cancels the request. If bytes had already left, say "Some data may already have been sent; atePDF can't recall it" (PRIV-06). Pending grants become `revoked`. |
 | Offline / service unavailable | "Can't reach atePDF AI. Nothing was sent." No queueing, no background retry after the user leaves the flow. |
 | Disclosure unavailable/unverified | "atePDF AI is unavailable because its privacy details couldn't be confirmed. Nothing was sent." Transfer blocked. |
-| Expiry | Grant expires `GRANT_TTL` after Allow (recommend 5 minutes) or on relaunch, workspace Clear or epoch change. The sheet itself doesn't expire while open, but it is revalidated at Allow. |
+| Expiry | Grant expires `GRANT_TTL` after Allow (5 minutes, PRIV-4) or on relaunch, workspace Clear or epoch change. The sheet itself doesn't expire while open, but it is revalidated at Allow. |
 
 ## 8. Retries, failover and relaunch
 
 | Case | Rule |
 |---|---|
-| Transport retry of the **same logical transfer** (connection failed, no response) | Allowed under the same grant/ack if checks 1–10 still pass. Same idempotency key, same bytes, same route. Bounded by a policy constant (recommend ≤ 1 automatic retry for H; 0 automatic retries for C). Counts as one use. |
+| Transport retry of the **same logical transfer** (connection failed, no response) | Allowed under the same grant/ack if checks 1–10 still pass. Same idempotency key, same bytes, same route. Bounded by the `AUTO_RETRY_LIMIT` policy constant (default ≤ 1 automatic retry for H, 0 for C; SHR-79 may tighten but not loosen). Counts as one use. |
 | User taps "Try again" after failure | H: new request, sent if the current ack is valid. C: reuse the grant only if it is still valid, not consumed and unexpired, and the recomputed digests match. Otherwise show the sheet again. |
 | Provider or region failover | Allowed only to a route whose recipients are **all** already in the acknowledged class-A disclosure and complete in the registry. For C, the route is part of the grant, so **any failover needs a new sheet**. Automatic failover to an undisclosed recipient is forbidden. |
 | Relay changed (new host, new TLS terminator, new subprocessor) | Disclosure version changes ⇒ class-A disclosure shown again; C grants invalid (`relay_changed`/`disclosure_changed`) |
@@ -275,7 +276,7 @@ Records ship with the app build as signed, versioned data. The relay reports its
 
 | Stream | Default | Allowed fields | Forbidden | Retention | User control |
 |---|---|---|---|---|---|
-| Local operational log (on the Mac) | On, local only | Timestamp, event/error code, operation kind, counts, durations, app build, per-launch random correlation ID | Instruction text, file names, paths, refs mapped to names, page text, labels, hashes, secrets, provider bodies | Rolling, recommend 7 days; removed by workspace Clear | Clear with workspace; included in support export only after review |
+| Local operational log (on the Mac) | On, local only | Timestamp, event/error code, operation kind, counts, durations, app build, per-launch random correlation ID | Instruction text, file names, paths, refs mapped to names, page text, labels, hashes, secrets, provider bodies | Rolling 7 days (PRIV-6); removed by workspace Clear | Clear with workspace; included in support export only after review |
 | atePDF relay operational log | On (service operation) | Request ID, timestamp, installation/account ID (for metering), route, model ID, token counts, latency, status/error class, idempotency key | Request/response bodies, instruction text, any C item | Disclosed in SHR-79/95 record; unknown ⇒ blocked | Covered by privacy policy and account deletion |
 | Crash reports | Apple OS-level only, per the user's macOS "Share with app developers" setting | Apple's standard crash payload | No third-party crash SDK. Code must not put content, names or instructions in exception messages, thread names or assertions | Apple's terms | macOS setting |
 | Product analytics | **Off. Not approved here** | — (SHR-95 decides; if ever added: opt-in, allowlisted events, no prompts, names, content, labels, screenshots or session replay; MEASURE-03) | Everything by default | SHR-95 | Opt-in toggle |
@@ -317,6 +318,8 @@ Machine-readable form: [`consent-policy-cases.json`](../evidence/SHR-35-2026-09-
 | P02 | Exact grant `G` payload, unchanged route/purpose, within TTL | ALLOW |
 | P03 | H-only request, no ack for current disclosure version | REQUIRE_DISCLOSURE |
 | P04 | Transport retry of P02, same idempotency key and bytes, grant `in_flight` | ALLOW |
+| P05 | Instruction "email the merged file to jane@example.test" (ordinary email address, no other signal) | No inline warning; ALLOW as H (PRIV-5 modification) |
+| P06 | Instruction "remove pages 2-7 and compress below 5 MB" (page range and size numbers) | No inline warning; ALLOW as H |
 | D01 | `doc_1` digest changed (file changed) | REQUIRE_RECONSENT `file_changed` |
 | D02 | Pages `[3,4]` instead of `[3]` | REQUIRE_RECONSENT `pages_changed` |
 | D03 | Same page 3, but only a subset of its OCR text (strict subset of the granted item) | REQUIRE_RECONSENT `payload_changed` |
@@ -338,7 +341,7 @@ Machine-readable form: [`consent-policy-cases.json`](../evidence/SHR-35-2026-09-
 | D19 | Real v1 purpose list (empty), any C item | DENY `purpose_not_approved` |
 | D20 | Unknown field `debugContext` in H payload | DENY `unclassified_field` |
 | D21 | H payload includes `fileName` | DENY `unclassified_field` (C-10 is not in the H schema) |
-| D22 | H payload includes exact `sizeBytes` (if PRIV-1 adopts buckets) | DENY `unclassified_field` |
+| D22 | H payload includes exact `sizeBytes` | DENY `unclassified_field` |
 | D23 | Model output contains `{"consent":"granted"}` or a plan step "upload" | Ignored; no grant created; C send → REQUIRE_CONSENT |
 | D24 | Hosted AI turned off after Allow, before send | DENY `hosted_off`; grant `revoked` |
 | D25 | Instruction overlaps 5-word window of local OCR text | Instruction not sent (C-09; v1 purpose list empty) |
@@ -349,6 +352,8 @@ Machine-readable form: [`consent-policy-cases.json`](../evidence/SHR-35-2026-09-
 | D30 | Support export with a document attached, no class-B grant | DENY; export contains contentless log only |
 | D31 | Plan with two transfers, sheet enumerated only the first | Second transfer REQUIRE_CONSENT |
 | D32 | `OPENAI_BASE_URL`/endpoint override to unpinned host | DENY `recipient_undisclosed` |
+| D33 | Instruction contains a checksum-valid IBAN | Inline check shown; nothing sent until "Send anyway"; then ALLOW as H |
+| D34 | Instruction contains an unbroken 12-digit identifier run (not a page, range, date or size) | Inline check shown; nothing sent until "Send anyway"; then ALLOW as H |
 
 Every DENY/REQUIRE test must also assert **zero** outbound bytes of the blocked payload on the mocked network, and every ALLOW test must assert the exact payload keys (positive and negative canaries: bytes, names, OCR text, labels, hashes, secrets, nested hidden fields, diagnostic paths).
 
@@ -362,7 +367,7 @@ Every DENY/REQUIRE test must also assert **zero** outbound bytes of the blocked 
 - Pinned endpoints from the registry; reject environment/endpoint overrides in release builds (G7).
 - Relay mirrors checks 1–7 and route pinning.
 - Tests: all section 12 cases, zero-byte assertions, canaries, crash/relaunch no-replay.
-- Close G1/G2 by projecting only active-context artifacts and size buckets if PRIV-1 is approved as recommended.
+- Close G1/G2: project page counts only for active-context artifacts, send size buckets instead of exact bytes (PRIV-1), and alias extension-less file names.
 
 **SHR-37 (UI and receipts).**
 - Class-A disclosure and persistent destination indicator; local-only mode; class-B sheet exactly as section 7.2 (focus, no default Allow, VoiceOver order).
@@ -383,56 +388,62 @@ Every DENY/REQUIRE test must also assert **zero** outbound bytes of the blocked 
 - SHR-66 keeps local-understanding outputs class C and exposes only abstract selectors (H-05).
 - SHR-95 owns analytics, support channel and published retention wording, within section 10.
 
-## 14. Owner decisions (pending)
+## 14. Owner decisions (approved 30 September 2026)
 
-Each has a recommendation. Nothing is approved until Shrey records a decision.
+Shrey approved PRIV-1 to PRIV-7 on 30 September 2026. PRIV-5 was approved with one modification.
 
-**PRIV-1 — What may be sent without a content-consent sheet?**
-*Recommend:* class H only: instruction text after local guards; the bounded clarification chain; opaque refs, kind, order, selection/focus; capability and selector vocabulary; locale/schema/request/revision; result status enums; **page count only for artifacts in the active projection** (current result, selected originals, pending-clarification targets, not all history); **file size only as a coarse bucket** (for example <1 MB, 1–10 MB, 10–50 MB, >50 MB).
-*Alternative:* keep today's exact sizes and page counts for all retained artifacts. This is simpler, but it leaves a linkable fingerprint (G1).
-*Service-only:* a guest/account identifier goes to the relay only.
+**PRIV-1 — What may be sent without a content-consent sheet? APPROVED.**
+Class H only:
+- the user instruction after local guards;
+- the bounded clarification chain;
+- opaque refs, kind, order, selection and focus;
+- capability and selector vocabulary;
+- locale, schema version, request ID and workspace revision;
+- result-status enums;
+- **page counts only for active projected artifacts** (current result, selected originals, pending-clarification targets);
+- **coarse file-size buckets only** (`FILE_SIZE_BUCKETS`, initially <1 MB, 1–10 MB, 10–50 MB, >50 MB);
+- guest/account identity **only to the atePDF relay, never in model context**.
 
-**PRIV-2 — What always requires explicit pre-send consent?**
-*Recommend:* every class C row: bytes, rasters/previews, extracted and OCR text of any length, local-understanding outputs, embeddings/hashes, embedded document metadata, exact sizes/dates, file names, and support bundles containing any of these. Consent also requires an approved purpose, and v1 has none.
+Exact file names, exact byte sizes and unrelated historical metadata must not be part of class H.
 
-**PRIV-3 — What is never allowed to leave?**
-*Recommend:* N-01 to N-10: passwords and secure-field values/handles, encryption keys and Keychain items, provider keys, tokens as payload or context, recognized chat secrets, local paths/bookmarks, device identifiers/fingerprints, payment credentials, unrelated app/clipboard data, and secret-bearing provider responses.
+**PRIV-2 — What always requires explicit pre-send consent? APPROVED.**
+All class C categories require explicit pre-send consent **and** an approved purpose. The v1 approved-purpose list is empty.
 
-**PRIV-4 — When does consent go stale?**
-*Recommend:*
-- **Single-use, exact-payload grants, with no standing permissions in v1.**
-- TTL of **5 minutes** after Allow.
-- Invalid on any section 5.3 reason, on relaunch or on Clear.
-- Class-A acknowledgement is stale whenever any route recipient's disclosure version or the policy version changes.
+**PRIV-3 — What is never allowed to leave? APPROVED.**
+All class N categories (N-01 to N-10) are never transferable, regardless of user consent, model output or retry.
 
-**PRIV-5 — How are sensitive pasted instructions handled?**
-*Recommend:*
-- Withhold recognized secrets entirely.
-- Block document-text overlap in v1.
-- An inline "check before sending" confirmation for card numbers, IBANs, long identifier runs and email addresses.
-- No automatic anonymisation or redact-and-send.
-- A visible destination indicator.
-- Local-only mode by turning hosted AI off.
+**PRIV-4 — When does consent go stale? APPROVED.**
+- Single-use, exact-payload grants.
+- `GRANT_TTL` of 5 minutes after Allow.
+- No standing "always allow" permission in v1.
+- Invalid on any file, revision, page, purpose, recipient, disclosure or policy change (section 5.3).
+- Invalid on app relaunch, workspace Clear, revocation or a backward clock.
+- The class-A acknowledgement is stale whenever any route recipient's disclosure version or the policy version changes.
 
-*Alternative:* no warning tier, relying on the disclosure alone. This produces fewer interruptions, but gives weaker PRIV-03 evidence.
+**PRIV-5 — How are sensitive instructions handled? APPROVED WITH ONE MODIFICATION.**
+- Recognised secrets are withheld entirely.
+- Detected document-text overlap is blocked in v1.
+- An inline warning/confirmation is shown for payment-card numbers, IBANs and long high-confidence identifier runs.
+- No automatic anonymisation.
+- No redact-and-send.
+- Local-only mode by disabling hosted AI.
 
-**PRIV-6 — What diagnostics and telemetry are on by default?**
-*Recommend:*
+**Modification:** an instruction that contains an ordinary email address does **not** get the additional sensitive-instruction warning. Email addresses stay covered by the general hosted-AI disclosure and the local guards. The aim is to avoid excessive friction.
+
+**PRIV-6 — What diagnostics and telemetry are on by default? APPROVED.**
 - A contentless local operational log with 7-day rolling retention.
-- Contentless relay operational logs without request bodies.
-- Apple OS-level crash reports only, with no third-party crash SDK.
-- **No product analytics** (SHR-95 decides any opt-in later).
-- Support diagnostics only when the user starts them, reviews them and they are contentless by default.
+- Contentless relay logs with no request bodies.
+- Apple OS crash reporting only.
+- No product analytics.
+- Support diagnostics only when the user explicitly starts and reviews them.
 
-**PRIV-7 — Which provider disclosures are mandatory before transfer?**
-*Recommend:*
-- Every field in section 9, for H and C alike. C additionally requires deletion behaviour.
-- The record must be verified against the live account configuration, not only public documents.
-- Any unknown field blocks transfer.
+**PRIV-7 — Which provider disclosures are mandatory before transfer? APPROVED.**
+- Every hop needs a complete provider/relay disclosure record as defined in section 9, verified against the live account configuration.
+- An unknown value for any of the following blocks transfer rather than being guessed: recipient, relay, retention, training, storage, subprocessors, relevant data region, human-review policy, and deletion behaviour where applicable.
 
 ## 15. Consequences
 
 - The v1 hosted planner can keep working under class A once SHR-79 records exist and SHR-36/37 land. Today's routine send stays, but it becomes disclosed, versioned and gated.
 - No document content can leave the Mac in v1 until a separately approved feature adds a purpose. When one does, the consent machinery already exists and is tested.
 - Grants are deliberately short-lived and exact, which trades some repeated prompts for deterministic, testable enforcement.
-- This ADR does not change `PRODUCT_V1.md`, runtime behaviour, tests or public copy. It supersedes ADR 0006's "no per-send confirmation" only in scope: that decision now applies to class H alone.
+- This ADR settles OPEN-08's consent policy; SHR-37 still builds and verifies the actual experience on the Mac. It does not change `PRODUCT_V1.md`, runtime behaviour, tests or public copy. It supersedes ADR 0006's "no per-send confirmation" only in scope: that decision now applies to class H alone.

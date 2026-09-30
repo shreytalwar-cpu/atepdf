@@ -138,6 +138,13 @@ export class WorkspaceVault{
   // the directory sync did not succeed). Carried across every later cleanup in this
   // session until an idempotent remove of that name (unlink + sync) succeeds.
   #unconfirmed=new Set<string>();
+  // Directories whose earlier unlinks (possibly by a previous process) are not yet
+  // durably committed. Every launch adds both: a previous process may have unlinked
+  // a file without a successful sync, and an empty listing is not proof of a durable
+  // removal. Each directory leaves the set only when its own sync succeeds, whichever
+  // checkpoint restored (a fallback included); until then cleanup stays pending and
+  // every later cleanup retries it.
+  #unsynced=new Set<'manifests'|'blobs'>();
   // Immutable blobs already durable, with the generation that sealed them.
   #blobs=new Map<string,number>();
   #refsByGeneration=new Map<number,Set<string>>();
@@ -273,6 +280,7 @@ export class WorkspaceVault{
   #blockClock(){this.mode='blocked';this.#blockedReason='clock';}
 
   async #open():Promise<RestoreOutcome>{
+    this.#unsynced.add('manifests').add('blobs');
     try{
       if(!await this.backend.exists(names.head)){
         // A head exists from before the first user data is written (the genesis
@@ -317,8 +325,14 @@ export class WorkspaceVault{
       // counted in usage and is retried at every later cleanup.
       let cleanupPending=!await this.#sweepStaging();
       // Retry cleanup of anything the head no longer references. After a fallback
-      // the newest manifest is unreadable, so its files are kept as evidence.
-      if(!recoveredPrevious){
+      // the newest manifest is unreadable, so its files are kept as evidence, but
+      // earlier unlinks still need both directory syncs before anything is reported
+      // clean. A failed sync keeps cleanup pending; later saves and launches retry it.
+      if(recoveredPrevious){
+        let confirmed=false;
+        for(let attempt=0;attempt<CLEANUP_ATTEMPTS&&!confirmed;attempt++)confirmed=await this.#syncDirectories();
+        if(!confirmed)cleanupPending=true;
+      }else{
         const keepRefs=new Set(checkpoint.artifacts.map(a=>a.ref)),keepGenerations=new Set([head.generation]);
         let predecessorRead=true;
         if(head.previousGeneration!==null){
@@ -552,11 +566,13 @@ export class WorkspaceVault{
    * - every name whose removal is unconfirmed, from this or any earlier cleanup in
    *   this session, has since had an idempotent remove (unlink + directory sync)
    *   succeed. Absence from a listing alone never confirms a removal;
-   * - at launch (options.confirm), both directories are also synced after the
-   *   clean listing. A previous process may have unlinked a file without a
-   *   successful sync; syncing the directory durably commits that unlink, and an
-   *   unlink lost to a crash reappears in the listing and is removed again. So the
-   *   obligation survives restarts without a separate on-disk record;
+   * - at launch (every path, a fallback restore included) and with options.confirm,
+   *   both directories are also synced after the clean listing. A previous process
+   *   may have unlinked a file without a successful sync; syncing the directory
+   *   durably commits that unlink, and an unlink lost to a crash reappears in the
+   *   listing and is removed again. So the obligation survives restarts without a
+   *   separate on-disk record. Each directory is confirmed independently, and one
+   *   whose sync fails stays owed, retried by every later cleanup until it succeeds;
    * - staging (options.staging: launch, clear, deletion; and every later cleanup
    *   while an earlier staging cleanup is unconfirmed or a write failed) is removed and
    *   verified empty by the backend. A failed listing, unlink or sync keeps cleanup
@@ -570,16 +586,13 @@ export class WorkspaceVault{
     };
     const unreferenced=async()=>[...await this.backend.list('manifests'),...await this.backend.list('blobs')].filter(name=>!kept(name));
     for(const name of [...this.#unconfirmed])if(kept(name))this.#unconfirmed.delete(name);
-    let directoriesConfirmed=!options.confirm;
+    if(options.confirm)this.#unsynced.add('manifests').add('blobs');
     for(let pass=0;pass<=CLEANUP_ATTEMPTS;pass++){
       let listed:string[];
       try{listed=await unreferenced();}catch{continue;}
       const targets=new Set([...listed,...this.#unconfirmed]);
       if(!targets.size){
-        if(!directoriesConfirmed){
-          try{await this.backend.syncDirectory('manifests');await this.backend.syncDirectory('blobs');directoriesConfirmed=true;}
-          catch{continue;}
-        }
+        if(!await this.#syncDirectories())continue;
         this.#cleanupPending=this.#stagingPending;return !this.#stagingPending;
       }
       if(pass===CLEANUP_ATTEMPTS)break;
@@ -588,6 +601,14 @@ export class WorkspaceVault{
       }
     }
     this.#cleanupPending=true;return false;
+  }
+  /** Sync every directory still owed a confirming sync, each independently; true once none is owed. */
+  async #syncDirectories():Promise<boolean>{
+    for(const directory of ['manifests','blobs'] as const){
+      if(!this.#unsynced.has(directory))continue;
+      try{await this.backend.syncDirectory(directory);this.#unsynced.delete(directory);}catch{/* still owed; retried later */}
+    }
+    return !this.#unsynced.size;
   }
   /** Remove staging files; true only once the backend verifies staging is empty. Until then it stays pending and is retried at every later cleanup. */
   async #sweepStaging():Promise<boolean>{

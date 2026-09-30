@@ -718,3 +718,92 @@ test('SHR-40 B2 a fallback restore keeps staging cleanup pending and counted unt
     assert.deepEqual(await stagingFiles(root),[]);assert.equal(fallback.vault.cleanupPending,false);assert.equal((await fallback.vault.usage()).pending,0);
   }finally{await done(root,outside);}
 });
+
+// Cross-review S40-01: a fallback restore keeps the newest generation as evidence, but
+// an earlier unlink whose directory sync failed is still owed a confirming sync of each
+// directory. An empty listing is never proof that the removal is durable.
+async function unsyncedUnlinkThenCorruptNewest(root:string,outside:string,keychain:TestKeychain,clock:Clock){
+  const app=await launch(root,keychain,clock);await populated(app,outside);
+  const orphan='blobs/file_s40_orphan.atw';await writeFile(join(root,orphan),new Uint8Array(64));
+  app.backend.fault=(step,name)=>{if(step==='remove-sync'&&name===orphan)failing('EIO');};
+  await app.say({role:'user',text:'Another checkpoint.'});
+  // The unlink ran but its directory sync failed: cleanup is owed, the file no longer lists.
+  assert.equal(app.vault.cleanupPending,true);
+  assert.ok(app.backend.calls.some(c=>c.op==='remove'&&c.name===orphan&&!c.ok));
+  assert.ok(!(await app.backend.list('blobs')).includes(orphan));
+  const {head}=await decrypted(root,keychain);
+  await corrupt(join(root,names.manifest(head.generation)),bytes=>{bytes[bytes.length-1]^=1;return bytes;});
+  return {newest:names.manifest(head.generation)};
+}
+const syncFaultIn=(directories:readonly string[]):Fault=>(step,name)=>{if(step==='dir-sync'&&directories.includes(name))failing('EIO');};
+const syncCalls=(app:App,from=0)=>app.backend.calls.slice(from).filter(c=>c.op==='syncDirectory');
+
+test('SHR-40 S40-01 fallback restore after an unconfirmed unlink keeps cleanup pending while directory syncs fail',async()=>{
+  const {root,outside,keychain,clock}=await scratch();
+  try{
+    const {newest}=await unsyncedUnlinkThenCorruptNewest(root,outside,keychain,clock);
+    // The reviewer's reproduction: relaunch with every explicit directory sync failing.
+    const next=await launch(root,keychain,clock,{fault:syncFaultIn(['manifests','blobs'])});
+    assert.equal(next.outcome.kind,'restored');assert.equal((next.outcome as {recoveredPrevious:boolean}).recoveredPrevious,true);
+    assert.equal((next.outcome as {cleanupPending:boolean}).cleanupPending,true,'failed cleanup must stay pending until both directory syncs succeed');
+    assert.equal(next.vault.cleanupPending,true);
+    // Launch attempted the confirming sync of each directory, and none succeeded.
+    const attempted=syncCalls(next);
+    assert.ok(attempted.some(c=>c.name==='manifests')&&attempted.some(c=>c.name==='blobs'),'both confirming syncs were attempted');
+    assert.ok(attempted.every(c=>!c.ok));
+    // The unreadable newest generation is kept as evidence, untouched.
+    assert.equal(await next.backend.exists(newest),true);
+    // A relaunch once syncing works confirms both directories, and only then is cleanup complete.
+    const healthy=await launch(root,keychain,clock);
+    assert.equal((healthy.outcome as {recoveredPrevious:boolean}).recoveredPrevious,true);
+    assert.deepEqual(syncCalls(healthy).filter(c=>c.ok).map(c=>c.name).sort(),['blobs','manifests']);
+    assert.equal((healthy.outcome as {cleanupPending:boolean}).cleanupPending,false);assert.equal(healthy.vault.cleanupPending,false);
+    assert.equal(await healthy.backend.exists(newest),true,'confirmation does not require deleting the evidence');
+  }finally{await done(root,outside);}
+});
+
+test('SHR-40 S40-01 each directory is confirmed independently; a failed one stays pending across later saves and launches until its sync succeeds',async()=>{
+  for(const failingDirs of [['manifests'],['blobs'],['manifests','blobs']] as const){
+    const label=failingDirs.join('+');
+    const {root,outside,keychain,clock}=await scratch();
+    try{
+      await unsyncedUnlinkThenCorruptNewest(root,outside,keychain,clock);
+      const first=await launch(root,keychain,clock,{fault:syncFaultIn(failingDirs)});
+      assert.equal((first.outcome as {recoveredPrevious:boolean}).recoveredPrevious,true,label);
+      assert.equal((first.outcome as {cleanupPending:boolean}).cleanupPending,true,label);
+      // The healthy directory was confirmed; the failing one was attempted and not.
+      for(const directory of ['manifests','blobs']){
+        const calls=syncCalls(first).filter(c=>c.name===directory);
+        assert.ok(calls.length>0,`${label}: ${directory} attempted`);
+        assert.equal(calls.some(c=>c.ok),!failingDirs.includes(directory as never),`${label}: ${directory}`);
+      }
+      // Relaunch while it still fails: still pending, retried again.
+      const again=await launch(root,keychain,clock,{fault:syncFaultIn(failingDirs)});
+      assert.equal((again.outcome as {cleanupPending:boolean}).cleanupPending,true,label);
+      assert.ok(syncCalls(again).some(c=>!c.ok),label);
+      // A later save while it still fails: still pending (an empty listing is not proof).
+      await again.say({role:'user',text:'Saved while syncing fails.'});
+      assert.equal(again.vault.cleanupPending,true,label);
+      if(failingDirs.length===2){
+        // Only one directory recovers: still pending until the other one is confirmed too.
+        again.backend.fault=syncFaultIn(['blobs']);
+        const mark=again.backend.calls.length;
+        await again.say({role:'user',text:'Manifests sync again.'});
+        assert.ok(syncCalls(again,mark).some(c=>c.name==='manifests'&&c.ok),label);
+        assert.equal(again.vault.cleanupPending,true,`${label}: blobs still owed`);
+      }
+      // Syncing works again: the next save confirms exactly what is still owed and clears it.
+      again.backend.fault=null;
+      const mark=again.backend.calls.length;
+      await again.say({role:'user',text:'Saved once syncing works.'});
+      assert.deepEqual(syncCalls(again,mark).filter(c=>c.ok).map(c=>c.name),failingDirs.length===2?['blobs']:[...failingDirs],label);
+      assert.equal(again.vault.cleanupPending,false,label);
+      // Nothing is owed any more: a later save syncs nothing extra, and a relaunch is clean.
+      const quiet=again.backend.calls.length;
+      await again.say({role:'user',text:'Nothing owed.'});
+      assert.deepEqual(syncCalls(again,quiet),[],label);
+      const relaunched=await launch(root,keychain,clock);
+      assert.equal(relaunched.outcome.kind,'restored',label);assert.equal((relaunched.outcome as {cleanupPending:boolean}).cleanupPending,false,label);
+    }finally{await done(root,outside);}
+  }
+});

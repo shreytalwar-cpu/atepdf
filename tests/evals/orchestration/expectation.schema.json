@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "corpusVersion": {
+      "const": "1.1.0"
+    },
+    "keys": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "const": "1.0"
+          },
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "turns": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "enum": [
+                    "plan",
+                    "clarify",
+                    "unsupported",
+                    "answer",
+                    "undo",
+                    "control",
+                    "rejected"
+                  ]
+                },
+                "reasonCodes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "clarify": {
+                  "type": "boolean"
+                },
+                "providerCalls": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "accepted": {
+                  "type": "boolean"
+                },
+                "tools": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "plan": {
+                  "type": "object"
+                },
+                "rejection": {
+                  "enum": [
+                    "privacy",
+                    "stale",
+                    "schema",
+                    "capability",
+                    "allowance"
+                  ]
+                },
+                "control": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "qualityConfirmation": {
+                  "type": "boolean"
+                },
+                "forbiddenTools": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "ordering": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "before": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "after": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "before",
+                      "after"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "clarificationChoices": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "clarificationTopic": {
+                  "enum": [
+                    "file",
+                    "page",
+                    "order"
+                  ]
+                },
+                "allowContentTransfer": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "status",
+                "reasonCodes",
+                "clarify",
+                "providerCalls",
+                "accepted",
+                "tools",
+                "forbiddenTools",
+                "ordering"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "id",
+          "turns"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "corpusVersion",
+    "keys"
+  ],
+  "additionalProperties": false
+}

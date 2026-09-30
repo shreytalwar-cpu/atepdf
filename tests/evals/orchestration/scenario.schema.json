@@ -1,0 +1,557 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "corpusVersion": {
+      "const": "1.1.0"
+    },
+    "scenarios": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "const": "1.0"
+          },
+          "id": {
+            "type": "string",
+            "pattern": "^O107-[0-9]{3}$"
+          },
+          "family": {
+            "type": "string",
+            "minLength": 1
+          },
+          "category": {
+            "enum": [
+              "single_tool",
+              "multi_step",
+              "follow_up",
+              "ambiguity",
+              "clarification",
+              "stale_revision",
+              "safe_controls",
+              "unsupported",
+              "local_selectors",
+              "collections",
+              "protect_last",
+              "quality_permission",
+              "entitlement",
+              "no_work"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "context": {
+            "type": "object",
+            "properties": {
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "files": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "ref": {
+                      "type": "string",
+                      "pattern": "^[A-Z][A-Za-z0-9_]{0,31}$"
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "pageCount": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 100
+                    },
+                    "text": {
+                      "type": "string"
+                    },
+                    "sourceRevision": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "sizeBytes": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  },
+                  "required": [
+                    "ref",
+                    "name",
+                    "pageCount",
+                    "sourceRevision"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "selectionRefs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[A-Z][A-Za-z0-9_]{0,31}$"
+                }
+              },
+              "originalRefs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[A-Z][A-Za-z0-9_]{0,31}$"
+                }
+              },
+              "history": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[A-Z][A-Za-z0-9_]{0,31}$"
+                }
+              },
+              "capabilities": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "selectors": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "refs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^[A-Z][A-Za-z0-9_]{0,31}$"
+                      }
+                    },
+                    "pages": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer",
+                        "minimum": 1
+                      }
+                    },
+                    "revision": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "certain": {
+                      "type": "boolean"
+                    },
+                    "evidence": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "refs",
+                    "pages",
+                    "revision",
+                    "certain"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "revision",
+              "files",
+              "selectionRefs",
+              "originalRefs",
+              "history",
+              "capabilities",
+              "selectors"
+            ],
+            "additionalProperties": false
+          },
+          "turns": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "event": {
+                  "enum": [
+                    "submit",
+                    "quick",
+                    "control"
+                  ]
+                },
+                "action": {
+                  "enum": [
+                    "merge",
+                    "remove",
+                    "ocr",
+                    "compress",
+                    "chain",
+                    "undo",
+                    "cancel",
+                    "start_over",
+                    "help",
+                    "privacy"
+                  ]
+                },
+                "page": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "context": {
+                  "type": "object",
+                  "properties": {
+                    "revision": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "files": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "ref": {
+                            "type": "string",
+                            "pattern": "^[A-Z][A-Za-z0-9_]{0,31}$"
+                          },
+                          "name": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "pageCount": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 100
+                          },
+                          "text": {
+                            "type": "string"
+                          },
+                          "sourceRevision": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "sizeBytes": {
+                            "type": "integer",
+                            "minimum": 0
+                          }
+                        },
+                        "required": [
+                          "ref",
+                          "name",
+                          "pageCount",
+                          "sourceRevision"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "selectionRefs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^[A-Z][A-Za-z0-9_]{0,31}$"
+                      }
+                    },
+                    "originalRefs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^[A-Z][A-Za-z0-9_]{0,31}$"
+                      }
+                    },
+                    "history": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^[A-Z][A-Za-z0-9_]{0,31}$"
+                      }
+                    },
+                    "capabilities": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "selectors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "kind": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "refs": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "pattern": "^[A-Z][A-Za-z0-9_]{0,31}$"
+                            }
+                          },
+                          "pages": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer",
+                              "minimum": 1
+                            }
+                          },
+                          "revision": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "certain": {
+                            "type": "boolean"
+                          },
+                          "evidence": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "kind",
+                          "refs",
+                          "pages",
+                          "revision",
+                          "certain"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "revision",
+                    "files",
+                    "selectionRefs",
+                    "originalRefs",
+                    "history",
+                    "capabilities",
+                    "selectors"
+                  ],
+                  "additionalProperties": false
+                },
+                "afterPlanningRevision": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "requestExtras": {
+                  "type": "object"
+                },
+                "qualityApproved": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "message",
+                "event"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          },
+          "consent": {
+            "type": "object",
+            "properties": {
+              "hostedCommands": {
+                "type": "boolean"
+              },
+              "receipt": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "operation": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "purpose": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "recipients": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "refs": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^[A-Z][A-Za-z0-9_]{0,31}$"
+                        }
+                      },
+                      "pages": {
+                        "type": "array",
+                        "items": {
+                          "type": "integer",
+                          "minimum": 1
+                        }
+                      },
+                      "revision": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "categories": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "revoked": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "operation",
+                      "purpose",
+                      "recipients",
+                      "refs",
+                      "pages",
+                      "revision",
+                      "categories",
+                      "revoked"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "hostedCommands",
+              "receipt"
+            ],
+            "additionalProperties": false
+          },
+          "entitlement": {
+            "type": "object",
+            "properties": {
+              "mode": {
+                "enum": [
+                  "not_integrated",
+                  "gateway_allowance"
+                ]
+              },
+              "remaining": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "mode",
+              "remaining"
+            ],
+            "additionalProperties": false
+          },
+          "canaries": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "kind": {
+                  "enum": [
+                    "document",
+                    "derived",
+                    "filename",
+                    "path",
+                    "secret"
+                  ]
+                }
+              },
+              "required": [
+                "value",
+                "kind"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "requirements": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "basis": {
+                "enum": [
+                  "current_contract",
+                  "approved_target"
+                ]
+              },
+              "notes": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "requirements",
+              "basis",
+              "notes"
+            ],
+            "additionalProperties": false
+          },
+          "priorConversation": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "role": {
+                  "enum": [
+                    "user",
+                    "assistant"
+                  ]
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "role",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "id",
+          "family",
+          "category",
+          "description",
+          "context",
+          "turns",
+          "consent",
+          "entitlement",
+          "canaries",
+          "metadata"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "corpusVersion",
+    "scenarios"
+  ],
+  "additionalProperties": false
+}

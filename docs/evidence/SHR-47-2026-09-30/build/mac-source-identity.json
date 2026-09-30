@@ -1,0 +1,9 @@
+{
+  "sourceCommit": "f7a62d4c9d9cebb6441a97a39a3dadfd55087196",
+  "archiveSha256": "162127b3b14d850072a78aaf0fc7b3f0dfe25506de05512dc8129b363a66cb6d",
+  "sourceRoot": "/tmp/atepdf-shr47-final-f7a62d4/mac-source-2",
+  "appleEngineSha256": "5db4f49ad3b560ac4eba59c477f625c4277cb94f69ea726532b86308556521cd",
+  "dependencyReuse": "APFS copy-on-write clone of already installed node_modules and Pods; no dependency install",
+  "podsManifestSha256": "5f8ac151ebf600cb2fb49fb8d850149c8c515be15427dbf17176ab9c2f3a23a9",
+  "androidSDKAvailable": false
+}

@@ -1,0 +1,30 @@
+{
+  "sourceCommit": "5e99a99fbe0503c5525f4d1c8aeb636c62533da6",
+  "scope": "Apple engine compilation only; no app linking/runtime acceptance",
+  "reasonForRetry": "Initial standalone invocation lacked standard Catalyst SDK iOSSupport framework/include search paths",
+  "argv": [
+    "xcrun",
+    "swiftc",
+    "-target",
+    "arm64-apple-ios16.4-macabi",
+    "-sdk",
+    "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+    "-F",
+    "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/iOSSupport/System/Library/Frameworks",
+    "-I",
+    "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/iOSSupport/usr/include",
+    "-module-cache-path",
+    "/tmp/atepdf-shr47-final-5e99a99/swift-catalyst-sdk-paths/module-cache",
+    "-parse-as-library",
+    "-emit-module",
+    "-module-name",
+    "AtepdfPDFEngine",
+    "apps/universal/modules/atepdf-pdf/ios/AtepdfPDFEngine.swift",
+    "-emit-module-path",
+    "/tmp/atepdf-shr47-final-5e99a99/swift-catalyst-sdk-paths/AtepdfPDFEngine.swiftmodule"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 10.19,
+  "log": "/tmp/atepdf-shr47-final-5e99a99/swift-catalyst-sdk-paths.log",
+  "DEVELOPER_DIR": "/Applications/Xcode-beta.app/Contents/Developer"
+}

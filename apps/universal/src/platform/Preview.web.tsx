@@ -5,7 +5,6 @@ import Minus from 'lucide-react-native/icons/minus';
 import Plus from 'lucide-react-native/icons/plus';
 import X from 'lucide-react-native/icons/x';
 import {Icon} from '../components/ui/icon';
-import {openPDF} from '@pdf/client';
 import type {PDFDocumentProxy,RenderTask} from 'pdfjs-dist';
 import './preview.css';
 
@@ -44,6 +43,7 @@ export default function Preview({bytes,count,onClose}:{bytes:Uint8Array;count:nu
     const abort=new AbortController();let pdf:PDFDocumentProxy|undefined,render:RenderTask|undefined;
     setLoading(true);setError('');
     void(async()=>{
+      const {openPDF}=await import('@pdf/client');
       pdf=await openPDF(bytes,abort.signal);abort.signal.throwIfAborted();
       const p=await pdf.getPage(page);abort.signal.throwIfAborted();
       const base=p.getViewport({scale:1}),target=canvas.current;if(!target)return;

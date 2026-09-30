@@ -6,23 +6,32 @@ import {join} from 'node:path';
 import {privateInstruction,assertInstructionSafe,hasRecognizedSecret,hasRejectedSecretDraft,safeOrdinaryText,SENSITIVE_DRAFT_MARKER} from '../../packages/planner/src/privacy';
 import {createGateway,validateRequest} from '../../packages/planner/src/gateway';
 import {LocalConfig} from '../../packages/planner/src/local-config';
-import {planWithOpenAI,MODEL} from '../../packages/planner/src/provider';
+import {planWithOpenAI as actualPlanWithOpenAI,MODEL} from '../../packages/planner/src/provider';
 import {PRODUCT_KNOWLEDGE} from '../../packages/planner/src/generated/product-knowledge';
-import {requestPlan} from '../../packages/planner/src/client';
+import {requestPlan,validatePlanResult} from '../../packages/planner/src/client';
 import {buildRequest,quickPlan} from '../../packages/contracts/src/protocol';
 import {isClarificationAnswer,pendingFromResponse,withPendingClarification} from '../../packages/planner/src/clarification';
 import {validateNonPlanResponse} from '../../packages/planner/src/reply';
 import type {Artifact} from '../../packages/core/src/local-file-store';
+import {fixture,wireRequest} from '../helpers/outbound-fixture';
+async function planWithOpenAI(...args:Parameters<typeof actualPlanWithOpenAI>){return actualPlanWithOpenAI(args[0],args[1],args[2],args[3],(await fixture()).boundary);}
 const files=[{ref:'file_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',kind:'pdf' as const,pageCount:2,sizeBytes:3000,encrypted:false as const},{ref:'file_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',kind:'pdf' as const,pageCount:1,sizeBytes:2000,encrypted:false as const}];
 const request=()=>buildRequest({revision:2,files,selected:files.map(f=>f.ref),focus:null,originals:files.map(f=>f.ref)},'Combine the two PDFs in the order added.');
 const clarify=(question:string,choices:string[]=[])=>( {schemaVersion:'1.0' as const,status:'clarify' as const,reasonCode:'ambiguous_reference' as const,steps:[],resultRefs:[],clarification:{question,choices}} );
+test('deferred response validator preserves complete validation and cancellation before admission',async()=>{
+  const req=request(),valid=quickPlan(req,'merge');
+  assert.deepEqual(await validatePlanResult(valid,req),valid);
+  await assert.rejects(validatePlanResult({...valid,planner:{...valid.planner,unexpected:'denied'}},req));
+  const abort=new AbortController(),pending=validatePlanResult(valid,req,abort.signal);
+  abort.abort();await assert.rejects(pending,{name:'AbortError'});
+});
 test('AI product knowledge is embedded from the maintained document, not a separate stale facts list',async()=>{
   assert.equal(PRODUCT_KNOWLEDGE,(await readFile('docs/AI_PRODUCT_KNOWLEDGE.md','utf8')).trim());
   assert.match(PRODUCT_KNOWLEDGE,/Android development is deferred/);
   assert.match(PRODUCT_KNOWLEDGE,/Do \*\*not\*\* claim the entire app is always offline/);
 });
 function memoryConfig(remaining=2){let locked=false;return {status:async()=>({connected:true,enabled:remaining>0,remaining}),reserve:async()=>{if(locked||remaining<=0)throw new Error('blocked');locked=true;remaining--;return {key:'sk-test-never-network',release:async()=>{locked=false;}};}};}
-async function setup(provider:Parameters<typeof createGateway>[1],remaining=2,timeoutMs=1000){const config=memoryConfig(remaining),gateway=createGateway(config,provider,{minIntervalMs:0,timeoutMs});const status=await (await gateway(new Request('http://localhost:3211/api/planner/status'))).json();const post=(body:unknown,headers:Record<string,string>={},signal?:AbortSignal)=>gateway(new Request('http://localhost:3211/api/planner',{method:'POST',headers:{origin:'http://localhost:3211','content-type':'application/json','x-atepdf-token':status.token,...headers},body:typeof body==='string'?body:JSON.stringify(body),signal}));return {config,gateway,post};}
+async function setup(provider:Parameters<typeof createGateway>[1],remaining=2,timeoutMs=1000){const config=memoryConfig(remaining),gateway=createGateway(config,provider,{minIntervalMs:0,timeoutMs,...(await fixture()).gatewayOptions});const status=await (await gateway(new Request('http://localhost:3211/api/planner/status'))).json();const post=(body:unknown,headers:Record<string,string>={},signal?:AbortSignal)=>gateway(new Request('http://localhost:3211/api/planner',{method:'POST',headers:{origin:'http://localhost:3211','content-type':'application/json','x-atepdf-token':status.token,...headers},body:typeof body==='string'?body:JSON.stringify(wireRequest(body)),signal}));return {config,gateway,post};}
 test('planner privacy: exact filename aliasing, local snippet/path/password/bytes rejection and positive manifest projection',()=>{
   const artifact={...files[0],name:'Customer [A]+.pdf',checksum:'c'.repeat(64),inspection:{pages:[{text:'CONFIDENTIAL CANARY every page must stay local',width:612,height:792,rotation:0}]}} as unknown as Artifact;
   assert.equal(privateInstruction('Please merge Customer [A]+.pdf with the second file',[artifact]),`Please merge ${artifact.ref} with the second file`);
@@ -117,10 +126,16 @@ test('gateway: partial, unavailable operation and future refs never form an exec
   }
 });
 test('gateway: concurrent requests, timeout and cancellation stop planning without retry or provider-error disclosure',async()=>{
-  let calls=0;const {post,config}=await setup(async(_r,_key,signal)=>{calls++;return await new Promise((_,reject)=>signal.addEventListener('abort',()=>reject(new Error('sk-LEAK-CANARY')),{once:true}));},2,30);
-  const first=post(request());await new Promise(resolve=>setTimeout(resolve,5));assert.equal((await post(request())).status,429);
+  let calls=0,entered=()=>{};
+  const nextEntry=()=>new Promise<void>(resolve=>{entered=resolve;});
+  const {post,config}=await setup(async(_r,_key,signal)=>{
+    calls++;entered();
+    return await new Promise((_,reject)=>signal.addEventListener('abort',()=>reject(new Error('sk-LEAK-CANARY')),{once:true}));
+  },2,1000);
+  const firstEntered=nextEntry(),first=post(request());await firstEntered;assert.equal((await post(request())).status,429);
   const result=await first;assert.equal(result.status,502);assert.doesNotMatch(await result.text(),/LEAK/);assert.equal(calls,1);assert.equal((await config.status()).remaining,1);
-  const abort=new AbortController();const cancelled=post(request(),{},abort.signal);setTimeout(()=>abort.abort(),5);assert.equal((await cancelled).status,499);assert.equal(calls,2);
+  const abort=new AbortController(),secondEntered=nextEntry(),cancelled=post(request(),{},abort.signal);
+  await secondEntered;abort.abort();assert.equal((await cancelled).status,499);assert.equal(calls,2);
 });
 test('local credential: private permissions, no symlink following, budget persists across gateway restarts',async()=>{
   const dir=await mkdtemp(join(tmpdir(),'atepdf-key-test-'));await chmod(dir,0o700);const config=new LocalConfig(dir);

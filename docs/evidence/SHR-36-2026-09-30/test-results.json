@@ -1,0 +1,57 @@
+{
+  "schema": "atepdf.shr36-test-evidence/1",
+  "date": "2026-09-30",
+  "branch": "codex/shr-36-outbound-privacy",
+  "baseCommit": "ff3e29184b5bf039cc8938f71bbdb60f93f4ba7b",
+  "latestObservedMainDuringValidation": "785397328a9871e013cb6b351881cc6507872b6f",
+  "scope": "implementation working tree committed with this evidence",
+  "syntheticOnly": true,
+  "realProviderCalls": 0,
+  "productionServicesAdded": 0,
+  "regression": {
+    "tests": 185,
+    "passed": 185,
+    "failed": 0,
+    "skipped": 0,
+    "corpusEnvironment": "bundled Python with reportlab, PIL and pypdf",
+    "covers": [
+      "SHR-36 outbound gate",
+      "all 40 ADR policy cases",
+      "planner",
+      "protocol conformance",
+      "native planner",
+      "local workflow",
+      "persistence",
+      "secret/privacy"
+    ]
+  },
+  "focused": {
+    "tests": 58,
+    "passed": 58,
+    "failed": 0,
+    "skipped": 0
+  },
+  "typescript": {
+    "web": "pass",
+    "universal": "pass"
+  },
+  "native": {
+    "debugURLSession": "pass",
+    "blockedCanaries": 21,
+    "blockedPlannerBytes": 0,
+    "releaseRouting": "pass",
+    "unapprovedReleasePairingBytes": 0,
+    "unapprovedReleasePlannerBytes": 0,
+    "pinnedTLS": "pass",
+    "invalidPinnedTLSHttpWrites": 0,
+    "applicationUI": "not_run",
+    "signedApp": "not_run"
+  },
+  "limitations": [
+    "Consent/disclosure/receipt rendered UI remains SHR-37",
+    "Verified signed recipient configuration remains SHR-79",
+    "Relay service remains SHR-80",
+    "No real provider or device validation",
+    "Support export and local log retention storage not implemented here"
+  ]
+}

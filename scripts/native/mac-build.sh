@@ -4,12 +4,23 @@ set -euo pipefail
 # Developer-only Catalyst build. No dependency install, provisioning, or publication.
 repo_root="$(cd -P "$(dirname "$0")/../.." && pwd)"
 launch=false
-case "${1:-}" in
-  '') ;;
-  --launch) launch=true ;;
-  *) echo 'Usage: scripts/native/mac-build.sh [--launch]' >&2; exit 2 ;;
-esac
-[[ $# -le 1 ]] || { echo 'Too many arguments.' >&2; exit 2; }
+synthetic=false
+for argument in "$@"; do
+  case "$argument" in
+    --launch) launch=true ;;
+    --synthetic-container) synthetic=true ;;
+    *) echo 'Usage: scripts/native/mac-build.sh [--synthetic-container] [--launch]' >&2; exit 2 ;;
+  esac
+done
+identifier=dev.atepdf.fresh.mac
+derived=.build/mac
+build_options=()
+if "$synthetic"; then
+  identifier=dev.atepdf.synthetic.mac
+  derived=.build/mac-synthetic
+  # Explicit compile-time test mode; no environment switch or production relaxation.
+  build_options+=("PRODUCT_BUNDLE_IDENTIFIER=$identifier" 'SWIFT_ACTIVE_COMPILATION_CONDITIONS=$(inherited) ATEPDF_SYNTHETIC_CONTAINER')
+fi
 [[ "$(uname -s)" == Darwin ]] || { echo 'A Mac with Xcode is required.' >&2; exit 1; }
 command -v node >/dev/null || { echo 'Node.js must be on PATH; no tools are installed by this script.' >&2; exit 1; }
 command -v python3 >/dev/null || { echo 'Python 3 is required for verified staging.' >&2; exit 1; }
@@ -24,7 +35,7 @@ mkdir -p .build
 build_log="$(mktemp "$repo_root/.build/mac-build-XXXXXX")"
 if ! xcodebuild -workspace apps/universal/ios/atepdf.xcworkspace -scheme atepdf \
   -configuration Release -destination "platform=macOS,variant=Mac Catalyst,arch=$(uname -m)" \
-  -derivedDataPath .build/mac CODE_SIGNING_ALLOWED=NO ONLY_ACTIVE_ARCH=YES \
+  -derivedDataPath "$derived" "${build_options[@]}" CODE_SIGNING_ALLOWED=NO ONLY_ACTIVE_ARCH=YES \
   -jobs 4 build > "$build_log" 2>&1; then
   echo "Mac application build failed. See $build_log" >&2
   tail -30 "$build_log" >&2
@@ -32,14 +43,14 @@ if ! xcodebuild -workspace apps/universal/ios/atepdf.xcworkspace -scheme atepdf 
 fi
 # A temporary stage avoids Finder metadata added by Documents file providers.
 # Only fresh generated artifacts are normalized; dependencies and source stay intact.
-python3 - "$repo_root" "$build_log" "$launch" <<'PY'
+python3 - "$repo_root" "$build_log" "$launch" "$derived" "$identifier" <<'PY'
 from pathlib import Path
 import datetime, hashlib, json, plistlib, shutil, subprocess, sys, tempfile
 
 repo, log, launch = Path(sys.argv[1]), sys.argv[2], sys.argv[3] == 'true'
-source = repo / '.build/mac/Build/Products/Release-maccatalyst/atepdf.app'
+source = repo / sys.argv[4] / 'Build/Products/Release-maccatalyst/atepdf.app'
 info = plistlib.loads((source / 'Contents/Info.plist').read_bytes())
-if info.get('CFBundleIdentifier') != 'dev.atepdf.fresh.mac':
+if info.get('CFBundleIdentifier') != sys.argv[5]:
     raise RuntimeError('Unexpected Mac identifier; refusing to sign or launch.')
 
 stage = Path(tempfile.mkdtemp(prefix='atepdf-mac-', dir='/private/tmp'))

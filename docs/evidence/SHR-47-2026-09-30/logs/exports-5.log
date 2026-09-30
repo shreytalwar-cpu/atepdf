@@ -1,0 +1,37 @@
+COMMAND ["/Users/shrey/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node", "/tmp/atepdf-shr47-final-f7a62d4/mac-source-2/node_modules/expo/bin/cli", "export", "--platform", "ios", "--output-dir", "/tmp/atepdf-shr47-final-885b41c/expo-ios"]
+CWD /tmp/atepdf-shr47-final-f7a62d4/mac-source-2/apps/universal
+Starting Metro Bundler
+
+| (node:41502) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:41502) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:41502) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:41502) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:41502) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:41502) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:41502) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+iOS Bundled 16886ms index.ts (1679 modules)
+
+› Assets (5):
+assets/approved-8-mark-source-crop.png (35KB)
+assets/approved-atepdf-wordmark-source-crop.png (34KB)
+assets/fixtures/appendix.pdf (2.1KB)
+assets/fixtures/brief.pdf (3.1KB)
+assets/paper.png (688KB)
+
+› ios bundles (1):
+_expo/static/js/ios/index-4c4336d9f68c5b35b7f11842b5a18ddb.hbc (5MB)
+
+› web bundles (1):
+_expo/static/css/global-d41d8cd98f00b204e9800998ecf8427e.css (0B)
+
+› Files (1):
+metadata.json (456B)
+
+Exported: /tmp/atepdf-shr47-final-885b41c/expo-ios

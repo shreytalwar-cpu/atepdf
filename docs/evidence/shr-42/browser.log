@@ -1,0 +1,25 @@
+
+Running 18 tests using 1 worker
+
+(node:64604) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/e2e/planner.spec.ts:11:5 › mocked planner transport: Send → redacted complete plan → real local result → follow-up (2.2s)
+  ✓   2 tests/e2e/planner.spec.ts:22:5 › clarification reply carries the original bounded task into a second model request (1.3s)
+  ✓   3 tests/e2e/planner.spec.ts:39:5 › a new unrelated request cannot complete an old clarification (1.8s)
+  ✓   4 tests/e2e/planner.spec.ts:52:5 › cancel and Start over clear a pending clarification (2.4s)
+  ✓   5 tests/e2e/planner.spec.ts:67:5 › AI-enabled quick PDF action stays local, while a product question uses the planner without changing files (1.6s)
+  ✓   6 tests/e2e/planner.spec.ts:77:5 › direct planner cancellation ignores a late complete plan and keeps local quick actions usable (2.1s)
+  ✓   7 tests/e2e/planner.spec.ts:93:5 › cancelling direct planner setup prevents any later model request (1.8s)
+  ✓   8 tests/e2e/planner.spec.ts:111:7 › direct planner incomplete response never changes a committed result (2.1s)
+  ✓   9 tests/e2e/planner.spec.ts:111:7 › direct planner stale response never changes a committed result (2.3s)
+  ✓  10 tests/e2e/planner.spec.ts:111:7 › direct planner truncated JSON response never changes a committed result (1.8s)
+  ✓  11 tests/e2e/planner.spec.ts:130:5 › direct balanced-compression plan retains its image-quality choice before local execution (1.9s)
+  ✓  12 tests/e2e/planner.spec.ts:138:5 › privacy rejection happens before transport, unknown instruction with no key stays honest (599ms)
+  ✓  13 tests/e2e/planner.spec.ts:145:5 › recognized secret is stopped before ordinary transcript retention (1.4s)
+  ✓  14 tests/e2e/planner.spec.ts:157:5 › secret clarification answer is excluded without consuming the pending task; unrelated text and reset stay safe (3.8s)
+  ✓  15 tests/e2e/planner.spec.ts:191:5 › recognized secret in a mocked provider failure is withheld from chat receipts (1.5s)
+  ✓  16 tests/e2e/planner.spec.ts:203:5 › masked local key setup keeps the key outside chat and model transport (677ms)
+  ✓  17 tests/e2e/planner.spec.ts:210:5 › native pairing code stays in a masked setup control and makes no model request (618ms)
+  ✓  18 tests/e2e/planner.spec.ts:220:5 › SHR-42: imports invalidate captured clarification before sending, and file numbering stays global (1.8s)
+
+  18 passed (33.4s)

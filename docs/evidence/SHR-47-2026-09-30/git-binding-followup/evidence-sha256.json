@@ -1,0 +1,25 @@
+{
+  "method": "SHA-256; excludes this manifest itself",
+  "files": {
+    "README.md": "82b77dcff815a47628f4666c9d96d47bfcf8528ea278816c9840bf76eee71187",
+    "focused-result.json": "bb7463d9c6159c3a78169ef49131a537a18b56852614a01375fc90bc260623b2",
+    "initial-sonar-check.json": "e0a9bc2143d9b78d1715701af65705ae1cd582b4891de520b92f46bec2ec4275",
+    "logs/focused-1.log": "f3a6ea76d6904b622b5ecfb0ccef63c0574e0bb10815458e4b8d58153e7f5a2b",
+    "logs/matrix-1.log": "0cc04071c37eb04180427bf739f53f45678f1ac1d8ad74b670f45eea892e331f",
+    "logs/regressions-1.log": "7252fbf0d6e11d08c2e51c81c12961dd4997753193c7f63534ddb94b452555bb",
+    "logs/types-1.log": "ff781cf28a908665ef28b2a02088bc61a4f6592e9545f52363a9989d41d0a016",
+    "logs/types-2.log": "ca3f795a1a49fb75b22286bfbabf41041df60df71172bba2e4f1131c3c801569",
+    "logs/types-3.log": "df81f6ee83bdc088e4ad0852283507361b1f443e471aabf0f09b6e858324a3d6",
+    "matrix/matrix.json": "8b65495a30e2d1dd4f273fe8eff4240596c9f65ba042d01f20df16c7e893b1e8",
+    "matrix/renders/geometry-font--merge_pdf-page-1.png": "5c1c2340c73ec07325c0ade27b4dcd9b0783d5fc8dce8ea152615008dc148ae7",
+    "matrix/renders/geometry-font--merge_pdf-page-3.png": "8abbb5ee144da41f7bee5ebf4fdb1e0b3cb01c742a285d16bd1a7594517b38dc",
+    "matrix/renders/hybrid-note--ocr_pdf-page-2.png": "8f46ea276576f11622efdc697cba29969d77b79d22a8370b80c984ed037c5f7c",
+    "matrix/renders/image-heavy--compress_pdf-page-1.png": "b42d384e09b06a60ac10e09d778827bd32e968ddf67908e7413b3aea77e218a9",
+    "matrix/renders/ordinary-brief--merge_pdf-page-1.png": "4de84aebbe32b076029ba18aae9550818e328f16188f5f8b094197a0d88ab6cd",
+    "matrix/summary.md": "b869eea6249db4f7993634e20d35f499a9f6e80a32eea46f86807db79c716e27",
+    "matrix-result.json": "54088496abea78abd485a8315a8428bb1a0524f3df90fd9e978d6266beba2700",
+    "regressions-result.json": "3c43af9ac240ed83efe806c763453728039055bdb05e4545f4493968bbbc98dc",
+    "source-identity.json": "0a8573f8fb9670e80c2db295dce75c723a0dd0b123343f68c8b240c523085709",
+    "types-result.json": "a8d1f27cca9c16d00876885a057e341c42c5e9fe812ccc1ddc8d7f8e1d4ff41e"
+  }
+}

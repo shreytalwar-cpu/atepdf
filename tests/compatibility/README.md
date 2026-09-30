@@ -6,7 +6,7 @@ Run from the repository root with the already installed Node dependencies and Go
 node --import tsx tests/compatibility/run.mts --output-dir /tmp/atepdf-matrix-new-run
 ```
 
-The output directory must not exist. The command emits schema-validated `matrix.json` and a generated `summary.md`. For representative output PNG references, also set `ATEPDF_MATRIX_RENDERER` to an already installed Poppler `pdftoppm` executable. No dependency is installed or downloaded. The [recorded source-bound run](../../docs/evidence/SHR-46-2026-09-30/README.md) contains exact commands, results and prioritized gaps.
+The output directory must not exist. The command emits schema-validated `matrix.json` and a generated `summary.md`. Current runs use schema v2, adding explicit production page-identity gate status/receipts for Merge and Remove Pages. Missing required receipts cannot count as supported. Historical v1 schemas/results remain unchanged and do not claim this later gate passed. For representative output PNG references, also set `ATEPDF_MATRIX_RENDERER` to an already installed Poppler `pdftoppm` executable. No dependency is installed or downloaded. The [original source-bound run](../../docs/evidence/SHR-46-2026-09-30/README.md) and [SHR-47 gate evidence](../../docs/evidence/SHR-47-2026-09-30/README.md) distinguish these source versions.
 
 The runner builds the current browser worker and a small test adapter into a temporary directory. It copies the pinned PDF.js/Tesseract/English assets from installed dependencies, starts its own random-port loopback listener and blocks every external browser request. It uses the existing `JobController`, `LocalFileStore`, validated local plan compiler and browser `runWorker/inspect/recognize` services. Real Tesseract recognition and browser JPEG encoding run; no recognition words or encoder outputs are mocked. This verifies those services without entering the application UI or model planner.
 
@@ -28,7 +28,7 @@ For every produced PDF, the runner writes a temporary saved copy, reads it back,
 
 The registry inventory describes current code, including historical scaffolding; it does not approve extra v1 tools. Policy expectations are copied from the corpus manifest without replacing approved policy with an observed outcome.
 
-Output hashes identify the measured saved artifacts, not a promise of deterministic PDF metadata across runs. Input hashes, source-file hashes, Git identity, runtime versions, scenarios and classifications make runs comparable. Tesseract results can vary across runtime/platform versions. Post-transform visual fidelity, OCR placement, semantic page identity in the product promotion boundary, and actual Mac-app/native acceptance remain SHR-47/48 and later platform work. Representative PNGs are rendering references, not an appearance-comparison verdict.
+Output hashes identify the measured saved artifacts, not a promise of deterministic PDF metadata across runs. Input hashes, source-file hashes, Git identity, runtime versions, scenarios and classifications make runs comparable. Tesseract results can vary across runtime/platform versions. SHR-47 adds structural page identity/order/geometry to Merge/Remove promotion. Post-transform visual fidelity, OCR placement and actual Mac-app acceptance remain SHR-48 and later platform work. Representative PNGs are rendering references, not an appearance-comparison verdict.
 
 Harness self-tests:
 

@@ -1,0 +1,66 @@
+name: PR verification
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: verification-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  core:
+    name: Shared and quality gates
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      VERIFY_EXPECTED_SHA: ${{ github.sha }}
+      VERIFY_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: .node-version
+      - name: Provision pinned plain pnpm in a runner-owned directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          pnpm_root="$RUNNER_TEMP/atepdf-pnpm"
+          mkdir -m 700 "$pnpm_root"
+          npm install --prefix "$pnpm_root" --no-save --package-lock=false --ignore-scripts --no-audit --no-fund pnpm@11.19.0
+          chmod -R go-w "$pnpm_root"
+          echo "$pnpm_root/node_modules/.bin" >> "$GITHUB_PATH"
+      - name: Clean checkout shared and quality gates
+        run: node scripts/verification/verify.mjs core
+      - name: Prove rejection gates and restoration
+        run: node scripts/verification/verify.mjs failures
+  browser:
+    name: Safe browser smoke
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      VERIFY_EXPECTED_SHA: ${{ github.sha }}
+      VERIFY_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: .node-version
+      - name: Provision pinned plain pnpm in a runner-owned directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          pnpm_root="$RUNNER_TEMP/atepdf-pnpm"
+          mkdir -m 700 "$pnpm_root"
+          npm install --prefix "$pnpm_root" --no-save --package-lock=false --ignore-scripts --no-audit --no-fund pnpm@11.19.0
+          chmod -R go-w "$pnpm_root"
+          echo "$pnpm_root/node_modules/.bin" >> "$GITHUB_PATH"
+      - name: Frozen install for browser OS prerequisite tool
+        run: pnpm install --frozen-lockfile
+      - name: Chromium system libraries
+        run: pnpm exec playwright install-deps chromium
+      - name: Fresh export and bounded local browser checks
+        run: node scripts/verification/verify.mjs browser

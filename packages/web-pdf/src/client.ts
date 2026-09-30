@@ -1,6 +1,7 @@
 import type {EngineRequest,EngineResult,Inspection,OCRPage} from './types';
 import {LIMITS} from './types';
 import type {PDFDocumentProxy} from 'pdfjs-dist';
+import {identifyPage,readPageBoxes} from './page-structure';
 
 export function runWorker<T=EngineResult>(request:EngineRequest,signal:AbortSignal,progress:(text:string)=>void=()=>{}):Promise<T>{
   return new Promise((resolve,reject)=>{
@@ -30,14 +31,17 @@ export async function inspect(bytes:Uint8Array,signal:AbortSignal):Promise<Inspe
   const abort=()=>{void doc.loadingTask.destroy();};signal.addEventListener('abort',abort,{once:true});
   try{
     if(doc.numPages<1||doc.numPages>LIMITS.pages)throw new Error('Use 1–100 pages.');
+    const boxes=await readPageBoxes(bytes),physical=[];
+    if(boxes.length!==doc.numPages)throw new Error('Page geometry verification failed. No new result was committed.');
     for(let n=1;n<=doc.numPages;n++){
       signal.throwIfAborted();const page=await doc.getPage(n),view=page.getViewport({scale:1});
       const content=await page.getTextContent();
       // Walk the display list too: a page count alone does not establish renderability.
       await page.getOperatorList();
+      physical.push(await identifyPage(page,boxes[n-1],document.createElement('canvas'),signal));
       pages.push({text:content.items.map(i=>'str' in i?i.str:'').join(' ').replace(/\s+/g,' ').trim(),width:view.width,height:view.height,rotation:page.rotate});page.cleanup();
     }
-    return {pages};
+    return {pages,structure:{version:1,reader:'pdfjs-raster96-v1',pages:physical}};
   }finally{signal.removeEventListener('abort',abort);await doc.loadingTask.destroy();}
 }
 

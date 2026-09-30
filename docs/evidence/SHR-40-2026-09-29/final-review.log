@@ -1,0 +1,11 @@
+✔ SHR-40 B1 a head removal that reports success but leaves the head is verified, and unlock/relaunch never restores the old conversation (980.003042ms)
+✔ SHR-40 B1 a head that stays present, or whose presence is unknown, is never reported deleted and nothing else is removed (258.076416ms)
+✔ SHR-40 B2 a fallback restore keeps staging cleanup pending and counted until a later save removes it (183.540875ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1863.493084

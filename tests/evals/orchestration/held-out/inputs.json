@@ -1,0 +1,1688 @@
+{
+  "corpusVersion": "1.1.0",
+  "scenarios": [
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-005",
+      "family": "O107-005",
+      "category": "single_tool",
+      "description": "Rotate page 2 by 90 degrees.",
+      "context": {
+        "revision": 4,
+        "files": [
+          {
+            "ref": "A",
+            "name": "synthetic-alpha.pdf",
+            "pageCount": 4,
+            "text": "Synthetic alpha evidence stays on the device",
+            "sourceRevision": 4
+          },
+          {
+            "ref": "B",
+            "name": "synthetic-beta.pdf",
+            "pageCount": 3,
+            "text": "Synthetic beta evidence stays on the device",
+            "sourceRevision": 4
+          }
+        ],
+        "selectionRefs": [
+          "A"
+        ],
+        "originalRefs": [
+          "A",
+          "B"
+        ],
+        "history": [],
+        "capabilities": [
+          "merge_pdf",
+          "select_pages",
+          "ocr_pdf",
+          "compress_pdf"
+        ],
+        "selectors": []
+      },
+      "turns": [
+        {
+          "message": "Rotate page 2 by 90 degrees.",
+          "event": "submit"
+        }
+      ],
+      "consent": {
+        "hostedCommands": true,
+        "receipt": null
+      },
+      "entitlement": {
+        "mode": "not_integrated",
+        "remaining": 20
+      },
+      "canaries": [],
+      "metadata": {
+        "requirements": [
+          "CONV-02",
+          "CONV-05",
+          "PRIV-01"
+        ],
+        "basis": "current_contract",
+        "notes": ""
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-006",
+      "family": "O107-006",
+      "category": "single_tool",
+      "description": "Make this smaller than five million bytes without quality loss.",
+      "context": {
+        "revision": 4,
+        "files": [
+          {
+            "ref": "A",
+            "name": "synthetic-alpha.pdf",
+            "pageCount": 4,
+            "text": "Synthetic alpha evidence stays on the device",
+            "sourceRevision": 4
+          },
+          {
+            "ref": "B",
+            "name": "synthetic-beta.pdf",
+            "pageCount": 3,
+            "text": "Synthetic beta evidence stays on the device",
+            "sourceRevision": 4
+          }
+        ],
+        "selectionRefs": [
+          "A"
+        ],
+        "originalRefs": [
+          "A",
+          "B"
+        ],
+        "history": [],
+        "capabilities": [
+          "merge_pdf",
+          "select_pages",
+          "ocr_pdf",
+          "compress_pdf"
+        ],
+        "selectors": []
+      },
+      "turns": [
+        {
+          "message": "Make this smaller than five million bytes without quality loss.",
+          "event": "submit"
+        }
+      ],
+      "consent": {
+        "hostedCommands": true,
+        "receipt": null
+      },
+      "entitlement": {
+        "mode": "not_integrated",
+        "remaining": 20
+      },
+      "canaries": [],
+      "metadata": {
+        "requirements": [
+          "CONV-02",
+          "CONV-05",
+          "PRIV-01"
+        ],
+        "basis": "current_contract",
+        "notes": ""
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-007",
+      "family": "O107-007",
+      "category": "single_tool",
+      "description": "Combine the second PDF before the first; do not OCR.",
+      "context": {
+        "revision": 4,
+        "files": [
+          {
+            "ref": "A",
+            "name": "synthetic-alpha.pdf",
+            "pageCount": 4,
+            "text": "Synthetic alpha evidence stays on the device",
+            "sourceRevision": 4
+          },
+          {
+            "ref": "B",
+            "name": "synthetic-beta.pdf",
+            "pageCount": 3,
+            "text": "Synthetic beta evidence stays on the device",
+            "sourceRevision": 4
+          }
+        ],
+        "selectionRefs": [
+          "A",
+          "B"
+        ],
+        "originalRefs": [
+          "A",
+          "B"
+        ],
+        "history": [],
+        "capabilities": [
+          "merge_pdf",
+          "select_pages",
+          "ocr_pdf",
+          "compress_pdf"
+        ],
+        "selectors": []
+      },
+      "turns": [
+        {
+          "message": "Combine the second PDF before the first; do not OCR.",
+          "event": "submit"
+        }
+      ],
+      "consent": {
+        "hostedCommands": true,
+        "receipt": null
+      },
+      "entitlement": {
+        "mode": "not_integrated",
+        "remaining": 20
+      },
+      "canaries": [],
+      "metadata": {
+        "requirements": [
+          "CONV-02",
+          "CONV-05",
+          "PRIV-01"
+        ],
+        "basis": "current_contract",
+        "notes": ""
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-010",
+      "family": "O107-010",
+      "category": "multi_step",
+      "description": "Remove page 2 from the second original, merge after the first, then losslessly compress.",
+      "context": {
+        "revision": 4,
+        "files": [
+          {
+            "ref": "A",
+            "name": "synthetic-alpha.pdf",
+            "pageCount": 4,
+            "text": "Synthetic alpha evidence stays on the device",
+            "sourceRevision": 4
+          },
+          {
+            "ref": "B",
+            "name": "synthetic-beta.pdf",
+            "pageCount": 3,
+            "text": "Synthetic beta evidence stays on the device",
+            "sourceRevision": 4
+          }
+        ],
+        "selectionRefs": [
+          "A",
+          "B"
+        ],
+        "originalRefs": [
+          "A",
+          "B"
+        ],
+        "history": [],
+        "capabilities": [
+          "merge_pdf",
+          "select_pages",
+          "ocr_pdf",
+          "compress_pdf"
+        ],
+        "selectors": []
+      },
+      "turns": [
+        {
+          "message": "Remove page 2 from the second original, merge after the first, then losslessly compress.",
+          "event": "submit"
+        }
+      ],
+      "consent": {
+        "hostedCommands": true,
+        "receipt": null
+      },
+      "entitlement": {
+        "mode": "not_integrated",
+        "remaining": 20
+      },
+      "canaries": [],
+      "metadata": {
+        "requirements": [
+          "CONV-02",
+          "CONV-05",
+          "PRIV-01"
+        ],
+        "basis": "current_contract",
+        "notes": ""
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-011",
+      "family": "O107-011",
+      "category": "multi_step",
+      "description": "Losslessly compress the selected original before adding English OCR.",
+      "context": {
+        "revision": 4,
+        "files": [
+          {
+            "ref": "A",
+            "name": "synthetic-alpha.pdf",
+            "pageCount": 4,
+            "text": "Synthetic alpha evidence stays on the device",
+            "sourceRevision": 4
+          },
+          {
+            "ref": "B",
+            "name": "synthetic-beta.pdf",
+            "pageCount": 3,
+            "text": "Synthetic beta evidence stays on the device",
+            "sourceRevision": 4
+          }
+        ],
+        "selectionRefs": [
+          "A"
+        ],
+        "originalRefs": [
+          "A",
+          "B"
+        ],
+        "history": [],
+        "capabilities": [
+          "merge_pdf",
+          "select_pages",
+          "ocr_pdf",
+          "compress_pdf"
+        ],
+        "selectors": []
+      },
+      "turns": [
+        {
+          "message": "Losslessly compress the selected original before adding English OCR.",
+          "event": "submit"
+        }
+      ],
+      "consent": {
+        "hostedCommands": true,
+        "receipt": null
+      },
+      "entitlement": {
+        "mode": "not_integrated",
+        "remaining": 20
+      },
+      "canaries": [],
+      "metadata": {
+        "requirements": [
+          "CONV-02",
+          "CONV-05",
+          "PRIV-01"
+        ],
+        "basis": "current_contract",
+        "notes": ""
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-016",
+      "family": "O107-016",
+      "category": "follow_up",
+      "description": "A newly committed result becomes the next turn target.",
+      "context": {
+        "revision": 4,
+        "files": [
+          {
+            "ref": "A",
+            "name": "synthetic-alpha.pdf",
+            "pageCount": 4,
+            "text": "Synthetic alpha evidence stays on the device",
+            "sourceRevision": 4
+          },
+          {
+            "ref": "B",
+            "name": "synthetic-beta.pdf",
+            "pageCount": 3,
+            "text": "Synthetic beta evidence stays on the device",
+            "sourceRevision": 4
+          }
+        ],
+        "selectionRefs": [
+          "A",
+          "B"
+        ],
+        "originalRefs": [
+          "A",
+          "B"
+        ],
+        "history": [],
+        "capabilities": [
+          "merge_pdf",
+          "select_pages",
+          "ocr_pdf",
+          "compress_pdf"
+        ],
+        "selectors": []
+      },
+      "turns": [
+        {
+          "message": "Merge these PDFs.",
+          "event": "submit"
+        },
+        {
+          "message": "Remove page 6 from that result.",
+          "event": "submit"
+        }
+      ],
+      "consent": {
+        "hostedCommands": true,
+        "receipt": null
+      },
+      "entitlement": {
+        "mode": "not_integrated",
+        "remaining": 20
+      },
+      "canaries": [],
+      "metadata": {
+        "requirements": [
+          "CONV-02",
+          "CONV-05",
+          "PRIV-01"
+        ],
+        "basis": "current_contract",
+        "notes": ""
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-017",
+      "family": "O107-017",
+      "category": "follow_up",
+      "description": "Compress the first original without quality loss, not the current result.",
+      "context": {
+        "revision": 4,
+        "files": [
+          {
+            "ref": "A",
+            "name": "synthetic-alpha.pdf",
+            "pageCount": 4,
+            "text": "Synthetic alpha evidence stays on the device",
+            "sourceRevision": 4
+          },
+          {
+            "ref": "B",
+            "name": "synthetic-beta.pdf",
+            "pageCount": 3,
+            "text": "Synthetic beta evidence stays on the device",
+            "sourceRevision": 4
+          },
+          {
+            "ref": "R1",
+            "name": "synthetic-first-result.pdf",
+            "pageCount": 7,
+            "sourceRevision": 3
+          },
+          {
+            "ref": "R2",
+            "name": "synthetic-current-result.pdf",
+            "pageCount": 6,
+            "sourceRevision": 4
+          }
+        ],
+        "selectionRefs": [
+          "A",
+          "B"
+        ],
+        "originalRefs": [
+          "A",
+          "B"
+        ],
+        "history": [
+          "R1",
+          "R2"
+        ],
+        "capabilities": [
+          "merge_pdf",
+          "select_pages",
+          "ocr_pdf",
+          "compress_pdf"
+        ],
+        "selectors": []
+      },
+      "turns": [
+        {
+          "message": "Compress the first original without quality loss, not the current result.",
+          "event": "submit"
+        }
+      ],
+      "consent": {
+        "hostedCommands": true,
+        "receipt": null
+      },
+      "entitlement": {
+        "mode": "not_integrated",
+        "remaining": 20
+      },
+      "canaries": [],
+      "metadata": {
+        "requirements": [
+          "CONV-02",
+          "CONV-05",
+          "PRIV-01"
+        ],
+        "basis": "current_contract",
+        "notes": ""
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-020",
+      "family": "O107-020",
+      "category": "ambiguity",
+      "description": "Compress synthetic-invoice.pdf.",
+      "context": {
+        "revision": 4,
+        "files": [
+          {
+            "ref": "A",
+            "name": "synthetic-invoice.pdf",
+            "pageCount": 4,
+            "text": "Synthetic alpha evidence stays on the device",
+            "sourceRevision": 4
+          },
+          {
+            "ref": "B",
+            "name": "synthetic-invoice.pdf",
+            "pageCount": 3,
+            "text": "Synthetic beta evidence stays on the device",
+            "sourceRevision": 4
+          }
+        ],
+        "selectionRefs": [
+          "A",
+          "B"
+        ],
+        "originalRefs": [
+          "A",
+          "B"
+        ],
+        "history": [],
+        "capabilities": [
+          "merge_pdf",
+          "select_pages",
+          "ocr_pdf",
+          "compress_pdf"
+        ],
+        "selectors": []
+      },
+      "turns": [
+        {
+          "message": "Compress synthetic-invoice.pdf.",
+          "event": "submit"
+        }
+      ],
+      "consent": {
+        "hostedCommands": true,
+        "receipt": null
+      },
+      "entitlement": {
+        "mode": "not_integrated",
+        "remaining": 20
+      },
+      "canaries": [
+        {
+          "value": "synthetic-invoice.pdf",
+          "kind": "filename"
+        }
+      ],
+      "metadata": {
+        "requirements": [
+          "CONV-02",
+          "CONV-05",
+          "PRIV-01"
+        ],
+        "basis": "current_contract",
+        "notes": ""
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-023",
+      "family": "O107-023",
+      "category": "clarification",
+      "description": "A complete explicit order should act directly.",
+      "context": {
+        "revision": 4,
+        "files": [
+          {
+            "ref": "A",
+            "name": "synthetic-alpha.pdf",
+            "pageCount": 4,
+            "text": "Synthetic alpha evidence stays on the device",
+            "sourceRevision": 4
+          },
+          {
+            "ref": "B",
+            "name": "synthetic-beta.pdf",
+            "pageCount": 3,
+            "text": "Synthetic beta evidence stays on the device",
+            "sourceRevision": 4
+          }
+        ],
+        "selectionRefs": [
+          "A",
+          "B"
+        ],
+        "originalRefs": [
+          "A",
+          "B"
+        ],
+        "history": [],
+        "capabilities": [
+          "merge_pdf",
+          "select_pages",
+          "ocr_pdf",
+          "compress_pdf"
+        ],
+        "selectors": []
+      },
+      "turns": [
+        {
+          "message": "Merge the first followed by the second in that order.",
+          "event": "submit"
+        }
+      ],
+      "consent": {
+        "hostedCommands": true,
+        "receipt": null
+      },
+      "entitlement": {
+        "mode": "not_integrated",
+        "remaining": 20
+      },
+      "canaries": [],
+      "metadata": {
+        "requirements": [
+          "CONV-02",
+          "CONV-05",
+          "PRIV-01"
+        ],
+        "basis": "current_contract",
+        "notes": ""
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-026",
+      "family": "O107-026",
+      "category": "stale_revision",
+      "description": "Changed focus invalidates the first-one answer.",
+      "context": {
+        "revision": 4,
+        "files": [
+          {
+            "ref": "A",
+            "name": "synthetic-alpha.pdf",
+            "pageCount": 4,
+            "text": "Synthetic alpha evidence stays on the device",
+            "sourceRevision": 4
+          },
+          {
+            "ref": "B",
+            "name": "synthetic-beta.pdf",
+            "pageCount": 3,
+            "text": "Synthetic beta evidence stays on the device",
+            "sourceRevision": 4
+          },
+          {
+            "ref": "R1",
+            "name": "synthetic-first-result.pdf",
+            "pageCount": 7,
+            "sourceRevision": 3
+          },
+          {
+            "ref": "R2",
+            "name": "synthetic-current-result.pdf",
+            "pageCount": 6,
+            "sourceRevision": 4
+          }
+        ],
+        "selectionRefs": [
+          "A",
+          "B"
+        ],
+        "originalRefs": [
+          "A",
+          "B"
+        ],
+        "history": [
+          "R1",
+          "R2"
+        ],
+        "capabilities": [
+          "merge_pdf",
+          "select_pages",
+          "ocr_pdf",
+          "compress_pdf"
+        ],
+        "selectors": []
+      },
+      "turns": [
+        {
+          "message": "Remove a page from the current result.",
+          "event": "submit"
+        },
+        {
+          "message": "The first one",
+          "event": "submit",
+          "context": {
+            "revision": 4,
+            "files": [
+              {
+                "ref": "A",
+                "name": "synthetic-alpha.pdf",
+                "pageCount": 4,
+                "text": "Synthetic alpha evidence stays on the device",
+                "sourceRevision": 4
+              },
+              {
+                "ref": "B",
+                "name": "synthetic-beta.pdf",
+                "pageCount": 3,
+                "text": "Synthetic beta evidence stays on the device",
+                "sourceRevision": 4
+              },
+              {
+                "ref": "R1",
+                "name": "synthetic-first-result.pdf",
+                "pageCount": 7,
+                "sourceRevision": 3
+              },
+              {
+                "ref": "R2",
+                "name": "synthetic-current-result.pdf",
+                "pageCount": 6,
+                "sourceRevision": 4
+              }
+            ],
+            "selectionRefs": [
+              "A",
+              "B"
+            ],
+            "originalRefs": [
+              "A",
+              "B"
+            ],
+            "history": [
+              "R1"
+            ],
+            "capabilities": [
+              "merge_pdf",
+              "select_pages",
+              "ocr_pdf",
+              "compress_pdf"
+            ],
+            "selectors": []
+          }
+        }
+      ],
+      "consent": {
+        "hostedCommands": true,
+        "receipt": null
+      },
+      "entitlement": {
+        "mode": "not_integrated",
+        "remaining": 20
+      },
+      "canaries": [],
+      "metadata": {
+        "requirements": [
+          "CONV-02",
+          "CONV-05",
+          "PRIV-01"
+        ],
+        "basis": "current_contract",
+        "notes": ""
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-027",
+      "family": "O107-027",
+      "category": "stale_revision",
+      "description": "Stale local blank-page evidence must not delete a page.",
+      "context": {
+        "revision": 4,
+        "files": [
+          {
+            "ref": "A",
+            "name": "synthetic-alpha.pdf",
+            "pageCount": 4,
+            "text": "Synthetic alpha evidence stays on the device",
+            "sourceRevision": 4
+          },
+          {
+            "ref": "B",
+            "name": "synthetic-beta.pdf",
+            "pageCount": 3,
+            "text": "Synthetic beta evidence stays on the device",
+            "sourceRevision": 4
+          }
+        ],
+        "selectionRefs": [
+          "A"
+        ],
+        "originalRefs": [
+          "A",
+          "B"
+        ],
+        "history": [],
+        "capabilities": [
+          "merge_pdf",
+          "select_pages",
+          "ocr_pdf",
+          "compress_pdf"
+        ],
+        "selectors": [
+          {
+            "kind": "blank_pages",
+            "refs": [
+              "A"
+            ],
+            "pages": [
+              2
+            ],
+            "revision": 3,
+            "certain": true
+          }
+        ]
+      },
+      "turns": [
+        {
+          "message": "Stale local blank-page evidence must not delete a page.",
+          "event": "submit"
+        }
+      ],
+      "consent": {
+        "hostedCommands": true,
+        "receipt": null
+      },
+      "entitlement": {
+        "mode": "not_integrated",
+        "remaining": 20
+      },
+      "canaries": [],
+      "metadata": {
+        "requirements": [
+          "CONV-02",
+          "CONV-05",
+          "PRIV-01"
+        ],
+        "basis": "approved_target",
+        "notes": "Selector capability is not integrated. Refusal is required until local revision binding exists."
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-030",
+      "family": "O107-030",
+      "category": "safe_controls",
+      "description": "Cancel a pending clarification then replace the task.",
+      "context": {
+        "revision": 4,
+        "files": [
+          {
+            "ref": "A",
+            "name": "synthetic-alpha.pdf",
+            "pageCount": 4,
+            "text": "Synthetic alpha evidence stays on the device",
+            "sourceRevision": 4
+          },
+          {
+            "ref": "B",
+            "name": "synthetic-beta.pdf",
+            "pageCount": 3,
+            "text": "Synthetic beta evidence stays on the device",
+            "sourceRevision": 4
+          }
+        ],
+        "selectionRefs": [
+          "A"
+        ],
+        "originalRefs": [
+          "A",
+          "B"
+        ],
+        "history": [],
+        "capabilities": [
+          "merge_pdf",
+          "select_pages",
+          "ocr_pdf",
+          "compress_pdf"
+        ],
+        "selectors": []
+      },
+      "turns": [
+        {
+          "message": "Remove a page.",
+          "event": "submit"
+        },
+        {
+          "message": "Never mind",
+          "event": "submit"
+        },
+        {
+          "message": "OCR this PDF in English.",
+          "event": "submit"
+        }
+      ],
+      "consent": {
+        "hostedCommands": true,
+        "receipt": null
+      },
+      "entitlement": {
+        "mode": "not_integrated",
+        "remaining": 20
+      },
+      "canaries": [],
+      "metadata": {
+        "requirements": [
+          "CONV-02",
+          "CONV-05",
+          "PRIV-01"
+        ],
+        "basis": "current_contract",
+        "notes": ""
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-034",
+      "family": "O107-034",
+      "category": "unsupported",
+      "description": "Redact private text from this PDF.",
+      "context": {
+        "revision": 4,
+        "files": [
+          {
+            "ref": "A",
+            "name": "synthetic-alpha.pdf",
+            "pageCount": 4,
+            "text": "Synthetic alpha evidence stays on the device",
+            "sourceRevision": 4
+          },
+          {
+            "ref": "B",
+            "name": "synthetic-beta.pdf",
+            "pageCount": 3,
+            "text": "Synthetic beta evidence stays on the device",
+            "sourceRevision": 4
+          }
+        ],
+        "selectionRefs": [
+          "A"
+        ],
+        "originalRefs": [
+          "A",
+          "B"
+        ],
+        "history": [],
+        "capabilities": [
+          "merge_pdf",
+          "select_pages",
+          "ocr_pdf",
+          "compress_pdf"
+        ],
+        "selectors": []
+      },
+      "turns": [
+        {
+          "message": "Redact private text from this PDF.",
+          "event": "submit"
+        }
+      ],
+      "consent": {
+        "hostedCommands": true,
+        "receipt": null
+      },
+      "entitlement": {
+        "mode": "not_integrated",
+        "remaining": 20
+      },
+      "canaries": [],
+      "metadata": {
+        "requirements": [
+          "CONV-02",
+          "CONV-05",
+          "PRIV-01"
+        ],
+        "basis": "approved_target",
+        "notes": "Expected local refusal; current typed route uses provider. Scripted reply does not measure language-model accuracy."
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-036",
+      "family": "O107-036",
+      "category": "unsupported",
+      "description": "Merge and then edit the text.",
+      "context": {
+        "revision": 4,
+        "files": [
+          {
+            "ref": "A",
+            "name": "synthetic-alpha.pdf",
+            "pageCount": 4,
+            "text": "Synthetic alpha evidence stays on the device",
+            "sourceRevision": 4
+          },
+          {
+            "ref": "B",
+            "name": "synthetic-beta.pdf",
+            "pageCount": 3,
+            "text": "Synthetic beta evidence stays on the device",
+            "sourceRevision": 4
+          }
+        ],
+        "selectionRefs": [
+          "A",
+          "B"
+        ],
+        "originalRefs": [
+          "A",
+          "B"
+        ],
+        "history": [],
+        "capabilities": [
+          "merge_pdf",
+          "select_pages",
+          "ocr_pdf",
+          "compress_pdf"
+        ],
+        "selectors": []
+      },
+      "turns": [
+        {
+          "message": "Merge and then edit the text.",
+          "event": "submit"
+        }
+      ],
+      "consent": {
+        "hostedCommands": true,
+        "receipt": null
+      },
+      "entitlement": {
+        "mode": "not_integrated",
+        "remaining": 20
+      },
+      "canaries": [],
+      "metadata": {
+        "requirements": [
+          "CONV-02",
+          "CONV-05",
+          "PRIV-01"
+        ],
+        "basis": "current_contract",
+        "notes": ""
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-039",
+      "family": "O107-039",
+      "category": "local_selectors",
+      "description": "OCR only scanned pages, preserving all other pages.",
+      "context": {
+        "revision": 4,
+        "files": [
+          {
+            "ref": "A",
+            "name": "synthetic-alpha.pdf",
+            "pageCount": 4,
+            "text": "Synthetic alpha evidence stays on the device",
+            "sourceRevision": 4
+          },
+          {
+            "ref": "B",
+            "name": "synthetic-beta.pdf",
+            "pageCount": 3,
+            "text": "Synthetic beta evidence stays on the device",
+            "sourceRevision": 4
+          }
+        ],
+        "selectionRefs": [
+          "A"
+        ],
+        "originalRefs": [
+          "A",
+          "B"
+        ],
+        "history": [],
+        "capabilities": [
+          "merge_pdf",
+          "select_pages",
+          "ocr_pdf",
+          "compress_pdf"
+        ],
+        "selectors": [
+          {
+            "kind": "scanned_pages",
+            "refs": [
+              "A"
+            ],
+            "pages": [
+              2,
+              4
+            ],
+            "revision": 4,
+            "certain": true
+          }
+        ]
+      },
+      "turns": [
+        {
+          "message": "OCR only scanned pages, preserving all other pages.",
+          "event": "submit"
+        }
+      ],
+      "consent": {
+        "hostedCommands": true,
+        "receipt": null
+      },
+      "entitlement": {
+        "mode": "not_integrated",
+        "remaining": 20
+      },
+      "canaries": [],
+      "metadata": {
+        "requirements": [
+          "CONV-02",
+          "CONV-05",
+          "PRIV-01"
+        ],
+        "basis": "current_contract",
+        "notes": ""
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-041",
+      "family": "O107-041",
+      "category": "collections",
+      "description": "Export pages 3 then 1 as separate PNG images.",
+      "context": {
+        "revision": 4,
+        "files": [
+          {
+            "ref": "A",
+            "name": "synthetic-alpha.pdf",
+            "pageCount": 4,
+            "text": "Synthetic alpha evidence stays on the device",
+            "sourceRevision": 4
+          },
+          {
+            "ref": "B",
+            "name": "synthetic-beta.pdf",
+            "pageCount": 3,
+            "text": "Synthetic beta evidence stays on the device",
+            "sourceRevision": 4
+          }
+        ],
+        "selectionRefs": [
+          "A"
+        ],
+        "originalRefs": [
+          "A",
+          "B"
+        ],
+        "history": [],
+        "capabilities": [
+          "merge_pdf",
+          "select_pages",
+          "ocr_pdf",
+          "compress_pdf"
+        ],
+        "selectors": []
+      },
+      "turns": [
+        {
+          "message": "Export pages 3 then 1 as separate PNG images.",
+          "event": "submit"
+        }
+      ],
+      "consent": {
+        "hostedCommands": true,
+        "receipt": null
+      },
+      "entitlement": {
+        "mode": "not_integrated",
+        "remaining": 20
+      },
+      "canaries": [],
+      "metadata": {
+        "requirements": [
+          "CONV-02",
+          "CONV-05",
+          "PRIV-01"
+        ],
+        "basis": "current_contract",
+        "notes": ""
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-043",
+      "family": "O107-043",
+      "category": "protect_last",
+      "description": "Protect and then remove page 3, keeping the final PDF protected.",
+      "context": {
+        "revision": 4,
+        "files": [
+          {
+            "ref": "A",
+            "name": "synthetic-alpha.pdf",
+            "pageCount": 4,
+            "text": "Synthetic alpha evidence stays on the device",
+            "sourceRevision": 4
+          },
+          {
+            "ref": "B",
+            "name": "synthetic-beta.pdf",
+            "pageCount": 3,
+            "text": "Synthetic beta evidence stays on the device",
+            "sourceRevision": 4
+          }
+        ],
+        "selectionRefs": [
+          "A"
+        ],
+        "originalRefs": [
+          "A",
+          "B"
+        ],
+        "history": [],
+        "capabilities": [
+          "merge_pdf",
+          "select_pages",
+          "ocr_pdf",
+          "compress_pdf"
+        ],
+        "selectors": []
+      },
+      "turns": [
+        {
+          "message": "Protect and then remove page 3, keeping the final PDF protected.",
+          "event": "submit"
+        }
+      ],
+      "consent": {
+        "hostedCommands": true,
+        "receipt": null
+      },
+      "entitlement": {
+        "mode": "not_integrated",
+        "remaining": 20
+      },
+      "canaries": [],
+      "metadata": {
+        "requirements": [
+          "CONV-02",
+          "CONV-05",
+          "PRIV-01"
+        ],
+        "basis": "current_contract",
+        "notes": ""
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-048",
+      "family": "O107-048",
+      "category": "quality_permission",
+      "description": "Nested document fields are rejected before sending.",
+      "context": {
+        "revision": 4,
+        "files": [
+          {
+            "ref": "A",
+            "name": "synthetic-alpha.pdf",
+            "pageCount": 4,
+            "text": "Synthetic alpha evidence stays on the device",
+            "sourceRevision": 4
+          },
+          {
+            "ref": "B",
+            "name": "synthetic-beta.pdf",
+            "pageCount": 3,
+            "text": "Synthetic beta evidence stays on the device",
+            "sourceRevision": 4
+          }
+        ],
+        "selectionRefs": [
+          "A"
+        ],
+        "originalRefs": [
+          "A",
+          "B"
+        ],
+        "history": [],
+        "capabilities": [
+          "merge_pdf",
+          "select_pages",
+          "ocr_pdf",
+          "compress_pdf"
+        ],
+        "selectors": []
+      },
+      "turns": [
+        {
+          "message": "Nested document fields are rejected before sending.",
+          "event": "submit",
+          "requestExtras": {
+            "diagnostics": {
+              "ocrText": "NESTED-CONTENT-CANARY"
+            }
+          }
+        }
+      ],
+      "consent": {
+        "hostedCommands": true,
+        "receipt": null
+      },
+      "entitlement": {
+        "mode": "not_integrated",
+        "remaining": 20
+      },
+      "canaries": [
+        {
+          "value": "NESTED-CONTENT-CANARY",
+          "kind": "derived"
+        }
+      ],
+      "metadata": {
+        "requirements": [
+          "CONV-02",
+          "CONV-05",
+          "PRIV-01"
+        ],
+        "basis": "current_contract",
+        "notes": ""
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-050",
+      "family": "O107-050",
+      "category": "quality_permission",
+      "description": "A stale content receipt cannot authorize document analysis.",
+      "context": {
+        "revision": 4,
+        "files": [
+          {
+            "ref": "A",
+            "name": "synthetic-alpha.pdf",
+            "pageCount": 4,
+            "text": "Synthetic alpha evidence stays on the device",
+            "sourceRevision": 4
+          },
+          {
+            "ref": "B",
+            "name": "synthetic-beta.pdf",
+            "pageCount": 3,
+            "text": "Synthetic beta evidence stays on the device",
+            "sourceRevision": 4
+          }
+        ],
+        "selectionRefs": [
+          "A"
+        ],
+        "originalRefs": [
+          "A",
+          "B"
+        ],
+        "history": [],
+        "capabilities": [
+          "merge_pdf",
+          "select_pages",
+          "ocr_pdf",
+          "compress_pdf"
+        ],
+        "selectors": []
+      },
+      "turns": [
+        {
+          "message": "A stale content receipt cannot authorize document analysis.",
+          "event": "submit"
+        }
+      ],
+      "consent": {
+        "hostedCommands": true,
+        "receipt": {
+          "operation": "analyse",
+          "purpose": "find_invoice",
+          "recipients": [
+            "openai",
+            "atepdf-relay"
+          ],
+          "refs": [
+            "A"
+          ],
+          "pages": [
+            1
+          ],
+          "revision": 3,
+          "categories": [
+            "ocr"
+          ],
+          "revoked": false
+        }
+      },
+      "entitlement": {
+        "mode": "not_integrated",
+        "remaining": 20
+      },
+      "canaries": [],
+      "metadata": {
+        "requirements": [
+          "CONV-02",
+          "CONV-05",
+          "PRIV-01"
+        ],
+        "basis": "approved_target",
+        "notes": "No cloud content service is approved; adapter sends only commands, while privacy self-tests mutate content transfers."
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-051",
+      "family": "O107-051",
+      "category": "quality_permission",
+      "description": "A changed recipient cannot reuse permission.",
+      "context": {
+        "revision": 4,
+        "files": [
+          {
+            "ref": "A",
+            "name": "synthetic-alpha.pdf",
+            "pageCount": 4,
+            "text": "Synthetic alpha evidence stays on the device",
+            "sourceRevision": 4
+          },
+          {
+            "ref": "B",
+            "name": "synthetic-beta.pdf",
+            "pageCount": 3,
+            "text": "Synthetic beta evidence stays on the device",
+            "sourceRevision": 4
+          }
+        ],
+        "selectionRefs": [
+          "A"
+        ],
+        "originalRefs": [
+          "A",
+          "B"
+        ],
+        "history": [],
+        "capabilities": [
+          "merge_pdf",
+          "select_pages",
+          "ocr_pdf",
+          "compress_pdf"
+        ],
+        "selectors": []
+      },
+      "turns": [
+        {
+          "message": "A changed recipient cannot reuse permission.",
+          "event": "submit"
+        }
+      ],
+      "consent": {
+        "hostedCommands": true,
+        "receipt": {
+          "operation": "analyse",
+          "purpose": "find_invoice",
+          "recipients": [
+            "atepdf-relay"
+          ],
+          "refs": [
+            "A"
+          ],
+          "pages": [
+            1
+          ],
+          "revision": 4,
+          "categories": [
+            "ocr"
+          ],
+          "revoked": false
+        }
+      },
+      "entitlement": {
+        "mode": "not_integrated",
+        "remaining": 20
+      },
+      "canaries": [],
+      "metadata": {
+        "requirements": [
+          "CONV-02",
+          "CONV-05",
+          "PRIV-01"
+        ],
+        "basis": "approved_target",
+        "notes": ""
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-054",
+      "family": "O107-054",
+      "category": "entitlement",
+      "description": "Help remains accessible after allowance exhaustion.",
+      "context": {
+        "revision": 4,
+        "files": [
+          {
+            "ref": "A",
+            "name": "synthetic-alpha.pdf",
+            "pageCount": 4,
+            "text": "Synthetic alpha evidence stays on the device",
+            "sourceRevision": 4
+          },
+          {
+            "ref": "B",
+            "name": "synthetic-beta.pdf",
+            "pageCount": 3,
+            "text": "Synthetic beta evidence stays on the device",
+            "sourceRevision": 4
+          }
+        ],
+        "selectionRefs": [
+          "A",
+          "B"
+        ],
+        "originalRefs": [
+          "A",
+          "B"
+        ],
+        "history": [],
+        "capabilities": [
+          "merge_pdf",
+          "select_pages",
+          "ocr_pdf",
+          "compress_pdf"
+        ],
+        "selectors": []
+      },
+      "turns": [
+        {
+          "message": "Help remains accessible after allowance exhaustion.",
+          "event": "control",
+          "action": "help"
+        }
+      ],
+      "consent": {
+        "hostedCommands": true,
+        "receipt": null
+      },
+      "entitlement": {
+        "mode": "gateway_allowance",
+        "remaining": 0
+      },
+      "canaries": [],
+      "metadata": {
+        "requirements": [
+          "CONV-02",
+          "CONV-05",
+          "PRIV-01"
+        ],
+        "basis": "current_contract",
+        "notes": ""
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-057",
+      "family": "O107-057",
+      "category": "no_work",
+      "description": "Privacy settings must not require a provider call.",
+      "context": {
+        "revision": 4,
+        "files": [
+          {
+            "ref": "A",
+            "name": "synthetic-alpha.pdf",
+            "pageCount": 4,
+            "text": "Synthetic alpha evidence stays on the device",
+            "sourceRevision": 4
+          },
+          {
+            "ref": "B",
+            "name": "synthetic-beta.pdf",
+            "pageCount": 3,
+            "text": "Synthetic beta evidence stays on the device",
+            "sourceRevision": 4
+          }
+        ],
+        "selectionRefs": [
+          "A",
+          "B"
+        ],
+        "originalRefs": [
+          "A",
+          "B"
+        ],
+        "history": [],
+        "capabilities": [
+          "merge_pdf",
+          "select_pages",
+          "ocr_pdf",
+          "compress_pdf"
+        ],
+        "selectors": []
+      },
+      "turns": [
+        {
+          "message": "Privacy settings must not require a provider call.",
+          "event": "control",
+          "action": "privacy"
+        }
+      ],
+      "consent": {
+        "hostedCommands": true,
+        "receipt": null
+      },
+      "entitlement": {
+        "mode": "not_integrated",
+        "remaining": 20
+      },
+      "canaries": [],
+      "metadata": {
+        "requirements": [
+          "CONV-02",
+          "CONV-05",
+          "PRIV-01"
+        ],
+        "basis": "current_contract",
+        "notes": ""
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-058",
+      "family": "O107-058",
+      "category": "follow_up",
+      "description": "Compress synthetic-beta.pdf without quality loss.",
+      "context": {
+        "revision": 4,
+        "files": [
+          {
+            "ref": "A",
+            "name": "synthetic-alpha.pdf",
+            "pageCount": 4,
+            "text": "Synthetic alpha evidence stays on the device",
+            "sourceRevision": 4
+          },
+          {
+            "ref": "B",
+            "name": "synthetic-beta.pdf",
+            "pageCount": 3,
+            "text": "Synthetic beta evidence stays on the device",
+            "sourceRevision": 4
+          }
+        ],
+        "selectionRefs": [
+          "A",
+          "B"
+        ],
+        "originalRefs": [
+          "A",
+          "B"
+        ],
+        "history": [],
+        "capabilities": [
+          "merge_pdf",
+          "select_pages",
+          "ocr_pdf",
+          "compress_pdf"
+        ],
+        "selectors": []
+      },
+      "turns": [
+        {
+          "message": "Compress synthetic-beta.pdf without quality loss.",
+          "event": "submit"
+        }
+      ],
+      "consent": {
+        "hostedCommands": true,
+        "receipt": null
+      },
+      "entitlement": {
+        "mode": "not_integrated",
+        "remaining": 20
+      },
+      "canaries": [
+        {
+          "value": "synthetic-beta.pdf",
+          "kind": "filename"
+        }
+      ],
+      "metadata": {
+        "requirements": [
+          "CONV-02",
+          "CONV-05",
+          "PRIV-01"
+        ],
+        "basis": "current_contract",
+        "notes": ""
+      }
+    }
+  ]
+}

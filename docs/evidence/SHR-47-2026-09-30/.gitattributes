@@ -1,0 +1,3 @@
+# Raw test/compiler diagnostics retain their original indentation and bytes.
+# This rule applies only to logs in this new evidence directory.
+**/*.log whitespace=-blank-at-eol

@@ -12,8 +12,8 @@ export function isClarificationAnswer(text:string,pending:PendingClarification):
   if(!answer||answer.length>100||answer.includes('\n')||newTask.test(answer))return false;
   const value=normalise(answer);
   if(pending.choices.some(choice=>normalise(choice)===value||normalise(choice)===value.replace(/^the /,'')))return true;
-  if(/^(?:(?:page|pages|file|document|item) )?\d{1,3}(?: and \d{1,3})?$/.test(value))return true;
-  if(/^(?:(?:page|file|document|item) )?(?:first|second|third|fourth|last)(?: one)?$/.test(value))return true;
+  if(/^(?:(?:page|pages|file|document|original|result|item) )?\d+(?: and \d+)?$/.test(value))return true;
+  if(/^(?:(?:page|file|document|original|result|item) )?(?:first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh|twelfth|thirteenth|fourteenth|fifteenth|sixteenth|seventeenth|eighteenth|nineteenth|twentieth|last)(?: (?:one|file|document|original|result|item))?$/.test(value))return true;
   if(pending.choices.length)return false;
   return /^[\p{L}\p{N}][\p{L}\p{N} '-]*$/u.test(answer)&&answer.split(/\s+/).length<=5;
 }
@@ -46,10 +46,10 @@ export function validatePendingClarification(request:Request):void{
   const pending=request.pendingClarification;
   if(!pending)return;
   validateLocalContext(request);
-  assertInstructionSafe(pending.originalInstruction);
+  assertInstructionSafe(pending.originalInstruction,true);
   validateNonPlanResponse({schemaVersion:'1.0',status:'clarify',reasonCode:'ambiguous_reference',steps:[],resultRefs:[],clarification:{question:pending.question,choices:pending.choices}});
   for(const answer of pending.answers){
     validateNonPlanResponse({schemaVersion:'1.0',status:'clarify',reasonCode:'ambiguous_reference',steps:[],resultRefs:[],clarification:{question:answer.question,choices:[]}});
-    assertInstructionSafe(answer.answer);
+    assertInstructionSafe(answer.answer,true);
   }
 }

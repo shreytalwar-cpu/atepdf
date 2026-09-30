@@ -1,0 +1,1292 @@
+{
+  "corpusVersion": "1.1.0",
+  "keys": [
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-001",
+      "turns": [
+        {
+          "status": "plan",
+          "reasonCodes": [],
+          "clarify": false,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [
+            "merge_pdf"
+          ],
+          "forbiddenTools": [],
+          "ordering": [],
+          "plan": {
+            "schemaVersion": "1.0",
+            "status": "plan",
+            "reasonCode": null,
+            "steps": [
+              {
+                "id": "s_1",
+                "operation": "merge_pdf",
+                "inputs": [
+                  "A",
+                  "B"
+                ],
+                "outputRef": "out_stage1",
+                "params": {
+                  "ordering": "as_provided"
+                }
+              }
+            ],
+            "resultRefs": [
+              "out_stage1"
+            ],
+            "clarification": null
+          }
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-002",
+      "turns": [
+        {
+          "status": "plan",
+          "reasonCodes": [],
+          "clarify": false,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [
+            "select_pages"
+          ],
+          "forbiddenTools": [],
+          "ordering": [],
+          "plan": {
+            "schemaVersion": "1.0",
+            "status": "plan",
+            "reasonCode": null,
+            "steps": [
+              {
+                "id": "s_1",
+                "operation": "select_pages",
+                "inputs": [
+                  "A"
+                ],
+                "outputRef": "out_stage1",
+                "params": {
+                  "action": "remove",
+                  "pages": {
+                    "mode": "explicit",
+                    "indices": [
+                      3
+                    ]
+                  }
+                }
+              }
+            ],
+            "resultRefs": [
+              "out_stage1"
+            ],
+            "clarification": null
+          }
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-003",
+      "turns": [
+        {
+          "status": "plan",
+          "reasonCodes": [],
+          "clarify": false,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [
+            "compress_pdf"
+          ],
+          "forbiddenTools": [],
+          "ordering": [],
+          "plan": {
+            "schemaVersion": "1.0",
+            "status": "plan",
+            "reasonCode": null,
+            "steps": [
+              {
+                "id": "s_1",
+                "operation": "compress_pdf",
+                "inputs": [
+                  "A"
+                ],
+                "outputRef": "out_stage1",
+                "params": {
+                  "targetBytes": null,
+                  "preset": "balanced",
+                  "batchMode": "single"
+                }
+              }
+            ],
+            "resultRefs": [
+              "out_stage1"
+            ],
+            "clarification": null
+          },
+          "qualityConfirmation": true
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-004",
+      "turns": [
+        {
+          "status": "plan",
+          "reasonCodes": [],
+          "clarify": false,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [
+            "ocr_pdf"
+          ],
+          "forbiddenTools": [],
+          "ordering": [],
+          "plan": {
+            "schemaVersion": "1.0",
+            "status": "plan",
+            "reasonCode": null,
+            "steps": [
+              {
+                "id": "s_1",
+                "operation": "ocr_pdf",
+                "inputs": [
+                  "A"
+                ],
+                "outputRef": "out_stage1",
+                "params": {
+                  "languages": [
+                    "eng"
+                  ],
+                  "existingText": "preserve",
+                  "batchMode": "single"
+                }
+              }
+            ],
+            "resultRefs": [
+              "out_stage1"
+            ],
+            "clarification": null
+          }
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-008",
+      "turns": [
+        {
+          "status": "plan",
+          "reasonCodes": [],
+          "clarify": false,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [
+            "merge_pdf",
+            "select_pages",
+            "compress_pdf"
+          ],
+          "forbiddenTools": [],
+          "ordering": [],
+          "plan": {
+            "schemaVersion": "1.0",
+            "status": "plan",
+            "reasonCode": null,
+            "steps": [
+              {
+                "id": "s_1",
+                "operation": "merge_pdf",
+                "inputs": [
+                  "A",
+                  "B"
+                ],
+                "outputRef": "out_stage1",
+                "params": {
+                  "ordering": "as_provided"
+                }
+              },
+              {
+                "id": "s_2",
+                "operation": "select_pages",
+                "inputs": [
+                  "out_stage1"
+                ],
+                "outputRef": "out_stage2",
+                "params": {
+                  "action": "remove",
+                  "pages": {
+                    "mode": "explicit",
+                    "indices": [
+                      3
+                    ]
+                  }
+                }
+              },
+              {
+                "id": "s_3",
+                "operation": "compress_pdf",
+                "inputs": [
+                  "out_stage2"
+                ],
+                "outputRef": "out_stage3",
+                "params": {
+                  "targetBytes": null,
+                  "preset": "balanced",
+                  "batchMode": "single"
+                }
+              }
+            ],
+            "resultRefs": [
+              "out_stage3"
+            ],
+            "clarification": null
+          },
+          "qualityConfirmation": true
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-009",
+      "turns": [
+        {
+          "status": "plan",
+          "reasonCodes": [],
+          "clarify": false,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [
+            "merge_pdf",
+            "ocr_pdf",
+            "compress_pdf"
+          ],
+          "forbiddenTools": [],
+          "ordering": [],
+          "plan": {
+            "schemaVersion": "1.0",
+            "status": "plan",
+            "reasonCode": null,
+            "steps": [
+              {
+                "id": "s_1",
+                "operation": "merge_pdf",
+                "inputs": [
+                  "A",
+                  "B"
+                ],
+                "outputRef": "out_stage1",
+                "params": {
+                  "ordering": "as_provided"
+                }
+              },
+              {
+                "id": "s_2",
+                "operation": "ocr_pdf",
+                "inputs": [
+                  "out_stage1"
+                ],
+                "outputRef": "out_stage2",
+                "params": {
+                  "languages": [
+                    "eng"
+                  ],
+                  "existingText": "preserve",
+                  "batchMode": "single"
+                }
+              },
+              {
+                "id": "s_3",
+                "operation": "compress_pdf",
+                "inputs": [
+                  "out_stage2"
+                ],
+                "outputRef": "out_stage3",
+                "params": {
+                  "targetBytes": null,
+                  "preset": "balanced",
+                  "batchMode": "single"
+                }
+              }
+            ],
+            "resultRefs": [
+              "out_stage3"
+            ],
+            "clarification": null
+          },
+          "qualityConfirmation": true
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-012",
+      "turns": [
+        {
+          "status": "clarify",
+          "reasonCodes": [
+            "missing_parameter"
+          ],
+          "clarify": true,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [],
+          "forbiddenTools": [],
+          "ordering": [],
+          "clarificationChoices": [
+            "Page 1",
+            "Page 2"
+          ],
+          "clarificationTopic": "page"
+        },
+        {
+          "status": "plan",
+          "reasonCodes": [],
+          "clarify": false,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [
+            "select_pages"
+          ],
+          "forbiddenTools": [],
+          "ordering": [],
+          "plan": {
+            "schemaVersion": "1.0",
+            "status": "plan",
+            "reasonCode": null,
+            "steps": [
+              {
+                "id": "s_1",
+                "operation": "select_pages",
+                "inputs": [
+                  "A"
+                ],
+                "outputRef": "out_stage1",
+                "params": {
+                  "action": "remove",
+                  "pages": {
+                    "mode": "explicit",
+                    "indices": [
+                      2
+                    ]
+                  }
+                }
+              }
+            ],
+            "resultRefs": [
+              "out_stage1"
+            ],
+            "clarification": null
+          }
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-013",
+      "turns": [
+        {
+          "status": "clarify",
+          "reasonCodes": [
+            "ambiguous_reference"
+          ],
+          "clarify": true,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [],
+          "forbiddenTools": [],
+          "ordering": [],
+          "clarificationChoices": [
+            "First",
+            "Second"
+          ],
+          "clarificationTopic": "file"
+        },
+        {
+          "status": "plan",
+          "reasonCodes": [],
+          "clarify": false,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [
+            "compress_pdf"
+          ],
+          "forbiddenTools": [],
+          "ordering": [],
+          "plan": {
+            "schemaVersion": "1.0",
+            "status": "plan",
+            "reasonCode": null,
+            "steps": [
+              {
+                "id": "s_1",
+                "operation": "compress_pdf",
+                "inputs": [
+                  "B"
+                ],
+                "outputRef": "out_stage1",
+                "params": {
+                  "targetBytes": null,
+                  "preset": "lossless",
+                  "batchMode": "single"
+                }
+              }
+            ],
+            "resultRefs": [
+              "out_stage1"
+            ],
+            "clarification": null
+          },
+          "qualityConfirmation": false
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-014",
+      "turns": [
+        {
+          "status": "plan",
+          "reasonCodes": [],
+          "clarify": false,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [
+            "select_pages"
+          ],
+          "forbiddenTools": [],
+          "ordering": [],
+          "plan": {
+            "schemaVersion": "1.0",
+            "status": "plan",
+            "reasonCode": null,
+            "steps": [
+              {
+                "id": "s_1",
+                "operation": "select_pages",
+                "inputs": [
+                  "R2"
+                ],
+                "outputRef": "out_stage1",
+                "params": {
+                  "action": "remove",
+                  "pages": {
+                    "mode": "explicit",
+                    "indices": [
+                      3
+                    ]
+                  }
+                }
+              }
+            ],
+            "resultRefs": [
+              "out_stage1"
+            ],
+            "clarification": null
+          }
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-015",
+      "turns": [
+        {
+          "status": "undo",
+          "reasonCodes": [
+            "undo_last_change"
+          ],
+          "clarify": false,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [],
+          "forbiddenTools": [],
+          "ordering": [],
+          "control": "undo"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-018",
+      "turns": [
+        {
+          "status": "clarify",
+          "reasonCodes": [
+            "ambiguous_reference"
+          ],
+          "clarify": true,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [],
+          "forbiddenTools": [],
+          "ordering": [],
+          "clarificationChoices": [
+            "First",
+            "Second"
+          ],
+          "clarificationTopic": "file"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-019",
+      "turns": [
+        {
+          "status": "clarify",
+          "reasonCodes": [
+            "missing_parameter"
+          ],
+          "clarify": true,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [],
+          "forbiddenTools": [],
+          "ordering": [],
+          "clarificationChoices": [
+            "Page 1",
+            "Page 2",
+            "Page 3",
+            "Page 4"
+          ],
+          "clarificationTopic": "page"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-021",
+      "turns": [
+        {
+          "status": "clarify",
+          "reasonCodes": [
+            "missing_files"
+          ],
+          "clarify": true,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [],
+          "forbiddenTools": [],
+          "ordering": [],
+          "clarificationTopic": "file"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-022",
+      "turns": [
+        {
+          "status": "plan",
+          "reasonCodes": [],
+          "clarify": false,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [
+            "select_pages"
+          ],
+          "forbiddenTools": [],
+          "ordering": [],
+          "plan": {
+            "schemaVersion": "1.0",
+            "status": "plan",
+            "reasonCode": null,
+            "steps": [
+              {
+                "id": "s_1",
+                "operation": "select_pages",
+                "inputs": [
+                  "A"
+                ],
+                "outputRef": "out_stage1",
+                "params": {
+                  "action": "remove",
+                  "pages": {
+                    "mode": "explicit",
+                    "indices": [
+                      3
+                    ]
+                  }
+                }
+              }
+            ],
+            "resultRefs": [
+              "out_stage1"
+            ],
+            "clarification": null
+          }
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-024",
+      "turns": [
+        {
+          "status": "plan",
+          "reasonCodes": [],
+          "clarify": false,
+          "providerCalls": 1,
+          "accepted": false,
+          "tools": [],
+          "forbiddenTools": [],
+          "ordering": [],
+          "plan": {
+            "schemaVersion": "1.0",
+            "status": "plan",
+            "reasonCode": null,
+            "steps": [
+              {
+                "id": "s_1",
+                "operation": "compress_pdf",
+                "inputs": [
+                  "R2"
+                ],
+                "outputRef": "out_stage1",
+                "params": {
+                  "targetBytes": null,
+                  "preset": "lossless",
+                  "batchMode": "single"
+                }
+              }
+            ],
+            "resultRefs": [
+              "out_stage1"
+            ],
+            "clarification": null
+          },
+          "rejection": "stale",
+          "qualityConfirmation": false
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-025",
+      "turns": [
+        {
+          "status": "clarify",
+          "reasonCodes": [
+            "missing_parameter"
+          ],
+          "clarify": true,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [],
+          "forbiddenTools": [],
+          "ordering": [],
+          "clarificationChoices": [
+            "Page 1",
+            "Page 2"
+          ],
+          "clarificationTopic": "page"
+        },
+        {
+          "status": "rejected",
+          "reasonCodes": [],
+          "clarify": false,
+          "providerCalls": 0,
+          "accepted": false,
+          "tools": [],
+          "forbiddenTools": [],
+          "ordering": [],
+          "rejection": "stale"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-028",
+      "turns": [
+        {
+          "status": "control",
+          "reasonCodes": [],
+          "clarify": false,
+          "providerCalls": 0,
+          "accepted": true,
+          "tools": [],
+          "forbiddenTools": [],
+          "ordering": [],
+          "control": "cancel"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-029",
+      "turns": [
+        {
+          "status": "control",
+          "reasonCodes": [],
+          "clarify": false,
+          "providerCalls": 0,
+          "accepted": true,
+          "tools": [],
+          "forbiddenTools": [],
+          "ordering": [],
+          "control": "start_over"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-031",
+      "turns": [
+        {
+          "status": "control",
+          "reasonCodes": [],
+          "clarify": false,
+          "providerCalls": 0,
+          "accepted": true,
+          "tools": [],
+          "forbiddenTools": [],
+          "ordering": [],
+          "control": "undo"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-032",
+      "turns": [
+        {
+          "status": "unsupported",
+          "reasonCodes": [
+            "excluded_operation"
+          ],
+          "clarify": false,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [],
+          "forbiddenTools": [],
+          "ordering": []
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-033",
+      "turns": [
+        {
+          "status": "unsupported",
+          "reasonCodes": [
+            "excluded_operation"
+          ],
+          "clarify": false,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [],
+          "forbiddenTools": [],
+          "ordering": []
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-035",
+      "turns": [
+        {
+          "status": "unsupported",
+          "reasonCodes": [
+            "content_required"
+          ],
+          "clarify": false,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [],
+          "forbiddenTools": [],
+          "ordering": []
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-037",
+      "turns": [
+        {
+          "status": "unsupported",
+          "reasonCodes": [
+            "content_required"
+          ],
+          "clarify": false,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [],
+          "forbiddenTools": [],
+          "ordering": []
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-038",
+      "turns": [
+        {
+          "status": "clarify",
+          "reasonCodes": [
+            "ambiguous_reference"
+          ],
+          "clarify": true,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [],
+          "forbiddenTools": [
+            "select_pages"
+          ],
+          "ordering": [],
+          "clarificationTopic": "page"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-040",
+      "turns": [
+        {
+          "status": "unsupported",
+          "reasonCodes": [
+            "unavailable_capability"
+          ],
+          "clarify": false,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [],
+          "forbiddenTools": [],
+          "ordering": []
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-042",
+      "turns": [
+        {
+          "status": "unsupported",
+          "reasonCodes": [
+            "unavailable_capability"
+          ],
+          "clarify": false,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [],
+          "forbiddenTools": [
+            "merge_pdf",
+            "compress_pdf",
+            "protect_pdf"
+          ],
+          "ordering": [
+            {
+              "before": "merge_pdf",
+              "after": "protect_pdf"
+            },
+            {
+              "before": "compress_pdf",
+              "after": "protect_pdf"
+            },
+            {
+              "before": "select_pages",
+              "after": "protect_pdf"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-044",
+      "turns": [
+        {
+          "status": "plan",
+          "reasonCodes": [],
+          "clarify": false,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [],
+          "forbiddenTools": [],
+          "ordering": [],
+          "plan": {
+            "schemaVersion": "1.0",
+            "status": "plan",
+            "reasonCode": null,
+            "steps": [
+              {
+                "id": "s_1",
+                "operation": "compress_pdf",
+                "inputs": [
+                  "A"
+                ],
+                "outputRef": "out_stage1",
+                "params": {
+                  "targetBytes": null,
+                  "preset": "balanced",
+                  "batchMode": "single"
+                }
+              }
+            ],
+            "resultRefs": [
+              "out_stage1"
+            ],
+            "clarification": null
+          },
+          "qualityConfirmation": true
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-045",
+      "turns": [
+        {
+          "status": "plan",
+          "reasonCodes": [],
+          "clarify": false,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [
+            "select_pages"
+          ],
+          "forbiddenTools": [],
+          "ordering": [],
+          "plan": {
+            "schemaVersion": "1.0",
+            "status": "plan",
+            "reasonCode": null,
+            "steps": [
+              {
+                "id": "s_1",
+                "operation": "select_pages",
+                "inputs": [
+                  "A"
+                ],
+                "outputRef": "out_stage1",
+                "params": {
+                  "action": "remove",
+                  "pages": {
+                    "mode": "explicit",
+                    "indices": [
+                      3
+                    ]
+                  }
+                }
+              }
+            ],
+            "resultRefs": [
+              "out_stage1"
+            ],
+            "clarification": null
+          }
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-046",
+      "turns": [
+        {
+          "status": "rejected",
+          "reasonCodes": [],
+          "clarify": false,
+          "providerCalls": 0,
+          "accepted": false,
+          "tools": [],
+          "forbiddenTools": [],
+          "ordering": [],
+          "rejection": "privacy"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-047",
+      "turns": [
+        {
+          "status": "rejected",
+          "reasonCodes": [],
+          "clarify": false,
+          "providerCalls": 0,
+          "accepted": false,
+          "tools": [],
+          "forbiddenTools": [],
+          "ordering": [],
+          "rejection": "privacy"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-049",
+      "turns": [
+        {
+          "status": "rejected",
+          "reasonCodes": [],
+          "clarify": false,
+          "providerCalls": 0,
+          "accepted": false,
+          "tools": [],
+          "forbiddenTools": [],
+          "ordering": [],
+          "rejection": "privacy"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-052",
+      "turns": [
+        {
+          "status": "rejected",
+          "reasonCodes": [],
+          "clarify": false,
+          "providerCalls": 0,
+          "accepted": false,
+          "tools": [],
+          "forbiddenTools": [],
+          "ordering": [],
+          "rejection": "allowance"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-053",
+      "turns": [
+        {
+          "status": "plan",
+          "reasonCodes": [],
+          "clarify": false,
+          "providerCalls": 0,
+          "accepted": false,
+          "tools": [],
+          "forbiddenTools": [],
+          "ordering": [],
+          "plan": {
+            "schemaVersion": "1.0",
+            "status": "plan",
+            "reasonCode": null,
+            "steps": [
+              {
+                "id": "s_1",
+                "operation": "merge_pdf",
+                "inputs": [
+                  "A",
+                  "B"
+                ],
+                "outputRef": "out_stage1",
+                "params": {
+                  "ordering": "as_provided"
+                }
+              }
+            ],
+            "resultRefs": [
+              "out_stage1"
+            ],
+            "clarification": null
+          },
+          "rejection": "allowance"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-055",
+      "turns": [
+        {
+          "status": "plan",
+          "reasonCodes": [],
+          "clarify": false,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [
+            "merge_pdf"
+          ],
+          "forbiddenTools": [],
+          "ordering": [],
+          "plan": {
+            "schemaVersion": "1.0",
+            "status": "plan",
+            "reasonCode": null,
+            "steps": [
+              {
+                "id": "s_1",
+                "operation": "merge_pdf",
+                "inputs": [
+                  "A",
+                  "B"
+                ],
+                "outputRef": "out_stage1",
+                "params": {
+                  "ordering": "as_provided"
+                }
+              }
+            ],
+            "resultRefs": [
+              "out_stage1"
+            ],
+            "clarification": null
+          }
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-056",
+      "turns": [
+        {
+          "status": "control",
+          "reasonCodes": [],
+          "clarify": false,
+          "providerCalls": 0,
+          "accepted": true,
+          "tools": [],
+          "forbiddenTools": [],
+          "ordering": [],
+          "control": "help"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-059",
+      "turns": [
+        {
+          "status": "clarify",
+          "reasonCodes": [
+            "missing_files"
+          ],
+          "clarify": true,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [],
+          "forbiddenTools": [],
+          "ordering": [],
+          "clarificationTopic": "file"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-060",
+      "turns": [
+        {
+          "status": "plan",
+          "reasonCodes": [],
+          "clarify": false,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [
+            "select_pages"
+          ],
+          "forbiddenTools": [],
+          "ordering": [],
+          "plan": {
+            "schemaVersion": "1.0",
+            "status": "plan",
+            "reasonCode": null,
+            "steps": [
+              {
+                "id": "s_1",
+                "operation": "select_pages",
+                "inputs": [
+                  "A"
+                ],
+                "outputRef": "out_stage1",
+                "params": {
+                  "action": "remove",
+                  "pages": {
+                    "mode": "explicit",
+                    "indices": [
+                      1,
+                      4
+                    ]
+                  }
+                }
+              }
+            ],
+            "resultRefs": [
+              "out_stage1"
+            ],
+            "clarification": null
+          }
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-061",
+      "turns": [
+        {
+          "status": "answer",
+          "reasonCodes": [
+            "product_information"
+          ],
+          "clarify": false,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [],
+          "forbiddenTools": [],
+          "ordering": []
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-062",
+      "turns": [
+        {
+          "status": "unsupported",
+          "reasonCodes": [
+            "unavailable_capability"
+          ],
+          "clarify": false,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [],
+          "forbiddenTools": [
+            "ocr_pdf"
+          ],
+          "ordering": []
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-063",
+      "turns": [
+        {
+          "status": "unsupported",
+          "reasonCodes": [
+            "unavailable_capability"
+          ],
+          "clarify": false,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [],
+          "forbiddenTools": [],
+          "ordering": []
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "O107-064",
+      "turns": [
+        {
+          "status": "unsupported",
+          "reasonCodes": [
+            "invalid_request"
+          ],
+          "clarify": false,
+          "providerCalls": 1,
+          "accepted": true,
+          "tools": [],
+          "forbiddenTools": [],
+          "ordering": []
+        }
+      ]
+    }
+  ]
+}

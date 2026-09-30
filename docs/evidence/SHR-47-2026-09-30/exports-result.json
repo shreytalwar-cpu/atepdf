@@ -1,0 +1,70 @@
+{
+  "sourceCommit": "f7a62d4c9d9cebb6441a97a39a3dadfd55087196",
+  "runtimeIdenticalAt": "885b41c7d39b70b8ad7a8833bb7019016d9ec62a",
+  "environment": {
+    "EXPO_NO_TELEMETRY": "1",
+    "NEXT_TELEMETRY_DISABLED": "1"
+  },
+  "commands": [
+    {
+      "cwd": "/tmp/atepdf-shr47-final-f7a62d4/mac-source-2",
+      "argv": [
+        "/Users/shrey/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "scripts/contracts.mjs"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.451,
+      "log": "/tmp/atepdf-shr47-final-885b41c/exports-1.log"
+    },
+    {
+      "cwd": "/tmp/atepdf-shr47-final-f7a62d4/mac-source-2",
+      "argv": [
+        "/Users/shrey/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "scripts/assets.mjs"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 1.129,
+      "log": "/tmp/atepdf-shr47-final-885b41c/exports-2.log"
+    },
+    {
+      "cwd": "/tmp/atepdf-shr47-final-f7a62d4/mac-source-2",
+      "argv": [
+        "/Users/shrey/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "scripts/build-gateway.mjs"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.126,
+      "log": "/tmp/atepdf-shr47-final-885b41c/exports-3.log"
+    },
+    {
+      "cwd": "/tmp/atepdf-shr47-final-f7a62d4/mac-source-2/apps/universal",
+      "argv": [
+        "/Users/shrey/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/tmp/atepdf-shr47-final-f7a62d4/mac-source-2/node_modules/expo/bin/cli",
+        "export",
+        "--platform",
+        "web",
+        "--output-dir",
+        "/tmp/atepdf-shr47-final-885b41c/expo-web"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 16.883,
+      "log": "/tmp/atepdf-shr47-final-885b41c/exports-4.log"
+    },
+    {
+      "cwd": "/tmp/atepdf-shr47-final-f7a62d4/mac-source-2/apps/universal",
+      "argv": [
+        "/Users/shrey/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/tmp/atepdf-shr47-final-f7a62d4/mac-source-2/node_modules/expo/bin/cli",
+        "export",
+        "--platform",
+        "ios",
+        "--output-dir",
+        "/tmp/atepdf-shr47-final-885b41c/expo-ios"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 18.452,
+      "log": "/tmp/atepdf-shr47-final-885b41c/exports-5.log"
+    }
+  ]
+}

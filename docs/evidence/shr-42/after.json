@@ -1,0 +1,202 @@
+[
+  {
+    "retained": 40,
+    "projected": 1,
+    "selection": 0,
+    "originals": 0,
+    "focus": "out_00000000000000000000000000000028",
+    "status": "accepted",
+    "payloadBytes": 532,
+    "payload": {
+      "schemaVersion": "1.0",
+      "requestId": "req_2ddeea48949d47779eb1e70b8d277ca6",
+      "workspaceRevision": 40,
+      "locale": "en-IN",
+      "instruction": "Compress the current result",
+      "files": [
+        {
+          "ref": "out_00000000000000000000000000000028",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        }
+      ],
+      "selectionRefs": [],
+      "focusedResultRef": "out_00000000000000000000000000000028",
+      "originalRefs": [],
+      "pendingClarification": null,
+      "previousActionIds": [],
+      "capabilities": [
+        "merge_pdf",
+        "select_pages",
+        "ocr_pdf",
+        "compress_pdf"
+      ],
+      "previousPlan": null,
+      "ocrLanguages": [
+        "eng"
+      ]
+    }
+  },
+  {
+    "retained": 41,
+    "projected": 1,
+    "selection": 0,
+    "originals": 0,
+    "focus": "out_00000000000000000000000000000029",
+    "status": "accepted",
+    "payloadBytes": 532,
+    "payload": {
+      "schemaVersion": "1.0",
+      "requestId": "req_7aa81f6ee45548ccaab85ff5f92277d7",
+      "workspaceRevision": 41,
+      "locale": "en-IN",
+      "instruction": "Compress the current result",
+      "files": [
+        {
+          "ref": "out_00000000000000000000000000000029",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        }
+      ],
+      "selectionRefs": [],
+      "focusedResultRef": "out_00000000000000000000000000000029",
+      "originalRefs": [],
+      "pendingClarification": null,
+      "previousActionIds": [],
+      "capabilities": [
+        "merge_pdf",
+        "select_pages",
+        "ocr_pdf",
+        "compress_pdf"
+      ],
+      "previousPlan": null,
+      "ocrLanguages": [
+        "eng"
+      ]
+    }
+  },
+  {
+    "retained": 100,
+    "projected": 1,
+    "selection": 0,
+    "originals": 0,
+    "focus": "out_00000000000000000000000000000064",
+    "status": "accepted",
+    "payloadBytes": 533,
+    "payload": {
+      "schemaVersion": "1.0",
+      "requestId": "req_f0c8257fd66b4648bb0571bad8b5d487",
+      "workspaceRevision": 100,
+      "locale": "en-IN",
+      "instruction": "Compress the current result",
+      "files": [
+        {
+          "ref": "out_00000000000000000000000000000064",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        }
+      ],
+      "selectionRefs": [],
+      "focusedResultRef": "out_00000000000000000000000000000064",
+      "originalRefs": [],
+      "pendingClarification": null,
+      "previousActionIds": [],
+      "capabilities": [
+        "merge_pdf",
+        "select_pages",
+        "ocr_pdf",
+        "compress_pdf"
+      ],
+      "previousPlan": null,
+      "ocrLanguages": [
+        "eng"
+      ]
+    }
+  },
+  {
+    "retained": 101,
+    "projected": 1,
+    "selection": 0,
+    "originals": 0,
+    "focus": "out_00000000000000000000000000000065",
+    "status": "accepted",
+    "payloadBytes": 533,
+    "payload": {
+      "schemaVersion": "1.0",
+      "requestId": "req_fbf952f59be24892a904f1a1842ae3bc",
+      "workspaceRevision": 101,
+      "locale": "en-IN",
+      "instruction": "Compress the current result",
+      "files": [
+        {
+          "ref": "out_00000000000000000000000000000065",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        }
+      ],
+      "selectionRefs": [],
+      "focusedResultRef": "out_00000000000000000000000000000065",
+      "originalRefs": [],
+      "pendingClarification": null,
+      "previousActionIds": [],
+      "capabilities": [
+        "merge_pdf",
+        "select_pages",
+        "ocr_pdf",
+        "compress_pdf"
+      ],
+      "previousPlan": null,
+      "ocrLanguages": [
+        "eng"
+      ]
+    }
+  },
+  {
+    "retained": 121,
+    "projected": 1,
+    "selection": 0,
+    "originals": 0,
+    "focus": "out_00000000000000000000000000000079",
+    "status": "accepted",
+    "payloadBytes": 533,
+    "payload": {
+      "schemaVersion": "1.0",
+      "requestId": "req_7d519e0dead5405086427388351458ba",
+      "workspaceRevision": 121,
+      "locale": "en-IN",
+      "instruction": "Compress the current result",
+      "files": [
+        {
+          "ref": "out_00000000000000000000000000000079",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        }
+      ],
+      "selectionRefs": [],
+      "focusedResultRef": "out_00000000000000000000000000000079",
+      "originalRefs": [],
+      "pendingClarification": null,
+      "previousActionIds": [],
+      "capabilities": [
+        "merge_pdf",
+        "select_pages",
+        "ocr_pdf",
+        "compress_pdf"
+      ],
+      "previousPlan": null,
+      "ocrLanguages": [
+        "eng"
+      ]
+    }
+  }
+]

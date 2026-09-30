@@ -1,0 +1,9 @@
+{
+  "source": "/tmp/atepdf-shr47-final-f7a62d4/mac-source-2/apps/universal/ios/build/generated",
+  "reuse": "Normal Xcode dependency codegen phase generated these files during the first isolated build; no dependency installation",
+  "requiredFiles": {
+    "ios/ReactCodegen/rnsvg/rnsvg-generated.mm": "fcb5425568c294d6df408edbd0b9f61109dbaf3513c63ec1fb949b753b9a738d",
+    "ios/ReactCodegen/safeareacontext/safeareacontext-generated.mm": "6a1e06b01f25d4b47ae44fabe696137bd021f10ccab2a291fd9f0bca5693ea0c",
+    "ios/ReactCodegen/react/renderer/components/rnsvg/States.cpp": "fc2c1570d1989fc77443a220063026c6e57010f1ebcb2706c6708c1d51c1fc89"
+  }
+}

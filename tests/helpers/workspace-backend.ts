@@ -1,4 +1,4 @@
-import {mkdir,open,readFile,readdir,rename,rm,stat,writeFile} from 'node:fs/promises';
+import {lstat,mkdir,open,readFile,readdir,rename,rm,stat,writeFile} from 'node:fs/promises';
 import {join,dirname} from 'node:path';
 import {NAME} from '../../packages/core/src/workspace-checkpoint';
 import type {VaultKeyStatus,VaultReadResult,WorkspaceVaultBackend} from '../../packages/core/src/workspace-vault';
@@ -15,7 +15,9 @@ export type TestKeychain={raw:Uint8Array|null;state:'ok'|'locked'|'unavailable'}
 // 'remove-sync': the unlink happened but the directory sync failed. 'list', 'exists'
 // and 'read': the storage query itself fails (for example EIO or EACCES).
 // 'dir-sync': an explicit directory sync (syncDirectory) fails.
-export type FaultStep='stage'|'rename'|'remove'|'remove-sync'|'list'|'exists'|'read'|'dir-sync';
+// 'usage': measuring storage fails. 'staging-list', 'staging-remove' (or 'skip': report
+// the unlink done but leave the file) and 'staging-sync': staging cleanup steps fail.
+export type FaultStep='stage'|'rename'|'remove'|'remove-sync'|'list'|'exists'|'read'|'dir-sync'|'usage'|'staging-list'|'staging-remove'|'staging-sync';
 export type Fault=(step:FaultStep,name:string)=>void|'skip';
 export const newKeychain=():TestKeychain=>({raw:null,state:'ok'});
 
@@ -77,8 +79,11 @@ export class NodeVaultBackend implements WorkspaceVaultBackend{
       const target=this.#path(name);if(this.fault?.('remove',name)==='skip'){ok=true;return;}
       await rm(target,{force:true});
       // Idempotent for an absent file, and only complete once the directory is synced.
+      // A directory that was never created has nothing to sync (as on the Mac).
       this.fault?.('remove-sync',name);
-      const directory=await open(dirname(target),'r');try{await directory.sync();}finally{await directory.close();}
+      let directory;
+      try{directory=await open(dirname(target),'r');}catch(error){if((error as {code?:string}).code==='ENOENT'){ok=true;return;}throw error;}
+      try{await directory.sync();}finally{await directory.close();}
       ok=true;
     }finally{this.calls.push({op:'remove',name,ok});}
   }
@@ -92,6 +97,35 @@ export class NodeVaultBackend implements WorkspaceVaultBackend{
       ok=true;
     }finally{this.calls.push({op:'syncDirectory',name:directory,ok});}
   }
-  async cleanStaging(){await rm(join(this.root,'staging'),{recursive:true,force:true});}
+  // Remove every staging entry, sync, then verify empty; any failure throws (as on the Mac).
+  // A staging path that is not a real directory (for example a symlink) is never followed.
+  async cleanStaging(){
+    const staging=join(this.root,'staging');
+    try{if(!(await lstat(staging)).isDirectory())throw new Error('Staging is not a directory.');}
+    catch(error){if((error as {code?:string}).code==='ENOENT')return;throw error;}
+    const entries=async()=>{this.fault?.('staging-list','staging');return readdir(staging);};
+    for(const entry of await entries()){
+      if(this.fault?.('staging-remove',entry)==='skip')continue;
+      await rm(join(staging,entry),{force:true});
+    }
+    this.fault?.('staging-sync','staging');
+    const directory=await open(staging,'r');try{await directory.sync();}finally{await directory.close();}
+    if((await entries()).length)throw new Error('Staging files remain.');
+  }
+  // Regular files only, measured with lstat; a missing directory is empty, any other failure throws.
+  async usage(){
+    this.fault?.('usage','');
+    const size=async(path:string)=>{try{const info=await lstat(path);return info.isFile()?info.size:null;}catch(error){if((error as {code?:string}).code==='ENOENT')return null;throw error;}};
+    const entries=async(directory:string)=>{try{return await readdir(join(this.root,directory));}catch(error){if((error as {code?:string}).code==='ENOENT')return [] as string[];throw error;}};
+    const out:{name:string;bytes:number}[]=[];
+    const head=await size(join(this.root,'head'));if(head!==null)out.push({name:'head',bytes:head});
+    for(const directory of ['manifests','blobs'] as const)for(const entry of await entries(directory)){
+      const name=`${directory}/${entry}`;if(!NAME.test(name))continue;
+      const bytes=await size(join(this.root,name));if(bytes!==null)out.push({name,bytes});
+    }
+    let staging=0;for(const entry of await entries('staging'))staging+=await size(join(this.root,'staging',entry))??0;
+    if(staging)out.push({name:'staging',bytes:staging});
+    return out;
+  }
 }
 export async function corrupt(path:string,mutate:(bytes:Uint8Array)=>Uint8Array){await writeFile(path,mutate(new Uint8Array(await readFile(path))));}

@@ -6,8 +6,8 @@ import NativePDF from '../../modules/atepdf-pdf';
 // existing session-only behavior on iPhone, iPad and Android.
 export function createWorkspaceBackend():WorkspaceVaultBackend|null{
   const m=NativePDF;
-  if(m?.workspaceAvailable!==true||!m.workspaceKeyStatusAsync||!m.workspaceExistsAsync||!m.workspaceWriteSealedAsync||!m.workspaceReadOpenedAsync||!m.workspaceListAsync||!m.workspaceRemoveAsync||!m.workspaceSyncDirectoryAsync||!m.workspaceCleanStagingAsync)return null;
-  const {workspaceKeyStatusAsync,workspaceExistsAsync,workspaceWriteSealedAsync,workspaceReadOpenedAsync,workspaceListAsync,workspaceRemoveAsync,workspaceSyncDirectoryAsync,workspaceCleanStagingAsync}=m;
+  if(m?.workspaceAvailable!==true||!m.workspaceKeyStatusAsync||!m.workspaceExistsAsync||!m.workspaceWriteSealedAsync||!m.workspaceReadOpenedAsync||!m.workspaceListAsync||!m.workspaceRemoveAsync||!m.workspaceSyncDirectoryAsync||!m.workspaceCleanStagingAsync||!m.workspaceUsageAsync)return null;
+  const {workspaceKeyStatusAsync,workspaceExistsAsync,workspaceWriteSealedAsync,workspaceReadOpenedAsync,workspaceListAsync,workspaceRemoveAsync,workspaceSyncDirectoryAsync,workspaceCleanStagingAsync,workspaceUsageAsync}=m;
   return {
     keyStatus:create=>workspaceKeyStatusAsync(create),
     exists:name=>workspaceExistsAsync(name),
@@ -22,5 +22,8 @@ export function createWorkspaceBackend():WorkspaceVaultBackend|null{
     remove:name=>workspaceRemoveAsync(name),
     syncDirectory:directory=>workspaceSyncDirectoryAsync(directory),
     cleanStaging:()=>workspaceCleanStagingAsync(),
+    usage:()=>workspaceUsageAsync(),
   };
 }
+// The system clock; retention expiry is measured with it (ADR 0010).
+export const workspaceClock=():(()=>Date)|undefined=>undefined;

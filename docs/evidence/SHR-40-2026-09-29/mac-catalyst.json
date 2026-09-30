@@ -1,0 +1,43 @@
+{
+  "issue": "SHR-40",
+  "host": {
+    "macOS": "27.0 (26A428)",
+    "arch": "arm64",
+    "xcode": "Xcode-beta 27.0 (27A266a)"
+  },
+  "podInstall": {
+    "command": "bundle exec pod install (pinned CocoaPods 1.16.2 bundle from the main checkout's ignored .build/native-tools, BUNDLE_FROZEN=true, RUBYOPT=-rlogger, LANG=en_US.UTF-8, CP_HOME_DIR cloned into this worktree's ignored .build)",
+    "scope": "Worktree-only; locked Podfile, no dependency change. No new Swift file was added in SHR-40.",
+    "trackedSideEffects": "Podfile.lock (hermes-engine checksum) and atepdf.xcodeproj/project.pbxproj path rewrites from the worktree's node_modules location; reverted with git checkout before commit, as in SHR-39."
+  },
+  "build": {
+    "command": "scripts/native/mac-build.sh",
+    "result": "Mac application built; strict signature and sandbox entitlement checks passed (Release, Mac Catalyst arm64)",
+    "stagedApp": "/private/tmp/atepdf-mac-0srcmq8z/atepdf.app",
+    "identifier": "dev.atepdf.fresh.mac",
+    "signature": "local ad-hoc, development only",
+    "binarySha256": "058914438e375e321949f0a51a437629d6803069145b8d30b56707bff9b32e68",
+    "mainJsbundleSha256": "b7ee5c0cf0355990fb6866becb58074c9673c1ab4de8c3285e37764bd3401fc7",
+    "containsSHR40": "binary contains the workspaceUsageAsync module function; main.jsbundle contains 'Privacy & storage' and 'Delete when atePDF quits'"
+  },
+  "runtimeObservation": {
+    "method": "Launched the exact staged path with open -n; process stayed running; terminated with SIGTERM.",
+    "workspaceDirectory": "No atepdf directory was created in ~/Library/Containers/dev.atepdf.fresh.mac/Data/Library/Application Support during or after the run: the ad-hoc build still cannot obtain the Keychain key (errSecMissingEntitlement, see SHR-39), so it runs session-only and writes nothing.",
+    "uiNotObserved": "The panel was not inspected in the Mac app in this session: background window capture failed ('Failed to start stream due to audio/video capture failure'), the full-screen control prompt was not answered, and a System Events accessibility query did not return within 60 s. Panel rendering, wording, Tab/Space/Enter keyboard use, focus moving to Cancel and Escape were verified in the shared UI through the browser suite (tests/e2e/retention.spec.ts) instead."
+  },
+  "reviewFixBuild": {
+    "command": "scripts/native/mac-build.sh after the PR #83 review fixes (Swift cleanStaging now verifies and throws; locked pod install rerun, tracked Podfile.lock/pbxproj artifacts reverted before commit)",
+    "result": "Mac application built; strict signature and sandbox entitlement checks passed",
+    "stagedApp": "/private/tmp/atepdf-mac-tb7v6los/atepdf.app",
+    "binarySha256": "bd5dca726c6d9d207b1e8c3c8110685b95b8974a66696558b6a2f13e540d720c",
+    "mainJsbundleSha256": "31a3d9a2680708b8deb8537d9859a5cc399add213547fad2dc8603cab0c1d33a",
+    "containsFixes": "binary contains workspaceUsageAsync; Hermes bundle contains the new 'At least ' total and the Start over / Delete local data setting wording (stored as UTF-16)",
+    "runtimeObservation": "Launched the exact staged path; process ran; no atepdf directory in the container's Application Support (ad-hoc build has no Keychain key); terminated with SIGTERM. The panel UI was not inspected (same capture limitation as the first round)."
+  },
+  "notVerified": [
+    "Mac keyboard/focus of Privacy & storage inside the Catalyst app (Full Keyboard Access, Tab order, VoiceOver labels).",
+    "Retention, expiry, Delete when atePDF quits and Delete local data against the real Application Support container and Keychain: needs a signed build with a keychain access group (SHR-41, channel identity SHR-91).",
+    "Storage usage figures and temporary-file removal against the real Caches folders (DocumentPicker, atepdf-work, atepdf-preview(s)).",
+    "Force termination during each deletion step on the real app (SHR-41)."
+  ]
+}

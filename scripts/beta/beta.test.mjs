@@ -351,7 +351,9 @@ test('real device-sharing launcher pairs over trusted loopback TLS and renews pr
   const authorization = {Authorization: `Bearer ${exchanged.body.token}`};
   const status = await tlsJSON(pairing.origin, ca, '/api/native/planner/status', {headers: authorization});
   assert.equal(status.status, 200);
-  assert.deepEqual(Object.keys(status.body).sort(), ['connected', 'enabled', 'model', 'remaining']);
+  assert.deepEqual(Object.keys(status.body).sort(), ['connected', 'enabled', 'gateAvailable', 'gateReason', 'model', 'remaining']);
+  assert.equal(status.body.gateAvailable, false);
+  assert.equal(status.body.gateReason, 'recipient_undisclosed');
   assert.equal(status.body.connected, true); assert.equal(status.body.enabled, false); assert.equal(status.body.remaining, 0);
   assert.equal(JSON.stringify(status.body).includes(syntheticKey), false);
   assert.equal((await tlsJSON(pairing.origin, ca, '/api/native/planner', {method: 'POST', headers: authorization, body: {}})).status, 503);

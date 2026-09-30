@@ -1,0 +1,675 @@
+{
+  "provenance": "Synthetic scripted responses using current schemas/prompt constraints; no live model observations. Kept separate from grading keys.",
+  "responses": {
+    "O107-001:0": {
+      "toolName": "run_local_pdf_workflow",
+      "input": {
+        "schemaVersion": "1.0",
+        "status": "plan",
+        "reasonCode": null,
+        "steps": [
+          {
+            "id": "s_1",
+            "operation": "merge_pdf",
+            "inputs": [
+              "A",
+              "B"
+            ],
+            "outputRef": "out_stage1",
+            "params": {
+              "ordering": "as_provided"
+            }
+          }
+        ],
+        "resultRefs": [
+          "out_stage1"
+        ],
+        "clarification": null
+      }
+    },
+    "O107-002:0": {
+      "toolName": "run_local_pdf_workflow",
+      "input": {
+        "schemaVersion": "1.0",
+        "status": "plan",
+        "reasonCode": null,
+        "steps": [
+          {
+            "id": "s_1",
+            "operation": "select_pages",
+            "inputs": [
+              "A"
+            ],
+            "outputRef": "out_stage1",
+            "params": {
+              "action": "remove",
+              "pages": {
+                "mode": "explicit",
+                "indices": [
+                  3
+                ]
+              }
+            }
+          }
+        ],
+        "resultRefs": [
+          "out_stage1"
+        ],
+        "clarification": null
+      }
+    },
+    "O107-003:0": {
+      "toolName": "run_local_pdf_workflow",
+      "input": {
+        "schemaVersion": "1.0",
+        "status": "plan",
+        "reasonCode": null,
+        "steps": [
+          {
+            "id": "s_1",
+            "operation": "compress_pdf",
+            "inputs": [
+              "A"
+            ],
+            "outputRef": "out_stage1",
+            "params": {
+              "targetBytes": null,
+              "preset": "balanced",
+              "batchMode": "single"
+            }
+          }
+        ],
+        "resultRefs": [
+          "out_stage1"
+        ],
+        "clarification": null
+      }
+    },
+    "O107-004:0": {
+      "toolName": "run_local_pdf_workflow",
+      "input": {
+        "schemaVersion": "1.0",
+        "status": "plan",
+        "reasonCode": null,
+        "steps": [
+          {
+            "id": "s_1",
+            "operation": "ocr_pdf",
+            "inputs": [
+              "A"
+            ],
+            "outputRef": "out_stage1",
+            "params": {
+              "languages": [
+                "eng"
+              ],
+              "existingText": "preserve",
+              "batchMode": "single"
+            }
+          }
+        ],
+        "resultRefs": [
+          "out_stage1"
+        ],
+        "clarification": null
+      }
+    },
+    "O107-008:0": {
+      "toolName": "run_local_pdf_workflow",
+      "input": {
+        "schemaVersion": "1.0",
+        "status": "plan",
+        "reasonCode": null,
+        "steps": [
+          {
+            "id": "s_1",
+            "operation": "merge_pdf",
+            "inputs": [
+              "A",
+              "B"
+            ],
+            "outputRef": "out_stage1",
+            "params": {
+              "ordering": "as_provided"
+            }
+          },
+          {
+            "id": "s_2",
+            "operation": "select_pages",
+            "inputs": [
+              "out_stage1"
+            ],
+            "outputRef": "out_stage2",
+            "params": {
+              "action": "remove",
+              "pages": {
+                "mode": "explicit",
+                "indices": [
+                  3
+                ]
+              }
+            }
+          },
+          {
+            "id": "s_3",
+            "operation": "compress_pdf",
+            "inputs": [
+              "out_stage2"
+            ],
+            "outputRef": "out_stage3",
+            "params": {
+              "targetBytes": null,
+              "preset": "balanced",
+              "batchMode": "single"
+            }
+          }
+        ],
+        "resultRefs": [
+          "out_stage3"
+        ],
+        "clarification": null
+      }
+    },
+    "O107-009:0": {
+      "toolName": "run_local_pdf_workflow",
+      "input": {
+        "schemaVersion": "1.0",
+        "status": "plan",
+        "reasonCode": null,
+        "steps": [
+          {
+            "id": "s_1",
+            "operation": "merge_pdf",
+            "inputs": [
+              "A",
+              "B"
+            ],
+            "outputRef": "out_stage1",
+            "params": {
+              "ordering": "as_provided"
+            }
+          },
+          {
+            "id": "s_2",
+            "operation": "ocr_pdf",
+            "inputs": [
+              "out_stage1"
+            ],
+            "outputRef": "out_stage2",
+            "params": {
+              "languages": [
+                "eng"
+              ],
+              "existingText": "preserve",
+              "batchMode": "single"
+            }
+          },
+          {
+            "id": "s_3",
+            "operation": "compress_pdf",
+            "inputs": [
+              "out_stage2"
+            ],
+            "outputRef": "out_stage3",
+            "params": {
+              "targetBytes": null,
+              "preset": "balanced",
+              "batchMode": "single"
+            }
+          }
+        ],
+        "resultRefs": [
+          "out_stage3"
+        ],
+        "clarification": null
+      }
+    },
+    "O107-012:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "clarify",
+        "reasonCode": "missing_parameter",
+        "message": "Which page should I remove?",
+        "choices": [
+          "Page 1",
+          "Page 2"
+        ]
+      }
+    },
+    "O107-012:1": {
+      "toolName": "run_local_pdf_workflow",
+      "input": {
+        "schemaVersion": "1.0",
+        "status": "plan",
+        "reasonCode": null,
+        "steps": [
+          {
+            "id": "s_1",
+            "operation": "select_pages",
+            "inputs": [
+              "A"
+            ],
+            "outputRef": "out_stage1",
+            "params": {
+              "action": "remove",
+              "pages": {
+                "mode": "explicit",
+                "indices": [
+                  2
+                ]
+              }
+            }
+          }
+        ],
+        "resultRefs": [
+          "out_stage1"
+        ],
+        "clarification": null
+      }
+    },
+    "O107-013:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "clarify",
+        "reasonCode": "ambiguous_reference",
+        "message": "Which file should I compress?",
+        "choices": [
+          "First",
+          "Second"
+        ]
+      }
+    },
+    "O107-013:1": {
+      "toolName": "run_local_pdf_workflow",
+      "input": {
+        "schemaVersion": "1.0",
+        "status": "plan",
+        "reasonCode": null,
+        "steps": [
+          {
+            "id": "s_1",
+            "operation": "compress_pdf",
+            "inputs": [
+              "B"
+            ],
+            "outputRef": "out_stage1",
+            "params": {
+              "targetBytes": null,
+              "preset": "lossless",
+              "batchMode": "single"
+            }
+          }
+        ],
+        "resultRefs": [
+          "out_stage1"
+        ],
+        "clarification": null
+      }
+    },
+    "O107-014:0": {
+      "toolName": "run_local_pdf_workflow",
+      "input": {
+        "schemaVersion": "1.0",
+        "status": "plan",
+        "reasonCode": null,
+        "steps": [
+          {
+            "id": "s_1",
+            "operation": "select_pages",
+            "inputs": [
+              "R2"
+            ],
+            "outputRef": "out_stage1",
+            "params": {
+              "action": "remove",
+              "pages": {
+                "mode": "explicit",
+                "indices": [
+                  3
+                ]
+              }
+            }
+          }
+        ],
+        "resultRefs": [
+          "out_stage1"
+        ],
+        "clarification": null
+      }
+    },
+    "O107-015:0": {
+      "toolName": "undo_last_change",
+      "input": {}
+    },
+    "O107-018:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "clarify",
+        "reasonCode": "ambiguous_reference",
+        "message": "Which file should I compress?",
+        "choices": [
+          "First",
+          "Second"
+        ]
+      }
+    },
+    "O107-019:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "clarify",
+        "reasonCode": "missing_parameter",
+        "message": "Which physical page?",
+        "choices": [
+          "Page 1",
+          "Page 2",
+          "Page 3",
+          "Page 4"
+        ]
+      }
+    },
+    "O107-021:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "clarify",
+        "reasonCode": "missing_files",
+        "message": "Choose another PDF to merge.",
+        "choices": []
+      }
+    },
+    "O107-022:0": {
+      "toolName": "run_local_pdf_workflow",
+      "input": {
+        "schemaVersion": "1.0",
+        "status": "plan",
+        "reasonCode": null,
+        "steps": [
+          {
+            "id": "s_1",
+            "operation": "select_pages",
+            "inputs": [
+              "A"
+            ],
+            "outputRef": "out_stage1",
+            "params": {
+              "action": "remove",
+              "pages": {
+                "mode": "explicit",
+                "indices": [
+                  3
+                ]
+              }
+            }
+          }
+        ],
+        "resultRefs": [
+          "out_stage1"
+        ],
+        "clarification": null
+      }
+    },
+    "O107-024:0": {
+      "toolName": "run_local_pdf_workflow",
+      "input": {
+        "schemaVersion": "1.0",
+        "status": "plan",
+        "reasonCode": null,
+        "steps": [
+          {
+            "id": "s_1",
+            "operation": "compress_pdf",
+            "inputs": [
+              "R2"
+            ],
+            "outputRef": "out_stage1",
+            "params": {
+              "targetBytes": null,
+              "preset": "lossless",
+              "batchMode": "single"
+            }
+          }
+        ],
+        "resultRefs": [
+          "out_stage1"
+        ],
+        "clarification": null
+      }
+    },
+    "O107-025:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "clarify",
+        "reasonCode": "missing_parameter",
+        "message": "Which page?",
+        "choices": [
+          "Page 1",
+          "Page 2"
+        ]
+      }
+    },
+    "O107-032:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "unsupported",
+        "reasonCode": "excluded_operation",
+        "message": "That operation is not supported.",
+        "choices": []
+      }
+    },
+    "O107-033:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "unsupported",
+        "reasonCode": "excluded_operation",
+        "message": "That operation is not supported.",
+        "choices": []
+      }
+    },
+    "O107-035:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "unsupported",
+        "reasonCode": "content_required",
+        "message": "Content-derived chronological sorting is unavailable.",
+        "choices": []
+      }
+    },
+    "O107-037:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "unsupported",
+        "reasonCode": "content_required",
+        "message": "Invoice selection is not connected to this runtime.",
+        "choices": []
+      }
+    },
+    "O107-038:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "clarify",
+        "reasonCode": "ambiguous_reference",
+        "message": "Confirm the uncertain blank-page candidate before choosing a physical page.",
+        "choices": []
+      }
+    },
+    "O107-040:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "unsupported",
+        "reasonCode": "unavailable_capability",
+        "message": "Ordered multi-output splitting is unavailable.",
+        "choices": []
+      }
+    },
+    "O107-042:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "unsupported",
+        "reasonCode": "unavailable_capability",
+        "message": "Protect is unavailable, so the complete workflow cannot run.",
+        "choices": []
+      }
+    },
+    "O107-044:0": {
+      "toolName": "run_local_pdf_workflow",
+      "input": {
+        "schemaVersion": "1.0",
+        "status": "plan",
+        "reasonCode": null,
+        "steps": [
+          {
+            "id": "s_1",
+            "operation": "compress_pdf",
+            "inputs": [
+              "A"
+            ],
+            "outputRef": "out_stage1",
+            "params": {
+              "targetBytes": null,
+              "preset": "balanced",
+              "batchMode": "single"
+            }
+          }
+        ],
+        "resultRefs": [
+          "out_stage1"
+        ],
+        "clarification": null
+      }
+    },
+    "O107-045:0": {
+      "toolName": "run_local_pdf_workflow",
+      "input": {
+        "schemaVersion": "1.0",
+        "status": "plan",
+        "reasonCode": null,
+        "steps": [
+          {
+            "id": "s_1",
+            "operation": "select_pages",
+            "inputs": [
+              "A"
+            ],
+            "outputRef": "out_stage1",
+            "params": {
+              "action": "remove",
+              "pages": {
+                "mode": "explicit",
+                "indices": [
+                  3
+                ]
+              }
+            }
+          }
+        ],
+        "resultRefs": [
+          "out_stage1"
+        ],
+        "clarification": null
+      }
+    },
+    "O107-049:0": {
+      "toolName": "run_local_pdf_workflow",
+      "input": {
+        "schemaVersion": "1.0",
+        "status": "plan",
+        "reasonCode": null,
+        "steps": [
+          {
+            "id": "s_1",
+            "operation": "merge_pdf",
+            "inputs": [
+              "A",
+              "B"
+            ],
+            "outputRef": "out_stage1",
+            "params": {
+              "ordering": "as_provided"
+            }
+          }
+        ],
+        "resultRefs": [
+          "out_stage1"
+        ],
+        "clarification": null
+      }
+    },
+    "O107-059:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "clarify",
+        "reasonCode": "missing_files",
+        "message": "Attach a PDF first.",
+        "choices": []
+      }
+    },
+    "O107-060:0": {
+      "toolName": "run_local_pdf_workflow",
+      "input": {
+        "schemaVersion": "1.0",
+        "status": "plan",
+        "reasonCode": null,
+        "steps": [
+          {
+            "id": "s_1",
+            "operation": "select_pages",
+            "inputs": [
+              "A"
+            ],
+            "outputRef": "out_stage1",
+            "params": {
+              "action": "remove",
+              "pages": {
+                "mode": "explicit",
+                "indices": [
+                  1,
+                  4
+                ]
+              }
+            }
+          }
+        ],
+        "resultRefs": [
+          "out_stage1"
+        ],
+        "clarification": null
+      }
+    },
+    "O107-061:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "answer",
+        "reasonCode": "product_information",
+        "message": "OCR adds searchable text locally to a supported scan.",
+        "choices": []
+      }
+    },
+    "O107-062:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "unsupported",
+        "reasonCode": "unavailable_capability",
+        "message": "The complete workflow needs a capability unavailable here.",
+        "choices": []
+      }
+    },
+    "O107-063:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "unsupported",
+        "reasonCode": "unavailable_capability",
+        "message": "The complete workflow needs a capability unavailable here.",
+        "choices": []
+      }
+    },
+    "O107-064:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "unsupported",
+        "reasonCode": "invalid_request",
+        "message": "A PDF must retain at least one page.",
+        "choices": []
+      }
+    }
+  },
+  "corpusVersion": "1.1.0"
+}

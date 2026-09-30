@@ -1,0 +1,38 @@
+{
+  "sourceCommit": "5e99a99fbe0503c5525f4d1c8aeb636c62533da6",
+  "cwd": "/Users/shrey/.codex/worktrees/shr47-page-verification/atepdf",
+  "environment": {
+    "ATEPDF_CORPUS_PYTHON": "/Users/shrey/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "EXPO_NO_TELEMETRY": "1",
+    "NEXT_TELEMETRY_DISABLED": "1"
+  },
+  "startedAt": "2026-09-30T10:39:11Z",
+  "commands": [
+    {
+      "argv": [
+        "/Users/shrey/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "--import",
+        "tsx",
+        "--test",
+        "tests/regressions/android-preflight.test.ts",
+        "tests/regressions/commerce.test.ts",
+        "tests/regressions/compatibility-matrix.test.ts",
+        "tests/regressions/content-admission.test.ts",
+        "tests/regressions/core-integrity.test.ts",
+        "tests/regressions/job-progress.test.ts",
+        "tests/regressions/local-workflow.test.ts",
+        "tests/regressions/native-beta.test.ts",
+        "tests/regressions/native-lifecycle.test.ts",
+        "tests/regressions/native-planner.test.ts",
+        "tests/regressions/page-verification.test.ts",
+        "tests/regressions/pdf-corpus.test.ts",
+        "tests/regressions/planner.test.ts",
+        "tests/regressions/protocol-conformance.test.ts",
+        "tests/regressions/workspace-persistence.test.ts"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 31.36,
+      "log": "/tmp/atepdf-shr47-final-5e99a99/regressions-1.log"
+    }
+  ]
+}

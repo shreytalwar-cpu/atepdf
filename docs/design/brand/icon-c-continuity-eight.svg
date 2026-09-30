@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="t">
+  <title id="t">atePDF app icon, direction C</title>
+  <!-- macOS icon grid: 824 pt body on a 1024 canvas, continuous-corner approximation rx 185.
+       Production icon is authored in Icon Composer as two layers: background + mark (+ fold tint). -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#EDEDF2"/></linearGradient>
+    <linearGradient id="mk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7466FF"/><stop offset="1" stop-color="#4B3BE6"/></linearGradient>
+    
+  </defs>
+  <rect x="100" y="100" width="824" height="824" rx="185" fill="url(#bg)"/>
+  <rect x="100.5" y="100.5" width="823" height="823" rx="184.5" fill="none" stroke="#0000001A" stroke-width="2"/>
+  <g transform="translate(212 212) scale(6)">
+    <g fill="none" stroke="url(#mk)" stroke-width="13" stroke-linecap="round">
+      <path d="M65.16 25.28 A15.5 15.5 0 1 1 51.62 13.08"/>
+      <circle cx="50" cy="64.5" r="20.5"/>
+    </g>
+    <circle cx="69.07" cy="7.32" r="5.5" fill="#FF8A5B"/>
+  </g>
+</svg>

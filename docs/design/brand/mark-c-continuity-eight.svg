@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-labelledby="t">
+  <title id="t">atePDF mark, direction C: Continuity Eight</title>
+  <!-- A heavy monoline 8. The upper bowl stays open at the top right and the break is
+       followed by a caret dot: the conversation continues. One stroke weight, one colour. -->
+  <g fill="none" stroke="#5646F0" stroke-width="13" stroke-linecap="round">
+    <path d="M65.16 25.28 A15.5 15.5 0 1 1 51.62 13.08"/>
+    <circle cx="50" cy="64.5" r="20.5"/>
+  </g>
+  <circle cx="69.07" cy="7.32" r="5.5" fill="#5646F0"/>
+</svg>

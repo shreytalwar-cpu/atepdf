@@ -39,6 +39,22 @@ Fresh independent atepdf repository; Attenlo remains read-only reference. No pro
 | Editing as an optional v1 expansion | D-17/Section 4.2: existing-text edits, added text, drawing, signatures, form filling, redaction and annotation creation are v2. Preserving existing structures is a distinct compatibility requirement. |
 | Existing touch/mobile acceptance as launch evidence | Sections 13/16 require actual Mac acceptance. Historical browser/simulator/helper results retain their limits; no newly passed gate is claimed. |
 
+## Approved v1 visual identity (SHR-105)
+
+Owner-approved 30 September 2026, effective when PR #91 merges; the canonical record is [docs/design/](design/README.md). The redesign changes presentation only. Conversation-first, intentional AI routing (including quick actions), local execution, consent, secure input and every PRODUCT_V1 behaviour are unchanged.
+
+| Decision | Outcome | Supersedes |
+|---|---|---|
+| OD-1 Logo/app icon | Folio Eight mark, Ink app icon | Raster gradient 8 in `APPROVED_BRAND.md` (build pack kept as history) |
+| OD-2 Name casing | `atePDF` in prose and wordmark; `atePDF Pro` | Lowercase `atepdf` in `APPROVED_BRAND.md` / `brand.json` |
+| OD-3 Dark mode | Ships at launch with light | MAC-04 "dark mode is not a launch gate unless separately approved" (this is that approval) |
+| OD-4 Accent | Iris `#5646F0` / `#6354FF` | White/navy/blue incumbent palette |
+| OD-5 Files panel | Right-hand panel, auto-shown ≥ 1120 pt | "No sidebar or permanent preview rail" |
+| OD-6 Catalyst idiom | Mac idiom, pending engineering confirmation in SHR-106/75 | iPad idiom (77% scaling) |
+| OD-7 Settings | In-window sheet | — (no separate Settings window in v1) |
+
+MAC-04's "preserve the 8-based identity and conversational layout" is honoured: the new mark is an 8 and the single conversation layout remains. Its "fix observed usability problems, not the entire visual direction" is superseded by the SHR-26 → SHR-105/106 redesign track. Detailed superseded UI rules are X-1–X-18 in [MIGRATION_MAP.md](design/MIGRATION_MAP.md).
+
 ## Remaining decisions and reconciliation limits
 
 [Section 19](PRODUCT_V1.md#19-open-decisions-and-bounded-investigations), OPEN-01–10, is the single open-decision register: minimum Mac/hardware, allowance/accounting, prices/Pro limits, payment/seller/account/channel design, persistence/retention, local-understanding method, OCR/formats/encryption/compatibility, consent UX, production provider/infrastructure/outage policy, updater/territory/privacy/analytics/support details. Do not choose defaults to close a document.

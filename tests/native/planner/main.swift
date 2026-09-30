@@ -5,7 +5,7 @@ import Foundation
   static func request(_ instruction: String) -> String {
     let a = "file_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", b = "file_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
     let value: [String: Any] = ["schemaVersion":"1.0", "requestId":"req_"+UUID().uuidString.replacingOccurrences(of:"-",with:"").lowercased(), "workspaceRevision":2,"locale":"en-IN","instruction":instruction,
-      "files":[["ref":a,"kind":"pdf","pageCount":2,"sizeBytes":3000,"encrypted":false],["ref":b,"kind":"pdf","pageCount":1,"sizeBytes":2000,"encrypted":false]],
+      "files":[["ref":a,"kind":"pdf","pageCount":2,"sizeBucket":"<1MB","encrypted":false],["ref":b,"kind":"pdf","pageCount":1,"sizeBucket":"<1MB","encrypted":false]],
       "selectionRefs":[a,b],"focusedResultRef":NSNull(),"originalRefs":[a,b],"pendingClarification":NSNull(),"previousActionIds":[],"previousPlan":NSNull(),"capabilities":["merge_pdf","select_pages","ocr_pdf","compress_pdf"],"ocrLanguages":["eng"]]
     return String(data:try! JSONSerialization.data(withJSONObject:value),encoding:.utf8)!
   }
@@ -29,6 +29,24 @@ import Foundation
     try check(connected.contains("\"enabled\":true") && !connected.contains("token"),"paired status excludes credential")
     let plan = try await transport.plan(id:UUID().uuidString,body:request("Merge in the order added"))
     try check(plan.contains("merge_pdf"),"complete merge response")
+    func plannerBytes() async throws -> Int {
+      let (data, _) = try await URLSession.shared.data(from: URL(string: "http://localhost:3212/test/evidence")!)
+      return (try JSONSerialization.jsonObject(with: data) as! [String: Any])["plannerBytes"] as! Int
+    }
+    let beforeCanaries = try await plannerBytes()
+    for (index, instruction) in ["password: SYNTHETIC_SECRET", "my password SYNTHETIC_SECRET", "ghp_syntheticcredentialvalue", "AKIAABCDEFGHIJKLMNOP", "Bearer synthetic-token-value", "/Users/synthetic/private", "synthetic-client.pdf", String(repeating: "a", count: 64)].enumerated() {
+      do { _ = try AtepdfPlannerTransport.admittedBody(request(instruction)); throw NSError(domain: "native admission canary index \(index)", code: 1) }
+      catch is AtepdfPlannerTransport.Failure {}
+      do { _ = try await transport.plan(id: UUID().uuidString, body: request(instruction)); throw NSError(domain: "privacy canary admitted", code: 1) }
+      catch is AtepdfPlannerTransport.Failure {}
+    }
+    for extra in ["pdfBytes", "fileName", "ocrText", "extractedText", "localLabel", "summary", "contentHash", "sizeBytes", "debugContext", "secureHandle", "encryptionKey", "deviceFingerprint", "clipboard"] {
+      var canary = try JSONSerialization.jsonObject(with: Data(request("Merge").utf8)) as! [String: Any]
+      canary[extra] = "SYNTHETIC_PRIVATE_VALUE"
+      do { _ = try await transport.plan(id: UUID().uuidString, body: String(data: JSONSerialization.data(withJSONObject: canary), encoding: .utf8)!); throw NSError(domain: "unclassified canary admitted", code: 1) }
+      catch is AtepdfPlannerTransport.Failure {}
+    }
+    try check(try await plannerBytes() == beforeCanaries, "native blocked payload bytes = 0")
     var continued = try JSONSerialization.jsonObject(with: Data(request("Merge in the order added").utf8)) as! [String: Any]
     let originalRequestId = continued["requestId"] as! String
     let refs = continued["originalRefs"] as! [String]
@@ -55,6 +73,6 @@ import Foundation
     do { _ = try await transport.plan(id:early,body:request("Merge"));throw NSError(domain:"early cancel failed",code:1) } catch is CancellationError {}
     try await transport.disconnect(id:UUID().uuidString)
     try check(try await transport.status(id:UUID().uuidString).contains("pairingRequired"),"disconnected")
-    print("Native URLSession tests passed: pairing, private DTO, product answer, complete plan, redirect/body rejection, cancellation, disconnect. Synthetic gateway only.")
+    print("Native URLSession tests passed: H buckets, 21 privacy canaries with zero outbound bytes, pairing, bounded clarification, product answer, complete plan, redirect/body rejection, cancellation, disconnect. Synthetic loopback gateway only.")
   }
 }

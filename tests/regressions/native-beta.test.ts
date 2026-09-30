@@ -1,3 +1,4 @@
+import {fixture,wireRequest} from '../helpers/outbound-fixture';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdtemp,rm,symlink,chmod} from 'node:fs/promises';
@@ -26,13 +27,13 @@ test('actual private TLS gateway pairs and plans, refuses browser/key/file route
     const authority=Buffer.from(tls.cert.toString().match(/-----BEGIN CERTIFICATE-----[\s\S]*?-----END CERTIFICATE-----/g)![1]);
     let calls=0;
     const origin='http://localhost:3212';
-    const gateway=createGateway({status:async()=>({connected:true,enabled:true,remaining:2}),reserve:async()=>({key:'synthetic-only',release:async()=>{}})},async request=>{calls++;assert.doesNotMatch(JSON.stringify(request),/PRIVATE-CANARY|brief\.pdf|appendix\.pdf/);return quickPlan(request,'merge').planner;},{minIntervalMs:0,nativeEndpoint:tls.endpoint});
+    const gateway=createGateway({status:async()=>({connected:true,enabled:true,remaining:2}),reserve:async()=>({key:'synthetic-only',release:async()=>{}})},async request=>{calls++;assert.doesNotMatch(JSON.stringify(request),/PRIVATE-CANARY|brief\.pdf|appendix\.pdf/);return quickPlan(request,'merge').planner;},{minIntervalMs:0,nativeEndpoint:tls.endpoint,...(await fixture()).gatewayOptions});
     server=createNativeBetaServer({gateway,origin:tls.endpoint.origin,loopbackOrigin:origin,key:tls.key,cert:tls.cert});
     server.listen(0,'127.0.0.1');await once(server,'listening');
     const address=server.address();assert.ok(address&&typeof address==='object');
     const testOrigin=`https://127.0.0.1:${address.port}`;
     function send(path:string,body?:unknown,headers:Record<string,string>={},trust:Buffer|undefined=authority,tlsHost?:string){return new Promise<{status:number;body:any}>((resolve,reject)=>{
-      const data=body===undefined?undefined:JSON.stringify(body),req=httpsRequest(testOrigin+path,{method:data?'POST':'GET',ca:trust,agent:false,checkServerIdentity:tlsHost?(_hostname,certificate)=>checkServerIdentity(tlsHost,certificate):checkServerIdentity,headers:{host:new URL(tls.endpoint.origin).host,...(data?{'content-type':'application/json','content-length':String(Buffer.byteLength(data))}:{}),...headers}},res=>{let text='';res.on('data',c=>text+=c);res.on('end',()=>resolve({status:res.statusCode!,body:JSON.parse(text)}));});req.on('error',reject);req.end(data);
+      const data=body===undefined?undefined:JSON.stringify(wireRequest(body)),req=httpsRequest(testOrigin+path,{method:data?'POST':'GET',ca:trust,agent:false,checkServerIdentity:tlsHost?(_hostname,certificate)=>checkServerIdentity(tlsHost,certificate):checkServerIdentity,headers:{host:new URL(tls.endpoint.origin).host,...(data?{'content-type':'application/json','content-length':String(Buffer.byteLength(data))}:{}),...headers}},res=>{let text='';res.on('data',c=>text+=c);res.on('end',()=>resolve({status:res.statusCode!,body:JSON.parse(text)}));});req.on('error',reject);req.end(data);
     });}
     // No trusted certificate => TLS must fail. This is not rejectUnauthorized:false.
     await assert.rejects(send('/api/native/planner/status',undefined,{},Buffer.from('')));

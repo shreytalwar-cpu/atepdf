@@ -291,7 +291,12 @@ function useWorkspace() {
         setChoice(id);return;
       }
       setLoading(false);setPlanning(true);
-      const result=await requestPlan(request,status.token,abort.signal);
+      const result=await requestPlan(request,status.token,abort.signal,()=>{
+        if(store.revision!==request.workspaceRevision)throw new Error('Files changed.');
+        const current=controller.request(privateInstruction(text,store.list));
+        current.requestId=request.requestId;
+        return continuation?withPendingClarification(current,continuation):current;
+      });
       abort.signal.throwIfAborted();
       if(store.revision!==request.workspaceRevision)throw new Error('Your files changed. Please ask again.');
       // requestPlan validates clarification shape and response binding too.

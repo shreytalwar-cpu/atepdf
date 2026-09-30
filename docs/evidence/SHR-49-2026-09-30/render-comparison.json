@@ -1,0 +1,59 @@
+{
+  "renderer": "pdftoppm version 26.05.0",
+  "scaleTo": 900,
+  "scope": "One representative page per pair. Pixel equality does not prove link behavior, form validity, or full visual fidelity.",
+  "pairs": [
+    {
+      "source": "uri-only-input",
+      "sourcePage": 1,
+      "output": "uri-only-merge-offset",
+      "outputPage": 2,
+      "size": [
+        637,
+        900
+      ],
+      "equalDecodedPixels": true,
+      "sourcePixelsSha256": "774b0366679f530e6958e2b2dd65ea1647f03db16f82f342f77156c75a25be67",
+      "outputPixelsSha256": "774b0366679f530e6958e2b2dd65ea1647f03db16f82f342f77156c75a25be67"
+    },
+    {
+      "source": "uri-only-input",
+      "sourcePage": 1,
+      "output": "uri-only-merge-first",
+      "outputPage": 1,
+      "size": [
+        637,
+        900
+      ],
+      "equalDecodedPixels": true,
+      "sourcePixelsSha256": "774b0366679f530e6958e2b2dd65ea1647f03db16f82f342f77156c75a25be67",
+      "outputPixelsSha256": "774b0366679f530e6958e2b2dd65ea1647f03db16f82f342f77156c75a25be67"
+    },
+    {
+      "source": "interactive-input",
+      "sourcePage": 1,
+      "output": "interactive-merge",
+      "outputPage": 2,
+      "size": [
+        637,
+        900
+      ],
+      "equalDecodedPixels": true,
+      "sourcePixelsSha256": "08cf5a24c094fb7a6416459341296c4091836e53604348c40106387e8e78a601",
+      "outputPixelsSha256": "08cf5a24c094fb7a6416459341296c4091836e53604348c40106387e8e78a601"
+    },
+    {
+      "source": "uri-only-input",
+      "sourcePage": 1,
+      "output": "uri-with-P-merge-offset",
+      "outputPage": 2,
+      "size": [
+        637,
+        900
+      ],
+      "equalDecodedPixels": true,
+      "sourcePixelsSha256": "774b0366679f530e6958e2b2dd65ea1647f03db16f82f342f77156c75a25be67",
+      "outputPixelsSha256": "774b0366679f530e6958e2b2dd65ea1647f03db16f82f342f77156c75a25be67"
+    }
+  ]
+}

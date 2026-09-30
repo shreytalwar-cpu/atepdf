@@ -26,6 +26,10 @@ Fresh independent atepdf repository; Attenlo remains read-only reference. No pro
 | 0011 | Mac launch envelope (SHR-34) — **approved 30 September 2026** | macOS 14.0 minimum; Universal arm64 + x86_64 with Intel support conditional on real Intel runtime acceptance (Apple Silicon only is the fallback); 8 GB/16 GB internal hypotheses only, no public disk number until SHR-78; Mac idiom viable (UX acceptance in SHR-106/75); provisional wording "macOS 14 or later. Mac with Apple silicon or Intel processor."; Setapp an intended v1 channel (PRODUCT_V1 §4.2 updated; acceptance pending SHR-91). Settles OPEN-01's envelope; no project setting changed yet |
 | 0012 | Pre-send privacy and operation-consent contract (SHR-35) — **approved 30 September 2026** (PRIV-1–7; PRIV-5 without an email-address warning) | Outbound fields classed H (instruction after local guards, bounded clarification, opaque refs, active-projection page counts, coarse size buckets; relay-only identity; versioned hosted disclosure), C (document/derived content, file names, exact sizes/metadata: single-use exact-payload grant, 5-minute TTL, plus an approved purpose; v1 purpose list empty) or N (never: passwords, keys, tokens, paths, device IDs). Incomplete provider/relay disclosure blocks transfer. Narrows 0006's no-per-send-confirmation to class H. Settles OPEN-08's policy; contract for SHR-36/37/79; nothing implemented |
 
+## Proposed complex-PDF decision (SHR-49)
+
+[ADR 0013](adr/0013-first-complex-pdf-preservation-slice.md) proposes a finite simple HTTP/HTTPS URI-link preservation slice for **Merge only**, using the existing writer/reader stack. CPDF-1–5 require explicit owner approval. This is not implemented support or authority to start SHR-50; current admission and runtime knowledge remain unchanged. [Source-bound probes](evidence/SHR-49-2026-09-30/README.md) distinguish rejected production inputs from direct-library preservation failures.
+
 ## Superseded direction and current-source gaps
 
 | Earlier direction or unresolved statement | Approved target / disposition |

@@ -1,0 +1,15 @@
+{
+  "source": "37e970025eaff9be35a2b8d5fa0291d9c7eef0a5",
+  "rows": [
+    {
+      "id": "interactive",
+      "admitted": false,
+      "error": "This PDF has document features this build cannot safely preserve. Your original is unchanged."
+    },
+    {
+      "id": "tagged",
+      "admitted": false,
+      "error": "This PDF has document features this build cannot safely preserve. Your original is unchanged."
+    }
+  ]
+}

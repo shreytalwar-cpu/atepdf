@@ -1,0 +1,1046 @@
+{
+  "scope": "Direct pdf-lib copyPages probe, not product support or Mac-app acceptance. URI inputs are test-only projections of SHR-45 interactive; removed catalog families are never stripped in production.",
+  "source": "37e970025eaff9be35a2b8d5fa0291d9c7eef0a5",
+  "pdfLib": "1.17.1",
+  "pdfjs": "6.3.289",
+  "inputs": {
+    "interactive": "88f98f1ba4ce99b784ed17205faae80edc5e3cfca54c14cb0f7e2c79e09cfc64",
+    "tagged": "dbf408294a099c53be62c7cec80dfbd296bd2bd1c3025ab0554daf517ca55ffd",
+    "ordinary": "7032fca149367388889994751fff118003c5a2cef90f97e0eaa4722bc5587e56"
+  },
+  "originalHashesUnchanged": {
+    "interactive": true,
+    "tagged": true
+  },
+  "records": [
+    {
+      "id": "interactive-input",
+      "sha256": "88f98f1ba4ce99b784ed17205faae80edc5e3cfca54c14cb0f7e2c79e09cfc64",
+      "byteLength": 9969,
+      "observation": {
+        "pages": [
+          {
+            "ref": {
+              "num": 7,
+              "gen": 0
+            },
+            "text": "INTERACTIVE-1 links, forms, notes Visit synthetic example Go to section two",
+            "view": [
+              0,
+              0,
+              595.28,
+              841.89
+            ],
+            "rotation": 0,
+            "annotations": [
+              {
+                "subtype": "Link",
+                "rect": [
+                  55,
+                  682,
+                  265,
+                  710
+                ],
+                "url": "https://example.invalid/shr45",
+                "unsafeUrl": "https://example.invalid/shr45",
+                "dest": null,
+                "targetPage": null,
+                "destinationError": null,
+                "fieldName": null,
+                "fieldValue": null,
+                "contents": ""
+              },
+              {
+                "subtype": "Link",
+                "rect": [
+                  55,
+                  632,
+                  245,
+                  660
+                ],
+                "url": null,
+                "unsafeUrl": null,
+                "dest": [
+                  {
+                    "num": 10,
+                    "gen": 0
+                  },
+                  {
+                    "name": "Fit"
+                  }
+                ],
+                "targetPage": 2,
+                "destinationError": null,
+                "fieldName": null,
+                "fieldValue": null,
+                "contents": "internal destination"
+              },
+              {
+                "subtype": "Highlight",
+                "rect": [
+                  55,
+                  730,
+                  355,
+                  762
+                ],
+                "url": null,
+                "unsafeUrl": null,
+                "dest": null,
+                "targetPage": null,
+                "destinationError": null,
+                "fieldName": null,
+                "fieldValue": null,
+                "contents": "Synthetic highlight"
+              },
+              {
+                "subtype": "Text",
+                "rect": [
+                  360,
+                  723,
+                  382,
+                  745
+                ],
+                "url": null,
+                "unsafeUrl": null,
+                "dest": null,
+                "targetPage": null,
+                "destinationError": null,
+                "fieldName": null,
+                "fieldValue": null,
+                "contents": "Synthetic note"
+              },
+              {
+                "subtype": "Widget",
+                "rect": [
+                  60,
+                  540,
+                  280,
+                  564
+                ],
+                "url": null,
+                "unsafeUrl": null,
+                "dest": null,
+                "targetPage": null,
+                "destinationError": null,
+                "fieldName": "synthetic_name",
+                "fieldValue": "Example",
+                "contents": ""
+              },
+              {
+                "subtype": "Widget",
+                "rect": [
+                  60,
+                  500,
+                  80,
+                  520
+                ],
+                "url": null,
+                "unsafeUrl": null,
+                "dest": null,
+                "targetPage": null,
+                "destinationError": null,
+                "fieldName": "synthetic_check",
+                "fieldValue": "Yes",
+                "contents": ""
+              }
+            ],
+            "structure": null
+          },
+          {
+            "ref": {
+              "num": 10,
+              "gen": 0
+            },
+            "text": "INTERACTIVE-2 internal target",
+            "view": [
+              0,
+              0,
+              595.28,
+              841.89
+            ],
+            "rotation": 0,
+            "annotations": [],
+            "structure": null
+          }
+        ],
+        "outline": [
+          {
+            "action": null,
+            "dest": [
+              {
+                "num": 7,
+                "gen": 0
+              },
+              {
+                "name": "Fit"
+              }
+            ],
+            "url": null,
+            "title": "Synthetic guide",
+            "color": {
+              "0": 0,
+              "1": 0,
+              "2": 0
+            },
+            "count": 1,
+            "bold": false,
+            "italic": false,
+            "items": [
+              {
+                "action": null,
+                "dest": [
+                  {
+                    "num": 10,
+                    "gen": 0
+                  },
+                  {
+                    "name": "Fit"
+                  }
+                ],
+                "url": null,
+                "title": "Second section",
+                "color": {
+                  "0": 0,
+                  "1": 0,
+                  "2": 0
+                },
+                "bold": false,
+                "italic": false,
+                "items": []
+              }
+            ]
+          }
+        ],
+        "fields": {},
+        "markInfo": null
+      }
+    },
+    {
+      "id": "tagged-input",
+      "sha256": "dbf408294a099c53be62c7cec80dfbd296bd2bd1c3025ab0554daf517ca55ffd",
+      "byteLength": 964,
+      "observation": {
+        "pages": [
+          {
+            "ref": {
+              "num": 3,
+              "gen": 0
+            },
+            "text": "TAGGED-1",
+            "view": [
+              0,
+              0,
+              300,
+              200
+            ],
+            "rotation": 0,
+            "annotations": [],
+            "structure": {
+              "children": [
+                {
+                  "role": "P",
+                  "children": [
+                    {
+                      "type": "content",
+                      "id": "p3R_mc0"
+                    }
+                  ]
+                }
+              ],
+              "role": "Root"
+            }
+          }
+        ],
+        "outline": null,
+        "fields": null,
+        "markInfo": {}
+      }
+    },
+    {
+      "id": "uri-only-input",
+      "sha256": "5f93c1c0008372f6c082d49824a817323a0d35f19fc4c62d0d36dce5deb2cf38",
+      "byteLength": 7122,
+      "observation": {
+        "pages": [
+          {
+            "ref": {
+              "num": 7,
+              "gen": 0
+            },
+            "text": "INTERACTIVE-1 links, forms, notes Visit synthetic example Go to section two",
+            "view": [
+              0,
+              0,
+              595.28,
+              841.89
+            ],
+            "rotation": 0,
+            "annotations": [
+              {
+                "subtype": "Link",
+                "rect": [
+                  55,
+                  682,
+                  265,
+                  710
+                ],
+                "url": "https://example.invalid/shr45",
+                "unsafeUrl": "https://example.invalid/shr45",
+                "dest": null,
+                "targetPage": null,
+                "destinationError": null,
+                "fieldName": null,
+                "fieldValue": null,
+                "contents": ""
+              }
+            ],
+            "structure": null
+          },
+          {
+            "ref": {
+              "num": 10,
+              "gen": 0
+            },
+            "text": "INTERACTIVE-2 internal target",
+            "view": [
+              0,
+              0,
+              595.28,
+              841.89
+            ],
+            "rotation": 0,
+            "annotations": [],
+            "structure": null
+          }
+        ],
+        "outline": null,
+        "fields": null,
+        "markInfo": null
+      }
+    },
+    {
+      "id": "uri-with-P-input",
+      "sha256": "9ecfe9d7dd29eb89ad2029a11c91af550f2f8bcfcdbc8a15cfcb06547614bcd0",
+      "byteLength": 7127,
+      "observation": {
+        "pages": [
+          {
+            "ref": {
+              "num": 7,
+              "gen": 0
+            },
+            "text": "INTERACTIVE-1 links, forms, notes Visit synthetic example Go to section two",
+            "view": [
+              0,
+              0,
+              595.28,
+              841.89
+            ],
+            "rotation": 0,
+            "annotations": [
+              {
+                "subtype": "Link",
+                "rect": [
+                  55,
+                  682,
+                  265,
+                  710
+                ],
+                "url": "https://example.invalid/shr45",
+                "unsafeUrl": "https://example.invalid/shr45",
+                "dest": null,
+                "targetPage": null,
+                "destinationError": null,
+                "fieldName": null,
+                "fieldValue": null,
+                "contents": ""
+              }
+            ],
+            "structure": null
+          },
+          {
+            "ref": {
+              "num": 10,
+              "gen": 0
+            },
+            "text": "INTERACTIVE-2 internal target",
+            "view": [
+              0,
+              0,
+              595.28,
+              841.89
+            ],
+            "rotation": 0,
+            "annotations": [],
+            "structure": null
+          }
+        ],
+        "outline": null,
+        "fields": null,
+        "markInfo": null
+      }
+    },
+    {
+      "id": "interactive-merge",
+      "sha256": "bcebe7411e07fbe060bf6b9de206ffed46b1f0a7014823160f6af73421e62792",
+      "byteLength": 8035,
+      "observation": {
+        "pages": [
+          {
+            "ref": {
+              "num": 7,
+              "gen": 0
+            },
+            "text": "COMMUNITY MAKERS MORNING  Morning Schedule  Practice event timetable  09:30   Room opens and materials are available 09:45   Welcome and activity introductions 10:00   First demonstration and open work time 10:45   Short break 11:00   Second demonstration and open work time 11:45   Informal project display 12:00   Pack away materials and close the room  Planning notes  The timetable is illustrative and may be adjusted for the practice event. People may work at their own pace during the open sessions. Leave the final quarter-hour free for arranging the display and tidying.  Synthetic practice document. No real event or personal information.   1",
+            "view": [
+              0,
+              0,
+              595.28,
+              841.89
+            ],
+            "rotation": 0,
+            "annotations": [],
+            "structure": null
+          },
+          {
+            "ref": {
+              "num": 29,
+              "gen": 0
+            },
+            "text": "INTERACTIVE-1 links, forms, notes Visit synthetic example Go to section two",
+            "view": [
+              0,
+              0,
+              595.28,
+              841.89
+            ],
+            "rotation": 0,
+            "annotations": [
+              {
+                "subtype": "Link",
+                "rect": [
+                  55,
+                  682,
+                  265,
+                  710
+                ],
+                "url": "https://example.invalid/shr45",
+                "unsafeUrl": "https://example.invalid/shr45",
+                "dest": null,
+                "targetPage": null,
+                "destinationError": null,
+                "fieldName": null,
+                "fieldValue": null,
+                "contents": ""
+              },
+              {
+                "subtype": "Link",
+                "rect": [
+                  55,
+                  632,
+                  245,
+                  660
+                ],
+                "url": null,
+                "unsafeUrl": null,
+                "dest": [
+                  {
+                    "num": 10,
+                    "gen": 0
+                  },
+                  {
+                    "name": "Fit"
+                  }
+                ],
+                "targetPage": 1,
+                "destinationError": null,
+                "fieldName": null,
+                "fieldValue": null,
+                "contents": "internal destination"
+              },
+              {
+                "subtype": "Highlight",
+                "rect": [
+                  55,
+                  730,
+                  355,
+                  762
+                ],
+                "url": null,
+                "unsafeUrl": null,
+                "dest": null,
+                "targetPage": null,
+                "destinationError": null,
+                "fieldName": null,
+                "fieldValue": null,
+                "contents": "Synthetic highlight"
+              },
+              {
+                "subtype": "Text",
+                "rect": [
+                  360,
+                  723,
+                  382,
+                  745
+                ],
+                "url": null,
+                "unsafeUrl": null,
+                "dest": null,
+                "targetPage": null,
+                "destinationError": null,
+                "fieldName": null,
+                "fieldValue": null,
+                "contents": "Synthetic note"
+              },
+              {
+                "subtype": "Widget",
+                "rect": [
+                  60,
+                  540,
+                  280,
+                  564
+                ],
+                "url": null,
+                "unsafeUrl": null,
+                "dest": null,
+                "targetPage": null,
+                "destinationError": null,
+                "fieldName": "synthetic_name",
+                "fieldValue": "Example",
+                "contents": ""
+              },
+              {
+                "subtype": "Widget",
+                "rect": [
+                  60,
+                  500,
+                  80,
+                  520
+                ],
+                "url": null,
+                "unsafeUrl": null,
+                "dest": null,
+                "targetPage": null,
+                "destinationError": null,
+                "fieldName": "synthetic_check",
+                "fieldValue": "Yes",
+                "contents": ""
+              }
+            ],
+            "structure": null
+          },
+          {
+            "ref": {
+              "num": 30,
+              "gen": 0
+            },
+            "text": "INTERACTIVE-2 internal target",
+            "view": [
+              0,
+              0,
+              595.28,
+              841.89
+            ],
+            "rotation": 0,
+            "annotations": [],
+            "structure": null
+          }
+        ],
+        "outline": null,
+        "fields": null,
+        "markInfo": null
+      }
+    },
+    {
+      "id": "interactive-remove-target",
+      "sha256": "3c84bded94e256b7458aace74a14f1d3048039665c302a3e9cef5be292c4c220",
+      "byteLength": 6883,
+      "observation": {
+        "pages": [
+          {
+            "ref": {
+              "num": 25,
+              "gen": 0
+            },
+            "text": "INTERACTIVE-1 links, forms, notes Visit synthetic example Go to section two",
+            "view": [
+              0,
+              0,
+              595.28,
+              841.89
+            ],
+            "rotation": 0,
+            "annotations": [
+              {
+                "subtype": "Link",
+                "rect": [
+                  55,
+                  682,
+                  265,
+                  710
+                ],
+                "url": "https://example.invalid/shr45",
+                "unsafeUrl": "https://example.invalid/shr45",
+                "dest": null,
+                "targetPage": null,
+                "destinationError": null,
+                "fieldName": null,
+                "fieldValue": null,
+                "contents": ""
+              },
+              {
+                "subtype": "Link",
+                "rect": [
+                  55,
+                  632,
+                  245,
+                  660
+                ],
+                "url": null,
+                "unsafeUrl": null,
+                "dest": [
+                  {
+                    "num": 6,
+                    "gen": 0
+                  },
+                  {
+                    "name": "Fit"
+                  }
+                ],
+                "targetPage": 1,
+                "destinationError": null,
+                "fieldName": null,
+                "fieldValue": null,
+                "contents": "internal destination"
+              },
+              {
+                "subtype": "Highlight",
+                "rect": [
+                  55,
+                  730,
+                  355,
+                  762
+                ],
+                "url": null,
+                "unsafeUrl": null,
+                "dest": null,
+                "targetPage": null,
+                "destinationError": null,
+                "fieldName": null,
+                "fieldValue": null,
+                "contents": "Synthetic highlight"
+              },
+              {
+                "subtype": "Text",
+                "rect": [
+                  360,
+                  723,
+                  382,
+                  745
+                ],
+                "url": null,
+                "unsafeUrl": null,
+                "dest": null,
+                "targetPage": null,
+                "destinationError": null,
+                "fieldName": null,
+                "fieldValue": null,
+                "contents": "Synthetic note"
+              },
+              {
+                "subtype": "Widget",
+                "rect": [
+                  60,
+                  540,
+                  280,
+                  564
+                ],
+                "url": null,
+                "unsafeUrl": null,
+                "dest": null,
+                "targetPage": null,
+                "destinationError": null,
+                "fieldName": "synthetic_name",
+                "fieldValue": "Example",
+                "contents": ""
+              },
+              {
+                "subtype": "Widget",
+                "rect": [
+                  60,
+                  500,
+                  80,
+                  520
+                ],
+                "url": null,
+                "unsafeUrl": null,
+                "dest": null,
+                "targetPage": null,
+                "destinationError": null,
+                "fieldName": "synthetic_check",
+                "fieldValue": "Yes",
+                "contents": ""
+              }
+            ],
+            "structure": null
+          }
+        ],
+        "outline": null,
+        "fields": null,
+        "markInfo": null
+      }
+    },
+    {
+      "id": "tagged-merge",
+      "sha256": "99ac41e207b38bda74abca3ce607e6d53b59df264949e272ca292f9ae69239fa",
+      "byteLength": 1906,
+      "observation": {
+        "pages": [
+          {
+            "ref": {
+              "num": 7,
+              "gen": 0
+            },
+            "text": "COMMUNITY MAKERS MORNING  Morning Schedule  Practice event timetable  09:30   Room opens and materials are available 09:45   Welcome and activity introductions 10:00   First demonstration and open work time 10:45   Short break 11:00   Second demonstration and open work time 11:45   Informal project display 12:00   Pack away materials and close the room  Planning notes  The timetable is illustrative and may be adjusted for the practice event. People may work at their own pace during the open sessions. Leave the final quarter-hour free for arranging the display and tidying.  Synthetic practice document. No real event or personal information.   1",
+            "view": [
+              0,
+              0,
+              595.28,
+              841.89
+            ],
+            "rotation": 0,
+            "annotations": [],
+            "structure": null
+          },
+          {
+            "ref": {
+              "num": 10,
+              "gen": 0
+            },
+            "text": "TAGGED-1",
+            "view": [
+              0,
+              0,
+              300,
+              200
+            ],
+            "rotation": 0,
+            "annotations": [],
+            "structure": null
+          }
+        ],
+        "outline": null,
+        "fields": null,
+        "markInfo": null
+      }
+    },
+    {
+      "id": "uri-only-merge-offset",
+      "sha256": "6c76ed0d707d2bae481457043a76da912d0954dca96c493fe468f3bd5247d19b",
+      "byteLength": 2573,
+      "observation": {
+        "pages": [
+          {
+            "ref": {
+              "num": 7,
+              "gen": 0
+            },
+            "text": "COMMUNITY MAKERS MORNING  Morning Schedule  Practice event timetable  09:30   Room opens and materials are available 09:45   Welcome and activity introductions 10:00   First demonstration and open work time 10:45   Short break 11:00   Second demonstration and open work time 11:45   Informal project display 12:00   Pack away materials and close the room  Planning notes  The timetable is illustrative and may be adjusted for the practice event. People may work at their own pace during the open sessions. Leave the final quarter-hour free for arranging the display and tidying.  Synthetic practice document. No real event or personal information.   1",
+            "view": [
+              0,
+              0,
+              595.28,
+              841.89
+            ],
+            "rotation": 0,
+            "annotations": [],
+            "structure": null
+          },
+          {
+            "ref": {
+              "num": 12,
+              "gen": 0
+            },
+            "text": "INTERACTIVE-1 links, forms, notes Visit synthetic example Go to section two",
+            "view": [
+              0,
+              0,
+              595.28,
+              841.89
+            ],
+            "rotation": 0,
+            "annotations": [
+              {
+                "subtype": "Link",
+                "rect": [
+                  55,
+                  682,
+                  265,
+                  710
+                ],
+                "url": "https://example.invalid/shr45",
+                "unsafeUrl": "https://example.invalid/shr45",
+                "dest": null,
+                "targetPage": null,
+                "destinationError": null,
+                "fieldName": null,
+                "fieldValue": null,
+                "contents": ""
+              }
+            ],
+            "structure": null
+          },
+          {
+            "ref": {
+              "num": 14,
+              "gen": 0
+            },
+            "text": "INTERACTIVE-2 internal target",
+            "view": [
+              0,
+              0,
+              595.28,
+              841.89
+            ],
+            "rotation": 0,
+            "annotations": [],
+            "structure": null
+          }
+        ],
+        "outline": null,
+        "fields": null,
+        "markInfo": null
+      }
+    },
+    {
+      "id": "uri-only-merge-first",
+      "sha256": "074073e45eb0c5adcacdda6560c9f402ccb658c0c6c96f4388a7c6e6972a6b3b",
+      "byteLength": 2565,
+      "observation": {
+        "pages": [
+          {
+            "ref": {
+              "num": 8,
+              "gen": 0
+            },
+            "text": "INTERACTIVE-1 links, forms, notes Visit synthetic example Go to section two",
+            "view": [
+              0,
+              0,
+              595.28,
+              841.89
+            ],
+            "rotation": 0,
+            "annotations": [
+              {
+                "subtype": "Link",
+                "rect": [
+                  55,
+                  682,
+                  265,
+                  710
+                ],
+                "url": "https://example.invalid/shr45",
+                "unsafeUrl": "https://example.invalid/shr45",
+                "dest": null,
+                "targetPage": null,
+                "destinationError": null,
+                "fieldName": null,
+                "fieldValue": null,
+                "contents": ""
+              }
+            ],
+            "structure": null
+          },
+          {
+            "ref": {
+              "num": 10,
+              "gen": 0
+            },
+            "text": "INTERACTIVE-2 internal target",
+            "view": [
+              0,
+              0,
+              595.28,
+              841.89
+            ],
+            "rotation": 0,
+            "annotations": [],
+            "structure": null
+          },
+          {
+            "ref": {
+              "num": 14,
+              "gen": 0
+            },
+            "text": "COMMUNITY MAKERS MORNING  Morning Schedule  Practice event timetable  09:30   Room opens and materials are available 09:45   Welcome and activity introductions 10:00   First demonstration and open work time 10:45   Short break 11:00   Second demonstration and open work time 11:45   Informal project display 12:00   Pack away materials and close the room  Planning notes  The timetable is illustrative and may be adjusted for the practice event. People may work at their own pace during the open sessions. Leave the final quarter-hour free for arranging the display and tidying.  Synthetic practice document. No real event or personal information.   1",
+            "view": [
+              0,
+              0,
+              595.28,
+              841.89
+            ],
+            "rotation": 0,
+            "annotations": [],
+            "structure": null
+          }
+        ],
+        "outline": null,
+        "fields": null,
+        "markInfo": null
+      }
+    },
+    {
+      "id": "uri-only-remove-target",
+      "sha256": "4c2697887b1f4d40016cd7eb37da20b1ccbd95afd8f795447b8fbd3123c38e1b",
+      "byteLength": 1248,
+      "observation": {
+        "pages": [
+          {
+            "ref": {
+              "num": 8,
+              "gen": 0
+            },
+            "text": "INTERACTIVE-1 links, forms, notes Visit synthetic example Go to section two",
+            "view": [
+              0,
+              0,
+              595.28,
+              841.89
+            ],
+            "rotation": 0,
+            "annotations": [
+              {
+                "subtype": "Link",
+                "rect": [
+                  55,
+                  682,
+                  265,
+                  710
+                ],
+                "url": "https://example.invalid/shr45",
+                "unsafeUrl": "https://example.invalid/shr45",
+                "dest": null,
+                "targetPage": null,
+                "destinationError": null,
+                "fieldName": null,
+                "fieldValue": null,
+                "contents": ""
+              }
+            ],
+            "structure": null
+          }
+        ],
+        "outline": null,
+        "fields": null,
+        "markInfo": null
+      }
+    },
+    {
+      "id": "uri-only-remove-link-page",
+      "sha256": "3aa59576e0089063d388fc1116cc253eb5dac292980323e74be3d1de556cc503",
+      "byteLength": 893,
+      "observation": {
+        "pages": [
+          {
+            "ref": {
+              "num": 7,
+              "gen": 0
+            },
+            "text": "INTERACTIVE-2 internal target",
+            "view": [
+              0,
+              0,
+              595.28,
+              841.89
+            ],
+            "rotation": 0,
+            "annotations": [],
+            "structure": null
+          }
+        ],
+        "outline": null,
+        "fields": null,
+        "markInfo": null
+      }
+    },
+    {
+      "id": "uri-with-P-merge-offset",
+      "sha256": "815dc905b7683d95c0117a08812d733ffc52e9fe546e7c486cc2ea4ad2e3b847",
+      "byteLength": 2587,
+      "observation": {
+        "pages": [
+          {
+            "ref": {
+              "num": 7,
+              "gen": 0
+            },
+            "text": "COMMUNITY MAKERS MORNING  Morning Schedule  Practice event timetable  09:30   Room opens and materials are available 09:45   Welcome and activity introductions 10:00   First demonstration and open work time 10:45   Short break 11:00   Second demonstration and open work time 11:45   Informal project display 12:00   Pack away materials and close the room  Planning notes  The timetable is illustrative and may be adjusted for the practice event. People may work at their own pace during the open sessions. Leave the final quarter-hour free for arranging the display and tidying.  Synthetic practice document. No real event or personal information.   1",
+            "view": [
+              0,
+              0,
+              595.28,
+              841.89
+            ],
+            "rotation": 0,
+            "annotations": [],
+            "structure": null
+          },
+          {
+            "ref": {
+              "num": 13,
+              "gen": 0
+            },
+            "text": "INTERACTIVE-1 links, forms, notes Visit synthetic example Go to section two",
+            "view": [
+              0,
+              0,
+              595.28,
+              841.89
+            ],
+            "rotation": 0,
+            "annotations": [
+              {
+                "subtype": "Link",
+                "rect": [
+                  55,
+                  682,
+                  265,
+                  710
+                ],
+                "url": "https://example.invalid/shr45",
+                "unsafeUrl": "https://example.invalid/shr45",
+                "dest": null,
+                "targetPage": null,
+                "destinationError": null,
+                "fieldName": null,
+                "fieldValue": null,
+                "contents": ""
+              }
+            ],
+            "structure": null
+          },
+          {
+            "ref": {
+              "num": 15,
+              "gen": 0
+            },
+            "text": "INTERACTIVE-2 internal target",
+            "view": [
+              0,
+              0,
+              595.28,
+              841.89
+            ],
+            "rotation": 0,
+            "annotations": [],
+            "structure": null
+          }
+        ],
+        "outline": null,
+        "fields": null,
+        "markInfo": null
+      }
+    }
+  ]
+}

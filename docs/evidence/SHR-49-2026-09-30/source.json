@@ -1,0 +1,65 @@
+{
+  "source": "37e970025eaff9be35a2b8d5fa0291d9c7eef0a5",
+  "node": "v24.19.0",
+  "files": [
+    {
+      "path": "packages/web-pdf/src/engine.ts",
+      "sha256": "0fe921cc97cc08926fab20dbc8ec4b541450a1b3a6a9a19662bdf74bee587a9c"
+    },
+    {
+      "path": "packages/web-pdf/src/types.ts",
+      "sha256": "5f26799b85db7c5a46d94975fe0c86b1ee4de7269bc0fb48492180e1e13dcb6a"
+    },
+    {
+      "path": "packages/web-pdf/src/content-admission.ts",
+      "sha256": "e228579bae823512351df7d226e8b3198f52595ed57d2e9d6740adc95a3f7307"
+    },
+    {
+      "path": "packages/core/src/job-controller.ts",
+      "sha256": "e1ed89a38a590ccca29a3444ae8eb838cc4cd3474a94d42dcc59aa6f4286f991"
+    },
+    {
+      "path": "apps/universal/src/platform/runtime.native.ts",
+      "sha256": "bbb842cabeda7c94a694bb56b76e9debed743bbd4e4ba309095a8230eb1ed504"
+    },
+    {
+      "path": "apps/universal/modules/atepdf-pdf/ios/AtepdfPDFEngine.swift",
+      "sha256": "15009d1d96b009f14bbea8806385e1c2091270c4ff61043e98be6d03ea19bd2b"
+    },
+    {
+      "path": "tests/fixtures/corpus/manifest.json",
+      "sha256": "be0c1b17e68a01fad1e7ece117cbe632dd1d0db04a102fb336073189042543fe"
+    },
+    {
+      "path": "tests/fixtures/corpus/interactive.pdf",
+      "sha256": "88f98f1ba4ce99b784ed17205faae80edc5e3cfca54c14cb0f7e2c79e09cfc64"
+    },
+    {
+      "path": "tests/fixtures/corpus/tagged.pdf",
+      "sha256": "dbf408294a099c53be62c7cec80dfbd296bd2bd1c3025ab0554daf517ca55ffd"
+    },
+    {
+      "path": "docs/evidence/SHR-46-main-update-2026-09-30/matrix.json",
+      "sha256": "a6217d7c244272aad7d65cd2534a1af82c7eef958cfc329632c4cc8de87fdae4"
+    },
+    {
+      "path": "docs/adr/0011-mac-launch-envelope.md",
+      "sha256": "640b494227688d932bc865dd947a6c1f4cbc100edb2c5f8ffd850ee7997c2474"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "pdf-lib/src/core/PDFObjectCopier.ts",
+      "sha256": "30739824b798ad8a9288b45efb2b93ba19ce1ae455fa681993c1047ea64f6131"
+    },
+    {
+      "path": "pdf-lib/src/api/PDFDocument.ts",
+      "sha256": "47f8eb90141be50c5e7ffb66772d39b67a70c94b6eb374f4f355bd98624bd198"
+    },
+    {
+      "path": "pdf-lib/LICENSE.md",
+      "sha256": "f2c9fc00fdb66eb99ac156ba52d734af66d8d309f65753ae809ad34ee2883bcb"
+    }
+  ],
+  "note": "Existing installed pdf-lib 1.17.1/PDF.js 6.3.289 used read-only; no dependency installation. Production sources unchanged."
+}

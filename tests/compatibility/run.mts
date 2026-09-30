@@ -17,7 +17,8 @@ const actions={merge_pdf:'merge',select_pages:'remove',ocr_pdf:'ocr',compress_pd
 type Fixture={id:string;path:string;sha256:string;pageCount:number;pageOrder:unknown;features:string[];visibleMarkers:string[];
   readerExpectation:string;operationExpectations:{operation:string;disposition:string;basis:string;reason:string}[]};
 type BrowserResult={admission:{status:string;reason:string|null};error:string|null;stage:string;
-  promoted:boolean;originalsUnchanged:boolean;output:string|null;note:string|null;ocr:{page:number;words:string[]}[]};
+  promoted:boolean;originalsUnchanged:boolean;output:string|null;note:string|null;ocr:{page:number;words:string[]}[];
+  pageVerification:{version:number;operation:string;status:string}|null};
 type Row=Record<string,unknown>&{id:string;fixtureId:string;operation:string;classification:string;reason:string|null};
 
 async function assets(temp:string){
@@ -102,7 +103,7 @@ export async function runMatrix(outputDir:string){
         parameters:operation==='select_pages'?{removePhysicalPages:[2]}:operation==='compress_pdf'?{preset:'balanced'}:
           operation==='ocr_pdf'?{languages:['eng'],existingText:'preserve'}:{ordering:'as_provided'},
         policy:fixture.operationExpectations.filter(item=>item.operation===operation),
-        admission:{status:'not_run',reason:null},execution:{status:'not_run',reason:null},
+        admission:{status:'not_run',reason:null},execution:{status:'not_run',reason:null,pageIdentity:{status:'not_run',required:['merge_pdf','select_pages'].includes(operation)}},
         result:null,independent:{reader:'not_run',structural:'not_run',issues:[]},
         visual:{status:'NOT_RUN',reason:'Post-transform rendering/OCR placement remains SHR-48.',
           inputReference:'tests/fixtures/corpus/README.md'},
@@ -134,8 +135,11 @@ export async function runMatrix(outputDir:string){
         row.classification='FAILED';rows.push(row);continue;
       }
       row.admission=got.admission;
+      const requiresPageIdentity=operation==='merge_pdf'||operation==='select_pages';
+      const gatePassed=got.pageVerification?.version===1&&got.pageVerification.operation===operation&&got.pageVerification.status==='passed';
       row.execution={status:got.admission.status==='rejected'?'not_run':got.error?'failed':'completed',
-        reason:got.error,note:got.note,recognizedPages:got.ocr};
+        reason:got.error,note:got.note,recognizedPages:got.ocr,pageIdentity:{required:requiresPageIdentity,
+          status:!requiresPageIdentity?'not_required':got.admission.status==='rejected'?'not_run':gatePassed?'passed':'failed',receipt:got.pageVerification}};
       row.originalUnchanged=got.originalsUnchanged&&ids.every(id=>sha256(inputs.get(id)!)===fixtures.find(f=>f.id===id)!.sha256);
       row.noPartialPromotion=!got.error||!got.promoted;
       if(got.error){
@@ -172,6 +176,7 @@ export async function runMatrix(outputDir:string){
         row.classification=classify({implemented:true,ran:true,verification,partialCoverage:partial,
           originalUnchanged:row.originalUnchanged===true});
         row.reason=verification.issues.join('; ')|| (partial?'Encoded-versus-declared raster dimensions remain unverified.':null);
+        if(requiresPageIdentity&&!gatePassed){row.classification='FAILED';row.reason='Required production page verification receipt is missing.';}
         row.independent={...verification,actual:verification.actual};
         row.expected=expected;
         row.result={sha256:sha256(saved),sizeBytes:saved.length,pageCount:verification.actual?.pages.length??null,
@@ -201,7 +206,7 @@ export async function runMatrix(outputDir:string){
       rows.push({id:fixture.id+'/'+expectation.operation,fixtureId:fixture.id,operation:expectation.operation,
         environment:'none',executor:null,reader:null,input:[{fixtureId:fixture.id,sha256:fixture.sha256,pageCount:fixture.pageCount,
           pageOrder:fixture.pageOrder,features:fixture.features}],parameters:null,policy:[expectation],
-        admission:{status:'not_run',reason:null},execution:{status:'not_run',reason:null},result:null,
+        admission:{status:'not_run',reason:null},execution:{status:'not_run',reason:null,pageIdentity:{required:false,status:'not_run'}},result:null,
         independent:{reader:'not_run',structural:'not_run',issues:[]},visual:{status:'NOT_RUN',reason:'No executor.'},
         originalUnchanged:true,noPartialPromotion:true,evidenceLocation:'matrix.json#'+fixture.id+'/'+expectation.operation,
         classification:'NOT_IMPLEMENTED',reason:'No active executor on current main.'});
@@ -212,17 +217,17 @@ export async function runMatrix(outputDir:string){
     const summaryCounts=summarizeCases(rows),counts=summaryCounts.counts;
     const runtimeFiles=['packages/contracts/src/protocol.ts','packages/core/src/job-controller.ts',
       'packages/core/src/local-file-store.ts','packages/web-pdf/src/engine.ts','packages/web-pdf/src/content-admission.ts',
-      'packages/web-pdf/src/client.ts','packages/web-pdf/src/pdf.worker.ts','package.json',
+      'packages/web-pdf/src/client.ts','packages/web-pdf/src/page-structure.ts','packages/core/src/page-verification.ts','packages/web-pdf/src/pdf.worker.ts','package.json',
       'tests/compatibility/matrix-core.ts','tests/compatibility/browser-entry.ts',
-      'tests/compatibility/run.mts','tests/compatibility/damaged-child.mts','tests/compatibility/matrix.schema.json'];
+      'tests/compatibility/run.mts','tests/compatibility/damaged-child.mts','tests/compatibility/matrix.schema.v2.json'];
     const sourceHashes=Object.fromEntries(await Promise.all(runtimeFiles.map(async path=>[path,sha256(await readFile(join(root,path)))])));
-    const matrix={schemaVersion:1,source:{commit:execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),
+    const matrix={schemaVersion:2,source:{commit:execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),
       files:sourceHashes,manifestSha256:sha256(manifestBytes)},environment:{node:process.version,
       browser:browser.version(),platform:process.platform,architecture:process.arch,nativeApp:'NOT_RUN',
       externalRequests:blockedRequests.length},operationInventory:registry.operations.map((op:{id:string})=>({
         operation:op.id,status:capabilities.includes(op.id as typeof capabilities[number])?'IMPLEMENTED':'NOT_IMPLEMENTED'})),
       summary:summaryCounts,cases:rows};
-    const validate=new Ajv2020({allErrors:true}).compile(JSON.parse(await readFile(join(root,'tests/compatibility/matrix.schema.json'),'utf8')));
+    const validate=new Ajv2020({allErrors:true}).compile(JSON.parse(await readFile(join(root,'tests/compatibility/matrix.schema.v2.json'),'utf8')));
     if(!validate(matrix))throw new Error('Matrix schema failed: '+JSON.stringify(validate.errors));
     await mkdir(outputDir,{recursive:true});
     if(renders.length)await mkdir(join(outputDir,'renders'));

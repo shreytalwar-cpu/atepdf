@@ -18,11 +18,7 @@ import {CheckpointScheduler} from '../../packages/core/src/workspace-checkpoints
 // in-memory stand-in for the device-local Keychain. No network, no providers.
 const fixture=async(name:string)=>new Uint8Array(await readFile(`tests/fixtures/${name}`));
 const hash=async(bytes:Uint8Array)=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new Uint8Array(bytes)))].map(n=>n.toString(16).padStart(2,'0')).join('');
-async function independent(bytes:Uint8Array):Promise<Inspection>{
-  const {getDocument}=await import('pdfjs-dist/legacy/build/pdf.mjs');
-  const task=getDocument({data:bytes.slice(),useSystemFonts:true,verbosity:0});const doc=await task.promise;
-  try{const pages=[];for(let n=1;n<=doc.numPages;n++){const p=await doc.getPage(n),v=p.getViewport({scale:1}),t=await p.getTextContent();pages.push({text:t.items.map(i=>'str'in i?i.str:'').join(' ').replace(/\s+/g,' ').trim(),width:v.width,height:v.height,rotation:p.rotate});}return {pages};}finally{await task.destroy();}
-}
+import {independentPDF as independent} from '../helpers/independent-pdf';
 type Calls={inspect:number;transform:number};
 const services=(calls:Calls)=>({worker:async(r:EngineRequest)=>{if(r.kind==='inspect'){calls.inspect++;return {pages:(await preflight(r.bytes)).getPageCount()};}calls.transform++;return transform(r,()=>{});},inspect:independent,recognize:async()=>[]});
 const CANARY='hunter2-canary-7Qz';

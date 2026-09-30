@@ -1,0 +1,652 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "atepdf-compatibility-matrix-v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "source",
+    "environment",
+    "operationInventory",
+    "summary",
+    "cases"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 2
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "commit",
+        "files",
+        "manifestSha256"
+      ],
+      "properties": {
+        "commit": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "manifestSha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "files": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "$ref": "#/$defs/hash"
+          }
+        }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "node",
+        "browser",
+        "platform",
+        "architecture",
+        "nativeApp",
+        "externalRequests"
+      ],
+      "properties": {
+        "node": {
+          "type": "string"
+        },
+        "browser": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "architecture": {
+          "type": "string"
+        },
+        "nativeApp": {
+          "enum": [
+            "NOT_RUN",
+            "RUN"
+          ]
+        },
+        "externalRequests": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "operationInventory": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "operation",
+          "status"
+        ],
+        "properties": {
+          "operation": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "IMPLEMENTED",
+              "NOT_IMPLEMENTED"
+            ]
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "total",
+        "executed",
+        "counts"
+      ],
+      "properties": {
+        "total": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "executed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "counts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "SUPPORTED",
+            "SAFELY_REJECTED",
+            "FAILED",
+            "FIDELITY_MISMATCH",
+            "UNVERIFIED",
+            "NOT_IMPLEMENTED",
+            "NOT_RUN"
+          ],
+          "properties": {
+            "SUPPORTED": {
+              "$ref": "#/$defs/count"
+            },
+            "SAFELY_REJECTED": {
+              "$ref": "#/$defs/count"
+            },
+            "FAILED": {
+              "$ref": "#/$defs/count"
+            },
+            "FIDELITY_MISMATCH": {
+              "$ref": "#/$defs/count"
+            },
+            "UNVERIFIED": {
+              "$ref": "#/$defs/count"
+            },
+            "NOT_IMPLEMENTED": {
+              "$ref": "#/$defs/count"
+            },
+            "NOT_RUN": {
+              "$ref": "#/$defs/count"
+            }
+          }
+        }
+      }
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/case"
+      }
+    }
+  },
+  "$defs": {
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "check": {
+      "enum": [
+        "passed",
+        "failed",
+        "not_run"
+      ]
+    },
+    "observation": {
+      "type": "object",
+      "required": [
+        "pages",
+        "annotations"
+      ],
+      "properties": {
+        "pages": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "annotations": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "stage": {
+      "type": "object",
+      "required": [
+        "status",
+        "reason"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "not_run",
+            "admitted",
+            "rejected",
+            "completed",
+            "failed"
+          ]
+        },
+        "reason": {
+          "$ref": "#/$defs/reason"
+        },
+        "pageIdentity": {
+          "type": "object",
+          "required": [
+            "required",
+            "status"
+          ],
+          "properties": {
+            "required": {
+              "type": "boolean"
+            },
+            "status": {
+              "enum": [
+                "passed",
+                "failed",
+                "not_run",
+                "not_required"
+              ]
+            },
+            "receipt": {
+              "type": [
+                "object",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "fixtureId",
+        "operation",
+        "classification",
+        "reason",
+        "environment",
+        "executor",
+        "reader",
+        "input",
+        "parameters",
+        "policy",
+        "admission",
+        "execution",
+        "result",
+        "independent",
+        "visual",
+        "originalUnchanged",
+        "noPartialPromotion",
+        "evidenceLocation"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "fixtureId": {
+          "type": "string"
+        },
+        "operation": {
+          "type": "string"
+        },
+        "classification": {
+          "enum": [
+            "SUPPORTED",
+            "SAFELY_REJECTED",
+            "FAILED",
+            "FIDELITY_MISMATCH",
+            "UNVERIFIED",
+            "NOT_IMPLEMENTED",
+            "NOT_RUN"
+          ]
+        },
+        "reason": {
+          "$ref": "#/$defs/reason"
+        },
+        "environment": {
+          "type": "string"
+        },
+        "executor": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reader": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "input": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "fixtureId",
+              "sha256",
+              "pageCount",
+              "pageOrder",
+              "features"
+            ],
+            "properties": {
+              "fixtureId": {
+                "type": "string"
+              },
+              "sha256": {
+                "$ref": "#/$defs/hash"
+              },
+              "pageCount": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "pageOrder": {},
+              "features": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "policy": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "operation",
+              "disposition",
+              "basis",
+              "reason"
+            ],
+            "properties": {
+              "operation": {
+                "type": "string"
+              },
+              "disposition": {
+                "enum": [
+                  "supported",
+                  "refused",
+                  "preserve_or_refuse",
+                  "unknown"
+                ]
+              },
+              "basis": {
+                "enum": [
+                  "approved_product_policy",
+                  "observed_prototype",
+                  "unknown"
+                ]
+              },
+              "reason": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "admission": {
+          "$ref": "#/$defs/stage"
+        },
+        "execution": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/stage"
+            },
+            {
+              "type": "object",
+              "required": [
+                "pageIdentity"
+              ]
+            }
+          ]
+        },
+        "result": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "required": [
+            "sha256",
+            "sizeBytes",
+            "pageCount",
+            "savedAndReopened",
+            "retained"
+          ],
+          "properties": {
+            "sha256": {
+              "$ref": "#/$defs/hash"
+            },
+            "sizeBytes": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "pageCount": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "savedAndReopened": {
+              "type": "boolean"
+            },
+            "retained": {
+              "type": "boolean"
+            },
+            "note": {
+              "$ref": "#/$defs/reason"
+            }
+          }
+        },
+        "independent": {
+          "type": "object",
+          "required": [
+            "reader",
+            "structural",
+            "issues"
+          ],
+          "properties": {
+            "reader": {
+              "$ref": "#/$defs/check"
+            },
+            "structural": {
+              "$ref": "#/$defs/check"
+            },
+            "visual": {
+              "$ref": "#/$defs/check"
+            },
+            "issues": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "actual": {
+              "$ref": "#/$defs/observation"
+            }
+          }
+        },
+        "expected": {
+          "$ref": "#/$defs/observation"
+        },
+        "visual": {
+          "type": "object",
+          "required": [
+            "status",
+            "reason"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASSED",
+                "FAILED",
+                "NOT_RUN"
+              ]
+            },
+            "reason": {
+              "type": "string"
+            },
+            "inputReference": {
+              "type": "string"
+            }
+          }
+        },
+        "originalUnchanged": {
+          "type": "boolean"
+        },
+        "noPartialPromotion": {
+          "type": "boolean"
+        },
+        "evidenceLocation": {
+          "type": "string"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "classification": {
+                "const": "SUPPORTED"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "executor": {
+                "type": "string",
+                "minLength": 1
+              },
+              "result": {
+                "type": "object",
+                "properties": {
+                  "savedAndReopened": {
+                    "const": true
+                  }
+                }
+              },
+              "independent": {
+                "type": "object",
+                "properties": {
+                  "reader": {
+                    "const": "passed"
+                  },
+                  "structural": {
+                    "const": "passed"
+                  }
+                }
+              },
+              "originalUnchanged": {
+                "const": true
+              },
+              "noPartialPromotion": {
+                "const": true
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "classification": {
+                "const": "SAFELY_REJECTED"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              },
+              "result": {
+                "type": "null"
+              },
+              "originalUnchanged": {
+                "const": true
+              },
+              "noPartialPromotion": {
+                "const": true
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "classification": {
+                "const": "NOT_IMPLEMENTED"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "executor": {
+                "type": "null"
+              },
+              "result": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "classification": {
+                "const": "SUPPORTED"
+              },
+              "operation": {
+                "enum": [
+                  "merge_pdf",
+                  "select_pages"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "execution": {
+                "type": "object",
+                "properties": {
+                  "pageIdentity": {
+                    "type": "object",
+                    "required": [
+                      "receipt"
+                    ],
+                    "properties": {
+                      "required": {
+                        "const": true
+                      },
+                      "status": {
+                        "const": "passed"
+                      },
+                      "receipt": {
+                        "type": "object",
+                        "required": [
+                          "version",
+                          "operation",
+                          "status"
+                        ],
+                        "properties": {
+                          "version": {
+                            "const": 1
+                          },
+                          "status": {
+                            "const": "passed"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

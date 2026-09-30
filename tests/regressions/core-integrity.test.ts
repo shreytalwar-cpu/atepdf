@@ -6,7 +6,7 @@ import {quickPlan,type Operation} from '../../packages/contracts/src/protocol';
 import type {Inspection,EngineRequest,EngineResult} from '../../packages/web-pdf/src/types';
 
 // Synthetic byte counts isolate orchestration; real PDF engine tests live separately.
-const inspection=(count:number):Inspection=>({pages:Array.from({length:count},()=>({width:612,height:792,rotation:0,text:''}))});
+import {syntheticInspection as inspection} from '../helpers/synthetic-inspection';
 async function storeWithInputs(){
   const store=new LocalFileStore();
   for(const [ref,pages] of [['file_a',3],['file_b',2]] as const){const entry=await store.prepare(new Uint8Array([pages]),'synthetic.pdf',inspection(pages),true,ref);store.commit([entry],store.revision);}

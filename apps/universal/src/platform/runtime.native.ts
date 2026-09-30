@@ -53,7 +53,15 @@ export const createController=()=>new JobController(new LocalFileStore(),{
       await checkpoint();const output=await requireReader().reencodeJpegAsync(encodeToBase64(bytes),width,height,.82);await checkpoint();return decodeFromBase64(output);
     }});signal.throwIfAborted();return result;
   },
-  inspect:async(bytes:Uint8Array,signal:AbortSignal):Promise<Inspection>=>{await check(bytes);return withPDF(bytes,signal,uri=>requireReader().inspectAsync(uri));},
+  inspect:async(bytes:Uint8Array,signal:AbortSignal):Promise<Inspection>=>{
+    const admitted=await check(bytes),inspection=await withPDF(bytes,signal,uri=>requireReader().inspectAsync(uri));
+    // Android reports integer point dimensions. Retain exact admitted box values
+    // as supplementary geometry evidence; native pixels remain independent.
+    if(Platform.OS==='android'&&inspection.structure)inspection.structure.pages=inspection.structure.pages.map((p,i)=>({
+      ...p,mediaBox:admitted.getPage(i).getMediaBox(),cropBox:admitted.getPage(i).getCropBox(),
+    }));
+    signal.throwIfAborted();return inspection;
+  },
   recognize:(bytes:Uint8Array,_inspection:Inspection,signal:AbortSignal,progress:(text:string)=>void):Promise<OCRPage[]>=>{
     if(!ocrAvailable)throw new Error('On-device text recognition is not available in this build. Your files stay here.');
     progress('Recognising English on your device');return withPDF(bytes,signal,uri=>requireReader().recognizeAsync(uri));

@@ -2,6 +2,7 @@ import {buildRequest,quickPlan,validateEnvelope,type Request,type Envelope,type 
 import {LocalFileStore,type Artifact,type StoreMark} from './local-file-store';
 import {CLEANUP_INCOMPLETE} from './workspace-vault';
 import type {EngineRequest,EngineResult,Inspection,OCRPage} from '@pdf/types';
+import {expectationsForStep,verifyPages,type PageVerificationReceipt} from './page-verification';
 type Services={capabilities?:Operation[];worker:(request:EngineRequest,signal:AbortSignal,progress?:(text:string)=>void)=>Promise<EngineResult|{pages:number}>;inspect:(bytes:Uint8Array,signal:AbortSignal)=>Promise<Inspection>;recognize:(bytes:Uint8Array,inspection:Inspection,signal:AbortSignal,progress:(text:string)=>void)=>Promise<OCRPage[]>};
 // Browser File objects need no cleanup; native picker handles own disposable cache copies.
 export type LocalInputFile=Pick<File,'name'|'size'|'arrayBuffer'>&{release?:()=>void|Promise<void>};
@@ -11,7 +12,7 @@ export type JobProgress={kind:'import'|'transform';currentStep:number|null;steps
 // existing in-memory session behavior.
 export type Durability={save:()=>Promise<void>;clear:()=>Promise<{cleanupComplete:boolean}>};
 export type SavedArtifact={meta:Artifact;bytes:Uint8Array};
-export type JobState={busy:boolean;message:string;error:string|null;stage:'idle'|'importing'|'executing'|'validating'|'complete'|'cancelled'|'failed';progress?:JobProgress};
+export type JobState={busy:boolean;message:string;error:string|null;stage:'idle'|'importing'|'executing'|'validating'|'complete'|'cancelled'|'failed';progress?:JobProgress;pageVerification?:PageVerificationReceipt};
 const operationLabels:Record<Operation,string>={merge_pdf:'Merge PDFs',select_pages:'Remove pages',ocr_pdf:'Make searchable',compress_pdf:'Compress PDF'};
 const normalize=(s:string)=>s.replace(/\s+/g,'').toLowerCase();
 export class JobController {
@@ -52,9 +53,9 @@ export class JobController {
     if(this.state.busy)throw new Error('Wait for this action or cancel it first.');
     const abort=new AbortController();this.#abort=abort;
     const deadline=setTimeout(()=>{if(!this.#persisting)abort.abort();},240_000);
-    this.update({busy:true,stage,error:null,progress,message:stage==='importing'?'Checking your PDFs…':'Starting local processing…'});
+    this.update({busy:true,stage,error:null,progress,pageVerification:undefined,message:stage==='importing'?'Checking your PDFs…':'Starting local processing…'});
     try{await work(abort.signal);abort.signal.throwIfAborted();this.update({stage:'complete',message:'Ready. Your originals are unchanged.',progress:this.state.progress?{...this.state.progress,currentStep:null}:undefined});}
-    catch(e){const cancelled=abort.signal.aborted;const progress=this.state.progress;this.update({stage:cancelled?'cancelled':'failed',error:cancelled?null:e instanceof Error?e.message:'This action could not finish.',message:cancelled?'Cancelled. No new result was committed.':'',progress:progress?{...progress,steps:progress.steps.map(step=>step.status==='active'||step.status==='validating'?{...step,status:cancelled?'cancelled':'failed'}:step)}:undefined});}
+    catch(e){const cancelled=abort.signal.aborted;const progress=this.state.progress;this.update({pageVerification:undefined,stage:cancelled?'cancelled':'failed',error:cancelled?null:e instanceof Error?e.message:'This action could not finish.',message:cancelled?'Cancelled. No new result was committed.':'',progress:progress?{...progress,steps:progress.steps.map(step=>step.status==='active'||step.status==='validating'?{...step,status:cancelled?'cancelled':'failed'}:step)}:undefined});}
     finally{clearTimeout(deadline);this.#abort=null;this.update({busy:false});}
   }
   cancel(){if(!this.#persisting)this.#abort?.abort();}
@@ -96,10 +97,13 @@ export class JobController {
     this.#used.add(request.requestId);
     await this.locked('executing',async signal=>{
       const stage=new Map<string,{bytes:Uint8Array;inspection:Inspection}>();let note='';
+      try{
       for(const [index,step] of envelope.planner.steps.entries()){
         signal.throwIfAborted();
         this.updateStep(index,'active',{stage:'executing',message:'Starting local processing…'});
         const inputs=step.inputs.map(ref=>{const temp=stage.get(ref);if(temp)return temp;const f=this.store.get(ref);return {bytes:f.bytes,inspection:f.meta.inspection};});
+        if(this.store.revision!==request.workspaceRevision)throw new Error('Files changed. Run the action again.');
+        const pageExpectations=expectationsForStep(step,inputs.map(i=>i.inspection),request.workspaceRevision);
         // A late engine callback cannot regress validation or overwrite a later job.
         const progress=(message:string)=>{if(!signal.aborted&&this.#abort?.signal===signal&&this.state.progress?.currentStep===index&&this.state.progress.steps[index].status==='active')this.update({message,stage:'executing'});};
         const ocrPages=step.operation==='ocr_pdf'?await this.services.recognize(inputs[0].bytes,inputs[0].inspection,signal,progress):undefined;
@@ -107,6 +111,10 @@ export class JobController {
         signal.throwIfAborted();this.updateStep(index,'validating',{stage:'validating',message:'Checking the PDF with an independent reader…'});
         const inspection=await this.services.inspect(result.bytes,signal);
         signal.throwIfAborted();
+        if(this.store.revision!==request.workspaceRevision)throw new Error('Files changed. Run the action again.');
+        if(pageExpectations){
+          verifyPages(pageExpectations,inspection,this.store.revision,signal);
+        }
         let expected=inputs.flatMap(i=>i.inspection.pages);
         if(step.operation==='select_pages')expected=expected.filter((_,i)=>!(step.params.pages as {indices:number[]}).indices.includes(i+1));
         if(expected.length!==inspection.pages.length)throw new Error('Page-count validation failed.');
@@ -118,6 +126,7 @@ export class JobController {
           const text=normalize(inspection.pages[page.page-1].text);
           if(page.words.some(w=>!text.includes(normalize(w.text))))throw new Error('Searchable text validation failed.');
         }
+        if(pageExpectations)this.update({pageVerification:{version:1,operation:step.operation,revision:request.workspaceRevision,pages:inspection.pages.length,status:'passed',reader:pageExpectations.reader}});
         stage.set(step.outputRef,{bytes:result.bytes,inspection});note=result.note||note;
         if(step.operation==='compress_pdf'){
           const before=inputs[0].bytes.length,after=result.bytes.length;
@@ -129,16 +138,17 @@ export class JobController {
       const ref=envelope.planner.resultRefs[0],result=stage.get(ref)!;
       const artifact=await this.store.prepare(result.bytes,'atepdf-result.pdf',result.inspection,false,ref,note);
       signal.throwIfAborted();await this.durably(()=>this.store.commit([artifact],request.workspaceRevision));
+      }finally{stage.clear();}
     },{kind:'transform',currentStep:null,steps:envelope.planner.steps.map(step=>({label:operationLabels[step.operation],operation:step.operation,status:'pending'}))});
   }
   undo():void|Promise<void>{
     if(this.state.busy)return;
-    if(!this.#durable){this.store.undo();this.update({message:'Previous result restored.',error:null,stage:'complete',progress:undefined});return;}
-    return this.#exclusive(async()=>{await this.durably(()=>this.store.undo());this.update({message:'Previous result restored.',error:null,stage:'complete',progress:undefined});},{error:null});
+    if(!this.#durable){this.store.undo();this.update({message:'Previous result restored.',error:null,stage:'complete',progress:undefined,pageVerification:undefined});return;}
+    return this.#exclusive(async()=>{await this.durably(()=>this.store.undo());this.update({message:'Previous result restored.',error:null,stage:'complete',progress:undefined,pageVerification:undefined});},{error:null});
   }
   clear():void|Promise<void>{
     if(this.state.busy)return;
-    if(!this.#durable){this.store.clear();this.update({message:'',error:null,stage:'idle',progress:undefined});return;}
+    if(!this.#durable){this.store.clear();this.update({message:'',error:null,stage:'idle',progress:undefined,pageVerification:undefined});return;}
     const durable=this.#durable;
     // The workspace is emptied only after the new deletion epoch is durable. If
     // that fails or cannot be confirmed, the current workspace stays as it is and
@@ -148,7 +158,7 @@ export class JobController {
       try{({cleanupComplete}=await durable.clear());}finally{this.#persisting=false;}
       // The clear is durable, so the workspace is emptied either way; removal of
       // the old copies is only implied when it was verified.
-      this.store.clear();this.update({message:cleanupComplete?'':CLEANUP_INCOMPLETE,stage:'idle',progress:undefined});
+      this.store.clear();this.update({message:cleanupComplete?'':CLEANUP_INCOMPLETE,stage:'idle',progress:undefined,pageVerification:undefined});
     },{error:null});
   }
   async #exclusive(work:()=>Promise<void>,start:Partial<JobState>){

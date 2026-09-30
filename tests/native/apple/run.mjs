@@ -10,13 +10,17 @@ import {spawnSync} from 'node:child_process';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'../../..');
 const scratch=await mkdtemp(join(tmpdir(),'atepdf-apple-check-'));
 const binary=join(scratch,'apple-pdf-check'),inputs=join(scratch,'inputs');
-function run(command,args) {
-  const result=spawnSync(command,args,{cwd:root,stdio:'inherit',timeout:180_000,killSignal:'SIGTERM'});
+const evidence=process.env.ATEPDF_NATIVE_EVIDENCE_DIR??'docs/evidence/native';
+function run(command,args,env={}) {
+  const result=spawnSync(command,args,{cwd:root,stdio:'inherit',timeout:180_000,killSignal:'SIGTERM',env:{...process.env,...env}});
   if(result.status!==0)throw new Error(`${command} exited ${result.status}`);
 }
 try {
   await mkdir(inputs);
   run('xcrun',['swiftc','-module-cache-path',join(scratch,'module-cache'),'apps/universal/modules/atepdf-pdf/ios/AtepdfPDFEngine.swift','tests/native/apple/main.swift','-o',binary]);
-  run(binary,['tests/fixtures',inputs,'docs/evidence/native']);
+  run(binary,['tests/fixtures',inputs,evidence]);
   run(process.execPath,['--import','tsx','tests/native/apple/chain.ts',inputs,binary]);
+  run(process.execPath,['--import','tsx','--test','tests/regressions/page-verification.test.ts'],{
+    ATEPDF_PAGE_READER_BINARY:binary,ATEPDF_PAGE_READER_SCRATCH:inputs,ATEPDF_NATIVE_EVIDENCE_DIR:resolve(root,evidence),
+  });
 } finally {await rm(scratch,{recursive:true,force:true});}

@@ -9,11 +9,7 @@ import {buildRequest,quickPlan,validateEnvelope} from '../../packages/contracts/
 import {savePDF} from '../../apps/web/src/services/export';
 import type {Inspection,EngineRequest} from '../../packages/web-pdf/src/types';
 const fixture=async(name:string)=>new Uint8Array(await readFile(`tests/fixtures/${name}`));
-async function independent(bytes:Uint8Array):Promise<Inspection>{
-  const {getDocument}=await import('pdfjs-dist/legacy/build/pdf.mjs');
-  const task=getDocument({data:bytes.slice(),useSystemFonts:true,verbosity:0});const doc=await task.promise;
-  try{const pages=[];for(let n=1;n<=doc.numPages;n++){const p=await doc.getPage(n),v=p.getViewport({scale:1}),t=await p.getTextContent();pages.push({text:t.items.map(i=>'str'in i?i.str:'').join(' ').replace(/\s+/g,' ').trim(),width:v.width,height:v.height,rotation:p.rotate});}return {pages};}finally{await task.destroy();}
-}
+import {independentPDF as independent} from '../helpers/independent-pdf';
 const service={worker:async(r:EngineRequest)=>r.kind==='inspect'?{pages:(await preflight(r.bytes)).getPageCount()}:transform(r,()=>{}),inspect:independent,recognize:async()=>[]};
 async function setup(){const store=new LocalFileStore(),controller=new JobController(store,service);await controller.import(await Promise.all(['brief.pdf','appendix.pdf'].map(async n=>new File([await fixture(n)],n))));assert.equal(controller.state.error,null);return {store,controller};}
 test('L01/L02: actual merge, physical-page follow-up, independent text order, immutable originals and undo',async()=>{

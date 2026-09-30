@@ -36,7 +36,9 @@ First establish a reproducible baseline on the frozen source in an isolated envi
 
 ## Difficult-PDF minimum corpus
 
-The [SHR-45 synthetic corpus](../tests/fixtures/corpus/README.md) now indexes reusable ordinary and difficult inputs with hashes, provenance and structural checks. Its presence does not classify any transform as compatible; the operation matrix and saved-output verification remain SHR-46 work.
+The [SHR-45 synthetic corpus](../tests/fixtures/corpus/README.md) indexes reusable ordinary and difficult inputs with hashes, provenance and structural checks. Fixture presence alone does not classify a transform as compatible; operation evidence is recorded separately below.
+
+The [SHR-46 service matrix harness](../tests/compatibility/README.md) runs current browser executors and independent saved-output checks with explicit supported/refused/failed/unverified/unrun categories. Its [source-bound observations](evidence/SHR-46-2026-09-30/README.md) preserve every refusal/failure and identify the remaining Mac-app and visual verification gaps.
 
 | Family | Current boundary | Minimum missing regression evidence |
 |---|---|---|

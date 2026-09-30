@@ -1,0 +1,42 @@
+✔ SHR-46 verifier supports independently reopened, unchanged saved PDF properties (504.849625ms)
+✔ SHR-46 only specific intentional refusal with unchanged originals and no promotion is safe (0.195917ms)
+✔ SHR-46 generic crashes and unsafe upstream exceptions are failures, never safe refusals (0.231875ms)
+✔ SHR-46 deliberate truncated/corrupt output cannot be called supported (8.826833ms)
+✔ SHR-46 reordered known-good pages produce a fidelity mismatch (18.996708ms)
+✔ SHR-46 missing page and changed crop geometry are distinct verified mismatches (27.453125ms)
+✔ SHR-46 unreadable arbitrary result, absent executor and unrun scenario are not passes (6.302667ms)
+✔ SHR-46 incomplete verification and explicit unresolved coverage remain unverified (0.113792ms)
+✔ SHR-46 schema rejects false support and records missing/unrun executors explicitly (39.993959ms)
+✔ SHR-46 summary keeps refusals/failures in the executed denominator and excludes unrun/absent work (0.5455ms)
+✔ SHR-46 runner refuses to overwrite an existing evidence destination (249.254375ms)
+✔ inline-image admission: rejects actual small/oversized inline images before any reader, compressed or plain (131.438959ms)
+✔ inline-image admission: upstream PDF.js parses the safe fixture but can omit oversized content, so admission cannot rely on its operator list (1071.022958ms)
+✔ inline-image admission: BI in comments, literal strings, escaped parentheses, hex strings and names remains supported (2.005084ms)
+✔ inline-image admission: content arrays preserve operator, literal, name and comment lexical state (13.044833ms)
+✔ inline-image admission: nested Forms, tiling patterns and Type 3 glyph programs cannot bypass the guard (11.033875ms)
+✔ inline-image admission: malformed or repair-dependent syntax fails closed without exposing decoded content (8.377958ms)
+✔ inline-image admission: lowercase escaped drawing names cannot exploit a parser-name disagreement (2.041125ms)
+✔ inline-image admission: bounds decoded drawing work and nesting without interpreting image XObject bytes as operators (277.282792ms)
+✔ L01/L02: actual merge, physical-page follow-up, independent text order, immutable originals and undo (1069.586125ms)
+✔ complete plans only; stale, duplicate and malicious envelopes never execute (14.581708ms)
+✔ remove all, out-of-range, duplicate input, future output and unsupported language rejected (10.579083ms)
+✔ L03: save cancellation and browser initiation never claim persistent save (0.5395ms)
+✔ L04: cancellation and failed independent validation cannot promote a candidate (5.867208ms)
+✔ local metadata cannot leak through the positive planner projection (0.141375ms)
+✔ damaged, active, form and oversized PDF features fail closed (2.083541ms)
+✔ unhelpful compression retains actual input bytes with honest result (5.660291ms)
+✔ large PDFs: real >20 MB inputs, >40 MB merge, >100 MB retained history, page removal and undo (333.86925ms)
+✔ SHR-45 manifest schema, provenance, hashes and fixture path boundary (69.581666ms)
+✔ SHR-45 local generator reproduces deterministic outputs when its optional Python environment is available (712.372792ms)
+✔ SHR-45 independent reader checks declared counts and digital page order (344.985833ms)
+✔ SHR-45 genuine links, annotations, outline, form fields and tag relation (12.587791ms)
+✔ SHR-45 embedded font, rotated/nonzero boxes, raster pages and encoded JPEG mismatch (3.901416ms)
+✔ SHR-45 encrypted fixture requires the test-only password and damaged PDF is isolated (235.053417ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2109.083875

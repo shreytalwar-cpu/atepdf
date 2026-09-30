@@ -39,7 +39,7 @@ const runtimeHashes=await hashFiles(runtimePaths);
 const harnessHashes=await hashFiles((await readdir(ROOT)).filter(p=>/\.(ts|mts)$/.test(p)).map(p=>join(ROOT,p)));
 function portable(hashes:Record<string,string>){return Object.fromEntries(Object.entries(hashes).map(([path,value])=>[path.startsWith(ROOT)?path.slice(ROOT.length):path,value]));}
 const corpusPortable=portable(corpusHashes),harnessPortable=portable(harnessHashes);
-const report:any={reportVersion:'1.0',corpusVersion:CORPUS_VERSION,splitVersion:'1.0.0',adapter:options.adapter?`candidate:${String(options.adapter)}`:'current-mocked-v1',configuration:config,provenance:{runtimeHead:execFileSync('git',['rev-parse','origin/main'],{encoding:'utf8'}).trim(),harnessHead:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),node:process.version,corpusHash:hash(JSON.stringify(corpusPortable)),corpusHashes:corpusPortable,runtimeHashes,harnessHashes:harnessPortable},sets:{}};
+const report:any={reportVersion:'1.0',corpusVersion:CORPUS_VERSION,splitVersion:'1.0.0',adapter:options.adapter?`candidate:${String(options.adapter)}`:'current-mocked-v1',configuration:config,provenance:{runtimeHead:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),runtimeBaseHead:execFileSync('git',['merge-base','HEAD','origin/main'],{encoding:'utf8'}).trim(),harnessHead:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),node:process.version,corpusHash:hash(JSON.stringify(corpusPortable)),corpusHashes:corpusPortable,runtimeHashes,harnessHashes:harnessPortable},sets:{}};
 if(options.adapter)report.provenance.adapterHash=hash(await readFile(resolve(String(options.adapter))));
 async function candidate(scenario:Scenario):Promise<Observation>{
   return new Promise((done,reject)=>{

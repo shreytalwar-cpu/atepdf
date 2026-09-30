@@ -1,6 +1,6 @@
 # atePDF v1 UI migration map
 
-**Issue:** SHR-105 · **Status:** proposed · **Implements in:** SHR-106 · **Baseline:** `origin/main` at `524af24` (includes SHR-39 persistence and SHR-45 corpus; SHR-40 is not included and was not used)
+**Issue:** SHR-105 · **Status:** approved (owner, 30 Sep 2026) · **Implements in:** SHR-106 · **Baseline:** `origin/main` at `524af24` (includes SHR-39 persistence and SHR-45 corpus; SHR-40 is not included and was not used)
 
 This maps every visible element of the current app (`apps/universal/App.tsx`, `src/components/**`, `src/platform/**`, `global.css`, `assets/`) to its fate: **Keep**, **Modify**, **Replace** or **Remove**. It records the incumbent UX constraints this redesign supersedes (the SHR-105 acceptance item) and the test selectors that change. It also lists interactions that need behaviour from another issue, and gives SHR-106 an order of work.
 
@@ -10,7 +10,7 @@ This maps every visible element of the current app (`apps/universal/App.tsx`, `s
 
 ## 1. Superseded UX constraints
 
-Each row is an incumbent rule that the owner-approved redesign track (SHR-26 → SHR-105/106) replaces **once SHR-105 is approved**. Until approval, the incumbent documents remain the reference.
+Each row is an incumbent rule that the owner-approved redesign track (SHR-26 → SHR-105/106) replaces. The owner approved SHR-105 on 30 September 2026; the replacements take effect when PR #91 merges and are applied in the product by SHR-106.
 
 | # | Incumbent constraint | Source | Superseded by |
 |---|---|---|---|
@@ -18,13 +18,13 @@ Each row is an incumbent rule that the owner-approved redesign track (SHR-26 →
 | X-2 | Palette `#ffffff` / `#18213b` / `#1769df`, mint privacy badge, blush/violet shortcut icon colours | `global.css`, `DESIGN.md` | DESIGN_SYSTEM 3 (Paper/Graphite neutrals, Iris accent, status/privacy tokens) |
 | X-3 | Radii 12/16/20/24/28 (pill controls, 28 pt composer and welcome) | `DESIGN.md` | DESIGN_SYSTEM 6 (4–16; status pills are the only full rounding) |
 | X-4 | Body 16 pt, captions 11–12 at 1:1 in the iPad idiom | `DESIGN.md` | DESIGN_SYSTEM 4 (Mac scale: body 14, UI 13, rendered pt) |
-| X-5 | "No sidebar or permanent preview rail" | `docs/DESIGN_SYSTEM.md`, `DESIGN.md` Don'ts | A right-hand **Files panel** (OD-5). Still no navigation sidebar. Preview is a Quick Look sheet, not a rail. |
+| X-5 | "No sidebar or permanent preview rail" | `docs/DESIGN_SYSTEM.md`, `DESIGN.md` Don'ts | A right-hand **Files panel** (OD-5, approved). Still no navigation sidebar. Preview is a Quick Look sheet, not a rail. |
 | X-6 | Inline preview inside the result card | `DESIGN.md` Preview, `UX_STATE_CONTRACT` Preview row | QuickLookPreview sheet (UX_SPEC S9.6). The contract's behaviour (read-only, page nav, zoom, fit, focus return, no retargeting) is kept. |
 | X-7 | Three always-visible quick-action pills under the composer | `App.tsx` Footer, `UI_FIDELITY_LEDGER` | Context-aware SuggestionChips inside the composer + ⌘K ActionPalette, AI-routed (D-04) |
 | X-8 | Dashed welcome card with the paper illustration; "Drop files here" / "Add your files" heading | `App.tsx` Welcome, `APPROVED_BRAND.md` | EmptyWorkspace (mark + headline + examples). The paper illustration is retired. |
-| X-9 | Approved raster gradient 8 and lowercase `atepdf` wordmark in the header | `APPROVED_BRAND.md`, `brand.json`, `App.tsx` header | The new mark (OD-1) and `atePDF` wordmark (OD-2). No logo in the toolbar. |
+| X-9 | Approved raster gradient 8 and lowercase `atepdf` wordmark in the header | `APPROVED_BRAND.md`, `brand.json`, `App.tsx` header | The Folio Eight mark (OD-1, approved) and `atePDF` wordmark (OD-2, approved). No logo in the toolbar. |
 | X-10 | Privacy badge text "Processed on your device" | `App.tsx`, `brand.json` | StatusPill "On this Mac" (accessibility label kept for tests, see section 4) |
-| X-11 | "Full dark mode is not implemented"; dark mode not a launch gate | `docs/DESIGN_SYSTEM.md`, MAC-04 | Full dark token set. Launch inclusion is OD-3. |
+| X-11 | "Full dark mode is not implemented"; dark mode not a launch gate | `docs/DESIGN_SYSTEM.md`, MAC-04 | Full dark token set, shipped at launch (OD-3, approved). |
 | X-12 | 44-pt minimum hit targets on all platforms | `docs/DESIGN_SYSTEM.md`, `DESIGN.md` | 28 pt controls / 24 pt pointer minimum on Mac; 44 pt hit areas kept on touch idioms (DESIGN_SYSTEM 14.2) |
 | X-13 | User messages as right-aligned bubbles (assistant-ui default) | `thread.aui.tsx` UserMessage | Left-aligned RequestBlock (COMPONENT_INVENTORY C2) |
 | X-14 | Result card copy "Tell me what you'd like to do next." inside the card | `App.tsx` MessageExtras | Removed. The composer placeholder "What next for {title}?" carries it. |
@@ -164,6 +164,6 @@ These appear in the design. SHR-106 builds their **presentation**. The behaviour
 4. **Thread:** RequestBlock, AssistantMessage, SourceGroup/FileRow/PageThumbnail, ActivityRow, OutcomeNotice, ResultCard, ChoiceList, ProposalCard, SecureInputCard. Remove the inline preview container.
 5. **Composer:** context row, SuggestionChips and ActionPalette wired to `submit()` (not `controller.quick`), Send/Stop, hint row, ExhaustedBar (flagged off).
 6. **Sheets:** QuickLookPreview (wrapping the existing renderers), ConfirmSheet, SettingsSheet (General, Privacy & Storage with SHR-40 values when merged, AI, Account & Pro placeholders, About), OnboardingSheet, PaywallSheet (flag off), ShortcutsSheet.
-7. **Files panel** (if OD-5 is approved).
+7. **Files panel** (OD-5, approved).
 8. **Brand assets:** app icon set, BrandMark SVGs.
 9. **Cleanup:** remove the retired assets, CSS and template components. Update `apps/universal/DESIGN.md` to point at `docs/design/`. Update the e2e selectors (section 4). Capture actual Mac builds at 640, 1024 and 1440 widths in both appearances.

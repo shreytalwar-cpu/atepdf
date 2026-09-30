@@ -348,7 +348,7 @@ const section = (id, title, desc, frames, note = '') => `<section class="screen"
 /* ——— Screens ——— */
 const S = [];
 
-S.push(['brand', 'Brand directions', `Three original directions. All keep the 8 (<em>ate</em>) and replace the raster gradient mark. <strong>A · Folio Eight is recommended</strong>. Owner decision OD-1. Sources: <code>docs/design/brand/*.svg</code>.`,
+S.push(['brand', 'Brand directions', `Three original directions. All keep the 8 (<em>ate</em>) and replace the raster gradient mark. <strong>A · Folio Eight was approved by the owner (OD-1, 30 Sep 2026)</strong>; B and C are the explored alternatives. Sources: <code>docs/design/brand/*.svg</code>.`,
   `<div class="brand-grid" style="width:100%">
   ${[['a', 'A · Folio Eight', 'mark-a-folio-eight.svg', 'icon-a-folio-eight-ink.svg', 'Two stacked sheets form the 8; one folded corner is the only document cue. Precise, ownable, legible at 16 px.', true],
      ['b', 'B · Speaking Page', 'mark-b-speaking-page.svg', 'icon-b-speaking-page.svg', 'A page with a speech tail; two counters form the 8. The most literal "talk to your document". Risks reading as a generic chat app.', false],
@@ -357,11 +357,11 @@ S.push(['brand', 'Brand directions', `Three original directions. All keep the 8 
       <div class="hero"><img src="../brand/${icon}" width="148" height="148" alt="${name} app icon"><div class="lockup"><img src="../brand/${mark}" width="40" height="40" alt=""><span class="wordmark">ate<span>PDF</span></span></div></div>
       <div class="hero dark" data-theme="dark" style="height:120px"><div class="lockup"><img src="../brand/${k === 'a' ? 'icon-a-folio-eight-ink.svg' : icon}" width="44" height="44" alt=""><span class="wordmark">ate<span>PDF</span></span></div>${k === 'a' ? '<img src="../brand/icon-a-folio-eight-paper.svg" width="64" height="64" alt="Paper variant">' : ''}</div>
       <div class="sizes">${[16, 32, 64, 128].map(s => `<img src="../brand/${icon}" width="${s}" height="${s}" alt="">`).join('')}<span class="m" style="margin-left:auto">16 · 32 · 64 · 128</span></div>
-      <div class="txt"><h3>${name}${rec ? '<span class="tag cur">Recommended</span>' : ''}</h3><p class="m" style="margin:0">${text}</p></div></div>`).join('')}
+      <div class="txt"><h3>${name}${rec ? '<span class="tag cur">Approved</span>' : '<span class="tag earl">Explored</span>'}</h3><p class="m" style="margin:0">${text}</p></div></div>`).join('')}
   </div>
   <div class="bcard" style="width:100%;flex-direction:row;align-items:center;gap:24px;padding:16px 20px">
     <img src="../../../apps/universal/assets/approved-8-mark-source-crop.png" height="56" alt="Current raster 8 mark">
-    <div class="vstack" style="gap:2px"><strong style="font:var(--type-headline)">Current (retired by this proposal)</strong><span class="m">Raster gradient crop from the brand board; no vector master, and the gradient does not survive 16 px or monochrome. Kept in the build pack as history.</span></div>
+    <div class="vstack" style="gap:2px"><strong style="font:var(--type-headline)">Previous mark (retired)</strong><span class="m">Raster gradient crop from the brand board; no vector master, and the gradient does not survive 16 px or monochrome. Kept in the build pack as history.</span></div>
     <div class="hstack" style="margin-left:auto;gap:18px"><span class="vstack" style="gap:4px;align-items:center"><span style="width:28px;height:28px;border-radius:6px;background:var(--brand-iris)"></span><span class="m">Iris 5646F0</span></span><span class="vstack" style="gap:4px;align-items:center"><span style="width:28px;height:28px;border-radius:6px;background:var(--brand-ink)"></span><span class="m">Ink 121120</span></span><span class="vstack" style="gap:4px;align-items:center"><span style="width:28px;height:28px;border-radius:6px;background:var(--brand-fold);outline:1px solid var(--border-hairline)"></span><span class="m">Fold E0DCFF</span></span></div>
   </div>`]);
 

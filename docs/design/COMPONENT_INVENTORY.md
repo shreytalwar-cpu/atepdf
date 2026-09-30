@@ -1,6 +1,6 @@
 # atePDF v1 component inventory
 
-**Issue:** SHR-105 · **Status:** proposed · Tokens: [atepdf-tokens.json](tokens/atepdf-tokens.json) · Rules: [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) · Flows: [UX_SPEC.md](UX_SPEC.md)
+**Issue:** SHR-105 · **Status:** approved (owner, 30 Sep 2026) · Tokens: [atepdf-tokens.json](tokens/atepdf-tokens.json) · Rules: [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) · Flows: [UX_SPEC.md](UX_SPEC.md)
 
 Every reusable component in the v1 Mac app. Each entry gives its purpose, anatomy with tokens, variants, states, keyboard behaviour, accessibility, and where it is used (**Used in** refers to UX_SPEC sections). Token names are written as in the JSON (`group.name`), with these short forms: type roles by name (`body` = `type.body`, likewise `bodyStrong`, `headline`, `ui`, `uiStrong`, `meta`, `section`, `caption`, `kbd`); `duration.*` and `easing.*` = `motion.duration.*` / `motion.easing.*`; `elevation.N` as in the JSON. Space values refer to the `space` scale. Text uses `font.family.ui` unless stated.
 

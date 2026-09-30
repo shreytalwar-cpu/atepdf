@@ -1,6 +1,6 @@
 # atePDF v1 design system
 
-**Issue:** SHR-105 · **Status:** proposed, awaiting owner approval · **Implements in:** SHR-106
+**Issue:** SHR-105 · **Status:** approved by the owner on 30 September 2026 (OD-1 to OD-7, [section 18](#18-owner-decisions)); authoritative once PR #91 merges · **Implements in:** SHR-106
 **Companion files:** [UX_SPEC.md](UX_SPEC.md) · [COMPONENT_INVENTORY.md](COMPONENT_INVENTORY.md) · [MIGRATION_MAP.md](MIGRATION_MAP.md) · [tokens](tokens/atepdf-tokens.json) · [mockups](mockups/index.html) · [brand assets](brand/)
 
 This document defines how atePDF looks, moves and sounds. It changes presentation only. The product model in [PRODUCT_V1.md](../PRODUCT_V1.md) stays the same: Mac-first, conversation-first, AI-orchestrated intent (including quick actions), deterministic local PDF engines, local-first understanding, explicit consent for any content transfer, and passwords kept out of chat. If this document appears to conflict with PRODUCT_V1.md, PRODUCT_V1.md wins and the conflict is a design bug.
@@ -29,7 +29,7 @@ Precise, calm, quick and trustworthy. atePDF is the colleague who does the tedio
 
 ### 2.2 Name and wordmark
 
-- **Name in prose:** `atePDF`. PRODUCT_V1.md, current runtime copy (`atePDF couldn't save…`) and the latest owner instructions all use this spelling. It **supersedes** the lowercase `atepdf` in `atepdf_codex_build_pack/brand/APPROVED_BRAND.md` (owner decision **OD-2**, [section 18](#18-decisions-requiring-owner-approval)).
+- **Name in prose:** `atePDF`. PRODUCT_V1.md, current runtime copy (`atePDF couldn't save…`) and the latest owner instructions all use this spelling. It **supersedes** the lowercase `atepdf` in `atepdf_codex_build_pack/brand/APPROVED_BRAND.md` (**OD-2, approved**).
 - **Wordmark:** `ate` in Semibold, `PDF` in Semibold at the same size and baseline, coloured `text.secondary`. Tracking −1%. The contrast between the two halves reads "ate · PDF" without a separator.
 - **Paid plan:** `atePDF Pro`. "Pro" is set in the same weight, never as a badge inside the wordmark.
 - **Lockup:** mark + 8 pt gap + wordmark, with the wordmark cap height equal to 42% of the mark height.
@@ -37,9 +37,9 @@ Precise, calm, quick and trustworthy. atePDF is the colleague who does the tedio
 
 ### 2.3 Directions explored
 
-Three original directions are proposed. All keep the equity of the 8 (ate), which PRODUCT_V1.md MAC-04 and the approved brand treat as the identity, and all replace the current raster gradient 8. SVG masters are in [`brand/`](brand/). The mockup page shows them side by side at 16–512 pt ([mockups/index.html#brand](mockups/index.html#brand)).
+Three original directions were explored. All keep the equity of the 8 (ate), which PRODUCT_V1.md MAC-04 and the approved brand treat as the identity, and all replace the current raster gradient 8. SVG masters are in [`brand/`](brand/). The mockup page shows them side by side at 16–512 pt ([mockups/index.html#brand](mockups/index.html#brand)).
 
-| | A · Folio Eight (**recommended**) | B · Speaking Page | C · Continuity Eight |
+| | A · Folio Eight (**approved**) | B · Speaking Page | C · Continuity Eight |
 |---|---|---|---|
 | Idea | An upright 8 built from two stacked sheets. The upper sheet is narrower, and its top-right corner is folded. | A page with a folded corner. Its lower-left corner becomes a speech tail, and two stacked counters form the 8. | A heavy monoline 8 whose upper bowl stays open, followed by a caret dot. |
 | Reads as | "8", then "pages" | "a document you talk to" | "8", then "flow / continuing" |
@@ -47,7 +47,7 @@ Three original directions are proposed. All keep the equity of the 8 (ate), whic
 | Risks | Two stacked rectangles read as "8" only if the counters stay generous. The rules in 2.4 protect this. | The speech bubble drifts toward "generic AI chat app". The 8 is secondary and weak at 16 px. | Least document-specific. The open stroke looks unfinished at small sizes. It resembles common "loop" marks. |
 | Files | `mark-a-folio-eight.svg`, `icon-a-folio-eight-ink.svg`, `icon-a-folio-eight-paper.svg` | `mark-b-speaking-page.svg`, `icon-b-speaking-page.svg` | `mark-c-continuity-eight.svg`, `icon-c-continuity-eight.svg` |
 
-**Recommendation: A · Folio Eight.** It keeps the one piece of brand equity that works (8 = ate) and adds exactly one document cue. It is ownable and precise, and it holds up at menu-bar and Dock sizes. B is the strongest alternative if the owner wants the conversation to be explicit in the mark. The rest of this system works unchanged with any of the three: only the `brand/` assets and the activity glyph (section 10.3) differ.
+**Approved: A · Folio Eight (OD-1).** It keeps the one piece of brand equity that works (8 = ate) and adds exactly one document cue. It is ownable and precise, and it holds up at menu-bar and Dock sizes. B and C are retained in `brand/` as the explored alternatives only; they must not be used in the product.
 
 ### 2.4 Mark construction (direction A)
 
@@ -298,7 +298,7 @@ Banned: `sparkles`, `wand`, `bot` and any "AI magic" iconography (principle 5). 
 ## 12. Light and dark
 
 - Both appearances are fully specified. The app follows the system setting by default; Settings ▸ General ▸ Appearance offers System / Light / Dark.
-- Shipping dark mode at launch requires owner approval (PRODUCT_V1.md MAC-04 says it is not a launch gate unless approved). This is **OD-3**. The recommendation is to ship both, because a Mac productivity app judged against Raycast without dark mode will look unfinished.
+- **Dark mode ships at launch (OD-3, approved).** This is the owner approval that PRODUCT_V1.md MAC-04 requires to make dark mode part of v1. Both appearances are therefore in scope for SHR-106 and for Mac acceptance.
 - Documents keep their own colours in both appearances: `page.paper` is always white, and previews are never colour-inverted.
 - In dark mode, cards lose their shadow and rely on the hairline plus a lighter surface. Iris lightens (`accent.text` #8C80FF) for text, while fills use #6354FF so white text passes contrast.
 
@@ -318,7 +318,7 @@ Voice follows PRODUCT_V1.md UX-02 and D-16: brief, specific, warm, factual. The 
 
 ## 14. Platform implementation notes (for SHR-106)
 
-1. **Units and the Catalyst idiom.** Tokens are rendered macOS points. The current build runs Mac Catalyst with the **iPad idiom**, which scales the whole UI to 77%. Until the app adopts the Mac idiom (`UIUserInterfaceIdiomMac`, "Optimize for Mac"), React Native style values must be `token / 0.77`, rounded to the nearest 0.5. SHR-106 should put this factor in exactly one place (`theme.scale`). Moving to the Mac idiom is recommended but is an engineering decision for SHR-106 or SHR-75 (**OD-6**).
+1. **Units and the Catalyst idiom.** Tokens are rendered macOS points. The current build runs Mac Catalyst with the **iPad idiom**, which scales the whole UI to 77%. Until the app adopts the Mac idiom (`UIUserInterfaceIdiomMac`, "Optimize for Mac"), React Native style values must be `token / 0.77`, rounded to the nearest 0.5. SHR-106 should put this factor in exactly one place (`theme.scale`). **Moving to the Mac idiom is approved (OD-6)**, subject to engineering confirmation in SHR-106 (or SHR-75 if it needs native window work). If a blocker is found, keep `theme.scale` and report the blocker rather than silently staying on the iPad idiom.
 2. **Hit targets.** Pointer minimum 24 pt, default control height 28. On touch idioms (iPhone/iPad builds, which remain preserved but are not v1 launch surfaces) every control expands its hit area to 44 via `hitSlop`, without changing its visual size.
 3. **Theme plumbing.** Generate the Uniwind/Tailwind `@theme` block and a typed RN `theme.ts` from `atepdf-tokens.json`. Replace the incumbent `global.css` colours; do not keep both.
 4. **Appearance.** Use `useColorScheme()` plus the Settings override. The native window background must match `bg.window` to avoid a white flash on launch in dark mode.
@@ -372,16 +372,18 @@ The incumbent rules (white canvas, navy `#18213b`, blue `#1769df`, pill quick ac
 
 ---
 
-## 18. Decisions requiring owner approval
+## 18. Owner decisions
 
-| ID | Decision | Recommendation |
+All seven were approved by the owner on 30 September 2026, as recommended.
+
+| ID | Decision | Approved outcome |
 |---|---|---|
-| OD-1 | Logo and app-icon direction | **A · Folio Eight**, Ink icon |
+| OD-1 | Logo and app-icon direction | **A · Folio Eight**, Ink icon (Paper variant for light/tinted appearances) |
 | OD-2 | Name casing and wordmark | `atePDF` in prose and wordmark, superseding lowercase `atepdf` |
 | OD-3 | Dark appearance in launch scope (MAC-04) | Ship light and dark together |
 | OD-4 | Accent colour | Iris `#5646F0` / `#6354FF` |
-| OD-5 | Right-hand Files panel (supersedes "no sidebar or permanent preview rail") | Approve: auto-shown ≥ 1120 pt, toggleable |
-| OD-6 | Mac idiom vs iPad idiom for Catalyst | Mac idiom (engineering confirmation in SHR-106/75) |
+| OD-5 | Right-hand Files panel (supersedes "no sidebar or permanent preview rail") | Right-hand Files panel, auto-shown ≥ 1120 pt, toggleable ⌥⌘I |
+| OD-6 | Mac idiom vs iPad idiom for Catalyst | Mac idiom, pending engineering confirmation in SHR-106/75 |
 | OD-7 | Settings as an in-window sheet rather than a separate Settings window | Sheet for v1 (avoids multi-window work, MAC-02) |
 
 Items that stay open under PRODUCT_V1.md (prices, allowance, retention defaults, outage policy, consent wording) are **not** decided here. The design shows where they appear, using placeholders.

@@ -1,6 +1,6 @@
 # atePDF v1 UX specification
 
-**Issue:** SHR-105 · **Status:** proposed · Components: [COMPONENT_INVENTORY.md](COMPONENT_INVENTORY.md) · Visual rules: [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) · Mockups: [mockups/index.html](mockups/index.html)
+**Issue:** SHR-105 · **Status:** approved (owner, 30 Sep 2026) · Components: [COMPONENT_INVENTORY.md](COMPONENT_INVENTORY.md) · Visual rules: [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) · Mockups: [mockups/index.html](mockups/index.html)
 
 This spec covers every major v1 flow, screen by screen and state by state. It is a presentation spec: behaviour it relies on (routing, validation, consent binding, persistence, entitlement) is defined in [PRODUCT_V1.md](../PRODUCT_V1.md) and the behavioural contract in [UX_STATE_CONTRACT.md](../UX_STATE_CONTRACT.md). Where a behaviour is still an open decision (OPEN-xx), this spec shows where it appears and uses a placeholder. It does not choose the answer.
 
@@ -294,7 +294,7 @@ SecureInputCard (Protect) with Password + Confirm fields. The plan pauses at thi
 A SettingsSheet with five tabs. Every row maps to an existing requirement. There are no speculative preferences.
 
 ### S12.1 General
-- **Appearance:** System / Light / Dark (a SegmentedControl; subject to OD-3).
+- **Appearance:** System / Light / Dark (a SegmentedControl; dark mode approved for launch, OD-3).
 - **Conversation text size:** Small / Default / Large / Larger (MAC-03).
 - **Show introduction again:** a button that re-opens onboarding.
 - **Keyboard shortcuts:** "View All… ⌘/".

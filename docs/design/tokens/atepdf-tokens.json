@@ -1,0 +1,296 @@
+{
+  "$schema": "atepdf-design-tokens/1",
+  "$description": "atePDF v1 design tokens (SHR-105, proposed). Source of truth for SHR-106. Sizes are rendered macOS points (see units). atepdf-tokens.css mirrors these values for web and the mockups; the React Native theme must be generated from or checked against this file.",
+  "units": {
+    "pt": "Rendered macOS points at 1x. Under Mac Catalyst with the iPad idiom the system scales the whole UI to 77%, so React Native style values must be pt / 0.77 until the Mac idiom is adopted (see DESIGN_SYSTEM.md, section 14).",
+    "ms": "Milliseconds."
+  },
+  "color": {
+    "light": {
+      "bg.window": "#F7F7F8",
+      "bg.sunken": "#EFEFF2",
+      "bg.panel": "#F2F2F5",
+      "surface.raised": "#FFFFFF",
+      "surface.elevated": "#FFFFFF",
+      "surface.request": "#EDEDF1",
+      "surface.hover": "rgba(23,23,28,0.05)",
+      "surface.pressed": "rgba(23,23,28,0.09)",
+      "surface.selected": "#EEECFF",
+      "border.hairline": "rgba(23,23,28,0.09)",
+      "border.strong": "#C9C9D3",
+      "text.primary": "#17171C",
+      "text.secondary": "#5E5E6B",
+      "text.tertiary": "#6B6B77",
+      "text.disabled": "#A9A9B3",
+      "text.onAccent": "#FFFFFF",
+      "accent.fill": "#5646F0",
+      "accent.fillHover": "#4B3BE6",
+      "accent.fillPressed": "#4133CC",
+      "accent.text": "#5646F0",
+      "accent.subtle": "#EEECFF",
+      "accent.subtleBorder": "#D6D2FF",
+      "status.success.fg": "#18794E",
+      "status.warning.fg": "#8F5500",
+      "status.warning.bg": "#FBF1E1",
+      "status.danger.fg": "#C8283F",
+      "status.danger.bg": "#FCEBED",
+      "status.danger.fill": "#C8283F",
+      "status.local.fg": "#0B7285",
+      "status.local.bg": "#E6F4F6",
+      "status.outbound.fg": "#8F5500",
+      "status.outbound.bg": "#FBF1E1",
+      "page.paper": "#FFFFFF",
+      "scrim": "rgba(10,10,20,0.28)",
+      "dropzone.fill": "rgba(86,70,240,0.06)"
+    },
+    "dark": {
+      "bg.window": "#141417",
+      "bg.sunken": "#0E0E10",
+      "bg.panel": "#18181C",
+      "surface.raised": "#1C1C21",
+      "surface.elevated": "#24242A",
+      "surface.request": "#23232A",
+      "surface.hover": "rgba(255,255,255,0.06)",
+      "surface.pressed": "rgba(255,255,255,0.10)",
+      "surface.selected": "#211E3D",
+      "border.hairline": "rgba(255,255,255,0.08)",
+      "border.strong": "rgba(255,255,255,0.16)",
+      "text.primary": "#EDEDF2",
+      "text.secondary": "#A2A2B0",
+      "text.tertiary": "#8A8A96",
+      "text.disabled": "#5A5A66",
+      "text.onAccent": "#FFFFFF",
+      "accent.fill": "#6354FF",
+      "accent.fillHover": "#7163FF",
+      "accent.fillPressed": "#5646F0",
+      "accent.text": "#8C80FF",
+      "accent.subtle": "#211E3D",
+      "accent.subtleBorder": "#3A3470",
+      "status.success.fg": "#3DCB85",
+      "status.warning.fg": "#F0B24A",
+      "status.warning.bg": "#2E2413",
+      "status.danger.fg": "#FF6F80",
+      "status.danger.bg": "#321A1E",
+      "status.danger.fill": "#CF3349",
+      "status.local.fg": "#45C4D6",
+      "status.local.bg": "#12292D",
+      "status.outbound.fg": "#F0B24A",
+      "status.outbound.bg": "#2E2413",
+      "page.paper": "#FFFFFF",
+      "scrim": "rgba(0,0,0,0.50)",
+      "dropzone.fill": "rgba(140,128,255,0.08)"
+    },
+    "brand": {
+      "brand.ink": "#121120",
+      "brand.inkTop": "#2A2745",
+      "brand.iris": "#5646F0",
+      "brand.irisLight": "#A79EFF",
+      "brand.irisDeep": "#4B3BE6",
+      "brand.fold": "#E0DCFF"
+    }
+  },
+  "font": {
+    "family.ui": "System (SF Pro Text/Display chosen by size); CSS: -apple-system, BlinkMacSystemFont, system-ui, sans-serif",
+    "family.mono": "SF Mono; CSS: ui-monospace, SFMono-Regular, Menlo, monospace",
+    "feature.numeric": "tabular-nums on every fact (sizes, page counts, allowance, times)"
+  },
+  "type": {
+    "display": {
+      "size": 26,
+      "line": 32,
+      "weight": 600,
+      "tracking": -0.4
+    },
+    "title1": {
+      "size": 20,
+      "line": 26,
+      "weight": 600,
+      "tracking": -0.2
+    },
+    "title2": {
+      "size": 15,
+      "line": 20,
+      "weight": 600,
+      "tracking": -0.1
+    },
+    "headline": {
+      "size": 13,
+      "line": 18,
+      "weight": 600,
+      "tracking": 0
+    },
+    "body": {
+      "size": 14,
+      "line": 21,
+      "weight": 400,
+      "tracking": 0
+    },
+    "bodyStrong": {
+      "size": 14,
+      "line": 21,
+      "weight": 500,
+      "tracking": 0
+    },
+    "ui": {
+      "size": 13,
+      "line": 18,
+      "weight": 400,
+      "tracking": 0
+    },
+    "uiStrong": {
+      "size": 13,
+      "line": 18,
+      "weight": 500,
+      "tracking": 0
+    },
+    "meta": {
+      "size": 12,
+      "line": 16,
+      "weight": 400,
+      "tracking": 0
+    },
+    "section": {
+      "size": 12,
+      "line": 16,
+      "weight": 600,
+      "tracking": 0
+    },
+    "caption": {
+      "size": 11,
+      "line": 14,
+      "weight": 500,
+      "tracking": 0.1
+    },
+    "kbd": {
+      "size": 11,
+      "line": 14,
+      "weight": 500,
+      "tracking": 0
+    }
+  },
+  "space": {
+    "0": 0,
+    "0.5": 2,
+    "1": 4,
+    "1.5": 6,
+    "2": 8,
+    "2.5": 10,
+    "3": 12,
+    "4": 16,
+    "5": 20,
+    "6": 24,
+    "8": 32,
+    "10": 40,
+    "12": 48,
+    "16": 64
+  },
+  "radius": {
+    "thumb": 3,
+    "xs": 4,
+    "sm": 6,
+    "md": 8,
+    "lg": 10,
+    "xl": 12,
+    "2xl": 16,
+    "full": 999
+  },
+  "size": {
+    "window.min": [
+      640,
+      520
+    ],
+    "window.default": [
+      1024,
+      720
+    ],
+    "window.panelBreakpoint": 1120,
+    "window.compactBreakpoint": 760,
+    "toolbar.height": 52,
+    "conversation.maxWidth": 720,
+    "conversation.gutter": 24,
+    "conversation.gutterCompact": 16,
+    "panel.files.default": 280,
+    "panel.files.min": 240,
+    "panel.files.max": 360,
+    "control.sm": 24,
+    "control.md": 28,
+    "control.lg": 32,
+    "hit.pointerMin": 24,
+    "hit.touchMin": 44,
+    "icon.sm": 14,
+    "icon.md": 16,
+    "icon.lg": 20,
+    "thumb.chip": [
+      18,
+      24
+    ],
+    "thumb.row": [
+      28,
+      36
+    ],
+    "thumb.card": [
+      40,
+      52
+    ],
+    "thumb.evidence": [
+      72,
+      96
+    ],
+    "composer.minHeight": 88,
+    "composer.inputMaxHeight": 200,
+    "palette.width": 560,
+    "palette.maxRows": 8,
+    "row.height": 32,
+    "sheet.sm": 420,
+    "sheet.md": 560,
+    "sheet.settings": [
+      760,
+      560
+    ],
+    "sheet.previewMax": [
+      1000,
+      820
+    ]
+  },
+  "elevation": {
+    "light": {
+      "0": "none",
+      "1": "0 1px 2px rgba(16,16,32,0.05)",
+      "2": "0 1px 3px rgba(16,16,32,0.06), 0 8px 24px rgba(16,16,32,0.08)",
+      "3": "0 24px 64px rgba(16,16,32,0.22), 0 2px 8px rgba(16,16,32,0.08)",
+      "page": "0 0 0 1px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.12)"
+    },
+    "dark": {
+      "0": "none",
+      "1": "none",
+      "2": "0 8px 24px rgba(0,0,0,0.40)",
+      "3": "0 24px 64px rgba(0,0,0,0.60)",
+      "page": "0 0 0 1px rgba(255,255,255,0.06), 0 1px 3px rgba(0,0,0,0.50)"
+    }
+  },
+  "focus": {
+    "ringWidth": 2,
+    "ringOffset": 2,
+    "ringColor": "accent.fill"
+  },
+  "motion": {
+    "duration.instant": 0,
+    "duration.fast": 120,
+    "duration.base": 180,
+    "duration.slow": 240,
+    "duration.sheet": 280,
+    "duration.activityCycle": 1200,
+    "easing.standard": "cubic-bezier(0.2, 0, 0, 1)",
+    "easing.enter": "cubic-bezier(0, 0, 0, 1)",
+    "easing.exit": "cubic-bezier(0.3, 0, 1, 1)",
+    "reduced": "All movement becomes an opacity change of at most duration.fast; the activity glyph is static; no scroll animation."
+  },
+  "layer": {
+    "base": 0,
+    "toolbar": 10,
+    "panel": 20,
+    "dropOverlay": 30,
+    "popover": 40,
+    "sheet": 50
+  }
+}

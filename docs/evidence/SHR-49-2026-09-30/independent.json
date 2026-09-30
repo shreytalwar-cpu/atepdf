@@ -1,0 +1,758 @@
+{
+  "reader": "pypdf",
+  "version": "6.10.0",
+  "scope": "Strict independent raw-object inspection. Page-tree membership is authoritative here; PDF.js destination index alone gave misleading answers on detached pages.",
+  "records": [
+    {
+      "id": "interactive-input",
+      "sha256": "88f98f1ba4ce99b784ed17205faae80edc5e3cfca54c14cb0f7e2c79e09cfc64",
+      "pages": [
+        {
+          "index": 1,
+          "text": "INTERACTIVE-1 links, forms, notes\nVisit synthetic example\nGo to section two\n",
+          "annotations": [
+            {
+              "subtype": "/Link",
+              "rect": [
+                55.0,
+                682.0,
+                265.0,
+                710.0
+              ],
+              "uri": "https://example.invalid/shr45",
+              "uriOriginalBytesHex": "68747470733a2f2f6578616d706c652e696e76616c69642f7368723435",
+              "destinationTargetInOutputPageTree": null,
+              "destinationHasPageReference": false,
+              "PInOutputPageTree": null,
+              "PExists": false,
+              "contents": null,
+              "fieldName": null,
+              "value": null
+            },
+            {
+              "subtype": "/Link",
+              "rect": [
+                55.0,
+                632.0,
+                245.0,
+                660.0
+              ],
+              "uri": null,
+              "uriOriginalBytesHex": null,
+              "destinationTargetInOutputPageTree": 2,
+              "destinationHasPageReference": true,
+              "PInOutputPageTree": null,
+              "PExists": false,
+              "contents": "internal destination",
+              "fieldName": null,
+              "value": null
+            },
+            {
+              "subtype": "/Widget",
+              "rect": [
+                60.0,
+                540.0,
+                280.0,
+                564.0
+              ],
+              "uri": null,
+              "uriOriginalBytesHex": null,
+              "destinationTargetInOutputPageTree": null,
+              "destinationHasPageReference": false,
+              "PInOutputPageTree": 1,
+              "PExists": true,
+              "contents": null,
+              "fieldName": "synthetic_name",
+              "value": "Example"
+            },
+            {
+              "subtype": "/Widget",
+              "rect": [
+                60.0,
+                500.0,
+                80.0,
+                520.0
+              ],
+              "uri": null,
+              "uriOriginalBytesHex": null,
+              "destinationTargetInOutputPageTree": null,
+              "destinationHasPageReference": false,
+              "PInOutputPageTree": 1,
+              "PExists": true,
+              "contents": null,
+              "fieldName": "synthetic_check",
+              "value": "/Yes"
+            },
+            {
+              "subtype": "/Highlight",
+              "rect": [
+                55.0,
+                730.0,
+                355.0,
+                762.0
+              ],
+              "uri": null,
+              "uriOriginalBytesHex": null,
+              "destinationTargetInOutputPageTree": null,
+              "destinationHasPageReference": false,
+              "PInOutputPageTree": null,
+              "PExists": false,
+              "contents": "Synthetic highlight",
+              "fieldName": null,
+              "value": null
+            },
+            {
+              "subtype": "/Text",
+              "rect": [
+                360.0,
+                720.0,
+                385.0,
+                745.0
+              ],
+              "uri": null,
+              "uriOriginalBytesHex": null,
+              "destinationTargetInOutputPageTree": null,
+              "destinationHasPageReference": false,
+              "PInOutputPageTree": null,
+              "PExists": false,
+              "contents": "Synthetic note",
+              "fieldName": null,
+              "value": null
+            }
+          ],
+          "StructParents": null
+        },
+        {
+          "index": 2,
+          "text": "INTERACTIVE-2 internal target\n",
+          "annotations": [],
+          "StructParents": null
+        }
+      ],
+      "catalogKeys": [
+        "/AcroForm",
+        "/Outlines",
+        "/PageMode",
+        "/Pages",
+        "/Type"
+      ],
+      "fields": [
+        "synthetic_check",
+        "synthetic_name"
+      ],
+      "outlineRootPresent": true,
+      "structureRootPresent": false
+    },
+    {
+      "id": "interactive-merge",
+      "sha256": "bcebe7411e07fbe060bf6b9de206ffed46b1f0a7014823160f6af73421e62792",
+      "pages": [
+        {
+          "index": 1,
+          "text": "COMMUNITY MAKERS MORNING\nMorning Schedule\nPractice event timetable\n09:30   Room opens and materials are available\n09:45   Welcome and activity introductions\n10:00   First demonstration and open work time\n10:45   Short break\n11:00   Second demonstration and open work time\n11:45   Informal project display\n12:00   Pack away materials and close the room\nPlanning notes\nThe timetable is illustrative and may be adjusted for the practice event.\nPeople may work at their own pace during the open sessions.\nLeave the final quarter-hour free for arranging the display and tidying.\nSynthetic practice document. No real event or personal information.\n1\n",
+          "annotations": [],
+          "StructParents": null
+        },
+        {
+          "index": 2,
+          "text": "INTERACTIVE-1 links, forms, notes\nVisit synthetic example\nGo to section two\n",
+          "annotations": [
+            {
+              "subtype": "/Link",
+              "rect": [
+                55.0,
+                682.0,
+                265.0,
+                710.0
+              ],
+              "uri": "https://example.invalid/shr45",
+              "uriOriginalBytesHex": "68747470733a2f2f6578616d706c652e696e76616c69642f7368723435",
+              "destinationTargetInOutputPageTree": null,
+              "destinationHasPageReference": false,
+              "PInOutputPageTree": null,
+              "PExists": false,
+              "contents": null,
+              "fieldName": null,
+              "value": null
+            },
+            {
+              "subtype": "/Link",
+              "rect": [
+                55.0,
+                632.0,
+                245.0,
+                660.0
+              ],
+              "uri": null,
+              "uriOriginalBytesHex": null,
+              "destinationTargetInOutputPageTree": null,
+              "destinationHasPageReference": true,
+              "PInOutputPageTree": null,
+              "PExists": false,
+              "contents": "internal destination",
+              "fieldName": null,
+              "value": null
+            },
+            {
+              "subtype": "/Widget",
+              "rect": [
+                60.0,
+                540.0,
+                280.0,
+                564.0
+              ],
+              "uri": null,
+              "uriOriginalBytesHex": null,
+              "destinationTargetInOutputPageTree": null,
+              "destinationHasPageReference": false,
+              "PInOutputPageTree": null,
+              "PExists": true,
+              "contents": null,
+              "fieldName": "synthetic_name",
+              "value": "Example"
+            },
+            {
+              "subtype": "/Widget",
+              "rect": [
+                60.0,
+                500.0,
+                80.0,
+                520.0
+              ],
+              "uri": null,
+              "uriOriginalBytesHex": null,
+              "destinationTargetInOutputPageTree": null,
+              "destinationHasPageReference": false,
+              "PInOutputPageTree": null,
+              "PExists": true,
+              "contents": null,
+              "fieldName": "synthetic_check",
+              "value": "/Yes"
+            },
+            {
+              "subtype": "/Highlight",
+              "rect": [
+                55.0,
+                730.0,
+                355.0,
+                762.0
+              ],
+              "uri": null,
+              "uriOriginalBytesHex": null,
+              "destinationTargetInOutputPageTree": null,
+              "destinationHasPageReference": false,
+              "PInOutputPageTree": null,
+              "PExists": false,
+              "contents": "Synthetic highlight",
+              "fieldName": null,
+              "value": null
+            },
+            {
+              "subtype": "/Text",
+              "rect": [
+                360.0,
+                720.0,
+                385.0,
+                745.0
+              ],
+              "uri": null,
+              "uriOriginalBytesHex": null,
+              "destinationTargetInOutputPageTree": null,
+              "destinationHasPageReference": false,
+              "PInOutputPageTree": null,
+              "PExists": false,
+              "contents": "Synthetic note",
+              "fieldName": null,
+              "value": null
+            }
+          ],
+          "StructParents": null
+        },
+        {
+          "index": 3,
+          "text": "INTERACTIVE-2 internal target\n",
+          "annotations": [],
+          "StructParents": null
+        }
+      ],
+      "catalogKeys": [
+        "/Pages",
+        "/Type"
+      ],
+      "fields": [],
+      "outlineRootPresent": false,
+      "structureRootPresent": false
+    },
+    {
+      "id": "interactive-remove-target",
+      "sha256": "3c84bded94e256b7458aace74a14f1d3048039665c302a3e9cef5be292c4c220",
+      "pages": [
+        {
+          "index": 1,
+          "text": "INTERACTIVE-1 links, forms, notes\nVisit synthetic example\nGo to section two\n",
+          "annotations": [
+            {
+              "subtype": "/Link",
+              "rect": [
+                55.0,
+                682.0,
+                265.0,
+                710.0
+              ],
+              "uri": "https://example.invalid/shr45",
+              "uriOriginalBytesHex": "68747470733a2f2f6578616d706c652e696e76616c69642f7368723435",
+              "destinationTargetInOutputPageTree": null,
+              "destinationHasPageReference": false,
+              "PInOutputPageTree": null,
+              "PExists": false,
+              "contents": null,
+              "fieldName": null,
+              "value": null
+            },
+            {
+              "subtype": "/Link",
+              "rect": [
+                55.0,
+                632.0,
+                245.0,
+                660.0
+              ],
+              "uri": null,
+              "uriOriginalBytesHex": null,
+              "destinationTargetInOutputPageTree": null,
+              "destinationHasPageReference": true,
+              "PInOutputPageTree": null,
+              "PExists": false,
+              "contents": "internal destination",
+              "fieldName": null,
+              "value": null
+            },
+            {
+              "subtype": "/Widget",
+              "rect": [
+                60.0,
+                540.0,
+                280.0,
+                564.0
+              ],
+              "uri": null,
+              "uriOriginalBytesHex": null,
+              "destinationTargetInOutputPageTree": null,
+              "destinationHasPageReference": false,
+              "PInOutputPageTree": null,
+              "PExists": true,
+              "contents": null,
+              "fieldName": "synthetic_name",
+              "value": "Example"
+            },
+            {
+              "subtype": "/Widget",
+              "rect": [
+                60.0,
+                500.0,
+                80.0,
+                520.0
+              ],
+              "uri": null,
+              "uriOriginalBytesHex": null,
+              "destinationTargetInOutputPageTree": null,
+              "destinationHasPageReference": false,
+              "PInOutputPageTree": null,
+              "PExists": true,
+              "contents": null,
+              "fieldName": "synthetic_check",
+              "value": "/Yes"
+            },
+            {
+              "subtype": "/Highlight",
+              "rect": [
+                55.0,
+                730.0,
+                355.0,
+                762.0
+              ],
+              "uri": null,
+              "uriOriginalBytesHex": null,
+              "destinationTargetInOutputPageTree": null,
+              "destinationHasPageReference": false,
+              "PInOutputPageTree": null,
+              "PExists": false,
+              "contents": "Synthetic highlight",
+              "fieldName": null,
+              "value": null
+            },
+            {
+              "subtype": "/Text",
+              "rect": [
+                360.0,
+                720.0,
+                385.0,
+                745.0
+              ],
+              "uri": null,
+              "uriOriginalBytesHex": null,
+              "destinationTargetInOutputPageTree": null,
+              "destinationHasPageReference": false,
+              "PInOutputPageTree": null,
+              "PExists": false,
+              "contents": "Synthetic note",
+              "fieldName": null,
+              "value": null
+            }
+          ],
+          "StructParents": null
+        }
+      ],
+      "catalogKeys": [
+        "/Pages",
+        "/Type"
+      ],
+      "fields": [],
+      "outlineRootPresent": false,
+      "structureRootPresent": false
+    },
+    {
+      "id": "tagged-input",
+      "sha256": "dbf408294a099c53be62c7cec80dfbd296bd2bd1c3025ab0554daf517ca55ffd",
+      "pages": [
+        {
+          "index": 1,
+          "text": "TAGGED-1",
+          "annotations": [],
+          "StructParents": 0
+        }
+      ],
+      "catalogKeys": [
+        "/MarkInfo",
+        "/Pages",
+        "/StructTreeRoot",
+        "/Type"
+      ],
+      "fields": [],
+      "outlineRootPresent": false,
+      "structureRootPresent": true
+    },
+    {
+      "id": "tagged-merge",
+      "sha256": "99ac41e207b38bda74abca3ce607e6d53b59df264949e272ca292f9ae69239fa",
+      "pages": [
+        {
+          "index": 1,
+          "text": "COMMUNITY MAKERS MORNING\nMorning Schedule\nPractice event timetable\n09:30   Room opens and materials are available\n09:45   Welcome and activity introductions\n10:00   First demonstration and open work time\n10:45   Short break\n11:00   Second demonstration and open work time\n11:45   Informal project display\n12:00   Pack away materials and close the room\nPlanning notes\nThe timetable is illustrative and may be adjusted for the practice event.\nPeople may work at their own pace during the open sessions.\nLeave the final quarter-hour free for arranging the display and tidying.\nSynthetic practice document. No real event or personal information.\n1\n",
+          "annotations": [],
+          "StructParents": null
+        },
+        {
+          "index": 2,
+          "text": "TAGGED-1",
+          "annotations": [],
+          "StructParents": 0
+        }
+      ],
+      "catalogKeys": [
+        "/Pages",
+        "/Type"
+      ],
+      "fields": [],
+      "outlineRootPresent": false,
+      "structureRootPresent": false
+    },
+    {
+      "id": "uri-only-input",
+      "sha256": "5f93c1c0008372f6c082d49824a817323a0d35f19fc4c62d0d36dce5deb2cf38",
+      "pages": [
+        {
+          "index": 1,
+          "text": "INTERACTIVE-1 links, forms, notes\nVisit synthetic example\nGo to section two\n",
+          "annotations": [
+            {
+              "subtype": "/Link",
+              "rect": [
+                55.0,
+                682.0,
+                265.0,
+                710.0
+              ],
+              "uri": "https://example.invalid/shr45",
+              "uriOriginalBytesHex": "68747470733a2f2f6578616d706c652e696e76616c69642f7368723435",
+              "destinationTargetInOutputPageTree": null,
+              "destinationHasPageReference": false,
+              "PInOutputPageTree": null,
+              "PExists": false,
+              "contents": null,
+              "fieldName": null,
+              "value": null
+            }
+          ],
+          "StructParents": null
+        },
+        {
+          "index": 2,
+          "text": "INTERACTIVE-2 internal target\n",
+          "annotations": [],
+          "StructParents": null
+        }
+      ],
+      "catalogKeys": [
+        "/PageMode",
+        "/Pages",
+        "/Type"
+      ],
+      "fields": [],
+      "outlineRootPresent": false,
+      "structureRootPresent": false
+    },
+    {
+      "id": "uri-only-merge-first",
+      "sha256": "074073e45eb0c5adcacdda6560c9f402ccb658c0c6c96f4388a7c6e6972a6b3b",
+      "pages": [
+        {
+          "index": 1,
+          "text": "INTERACTIVE-1 links, forms, notes\nVisit synthetic example\nGo to section two\n",
+          "annotations": [
+            {
+              "subtype": "/Link",
+              "rect": [
+                55.0,
+                682.0,
+                265.0,
+                710.0
+              ],
+              "uri": "https://example.invalid/shr45",
+              "uriOriginalBytesHex": "68747470733a2f2f6578616d706c652e696e76616c69642f7368723435",
+              "destinationTargetInOutputPageTree": null,
+              "destinationHasPageReference": false,
+              "PInOutputPageTree": null,
+              "PExists": false,
+              "contents": null,
+              "fieldName": null,
+              "value": null
+            }
+          ],
+          "StructParents": null
+        },
+        {
+          "index": 2,
+          "text": "INTERACTIVE-2 internal target\n",
+          "annotations": [],
+          "StructParents": null
+        },
+        {
+          "index": 3,
+          "text": "COMMUNITY MAKERS MORNING\nMorning Schedule\nPractice event timetable\n09:30   Room opens and materials are available\n09:45   Welcome and activity introductions\n10:00   First demonstration and open work time\n10:45   Short break\n11:00   Second demonstration and open work time\n11:45   Informal project display\n12:00   Pack away materials and close the room\nPlanning notes\nThe timetable is illustrative and may be adjusted for the practice event.\nPeople may work at their own pace during the open sessions.\nLeave the final quarter-hour free for arranging the display and tidying.\nSynthetic practice document. No real event or personal information.\n1\n",
+          "annotations": [],
+          "StructParents": null
+        }
+      ],
+      "catalogKeys": [
+        "/Pages",
+        "/Type"
+      ],
+      "fields": [],
+      "outlineRootPresent": false,
+      "structureRootPresent": false
+    },
+    {
+      "id": "uri-only-merge-offset",
+      "sha256": "6c76ed0d707d2bae481457043a76da912d0954dca96c493fe468f3bd5247d19b",
+      "pages": [
+        {
+          "index": 1,
+          "text": "COMMUNITY MAKERS MORNING\nMorning Schedule\nPractice event timetable\n09:30   Room opens and materials are available\n09:45   Welcome and activity introductions\n10:00   First demonstration and open work time\n10:45   Short break\n11:00   Second demonstration and open work time\n11:45   Informal project display\n12:00   Pack away materials and close the room\nPlanning notes\nThe timetable is illustrative and may be adjusted for the practice event.\nPeople may work at their own pace during the open sessions.\nLeave the final quarter-hour free for arranging the display and tidying.\nSynthetic practice document. No real event or personal information.\n1\n",
+          "annotations": [],
+          "StructParents": null
+        },
+        {
+          "index": 2,
+          "text": "INTERACTIVE-1 links, forms, notes\nVisit synthetic example\nGo to section two\n",
+          "annotations": [
+            {
+              "subtype": "/Link",
+              "rect": [
+                55.0,
+                682.0,
+                265.0,
+                710.0
+              ],
+              "uri": "https://example.invalid/shr45",
+              "uriOriginalBytesHex": "68747470733a2f2f6578616d706c652e696e76616c69642f7368723435",
+              "destinationTargetInOutputPageTree": null,
+              "destinationHasPageReference": false,
+              "PInOutputPageTree": null,
+              "PExists": false,
+              "contents": null,
+              "fieldName": null,
+              "value": null
+            }
+          ],
+          "StructParents": null
+        },
+        {
+          "index": 3,
+          "text": "INTERACTIVE-2 internal target\n",
+          "annotations": [],
+          "StructParents": null
+        }
+      ],
+      "catalogKeys": [
+        "/Pages",
+        "/Type"
+      ],
+      "fields": [],
+      "outlineRootPresent": false,
+      "structureRootPresent": false
+    },
+    {
+      "id": "uri-only-remove-link-page",
+      "sha256": "3aa59576e0089063d388fc1116cc253eb5dac292980323e74be3d1de556cc503",
+      "pages": [
+        {
+          "index": 1,
+          "text": "INTERACTIVE-2 internal target\n",
+          "annotations": [],
+          "StructParents": null
+        }
+      ],
+      "catalogKeys": [
+        "/Pages",
+        "/Type"
+      ],
+      "fields": [],
+      "outlineRootPresent": false,
+      "structureRootPresent": false
+    },
+    {
+      "id": "uri-only-remove-target",
+      "sha256": "4c2697887b1f4d40016cd7eb37da20b1ccbd95afd8f795447b8fbd3123c38e1b",
+      "pages": [
+        {
+          "index": 1,
+          "text": "INTERACTIVE-1 links, forms, notes\nVisit synthetic example\nGo to section two\n",
+          "annotations": [
+            {
+              "subtype": "/Link",
+              "rect": [
+                55.0,
+                682.0,
+                265.0,
+                710.0
+              ],
+              "uri": "https://example.invalid/shr45",
+              "uriOriginalBytesHex": "68747470733a2f2f6578616d706c652e696e76616c69642f7368723435",
+              "destinationTargetInOutputPageTree": null,
+              "destinationHasPageReference": false,
+              "PInOutputPageTree": null,
+              "PExists": false,
+              "contents": null,
+              "fieldName": null,
+              "value": null
+            }
+          ],
+          "StructParents": null
+        }
+      ],
+      "catalogKeys": [
+        "/Pages",
+        "/Type"
+      ],
+      "fields": [],
+      "outlineRootPresent": false,
+      "structureRootPresent": false
+    },
+    {
+      "id": "uri-with-P-input",
+      "sha256": "9ecfe9d7dd29eb89ad2029a11c91af550f2f8bcfcdbc8a15cfcb06547614bcd0",
+      "pages": [
+        {
+          "index": 1,
+          "text": "INTERACTIVE-1 links, forms, notes\nVisit synthetic example\nGo to section two\n",
+          "annotations": [
+            {
+              "subtype": "/Link",
+              "rect": [
+                55.0,
+                682.0,
+                265.0,
+                710.0
+              ],
+              "uri": "https://example.invalid/shr45",
+              "uriOriginalBytesHex": "68747470733a2f2f6578616d706c652e696e76616c69642f7368723435",
+              "destinationTargetInOutputPageTree": null,
+              "destinationHasPageReference": false,
+              "PInOutputPageTree": 1,
+              "PExists": true,
+              "contents": null,
+              "fieldName": null,
+              "value": null
+            }
+          ],
+          "StructParents": null
+        },
+        {
+          "index": 2,
+          "text": "INTERACTIVE-2 internal target\n",
+          "annotations": [],
+          "StructParents": null
+        }
+      ],
+      "catalogKeys": [
+        "/PageMode",
+        "/Pages",
+        "/Type"
+      ],
+      "fields": [],
+      "outlineRootPresent": false,
+      "structureRootPresent": false
+    },
+    {
+      "id": "uri-with-P-merge-offset",
+      "sha256": "815dc905b7683d95c0117a08812d733ffc52e9fe546e7c486cc2ea4ad2e3b847",
+      "pages": [
+        {
+          "index": 1,
+          "text": "COMMUNITY MAKERS MORNING\nMorning Schedule\nPractice event timetable\n09:30   Room opens and materials are available\n09:45   Welcome and activity introductions\n10:00   First demonstration and open work time\n10:45   Short break\n11:00   Second demonstration and open work time\n11:45   Informal project display\n12:00   Pack away materials and close the room\nPlanning notes\nThe timetable is illustrative and may be adjusted for the practice event.\nPeople may work at their own pace during the open sessions.\nLeave the final quarter-hour free for arranging the display and tidying.\nSynthetic practice document. No real event or personal information.\n1\n",
+          "annotations": [],
+          "StructParents": null
+        },
+        {
+          "index": 2,
+          "text": "INTERACTIVE-1 links, forms, notes\nVisit synthetic example\nGo to section two\n",
+          "annotations": [
+            {
+              "subtype": "/Link",
+              "rect": [
+                55.0,
+                682.0,
+                265.0,
+                710.0
+              ],
+              "uri": "https://example.invalid/shr45",
+              "uriOriginalBytesHex": "68747470733a2f2f6578616d706c652e696e76616c69642f7368723435",
+              "destinationTargetInOutputPageTree": null,
+              "destinationHasPageReference": false,
+              "PInOutputPageTree": null,
+              "PExists": true,
+              "contents": null,
+              "fieldName": null,
+              "value": null
+            }
+          ],
+          "StructParents": null
+        },
+        {
+          "index": 3,
+          "text": "INTERACTIVE-2 internal target\n",
+          "annotations": [],
+          "StructParents": null
+        }
+      ],
+      "catalogKeys": [
+        "/Pages",
+        "/Type"
+      ],
+      "fields": [],
+      "outlineRootPresent": false,
+      "structureRootPresent": false
+    }
+  ]
+}

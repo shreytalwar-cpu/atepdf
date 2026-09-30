@@ -23,6 +23,14 @@ Fresh independent atepdf repository; Attenlo remains read-only reference. No pro
 | 0007 | GPT-6 Luna and complete tool selection | Intentional enabled-AI orchestration reaffirmed by D-04; specific production model/provider remains OPEN-09; development allowance is not v1 commercial quota |
 | 0008 | Development native pairing | One-use expiring pairing and memory-only bearer; not production account auth |
 | 0009 | Explicit private TLS beta companion | Pinned local-network native transport; not a hosted production backend |
+| 0011 | Mac launch envelope (SHR-34) — **approved 30 September 2026** | macOS 14.0 minimum; Universal arm64 + x86_64 with Intel support conditional on real Intel runtime acceptance (Apple Silicon only is the fallback); 8 GB/16 GB internal hypotheses only, no public disk number until SHR-78; Mac idiom viable (UX acceptance in SHR-106/75); provisional wording "macOS 14 or later. Mac with Apple silicon or Intel processor."; Setapp an intended v1 channel (PRODUCT_V1 §4.2 updated; acceptance pending SHR-91). Settles OPEN-01's envelope; no project setting changed yet |
+| 0012 | Pre-send privacy and operation-consent contract (SHR-35) — **approved 30 September 2026** (PRIV-1–7; PRIV-5 without an email-address warning) | Outbound fields classed H (instruction after local guards, bounded clarification, opaque refs, active-projection page counts, coarse size buckets; relay-only identity; versioned hosted disclosure), C (document/derived content, file names, exact sizes/metadata: single-use exact-payload grant, 5-minute TTL, plus an approved purpose; v1 purpose list empty) or N (never: passwords, keys, tokens, paths, device IDs). Incomplete provider/relay disclosure blocks transfer. Narrows 0006's no-per-send-confirmation to class H. Settles OPEN-08's policy; contract for SHR-36/37/79; nothing implemented |
+
+## Approved complex-PDF decision (SHR-49)
+
+[ADR 0013](adr/0013-first-complex-pdf-preservation-slice.md), **revision 2, CPDF-1–5 approved by Shrey Talwar on 30 September 2026**, records simple absolute HTTP/HTTPS URI-link preservation for **Merge only**, using the existing **pdf-lib + PDFKit** stack with no new PDF dependency. Supported annotation structure, correct output-page binding and independent verification before promotion are required. Internal destinations, outlines/bookmarks, forms, tags, comments/highlights and other annotation subtypes, custom appearances and unsupported actions remain refused; linked PDFs remain refused for Remove Pages/OCR/Compress. Digitally signed, certified or signature-field PDFs are refused for v1 content-changing transformations: explain possible invalidation and request an unsigned copy, without silent stripping, warning-and-continue or preservation claims.
+
+The exact support statement in ADR 0013 is an **approved target contract**, withheld from public exposure until SHR-50 implements and verifies it. The exact SHR-50 verification requirements remain unchanged. This approval update changes no production guards, runtime behavior or runtime knowledge and does not start SHR-50. SHR-49 stays **In Review until PR #95 merges**. [Source-bound probes](evidence/SHR-49-2026-09-30/README.md) retain the distinction between rejected production inputs and direct-library preservation failures.
 
 ## Superseded direction and current-source gaps
 
@@ -38,6 +46,22 @@ Fresh independent atepdf repository; Attenlo remains read-only reference. No pro
 | Subscription vs one-time model and AI cost ownership unresolved | Monthly/annual Pro and company-supplied AI are settled; lifetime/credit packs are excluded. Payment/account/channel implementations remain open. |
 | Editing as an optional v1 expansion | D-17/Section 4.2: existing-text edits, added text, drawing, signatures, form filling, redaction and annotation creation are v2. Preserving existing structures is a distinct compatibility requirement. |
 | Existing touch/mobile acceptance as launch evidence | Sections 13/16 require actual Mac acceptance. Historical browser/simulator/helper results retain their limits; no newly passed gate is claimed. |
+
+## Approved v1 visual identity (SHR-105)
+
+Owner-approved 30 September 2026, effective when PR #91 merges; the canonical record is [docs/design/](design/README.md). The redesign changes presentation only. Conversation-first, intentional AI routing (including quick actions), local execution, consent, secure input and every PRODUCT_V1 behaviour are unchanged.
+
+| Decision | Outcome | Supersedes |
+|---|---|---|
+| OD-1 Logo/app icon | Folio Eight mark, Ink app icon | Raster gradient 8 in `APPROVED_BRAND.md` (build pack kept as history) |
+| OD-2 Name casing | `atePDF` in prose and wordmark; `atePDF Pro` | Lowercase `atepdf` in `APPROVED_BRAND.md` / `brand.json` |
+| OD-3 Dark mode | Ships at launch with light | MAC-04 "dark mode is not a launch gate unless separately approved" (this is that approval) |
+| OD-4 Accent | Iris `#5646F0` / `#6354FF` | White/navy/blue incumbent palette |
+| OD-5 Files panel | Right-hand panel, auto-shown ≥ 1120 pt | "No sidebar or permanent preview rail" |
+| OD-6 Catalyst idiom | Mac idiom, pending engineering confirmation in SHR-106/75 | iPad idiom (77% scaling) |
+| OD-7 Settings | In-window sheet | — (no separate Settings window in v1) |
+
+MAC-04's "preserve the 8-based identity and conversational layout" is honoured: the new mark is an 8 and the single conversation layout remains. Its "fix observed usability problems, not the entire visual direction" is superseded by the SHR-26 → SHR-105/106 redesign track. Detailed superseded UI rules are X-1–X-18 in [MIGRATION_MAP.md](design/MIGRATION_MAP.md).
 
 ## Remaining decisions and reconciliation limits
 

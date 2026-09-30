@@ -1,0 +1,205 @@
+{
+  "schema": "atepdf.cost-model/2",
+  "source": "docs/adr/0016-consumer-ai-service.md section 15 (enforced bound: section 11.2)",
+  "labels": {
+    "MEASURED": "measured in this repository on 2026-09-30",
+    "DOCUMENTED": "vendor primary documentation retrieved 2026-09-30",
+    "ESTIMATE": "derived from the stated assumptions; not measured"
+  },
+  "measured": {
+    "fixedPrefixChars": {
+      "systemPrompt": 2269,
+      "productKnowledge": 8196,
+      "toolSchemas": [
+        3929,
+        76,
+        542
+      ],
+      "total": 15012
+    },
+    "requestChars": {
+      "simple": 724,
+      "followUp14Artifacts": 2030,
+      "clarification": 1117,
+      "multiStep": 1003
+    },
+    "outputChars": {
+      "onePlan": 302,
+      "fourStepPlan": 1350,
+      "clarification": 140
+    },
+    "method": "offline tsx script importing packages/planner/src/schema.ts and product-knowledge.ts; synthetic refs; no provider call"
+  },
+  "documentedPricesUsdPer1M": {
+    "retrieved": "2026-09-30",
+    "standardShortContext": {
+      "gpt-6-luna": {
+        "input": 0.1,
+        "cachedInput": 0.01,
+        "cacheWrite": 0.125,
+        "output": 0.5
+      },
+      "gpt-6.1-sol": {
+        "input": 2.0,
+        "cachedInput": 0.1,
+        "cacheWrite": 2.5,
+        "output": 10.0
+      },
+      "claude-sonnet-5-5": {
+        "input": 2.0,
+        "cacheHit": 0.2,
+        "output": 10.0
+      },
+      "gemini-3.8-flash": {
+        "input2026": 0.75,
+        "output2026": 3.75,
+        "input2027": 1.5,
+        "output2027": 7.5
+      }
+    },
+    "cacheRules": "GPT-5.6 and later: cache write 1.25x uncached input; read 0.1x (0.05x for GPT-6.1 Sol); explicit mode writes end at the last breakpoint; content after it billed at the uncached rate with no write charge",
+    "uplifts": {
+      "openaiDataResidency": "+10% for models released on or after 2026-03-05"
+    }
+  },
+  "platformFixedUsdPerMonth": {
+    "vercelPro": 20,
+    "supabasePro": 25,
+    "note": "DOCUMENTED list prices; outside the AI provider spend caps; custom SMTP provider for email one-time codes not yet chosen, cost UNKNOWN"
+  },
+  "estimateAssumptions": {
+    "fixedPrefixTokens": 4200,
+    "fixedPrefixRange": [
+      3700,
+      5000
+    ],
+    "variableInputTokens": {
+      "simple": 300,
+      "followUp": 800,
+      "clarification": 420,
+      "multiStep": 400
+    },
+    "visibleOutputTokens": {
+      "simple": 110,
+      "followUp": 150,
+      "clarification": 60,
+      "multiStep": 450
+    },
+    "reasoningTokens": {
+      "lunaNone": 0,
+      "low": {
+        "simple": 300,
+        "followUp": 300,
+        "clarification": 200,
+        "multiStep": 800,
+        "note": "UNKNOWN; replace with SHR-108 measurements"
+      }
+    },
+    "prefixCacheHitRate": 0.8,
+    "cacheMissPricedAt": "cache-write rate on the fixed prefix only",
+    "userMessage": "always uncached",
+    "residencyUplift": 1.1,
+    "callMix": {
+      "simple": 0.45,
+      "followUp": 0.25,
+      "clarification": 0.2,
+      "multiStep": 0.1
+    },
+    "callsPerWorkflow": 1.5
+  },
+  "expectedProduction": {
+    "config": "gpt-6-luna, effort none",
+    "usdPerCall": {
+      "simple": 0.00022,
+      "followUp": 0.00029,
+      "clarification": 0.00021,
+      "multiStep": 0.0004,
+      "blendedWithResidency": 0.00028,
+      "perCaseNote": "simple/followUp/clarification/multiStep are before the +10% residency uplift; blendedWithResidency includes it; all are no-retry expected estimates"
+    },
+    "usdPerUserMonth": {
+      "note": "workflow counts illustrative, not approved allowances (SHR-84)",
+      "guest10": 0.004,
+      "light20": 0.01,
+      "normal100": 0.04,
+      "heavy500": 0.21
+    },
+    "callsCoveredBy": {
+      "monthlyCap50": 176678,
+      "dailyCap5": 17667
+    }
+  },
+  "lunaLowEffort": {
+    "usdPerCallBlendedWithResidency": 0.00046,
+    "usdPerUserMonth": {
+      "guest10": 0.007,
+      "light20": 0.014,
+      "normal100": 0.07,
+      "heavy500": 0.35
+    },
+    "callsCoveredBy": {
+      "monthlyCap50": 107758,
+      "dailyCap5": 10775
+    }
+  },
+  "contingencyAndEvalOnly": {
+    "config": "gpt-6.1-sol, effort low",
+    "usdPerCallBlendedWithResidency": 0.0089,
+    "worstCaseWithResidency": 0.077,
+    "usdPerUserMonth": {
+      "guest10": 0.13,
+      "light20": 0.27,
+      "normal100": 1.34,
+      "heavy500": 6.68
+    },
+    "callsCoveredBy": {
+      "monthlyCap50": 5616
+    }
+  },
+  "ceilings": {
+    "maxOutputTokens": 4000,
+    "maxRequestCostUsd": {
+      "gpt-6-luna": 0.01,
+      "gpt-6.1-sol-eval": 0.1
+    },
+    "perSubjectDailyUsd": {
+      "guest": 0.25,
+      "account": 1.0
+    },
+    "globalDailyUsd": 5,
+    "globalMonthlyUsd": 50,
+    "openaiProjectHardBudgetUsd": 55,
+    "maxProviderAttempts": {
+      "gpt-6-luna": 2,
+      "gpt-6.1-sol-eval": 1
+    }
+  },
+  "enforcedBound": {
+    "label": "arithmetic from DOCUMENTED prices and ENFORCED ceilings (ADR 0016 section 11.2)",
+    "gpt-6-luna": {
+      "maxInputTokens": 12000,
+      "maxOutputTokens": 4000,
+      "inputRateUsedUsdPer1M": 0.125,
+      "inputRateNote": "cache-write rate, the highest input rate",
+      "outputUsdPer1M": 0.5,
+      "uplift": 1.1,
+      "perAttemptWorstCaseUsd": 0.00385,
+      "maxProviderAttempts": 2,
+      "envelopeUsd": 0.0077,
+      "maxRequestCostUsd": 0.01
+    },
+    "gpt-6.1-sol-eval": {
+      "maxInputTokens": 12000,
+      "maxOutputTokens": 4000,
+      "inputRateUsedUsdPer1M": 2.5,
+      "inputRateNote": "cache-write rate, the highest input rate",
+      "outputUsdPer1M": 10.0,
+      "uplift": 1.1,
+      "perAttemptWorstCaseUsd": 0.077,
+      "maxProviderAttempts": 1,
+      "envelopeUsd": 0.077,
+      "maxRequestCostUsd": 0.1
+    },
+    "note": "Input tokens are counted with the pinned tokenizer over the whole provider request before sending; a character-to-token ratio is not used as the bound. Attempts without provider usage stay booked at the per-attempt worst case. The Sol eval row allows one attempt (no relay retry) so its envelope fits its ceiling (S61)."
+  }
+}

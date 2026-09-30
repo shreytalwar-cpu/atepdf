@@ -1,6 +1,5 @@
 import type {Request as PlannerRequest,Envelope} from '../../contracts/src/protocol';
 import {validateEnvelope,validateEnvelopeBinding} from '../../contracts/src/protocol';
-import responseValid from '../../contracts/src/generated/response';
 import type {PlannerResponse} from './schema';
 import {validateNonPlanResponse} from './reply';
 import {projectHosted} from './outbound/schema';
@@ -20,9 +19,13 @@ export async function requestPlan(request:PlannerRequest,token:string,signal:Abo
   if(!response.ok)throw new Error('Planning did not finish. No local files changed.');
   const envelope=await response.json();
   signal.throwIfAborted();
-  return validatePlanResult(envelope,request);
+  return validatePlanResult(envelope,request,signal);
 }
-export function validatePlanResult(value:unknown,request:PlannerRequest){
+export async function validatePlanResult(value:unknown,request:PlannerRequest,signal?:AbortSignal){
+  // Response-only validation loads when a reply arrives. It remains mandatory
+  // before returning any plan; cancellation during the load cannot admit work.
+  const {default:responseValid}=await import('../../contracts/src/generated/response');
+  signal?.throwIfAborted();
   const envelope=value as {schemaVersion:'1.0';requestId:string;workspaceRevision:number;planner:PlannerResponse};
   validateEnvelopeBinding(envelope,request,request.workspaceRevision);
   if(envelope.schemaVersion!=='1.0'||envelope.requestId!==request.requestId||envelope.workspaceRevision!==request.workspaceRevision||!responseValid(envelope.planner))throw new Error('Invalid or stale plan. No local files changed.');

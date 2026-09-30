@@ -1,6 +1,6 @@
 # ADR 0013 — First complex-PDF preservation slice (SHR-49)
 
-**Status:** **Approved** by Shrey Talwar on 30 September 2026 — revision 2, CPDF-1–5. Approval applies to PR #95 at reviewed head `592bd7e403775f5365d72ebf11b55aed6d614c2e`. This is an approved target support contract, not implemented support. Public exposure waits for SHR-50 implementation and verification. SHR-49 stays In Review until merge, not Done. This documentation update does not start SHR-50 or authorize a release.
+**Status:** **Approved** by Shrey Talwar on 30 September 2026 — revision 2, CPDF-1–5. Approval applies to PR #95 at reviewed head `592bd7e403775f5365d72ebf11b55aed6d614c2e`. PR #95 subsequently merged as `785397328a9871e013cb6b351881cc6507872b6f` on 30 September 2026. This is an approved target support contract, not implemented support. Public exposure waits for SHR-50 implementation and verification. The SHR-49 decision is complete; its merge does not complete or start SHR-50 or authorize a release.
 
 **Date:** 30 September 2026. **Investigated source:** latest fetched `origin/main`, `37e970025eaff9be35a2b8d5fa0291d9c7eef0a5`. **Authority:** [PRODUCT_V1](../PRODUCT_V1.md) PDF-02–05/08, TOOL-01/03/15, ARCH-01/04/05, OPEN-07, G-03/07; [SHR-49](https://linear.app/shrey-talwar/issue/SHR-49/choose-an-evidence-backed-first-complex-pdf-compatibility-expansion), parent [SHR-21](https://linear.app/shrey-talwar/issue/SHR-21/strengthen-pdf-fidelity-verification). **Evidence:** [bounded probes and reproduction instructions](../evidence/SHR-49-2026-09-30/README.md).
 
@@ -136,7 +136,7 @@ Shrey Talwar explicitly approved **CPDF-1 through CPDF-5 on 30 September 2026** 
 
 Expanded help must define “simple” using section 4's exclusions (custom appearances, additional actions and other link variants). Specific refusals name the unsupported family and say the original is unchanged. Example: “This PDF has internal links I can't safely preserve in Merge yet. I haven't changed it.” Signed/certified refusal: “Transforming this PDF could invalidate its digital signature or certification. Please use an unsigned copy. Your original is unchanged.” Signature-field refusals must likewise explain this risk and request an unsigned copy.
 
-CPDF-1–5 are recorded as approved by Shrey Talwar, dated 30 September 2026, ADR revision 2. Approval does not run SHR-50 or authorize a release/public claim. Keep SHR-49 **In Review until PR #95 merges**; do not merge or mark Done in this task. Stop after updating PR #95.
+CPDF-1–5 are recorded as approved by Shrey Talwar, dated 30 September 2026, ADR revision 2. Approval does not run SHR-50 or authorize a release/public claim. The original decision task stopped at review; PR #95 has since merged as recorded above. SHR-50 remains a separate implementation task with the gates in Section 7.
 
 ## 9. Primary external references
 

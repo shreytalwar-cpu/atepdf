@@ -8,7 +8,7 @@ import {createGateway,validateRequest} from '../../packages/planner/src/gateway'
 import {LocalConfig} from '../../packages/planner/src/local-config';
 import {planWithOpenAI as actualPlanWithOpenAI,MODEL} from '../../packages/planner/src/provider';
 import {PRODUCT_KNOWLEDGE} from '../../packages/planner/src/generated/product-knowledge';
-import {requestPlan} from '../../packages/planner/src/client';
+import {requestPlan,validatePlanResult} from '../../packages/planner/src/client';
 import {buildRequest,quickPlan} from '../../packages/contracts/src/protocol';
 import {isClarificationAnswer,pendingFromResponse,withPendingClarification} from '../../packages/planner/src/clarification';
 import {validateNonPlanResponse} from '../../packages/planner/src/reply';
@@ -18,6 +18,13 @@ async function planWithOpenAI(...args:Parameters<typeof actualPlanWithOpenAI>){r
 const files=[{ref:'file_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',kind:'pdf' as const,pageCount:2,sizeBytes:3000,encrypted:false as const},{ref:'file_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',kind:'pdf' as const,pageCount:1,sizeBytes:2000,encrypted:false as const}];
 const request=()=>buildRequest({revision:2,files,selected:files.map(f=>f.ref),focus:null,originals:files.map(f=>f.ref)},'Combine the two PDFs in the order added.');
 const clarify=(question:string,choices:string[]=[])=>( {schemaVersion:'1.0' as const,status:'clarify' as const,reasonCode:'ambiguous_reference' as const,steps:[],resultRefs:[],clarification:{question,choices}} );
+test('deferred response validator preserves complete validation and cancellation before admission',async()=>{
+  const req=request(),valid=quickPlan(req,'merge');
+  assert.deepEqual(await validatePlanResult(valid,req),valid);
+  await assert.rejects(validatePlanResult({...valid,planner:{...valid.planner,unexpected:'denied'}},req));
+  const abort=new AbortController(),pending=validatePlanResult(valid,req,abort.signal);
+  abort.abort();await assert.rejects(pending,{name:'AbortError'});
+});
 test('AI product knowledge is embedded from the maintained document, not a separate stale facts list',async()=>{
   assert.equal(PRODUCT_KNOWLEDGE,(await readFile('docs/AI_PRODUCT_KNOWLEDGE.md','utf8')).trim());
   assert.match(PRODUCT_KNOWLEDGE,/Android development is deferred/);

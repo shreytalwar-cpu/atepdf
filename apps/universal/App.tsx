@@ -37,7 +37,8 @@ import {CheckpointScheduler,WorkspaceSession} from '@core/workspace-checkpoints'
 import {DAY_MS,RETENTION_DAYS,type PersistedEntry,type RetentionMode} from '@core/workspace-checkpoint';
 import {createWorkspaceBackend,workspaceClock} from './src/platform/workspace';
 import {temporaryFiles} from './src/platform/temporary';
-import {PrivacyStorage,type RetentionImpact,type StorageView} from './src/components/PrivacyStorage';
+import type {RetentionImpact,StorageView} from './src/components/PrivacyStorage';
+import {PrivacyStorage} from './src/platform/PrivacyStorage';
 
 const formatSize = (n: number) => n < 1_000_000 ? `${(n / 1000).toFixed(1)} kB` : `${(n / 1_000_000).toFixed(2)} MB`;
 const pageCount = (count: number) => `${count} ${count === 1 ? 'page' : 'pages'}`;

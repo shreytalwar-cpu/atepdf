@@ -1,4 +1,3 @@
-import {PDFDocument} from 'pdf-lib';
 import type {PDFPageProxy} from 'pdfjs-dist';
 import type {PhysicalPage} from './types';
 
@@ -8,6 +7,7 @@ export async function readPageBoxes(bytes:Uint8Array){
   // Supplementary dictionary checks use the existing writer library; pixel/text
   // identity still comes from the separate PDF.js reader, never the writer.
   try{
+    const {PDFDocument}=await import('pdf-lib');
     const doc=await PDFDocument.load(bytes,{updateMetadata:false,throwOnInvalidObject:true});
     return doc.getPages().map(page=>({mediaBox:page.getMediaBox(),cropBox:page.getCropBox()}));
   }catch{throw new Error('Page geometry verification failed. No new result was committed.');}

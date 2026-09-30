@@ -22,7 +22,7 @@ export async function plannerStatus(signal?:AbortSignal):Promise<PlannerStatus>{
 }
 export async function requestPlan(request:PlannerRequest,_token:string,signal:AbortSignal,readCurrent:()=>PlannerRequest=()=>request){
   const value=JSON.parse(await productionOutbound.writeLocalHosted(()=>projectHosted(readCurrent()),body=>call(id=>native().planAsync(id,body),signal),signal));
-  signal.throwIfAborted();return validatePlanResult(value,request);
+  signal.throwIfAborted();return validatePlanResult(value,request,signal);
 }
 export async function pairNativePlanner(code:string){await call(id=>native().pairAsync(id,code.trim()));}
 export async function disconnectNativePlanner(){await call(id=>native().disconnectAsync(id));}

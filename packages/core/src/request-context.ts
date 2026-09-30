@@ -7,7 +7,7 @@ export type ActiveRequestContext={revision:number;files:ManifestFile[];selected:
 const ordinalWords=['first','second','third','fourth','fifth','sixth','seventh','eighth','ninth','tenth','eleventh','twelfth','thirteenth','fourteenth','fifteenth','sixteenth','seventeenth','eighteenth','nineteenth','twentieth'];
 const ordinalWordsPattern=`(?:${ordinalWords.join('|')}|last)`;
 const ordinal=`(?:\\d+(?:st|nd|rd|th)?|${ordinalWords.join('|')}|last)`;
-const ordinalIndex=(value:string,length:number)=>value.toLowerCase()==='last'?length-1:ordinalWords.includes(value.toLowerCase())?ordinalWords.indexOf(value.toLowerCase()):parseInt(value,10)-1;
+const ordinalIndex=(value:string,length:number)=>value.toLowerCase()==='last'?length-1:ordinalWords.includes(value.toLowerCase())?ordinalWords.indexOf(value.toLowerCase()):Number.parseInt(value,10)-1;
 
 /** Durable catalog order owns identity. Projection order must never renumber it. */
 export function activeRequestContext(catalog:Catalog,rawInstruction:string,pending?:PendingClarification):ActiveRequestContext{
@@ -31,16 +31,17 @@ export function activeRequestContext(catalog:Catalog,rawInstruction:string,pendi
   if(range.test(rawInstruction))throw new Error('List each file or result number explicitly instead of a range.');
   // Lists are expanded before single ordinals, so "files 1 and 2" cannot drop 2.
   const list=new RegExp(`\\b(files?|documents?|originals?|results?)\\s+(?:numbers?\\s+)?(\\d+(?:st|nd|rd|th)?(?:\\s*(?:,\\s*(?:and\\s+)?|and|&)\\s*${ordinal})+)\\b`,'gi');
-  instruction=instruction.replace(list,(_match,kind:string,values:string)=>values.split(/\s*(?:,\s*(?:and\s+)?|and|&)\s*/i).map(value=>resolve(kind,value)).join(' and '));
+  const resolveList=(kind:string,values:string)=>values.split(/,|and|&/i).map(value=>value.trim()).filter(value=>value.length>0).map(value=>resolve(kind,value)).join(' and ');
+  instruction=instruction.replace(list,(_match,kind:string,values:string)=>resolveList(kind,values));
   const beforeList=new RegExp(`\\b(${ordinalWordsPattern}(?:\\s*(?:,\\s*(?:and\\s+)?|and|&)\\s*${ordinal})+)\\s+(files?|documents?|originals?|results?)\\b`,'gi');
-  instruction=instruction.replace(beforeList,(_match,values:string,kind:string)=>values.split(/\s*(?:,\s*(?:and\s+)?|and|&)\s*/i).map(value=>resolve(kind,value)).join(' and '));
+  instruction=instruction.replace(beforeList,(_match,values:string,kind:string)=>resolveList(kind,values));
   const numbered=new RegExp(`\\b(files?|documents?|originals?|results?)\\s+(?:number\\s+|#)?(\\d+(?:st|nd|rd|th)?)\\b|\\b(${ordinalWordsPattern}|\\d+(?:st|nd|rd|th))\\s+(files?|documents?|originals?|results?)\\b`,'gi');
   instruction=instruction.replace(/\b(?:last|latest|current) result\b/gi,()=>{return 'current result';});
   instruction=instruction.replace(numbered,(_match,kind:string,value:string,before:string,after:string)=>resolve(kind??after,value??before));
   instruction=instruction.replace(/\b(?:previous|preceding) result\b/gi,()=>{
     const ref=catalog.history.at(-2);if(!ref)throw new Error('There is no preceding committed result.');return ref;
   });
-  if(/\b(?:files?|documents?|originals?|results?)\s*(?:number\s*)?[#(\[+-]*\s*\d/i.test(instruction))throw new Error('Use a reference such as file 2 or result 1. Your files are unchanged.');
+  if(/\b(?:files?|documents?|originals?|results?)(?:\s*number)?[\s#(\[+-]*\d/i.test(instruction))throw new Error('Use a reference such as file 2 or result 1. Your files are unchanged.');
   instruction=instruction.replace(/\b(?:file|out)_[a-f0-9]{32}\b/g,mention);
 
   let selected:string[],originals:string[],focus=catalog.focus;

@@ -79,7 +79,11 @@ test('SHR-42: early file aliases and explicit file lists never rebind to project
     const request=controller.request(text);assert.deepEqual(request.selectionRefs,[ref(true,2),ref(true,1)]);assert.deepEqual(request.originalRefs,[ref(true,2),ref(true,1)]);
   }
   const mixed=controller.request(`Merge ${ref(true,1)} and file 2`);assert.deepEqual(mixed.selectionRefs,[ref(true,1),ref(true,2)]);
-  const three=controller.request('Merge files 3, 2, and 1');assert.deepEqual(three.selectionRefs,[ref(true,3),ref(true,2),ref(true,1)]);
+  for(const text of ['Merge files 3, 2, and 1','Merge third, second, and first files',`Merge files 3${' '.repeat(120)}, and 2 & 1`]){
+    const three=controller.request(text);assert.deepEqual(three.selectionRefs,[ref(true,3),ref(true,2),ref(true,1)]);
+  }
+  assert.throws(()=>controller.request(`Compress file${' '.repeat(120)}number${' '.repeat(120)}[  +  2`),/Use a reference/);
+  assert.deepEqual(controller.request(`Compress file${' '.repeat(950)}(`).selectionRefs,store.originals);
   const named=controller.request(privateInstruction('Remove page 1 from synthetic-original-2.pdf',store.list));
   assert.deepEqual(named.selectionRefs,[ref(true,2)]);assert.doesNotMatch(named.instruction,/\.pdf/);
   for(const text of ['Compress file 0','Compress file(2)','Compress file2','Compress file -2','Compress file 99','Compress result 0','Compress result 999','Merge files 1-3','Merge results 1 through 3','Merge first through third results','Merge results first-third','Compress the twenty-first result','Compress the second-to-last result',`Compress ${ref(true,99)}`])assert.throws(()=>controller.request(text));

@@ -44,7 +44,7 @@ export function currentAdapter(recordings:Record<string,Recording>):Adapter {
         if(work.kind!=='transform')throw new Error('Only synthetic transforms are used in this eval.');
         invoked.push(structuredClone(work.step));
         let pages=work.inputs.flatMap(input=>input.inspection.pages),structure=work.inputs.flatMap(input=>input.inspection.structure!.pages);
-        if(work.step.operation==='select_pages'){const keep=(_:unknown,i:number)=>!(work.step.params.pages as {indices:number[]}).indices.includes(i+1);pages=pages.filter(keep);structure=structure.filter(keep);}
+        if(work.step.operation==='select_pages'){const keep=(index:number)=>!(work.step.params.pages as {indices:number[]}).indices.includes(index+1);pages=pages.filter((_page,index)=>keep(index));structure=structure.filter((_page,index)=>keep(index));}
         return {bytes:encode({pages,structure:{version:1,reader:'synthetic-test-only',pages:structure}}),note:'Synthetic eval engine; no PDF fidelity evidence.'} as EngineResult;
       }});
     };

@@ -1,0 +1,68 @@
+
+Running 2 tests using 1 worker
+
+  ✘  1 tests/e2e/retention.spec.ts:168:5 › P1-1 a sample download that finishes after Delete local data is discarded: nothing imported, shown or saved (22.4s)
+  ✘  2 tests/e2e/retention.spec.ts:186:5 › P1-1 a file chooser that completes after Delete local data is discarded: nothing imported, shown or saved (22.6s)
+
+
+  1) tests/e2e/retention.spec.ts:168:5 › P1-1 a sample download that finishes after Delete local data is discarded: nothing imported, shown or saved 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Drop files here' })
+    Expected: visible
+    Timeout: 20000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'Drop files here' }) with timeout 20000ms
+      - waiting for getByRole('heading', { name: 'Drop files here' })
+
+
+      177 |   // Give the stale completion every chance to land.
+      178 |   await page.waitForTimeout(1500);
+    > 179 |   await expect(page.getByRole('heading',{name:'Drop files here'})).toBeVisible();
+          |                                                                    ^
+      180 |   await expect(page.getByText(/I’ve added/)).toHaveCount(0);await expect(page.getByText(/PDFs are ready/)).toHaveCount(0);
+      181 |   expect(await writes(page)).toBe(afterDelete.writes);expect(await stored(page)).toEqual(afterDelete.stored);
+      182 |   expect(afterDelete.stored.filter(name=>name.startsWith('blobs/'))).toEqual([]);
+        at /Users/shrey/Documents/ChatGPT/atepdf/.claude/worktrees/shr-40-retention/tests/e2e/retention.spec.ts:179:68
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .build/playwright-results/retention-P1-1-a-sample-do-1edb0-ing-imported-shown-or-saved/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .build/playwright-results/retention-P1-1-a-sample-do-1edb0-ing-imported-shown-or-saved/error-context.md
+
+  2) tests/e2e/retention.spec.ts:186:5 › P1-1 a file chooser that completes after Delete local data is discarded: nothing imported, shown or saved 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Drop files here' })
+    Expected: visible
+    Timeout: 20000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'Drop files here' }) with timeout 20000ms
+      - waiting for getByRole('heading', { name: 'Drop files here' })
+
+
+      195 |   await pending.setFiles('tests/fixtures/appendix.pdf');
+      196 |   await page.waitForTimeout(1500);
+    > 197 |   await expect(page.getByRole('heading',{name:'Drop files here'})).toBeVisible();
+          |                                                                    ^
+      198 |   await expect(page.getByText(/I’ve added/)).toHaveCount(0);
+      199 |   expect(await writes(page)).toBe(afterDelete.writes);expect(await stored(page)).toEqual(afterDelete.stored);
+      200 |   expect(afterDelete.stored.filter(name=>name.startsWith('blobs/'))).toEqual([]);
+        at /Users/shrey/Documents/ChatGPT/atepdf/.claude/worktrees/shr-40-retention/tests/e2e/retention.spec.ts:197:68
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .build/playwright-results/retention-P1-1-a-file-choo-d2924-ing-imported-shown-or-saved/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .build/playwright-results/retention-P1-1-a-file-choo-d2924-ing-imported-shown-or-saved/error-context.md
+
+  2 failed
+    tests/e2e/retention.spec.ts:168:5 › P1-1 a sample download that finishes after Delete local data is discarded: nothing imported, shown or saved 
+    tests/e2e/retention.spec.ts:186:5 › P1-1 a file chooser that completes after Delete local data is discarded: nothing imported, shown or saved 

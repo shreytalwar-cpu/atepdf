@@ -22,7 +22,8 @@ const inside=(file:File,directory:Directory)=>file.uri.startsWith(`${directory.u
 export function removeTemporary(file:File){if(!storageIsolated)return;try{if(file.exists)file.delete();}catch{/* OS cache eviction/startup cleanup remains available; never expose local paths. */}}
 function cleanFiles(directory:Directory){try{if(directory.exists)for(const entry of directory.list())if(entry instanceof File)removeTemporary(entry);}catch{/* Cache cleanup must not prevent the application from opening. */}}
 // These app-private locations hold disposable copies only, never user-chosen saved originals.
-if(storageIsolated)for(const directory of [scratch,new Directory(Paths.cache,'atepdf-preview'),new Directory(Paths.cache,'atepdf-previews')])cleanFiles(directory);
+// Picker copies left by an interrupted import are removed too (ADR 0010 startup cleanup).
+if(storageIsolated)for(const directory of [scratch,new Directory(Paths.cache,'atepdf-preview'),new Directory(Paths.cache,'atepdf-previews'),pickerCache])cleanFiles(directory);
 export function temporaryPDF(bytes:Uint8Array){
   requireReader();
   const file=new File(scratch,`${crypto.randomUUID()}.pdf`);

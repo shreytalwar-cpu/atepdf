@@ -99,6 +99,9 @@ public final class AtepdfPdfModule: Module {
     AsyncFunction("workspaceCleanStagingAsync") {
       try self.requireWorkspace().cleanStaging()
     }.runOnQueue(workspaceQueue)
+    AsyncFunction("workspaceUsageAsync") { () -> [[String: Any]] in
+      try self.requireWorkspace().usage().map { ["name": $0.name, "bytes": Double($0.bytes)] }
+    }.runOnQueue(workspaceQueue)
     #endif
     AsyncFunction("inspectAsync") { (uri: String) -> [String: Any] in
       try self.requireIsolatedStorage()

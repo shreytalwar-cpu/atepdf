@@ -16,6 +16,7 @@ export type NativePDFModule={
   workspaceRemoveAsync?(name:string):Promise<void>;
   workspaceSyncDirectoryAsync?(directory:'blobs'|'manifests'):Promise<void>;
   workspaceCleanStagingAsync?():Promise<void>;
+  workspaceUsageAsync?():Promise<{name:string;bytes:number}[]>;
   inspectAsync(uri:string):Promise<Inspection>;
   renderPageAsync(uri:string,page:number,maxDimension:number):Promise<{uri:string;width:number;height:number}>;
   recognizeAsync(uri:string):Promise<OCRPage[]>;

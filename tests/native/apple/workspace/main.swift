@@ -2,7 +2,7 @@ import Foundation
 import CryptoKit
 import Security
 
-// Synthetic host checks for AtepdfWorkspaceVault (SHR-39). Compiled with swiftc
+// Synthetic host checks for AtepdfWorkspaceVault (SHR-39; storage usage SHR-40). Compiled with swiftc
 // against the shipped source. This is not Mac Catalyst app acceptance: the
 // Keychain probe runs from an unsigned command-line tool (see SHR-41).
 func require(_ condition: @autoclosure () throws -> Bool, _ message: String) throws {
@@ -156,9 +156,64 @@ if created == .ready, let createdKey {
 }
 print("keychain-probe \(String(data: try JSONSerialization.data(withJSONObject: live, options: [.sortedKeys]), encoding: .utf8)!)")
 
+// 7. Storage usage (SHR-40): workspace files only, measured with lstat.
+let usageRoot = scratch.appendingPathComponent("usage/Workspace", isDirectory: true)
+let usageVault = AtepdfWorkspaceVault(root: usageRoot, keys: MemoryKeys(SymmetricKey(size: .bits256)))
+try require(try usageVault.usage().isEmpty, "a workspace that was never created uses no storage")
+try usageVault.writeSealed("head", plain: Data(repeating: 1, count: 10), associatedData: "head")
+try usageVault.writeSealed("manifests/1.atw", plain: Data(repeating: 2, count: 100), associatedData: "m")
+try usageVault.writeSealed("blobs/file_a.atw", plain: pdf, associatedData: "b")
+try Data(repeating: 3, count: 7).write(to: usageRoot.appendingPathComponent("staging/interrupted.tmp"))
+// Neither a symbolic link to a user's file nor an unrelated file is counted or followed.
+let userFile = scratch.appendingPathComponent("usage/User Documents/Large original.pdf")
+try manager.createDirectory(at: userFile.deletingLastPathComponent(), withIntermediateDirectories: true)
+try Data(repeating: 9, count: 1_000_000).write(to: userFile)
+let userHash = hex(Data(SHA256.hash(data: try Data(contentsOf: userFile))))
+try manager.createSymbolicLink(at: usageRoot.appendingPathComponent("blobs/file_link.atw"), withDestinationURL: userFile)
+try Data(repeating: 4, count: 50).write(to: usageRoot.appendingPathComponent("blobs/notes.txt"))
+let measured = Dictionary(uniqueKeysWithValues: try usageVault.usage().map { ($0.name, $0.bytes) })
+try require(measured == ["head": 42, "manifests/1.atw": 132, "blobs/file_a.atw": Int64(pdf.count + 32), "staging": 7], "usage reports each sealed workspace file's on-disk size and staging, nothing else")
+try require(hex(Data(SHA256.hash(data: try Data(contentsOf: userFile)))) == userHash, "measuring never changes a file outside the workspace")
+try manager.setAttributes([.posixPermissions: 0o000], ofItemAtPath: usageRoot.appendingPathComponent("blobs").path)
+var usageFailed = false
+do { _ = try usageVault.usage() } catch { usageFailed = true }
+try manager.setAttributes([.posixPermissions: 0o700], ofItemAtPath: usageRoot.appendingPathComponent("blobs").path)
+try require(usageFailed, "an unreadable workspace directory is an error, never zero usage")
+
+// 8. Staging cleanup is verified, and failures are reported (SHR-40 P1-2).
+let stagingDir = usageRoot.appendingPathComponent("staging")
+try Data(repeating: 5, count: 9).write(to: stagingDir.appendingPathComponent("second.tmp"))
+try usageVault.cleanStaging()
+try require(try manager.contentsOfDirectory(atPath: stagingDir.path).isEmpty && (try usageVault.usage()).allSatisfy { $0.name != "staging" }, "staging cleanup removes every staging file and verifies it is empty")
+let neverStaged = AtepdfWorkspaceVault(root: scratch.appendingPathComponent("usage/Never", isDirectory: true), keys: MemoryKeys())
+try neverStaged.cleanStaging()
+try require(true, "a staging directory that was never created is clean")
+try Data(repeating: 6, count: 11).write(to: stagingDir.appendingPathComponent("locked.tmp"))
+try manager.setAttributes([.posixPermissions: 0o500], ofItemAtPath: stagingDir.path)
+var unlinkFailed = false
+do { try usageVault.cleanStaging() } catch { unlinkFailed = true }
+try require(unlinkFailed && manager.fileExists(atPath: stagingDir.appendingPathComponent("locked.tmp").path), "a staging file that cannot be unlinked is an error, and it stays")
+try manager.setAttributes([.posixPermissions: 0o000], ofItemAtPath: stagingDir.path)
+var listingFailed = false
+do { try usageVault.cleanStaging() } catch { listingFailed = true }
+try manager.setAttributes([.posixPermissions: 0o700], ofItemAtPath: stagingDir.path)
+try require(listingFailed, "an unreadable staging directory is an error, never clean")
+try require((try usageVault.usage()).contains { $0.name == "staging" && $0.bytes == 11 }, "retained staging bytes stay visible in usage")
+try usageVault.cleanStaging()
+try require(try manager.contentsOfDirectory(atPath: stagingDir.path).isEmpty, "a later retry removes the retained staging file")
+let symlinkRoot = scratch.appendingPathComponent("usage/Linked", isDirectory: true)
+try manager.createDirectory(at: symlinkRoot, withIntermediateDirectories: true)
+let outsideDir = scratch.appendingPathComponent("usage/Outside staging", isDirectory: true)
+try manager.createDirectory(at: outsideDir, withIntermediateDirectories: true)
+try Data(repeating: 7, count: 13).write(to: outsideDir.appendingPathComponent("user.tmp"))
+try manager.createSymbolicLink(at: symlinkRoot.appendingPathComponent("staging"), withDestinationURL: outsideDir)
+var symlinkRefused = false
+do { try AtepdfWorkspaceVault(root: symlinkRoot, keys: MemoryKeys()).cleanStaging() } catch { symlinkRefused = true }
+try require(symlinkRefused && manager.fileExists(atPath: outsideDir.appendingPathComponent("user.tmp").path), "a symbolic-link staging directory is refused and its target left untouched")
+
 // 6. Interop with the TypeScript backend format, using a synthetic shared key.
 let interop = AtepdfWorkspaceVault(root: scratch.appendingPathComponent("interop"), keys: MemoryKeys(sharedKey))
 try interop.writeSealed("blobs/file_swift.atw", plain: pdf, associatedData: "atepdf.workspace/v1|pdf|interop|file_swift|1")
 let fromNode = try interop.readOpened("blobs/file_node.atw", associatedData: "atepdf.workspace/v1|pdf|interop|file_node|1")
 try require(fromNode.status == "ok" && fromNode.data == pdf, "Swift opens a file sealed by the TypeScript test backend")
-print("SHR-39 native workspace checks passed")
+print("SHR-39/SHR-40 native workspace checks passed")

@@ -1,0 +1,59 @@
+{
+  "recordedDate": "2026-09-30",
+  "sourceBase": "37e970025eaff9be35a2b8d5fa0291d9c7eef0a5",
+  "scope": "Read-only synthetic fixture reader probes and standalone PDFKit compile checks; no candidate engine or app build.",
+  "host": {
+    "architecture": "arm64",
+    "os": "macOS 27.0",
+    "osBuild": "26A428"
+  },
+  "toolchain": {
+    "xcode": "27.0",
+    "xcodeBuild": "27A266a",
+    "macOSSDK": "27.0"
+  },
+  "catalyst": {
+    "targets": [
+      "arm64-apple-ios17.0-macabi",
+      "x86_64-apple-ios17.0-macabi"
+    ],
+    "minimumCatalyst": "17.0",
+    "sdk": "27.0",
+    "compiledArchitectures": [
+      "arm64",
+      "x86_64"
+    ],
+    "ranArchitectures": [
+      "arm64"
+    ],
+    "intelRuntimeProven": false,
+    "appSandboxProven": false
+  },
+  "hashes": {
+    "main.swift": "c17a2023517d993360ac4c088e51cdaa2a3f3d2af08b9cdc317701add5a1aa23",
+    "pdfkit-catalyst-universal": "929c17d2bfcb9b9ccd43ff9a5d7b2a9110daa78f439547062ac4b2866873ecbd",
+    "qpdf-encryption-source.cc": "8b4a371e58a346d3526bf172da59bf26787552cb898673587d19d4ae0f4b58c7",
+    "fixture.png": "40946c45e94e18718c5f455370b02e507b5ec14c34419c018f58c7e6c74976c6"
+  },
+  "qpdfSourceInspection": {
+    "tag": "v12.4.2",
+    "file": "libqpdf/QPDF_encryption.cc",
+    "purpose": "Read-only API/password-lifetime inspection; not a dependency installation or engine proof"
+  },
+  "candidateEngineInstalledCompiledOrExecuted": false,
+  "dependenciesInstalled": false,
+  "applicationSourceChanged": false,
+  "unverified": [
+    "QPDF Protect/Unlock",
+    "QPDF/OpenSSL/JPEG Catalyst builds",
+    "real Intel runtime",
+    "macOS 14 runtime",
+    "Preview/Adobe UI",
+    "metadata encryption with XMP",
+    "transformed-output visual fidelity",
+    "restricted/signed/malformed input policy",
+    "signed sandboxed app",
+    "channel acceptance",
+    "raw-password lifetime inside QPDF"
+  ]
+}

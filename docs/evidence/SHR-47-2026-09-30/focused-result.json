@@ -1,0 +1,30 @@
+{
+  "sourceCommit": "885b41c7d39b70b8ad7a8833bb7019016d9ec62a",
+  "cwd": "/Users/shrey/.codex/worktrees/shr47-page-verification/atepdf",
+  "environment": {
+    "ATEPDF_CORPUS_PYTHON": "/Users/shrey/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "EXPO_NO_TELEMETRY": "1",
+    "NEXT_TELEMETRY_DISABLED": "1"
+  },
+  "startedAt": "2026-09-30T10:27:19Z",
+  "commands": [
+    {
+      "argv": [
+        "/Users/shrey/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "--import",
+        "tsx",
+        "--test",
+        "tests/regressions/page-verification.test.ts",
+        "tests/regressions/compatibility-matrix.test.ts",
+        "tests/regressions/pdf-corpus.test.ts",
+        "tests/regressions/local-workflow.test.ts",
+        "tests/regressions/content-admission.test.ts",
+        "tests/regressions/job-progress.test.ts",
+        "tests/regressions/core-integrity.test.ts"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 48.421,
+      "log": "/tmp/atepdf-shr47-final-885b41c/focused-1.log"
+    }
+  ]
+}

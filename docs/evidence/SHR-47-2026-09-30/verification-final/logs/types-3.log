@@ -1,0 +1,2 @@
+COMMAND ["/Users/shrey/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node", "node_modules/typescript/bin/tsc", "--noEmit", "-p", "apps/web/tsconfig.json", "--tsBuildInfoFile", "/tmp/atepdf-shr47-final-5e99a99/web.tsbuildinfo"]
+CWD /Users/shrey/.codex/worktrees/shr47-page-verification/atepdf

@@ -46,3 +46,18 @@ for(const cause of ['timeout','cancel'] as const)test(`S90-07 ${cause} escalates
     const outcome=await pending;assert.equal(outcome.signal,'SIGKILL');assert.match(outcome.error.message,cause==='cancel'?/cancelled/:/timeout/);
   }finally{await rm(root,{recursive:true,force:true});}
 });
+
+for(const cause of ['timeout','cancel'] as const)test(`S90-07 ${cause} kills a TERM-ignoring descendant after its parent exits`,async()=>{
+  const root=await mkdtemp(join(tmpdir(),'shr90-descendant-')),ready=join(root,'pid'),heartbeat=join(root,'heartbeat'),signal=new AbortController();let pid:number|undefined;
+  const descendant="process.on('SIGTERM',()=>{});require('fs').writeFileSync(process.argv[1],String(process.pid));let ticks=0;setInterval(()=>require('fs').writeFileSync(process.argv[2],String(++ticks)),25)";
+  const parent="require('child_process').spawn(process.execPath,['-e',process.argv[1],process.argv[2],process.argv[3]],{stdio:'ignore'});setInterval(()=>{},1000)";
+  try{
+    const pending=runChild(process.execPath,['-e',parent,descendant,ready,heartbeat],{stdio:'ignore'},{timeout:cause==='timeout'?600:10_000,signal:signal.signal,grace:100});
+    for(let i=0;i<100;i++){try{pid=Number(await readFile(ready,'utf8'));await readFile(heartbeat);break;}catch{await new Promise(done=>setTimeout(done,5));}}
+    assert.ok(pid,'owned descendant must start');
+    if(cause==='cancel')signal.abort();
+    const outcome=await pending;assert.equal(outcome.signal,'SIGTERM');assert.match(outcome.error.message,cause==='cancel'?/cancelled/:/timeout/);
+    const stopped=await readFile(heartbeat,'utf8');await new Promise(done=>setTimeout(done,150));
+    assert.equal(await readFile(heartbeat,'utf8'),stopped,'owned descendant continued executing after cleanup returned');
+  }finally{if(pid)try{process.kill(pid,'SIGKILL');}catch{}await rm(root,{recursive:true,force:true});}
+});

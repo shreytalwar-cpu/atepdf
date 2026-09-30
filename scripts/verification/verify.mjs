@@ -1,15 +1,33 @@
 import {spawnSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
-import {mkdtempSync,readFileSync,writeFileSync,mkdirSync,openSync,closeSync,rmSync,readdirSync,existsSync} from 'node:fs';
-import {dirname,join,resolve} from 'node:path';
+import {mkdtempSync,readFileSync,writeFileSync,mkdirSync,openSync,closeSync,rmSync,readdirSync,existsSync,realpathSync,statSync,accessSync,constants} from 'node:fs';
+import {dirname,join,resolve,delimiter,isAbsolute} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {tmpdir} from 'node:os';
 
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'../..');
 const mode=process.argv[2]||'all';
+// Supported verification hosts are macOS and Ubuntu. Use fixed system tools,
+// resolve the explicitly provisioned pnpm once, and give children a bounded PATH.
+const gitBin='/usr/bin/git',tarBin='/usr/bin/tar';
+function packageManagerExecutable(){
+  for(const directory of (process.env.PATH||'').split(delimiter)){
+    if(!isAbsolute(directory)||directory===root)continue;
+    const candidate=join(directory,'pnpm');
+    try{
+      if(statSync(directory).mode&0o022)continue;
+      accessSync(candidate,constants.X_OK);const path=realpathSync(candidate);
+      if(!statSync(path).isFile()||statSync(path).mode&0o022)continue;
+      return path;
+    }catch{ /* Try the next explicitly provisioned runtime directory. */ }
+  }
+  throw new Error('Provision pnpm 11.19.0 in a trusted absolute directory on PATH (not group/world writable).');
+}
+const pnpmBin=packageManagerExecutable();
+const toolEnv={...process.env,PATH:[dirname(process.execPath),dirname(pnpmBin),'/usr/bin','/bin','/usr/sbin','/sbin'].join(delimiter)};
 if(!['all','core','browser','failures','native'].includes(mode))throw new Error('Usage: node scripts/verification/verify.mjs [all|core|browser|failures|native]');
 const git=(...args)=>{
-  const result=spawnSync('git',args,{cwd:root,encoding:'utf8'});
+  const result=spawnSync(gitBin,args,{cwd:root,env:toolEnv,encoding:'utf8'});
   if(result.status!==0)throw new Error(result.stderr||'Git failed');return result.stdout.trim();
 };
 if(git('status','--porcelain','--untracked-files=all'))throw new Error('Verification requires a clean committed checkout. Commit changes or use a dedicated worktree. Ignored outputs are never copied.');
@@ -18,7 +36,7 @@ if(process.env.VERIFY_EXPECTED_SHA&&process.env.VERIFY_EXPECTED_SHA!==commit)thr
 const manifest=JSON.parse(readFileSync(join(root,'package.json'),'utf8'));
 if(process.version!==`v${manifest.engines.node}`)throw new Error(`Use Node ${manifest.engines.node}; got ${process.version}`);
 if(readFileSync(join(root,'.node-version'),'utf8').trim()!==manifest.engines.node||manifest.packageManager!==`pnpm@${manifest.engines.pnpm}`)throw new Error('Runtime pins disagree');
-const pm=spawnSync('pnpm',['--version'],{cwd:root,encoding:'utf8'});
+const pm=spawnSync(pnpmBin,['--version'],{cwd:root,env:toolEnv,encoding:'utf8'});
 if(pm.status!==0||pm.stdout.trim()!==manifest.engines.pnpm)throw new Error(`Use plain pnpm ${manifest.engines.pnpm} on PATH. Disable wrappers that switch versions or install on script invocation.`);
 const reportDir=join(root,'.build/verification',`${mode}-${commit.slice(0,12)}-${Date.now()}`);
 mkdirSync(reportDir,{recursive:true});
@@ -27,10 +45,9 @@ const sha256=bytes=>createHash('sha256').update(bytes).digest('hex');
 const record={commit,mode,startedAt:new Date().toISOString(),node:process.version,pnpm:pm.stdout.trim(),
   platform:process.platform,architecture:process.arch,workflow:process.env.GITHUB_WORKFLOW_REF||null,
   workflowCommit:process.env.GITHUB_WORKFLOW_SHA||null,prHead:process.env.VERIFY_PR_HEAD_SHA||null,
-  runID:process.env.GITHUB_RUN_ID||null,files:{},commands:[],passed:false};
-const env={...process.env,CI:'true',EXPO_NO_TELEMETRY:'1',NEXT_TELEMETRY_DISABLED:'1',
-  OPENAI_API_KEY:'',ATEPDF_BASE_URL:'',ATEPDF_CORPUS_PYTHON:'',
-  PATH:`${dirname(process.execPath)}:${process.env.PATH}`};
+  runID:process.env.GITHUB_RUN_ID||null,executables:{node:process.execPath,git:gitBin,pnpm:pnpmBin,tar:tarBin},files:{},commands:[],passed:false};
+const env={...toolEnv,CI:'true',EXPO_NO_TELEMETRY:'1',NEXT_TELEMETRY_DISABLED:'1',
+  OPENAI_API_KEY:'',ATEPDF_BASE_URL:'',ATEPDF_CORPUS_PYTHON:''};
 function run(name,command,args,{cwd=scratch,timeout=600_000,expectFailure=false,diagnostic}={}){
   console.log(`Verification: ${name}`);
   const log=join(reportDir,`${record.commands.length+1}-${name}.log`);
@@ -55,15 +72,15 @@ function typechecks(){
 function contracts(){node('generated-contracts',['scripts/contracts.mjs','--check']);node('generated-knowledge',['scripts/embed-product-knowledge.mjs','--check']);node('schemas-catalogue-evals',['--import','tsx','scripts/verification/schemas.mts']);}
 try{
   const archive=join(reportDir,'source.tar');const fd=openSync(archive,'w');
-  const exported=spawnSync('git',['archive','--format=tar',commit],{cwd:root,stdio:['ignore',fd,'pipe']});closeSync(fd);
+  const exported=spawnSync(gitBin,['archive','--format=tar',commit],{cwd:root,stdio:['ignore',fd,'pipe']});closeSync(fd);
   if(exported.status!==0)throw new Error('Cannot export the exact committed source');
   record.archiveSha256=sha256(readFileSync(archive));
-  run('export-source','tar',['-xf',archive,'-C',scratch]);rmSync(archive);
+  run('export-source',tarBin,['-xf',archive,'-C',scratch]);rmSync(archive);
   for(const path of ['package.json','pnpm-lock.yaml','pnpm-workspace.yaml','.node-version','.npmrc',
     'scripts/verification/verify.mjs','scripts/verification/schemas.mts','scripts/verification/browser.mjs',
     'scripts/verification/playwright.config.mts','scripts/contracts.mjs','scripts/embed-product-knowledge.mjs',
     '.github/workflows/verify.yml'])record.files[path]=sha256(readFileSync(join(scratch,path)));
-  run('frozen-install','pnpm',['install','--frozen-lockfile']);
+  run('frozen-install',pnpmBin,['install','--frozen-lockfile']);
   if(mode==='all'||mode==='core'){
     contracts();typechecks();
     const tests=readdirSync(join(scratch,'tests/regressions')).filter(file=>file.endsWith('.test.ts')).sort().map(file=>`tests/regressions/${file}`);
@@ -76,7 +93,7 @@ try{
   if(mode==='all'||mode==='browser'){
     contracts();
     // Downloads only the locked Playwright browser. Linux OS libraries are runner prerequisites.
-    run('playwright-browser','pnpm',['exec','playwright','install','chromium']);
+    run('playwright-browser',pnpmBin,['exec','playwright','install','chromium']);
     node('engine-assets',['scripts/assets.mjs']);
     node('expo-web-export',['../../node_modules/expo/bin/cli','export','--platform','web','--output-dir','dist-web'],{cwd:join(scratch,'apps/universal')});
     node('web-budget',['scripts/check-web-budget.mjs']);
@@ -110,12 +127,12 @@ try{
   }
   if(mode==='native'){
     if(process.platform!=='darwin')throw new Error('Native checks require macOS with selected Xcode; this is not an optional skip.');
-    contracts();run('xcode-version','xcodebuild',['-version']);
+    contracts();run('xcode-version','/usr/bin/xcodebuild',['-version']);
     node('apple-helper',['tests/native/apple/run.mjs']);
     record.native={scope:'Host helper and transport compilation, not Mac UI or production signing',
       engine:JSON.parse(readFileSync(join(scratch,'docs/evidence/native/apple-engine-tests.json'),'utf8')),
       shared:JSON.parse(readFileSync(join(scratch,'docs/evidence/native/apple-shared-writer-tests.json'),'utf8'))};
-    run('swift-planner-compile','xcrun',['swiftc','-module-cache-path',join(scratch,'.build/swift-cache'),'-parse-as-library',
+    run('swift-planner-compile','/usr/bin/xcrun',['swiftc','-module-cache-path',join(scratch,'.build/swift-cache'),'-parse-as-library',
       'apps/universal/modules/atepdf-planner/ios/AtepdfPlannerTransport.swift','tests/native/planner/main.swift','-o',join(scratch,'.build/native-planner-tests')]);
     // Fixed-port Swift transport execution remains an explicit isolated manual step.
   }

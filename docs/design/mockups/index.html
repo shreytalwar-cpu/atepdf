@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>atePDF v1 Mockups</title>
+<link rel="stylesheet" href="../tokens/atepdf-tokens.css">
+<style>
+/* Mockup page chrome (not part of the product). Everything inside .win uses only token variables. */
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg-sunken); color: var(--text-primary); font: var(--type-ui); -webkit-font-smoothing: antialiased; }
+.page-head { position: sticky; top: 0; z-index: 100; display: flex; gap: 16px; align-items: center; padding: 10px 24px; background: var(--surface-elevated); border-bottom: 1px solid var(--border-hairline); flex-wrap: wrap; }
+.page-head h1 { font: var(--type-title2); margin: 0; }
+.page-head nav { display: flex; gap: 4px; flex-wrap: wrap; flex: 1; }
+.page-head nav a { font: var(--type-meta); color: var(--text-secondary); text-decoration: none; padding: 3px 7px; border-radius: var(--radius-sm); }
+.page-head nav a:hover { background: var(--surface-hover); color: var(--text-primary); }
+.theme-switch { display: flex; background: var(--bg-sunken); border-radius: var(--radius-sm); padding: 2px; }
+.theme-switch button { font: var(--type-uiStrong); border: 0; background: transparent; color: var(--text-secondary); height: 24px; padding: 0 10px; border-radius: 4px; cursor: pointer; }
+.theme-switch button[aria-pressed="true"] { background: var(--surface-raised); color: var(--text-primary); box-shadow: var(--elev-1); }
+main.doc { padding: 24px; display: flex; flex-direction: column; gap: 56px; max-width: 1400px; margin: 0 auto; }
+section.screen > header { margin-bottom: 14px; max-width: 900px; }
+section.screen > header h2 { font: var(--type-title1); margin: 0 0 4px; }
+section.screen > header p { margin: 0; color: var(--text-secondary); font: var(--type-ui); }
+section.screen > header code { font: var(--type-meta); font-family: var(--font-mono); background: var(--surface-raised); padding: 1px 4px; border-radius: 4px; }
+.frames { display: flex; gap: 24px; flex-wrap: wrap; align-items: flex-start; }
+.note { font: var(--type-meta); color: var(--text-secondary); margin-top: 8px; max-width: 1024px; }
+.illustrative { display: inline-block; font: var(--type-caption); background: var(--status-warning-bg); color: var(--status-warning-fg); border-radius: 4px; padding: 2px 6px; margin-left: 8px; vertical-align: middle; }
+
+/* ——— Window ——— */
+.win { position: relative; display: flex; flex-direction: column; width: var(--w, 1024px); height: var(--h, 680px); background: var(--bg-window); color: var(--text-primary); border-radius: 10px; overflow: hidden; box-shadow: var(--elev-3); outline: 1px solid var(--border-hairline); font: var(--type-ui); flex: none; }
+.lights { position: absolute; left: 18px; top: 20px; display: flex; gap: 8px; z-index: 12; }
+.lights i { width: 12px; height: 12px; border-radius: 50%; background: #FF5F57; box-shadow: inset 0 0 0 0.5px rgba(0,0,0,.2); }
+.lights i:nth-child(2) { background: #FEBC2E; } .lights i:nth-child(3) { background: #28C840; }
+.tb { height: var(--size-toolbar-height); flex: none; display: flex; align-items: center; gap: 6px; padding: 0 12px 0 84px; border-bottom: 1px solid var(--border-hairline); position: relative; z-index: 10; }
+.tb .spacer { flex: 1; }
+.ctx { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 8px; border-radius: var(--radius-sm); color: var(--text-primary); font: var(--type-uiStrong); white-space: nowrap; }
+.ctx .m { font: var(--type-meta); color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+.ctx.disabled { color: var(--text-disabled); }
+.ib { width: 28px; height: 28px; border-radius: var(--radius-sm); display: inline-flex; align-items: center; justify-content: center; color: var(--text-secondary); flex: none; }
+.ib.on { background: var(--surface-pressed); color: var(--text-primary); }
+.ib.sm { width: 24px; height: 24px; }
+.pill { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 9px 0 8px; border-radius: var(--radius-full); font: var(--type-meta); white-space: nowrap; }
+.pill.local { background: var(--status-local-bg); color: var(--status-local-fg); }
+.pill.out { background: var(--status-outbound-bg); color: var(--status-outbound-fg); }
+.pill.muted { background: var(--bg-sunken); color: var(--text-secondary); }
+.pill.icononly { width: 24px; padding: 0; justify-content: center; }
+.body { flex: 1; display: flex; min-height: 0; position: relative; }
+.col { flex: 1; display: flex; flex-direction: column; min-width: 0; position: relative; }
+.thread { flex: 1; overflow: hidden; padding: 24px var(--size-conversation-gutter) 16px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
+.thread.top { justify-content: flex-start; }
+.ti { width: 100%; max-width: var(--size-conversation-maxWidth); display: flex; flex-direction: column; gap: 16px; }
+.task { display: flex; flex-direction: column; gap: 8px; }
+.task + .task { margin-top: 12px; }
+.req { align-self: flex-start; max-width: 100%; display: flex; gap: 8px; align-items: baseline; background: var(--surface-request); border-radius: var(--radius-md); padding: 7px 12px; font: var(--type-bodyStrong); }
+.req .g { color: var(--text-tertiary); position: relative; top: 2px; }
+.req .ctxline { display: block; font: var(--type-meta); color: var(--text-secondary); margin-bottom: 2px; }
+.msg { font: var(--type-body); color: var(--text-primary); margin: 0; }
+.msg.with-icon { display: flex; gap: 8px; align-items: flex-start; }
+.msg.with-icon > svg { flex: none; margin-top: 2.5px; }
+.m, .meta { font: var(--type-meta); color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+.t3 { color: var(--text-tertiary); }
+.card { background: var(--surface-raised); border: 1px solid var(--border-hairline); border-radius: var(--radius-lg); box-shadow: var(--elev-1); padding: 12px 14px; }
+.group { background: var(--surface-raised); border: 1px solid var(--border-hairline); border-radius: var(--radius-lg); padding: 4px; display: flex; flex-direction: column; gap: 2px; }
+.row { display: flex; align-items: center; gap: 10px; min-height: var(--size-row-height); padding: 4px 8px; border-radius: var(--radius-md); }
+.row.tall { min-height: 44px; }
+.row .name { font: var(--type-ui); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.row .grow { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.row.sel { background: var(--surface-selected); box-shadow: inset 0 0 0 1px var(--accent-subtleBorder); }
+.row.hover { background: var(--surface-hover); }
+.row.focus { outline: 2px solid var(--focus-ring-color); outline-offset: 0; }
+.ord { font: var(--type-meta); color: var(--text-tertiary); width: 12px; text-align: right; font-variant-numeric: tabular-nums; flex: none; }
+.tag { display: inline-flex; align-items: center; gap: 4px; height: 18px; padding: 0 6px; border-radius: var(--radius-xs); font: var(--type-caption); letter-spacing: var(--type-caption-tracking); white-space: nowrap; flex: none; }
+.tag.cur { background: var(--accent-subtle); color: var(--accent-text); }
+.tag.earl { background: var(--bg-sunken); color: var(--text-secondary); }
+.tag.ok { color: var(--status-success-fg); padding: 0 2px; }
+.tag.warn { background: var(--status-warning-bg); color: var(--status-warning-fg); }
+.tag.bad { background: var(--status-danger-bg); color: var(--status-danger-fg); }
+.tag.lock { color: var(--text-secondary); background: var(--bg-sunken); }
+.tag.pro { background: var(--accent-subtle); color: var(--accent-text); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: var(--size-control-md); padding: 0 10px; border-radius: var(--radius-sm); font: var(--type-uiStrong); border: 1px solid transparent; white-space: nowrap; flex: none; }
+.btn.lg { height: var(--size-control-lg); padding: 0 12px; }
+.btn.primary { background: var(--accent-fill); color: var(--text-onAccent); }
+.btn.primary.hover { background: var(--accent-fillHover); }
+.btn.primary.pressed { background: var(--accent-fillPressed); }
+.btn.secondary { background: var(--surface-raised); border-color: var(--border-hairline); box-shadow: var(--elev-1); color: var(--text-primary); }
+.btn.plain { background: transparent; color: var(--text-secondary); }
+.btn.plain.hover, .btn.secondary.hover { background: var(--surface-hover); }
+.btn.danger { background: var(--status-danger-fill); color: var(--text-onAccent); }
+.btn.dplain { color: var(--status-danger-fg); background: transparent; }
+.btn.disabled { color: var(--text-disabled); background: var(--surface-hover); box-shadow: none; border-color: transparent; }
+.btn.focus { outline: 2px solid var(--focus-ring-color); outline-offset: 2px; }
+.kbd { display: inline-flex; align-items: center; justify-content: center; min-width: 16px; height: 16px; padding: 0 4px; border: 1px solid var(--border-hairline); border-radius: var(--radius-xs); font: var(--type-kbd); color: var(--text-tertiary); background: transparent; font-variant-numeric: tabular-nums; }
+.btn.primary .kbd { color: var(--text-onAccent); border-color: rgba(255,255,255,.35); }
+.thumb { flex: none; background: var(--page-paper); border-radius: var(--radius-thumb); box-shadow: var(--elev-page); position: relative; overflow: hidden; }
+.thumb i { position: absolute; left: 14%; right: 14%; height: 1.5px; background: #D9DBE3; border-radius: 1px; }
+.thumb i.h { background: #7B8196; height: 2.5px; right: 38%; }
+.thumb i.bar { left: 0; right: 0; top: 0; height: 16%; background: #243052; border-radius: 0; }
+.thumb.scan { background: #F4F1EA; } .thumb.scan i { background: #B9B3A5; }
+.thumb.blank i { display: none; }
+.thumb.photo { background: linear-gradient(160deg, #B9D4E8, #6E8FAE 55%, #45566B); }
+.thumb.photo i { display: none; }
+.thumb.locked { background: var(--bg-sunken); box-shadow: none; outline: 1px solid var(--border-hairline); display: flex; align-items: center; justify-content: center; color: var(--text-tertiary); }
+.thumb.locked i { display: none; }
+.actglyph { display: inline-flex; flex-direction: column; gap: 2px; width: 14px; height: 14px; justify-content: center; align-items: center; flex: none; }
+.actglyph b { width: 10px; height: 5px; border-radius: 1.5px; background: var(--accent-text); animation: act var(--motion-duration-activityCycle) var(--motion-easing-standard) infinite; }
+.actglyph b:nth-child(2) { animation-delay: calc(var(--motion-duration-activityCycle) / -2); }
+@keyframes act { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+@media (prefers-reduced-motion: reduce) { .actglyph b { animation: none; } }
+.activity { display: flex; gap: 10px; align-items: flex-start; padding: 2px 0; }
+.activity .glyphbox { width: 24px; height: 24px; border-radius: var(--radius-sm); background: var(--accent-subtle); display: flex; align-items: center; justify-content: center; flex: none; }
+.activity .lbl { font: var(--type-uiStrong); }
+.activity .grow { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.marker { display: inline-flex; align-items: center; gap: 4px; font: var(--type-meta); }
+.marker.local { color: var(--status-local-fg); }
+.marker.ai { color: var(--text-secondary); }
+.marker.out { color: var(--status-outbound-fg); }
+.steps { margin: 6px 0 0 2px; padding-left: 12px; border-left: 1px solid var(--border-hairline); display: flex; flex-direction: column; gap: 6px; }
+.steps div { display: flex; align-items: center; gap: 8px; font: var(--type-ui); }
+.steps .st { margin-left: auto; font: var(--type-meta); color: var(--text-secondary); }
+.composer-wrap { padding: 0 var(--size-conversation-gutter) 16px; display: flex; flex-direction: column; align-items: center; flex: none; }
+.composer { width: 100%; max-width: var(--size-conversation-maxWidth); background: var(--surface-raised); border: 1px solid var(--border-hairline); border-radius: var(--radius-xl); box-shadow: var(--elev-2); }
+.composer.focus { border-color: var(--accent-subtleBorder); box-shadow: var(--elev-2), 0 0 0 2px color-mix(in srgb, var(--accent-fill) 14%, transparent); }
+.composer .ctxrow { display: flex; align-items: center; gap: 6px; padding: 10px 12px 0; font: var(--type-meta); color: var(--text-secondary); }
+.composer .input { padding: 8px 12px 4px; font: var(--type-body); color: var(--text-tertiary); min-height: 29px; }
+.composer .input.typed { color: var(--text-primary); }
+.caret { display: inline-block; width: 1.5px; height: 17px; background: var(--accent-fill); vertical-align: -3px; margin-left: 1px; }
+.composer .actions { display: flex; align-items: center; gap: 6px; padding: 4px 8px 8px; }
+.composer .actions .spacer { flex: 1; }
+.chip { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 8px; border-radius: var(--radius-sm); background: var(--bg-sunken); font: var(--type-meta); color: var(--text-primary); white-space: nowrap; }
+.chip.more { color: var(--text-secondary); gap: 4px; }
+.send { width: 28px; height: 28px; border-radius: var(--radius-sm); display: inline-flex; align-items: center; justify-content: center; background: var(--surface-hover); color: var(--text-disabled); flex: none; }
+.send.on { background: var(--accent-fill); color: var(--text-onAccent); }
+.send.stop { background: var(--surface-raised); border: 1px solid var(--border-hairline); color: var(--text-primary); box-shadow: var(--elev-1); }
+.send.stop b { width: 8px; height: 8px; background: currentColor; border-radius: 1.5px; }
+.hint { font: var(--type-meta); color: var(--text-tertiary); padding-top: 8px; display: flex; gap: 10px; align-items: center; justify-content: center; }
+.allow { font: var(--type-meta); color: var(--text-tertiary); font-variant-numeric: tabular-nums; margin-right: 4px; }
+.panel { width: var(--size-panel-files-default); flex: none; background: var(--bg-panel); border-left: 1px solid var(--border-hairline); display: flex; flex-direction: column; padding: 12px 8px; gap: 4px; }
+.panel .sec { font: var(--type-section); color: var(--text-tertiary); padding: 10px 8px 4px; display: flex; justify-content: space-between; }
+.panel .foot { margin-top: auto; padding: 10px 8px 2px; border-top: 1px solid var(--border-hairline); display: flex; align-items: center; gap: 6px; }
+.empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 24px; }
+.empty h3 { font: var(--type-title1); letter-spacing: var(--type-title1-tracking); margin: 16px 0 6px; }
+.examples { margin-top: 24px; width: 100%; max-width: 380px; text-align: left; }
+.examples .row { color: var(--text-secondary); }
+.banner { display: flex; align-items: center; gap: 10px; background: var(--surface-raised); border: 1px solid var(--border-hairline); border-radius: var(--radius-lg); padding: 8px 8px 8px 12px; }
+.banner .grow { flex: 1; }
+.overlay { position: absolute; inset: 0; z-index: 30; background: var(--dropzone-fill); display: flex; align-items: center; justify-content: center; }
+.overlay .zone { position: absolute; inset: 12px; border: 1.5px dashed var(--accent-fill); border-radius: var(--radius-xl); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
+.overlay h4 { font: var(--type-title2); margin: 8px 0 0; }
+.scrim { position: absolute; inset: 0; background: var(--scrim); z-index: 50; display: flex; align-items: center; justify-content: center; }
+.sheet { background: var(--surface-elevated); border-radius: var(--radius-2xl); box-shadow: var(--elev-3); outline: 1px solid var(--border-hairline); display: flex; flex-direction: column; overflow: hidden; }
+.sheet .sh-body { padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+.sheet .sh-foot { border-top: 1px solid var(--border-hairline); padding: 12px 20px; display: flex; gap: 8px; align-items: center; justify-content: flex-end; }
+.sheet h3 { font: var(--type-title1); letter-spacing: var(--type-title1-tracking); margin: 0; }
+.dl { display: grid; grid-template-columns: 120px 1fr; gap: 10px 14px; align-items: start; }
+.dl dt { font: var(--type-section); color: var(--text-tertiary); padding-top: 1px; }
+.dl dd { margin: 0; font: var(--type-ui); }
+.palette { position: absolute; z-index: 40; width: var(--size-palette-width); background: var(--surface-elevated); border-radius: var(--radius-xl); box-shadow: var(--elev-3); outline: 1px solid var(--border-hairline); overflow: hidden; }
+.palette .search { display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-bottom: 1px solid var(--border-hairline); font: var(--type-body); color: var(--text-primary); }
+.palette .list { padding: 6px; }
+.palette .sec { font: var(--type-section); color: var(--text-tertiary); padding: 8px 8px 4px; }
+.palette .row .r { margin-left: auto; display: flex; gap: 6px; align-items: center; }
+.palette .foot { display: flex; gap: 14px; justify-content: flex-end; padding: 8px 12px; border-top: 1px solid var(--border-hairline); font: var(--type-meta); color: var(--text-tertiary); }
+.seg { display: inline-flex; background: var(--bg-sunken); border-radius: var(--radius-sm); padding: 2px; gap: 2px; }
+.seg span { height: 24px; padding: 0 10px; display: inline-flex; align-items: center; border-radius: 4px; font: var(--type-ui); color: var(--text-secondary); }
+.seg span.on { background: var(--surface-raised); color: var(--text-primary); box-shadow: var(--elev-1); font: var(--type-uiStrong); }
+.toggle { width: 32px; height: 18px; border-radius: var(--radius-full); background: var(--border-strong); position: relative; flex: none; }
+.toggle::after { content: ""; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: var(--surface-raised); box-shadow: 0 1px 2px rgba(0,0,0,.2); }
+.toggle.on { background: var(--accent-fill); } .toggle.on::after { left: 16px; }
+.field { height: 28px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--surface-raised); display: flex; align-items: center; gap: 8px; padding: 0 8px; font: var(--type-ui); color: var(--text-tertiary); }
+.field.focus { border-color: var(--accent-fill); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-fill) 20%, transparent); color: var(--text-primary); }
+.dots { letter-spacing: 2px; color: var(--text-primary); font-size: 16px; }
+.meter { height: 4px; border-radius: var(--radius-full); background: var(--bg-sunken); overflow: hidden; display: flex; }
+.meter b { display: block; height: 100%; }
+.set-tabs { display: flex; justify-content: center; gap: 2px; padding: 10px; border-bottom: 1px solid var(--border-hairline); }
+.set-tabs span { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 12px; border-radius: var(--radius-md); font: var(--type-meta); color: var(--text-secondary); min-width: 88px; }
+.set-tabs span.on { background: var(--surface-selected); color: var(--accent-text); }
+.set-body { padding: 16px 28px 24px; display: flex; flex-direction: column; gap: 6px; overflow: hidden; flex: 1; }
+.set-sec { font: var(--type-section); color: var(--text-tertiary); padding: 10px 2px 4px; }
+.set-group { background: var(--surface-raised); border: 1px solid var(--border-hairline); border-radius: var(--radius-lg); }
+.set-row { display: flex; align-items: center; gap: 12px; min-height: 40px; padding: 8px 14px; }
+.set-row + .set-row { border-top: 1px solid var(--border-hairline); }
+.set-row .grow { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.ql-rail { width: 96px; background: var(--bg-panel); border-right: 1px solid var(--border-hairline); padding: 12px; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+.ql-rail .pg { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 4px; border-radius: var(--radius-md); }
+.ql-rail .pg.on { background: var(--surface-selected); box-shadow: inset 0 0 0 1px var(--accent-subtleBorder); }
+.ql-well { flex: 1; background: var(--bg-sunken); display: flex; align-items: center; justify-content: center; }
+.ql-bar { display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-top: 1px solid var(--border-hairline); }
+.gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.gpanel { background: var(--bg-window); color: var(--text-primary); border-radius: 10px; outline: 1px solid var(--border-hairline); padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.gpanel h4 { margin: 0; font: var(--type-section); color: var(--text-tertiary); }
+.hstack { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.vstack { display: flex; flex-direction: column; gap: 8px; }
+.brand-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.bcard { background: var(--surface-raised); border-radius: 12px; outline: 1px solid var(--border-hairline); overflow: hidden; display: flex; flex-direction: column; }
+.bcard .hero { height: 220px; display: flex; align-items: center; justify-content: center; gap: 28px; background: var(--bg-window); }
+.bcard .hero.dark { background: #141417; }
+.bcard .sizes { display: flex; align-items: flex-end; gap: 14px; padding: 14px 16px; border-top: 1px solid var(--border-hairline); }
+.bcard .txt { padding: 14px 16px 16px; border-top: 1px solid var(--border-hairline); display: flex; flex-direction: column; gap: 6px; }
+.bcard .txt h3 { margin: 0; font: var(--type-title2); display: flex; align-items: center; gap: 8px; }
+.wordmark { font: 600 26px/1 var(--font-ui); letter-spacing: -0.26px; color: var(--text-primary); }
+.wordmark span { color: var(--text-secondary); }
+.lockup { display: flex; align-items: center; gap: 8px; }
+.rec { outline: 2px solid var(--accent-fill); }
+</style>
+</head>
+<body>
+<div class="page-head">
+  <h1>atePDF v1 · SHR-105 mockups</h1>
+  <nav id="nav"></nav>
+  <div class="theme-switch" role="group" aria-label="Appearance">
+    <button data-set="light" aria-pressed="true">Light</button>
+    <button data-set="dark" aria-pressed="false">Dark</button>
+  </div>
+</div>
+<main class="doc" id="doc"></main>
+
+<script>
+/* ——— Icons (Lucide-style, 24 grid, 1.75 stroke) ——— */
+const P = {
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  up:'<path d="M12 19V5M5 12l7-7 7 7"/>',
+  down:'<path d="M12 5v14M19 12l-7 7-7-7"/>',
+  file:'<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>',
+  eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  save:'<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>',
+  folderDown:'<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.7-.9l-.8-1.2A2 2 0 0 0 7.9 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2z"/><path d="M12 10v6M9 13l3 3 3-3"/>',
+  undo:'<path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>',
+  check:'<path d="M20 6 9 17l-5-5"/>',
+  x:'<path d="M18 6 6 18M6 6l12 12"/>',
+  lock:'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  key:'<circle cx="7.5" cy="15.5" r="4.5"/><path d="m10.7 12.3 9.3-9.3M17 6l3 3M14.5 8.5l2.5 2.5"/>',
+  mac:'<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M2 20h20"/>',
+  cloud:'<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/>',
+  cloudOff:'<path d="m2 2 20 20M5.8 5.8A7 7 0 0 0 9 19h8.5a4.5 4.5 0 0 0 1.3-.2M21.5 15.5A4.5 4.5 0 0 0 17.5 10h-1.8A7 7 0 0 0 9.8 5"/>',
+  out:'<path d="M7 17 17 7M7 7h10v10"/>',
+  warn:'<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/>',
+  cx:'<circle cx="12" cy="12" r="9"/><path d="m15 9-6 6M9 9l6 6"/>',
+  ban:'<circle cx="12" cy="12" r="9"/><path d="m5.6 5.6 12.8 12.8"/>',
+  panel:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M15 3v18"/>',
+  more:'<circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>',
+  chevR:'<path d="m9 18 6-6-6-6"/>',
+  chevL:'<path d="m15 18-6-6 6-6"/>',
+  chevD:'<path d="m6 9 6 6 6-6"/>',
+  grip:'<circle cx="9" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="18" r="1"/>',
+  files:'<path d="M15 2H9a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V7z"/><path d="M15 2v5h5M4 7v13a2 2 0 0 0 2 2h9"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>',
+  image:'<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/>',
+  text:'<path d="M4 6h16M4 12h16M4 18h10"/>',
+  help:'<circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/>',
+  scan:'<path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 12h10"/>',
+  gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+  shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+  info:'<circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/>',
+  trash:'<path d="M3 6h18M8 6V4h8v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
+  stop:'<rect x="6" y="6" width="12" height="12" rx="2"/>',
+  enter:'<path d="M20 4v7a4 4 0 0 1-4 4H4M9 10l-5 5 5 5"/>',
+  stopFill:'<rect x="7" y="7" width="10" height="10" rx="2" fill="currentColor" stroke="none"/>',
+  circle:'<circle cx="12" cy="12" r="6"/>',
+};
+const ic = (n, s = 16, extra = '') => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" ${extra}>${P[n]}</svg>`;
+const icc = (n, color, s = 16) => `<span style="color:var(${color});display:inline-flex">${ic(n, s)}</span>`;
+
+/* ——— Building blocks ——— */
+const thumb = (w, h, kind = 'text') => {
+  if (kind === 'locked') return `<div class="thumb locked" style="width:${w}px;height:${h}px">${ic('lock', Math.round(w * .38))}</div>`;
+  let lines = '';
+  if (kind === 'invoice') lines = `<i class="bar"></i><i class="h" style="top:26%"></i>` + [38, 46, 54, 62, 70, 78].map(t => `<i style="top:${t}%"></i>`).join('');
+  else if (kind === 'text' || kind === 'scan') lines = `<i class="h" style="top:14%"></i>` + [26, 34, 42, 50, 58, 66, 74, 82].map(t => `<i style="top:${t}%;right:${t % 3 ? 14 : 30}%"></i>`).join('');
+  return `<div class="thumb ${kind}" style="width:${w}px;height:${h}px">${lines}</div>`;
+};
+const glyph = () => `<span class="actglyph" aria-hidden="true"><b></b><b></b></span>`;
+const kbd = k => `<span class="kbd">${k}</span>`;
+const lights = () => `<div class="lights"><i></i><i></i><i></i></div>`;
+function toolbar({ ctx = null, busy = null, panelOn = false, compact = false } = {}) {
+  const c = busy ? `<span class="ctx">${glyph()} ${busy}</span>`
+    : ctx ? `<span class="ctx">${ctx.icon ? ic(ctx.icon, 14) : ''}${ctx.t} <span class="m">${ctx.m || ''}</span>${ic('chevD', 14, 'style="color:var(--text-tertiary)"')}</span>`
+    : `<span class="ctx disabled">No files yet</span>`;
+  return `${lights()}<div class="tb">${c}<span class="spacer"></span>
+    ${compact ? `<span class="pill local icononly" title="On this Mac">${ic('shield', 14)}</span>` : `<span class="pill local">${ic('shield', 14)}On this Mac</span>`}
+    <span class="ib ${panelOn ? 'on' : ''}" title="Files panel ⌥⌘I">${ic('panel')}</span><span class="ib" title="More">${ic('more')}</span></div>`;
+}
+const req = (t, ctxline = '') => `<div class="req"><span class="g">${ic('chevR', 14)}</span><span>${ctxline ? `<span class="ctxline">${ctxline}</span>` : ''}${t}</span></div>`;
+const msg = t => `<p class="msg">${t}</p>`;
+const notice = (icon, color, t, actions = '') => `<div class="vstack" style="gap:6px"><p class="msg with-icon">${icc(icon, color)}<span>${t}</span></p>${actions ? `<div class="hstack" style="padding-left:24px">${actions}</div>` : ''}</div>`;
+function fileRow({ n, name, facts, kind = 'text', tags = '', cls = '', hover = '', tall = true, ord = true }) {
+  return `<div class="row ${tall ? 'tall' : ''} ${cls}">${ord && n ? `<span class="ord">${n}</span>` : ''}${thumb(28, 36, kind)}<div class="grow"><span class="name">${name}</span><span class="m">${facts}</span></div>${tags}${hover}</div>`;
+}
+const SOURCES = [
+  { n: 1, name: 'Q3-Invoice-Northwind.pdf', facts: '2 pages · 184 kB', kind: 'invoice' },
+  { n: 2, name: 'Board-Report-September.pdf', facts: '14 pages · 2.8 MB', kind: 'text' },
+  { n: 3, name: 'Signed-Appendix-scan.pdf', facts: '8 pages · 5.6 MB', kind: 'scan' },
+];
+function sourceGroup({ state = 'done', extra = [] } = {}) {
+  const rows = SOURCES.map((s, i) => {
+    if (state === 'importing' && i === 2) return fileRow({ ...s, facts: 'Checking…', kind: 'blank', tags: glyph() });
+    return fileRow(s);
+  }).concat(extra.map(fileRow)).join('');
+  const head = state === 'importing'
+    ? `<span class="m">Adding 3 PDFs</span>`
+    : `<span class="m">Added 3 PDFs · 24 pages</span><span class="marker local">${ic('shield', 12)}Checked on this Mac</span>`;
+  return `<div class="vstack" style="gap:6px"><div class="hstack" style="gap:10px">${head}</div><div class="group">${rows}</div></div>`;
+}
+function activity({ label, detail, marker = 'local', steps = null, stop = true }) {
+  const mk = marker === 'ai' ? `<span class="marker ai">${ic('cloud', 12)}atePDF AI</span>` : marker === 'local' ? `<span class="marker local">${ic('shield', 12)}On this Mac</span>` : marker === 'out' ? `<span class="marker out">${ic('out', 12)}Leaves this Mac</span>` : '';
+  return `<div class="activity" data-testid="progress-message"><span class="glyphbox">${glyph()}</span><div class="grow">
+    <div class="hstack" style="gap:8px"><span class="lbl">${label}</span>${mk}</div><span class="m">${detail}</span>
+    ${steps ? `<span class="m" style="display:flex;align-items:center;gap:4px;margin-top:4px">${ic('chevD', 12)}Steps · ${steps.label}</span><div class="steps">${steps.rows.map(r => `<div>${r[0] === 'done' ? icc('check', '--status-success-fg', 14) : r[0] === 'active' ? glyph() : icc('circle', '--text-tertiary', 14)}<span>${r[1]}</span><span class="st">${r[2]}</span></div>`).join('')}</div>` : ''}
+  </div>${stop ? `<span class="btn plain">Stop ${kbd('⌘.')}</span>` : ''}</div>`;
+}
+function resultCard({ title, facts, tags = '', note = '', receipt = '', undo = true, kind = 'text', current = true, actionsBelow = false }) {
+  const actions = `<div class="hstack" style="gap:6px;${actionsBelow ? 'margin-top:10px' : ''}"><span class="btn ${current ? 'primary' : 'secondary'}">${ic('save')}Save…</span><span class="ib" title="Quick Look (Space)">${ic('eye')}</span><span class="ib">${ic('more')}</span></div>`;
+  return `<div class="card" data-testid="${current ? 'current-result' : 'previous-result'}">
+    <div class="hstack" style="gap:12px;flex-wrap:nowrap;align-items:flex-start">${thumb(40, 52, kind)}
+      <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px"><span style="font:var(--type-headline)">${title}</span>
+        <span class="m" data-testid="result-facts">${facts}</span><div class="hstack" style="gap:6px;margin-top:3px">${current ? '<span class="tag cur">Current</span>' : '<span class="tag earl">Earlier</span>'}<span class="tag ok">${ic('check', 12)}Verified</span>${tags}</div></div>
+      ${actionsBelow ? '' : actions}</div>
+    ${actionsBelow ? actions : ''}
+    ${note ? `<p class="m" style="margin:10px 0 0">${note}</p>` : ''}
+    ${receipt || undo ? `<div class="hstack" style="margin-top:10px;padding-top:8px;border-top:1px solid var(--border-hairline);justify-content:space-between">${receipt ? `<span class="m" style="display:flex;gap:6px;align-items:center">${receipt}</span>` : '<span></span>'}${undo ? `<span class="btn plain">${ic('undo', 14)}Undo ${kbd('⌘Z')}</span>` : ''}</div>` : ''}
+  </div>`;
+}
+const earlierRow = (title, facts, kind = 'text', extraTag = '') => `<div class="group" data-testid="previous-result">${fileRow({ name: title, facts, kind, ord: false, tags: `${extraTag}<span class="tag earl">Earlier</span>`, hover: '' })}</div>`;
+function composer({ ph = 'Describe what you need…', typed = '', ctx = '', chips = [], send = 'off', focus = false, allowance = '', hint = false, warn = '' } = {}) {
+  return `<div class="composer-wrap"><div class="composer ${focus ? 'focus' : ''}">
+    ${ctx ? `<div class="ctxrow">${ctx}</div>` : ''}
+    <div class="input ${typed ? 'typed' : ''}">${typed ? typed + (focus ? '<span class="caret"></span>' : '') : (focus ? '<span class="caret" style="margin-left:0;margin-right:2px"></span>' : '') + ph}</div>
+    ${warn ? `<div class="m" style="padding:0 12px 4px;color:var(--status-warning-fg);display:flex;gap:6px;align-items:center">${ic('warn', 12)}${warn}</div>` : ''}
+    <div class="actions"><span class="ib" title="Add files ⌘O">${ic('plus')}</span>${chips.map(c => `<span class="chip">${c}</span>`).join('')}${chips.length ? `<span class="chip more">${kbd('⌘K')}More</span>` : ''}
+      <span class="spacer"></span>${allowance ? `<span class="allow">${allowance}</span>` : ''}
+      ${send === 'stop' ? `<span class="send stop" title="Stop ⌘."><b></b></span>` : `<span class="send ${send === 'on' ? 'on' : ''}" title="Send message">${ic('up', 16)}</span>`}</div>
+  </div>${hint ? `<div class="hint"><span>${kbd('↩')} to send</span><span>${kbd('⇧↩')} new line</span><span>${kbd('⌘K')} actions</span></div>` : ''}</div>`;
+}
+const chipCtx = (kind, t) => `<span class="hstack" style="gap:6px">${thumb(14, 18, kind)}<span style="color:var(--text-primary)">${t}</span></span>`;
+function panel({ results = [], sources = SOURCES, sel = -1 } = {}) {
+  return `<aside class="panel" aria-label="Files">
+    ${results.length ? `<div class="sec"><span>Results</span><span>${results.length}</span></div>${results.map((r, i) => fileRow({ ...r, ord: false, cls: i === sel ? 'sel' : '', tall: true })).join('')}` : ''}
+    <div class="sec"><span>Sources</span><span>${sources.length}</span></div>
+    ${sources.map((s, i) => fileRow({ ...s, hover: i === 0 && sel === -2 ? `<span style="color:var(--text-tertiary)">${ic('grip', 14)}</span>` : '', cls: i === 0 && sel === -2 ? 'hover' : '' })).join('')}
+    <div class="foot">${icc('shield', '--status-local-fg', 14)}<span class="m">Stored on this Mac · 48.2 MB</span></div></aside>`;
+}
+const win = (inner, { w = 1024, h = 680, theme = '' } = {}) => `<div class="win" style="--w:${w}px;--h:${h}px" ${theme ? `data-theme="${theme}"` : ''}>${inner}</div>`;
+const shell = ({ tb = {}, thread = '', comp = '', side = '', top = false, overlay = '', empty = '' }) =>
+  toolbar(tb) + `<div class="body"><div class="col">${empty || `<div class="thread ${top ? 'top' : ''}"><div class="ti">${thread}</div></div>`}${comp}</div>${side}${overlay}</div>`;
+const section = (id, title, desc, frames, note = '') => `<section class="screen" id="${id}"><header><h2>${title}</h2><p>${desc}</p></header><div class="frames">${frames}</div>${note ? `<p class="note">${note}</p>` : ''}</section>`;
+
+/* ——— Screens ——— */
+const S = [];
+
+S.push(['brand', 'Brand directions', `Three original directions. All keep the 8 (<em>ate</em>) and replace the raster gradient mark. <strong>A · Folio Eight is recommended</strong>. Owner decision OD-1. Sources: <code>docs/design/brand/*.svg</code>.`,
+  `<div class="brand-grid" style="width:100%">
+  ${[['a', 'A · Folio Eight', 'mark-a-folio-eight.svg', 'icon-a-folio-eight-ink.svg', 'Two stacked sheets form the 8; one folded corner is the only document cue. Precise, ownable, legible at 16 px.', true],
+     ['b', 'B · Speaking Page', 'mark-b-speaking-page.svg', 'icon-b-speaking-page.svg', 'A page with a speech tail; two counters form the 8. The most literal "talk to your document". Risks reading as a generic chat app.', false],
+     ['c', 'C · Continuity Eight', 'mark-c-continuity-eight.svg', 'icon-c-continuity-eight.svg', 'A monoline 8 that stays open, followed by a caret. Friendly, closest to today\'s rounded 8. The least document-specific.', false]]
+   .map(([k, name, mark, icon, text, rec]) => `<div class="bcard ${rec ? 'rec' : ''}">
+      <div class="hero"><img src="../brand/${icon}" width="148" height="148" alt="${name} app icon"><div class="lockup"><img src="../brand/${mark}" width="40" height="40" alt=""><span class="wordmark">ate<span>PDF</span></span></div></div>
+      <div class="hero dark" data-theme="dark" style="height:120px"><div class="lockup"><img src="../brand/${k === 'a' ? 'icon-a-folio-eight-ink.svg' : icon}" width="44" height="44" alt=""><span class="wordmark">ate<span>PDF</span></span></div>${k === 'a' ? '<img src="../brand/icon-a-folio-eight-paper.svg" width="64" height="64" alt="Paper variant">' : ''}</div>
+      <div class="sizes">${[16, 32, 64, 128].map(s => `<img src="../brand/${icon}" width="${s}" height="${s}" alt="">`).join('')}<span class="m" style="margin-left:auto">16 · 32 · 64 · 128</span></div>
+      <div class="txt"><h3>${name}${rec ? '<span class="tag cur">Recommended</span>' : ''}</h3><p class="m" style="margin:0">${text}</p></div></div>`).join('')}
+  </div>
+  <div class="bcard" style="width:100%;flex-direction:row;align-items:center;gap:24px;padding:16px 20px">
+    <img src="../../../apps/universal/assets/approved-8-mark-source-crop.png" height="56" alt="Current raster 8 mark">
+    <div class="vstack" style="gap:2px"><strong style="font:var(--type-headline)">Current (retired by this proposal)</strong><span class="m">Raster gradient crop from the brand board; no vector master, and the gradient does not survive 16 px or monochrome. Kept in the build pack as history.</span></div>
+    <div class="hstack" style="margin-left:auto;gap:18px"><span class="vstack" style="gap:4px;align-items:center"><span style="width:28px;height:28px;border-radius:6px;background:var(--brand-iris)"></span><span class="m">Iris 5646F0</span></span><span class="vstack" style="gap:4px;align-items:center"><span style="width:28px;height:28px;border-radius:6px;background:var(--brand-ink)"></span><span class="m">Ink 121120</span></span><span class="vstack" style="gap:4px;align-items:center"><span style="width:28px;height:28px;border-radius:6px;background:var(--brand-fold);outline:1px solid var(--border-hairline)"></span><span class="m">Fold E0DCFF</span></span></div>
+  </div>`]);
+
+S.push(['empty', 'Launch · empty workspace (S4.1)', 'No logo in the toolbar, no dashed card, no illustration. Examples fill the composer only; nothing runs without files.',
+  win(shell({ tb: {}, empty: `<div class="empty" data-testid="welcome"><img src="../brand/mark-a-folio-eight.svg" width="32" height="32" alt="" style="opacity:.35;filter:grayscale(1)"><h3>Drop PDFs or images here</h3><span class="m">or press ${kbd('⌘O')} to choose files</span>
+      <div class="examples"><div class="set-sec" style="padding-left:8px">Try asking</div><div class="group" style="background:transparent;border:0;padding:0">
+      ${['Merge these into one PDF', 'Make this scan searchable', 'Get this under 5 MB'].map((t, i) => `<div class="row ${i === 0 ? 'hover' : ''}">${icc('chevR', '--text-tertiary', 14)}<span class="name" style="color:var(--text-secondary)">${t}</span>${i === 0 ? `<span style="margin-left:auto;color:var(--text-tertiary)">${ic('enter', 14)}</span>` : ''}</div>`).join('')}</div></div>
+      <span class="btn plain" style="margin-top:16px">Try with sample PDFs</span></div>`,
+    comp: composer({ focus: true, hint: true }) })) +
+  win(shell({ tb: { compact: true }, empty: `<div class="empty"><img src="../brand/mark-a-folio-eight.svg" width="28" height="28" alt="" style="opacity:.35;filter:grayscale(1)"><h3 style="font:var(--type-title2)">Drop PDFs or images here</h3><span class="m">or press ${kbd('⌘O')}</span><span class="btn plain" style="margin-top:12px">Try with sample PDFs</span></div>`, comp: composer({}) }), { w: 640, h: 520, theme: 'dark' }),
+  'Second frame: minimum window (640 × 520) in dark appearance. The privacy pill collapses to its icon and the examples are dropped below 600 pt of height.']);
+
+S.push(['drop', 'Drag over the window (S4.2)', 'The whole window is the drop target. The label counts what can be added and restates the order rule.',
+  win(shell({ tb: {}, empty: `<div class="empty" style="opacity:.35"><h3>Drop PDFs or images here</h3></div>`, comp: composer({}),
+    overlay: `<div class="overlay" data-testid="drop-feedback"><div class="zone"><span style="color:var(--accent-text)">${ic('files', 28)}</span><h4>Drop to add 3 PDFs</h4><span class="m">They'll be added in this order</span></div></div>` }), { w: 760, h: 520 }) +
+  win(shell({ tb: {}, empty: `<div class="empty" style="opacity:.35"><h3>Drop PDFs or images here</h3></div>`, comp: composer({}),
+    overlay: `<div class="overlay"><div class="zone"><span style="color:var(--accent-text)">${ic('files', 28)}</span><h4>2 of 3 files can be added</h4><span class="m">Only PDFs and supported images · notes.docx will be skipped</span></div></div>` }), { w: 520, h: 520 }),
+  'Supported image formats come from the runtime capability catalogue (OPEN-07), never from a hard-coded list.']);
+
+S.push(['attached', 'PDFs added + composer (S4.4, S7.1)', 'Import is local and immediate: a SourceGroup turn with real thumbnails and facts. The composer shows its target and context-aware suggestions, which are sent through AI orchestration as ordinary requests.',
+  win(shell({ tb: { ctx: { icon: 'files', t: '3 PDFs', m: '24 pages' } },
+    thread: `<div class="task">${sourceGroup()}${msg('Your 3 PDFs are ready. What would you like to do? Merge uses this order.')}</div>`,
+    comp: composer({ ph: 'What should I do with these 3 PDFs?', ctx: `<span>Working on</span>${chipCtx('invoice', '3 sources')}<span class="t3">· in this order</span>`, chips: ['Merge in this order', 'Compress', 'Make searchable'], focus: true, allowance: '12 free left', hint: true }) })) +
+  win(shell({ tb: { ctx: { icon: 'files', t: '3 PDFs', m: '' }, compact: true },
+    thread: `<div class="task">${sourceGroup()}</div>`,
+    comp: composer({ ph: 'What should I do with these?', chips: ['Merge in this order', 'Compress'] }) }), { w: 640, h: 560 }),
+  'The allowance indicator ("12 free left") is a placeholder for the server value (OPEN-02) and appears only for guests. The second frame is compact width, where the chips reduce to two plus ⌘K.']);
+
+S.push(['palette', 'Quick actions palette ⌘K (S7.2)', 'Command speed without a tools dashboard. Capability rows become a sentence in the conversation and go through the AI. Workspace rows are local. Actions that don\'t apply are listed with the reason.',
+  win(shell({ tb: { ctx: { icon: 'files', t: '3 PDFs', m: '24 pages' } },
+    thread: `<div class="task" style="opacity:.5">${sourceGroup()}</div>`,
+    comp: composer({ ph: 'What should I do with these 3 PDFs?', chips: ['Merge in this order', 'Compress', 'Make searchable'] }),
+    overlay: `<div class="palette" style="left:232px;bottom:96px"><div class="search">${icc('search', '--text-tertiary')}<span>com</span><span class="caret" style="margin-left:-6px"></span><span class="m" style="margin-left:auto">3 sources</span></div>
+      <div class="list"><div class="sec">Suggested</div>
+      <div class="row sel">${icc('down', '--text-secondary')}<span class="name"><b>Com</b>press</span><span class="r"><span class="m">3 PDFs · 8.6 MB</span>${ic('enter', 14)}</span></div>
+      <div class="row">${icc('files', '--text-secondary')}<span class="name">Merge and <b>com</b>press</span><span class="r"><span class="m">3 PDFs</span></span></div>
+      <div class="sec">All actions</div>
+      <div class="row">${icc('scan', '--text-secondary')}<span class="name">Make searchable…</span><span class="r"><span class="m">Signed-Appendix-scan.pdf</span></span></div>
+      <div class="row" style="color:var(--text-disabled)">${icc('lock', '--text-disabled')}<span class="name" style="color:var(--text-disabled)">Unlock…</span><span class="r"><span class="m" style="color:var(--text-tertiary)">No locked files</span></span></div>
+      <div class="sec">Workspace</div>
+      <div class="row">${icc('plus', '--text-secondary')}<span class="name">Add Files…</span><span class="r">${kbd('⌘O')}</span></div>
+      <div class="row">${icc('shield', '--text-secondary')}<span class="name">Privacy &amp; Storage…</span></div></div>
+      <div class="foot"><span>${kbd('↑↓')} move</span><span>${kbd('↩')} ask atePDF</span><span>${kbd('esc')} close</span></div></div>` })),
+  'Choosing "Compress" appends the RequestBlock "Compress these 3 PDFs" and sends it through the same path as typed text (D-04, CONV-01).']);
+
+S.push(['conversation', 'Active conversation · planning (S6.1)', 'Requests are left-aligned blocks, not chat bubbles. Assistant text sits on the window. Planning names where the instruction goes. Expanded window with the Files panel docked.',
+  win(shell({ tb: { busy: 'Planning…', panelOn: true },
+    thread: `<div class="task">${sourceGroup()}${msg('Your 3 PDFs are ready. What would you like to do? Merge uses this order.')}</div>
+      <div class="task">${req('Merge these three PDFs')}${activity({ label: 'Planning', detail: 'Sending your instruction to atePDF AI. Your files stay here.', marker: 'ai' })}</div>`,
+    comp: composer({ ph: 'You can type the next request while this runs', send: 'stop' }),
+    side: panel({}) }), { w: 1280, h: 720 }),
+  'Hovering the "atePDF AI" marker explains exactly what is sent: the instruction plus anonymous facts (page counts, sizes). Files and names are not sent (PRIV-02).']);
+
+S.push(['clarify', 'Clarification (S6.2)', 'One specific question with the relevant choices, numbered for the keyboard. The answer is bound to this workspace revision, and the choice goes stale if the files change.',
+  win(shell({ tb: { ctx: { icon: 'files', t: '3 PDFs', m: '24 pages' } },
+    thread: `<div class="task">${req('Remove page 3')}${msg('Which PDF should I remove page 3 from?')}
+      <div class="group" role="radiogroup">
+        ${SOURCES.map((s, i) => `<div class="row tall ${i === 1 ? 'sel focus' : ''}">${kbd(i + 1)}${thumb(28, 36, s.kind)}<div class="grow"><span class="name">${s.name}</span><span class="m">${s.facts}</span></div>${i === 1 ? `<span style="color:var(--text-tertiary)">${ic('enter', 14)}</span>` : ''}</div>`).join('')}
+        <div class="row">${kbd('4')}<span class="name" style="color:var(--text-secondary)">Something else…</span></div></div></div>`,
+    comp: composer({ ph: 'Answer, or ask for something else…', ctx: `<span>Answering</span><span style="color:var(--text-primary)">Which PDF should I remove page 3 from?</span>`, send: 'off' }) })) +
+  win(shell({ tb: { ctx: { icon: 'files', t: '3 PDFs', m: '24 pages' } },
+    thread: `<div class="task" style="opacity:.6">${req('Remove page 3')}${msg('Which PDF should I remove page 3 from?')}<div class="group" style="opacity:.6">${SOURCES.slice(0, 2).map((s, i) => `<div class="row">${kbd(i + 1)}<span class="name">${s.name}</span></div>`).join('')}</div><span class="m">This question is closed.</span></div>
+      <div class="task">${req('Actually, merge them first')}${activity({ label: 'Planning', detail: 'Sending your instruction to atePDF AI. Your files stay here.', marker: 'ai' })}</div>`,
+    comp: composer({ send: 'stop', ph: '' }) }), { w: 560, h: 680 }),
+  'Second frame: a new request supersedes the pending question, so the old choices go stale instead of executing later (CONV-04).']);
+
+S.push(['processing', 'Processing, cancel and verification (S8)', 'Real stages only: the operation, then an independent check. Steps appear in a disclosure. Stop is always one key away. No percentages unless the engine reports real units.',
+  win(shell({ tb: { busy: 'Removing pages…', panelOn: true },
+    thread: `<div class="task" style="opacity:.55">${earlierRow('Merged PDF', '24 pages · 8.6 MB')}</div>
+      <div class="task">${req('Remove pages 2 and 7')}${activity({ label: 'Verifying the result', detail: 'Checking pages, order and text with an independent reader', marker: 'local', steps: { label: '2 of 2', rows: [['done', 'Remove pages 2 and 7 from Merged PDF', 'Done'], ['active', 'Verify the new copy', 'Checking']] } })}</div>`,
+    comp: composer({ send: 'stop', ph: 'Finish or stop the current task before sending' }),
+    side: panel({ results: [{ name: 'Merged PDF', facts: '24 pages · 8.6 MB', tags: '<span class="tag cur">Current</span>' }] }) }), { w: 1280, h: 640 }) +
+  win(shell({ tb: { ctx: { icon: 'file', t: 'Merged PDF', m: '24 pages' } },
+    thread: `<div class="task">${req('Make it searchable')}${activity({ label: 'Making text searchable', detail: 'Page 4 of 24', marker: 'local', stop: false })}<span class="m" style="padding-left:34px">Stopping…</span></div>
+      <div class="task">${notice('stopFill', '--text-secondary', 'Stopped. No new result was created. Merged PDF is still current.')}</div>`,
+    comp: composer({ ph: 'What next for Merged PDF?' }) }), { w: 560, h: 640 }),
+  'Second frame: the Stop sequence. "Page 4 of 24" appears only because the OCR engine reports pages. After Stop, controller truth decides the wording.']);
+
+S.push(['confirm', 'Quality confirmation + secure password (S8.4, S10.6)', 'From the reference journey: "Try to get it below 5 MB, then password-protect it."',
+  win(shell({ tb: { busy: 'Waiting for password', panelOn: false },
+    thread: `<div class="task">${req('Try to get it below 5 MB, then password-protect it')}
+      <div class="card"><div class="hstack" style="gap:10px;align-items:flex-start;flex-wrap:nowrap">${icc('warn', '--status-warning-fg')}<div class="vstack" style="gap:4px;flex:1"><span style="font:var(--type-headline)">Image quality may change</span><span class="msg" style="font:var(--type-ui);color:var(--text-secondary)">To get below 5 MB I'd re-encode images. Text and vector graphics stay sharp. I'll make a copy; your current result stays as it is.</span><span class="m" style="margin-top:6px;display:flex;gap:6px;align-items:center">${icc('check', '--status-success-fg', 12)}You chose: Create Copy</span></div></div></div></div>
+      <div class="task">${req('Yes, create a copy')}${msg('Enter the password in the secure field below. It stays on your Mac.')}
+      <div class="card" style="border-color:color-mix(in srgb, var(--status-local-fg) 40%, transparent)"><div class="vstack" style="gap:10px">
+        <div class="hstack" style="gap:8px">${icc('key', '--text-secondary')}<span style="font:var(--type-headline)">Choose a password for the protected copy</span></div>
+        <div class="hstack" style="gap:8px;flex-wrap:nowrap"><div class="field focus" style="flex:1"><span class="dots">••••••••••</span><span class="caret"></span></div><div class="field" style="flex:1">Confirm password</div></div>
+        <div class="hstack" style="justify-content:space-between"><span class="marker local">${ic('shield', 12)}Stays on this Mac. It's never added to the chat or sent to AI.</span><div class="hstack" style="gap:6px"><span class="btn plain">Cancel</span><span class="btn primary">Protect</span></div></div>
+      </div></div></div>`,
+    comp: composer({ ph: 'Use the password field above; don\'t type passwords here' }) })),
+  'The plan pauses at Protect. If a password is typed into the composer instead, the existing secret detection withholds it and shows an inline warning (PDF-06).']);
+
+S.push(['result', 'Result (S9.1–S9.3, S9.7, S9.9)', 'One card per outcome, with measured facts, honest caveats, and a receipt that only says "Saved" after the write succeeds. Undo sits with the current result.',
+  win(shell({ tb: { ctx: { icon: 'lock', t: 'Protected PDF', m: '22 pages' }, panelOn: false },
+    thread: `<div class="task" style="opacity:.55">${earlierRow('PDF without pages 2 and 7', '22 pages · 8.2 MB')}</div>
+      <div class="task">${req('Try to get it below 5 MB, then password-protect it')}${msg('Done. It\'s 4.6 MB, down from 8.2 MB, and it now needs the password to open. I reduced image quality slightly.')}
+      ${resultCard({ title: 'Protected PDF', facts: '22 pages · 8.2 MB → 4.6 MB', tags: '<span class="tag warn">Quality changed</span><span class="tag lock">' + ic('lock', 11) + 'Password to open</span>', note: 'atePDF didn\'t keep the password. Your originals and earlier results are unchanged.', receipt: `${icc('check', '--status-success-fg', 14)}Saved to Documents as Protected PDF.pdf`, kind: 'text' })}</div>`,
+    comp: composer({ ph: 'What next for Protected PDF?', ctx: `<span>Working on</span>${chipCtx('text', 'Protected PDF · 22 pp')}`, chips: ['Extract text', 'Split…'], allowance: '9 free left' }) })) +
+  win(shell({ tb: { ctx: { icon: 'file', t: 'Merged PDF', m: '24 pages' } },
+    thread: `<div class="task">${req('Undo that')}${msg('I restored the previous result. Your originals are unchanged.')}${resultCard({ title: 'Merged PDF', facts: '24 pages · 8.6 MB', tags: '<span class="m">Restored</span>', receipt: 'Save cancelled · still ready to save', undo: false, actionsBelow: true })}
+      ${earlierRow('PDF without pages 2 and 7', '22 pages · 8.2 MB', 'text', '<span class="tag earl">Undone</span>')}</div>`,
+    comp: composer({ ph: 'What next for Merged PDF?' }) }), { w: 520, h: 680 }),
+  'Second frame: after Undo (narrow window, where the actions wrap below the facts). The undone result stays savable as an Earlier row. There is no redo.']);
+
+S.push(['history', 'Multiple results, collections and history (S9.4, S9.8, S5)', 'Earlier results collapse in place. The Files panel is the document index: results newest-first, sources in order (drag or ⌥↑/⌥↓ to reorder), and local storage used.',
+  win(shell({ tb: { ctx: { icon: 'files', t: 'Split into 3 PDFs', m: '3 files' }, panelOn: true },
+    thread: `<div class="task">${req('Merge these three PDFs')}${earlierRow('Merged PDF', '24 pages · 8.6 MB')}</div>
+      <div class="task">${req('Remove pages 2 and 7')}${earlierRow('PDF without pages 2 and 7', '22 pages · 8.2 MB')}</div>
+      <div class="task">${req('Split it into invoice, report and appendix')}${msg('I split it into 3 PDFs, using the original file boundaries.')}
+      <div class="card" data-testid="current-result"><div class="hstack" style="gap:10px;flex-wrap:nowrap"><span style="color:var(--text-secondary)">${ic('files', 20)}</span><div class="vstack" style="gap:3px;flex:1"><span style="font:var(--type-headline)">Split into 3 PDFs</span><span class="m">3 files · 22 pages · 8.2 MB total</span></div><span class="tag cur">Current</span><span class="tag ok">${ic('check', 12)}Verified</span><span class="btn primary">${ic('folderDown')}Save All… ${kbd('⌥⌘S')}</span></div>
+        <div class="group" style="margin-top:10px;box-shadow:none">${[['1', 'Merged – 1 Invoice.pdf', '2 pages · 190 kB', 'invoice'], ['2', 'Merged – 2 Board report.pdf', '12 pages · 2.7 MB', 'text'], ['3', 'Merged – 3 Appendix.pdf', '8 pages · 5.3 MB', 'scan']].map(([n, name, f, k], i) => fileRow({ n, name, facts: f, kind: k, cls: i === 1 ? 'hover' : '', hover: i === 1 ? `<span class="ib sm">${ic('eye', 14)}</span><span class="ib sm">${ic('save', 14)}</span>` : '' })).join('')}</div>
+        <div class="m" style="margin-top:8px">Saved 3 files to Downloads/Merged – split</div></div></div>`,
+    comp: composer({ ph: 'What next for these 3 PDFs?' }),
+    side: panel({ results: [{ name: 'Split into 3 PDFs', facts: '3 files · 8.2 MB', tags: '<span class="tag cur">Current</span>' }, { name: 'PDF without pages 2 and 7', facts: '22 pages · 8.2 MB' }, { name: 'Merged PDF', facts: '24 pages · 8.6 MB' }], sel: 0 }) }), { w: 1280, h: 720 })]);
+
+S.push(['quicklook', 'Quick Look preview (S9.6)', 'Space on any file, row or thumbnail. Read-only, with page rail, page navigation and zoom. Esc returns focus to where you were. This replaces the inline preview inside the card.',
+  win(shell({ tb: { ctx: { icon: 'file', t: 'Merged PDF', m: '24 pages' } }, thread: `<div class="task">${resultCard({ title: 'Merged PDF', facts: '24 pages · 8.6 MB' })}</div>`, comp: composer({}),
+    overlay: `<div class="scrim"><div class="sheet" role="dialog" aria-label="Read-only preview" style="width:880px;height:600px">
+      <div class="hstack" style="padding:12px 14px;border-bottom:1px solid var(--border-hairline);flex-wrap:nowrap"><div class="vstack" style="gap:2px;flex:1"><span style="font:var(--type-title2)">Merged PDF</span><span class="m">24 pages · 8.6 MB · Verified</span></div><span class="btn secondary">${ic('save')}Save…</span><span class="ib" title="Close preview">${ic('x')}</span></div>
+      <div style="flex:1;display:flex;min-height:0"><div class="ql-rail">${[1, 2, 3, 4].map(p => `<div class="pg ${p === 2 ? 'on' : ''}">${thumb(52, 68, p === 1 ? 'invoice' : p === 4 ? 'scan' : 'text')}<span class="m">${p}</span></div>`).join('')}</div>
+      <div class="ql-well">${thumb(300, 388, 'text')}</div></div>
+      <div class="ql-bar"><span class="ib">${ic('chevL')}</span><span class="m">Page 2 of 24</span><span class="ib">${ic('chevR')}</span><span style="flex:1"></span><span class="ib">−</span><span class="m">Fit</span><span class="ib">+</span></div></div></div>` }))]);
+
+S.push(['consent', 'Content-transfer consent (S10.3) <span class="illustrative">Illustrative: no v1 flow triggers this</span>', 'For any future operation that needs content to leave the Mac. The sheet shows the exact pages, the recipients, purpose, retention and the consequence of declining. The default is not to send. There is no "always allow".',
+  win(shell({ tb: { ctx: { icon: 'file', t: 'Signed-Appendix-scan.pdf', m: '8 pages' } }, thread: `<div class="task">${req('Recognise the handwriting on the signature pages')}${msg('Handwriting recognition needs a service outside your Mac. Here\'s exactly what would be sent.')}</div>`, comp: composer({}),
+    overlay: `<div class="scrim"><div class="sheet" role="dialog" style="width:var(--size-sheet-md)"><div class="sh-body">
+      <span class="pill out" style="align-self:flex-start">${ic('out', 14)}Leaves this Mac</span>
+      <h3>Send 3 pages of Signed-Appendix-scan.pdf to {Provider}?</h3>
+      <dl class="dl"><dt>What</dt><dd><div class="hstack" style="gap:8px">${[6, 7, 8].map(p => `<span class="vstack" style="gap:3px;align-items:center">${thumb(40, 52, 'scan')}<span class="m">p. ${p}</span></span>`).join('')}<span class="m" style="margin-left:6px">Page images only · no file name</span></div></dd>
+      <dt>To</dt><dd>atePDF relay → {Provider}</dd>
+      <dt>Why</dt><dd>Recognise handwritten text on these pages</dd>
+      <dt>Kept by them</dt><dd class="m">{Verified provider retention statement}</dd>
+      <dt>Kept by atePDF</dt><dd class="m">{Verified atePDF relay storage statement}</dd>
+      <dt>If you don't send</dt><dd class="m">Printed text is still recognised on this Mac; the handwriting won't be.</dd></dl>
+      <span class="m" style="display:flex;gap:4px;align-items:center">${ic('chevR', 12)}What exactly is sent</span></div>
+      <div class="sh-foot"><span class="btn secondary focus">Don't Send</span><span class="btn primary">Send 3 Pages</span></div></div></div>` })),
+  'Initial focus is on Don\'t Send. The send button always states the scope. Cancel means nothing is sent (PRIV-06). Values in {braces} come from verified provider configuration.']);
+
+const settingsTabs = on => `<div class="set-tabs">${[['gear', 'General'], ['shield', 'Privacy & Storage'], ['cloud', 'AI'], ['user', 'Account & Pro'], ['info', 'About']].map(([i, t]) => `<span class="${t === on ? 'on' : ''}">${ic(i, 18)}${t}</span>`).join('')}</div>`;
+S.push(['privacy', 'Settings · Privacy & Storage (S12.2)', 'Plain statements, real storage numbers, retention (values from OPEN-05 / SHR-40), a transfer log and deletion.',
+  win(shell({ tb: {}, empty: '<div class="empty"></div>', comp: composer({}),
+    overlay: `<div class="scrim"><div class="sheet" role="dialog" style="width:760px;height:600px">${settingsTabs('Privacy & Storage')}<div class="set-body">
+      <div class="set-sec">How atePDF handles your files</div><div class="set-group">
+        <div class="set-row">${icc('shield', '--status-local-fg')}<div class="grow"><span>Your files are processed on this Mac.</span></div></div>
+        <div class="set-row">${icc('cloud', '--text-secondary')}<div class="grow"><span>Your instructions go to atePDF AI to plan the steps.</span><span class="m">Your PDFs, file names, paths, document text and passwords aren't sent. What you type is sent, so leave out details the task doesn't need.</span></div></div>
+        <div class="set-row">${icc('out', '--status-outbound-fg')}<div class="grow"><span>Anything else leaves only if you approve it, one request at a time.</span></div><span class="m">Nothing sent so far</span></div></div>
+      <div class="set-sec">Storage on this Mac</div><div class="set-group"><div class="set-row"><div class="grow" style="gap:8px">
+        <div class="hstack" style="justify-content:space-between"><span>atePDF is using 48.2 MB</span><span class="m">Not synced or backed up by atePDF</span></div>
+        <div class="meter" style="height:6px"><b style="width:34%;background:var(--accent-fill)"></b><b style="width:30%;background:var(--status-local-fg)"></b><b style="width:14%;background:var(--text-tertiary)"></b><b style="width:6%;background:var(--border-strong)"></b></div>
+        <div class="hstack m" style="gap:14px"><span><b style="color:var(--accent-fill)">●</b> Imported copies 16.4 MB</span><span><b style="color:var(--status-local-fg)">●</b> Results 14.5 MB</span><span><b style="color:var(--text-tertiary)">●</b> Previews &amp; analysis 6.8 MB</span><span><b style="color:var(--border-strong)">●</b> Conversation 2.9 MB</span></div></div></div>
+        <div class="set-row"><div class="grow"><span>Keep my workspace</span><span class="m">{Retention options from OPEN-05 / SHR-40}</span></div><span class="btn secondary">{Option} ${ic('chevD', 14)}</span></div></div>
+      <div class="set-group" style="margin-top:12px"><div class="set-row"><div class="grow"><span>Clear workspace</span><span class="m">Removes this conversation and atePDF's copies. Files you added stay where they are.</span></div><span class="btn secondary">Clear Workspace…</span></div>
+        <div class="set-row"><div class="grow"><span>Delete all local data</span><span class="m">Deleting removes atePDF's copies. It doesn't erase backups or files you saved elsewhere.</span></div><span class="btn dplain">Delete All Local Data…</span></div></div>
+    </div></div></div>` }), { w: 1024, h: 720 })]);
+
+S.push(['settings', 'Settings · General and Account & Pro (S12.1, S12.4)', 'Only settings that map to a requirement. Raycast-grade: grouped rows, one control per row, clear descriptions.',
+  win(shell({ tb: {}, empty: '<div class="empty"></div>', comp: '',
+    overlay: `<div class="scrim"><div class="sheet" role="dialog" style="width:720px;height:460px">${settingsTabs('General')}<div class="set-body">
+      <div class="set-group">
+        <div class="set-row"><div class="grow"><span>Appearance</span></div><span class="seg"><span class="on">System</span><span>Light</span><span>Dark</span></span></div>
+        <div class="set-row"><div class="grow"><span>Conversation text size</span><span class="m">Applies to messages and the composer</span></div><span class="seg"><span>Small</span><span class="on">Default</span><span>Large</span><span>Larger</span></span></div></div>
+      <div class="set-group" style="margin-top:12px">
+        <div class="set-row"><div class="grow"><span>Introduction</span><span class="m">See the three-step introduction again</span></div><span class="btn secondary">Show Introduction</span></div>
+        <div class="set-row"><div class="grow"><span>Keyboard shortcuts</span></div><span class="btn secondary">View All ${kbd('⌘/')}</span></div></div>
+    </div></div></div>` }), { w: 820, h: 540 }) +
+  win(shell({ tb: {}, empty: '<div class="empty"></div>', comp: '',
+    overlay: `<div class="scrim"><div class="sheet" role="dialog" style="width:720px;height:460px">${settingsTabs('Account & Pro')}<div class="set-body">
+      <div class="set-group"><div class="set-row"><div class="grow" style="gap:8px"><div class="hstack"><span style="font:var(--type-headline)">Guest</span><span class="tag earl">Free allowance</span></div>
+        <div class="meter"><b style="width:40%;background:var(--accent-fill)"></b></div><span class="m">{used} of {allowance} used · {what counts as one request}</span></div><span class="btn primary">See atePDF Pro</span></div>
+        <div class="set-row"><div class="grow"><span>Restore purchase</span><span class="m">Already subscribed on this Apple ID?</span></div><span class="btn secondary">Restore Purchase</span></div></div>
+      <div class="set-sec">Account</div><div class="set-group"><div class="set-row"><div class="grow"><span class="m">Shown only if OPEN-04 requires an account. No account is needed to use atePDF as a guest.</span></div></div></div>
+    </div></div></div>` }), { w: 820, h: 540, theme: 'dark' })]);
+
+S.push(['onboarding', 'Onboarding (S13)', 'Three short panes, no signup, no skip (pane 2 carries the hosted-AI disclosure). Illustrations are built from real components.',
+  win(shell({ tb: {}, empty: '<div class="empty"></div>', comp: '',
+    overlay: `<div class="scrim"><div class="sheet" role="dialog" style="width:var(--size-sheet-md)"><div class="sh-body" style="padding:28px 32px 20px;gap:18px">
+      <div style="height:150px;border-radius:var(--radius-lg);background:var(--bg-window);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;outline:1px solid var(--border-hairline)">
+        <span class="pill local">${ic('shield', 14)}On this Mac · your PDFs</span>
+        <span class="hstack" style="gap:10px"><span class="marker ai">${ic('cloud', 12)}atePDF AI · your instruction</span></span>
+        <span class="pill out">${ic('out', 14)}Anything else · only with your OK</span></div>
+      <h3 style="font:var(--type-display);letter-spacing:var(--type-display-tracking)">Your files stay on this Mac.</h3>
+      <p class="msg" style="color:var(--text-secondary)">PDFs are processed on your Mac. Your instructions go to atePDF AI to plan the steps. Files and names don't. If anything else ever needs to leave, you'll be asked first.</p></div>
+      <div class="sh-foot" style="justify-content:space-between"><span class="hstack" style="gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:var(--text-tertiary)"></span><span style="width:6px;height:6px;border-radius:50%;background:var(--accent-fill)"></span><span style="width:6px;height:6px;border-radius:50%;background:var(--text-tertiary)"></span></span><span class="hstack" style="gap:8px"><span class="btn plain">Back</span><span class="btn primary lg">Continue</span></span></div></div></div>` }), { w: 820, h: 600 }) +
+  `<div class="vstack" style="gap:16px">${[['1', 'Just say what you need.', 'Add PDFs or images, then describe the result. atePDF makes a new file and keeps your originals untouched.'], ['3', 'Start free.', 'Try atePDF without an account. When your free allowance runs out, atePDF Pro keeps you working, and your files always stay yours.']].map(([n, t, b]) => `<div class="sheet" style="width:360px"><div class="sh-body" style="gap:8px"><span class="m">Pane ${n} of 3</span>${n === '1' ? `<img src="../brand/mark-a-folio-eight.svg" width="36" height="36" alt="">` : ''}<h3 style="font:var(--type-title1)">${t}</h3><p class="m" style="margin:0">${b}</p></div><div class="sh-foot"><span class="btn primary">${n === '3' ? 'Get Started' : 'Continue'}</span></div></div>`).join('')}</div>`]);
+
+S.push(['paywall', 'Pro, paywall and exhausted state (S14)', 'Prices, savings and allowance are runtime placeholders. Exhaustion blocks new work, never existing files.',
+  win(shell({ tb: {}, empty: '<div class="empty"></div>', comp: '',
+    overlay: `<div class="scrim"><div class="sheet" role="dialog" style="width:var(--size-sheet-md)"><div class="sh-body" style="padding:28px 32px 20px;gap:16px">
+      <img src="../brand/mark-a-folio-eight.svg" width="32" height="32" alt=""><h3 style="font:var(--type-display);letter-spacing:var(--type-display-tracking)">atePDF Pro</h3>
+      <p class="msg" style="color:var(--text-secondary);margin-top:-8px">Keep getting PDF work done by asking for it.</p>
+      <div class="vstack" style="gap:6px">${['Keep working after your free allowance', 'The same local processing and privacy rules', 'Manage or cancel in {channel subscription settings}'].map(t => `<span class="hstack" style="gap:8px">${icc('check', '--status-success-fg', 14)}<span>${t}</span></span>`).join('')}</div>
+      <div class="hstack" style="gap:10px;flex-wrap:nowrap">
+        <div class="card" style="flex:1;box-shadow:none"><span style="font:var(--type-headline)">Monthly</span><div class="m">{monthly_price} / month</div></div>
+        <div class="card" style="flex:1;box-shadow:none;background:var(--surface-selected);border-color:var(--accent-subtleBorder)"><div class="hstack" style="justify-content:space-between"><span style="font:var(--type-headline)">Annual</span>${icc('check', '--accent-text', 14)}</div><div class="m">{annual_price} / year · {computed saving}</div></div></div></div>
+      <div class="sh-foot" style="justify-content:space-between"><span class="hstack m" style="gap:12px"><span>Restore Purchase</span><span>Terms</span><span>Privacy</span></span><span class="hstack" style="gap:8px"><span class="btn plain">Not Now</span><span class="btn primary lg">Continue</span></span></div></div></div>` }), { w: 820, h: 640 }) +
+  win(shell({ tb: { ctx: { icon: 'file', t: 'Merged PDF', m: '24 pages' } },
+    thread: `<div class="task">${resultCard({ title: 'Merged PDF', facts: '24 pages · 8.6 MB', undo: true, actionsBelow: true })}</div><div class="task">${req('Compress it')}${notice('lock', '--status-warning-fg', 'You\'ve used your free allowance. Upgrade to keep working. Your existing files are still available.')}</div>`,
+    comp: `<div class="composer-wrap"><div class="composer" style="padding:12px 14px;display:flex;gap:10px;align-items:center">${icc('lock', '--status-warning-fg')}<span style="flex:1" class="m">Free allowance used. Your files, Save and Undo still work.</span><span class="btn plain">Restore Purchase</span><span class="btn primary">See atePDF Pro</span></div></div>` }), { w: 560, h: 640 })]);
+
+S.push(['errors', 'Errors, refusals and recovery (S11)', 'Calm, specific, and always saying what is unchanged. Failures are messages with one next step, not red cards.',
+  win(shell({ tb: { ctx: { icon: 'file', t: 'Merged PDF', m: '24 pages' } }, top: true,
+    thread: `<div class="banner">${icc('cloudOff', '--text-secondary')}<span class="grow">atePDF AI isn't reachable right now. Your files and results are still here.</span><span class="btn plain">Status</span><span class="btn secondary">Retry</span></div>
+      <div class="task">${req('Rotate the scanned pages')}${notice('ban', '--status-danger-fg', 'Signed-Appendix-scan.pdf has annotations I can\'t safely preserve in this operation yet. I haven\'t changed it.', '<span class="btn plain">What\'s supported?</span>')}</div>
+      <div class="task">${req('Remove page 30')}${notice('cx', '--status-danger-fg', 'Merged PDF has 24 pages, so there\'s no page 30. Which pages should I remove?')}</div>
+      <div class="task">${req('Compress it')}${notice('cx', '--status-danger-fg', 'The new copy didn\'t pass checks, so I didn\'t keep it. Merged PDF is unchanged.', '<span class="btn secondary">Try Again</span>')}</div>
+      <div class="task">${notice('warn', '--status-warning-fg', 'Q3-Invoice-Northwind.pdf was moved or renamed. atePDF still has its copy, but can\'t link back to the original.', '<span class="btn plain">Locate…</span>')}</div>`,
+    comp: composer({ ph: 'What next for Merged PDF?', chips: [] }) }), { w: 1024, h: 720 }) +
+  `<div class="vstack" style="gap:16px">${win(`<div class="scrim" style="position:absolute"><div class="sheet" role="dialog" style="width:var(--size-sheet-sm)"><div class="sh-body">${icc('trash', '--status-danger-fg', 20)}<h3>Start over?</h3><p class="m" style="margin:0;font:var(--type-ui);color:var(--text-secondary)">This clears the conversation and atePDF's copies of its PDFs and results on this Mac. Files you added and PDFs you've saved elsewhere stay unchanged.</p></div><div class="sh-foot" style="justify-content:space-between"><span class="btn plain">Save Current Result…</span><span class="hstack" style="gap:8px"><span class="btn secondary focus">Cancel</span><span class="btn danger">Start Over</span></span></div></div></div>`, { w: 460, h: 300 })}
+   ${win(`<div class="scrim" style="position:absolute"><div class="sheet" role="dialog" style="width:400px"><div class="sh-body">${icc('warn', '--status-warning-fg', 20)}<h3 style="font:var(--type-title2)">3 files with these names already exist in Downloads</h3></div><div class="sh-foot"><span class="btn plain">Cancel</span><span class="btn secondary">Replace</span><span class="btn primary">Keep Both</span></div></div></div>`, { w: 460, h: 240 })}</div>`,
+  'Safety limits (BILL-07) use the refusal pattern and never show an upgrade prompt. Destructive sheets never make the destructive button the default.']);
+
+S.push(['components', 'Components and states', 'Primitives in both appearances. Every state named in COMPONENT_INVENTORY is drawn here or in a screen above.',
+  `<div class="gallery" style="width:100%">${['light', 'dark'].map(t => `<div class="gpanel" data-theme="${t}">
+    <h4>Buttons: default · hover · pressed · focus · disabled · busy</h4>
+    <div class="hstack"><span class="btn primary">Save…</span><span class="btn primary hover">Save…</span><span class="btn primary pressed">Save…</span><span class="btn primary focus">Save…</span><span class="btn disabled">Save…</span><span class="btn primary" style="width:92px"><span style="--accent-text:var(--text-onAccent);display:inline-flex">${glyph()}</span>Saving…</span></div>
+    <div class="hstack"><span class="btn secondary">Keep Current Result</span><span class="btn secondary hover">Hover</span><span class="btn plain">Plain</span><span class="btn plain hover">Hover</span><span class="btn danger">Start Over</span><span class="btn dplain">Delete…</span></div>
+    <h4>Tags, pills, keycaps</h4>
+    <div class="hstack"><span class="tag cur">Current</span><span class="tag earl">Earlier</span><span class="tag ok">${ic('check', 12)}Verified</span><span class="tag warn">Quality changed</span><span class="tag bad">Unsupported</span><span class="tag lock">${ic('lock', 11)}Locked</span><span class="tag pro">Pro</span></div>
+    <div class="hstack"><span class="pill local">${ic('shield', 14)}On this Mac</span><span class="pill out">${ic('out', 14)}Leaves this Mac</span><span class="pill muted">${ic('cloudOff', 14)}atePDF AI unavailable</span>${kbd('⌘K')}${kbd('⌘.')}${kbd('⌥⌘I')}</div>
+    <h4>File rows: source · selected · importing · locked · unsupported · missing</h4>
+    <div class="group">${fileRow({ ...SOURCES[0], cls: 'hover', hover: `<span style="color:var(--text-tertiary)">${ic('grip', 14)}</span><span class="ib sm">${ic('x', 14)}</span>` })}${fileRow({ ...SOURCES[1], cls: 'sel' })}${fileRow({ n: 3, name: 'Signed-Appendix-scan.pdf', facts: 'Checking…', kind: 'blank', tags: glyph() })}${fileRow({ n: 4, name: 'Contract-final.pdf', facts: 'Password needed', kind: 'locked', tags: '<span class="tag lock">' + ic('lock', 11) + 'Locked</span>' })}
+      <div class="row tall">${icc('ban', '--status-danger-fg', 18)}<div class="grow"><span class="name">Form-W9.pdf</span><span class="m">Can't be added: has form fields I can't preserve yet</span></div></div>
+      <div class="row tall">${icc('warn', '--status-warning-fg', 18)}<div class="grow"><span class="name">Q3-Invoice-Northwind.pdf</span><span class="m">Moved or unavailable · Locate…</span></div></div></div>
+    <h4>Fields, segmented, toggle, meters</h4>
+    <div class="hstack"><div class="field" style="width:160px">Placeholder</div><div class="field focus" style="width:160px"><span class="dots">••••••</span><span class="caret"></span></div><span class="seg"><span class="on">Monthly</span><span>Annual</span></span><span class="toggle on"></span><span class="toggle"></span></div>
+    <div class="vstack" style="gap:4px"><span class="m" style="color:var(--status-danger-fg);display:flex;gap:6px;align-items:center">${ic('cx', 12)}That password didn't work. Try again.</span></div>
+    <div class="vstack" style="gap:6px"><div class="meter"><b style="width:40%;background:var(--accent-fill)"></b></div><div class="meter"><b style="width:85%;background:var(--status-warning-fg)"></b></div><div class="meter"><b style="width:100%;background:var(--status-danger-fg)"></b></div></div>
+    <h4>Evidence proposal (UNDERSTAND-03)</h4>
+    <div class="card"><div class="hstack" style="gap:10px;align-items:flex-start;flex-wrap:nowrap">${icc('scan', '--text-secondary')}<div class="vstack" style="gap:6px;flex:1"><span style="font:var(--type-headline)">Remove these 2 pages?</span><span class="m">They look blank. Page 5 has faint marks, so check it first.</span>
+      <div class="hstack" style="gap:12px">${[['4', 'Looks blank', true], ['5', 'Faint marks', false]].map(([p, r, on]) => `<span class="vstack" style="gap:4px;align-items:center;padding:4px;border-radius:var(--radius-md);${on ? 'background:var(--surface-selected);box-shadow:inset 0 0 0 1px var(--accent-subtleBorder)' : ''}">${thumb(54, 72, 'blank')}<span class="m">p. ${p} · ${r}</span></span>`).join('')}</div>
+      <div class="hstack"><span class="btn primary">Remove 1 Page</span><span class="btn plain">Cancel</span></div></div></div></div>
+    <h4>Activity glyph · stages</h4>
+    ${activity({ label: 'Checking 3 PDFs', detail: '2 of 3 checked', marker: 'local' })}
+    ${activity({ label: 'Still waiting for atePDF AI', detail: 'You can stop; nothing has changed.', marker: 'ai' })}
+    <h4>Composer states</h4>
+    ${composer({ typed: 'Merge these and put the invoice first', send: 'on', focus: true }).replace('composer-wrap', 'composer-wrap" style="padding:0')}
+    ${composer({ typed: 'password is hunter2', warn: 'That looks like a password. Use the secure field so it stays out of the chat.', send: 'off' }).replace('composer-wrap', 'composer-wrap" style="padding:0')}
+  </div>`).join('')}</div>`]);
+
+/* ——— Render ——— */
+const only = new URLSearchParams(location.search).get('only');
+document.getElementById('doc').innerHTML = S.filter(s => !only || s[0] === only).map(s => section(...s)).join('');
+if (only) document.querySelector('.page-head').style.display = 'none';
+document.getElementById('nav').innerHTML = S.map(([id, t]) => `<a href="#${id}">${t.replace(/<[^>]+>/g, '').split(' (')[0].split(' · ')[0]}</a>`).join('');
+const setTheme = t => { document.documentElement.dataset.theme = t; document.querySelectorAll('[data-set]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.set === t))); try { localStorage.setItem('atepdf-mock-theme', t); } catch (e) {} };
+document.querySelectorAll('[data-set]').forEach(b => b.addEventListener('click', () => setTheme(b.dataset.set)));
+const q = new URLSearchParams(location.search).get('theme');
+let saved = null; try { saved = localStorage.getItem('atepdf-mock-theme'); } catch (e) {}
+setTheme(q || saved || 'light');
+if (location.hash) { const el = document.querySelector(location.hash); if (el) el.scrollIntoView(); }
+</script>
+</body>
+</html>

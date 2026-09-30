@@ -1,7 +1,8 @@
 import {build} from 'esbuild';
-import {readFile} from 'node:fs/promises';
+import {mkdtemp,readFile,rm,writeFile} from 'node:fs/promises';
 import {createRequire} from 'node:module';
-import {resolve} from 'node:path';
+import {tmpdir} from 'node:os';
+import {join,resolve} from 'node:path';
 import type {JobController} from '../../packages/core/src/job-controller';
 import type {WorkspaceVaultBackend} from '../../packages/core/src/workspace-vault';
 
@@ -32,8 +33,14 @@ export async function workspaceHook(controller:JobController, options:{sampleFil
     build.onLoad({filter:/.*/,namespace:'hook'},args=>({contents:args.path==='react'?`const h=globalThis.__atepdfHook.hooks; export const {createContext,useContext,useState,useRef,useMemo,useSyncExternalStore,useEffect}=h;export default h;`:args.path==='runtime'?runtimeSource:args.path==='planner'?plannerSource:`export const createWorkspaceBackend=globalThis.__atepdfHook.createWorkspaceBackend;`,loader:'js'}));
     build.onLoad({filter:/.*/,namespace:'ui'},()=>({contents:`export default ()=>null; export const jsx=()=>null,jsxs=()=>null,Fragment=()=>null,setStringAsync=()=>{},Platform={OS:'test'},View=()=>null,Text=()=>null,Image=()=>null,Pressable=()=>null,TextInput=()=>null,ScrollView=()=>null,Modal=()=>null,Keyboard={},useWindowDimensions=()=>({width:1000,height:1000}),SafeAreaProvider=()=>null,SafeAreaView=()=>null,AssistantRuntimeProvider=()=>null,useExternalStoreRuntime=()=>null,useAuiState=()=>null,Thread=()=>null,Icon=()=>null,nativeComposerComponents={},resetComposerInput=()=>{},JobActivity=()=>null,useAnnounce=()=>{},useMotion=()=>false;`,loader:'js'}));
   }}]});
-  const module={exports:{} as any};new Function('require','module','exports',output.outputFiles[0].text)(createRequire(import.meta.url),module,module.exports);
-  function render(){cursor=0;view=module.exports.useWorkspace();for(const effect of effects.splice(0))effect();return view;}
+  const bundleDirectory=await mkdtemp(join(tmpdir(),'atepdf-hook-'));
+  const bundlePath=join(bundleDirectory,'workspace.cjs');
+  let workspace:{useWorkspace:()=>any};
+  try{
+    await writeFile(bundlePath,output.outputFiles[0].text,{flag:'wx',mode:0o600});
+    workspace=createRequire(import.meta.url)(bundlePath);
+  }finally{await rm(bundleDirectory,{recursive:true,force:true});}
+  function render(){cursor=0;view=workspace.useWorkspace();for(const effect of effects.splice(0))effect();return view;}
   function schedule(){if(queued||disposed)return;queued=true;queueMicrotask(()=>{queued=false;if(!disposed)render();});}
   const unsubscribe=controller.subscribe(schedule);render();
   return {get view(){return render();},async flush(){for(let i=0;i<8;i++)await new Promise(done=>setTimeout(done,0));return render();},dispose(){disposed=true;unsubscribe();cleanups.forEach(fn=>fn?.());}};

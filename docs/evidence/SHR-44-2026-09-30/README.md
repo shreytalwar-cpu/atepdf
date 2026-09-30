@@ -4,7 +4,7 @@
 
 ## Before the change
 
-The first nine ownership regressions exercised the actual `useWorkspace` hook with deterministic state/effect slots and delayed OS/transport promises. All nine reached their assertions and failed on the original App source; [baseline-hook.log](baseline-hook.log) records the failures. This is orchestration evidence, not a native UI run. The final browser tests exercise the real React interface with local PDF fixtures and mocked transport.
+The first nine ownership regressions exercised the actual `useWorkspace` hook with deterministic state/effect slots and delayed OS/transport promises. All nine reached their assertions and failed on the original App source; [baseline-hook.log](baseline-hook.log) records the failures. This is orchestration evidence, not a native UI run. The hook harness loads its compiled repository-source bundle from a private temporary file and removes it immediately after loading. The final browser tests exercise the real React interface with local PDF fixtures and mocked transport.
 
 | Requested reproduction | Main-source behavior |
 | --- | --- |

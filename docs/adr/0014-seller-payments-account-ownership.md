@@ -1,23 +1,23 @@
 # ADR 0014 — Seller, direct payments and cross-channel account ownership (SHR-85)
 
-**Status:** **Proposed — pending owner approval of SELL-1 to SELL-10** (section 20). This is a commercial and account architecture decision. No company was incorporated, no developer or payment account was created or changed, no Terms were accepted, no product, price or checkout was configured and no transaction was made.  **Source:** `origin/main` `ff3e29184b5bf039cc8938f71bbdb60f93f4ba7b` (30 September 2026).  **Authority:** `PRODUCT_V1.md` D-01/D-07/D-08/D-09, BILL-01–10, DIST-01–06, OPEN-04, G-08; [SHR-85](https://linear.app/shrey-talwar/issue/SHR-85/decide-seller-direct-payments-and-cross-channel-account-ownership) (parent SHR-28); ADR 0011 (SHR-34, ENV-7 Setapp as an intended channel); ADR 0012 (SHR-35, H-09 relay-only identity, N-07 no device identifiers).  **Evidence:** [docs/evidence/SHR-85-2026-09-30](../evidence/SHR-85-2026-09-30/README.md) — machine-readable acceptance cases.
+**Status:** **Partially approved** by Shrey on 30 September 2026. **SELL-2 to SELL-10 are approved** (SELL-4 with a modification). **SELL-1 (legal seller) remains pending** owner facts; only its architectural principle is approved (section 20). This is a commercial and account architecture decision. No company was incorporated, no developer or payment account was created or changed, no Terms were accepted, no product, price or checkout was configured and no transaction was made.  **Source:** `origin/main` `ff3e29184b5bf039cc8938f71bbdb60f93f4ba7b` (30 September 2026).  **Authority:** `PRODUCT_V1.md` D-01/D-07/D-08/D-09, BILL-01–10, DIST-01–06, OPEN-04, G-08; [SHR-85](https://linear.app/shrey-talwar/issue/SHR-85/decide-seller-direct-payments-and-cross-channel-account-ownership) (parent SHR-28); ADR 0011 (SHR-34, ENV-7 Setapp as an intended channel); ADR 0012 (SHR-35, H-09 relay-only identity, N-07 no device identifiers).  **Evidence:** [docs/evidence/SHR-85-2026-09-30](../evidence/SHR-85-2026-09-30/README.md) — machine-readable acceptance cases.
 
 This ADR defines who sells atePDF, which systems hold the truth about who has paid, when a person needs an atePDF account, and how the three Mac channels (Mac App Store, direct download, Setapp) coexist without double charges or hostage files. It is the policy that SHR-86 (ledger), SHR-87 (StoreKit), SHR-88 (direct payments), SHR-89 (Mac paywall/integration) and SHR-91 (channel identities) implement or build on. It does not choose prices, allowance sizes or charging events (SHR-84), and it does not choose the AI service or relay provider (SHR-79).
 
-## 1. Summary of the recommendation
+## 1. Summary of the decision
 
-| Area | Recommendation |
+| Area | Decision |
 |---|---|
-| Seller (SELL-1) | Sell under the entity that will own atePDF long term, from the first paid sale. If that entity does not exist and verify in time, sell as Shrey individually and convert later. **Owner facts required** (section 3.4). |
-| Direct payments (SELL-2) | **Paddle Billing** as merchant of record. Polar is the fallback if Paddle declines the seller. Plain Stripe is not recommended. |
-| Accounts (SELL-3) | **Guest-first.** No account to try atePDF or to buy in the App Store. An atePDF account is **required to buy direct** and **optional** for App Store users who want cross-channel access. No accounts in the Setapp build. |
-| Login (SELL-4) | **Email one-time code**, entered in the app. No passwords. No Sign in with Apple in v1. Passkeys later. |
-| Cross-channel (SELL-5) | App Store ↔ direct through an optional linked atePDF account. Setapp is isolated in both directions. |
-| Setapp (SELL-6) | Setapp build has no paywall and no atePDF account. Access is verified server-side through Setapp's Vendor API. |
-| Devices (SELL-7) | No device cap. Commercial limits are per account (SHR-84). Visible session list with remote sign-out. Family Sharing off. |
-| Double subscription (SELL-8) | Server refuses to start a second paid subscription for an account that already has verified Pro. Paywalls show the active channel. Where status is unknown, warn. |
-| Restore (SELL-9) | Purchases are restored from the channel's own record (Apple, Paddle, Setapp) through the server ledger. Nothing depends only on local state. |
-| Migration (SELL-10) | Yes, as a light v1 requirement: seller-neutral identifiers and a seller field on every purchase record. Full corporate migration is not designed here. |
+| Seller (SELL-1) | **Pending.** Principle approved: one long-term seller identity where practical; the long-term company if it exists and is ready before the first paid launch; an individual launch only after explicit owner approval; keep migration flexibility. The legal seller is not chosen until the section 3.4 facts are supplied. |
+| Direct payments (SELL-2) | **Approved:** Paddle Billing as merchant of record, subject to actual eligibility and verification at signup. Polar only if Paddle onboarding or availability fails. |
+| Accounts (SELL-3) | **Approved:** guest-first. No account to try atePDF or to buy in the App Store. An atePDF account is required for a direct purchase, for cross-channel entitlement linking and for restore/recovery where server identity is needed. No accounts in the Setapp build. Signup never grants another guest allowance. |
+| Login (SELL-4) | **Approved with modification:** email one-time code is the required, common login for every supported channel. No passwords. Sign in with Apple is optional and deferred; v1 must not depend on it. Passkeys later. |
+| Cross-channel (SELL-5) | **Approved:** App Store ↔ direct through a linked atePDF account, verified server-side, with channel-local fallback if App Review rejects it. Setapp is isolated in both directions. |
+| Setapp (SELL-6) | **Approved:** Setapp build has no paywall, no upsell and no required atePDF account. Access is verified through the approved Setapp integration. |
+| Devices (SELL-7) | **Approved:** no fixed device cap. Commercial limits are per account (SHR-84). Visible session list with remote sign-out. Family Sharing off. |
+| Double subscription (SELL-8) | **Approved.** Server refuses to start a second paid subscription for an account that already has verified Pro. Paywalls show the active channel. Where status is unknown, warn. |
+| Restore (SELL-9) | **Approved.** Purchases are restored from the channel's own record (Apple, Paddle, Setapp) through the server ledger. Nothing depends only on local state. |
+| Migration (SELL-10) | **Approved** as a light v1 requirement: seller-neutral identifiers and a seller field on every purchase record. Full corporate migration is not designed here. |
 
 ## 2. Current state
 
@@ -48,11 +48,14 @@ This ADR defines who sells atePDF, which systems hold the truth about who has pa
 | Later migration | **Apple:** an individual membership can be converted to an organisation by request if Shrey is founder/co-founder, with a D-U-N-S number [A-CONVERT]. This keeps the apps in place. **Paddle:** each business needs its own account [P13]; moving subscribers to a new entity is **not documented as self-serve**. **Setapp:** unknown. | Moving from this company to another is an app transfer (Apple) plus a provider migration (Paddle) | No later migration if it is the first seller |
 | Main cost | Personal name is public; later direct-subscriber migration | Commits atePDF to that company | Launch dependent on formation timeline |
 
-### 3.3 Recommendation
+### 3.3 Approved principle (SELL-1 itself pending)
 
-- Use **one seller for all three channels**, so receipts, support, refunds and the privacy policy name one party.
-- **If the Attenlo (or other long-term) entity will be formed and verified before the first paid sale, use it everywhere (S-C).** This avoids any later subscriber migration.
-- **Otherwise launch as Shrey individually (S-A)** and do not block v1 on incorporation. Apple converts in place. The direct channel carries the migration cost, so the ledger stays seller-neutral (section 16) and any migration should happen while the direct subscriber base is small.
+Shrey approved this principle on 30 September 2026. It does **not** choose the legal seller.
+
+- Use **one long-term seller identity** across the channels where practical, so receipts, support, refunds and the privacy policy name one party.
+- **Prefer the long-term company** if it exists and is ready (formed, verified, D-U-N-S) before the first paid launch.
+- **An individual launch (S-A) may be used only after explicit owner approval.** It is not a default. If approved, Apple converts in place later; the direct channel carries the migration cost, so any migration should happen while the direct subscriber base is small.
+- **Preserve migration flexibility** (SELL-10, section 16).
 - "Attenlo Labs" must not appear as the legal seller unless it is a legal entity.
 
 ### 3.4 Facts that require owner confirmation (blockers, not assumptions)
@@ -76,13 +79,13 @@ All Apple facts are from primary Apple documentation accessed 30 September 2026 
 | atePDF association | Set `appAccountToken` (a UUID) at purchase [A-AAT]. atePDF uses a **random per-subject purchase token**, not the account ID. The server-side *Set App Account Token* endpoint can set or replace it for current and future renewals, not past transactions, and not for Family Shared transactions [A-SETAAT] |
 | Entitlement owner | **Apple** owns the subscription state. atePDF's server keeps a **verified mirror** (signed transactions, `Get All Subscription Statuses`, V2 notifications including `SUBSCRIBED`, `DID_RENEW`, `DID_FAIL_TO_RENEW`, `GRACE_PERIOD_EXPIRED`, `EXPIRED`, `REFUND`, `REFUND_REVERSED`, `REVOKE`) [A-NOTIF] |
 | Restore | `Transaction.currentEntitlements` returns active/grace subscriptions, excluding refunded/revoked [A-CE]. `AppStore.sync()` shows a sign-in prompt, so call it **only** from an explicit Restore Purchases button [A-SYNC]. Guideline 3.1.1 says apps **should** provide a restore mechanism; atePDF will |
-| Family Sharing | Per product, and **cannot be turned off once enabled** [A-FAMILY]. Recommended **off** for v1 (SELL-7) |
+| Family Sharing | Per product, and **cannot be turned off once enabled** [A-FAMILY]. **Off** for v1 (SELL-7, approved) |
 | Subscription management | `showManageSubscriptions`/`manageSubscriptionsSheet` are **not supported on macOS**; Apple says to avoid them in Mac Catalyst [A-MANAGE]. The Store build opens the App Store subscriptions page instead (exact URL verified in SHR-87) |
 | Refunds | Apple issues them; the developer may not (DPLA Attachment 2 §3.4) [A-DPLA]. `beginRefundRequest(in:)` is available on Mac Catalyst 15+ [A-REFUND]; otherwise reportaproblem.apple.com [A-SUPPORT] |
 | Commission | 30% standard, 15% on subscription renewals after one year; 15% from day one in the Small Business Program (≤ $1M proceeds in the prior year) [A-DPLA][A-SBP]. Sourced estimate; verify at enrolment |
 | Recognising purchases made elsewhere | Guideline 3.1.3(b) (Multiplatform Services) allows access to subscriptions bought on the developer's website **provided those items are also available as in-app purchases** [A-GUIDE]. atePDF's Store build therefore always sells Pro through StoreKit too |
 | Steering | Outside the US storefront, the app may not include buttons, links or calls to action to other purchase methods (3.1.1, 3.1.3) [A-GUIDE]. The US storefront changes of 1 May 2025 [A-US] and the EU macOS terms effective 1 October 2026 (DPLA Attachment 14) [A-DMA] are **not adopted for v1**: they need separate terms, entitlements and review, and would split behaviour by storefront |
-| Developer ID builds | In-App Purchase and Sign in with Apple are **App Store-only** capabilities on macOS [A-CAP]. The direct build cannot use StoreKit; it needs its own payment provider. No Apple rule restricting third-party payment in Developer ID apps was found (absence of evidence) |
+| Developer ID builds | Apple's macOS capability table lists In-App Purchase as **App Store-only** [A-CAP]. The direct build cannot use StoreKit; it needs its own payment provider. The same table lists Sign in with Apple as unavailable with Developer ID; whether another Sign in with Apple route is viable for the direct build is **unverified** and left to SHR-91 (SELL-4). No Apple rule restricting third-party payment in Developer ID apps was found (absence of evidence) |
 
 **What this means.** The App Store build can *honour* a direct purchase but can never *sell* or point to one outside the US/EU exceptions. An App Store purchase is visible to other builds only through atePDF's own server ledger, never through StoreKit.
 
@@ -107,13 +110,13 @@ Fees are **sourced estimates from the providers' own pages on 30 September 2026;
 | Status risk | — | — | Not open to IN/AE sellers | Owner's 2026 post: slower support, migration path to Stripe Managed Payments [L8] | Newer provider |
 | Mac-software/AI policy | Compatible as far as the AUP shows (PDF tool not a prohibited category; inference) [P12] | Compatible [S15] | AI tax codes eligible [S4] | No conflict found [L11] | Not researched |
 
-**Recommendation: Paddle Billing (SELL-2).**
+**Approved: Paddle Billing (SELL-2)**, subject to actual eligibility and verification at signup.
 - It is the only mature MoR that is open to both candidate seller locations, individual or company.
 - MoR means no per-country VAT/GST registration for a solo founder.
 - It handles chargebacks and has the clearest documented card-portability promise, which matters for SELL-10.
 - It has a hosted customer portal, so atePDF does not build billing management.
 - Limitation: Paddle Billing has **no native license keys** and its Mac SDK is Classic-only [P9]. atePDF does not need either: the atePDF account plus the server ledger **is** the licence. The Paddle page also notes products under $10 need custom pricing [P4]; check against SHR-84 prices.
-- **Fallback:** Polar, if Paddle rejects the seller. **Not recommended:** plain Stripe (seller becomes merchant and owns global tax compliance; India invite-only), Stripe Managed Payments (not available to India/UAE sellers), Lemon Squeezy (declared reduced investment and migration toward Stripe Managed Payments).
+- **Fallback:** Polar, only if Paddle onboarding or availability fails. **Not recommended:** plain Stripe (seller becomes merchant and owns global tax compliance; India invite-only), Stripe Managed Payments (not available to India/UAE sellers), Lemon Squeezy (declared reduced investment and migration toward Stripe Managed Payments).
 - Paddle's refund discretion means atePDF's own direct refund policy sits inside Paddle's buyer policy, not above it.
 
 ## 6. Setapp (Task 4)
@@ -132,8 +135,8 @@ Facts from public docs.setapp.com pages and Setapp support, accessed 30 Septembe
 | Revenue | 70% of each member's fee split by apps used, weighted by a price tier set from the annual price outside Setapp, which must have been **in effect for at least 3 months** [SA-REV] |
 | Setapp AI Gateway | OpenAI-compatible proxy using the user's Setapp AI credits [SA-AI]. **Not adopted in v1:** it is a different AI recipient that needs its own SHR-79/ADR 0012 disclosure record |
 
-**Setapp policy (SELL-6).**
-1. The Setapp build shows **no paywall, price, purchase, restore-purchase or atePDF sign-in**.
+**Setapp policy (SELL-6, approved).**
+1. The Setapp build shows **no paywall, price, purchase, restore-purchase, external/direct upsell or required atePDF sign-in**. v1 offers no atePDF sign-in there at all (guideline 7.3 risk).
 2. At launch it obtains a Vendor API authorisation code and sends it to the atePDF server. The server exchanges it, checks `granted`, and creates or finds a `subject` keyed by the Setapp `sub`. The client never asserts Setapp status.
 3. An active Setapp member gets the **Pro service level** under a Setapp-specific allowance defined in SHR-84, because Setapp forbids charging on top of the membership. At that limit, atePDF says when it resets and does **not** upsell.
 4. Setapp access is not recognised in the App Store or direct builds, and App Store/direct purchases are not recognised in the Setapp build (section 9).
@@ -144,13 +147,14 @@ Facts from public docs.setapp.com pages and Setapp support, accessed 30 Septembe
 
 ## 7. Account requirement (Task 5)
 
-**Chosen: A with one condition (SELL-3).**
+**Approved: A with one condition (SELL-3).**
 
 | Situation | Account? |
 |---|---|
 | Trying atePDF, using the guest allowance | **No** (BILL-01, UX-01) |
 | Buying Pro in the App Store build | **No.** The Apple Account is the purchase identity |
 | Buying Pro in the direct build | **Yes, at checkout** (email code). A direct purchase needs a recoverable, verifiable owner; an anonymous direct subscription could not be restored on a new Mac |
+| Restore/recovery that needs server identity (for example, a direct purchase on a new Mac, or recovering a linked cross-channel entitlement) | **Yes** (sign in) |
 | Using a direct purchase in the App Store build, or an App Store purchase in the direct build | **Yes** (sign in to link) |
 | Pro on several Macs in the same channel | App Store: no (same Apple Account). Direct: yes (sign in) |
 | Setapp build | **No accounts** |
@@ -212,7 +216,7 @@ Coordinated conceptually with SHR-79 (still in progress) and bound by ADR 0012 H
 
 ## 11. Double-subscription prevention (Task 9)
 
-**SELL-8 policy.**
+**SELL-8 policy (approved).**
 1. **Show before selling.** Every paywall first asks the server for the subject's entitlement. If Pro is active, it shows "You have atePDF Pro through {App Store | direct | Setapp}. Manage it there." with the correct management route (section 13) instead of a buy button.
 2. **Direct: hard block.** The server refuses to create a Paddle checkout for an account that has any verified active Pro, from any channel. Checkout requires sign-in first, so the server always knows the account.
 3. **App Store: native check first.** The Store build checks `Transaction.currentEntitlements` before showing the purchase button. If this Apple Account already has Pro, it offers Restore, not Buy. StoreKit itself prevents two active subscriptions in one subscription group for one Apple Account.
@@ -252,20 +256,21 @@ Purchase recovery never depends only on local state.
 
 | Option | Fits App Store + direct? | Burden | Verdict |
 |---|---|---|---|
-| **Email one-time code** | Yes; atePDF's own sign-in is exempt from guideline 4.8 [A-GUIDE] | Low: send and verify a code, rate-limit | **Chosen (SELL-4)** |
+| **Email one-time code** | Yes, in every channel; atePDF's own sign-in is exempt from guideline 4.8 [A-GUIDE] | Low: send and verify a code, rate-limit | **Required v1 login (SELL-4)** |
 | Magic link | Yes | Needs link return into a sandboxed and a Developer ID app; mail scanners can pre-open links | Not in v1 |
-| Sign in with Apple | **No** for the direct build: App Store-only capability on macOS [A-CAP]; hidden relay emails do not match Paddle receipt emails | Medium | Not in v1 |
+| Sign in with Apple | Unverified for the direct build: Apple's capability table lists it as unavailable with Developer ID [A-CAP], but other routes are not assessed. Hidden relay emails do not match Paddle receipt emails | Medium | **Optional, deferred.** SHR-91 may verify viability across the final signing and identity setup. v1 must not depend on it |
 | Email + password | Yes | Password storage, reset, breach handling | Rejected |
 | Passkeys | Later, once an account exists | Medium | Later |
 
+- **SELL-4 as approved:** email one-time code is the required, common login method for every supported channel. No passwords. Sign in with Apple is optional and deferred; SHR-91 may verify whether it is viable across the final App Store/direct signing and identity setup; v1 must not depend on it. This keeps the account architecture channel-neutral.
 - Codes: short-lived, single-use, rate-limited per email and per installation. The session refresh token lives in the Keychain.
-- **Build or buy** of the code-sending/identity piece belongs to SHR-79/SHR-86 with the service choice. The requirement is small: no passwords, no social login, no identity platform.
+- **Build or buy** of the code-sending/identity piece belongs to SHR-79/SHR-86 with the service choice. The requirement is small: no passwords, no identity platform, and no dependency on any social or platform login.
 - **Account deletion** is available in-app in the Store and direct builds (5.1.1(v)). It deletes the account and links. It **cancels a direct renewal at Paddle** (with a clear statement that no refund is implied). It tells App Store users that their Apple subscription continues until they cancel it with Apple. Local files are untouched.
 - **Sessions:** Settings lists signed-in installations by channel, app version and last-seen date. It shows no device names (N-07). The user can sign any of them out.
 
 ## 15. Device policy (Task 11)
 
-**SELL-7 recommendation: no device cap in v1.**
+**SELL-7 approved: no fixed device cap in v1.** No device-count policy is promised unless later evidence requires one.
 - Hosted cost is metered **per subject** (SHR-84 Pro limits). Sharing an account spreads one allowance; it does not multiply cost. A device count would add friction without protecting cost.
 - A normal user with a desktop and a laptop is not blocked or asked to deauthorise anything.
 - **Abuse controls** are server-side: per-subject rate and concurrency limits, and review of anomalous patterns (for example, many simultaneous sessions from unrelated networks). They are safety/abuse controls, not commercial device limits, and never say "upgrade" (BILL-07).
@@ -282,11 +287,11 @@ Full corporate migration is not designed here. The v1 architecture avoids bindin
 1. **Seller-neutral user identity.** A user's atePDF account is an email + `subject`, with no seller ID in it. Changing seller never changes a user's account.
 2. **Seller on every purchase record** (`seller_account_ref`), so two sellers' records can coexist during a changeover.
 3. **Seller-neutral product and bundle identifiers.** No personal names in bundle IDs, StoreKit product IDs, Paddle product names or Keychain groups. Final IDs are chosen in SHR-91/87/88.
-4. **Apple:** prefer converting an individual membership to an organisation (apps stay in place) [A-CONVERT] over an app transfer. If a transfer is ever needed: no App Group container shared with another Mac app, no Sign in with Apple, keep IAP product IDs unique [A-TRANSFER]. Whether active subscriptions survive a transfer uninterrupted is **unverified**.
+4. **Apple:** prefer converting an individual membership to an organisation (apps stay in place) [A-CONVERT] over an app transfer. If a transfer is ever needed: no App Group container shared with another Mac app, keep IAP product IDs unique, and if Sign in with Apple is ever adopted, plan for its per-user transfer identifiers [A-TRANSFER]. Whether active subscriptions survive a transfer uninterrupted is **unverified**.
 5. **Paddle:** each legal entity has its own Paddle account [P13]; moving subscribers means migrating card data under Paddle's portability commitment [P8] and re-creating subscriptions. Keep direct subscriber count and complexity low before any change.
 6. **Setapp:** vendor-account change process unknown; verify before signing.
 
-**SELL-10 recommendation:** items 1–4 are v1 requirements because they cost almost nothing now. Items 5–6 are documented risks.
+**SELL-10 approved:** light seller-migration flexibility is a v1 architectural requirement: seller-neutral internal user/account/entitlement identifiers; an explicit seller and channel field on every purchase record; external provider transaction IDs kept separately from internal IDs; no schema that makes a future Apple app transfer or payment-provider migration unnecessarily impossible. Items 1–4 apply now. Items 5–6 are documented risks. No migration system is built now.
 
 ## 17. Commercial responsibility matrix (Task 14)
 
@@ -387,28 +392,28 @@ Machine-readable: [`seller-account-cases.json`](../evidence/SHR-85-2026-09-30/se
 
 **Not verified from a primary source** (do not rely on without checking): whether the US storefront link-out change covers the Mac App Store; whether active subscriptions survive an Apple app transfer uninterrupted; US Stripe pricing (pages were geolocated); whether Lemon Squeezy still onboards new sellers long term; Setapp portal-only contract terms, sandbox entitlement page and vendor-account change process; whether a mandatory account is acceptable in a Setapp build.
 
-## 20. Owner decisions (pending)
+## 20. Owner decisions (30 September 2026)
 
-Each item needs Shrey's explicit approval, rejection or modification. Nothing dependent (SHR-86/87/88/89/91 code, account enrolment, provider signup, Terms) may start on an unapproved item.
+Shrey reviewed PR #103 on 30 September 2026. **SELL-2 to SELL-10 are approved; SELL-1 remains pending.** SHR-85 stays In Review and is not Done while SELL-1 is unresolved. No account enrolment, provider signup or Terms acceptance is authorised by these approvals. Dependent work that needs the legal seller (account enrolment, provider signup, seller names in listings or receipts) waits for SELL-1.
 
-| ID | Decision needed | Recommendation | Owner facts needed |
-|---|---|---|---|
-| **SELL-1** | Legal seller and account owner for v1 (Apple, Paddle, Setapp) | One seller for all channels. The long-term entity if formed and verified before the first paid sale; otherwise Shrey as individual with in-place Apple conversion later. "Attenlo Labs" is not a seller unless it is a legal entity | §3.4 items 1–6 |
-| **SELL-2** | Direct payment provider | Paddle Billing (MoR). Fallback Polar. Not Stripe, Stripe Managed Payments or Lemon Squeezy. Also: set a direct refund window with SHR-84 before SHR-88 | Paddle eligibility of the SELL-1 seller |
-| **SELL-3** | Whether and when atePDF accounts are required | Guest-first. Required only to buy direct and to use cross-channel. Optional for App Store buyers. None in the Setapp build. Signup never adds allowance | — |
-| **SELL-4** | Login method | Email one-time code; no passwords; no Sign in with Apple in v1; passkeys later | — |
-| **SELL-5** | Cross-channel entitlement policy | App Store ↔ direct via linked account; Store build never shows direct prices/links; channel-local fallback if App Review objects. Setapp isolated. US/EU steering options not used in v1 | — |
-| **SELL-6** | Setapp account/linking policy | No paywall, no atePDF account; server-side Vendor API verification; Setapp-specific allowance from SHR-84 with no upsell; no Setapp AI Gateway in v1; BILL-04 conflict resolved in SHR-91 | — |
-| **SELL-7** | Device policy | No device cap; per-subject commercial limits; server abuse limits; session list with remote sign-out; Family Sharing off | — |
-| **SELL-8** | Double-subscription prevention | Section 11: show active channel first; server hard-block for direct; StoreKit check in Store build; warn when unknown; show both if detected | — |
-| **SELL-9** | Restore/recovery architecture | Section 12: channel owner + server ledger; installation secret in Keychain; email-code account recovery; support-assisted recovery with purchase proof | — |
-| **SELL-10** | Seller-migration flexibility as a v1 requirement | Yes, light: seller-neutral IDs, `seller_account_ref` on every purchase, no App Group shared across Mac apps, no Sign in with Apple. Full migration not designed | — |
+| ID | Decision | Status and approved outcome |
+|---|---|---|
+| **SELL-1** | Legal seller and account owner for v1 | **PENDING owner facts** (section 3.4): tax residence; whether a legal entity already exists that should own atePDF; Apple Developer membership ownership and type; whether and when an Attenlo legal entity will exist; payout-bank country; whether Shrey is willing to have his personal legal name appear as seller if atePDF launches individually. **Principle approved:** one long-term seller identity where practical; prefer the long-term company if it exists and is ready before the first paid launch; otherwise an individual launch only after explicit owner approval; preserve migration flexibility. The legal seller is not guessed |
+| **SELL-2** | Direct payment provider | **APPROVED:** Paddle Billing is the preferred direct payment provider, subject to actual account eligibility and verification at signup. Polar remains the fallback only if Paddle onboarding or availability fails. No account is created and no Terms are accepted in this task. The direct refund window is set with SHR-84 before SHR-88 |
+| **SELL-3** | Whether and when atePDF accounts are required | **APPROVED:** guest-first; no account to try atePDF. An account is required for a direct purchase, cross-channel entitlement linking, and restore/recovery where server identity is needed. An App Store purchase itself does not require an atePDF account. Signing up never grants another guest allowance |
+| **SELL-4** | Login method | **APPROVED WITH MODIFICATION:** email one-time code is the required, common login method for every supported channel. No passwords. Sign in with Apple is optional and deferred; SHR-91 may verify whether it is viable across the final App Store/direct signing and identity setup; v1 must not depend on it. The account architecture stays channel-neutral. (This replaces the proposal's "no Sign in with Apple in v1" and its claim that the direct build cannot use it) |
+| **SELL-5** | Cross-channel entitlement policy | **APPROVED:** App Store and direct Pro entitlements may be recognised in each other's builds through a linked atePDF account, provided the same Pro feature set is also offered through App Store IAP; the App Store build shows no direct checkout pricing or links where Apple policy does not permit them; entitlement is verified server-side; and if App Review or final policy verification rejects the model, the Store build falls back to channel-local App Store entitlement without breaking existing purchases. Setapp remains isolated |
+| **SELL-6** | Setapp account/linking policy | **APPROVED:** Setapp build has no atePDF paywall, no external/direct subscription upsell and no required atePDF account; entitlement is verified through the approved Setapp integration; Pro-level app functionality while active; allowance/service policy defined later by SHR-84; no recognition of Paddle/App Store purchases in the Setapp build and no recognition of Setapp entitlement in App Store/direct builds; Setapp's AI service is not used in v1 unless separately approved. **Open:** Setapp membership termination versus BILL-04 access to existing results must be resolved by SHR-91 before Setapp release |
+| **SELL-7** | Device policy | **APPROVED:** no fixed device cap in v1; server-side abuse controls; session/device list; remote sign-out; Family Sharing off. No device-count policy is promised unless later evidence requires one |
+| **SELL-8** | Double-subscription prevention | **APPROVED:** show the known entitlement channel before offering a purchase; block a second Paddle/direct checkout when an entitlement is already known; the App Store build checks verified Apple entitlement; warn when existing entitlement status cannot be confirmed; if two subscriptions exist anyway, show both and where each is managed |
+| **SELL-9** | Restore/recovery architecture | **APPROVED:** App Store — the Apple transaction is source evidence and the server stores verified entitlement state. Direct — the Paddle transaction/subscription is source evidence and the server stores verified entitlement state. Setapp — Setapp is the entitlement authority for the Setapp build. Guest — a local installation identity covers guest state, which can later link to an account without reset. Account recovery — email one-time code, plus support recovery using verified purchase evidence where needed. No paid entitlement may depend solely on local Mac storage |
+| **SELL-10** | Seller-migration flexibility | **APPROVED** as a light v1 architectural requirement: seller-neutral internal user/account/entitlement identifiers; explicit seller/channel field on purchase records; external provider transaction IDs kept separately; no schema that makes a future Apple app transfer or payment-provider migration unnecessarily impossible. No migration system is built now |
 
 ## 21. Downstream contract
 
 - **SHR-86 (ledger):** subjects, principals, purchase records with `seller_account_ref`, single-owner links, union entitlement, signed leases, guest linking keeps the lower allowance, abuse limits without fingerprinting, email-code auth (with SHR-79).
 - **SHR-87 (StoreKit):** `appAccountToken` = per-subject random token; server JWS verification and V2 notifications; Restore button only; App Store subscriptions page for management; `beginRefundRequest`; Family Sharing off; no steering.
-- **SHR-88 (direct):** bind to the SELL-2 provider actually approved; checkout only after sign-in and server duplicate check; signed webhooks; portal sessions from the server; account deletion cancels renewal.
+- **SHR-88 (direct):** bind to Paddle Billing (SELL-2) once the SELL-1 seller's account exists and passes verification; checkout only after sign-in and server duplicate check; signed webhooks; portal sessions from the server; account deletion cancels renewal.
 - **SHR-89 (Mac integration):** paywall states in section 11; management routes in section 13; account deletion and session list; acceptance cases in section 18.
-- **SHR-91 (channels):** three bundle IDs (Store, direct, `-setapp`); shared Keychain access group decision; no cross-app App Group; Setapp requirements and BILL-04 conflict; Setapp 3-month tier rule.
+- **SHR-91 (channels):** three bundle IDs (Store, direct, `-setapp`); shared Keychain access group decision; no cross-app App Group; Setapp requirements and the BILL-04 termination conflict (before Setapp release); Setapp 3-month tier rule; optionally, whether Sign in with Apple is viable across the final App Store/direct signing and identity setup (SELL-4; v1 does not depend on it).
 - **SHR-79/SHR-95:** relay-only identity (ADR 0012 H-09); abuse-log retention; Setapp AI Gateway stays out unless disclosed and approved.

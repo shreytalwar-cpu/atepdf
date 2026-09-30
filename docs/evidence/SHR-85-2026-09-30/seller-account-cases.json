@@ -1,24 +1,26 @@
 {
   "schema": "atepdf.seller-account-cases/1",
   "source": "docs/adr/0014-seller-payments-account-ownership.md section 18",
-  "status": "Proposed; pending owner approval of SELL-1 to SELL-10. Policy cases for SHR-86/87/88/89 tests, not evidence that anything is implemented.",
+  "status": "Partially approved by Shrey on 30 September 2026: SELL-2 to SELL-10 approved (SELL-4 with modification); SELL-1 (legal seller) pending owner facts. Policy cases for SHR-86/87/88/89 tests, not evidence that anything is implemented.",
   "policy": {
     "account_required": {
       "guest_use": false,
       "app_store_purchase": false,
       "direct_purchase": true,
       "cross_channel": true,
-      "setapp_build": "no_accounts"
+      "setapp_build": "no_accounts",
+      "restore_recovery_needing_server_identity": true
     },
-    "login": "email_one_time_code",
-    "sign_in_with_apple_v1": false,
+    "login": "email_one_time_code_required_all_channels",
+    "sign_in_with_apple": "optional_deferred_v1_must_not_depend_on_it",
+    "legal_seller": "pending_SELL-1",
     "device_cap": null,
     "family_sharing": false,
     "guest_link_allowance_rule": "keep_lower_remaining",
     "signup_top_up": false,
     "entitlement_sources": {
       "app_store": "apple",
-      "direct": "paddle_mor_proposed",
+      "direct": "paddle_billing_mor_approved_subject_to_signup_eligibility",
       "setapp": "setapp_vendor_api"
     },
     "client_self_assertion": "rejected",

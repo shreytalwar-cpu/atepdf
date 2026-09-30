@@ -1,10 +1,10 @@
 # SHR-85 evidence — seller, direct payments and cross-channel account ownership (30 September 2026)
 
-**Source:** `origin/main` `ff3e29184b5bf039cc8938f71bbdb60f93f4ba7b`.  **Decision record:** [ADR 0014](../../adr/0014-seller-payments-account-ownership.md) (proposed; pending owner approval of SELL-1 to SELL-10).
+**Source:** `origin/main` `ff3e29184b5bf039cc8938f71bbdb60f93f4ba7b`.  **Decision record:** [ADR 0014](../../adr/0014-seller-payments-account-ownership.md) (partially approved 30 September 2026: SELL-2 to SELL-10 approved, SELL-1 pending owner facts).
 
 | File | Content |
 |---|---|
-| [seller-account-cases.json](seller-account-cases.json) | The 37 acceptance cases from ADR 0014 section 18 (guest identity, App Store, direct, cross-channel/double subscription, Setapp, migration, device policy) and the proposed policy constants, for SHR-86/87/88/89 tests to consume once approved. Generated from the ADR table, so IDs and wording match it exactly. Policy cases only; they are not evidence that anything is implemented. |
+| [seller-account-cases.json](seller-account-cases.json) | The 37 acceptance cases from ADR 0014 section 18 (guest identity, App Store, direct, cross-channel/double subscription, Setapp, migration, device policy) and the approved policy constants (legal seller pending SELL-1), for SHR-86/87/88/89 tests to consume. Generated from the ADR table, so IDs and wording match it exactly. Policy cases only; they are not evidence that anything is implemented. |
 
 ## Research performed
 

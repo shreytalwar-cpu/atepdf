@@ -157,10 +157,10 @@ test('7 days: an idle workspace is deleted before the next action, and a shorter
 
 // P1-1: a picker or sample completion that arrives after Delete local data began must
 // not import, add to the conversation or save into the new, empty workspace.
-async function deleteNow(page:Page){
+async function deleteNow(page:Page,activeTask=true){
   const dialog=await openSettings(page);
   await dialog.getByRole('button',{name:'Delete Local Data…'}).click();
-  await expect(dialog).toContainText('The current task will be stopped first.');
+  if(activeTask)await expect(dialog).toContainText('The current task will be stopped first.');
   await dialog.getByRole('button',{name:'Delete',exact:true}).click();
   await expect(dialog.getByTestId('storage-status')).toHaveText('atePDF’s local data was deleted from this Mac.');
   await dialog.getByRole('button',{name:'Done'}).click();
@@ -240,7 +240,8 @@ test('B3 a connection response that arrives after Delete local data adds no mess
   const held=await holdFirstStatus(page);
   await page.getByRole('button',{name:'OpenAI connection'}).click();
   await expect.poll(()=>held.state.requests).toBe(1);
-  await deleteNow(page);
+  // A pending connection check is not a running task, so no stop warning is shown.
+  await deleteNow(page,false);
   const after={writes:await writes(page),stored:await stored(page)};
   expect(after.stored.filter(name=>name.startsWith('blobs/'))).toEqual([]);
   await staleResponseIsInert(page,held,after);

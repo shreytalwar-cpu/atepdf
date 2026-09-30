@@ -1,0 +1,69 @@
+ok  missing key is reported without creating one
+ok  key created only when asked
+ok  ATW1 + nonce + ciphertext + tag layout
+ok  PDF bytes are not stored in plaintext
+ok  round trip returns identical PDF bytes
+ok  round trip hash matches
+ok  different generation in associated data is refused
+ok  flipped tag byte is refused
+ok  truncated file is refused
+ok  missing file is reported
+ok  wrong key is refused
+ok  locked keychain is not replaced by a new key
+ok  locked keychain reads report locked
+ok  rejects storage name ../escape
+ok  rejects storage name /etc/passwd
+ok  rejects storage name blobs/../head
+ok  rejects storage name blobs/file_a.pdf
+ok  rejects storage name staging/x.tmp
+ok  rejects storage name manifests/0.atw
+ok  rejects storage name head/x
+ok  head is replaced atomically by rename
+ok  no staging leftovers after successful writes
+ok  interrupted staging files are removed
+ok  listing ignores unexpected files
+ok  remove deletes a sealed file
+ok  symbolic links are not followed
+ok  a workspace that was never created lists empty and has no head
+ok  an unreadable blob directory throws instead of listing empty
+ok  an unsearchable directory throws instead of reporting a missing file
+ok  an unreadable blob throws instead of reading as missing
+ok  an unreadable manifest directory throws instead of listing empty
+ok  an unreadable manifest file throws instead of reading as missing
+ok  an unlink whose directory sync fails is reported as a failed removal
+ok  the unlinked file no longer lists
+ok  removing it again is idempotent and confirms the removal with a successful directory sync
+ok  explicit directory syncs succeed on readable workspace directories
+ok  a directory sync that cannot open the directory throws
+ok  only workspace data directories can be synced by name
+ok  syncing a directory that was never created has nothing to commit
+ok  directory root is 0700
+ok  directory blobs is 0700
+ok  directory manifests is 0700
+ok  directory staging is 0700
+ok  sealed blob is 0600
+ok  head is 0600
+ok  workspace directory carries the backup-exclusion marker on disk after replacement
+ok  vault verifies the backup exclusion after replacement
+info Foundation isExcludedFromBackup read-back: true
+ok  a directory without the exclusion is not reported as excluded
+ok  query uses the Data Protection Keychain
+ok  query excludes synchronizable items
+ok  generic password item
+ok  key is WhenUnlockedThisDeviceOnly
+ok  keychain status mapping
+keychain-probe {"createStatus":"unavailable","rawAddOSStatus":-34018}
+ok  a workspace that was never created uses no storage
+ok  usage reports each sealed workspace file's on-disk size and staging, nothing else
+ok  measuring never changes a file outside the workspace
+ok  an unreadable workspace directory is an error, never zero usage
+ok  staging cleanup removes every staging file and verifies it is empty
+ok  a staging directory that was never created is clean
+ok  a staging file that cannot be unlinked is an error, and it stays
+ok  an unreadable staging directory is an error, never clean
+ok  retained staging bytes stay visible in usage
+ok  a later retry removes the retained staging file
+ok  a symbolic-link staging directory is refused and its target left untouched
+ok  Swift opens a file sealed by the TypeScript test backend
+SHR-39/SHR-40 native workspace checks passed
+ok  TypeScript backend opens a file sealed by Swift; different associated data is refused

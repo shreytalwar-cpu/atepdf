@@ -1,10 +1,10 @@
 # ADR 0013 — First complex-PDF preservation slice (SHR-49)
 
-**Status:** Proposed — awaiting Shrey's explicit CPDF-1–5 approval. Not implemented; not a support claim. SHR-49 stays In Review, not Done. SHR-50 must not start until approval and a separately bounded implementation instruction.
+**Status:** **Approved** by Shrey Talwar on 30 September 2026 — revision 2, CPDF-1–5. Approval applies to PR #95 at reviewed head `592bd7e403775f5365d72ebf11b55aed6d614c2e`. This is an approved target support contract, not implemented support. Public exposure waits for SHR-50 implementation and verification. SHR-49 stays In Review until merge, not Done. This documentation update does not start SHR-50 or authorize a release.
 
 **Date:** 30 September 2026. **Investigated source:** latest fetched `origin/main`, `37e970025eaff9be35a2b8d5fa0291d9c7eef0a5`. **Authority:** [PRODUCT_V1](../PRODUCT_V1.md) PDF-02–05/08, TOOL-01/03/15, ARCH-01/04/05, OPEN-07, G-03/07; [SHR-49](https://linear.app/shrey-talwar/issue/SHR-49/choose-an-evidence-backed-first-complex-pdf-compatibility-expansion), parent [SHR-21](https://linear.app/shrey-talwar/issue/SHR-21/strengthen-pdf-fidelity-verification). **Evidence:** [bounded probes and reproduction instructions](../evidence/SHR-49-2026-09-30/README.md).
 
-## 1. Proposed decision
+## 1. Approved decision
 
 Choose **preservation of simple absolute HTTP/HTTPS URI Link annotations during Merge only**, in otherwise admitted, unsigned, unencrypted PDFs. Use the existing pdf-lib writer and PDFKit independent reader. Add no engine or dependency. This is a finite compatibility exception, not support for complex PDFs generally or annotation creation/editing.
 
@@ -58,11 +58,11 @@ These contracts compare source identity and output page-tree membership, not obj
 | Forms | Preserve field/widget trees, types/names/values, appearance states/resources, widget-page binding and valid object references; collisions and calculation/actions require explicit policies; no silent flattening | Remove only widgets on removed pages; reconcile surviving fields/widgets and resources without dropping values or leaving dangling references | Current copying loses discoverable fields. pdf-lib form APIs do not make cross-document field migration automatic. qpdf AcroForm helpers or MuPDF could be investigated separately; XFA and scripting remain distinct refusals. |
 | Tags | Preserve logical reading order, role/class mappings, StructElem parent/child relationships, page/MCID/OBJR bindings and ParentTree; namespace/key collisions remap | Prune removed-page references and keep remaining structure/reading order/ParentTree coherent | Current Merge loses root. Requires document-wide reconstruction plus an independent structure/accessibility oracle. No candidate was demonstrated safe. No PDF/UA conformance claim. |
 
-## 4. Exact proposed first envelope
+## 4. Exact approved first envelope
 
 **Operation:** Merge all pages in explicit input order only. **Inputs:** otherwise currently admitted unencrypted, unsigned PDFs; each annotation must pass the profile below. An ordinary PDF may be mixed with a profile PDF. All inputs must pass before a result can be promoted. A URI alongside a form, internal link, bookmark, tag or unsupported annotation refuses the whole job; do not discard that other feature.
 
-**Simple web-link profile (proposed, CPDF-1):**
+**Simple web-link profile (approved, CPDF-1):**
 
 - `/Subtype /Link`; optional `/Type` must be `/Annot`. Exactly one `/A` URI action: optional `/Type /Action`, `/S /URI`, `/URI` a string containing an absolute ASCII HTTP/HTTPS URL with a nonempty host and no control characters. Preserve original bytes without decoding/re-encoding, URL normalization or fetching. Relative URLs, catalog URI bases, other schemes, credentials, `/IsMap`, action chains and additional action keys are outside this first slice.
 - `/Rect`: exactly four finite numbers, ordered with positive area, expressed in the unchanged page coordinate system. Preserve MediaBox/CropBox origins, rotation and visible placement; do not translate just because output page number changes.
@@ -72,7 +72,7 @@ These contracts compare source identity and output page-tree membership, not obj
 
 This is preservation of existing approved-profile annotations, not a feature for creating/editing annotations. Technical traversal/resource bounds remain separate from commercial allowances. Bound every new object walk/string/array decode and test malformed/cyclic graphs; do not invent a larger public page limit here.
 
-### Remaining refusals after the proposed implementation
+### Remaining refusals after the approved implementation
 
 Merge still refuses internal/named/remote GoTo links, relative/non-HTTP(S) URI actions, launch/JavaScript/submit/reset actions, every other annotation subtype (including Text, Highlight, Ink, Popup, Widget, FileAttachment and RichMedia), custom appearances, optional content, outlines/bookmarks, destination/name trees, forms/XFA, tagged structure and digitally signed/certified/signature-field inputs. Existing collections, active-content, drawing, damaged/encrypted and resource refusals are unchanged except for the expressly approved URI profile.
 
@@ -84,7 +84,7 @@ Merge still refuses internal/named/remote GoTo links, relative/non-HTTP(S) URI a
 
 | Option | Local/Catalyst feasibility and preservation | Licensing, size, packaging and maintenance |
 | --- | --- | --- |
-| **Existing pdf-lib + PDFKit reader — recommend** | JS writer already executes on Catalyst/Hermes. URI dictionaries are finite; use explicit page association and supported-key preservation, with PDFKit inspection extended before promotion. No architecture replacement. Not safe by guard deletion alone. | pdf-lib 1.17.1 is MIT (installed license checked); retain copyright/license notices. No additional native binary/framework/engine and no new dependency license. JS/reader-check size and memory deltas remain unmeasured. Pin existing versions, review low-level copier changes on upgrades. Store sandbox, direct signing/notarization and Setapp packaging still require their channel acceptance. |
+| **Existing pdf-lib + PDFKit reader — approved** | JS writer already executes on Catalyst/Hermes. URI dictionaries are finite; use explicit page association and supported-key preservation, with PDFKit inspection extended before promotion. No architecture replacement. Not safe by guard deletion alone. | pdf-lib 1.17.1 is MIT (installed license checked); retain copyright/license notices. No additional native binary/framework/engine and no new dependency license. JS/reader-check size and memory deltas remain unmeasured. Pin existing versions, review low-level copier changes on upgrades. Store sandbox, direct signing/notarization and Setapp packaging still require their channel acceptance. |
 | Apple PDFKit as an alternative writer | Already used locally; SDK exposes page insert/remove, write, outline and link URL/destination APIs. Relevant annotation APIs predate the approved floor. Potential native-only fallback, **not preservation-tested**. Replacing PDFKit reader with PDFKit writer would lose engine independence unless another reader verifies output. | System framework, no bundled engine binary; native bridge delta unmeasured. SDK/platform terms apply. OS-version behavior becomes part of the support matrix. Greater integration disruption than the selected slice; no independent-reader or channel acceptance implied. |
 | libqpdf | Native C++ library with page/AcroForm helpers; plausible static library + native bridge, with arm64/x86_64 **Mac Catalyst** builds required, not ordinary macOS binaries. No Catalyst build performed. Page-selection docs warn about document-level data and removed bookmark targets. Not a drop-in solution for all candidates. | Apache-2.0; verify exact release and transitive zlib/jpeg/optional crypto notices before selection. Extra binary size is **unknown**, not estimated from a desktop CLI. C++20/CMake and dependency maintenance add build/security work. Prefer in-process bundled library over a command-line helper; Store must remain self-contained/sandboxed, direct code signed/notarized, Setapp reviewed. No installation or adoption recommended here. |
 | MuPDF C library | Native parser/renderer/object APIs make it a plausible broader local investigation. Catalyst Universal integration, preservation of cross-document structures and independent verification are **unproven** here. Grafting pages is not proof of intact tags/forms/outlines. | AGPL or commercial licensing; no commercial terms/price obtained and no license approved. Require owner/legal licensing decision before closed-product integration. Renderer/fonts/codecs can add payload; exact Universal binary size **unknown**. Larger build/bridge/security burden, plus per-channel redistribution terms. Not recommended for this slice. |
@@ -95,11 +95,11 @@ The Mac App Store requires a sandboxed, self-contained Xcode-packaged app; new d
 
 ## 6. Digitally signed PDF policy (CPDF-4)
 
-**Recommend refusing digitally signed or certified inputs for v1 content-changing transformations, including Merge and Remove.** Also refuse signature fields, including empty ones, under the form refusal. Do not offer warning-and-continue, strip signatures, or imply a visible signature appearance proves authenticity. Ask for an unsigned source copy; preserve the original bytes and existing access/export controls. Detecting signature structure is not cryptographic verification or signer trust validation.
+**Approved: refuse digitally signed, certified or signature-field PDFs for v1 content-changing transformations, including Merge and Remove.** Also refuse empty signature fields under the form refusal. Explain that transforming the PDF could invalidate its signature or certification and ask for an unsigned source copy. Do not strip signatures silently, offer warning-and-continue, or claim signature preservation. Preserve the original bytes and existing access/export controls. A visible signature appearance does not prove authenticity; detecting signature structure is not cryptographic verification or signer trust validation.
 
 The writer creates and rewrites a new document. It has no verified incremental-update/certification-permission preservation path. Some signature workflows allow specific incremental changes; that does not authorize this writer's page transformations or validate signatures on its new output. Signature-looking raster marks without digital signature structures are ordinary page content, with no authenticity claim.
 
-Current AcroForm/Perms/Annots guards reject common signed structures, but there is no dedicated signed-input classifier or genuine signed corpus evidence. SHR-50 must fail closed on field `/FT /Sig`, signature dictionaries `/Type /Sig` or `/DocTimeStamp`, `/ByteRange`/signature-content structures, certification/DocMDP/FieldMDP/Perms, inherited/indirect and malformed signature indicators; bounded traversal ambiguity refuses. Byte scanning alone is insufficient. No signed-input support can be inferred from generic rejection. This policy recommendation adds no runtime detection in SHR-49.
+Current AcroForm/Perms/Annots guards reject common signed structures, but there is no dedicated signed-input classifier or genuine signed corpus evidence. SHR-50 must fail closed on field `/FT /Sig`, signature dictionaries `/Type /Sig` or `/DocTimeStamp`, `/ByteRange`/signature-content structures, certification/DocMDP/FieldMDP/Perms, inherited/indirect and malformed signature indicators; bounded traversal ambiguity refuses. Byte scanning alone is insufficient. No signed-input support can be inferred from generic rejection. This approved policy adds no runtime detection in SHR-49.
 
 ## 7. Exact SHR-50 verification and promotion gates
 
@@ -120,23 +120,23 @@ Implement only after CPDF-1–5 approval and a bounded task. Tests must drive th
 
 **Promotion condition:** every admitted profile must have complete independent per-link/page evidence. Missing inspection, undecodable structure, changed URI/rectangle/style or wrong page association prevents result promotion. Failure of feasibility in SHR-50 returns this decision to Shrey; do not widen the profile, switch engines or silently accept permanent blanket rejection. Public copy changes only after implemented, verified support; this ADR changes no runtime knowledge.
 
-## 8. Owner decisions required
+## 8. Owner approval record — revision 2
 
-All five are **pending**, with no inferred approval from creating or merging this decision PR.
+Shrey Talwar explicitly approved **CPDF-1 through CPDF-5 on 30 September 2026** in the owner's “CONTINUE SHR-49 ONLY” instruction for PR #95, reviewed head `592bd7e403775f5365d72ebf11b55aed6d614c2e`. Revision 2 records that approval; it does not broaden section 4 or change the exact section 7 verification requirements.
 
-| Decision | Proposed answer for explicit approval |
+| Decision | Approved answer |
 | --- | --- |
-| **CPDF-1 — first slice** | Simple absolute ASCII HTTP/HTTPS URI Link profile in section 4, **Merge only**, with optional valid `/P` correctly rebound and exact style/geometry preservation. Remove expansion waits for a separate decision. |
-| **CPDF-2 — refusals** | Approve section 4's remaining family/subtype/action/operation refusals, including mixed supported+unsupported inputs and linked results used in other operations; no silent loss/flattening. |
-| **CPDF-3 — dependency** | **No new local dependency/engine.** Retain pdf-lib writer/PDFKit reader and implement the finite classifier/page binding/independent verification. Any failure requiring qpdf/MuPDF or another engine returns for owner approval. |
-| **CPDF-4 — signatures** | Refuse digital signature/certification/signature-field inputs for transformations; request an unsigned source. No invalidation warning-and-continue or signature stripping in v1 under this decision. |
-| **CPDF-5 — exact future public statement** | Approve the statement below **only for use after** SHR-50 and relevant Mac acceptance pass. Today's blanket refusals remain accurately described until then. |
+| **CPDF-1 — APPROVED** | Preserve the simple absolute ASCII `http://` or `https://` URI Link profile in section 4 during **Merge only**. Annotation structure must be supported, the link must bind correctly to the copied output page, and independent verification must pass before promotion. No internal destinations, forms, arbitrary annotations or other operations. |
+| **CPDF-2 — APPROVED** | Continue section 4's explicit, truthful refusals: internal links/destinations, bookmarks/outlines, forms, tagged PDFs, comments/highlights and other annotation subtypes, custom appearances, unsupported actions, and linked PDFs for Remove Pages/OCR/Compress. Mixed supported+unsupported inputs and linked results used in other operations remain refused; no silent loss/flattening. |
+| **CPDF-3 — APPROVED** | Keep the existing **pdf-lib + PDFKit** stack. **No new PDF dependency is approved.** SHR-50 may implement this preservation path using the current stack only if required independent verification passes; any need for another engine returns for owner approval. SHR-50 is not started by this update. |
+| **CPDF-4 — APPROVED** | Refuse digitally signed, certified or signature-field PDFs for content-changing transformations in v1. Explain possible signature/certification invalidation and request an unsigned copy. No silent stripping, warning-and-continue or signature-preservation claim. |
+| **CPDF-5 — APPROVED** | The exact statement below is the **target support contract**. It must not be exposed publicly until SHR-50 implements and verifies it, including relevant Mac acceptance. Today's blanket refusals remain accurately described until then. |
 
 > Merge preserves simple HTTP/HTTPS web links in otherwise supported PDFs. Internal links, bookmarks, forms, comments/highlights, tagged PDFs and digitally signed PDFs are not supported. PDFs with web links are not yet supported by Remove Pages, OCR or Compress.
 
-Expanded help must define “simple” using section 4's exclusions (custom appearances, additional actions and other link variants). Specific refusals name the unsupported family and say the original is unchanged. Example: “This PDF has internal links I can't safely preserve in Merge yet. I haven't changed it.” Signed refusal: “This PDF contains a digital signature. I can't merge or remove pages while preserving it. Please use an unsigned copy. Your original is unchanged.”
+Expanded help must define “simple” using section 4's exclusions (custom appearances, additional actions and other link variants). Specific refusals name the unsupported family and say the original is unchanged. Example: “This PDF has internal links I can't safely preserve in Merge yet. I haven't changed it.” Signed/certified refusal: “Transforming this PDF could invalidate its digital signature or certification. Please use an unsigned copy. Your original is unchanged.” Signature-field refusals must likewise explain this risk and request an unsigned copy.
 
-Approval should record CPDF-1–5, owner, date and ADR revision explicitly in this ADR/Linear. Approval does not run SHR-50 or authorize a release. Stop SHR-49 once this PR is ready; do not mark Done until explicit owner approval.
+CPDF-1–5 are recorded as approved by Shrey Talwar, dated 30 September 2026, ADR revision 2. Approval does not run SHR-50 or authorize a release/public claim. Keep SHR-49 **In Review until PR #95 merges**; do not merge or mark Done in this task. Stop after updating PR #95.
 
 ## 9. Primary external references
 
@@ -147,4 +147,4 @@ Reviewed 30 September 2026; these establish API/license/policy constraints, not 
 - qpdf [page-selection limitations](https://qpdf.readthedocs.io/en/stable/cli.html#limitations), [build/dependencies](https://qpdf.readthedocs.io/en/stable/installation.html), [Apache-2.0 license](https://qpdf.readthedocs.io/en/stable/license.html).
 - MuPDF [AGPL/commercial licensing](https://mupdf.readthedocs.io/en/1.28.5/license.html). No commercial permission or binary size established.
 - Apple [App Review Guidelines §2.4.5](https://developer.apple.com/app-store/review/guidelines/#hardware-compatibility), [Developer ID](https://developer.apple.com/developer-id/); Setapp [integration requirements](https://docs.setapp.com/docs/integration-requirements). No submission or channel acceptance.
-- Adobe [signed-PDF limitations](https://helpx.adobe.com/acrobat/desktop/e-sign-documents/learn-about-signatures/signed-pdf-limitations.html). The refusal policy is atePDF's proposed bounded choice; it does not assert every conceivable incremental change invalidates every signature.
+- Adobe [signed-PDF limitations](https://helpx.adobe.com/acrobat/desktop/e-sign-documents/learn-about-signatures/signed-pdf-limitations.html). The refusal policy is atePDF's approved bounded choice; it does not assert every conceivable incremental change invalidates every signature.

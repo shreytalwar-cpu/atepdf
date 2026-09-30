@@ -1,4 +1,4 @@
-# ADR 0013 — Seller, direct payments and cross-channel account ownership (SHR-85)
+# ADR 0014 — Seller, direct payments and cross-channel account ownership (SHR-85)
 
 **Status:** **Proposed — pending owner approval of SELL-1 to SELL-10** (section 20). This is a commercial and account architecture decision. No company was incorporated, no developer or payment account was created or changed, no Terms were accepted, no product, price or checkout was configured and no transaction was made.  **Source:** `origin/main` `ff3e29184b5bf039cc8938f71bbdb60f93f4ba7b` (30 September 2026).  **Authority:** `PRODUCT_V1.md` D-01/D-07/D-08/D-09, BILL-01–10, DIST-01–06, OPEN-04, G-08; [SHR-85](https://linear.app/shrey-talwar/issue/SHR-85/decide-seller-direct-payments-and-cross-channel-account-ownership) (parent SHR-28); ADR 0011 (SHR-34, ENV-7 Setapp as an intended channel); ADR 0012 (SHR-35, H-09 relay-only identity, N-07 no device identifiers).  **Evidence:** [docs/evidence/SHR-85-2026-09-30](../evidence/SHR-85-2026-09-30/README.md) — machine-readable acceptance cases.
 

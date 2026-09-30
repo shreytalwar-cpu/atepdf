@@ -1,6 +1,6 @@
 {
   "schema": "atepdf.seller-account-cases/1",
-  "source": "docs/adr/0013-seller-payments-account-ownership.md section 18",
+  "source": "docs/adr/0014-seller-payments-account-ownership.md section 18",
   "status": "Proposed; pending owner approval of SELL-1 to SELL-10. Policy cases for SHR-86/87/88/89 tests, not evidence that anything is implemented.",
   "policy": {
     "account_required": {

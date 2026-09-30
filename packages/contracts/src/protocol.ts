@@ -8,6 +8,8 @@ export type Envelope = { schemaVersion: '1.0'; requestId: string; workspaceRevis
 export type ManifestFile = {ref:string; kind:'pdf'; pageCount:number; sizeBytes:number; encrypted:false};
 export type PendingClarification = {originalRequestId:string;workspaceRevision:number;originalInstruction:string;question:string;choices:string[];answers:{question:string;answer:string}[];selectionRefs:string[];focusedResultRef:string|null;originalRefs:string[]};
 export type Request = {schemaVersion:'1.0'; requestId:string; workspaceRevision:number; locale:string; instruction:string; files:ManifestFile[]; selectionRefs:string[]; focusedResultRef:string|null; originalRefs:string[]; pendingClarification:PendingClarification|null; previousActionIds:Operation[]; capabilities:Operation[]; previousPlan:null; ocrLanguages:string[]};
+// Transport safety envelope; distinct from retention, PDF page limits and billing.
+export const PLANNER_REFERENCE_LIMIT=40;
 export const capabilities: Operation[] = ['merge_pdf','select_pages','ocr_pdf','compress_pdf'];
 export function validateLocalContext(request: Request): void {
   if (!requestValid(request)) throw new Error('Invalid instruction or local manifest.');

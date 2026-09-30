@@ -1,0 +1,73 @@
+✖ SHR-47 swapped same-size empty-text scanned pages are rejected before promotion (312.066541ms)
+✖ SHR-47 shifted crop origin with unchanged size is rejected before promotion (32.07225ms)
+✖ SHR-47 wrong retained scanned source page is rejected despite correct count and dimensions (10.019042ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 0
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1133.713042
+
+✖ failing tests:
+
+test at tests/regressions/page-verification.test.ts:2:3511
+✖ SHR-47 swapped same-size empty-text scanned pages are rejected before promotion (312.066541ms)
+  AssertionError [ERR_ASSERTION]: wrong actual PDF artifact must not be promoted
+  + actual - expected
+  
+  + 'complete'
+  - 'failed'
+  
+      at reject (/Users/shrey/.codex/worktrees/shr47-page-verification/atepdf/tests/regressions/page-verification.test.ts:28:10)
+      at async TestContext.<anonymous> (/Users/shrey/.codex/worktrees/shr47-page-verification/atepdf/tests/regressions/page-verification.test.ts:40:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'complete',
+    expected: 'failed',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/regressions/page-verification.test.ts:2:3696
+✖ SHR-47 shifted crop origin with unchanged size is rejected before promotion (32.07225ms)
+  AssertionError [ERR_ASSERTION]: wrong actual PDF artifact must not be promoted
+  + actual - expected
+  
+  + 'complete'
+  - 'failed'
+  
+      at reject (/Users/shrey/.codex/worktrees/shr47-page-verification/atepdf/tests/regressions/page-verification.test.ts:28:10)
+      at async TestContext.<anonymous> (/Users/shrey/.codex/worktrees/shr47-page-verification/atepdf/tests/regressions/page-verification.test.ts:43:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'complete',
+    expected: 'failed',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/regressions/page-verification.test.ts:2:4060
+✖ SHR-47 wrong retained scanned source page is rejected despite correct count and dimensions (10.019042ms)
+  AssertionError [ERR_ASSERTION]: wrong actual PDF artifact must not be promoted
+  + actual - expected
+  
+  + 'complete'
+  - 'failed'
+  
+      at reject (/Users/shrey/.codex/worktrees/shr47-page-verification/atepdf/tests/regressions/page-verification.test.ts:28:10)
+      at async TestContext.<anonymous> (/Users/shrey/.codex/worktrees/shr47-page-verification/atepdf/tests/regressions/page-verification.test.ts:49:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'complete',
+    expected: 'failed',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

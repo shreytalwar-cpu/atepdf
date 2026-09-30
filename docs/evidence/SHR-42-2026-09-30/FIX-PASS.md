@@ -1,0 +1,9 @@
+# SHR-42 cross-review fix pass — 30 Sep 2026
+
+Fixed S42-01–05 and S42-08–12. Owner G2 makes result numbers stable creation numbers, with last/latest/current meaning focus; G5 clears clarification on import. Raw instruction length is capped before private filename/reference expansion. Expanded instructions and captured clarification use the existing 4,000-character wire envelope with the non-reference content budget still checked. Over-cap single-result ambiguity asks for a result number without evicting history.
+
+Integrated still-open #96, #97 and fixed #104 through a local integration base, based on current origin/main 785397328a9871e013cb6b351881cc6507872b6f. No GitHub merge performed. INT-01 uses the independent structural reader and synthetic structural ownership fixtures. INT-06 preserves cancelled-save ownership, page-receipt cleanup and stage cleanup. INT-07 keeps import-clears-clarification. INT-08 retains both stronger reset assertions; INT-12 validates the retained v2 matrix.
+
+Validation: full Node suite 195 tests: 194 passed, one optional Python skip. Web/universal TypeScript, generated validators and schema/matrix checks passed. Planner plus ownership browser suites: 23 passed, including two import batches and stable visible result numbers through Undo/new commit.
+
+Browser limitation: the default committed Expo build resolves pdf-lib's tslib 1.14 entry through modules/index.js and crashes before mount (undefined default.__extends). A temporary, uncommitted Metro resolver selecting tslib.es6.js was used to run the 23 browser tests, then restored. This is a qualified UI check, not proof that the default export launches. No #97 production change or dependency change was made. The retained default export startup issue needs a separate bounded resolution before launch/merge.

@@ -4,6 +4,7 @@ import CoreGraphics
 import ImageIO
 import UniformTypeIdentifiers
 import Vision
+import CryptoKit
 
 /// Catalyst must never turn an unsigned launch into access to the user's global
 /// caches. All values are supplied by native process APIs, never by JavaScript.
@@ -83,18 +84,27 @@ final class AtepdfPDFEngine {
   func inspect(_ uri: String, check: () throws -> Void = {}) throws -> [String: Any] {
     let document = try open(uri)
     var pages: [[String: Any]] = []
+    var physical: [[String: Any]] = []
     for index in 0..<document.pageCount {
       try check()
       guard let page = document.page(at: index) else { throw Failure.invalidPDF }
       let geometry = try dimensions(page)
       // A bounded render walks actual drawing operators, rather than treating a
       // readable page count as evidence that output is usable.
-      _ = try raster(page, maximumDimension: 96)
+      let image = try raster(page, maximumDimension: 96, neutralRotation: true)
+      guard let data = image.dataProvider?.data, let reference = page.pageRef else { throw Failure.invalidPDF }
+      let identity = SHA256.hash(data: data as Data).map { String(format: "%02x", $0) }.joined()
+      func box(_ rectangle: CGRect) -> [String: Double] {
+        ["x": rectangle.origin.x, "y": rectangle.origin.y, "width": rectangle.width, "height": rectangle.height]
+      }
+      physical.append(["mediaBox": box(reference.getBoxRect(.mediaBox)),
+                       "cropBox": box(reference.getBoxRect(.cropBox)),
+                       "rotation": geometry.rotation, "identity": identity])
       try check()
       pages.append(["width": geometry.width, "height": geometry.height,
                     "rotation": geometry.rotation, "text": normalizedText(page)])
     }
-    return ["pages": pages]
+    return ["pages": pages, "structure": ["version": 1, "reader": "coregraphics-raster96-v1", "pages": physical]]
   }
 
   func render(_ uri: String, pageNumber: Int, maximumDimension: Int,
@@ -259,9 +269,11 @@ final class AtepdfPDFEngine {
             rotation == 90 || rotation == 270 ? box.width : box.height, rotation, box)
   }
 
-  private func raster(_ page: PDFPage, maximumDimension: Int) throws -> CGImage {
+  private func raster(_ page: PDFPage, maximumDimension: Int, neutralRotation: Bool = false) throws -> CGImage {
     guard maximumDimension > 0, let reference = page.pageRef else { throw Failure.geometry }
-    let size = try dimensions(page)
+    let geometry = try dimensions(page)
+    let size = neutralRotation ? (width: Double(geometry.box.width), height: Double(geometry.box.height))
+      : (width: geometry.width, height: geometry.height)
     let scale = min(Double(maximumDimension) / max(size.width, size.height),
                     sqrt(Double(Self.pixelLimit) / (size.width * size.height)))
     // Floor keeps the allocated dimensions inside the pixel budget.
@@ -280,7 +292,7 @@ final class AtepdfPDFEngine {
     // correspond to PDF points rather than an artificially padded page.
     context.scaleBy(x: Double(width) / size.width, y: Double(height) / size.height)
     let logicalPage = CGRect(x: 0, y: 0, width: size.width, height: size.height)
-    context.concatenate(reference.getDrawingTransform(.cropBox, rect: logicalPage, rotate: 0, preserveAspectRatio: true))
+    context.concatenate(reference.getDrawingTransform(.cropBox, rect: logicalPage, rotate: Int32(neutralRotation ? -geometry.rotation : 0), preserveAspectRatio: true))
     context.drawPDFPage(reference)
     guard let image = context.makeImage() else { throw Failure.image }
     return image

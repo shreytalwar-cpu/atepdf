@@ -1,0 +1,36 @@
+
+Running 28 tests using 1 worker
+
+(node:67383) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/28] tests/e2e/planner.spec.ts:11:5 › mocked planner transport: Send → redacted complete plan → real local result → follow-up
+[2/28] tests/e2e/planner.spec.ts:22:5 › clarification reply carries the original bounded task into a second model request
+[3/28] tests/e2e/planner.spec.ts:39:5 › a new unrelated request cannot complete an old clarification
+[4/28] tests/e2e/planner.spec.ts:52:5 › cancel and Start over clear a pending clarification
+[5/28] tests/e2e/planner.spec.ts:67:5 › AI-enabled quick PDF action stays local, while a product question uses the planner without changing files
+[6/28] tests/e2e/planner.spec.ts:77:5 › direct planner cancellation ignores a late complete plan and keeps local quick actions usable
+[7/28] tests/e2e/planner.spec.ts:93:5 › cancelling direct planner setup prevents any later model request
+[8/28] tests/e2e/planner.spec.ts:111:7 › direct planner incomplete response never changes a committed result
+[9/28] tests/e2e/planner.spec.ts:111:7 › direct planner stale response never changes a committed result
+[10/28] tests/e2e/planner.spec.ts:111:7 › direct planner truncated JSON response never changes a committed result
+[11/28] tests/e2e/planner.spec.ts:130:5 › direct balanced-compression plan retains its image-quality choice before local execution
+[12/28] tests/e2e/planner.spec.ts:138:5 › privacy rejection happens before transport, unknown instruction with no key stays honest
+[13/28] tests/e2e/planner.spec.ts:145:5 › recognized secret is stopped before ordinary transcript retention
+[14/28] tests/e2e/planner.spec.ts:157:5 › secret clarification answer is excluded without consuming the pending task; unrelated text and reset stay safe
+[15/28] tests/e2e/planner.spec.ts:191:5 › recognized secret in a mocked provider failure is withheld from chat receipts
+[16/28] tests/e2e/planner.spec.ts:203:5 › masked local key setup keeps the key outside chat and model transport
+[17/28] tests/e2e/planner.spec.ts:210:5 › native pairing code stays in a masked setup control and makes no model request
+[18/28] tests/e2e/workflow.spec.ts:8:5 › real merge → preview/save → remove physical page 2 → undo; local-only network
+[19/28] tests/e2e/workflow.spec.ts:23:5 › responsive workspace, keyboard height, privacy and save cancellation
+[20/28] tests/e2e/workflow.spec.ts:30:5 › real merge → OCR → compression preserves text and produces a measured smaller PDF without egress
+[21/28] tests/e2e/workflow.spec.ts:41:5 › chat clarification, cancellation and discard guard keep committed results intact
+[22/28] tests/e2e/workflow.spec.ts:85:5 › PDF drag feedback clears on leave and actual drop imports locally
+[23/28] tests/e2e/workflow.spec.ts:111:5 › keyboard composer and Latest message keep current results reachable
+[24/28] tests/e2e/workflow.spec.ts:142:5 › one chat recipe commits only the final merge → OCR → compression result
+[25/28] tests/e2e/workspace-ownership.spec.ts:4:58 › delayed sample + Cancel leaves the active workspace authoritative
+[26/28] tests/e2e/workspace-ownership.spec.ts:4:58 › delayed sample + Start Over leaves the active workspace authoritative
+[27/28] tests/e2e/workspace-ownership.spec.ts:22:5 › late setup status after Start over cannot reopen a closed setup choice
+[28/28] tests/e2e/workspace-ownership.spec.ts:31:5 › late export receipt after Start over stays off the new result; external bytes survive
+  28 passed (49.3s)

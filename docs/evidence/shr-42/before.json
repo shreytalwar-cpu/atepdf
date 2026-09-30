@@ -1,0 +1,343 @@
+[
+  {
+    "retained": 40,
+    "projected": 40,
+    "selection": 2,
+    "originals": 2,
+    "focus": "out_00000000000000000000000000000028",
+    "status": "accepted",
+    "payloadBytes": 4826,
+    "payload": {
+      "schemaVersion": "1.0",
+      "requestId": "req_67d83ea28a7947ec92255942fdecbbe3",
+      "workspaceRevision": 40,
+      "locale": "en-IN",
+      "instruction": "Compress the current result",
+      "files": [
+        {
+          "ref": "file_00000000000000000000000000000001",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "file_00000000000000000000000000000002",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_00000000000000000000000000000003",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_00000000000000000000000000000004",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_00000000000000000000000000000005",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_00000000000000000000000000000006",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_00000000000000000000000000000007",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_00000000000000000000000000000008",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_00000000000000000000000000000009",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_0000000000000000000000000000000a",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_0000000000000000000000000000000b",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_0000000000000000000000000000000c",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_0000000000000000000000000000000d",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_0000000000000000000000000000000e",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_0000000000000000000000000000000f",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_00000000000000000000000000000010",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_00000000000000000000000000000011",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_00000000000000000000000000000012",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_00000000000000000000000000000013",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_00000000000000000000000000000014",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_00000000000000000000000000000015",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_00000000000000000000000000000016",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_00000000000000000000000000000017",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_00000000000000000000000000000018",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_00000000000000000000000000000019",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_0000000000000000000000000000001a",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_0000000000000000000000000000001b",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_0000000000000000000000000000001c",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_0000000000000000000000000000001d",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_0000000000000000000000000000001e",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_0000000000000000000000000000001f",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_00000000000000000000000000000020",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_00000000000000000000000000000021",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_00000000000000000000000000000022",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_00000000000000000000000000000023",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_00000000000000000000000000000024",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_00000000000000000000000000000025",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_00000000000000000000000000000026",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_00000000000000000000000000000027",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        },
+        {
+          "ref": "out_00000000000000000000000000000028",
+          "kind": "pdf",
+          "pageCount": 1,
+          "sizeBytes": 1,
+          "encrypted": false
+        }
+      ],
+      "selectionRefs": [
+        "file_00000000000000000000000000000001",
+        "file_00000000000000000000000000000002"
+      ],
+      "focusedResultRef": "out_00000000000000000000000000000028",
+      "originalRefs": [
+        "file_00000000000000000000000000000001",
+        "file_00000000000000000000000000000002"
+      ],
+      "pendingClarification": null,
+      "previousActionIds": [],
+      "capabilities": [
+        "merge_pdf",
+        "select_pages",
+        "ocr_pdf",
+        "compress_pdf"
+      ],
+      "previousPlan": null,
+      "ocrLanguages": [
+        "eng"
+      ]
+    }
+  },
+  {
+    "retained": 41,
+    "projected": 41,
+    "stage": "planner-validation",
+    "error": "Unsupported context."
+  },
+  {
+    "retained": 100,
+    "projected": 100,
+    "stage": "planner-validation",
+    "error": "Unsupported context."
+  },
+  {
+    "retained": 101,
+    "stage": "shared-request-construction",
+    "error": "Invalid instruction or local manifest."
+  },
+  {
+    "retained": 121,
+    "stage": "shared-request-construction",
+    "error": "Invalid instruction or local manifest."
+  }
+]

@@ -17,6 +17,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URI
+import java.security.MessageDigest
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.math.abs
 import kotlin.math.floor
@@ -49,14 +50,20 @@ class AtepdfPdfEngine(context: Context) {
         fail("Forms cannot be changed safely by this Android build.")
       }
       val pages = ArrayList<Map<String, Any>>(renderer.pageCount)
+      val physical = ArrayList<Map<String, Any>>(renderer.pageCount)
       for (index in 0 until renderer.pageCount) {
         checkCancelled(it)
         renderer.openPage(index).use { page ->
           val text = page.textContents.joinToString(" ") { content -> content.text }
             .replace(Regex("\\s+"), " ").trim()
           // A real display-list render catches errors that page counting cannot.
-          val bitmap = render(page, 256)
-          bitmap.recycle()
+          val bitmap = render(page, 96)
+          val pixels = IntArray(bitmap.width * bitmap.height)
+          try { bitmap.getPixels(pixels, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height) }
+          finally { bitmap.recycle() }
+          val digest = MessageDigest.getInstance("SHA-256")
+          for (pixel in pixels) for (shift in intArrayOf(24, 16, 8, 0)) digest.update((pixel shr shift).toByte())
+          val identity = digest.digest().joinToString("") { byte -> "%02x".format(byte.toInt() and 255) }
           checkCancelled(it)
           // PdfRenderer does not expose /Rotate or CropBox. JS admission must first
           // reject rotated, cropped, offset and non-default UserUnit documents.
@@ -64,9 +71,11 @@ class AtepdfPdfEngine(context: Context) {
             "text" to text, "width" to page.width.toDouble(),
             "height" to page.height.toDouble(), "rotation" to 0
           ))
+          val box = mapOf("x" to 0.0, "y" to 0.0, "width" to page.width.toDouble(), "height" to page.height.toDouble())
+          physical.add(mapOf("mediaBox" to box, "cropBox" to box, "rotation" to 0, "identity" to identity))
         }
       }
-      mapOf("pages" to pages)
+      mapOf("pages" to pages, "structure" to mapOf("version" to 1, "reader" to "android-raster96-v1", "pages" to physical))
     }
   }
 

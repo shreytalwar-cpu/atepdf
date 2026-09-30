@@ -1,0 +1,15 @@
+{
+  "date": "2026-09-30",
+  "web": {
+    "command": "tsc --noEmit --incremental false -p apps/web/tsconfig.json",
+    "exitCode": 0
+  },
+  "universal": {
+    "command": "tsc --noEmit --incremental false -p apps/universal/tsconfig.json",
+    "exitCode": 0
+  },
+  "newTestsAndHarness": {
+    "exitCode": 0,
+    "configuration": "temporary config extending apps/web/tsconfig.json, node types from existing dependency directory, includes active-references.test.ts, planner.spec.ts and boundaries.mts"
+  }
+}

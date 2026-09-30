@@ -1,0 +1,50 @@
+{
+  "sourceCommit": "885b41c7d39b70b8ad7a8833bb7019016d9ec62a",
+  "cwd": "/Users/shrey/.codex/worktrees/shr47-page-verification/atepdf",
+  "environment": {
+    "ATEPDF_CORPUS_PYTHON": "/Users/shrey/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "EXPO_NO_TELEMETRY": "1",
+    "NEXT_TELEMETRY_DISABLED": "1"
+  },
+  "startedAt": "2026-09-30T10:27:23Z",
+  "commands": [
+    {
+      "argv": [
+        "/Users/shrey/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "-p",
+        "tests/compatibility/tsconfig.json"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 1.403,
+      "log": "/tmp/atepdf-shr47-final-885b41c/types-1.log"
+    },
+    {
+      "argv": [
+        "/Users/shrey/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "-p",
+        "apps/universal/tsconfig.json"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 1.604,
+      "log": "/tmp/atepdf-shr47-final-885b41c/types-2.log"
+    },
+    {
+      "argv": [
+        "/Users/shrey/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "-p",
+        "apps/web/tsconfig.json",
+        "--tsBuildInfoFile",
+        "/tmp/atepdf-shr47-final-885b41c/web.tsbuildinfo"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 1.824,
+      "log": "/tmp/atepdf-shr47-final-885b41c/types-3.log"
+    }
+  ]
+}

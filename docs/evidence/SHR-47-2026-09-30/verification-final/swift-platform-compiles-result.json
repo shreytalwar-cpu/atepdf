@@ -1,0 +1,50 @@
+{
+  "sourceCommit": "5e99a99fbe0503c5525f4d1c8aeb636c62533da6",
+  "scope": "Changed Apple engine only, independent of the unavailable full-app Pods project; compilation is not runtime acceptance",
+  "commands": [
+    {
+      "argv": [
+        "xcrun",
+        "swiftc",
+        "-target",
+        "arm64-apple-ios16.4-macabi",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+        "-module-cache-path",
+        "/tmp/atepdf-shr47-final-5e99a99/swift-catalyst/module-cache",
+        "-parse-as-library",
+        "-emit-module",
+        "-module-name",
+        "AtepdfPDFEngine",
+        "apps/universal/modules/atepdf-pdf/ios/AtepdfPDFEngine.swift",
+        "-emit-module-path",
+        "/tmp/atepdf-shr47-final-5e99a99/swift-catalyst/AtepdfPDFEngine.swiftmodule"
+      ],
+      "exitCode": 1,
+      "elapsedSeconds": 6.58,
+      "log": "/tmp/atepdf-shr47-final-5e99a99/swift-catalyst.log"
+    },
+    {
+      "argv": [
+        "xcrun",
+        "swiftc",
+        "-target",
+        "arm64-apple-ios16.4-simulator",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.0.sdk",
+        "-module-cache-path",
+        "/tmp/atepdf-shr47-final-5e99a99/swift-ios-simulator/module-cache",
+        "-parse-as-library",
+        "-emit-module",
+        "-module-name",
+        "AtepdfPDFEngine",
+        "apps/universal/modules/atepdf-pdf/ios/AtepdfPDFEngine.swift",
+        "-emit-module-path",
+        "/tmp/atepdf-shr47-final-5e99a99/swift-ios-simulator/AtepdfPDFEngine.swiftmodule"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 6.361,
+      "log": "/tmp/atepdf-shr47-final-5e99a99/swift-ios-simulator.log"
+    }
+  ]
+}

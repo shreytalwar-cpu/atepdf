@@ -1,0 +1,16 @@
+{
+  "head": "ae0345d7cd3c54de428fdea3b850fa5133aff4ac",
+  "checkRun": 109856945053,
+  "check": "SonarCloud Code Analysis",
+  "conclusion": "failure",
+  "condition": "B Security Rating on New Code; required A",
+  "annotation": {
+    "path": "tests/compatibility/run.mts",
+    "line": 228,
+    "title": "Make sure the PATH variable only contains fixed, unwriteable directories.",
+    "issueKey": "AaDx_By1mpvTXI8jPnzv"
+  },
+  "baselineFinding": "The same execFileSync git PATH lookup exists on 29f56ea; schema versioning touched that line",
+  "resolution": "Use the fixed existing /usr/bin/git for this Mac/Linux-only verification runner; no application or PDF behavior changes",
+  "scope": "Existing CI result read; no auto-review or manual analysis triggered"
+}

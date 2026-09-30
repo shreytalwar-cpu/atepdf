@@ -1,0 +1,265 @@
+{
+  "checks" : [
+    {
+      "cropped" : false,
+      "height" : 96,
+      "maximumDimension" : 96,
+      "redBounds" : [
+        0.2361111111111111,
+        0.19791666666666666,
+        0.125,
+        0.052083333333333336
+      ],
+      "rotation" : 0,
+      "width" : 72
+    },
+    {
+      "cropped" : false,
+      "height" : 724,
+      "maximumDimension" : 724,
+      "redBounds" : [
+        0.23388581952117865,
+        0.20027624309392264,
+        0.13259668508287292,
+        0.049723756906077346
+      ],
+      "rotation" : 0,
+      "width" : 543
+    },
+    {
+      "cropped" : false,
+      "height" : 1024,
+      "maximumDimension" : 1024,
+      "redBounds" : [
+        0.23307291666666666,
+        0.2001953125,
+        0.1328125,
+        0.0498046875
+      ],
+      "rotation" : 0,
+      "width" : 768
+    },
+    {
+      "cropped" : false,
+      "height" : 1800,
+      "maximumDimension" : 1800,
+      "redBounds" : [
+        0.23333333333333334,
+        0.20000000000000001,
+        0.13333333333333333,
+        0.050000000000000003
+      ],
+      "rotation" : 0,
+      "width" : 1350
+    },
+    {
+      "cropped" : true,
+      "height" : 96,
+      "maximumDimension" : 96,
+      "redBounds" : [
+        0.10294117647058823,
+        0.072916666666666671,
+        0.19117647058823528,
+        0.0625
+      ],
+      "rotation" : 0,
+      "width" : 68
+    },
+    {
+      "cropped" : true,
+      "height" : 724,
+      "maximumDimension" : 724,
+      "redBounds" : [
+        0.10058027079303675,
+        0.0718232044198895,
+        0.19922630560928434,
+        0.070441988950276244
+      ],
+      "rotation" : 0,
+      "width" : 517
+    },
+    {
+      "cropped" : true,
+      "height" : 1024,
+      "maximumDimension" : 1024,
+      "redBounds" : [
+        0.099863201094391243,
+        0.0712890625,
+        0.19972640218878249,
+        0.0712890625
+      ],
+      "rotation" : 0,
+      "width" : 731
+    },
+    {
+      "cropped" : true,
+      "height" : 1800,
+      "maximumDimension" : 1800,
+      "redBounds" : [
+        0.10038910505836576,
+        0.07166666666666667,
+        0.1992217898832685,
+        0.071111111111111111
+      ],
+      "rotation" : 0,
+      "width" : 1285
+    },
+    {
+      "cropped" : true,
+      "height" : 68,
+      "maximumDimension" : 96,
+      "redBounds" : [
+        0.86458333333333337,
+        0.10294117647058823,
+        0.0625,
+        0.19117647058823528
+      ],
+      "rotation" : 90,
+      "width" : 96
+    },
+    {
+      "cropped" : true,
+      "height" : 517,
+      "maximumDimension" : 724,
+      "redBounds" : [
+        0.85773480662983426,
+        0.10058027079303675,
+        0.070441988950276244,
+        0.19922630560928434
+      ],
+      "rotation" : 90,
+      "width" : 724
+    },
+    {
+      "cropped" : true,
+      "height" : 731,
+      "maximumDimension" : 1024,
+      "redBounds" : [
+        0.857421875,
+        0.099863201094391243,
+        0.0712890625,
+        0.19972640218878249
+      ],
+      "rotation" : 90,
+      "width" : 1024
+    },
+    {
+      "cropped" : true,
+      "height" : 1285,
+      "maximumDimension" : 1800,
+      "redBounds" : [
+        0.85722222222222222,
+        0.10038910505836576,
+        0.071111111111111111,
+        0.1992217898832685
+      ],
+      "rotation" : 90,
+      "width" : 1800
+    },
+    {
+      "cropped" : true,
+      "height" : 96,
+      "maximumDimension" : 96,
+      "redBounds" : [
+        0.70588235294117652,
+        0.86458333333333337,
+        0.19117647058823528,
+        0.0625
+      ],
+      "rotation" : 180,
+      "width" : 68
+    },
+    {
+      "cropped" : true,
+      "height" : 724,
+      "maximumDimension" : 724,
+      "redBounds" : [
+        0.70019342359767889,
+        0.85773480662983426,
+        0.19922630560928434,
+        0.070441988950276244
+      ],
+      "rotation" : 180,
+      "width" : 517
+    },
+    {
+      "cropped" : true,
+      "height" : 1024,
+      "maximumDimension" : 1024,
+      "redBounds" : [
+        0.70041039671682626,
+        0.857421875,
+        0.19972640218878249,
+        0.0712890625
+      ],
+      "rotation" : 180,
+      "width" : 731
+    },
+    {
+      "cropped" : true,
+      "height" : 1800,
+      "maximumDimension" : 1800,
+      "redBounds" : [
+        0.70038910505836571,
+        0.85722222222222222,
+        0.1992217898832685,
+        0.071111111111111111
+      ],
+      "rotation" : 180,
+      "width" : 1285
+    },
+    {
+      "cropped" : true,
+      "height" : 68,
+      "maximumDimension" : 96,
+      "redBounds" : [
+        0.072916666666666671,
+        0.70588235294117652,
+        0.0625,
+        0.19117647058823528
+      ],
+      "rotation" : 270,
+      "width" : 96
+    },
+    {
+      "cropped" : true,
+      "height" : 517,
+      "maximumDimension" : 724,
+      "redBounds" : [
+        0.0718232044198895,
+        0.70019342359767889,
+        0.070441988950276244,
+        0.19922630560928434
+      ],
+      "rotation" : 270,
+      "width" : 724
+    },
+    {
+      "cropped" : true,
+      "height" : 731,
+      "maximumDimension" : 1024,
+      "redBounds" : [
+        0.0712890625,
+        0.70041039671682626,
+        0.0712890625,
+        0.19972640218878249
+      ],
+      "rotation" : 270,
+      "width" : 1024
+    },
+    {
+      "cropped" : true,
+      "height" : 1285,
+      "maximumDimension" : 1800,
+      "redBounds" : [
+        0.07166666666666667,
+        0.70038910505836571,
+        0.071111111111111111,
+        0.1992217898832685
+      ],
+      "rotation" : 270,
+      "width" : 1800
+    }
+  ],
+  "passed" : true
+}

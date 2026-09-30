@@ -5,7 +5,7 @@ import {LocalFileStore} from '../../packages/core/src/local-file-store';
 import type {EngineResult,Inspection} from '../../packages/web-pdf/src/types';
 
 // Synthetic values isolate orchestration timing; PDF validity is tested with real fixtures separately.
-const inspection=(count:number):Inspection=>({pages:Array.from({length:count},()=>({width:612,height:792,rotation:0,text:''}))});
+import {syntheticInspection as inspection} from '../helpers/synthetic-inspection';
 const deferred=<T,>()=>{let resolve!:(value:T)=>void;const promise=new Promise<T>(done=>{resolve=done;});return {promise,resolve};};
 async function inputs(){const store=new LocalFileStore();for(const ref of ['file_a','file_b']){const file=await store.prepare(new Uint8Array([1]),'PRIVATE-NAME.pdf',inspection(1),true,ref);store.commit([file],store.revision);}return store;}
 const statuses=(state:JobState)=>state.progress?.steps.map(step=>step.status);

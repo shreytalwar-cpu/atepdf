@@ -14,7 +14,7 @@ After the browser export is built, use **Start atepdf.command** and **Stop atepd
 
 ## Run locally
 
-Node 24 and pnpm 11 were used for verification. Install dependencies with `pnpm install --frozen-lockfile`.
+Reproducible PR verification uses Node **24.19.0** and pnpm **11.19.0**, pinned in repository configuration. From a clean committed checkout, run `node scripts/verification/verify.mjs`. See [verification and CI](docs/VERIFICATION.md) for exact prerequisites, gates, source-bound evidence, costs and manual Mac acceptance. For ordinary authorized development, install dependencies with `pnpm install --frozen-lockfile`.
 
 - `pnpm build` then `pnpm start`: production browser application at http://127.0.0.1:3210 (shared React Native interface inside the optional Next host).
 - `pnpm expo:web` then `pnpm expo:preview`: independently exported Expo web application at http://localhost:3211.

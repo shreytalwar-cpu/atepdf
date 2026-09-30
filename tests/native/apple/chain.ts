@@ -10,7 +10,7 @@ import {JobController} from '../../../packages/core/src/job-controller';
 async function main() {
 const root=process.cwd(),scratch=process.argv[2],binary=process.argv[3];
 assert(scratch&&binary,'Pass isolated scratch directory and compiled Apple harness');
-const evidence=resolve(root,'docs/evidence/native'),fixtures=resolve(root,'tests/fixtures');
+const evidence=resolve(root,process.env.ATEPDF_NATIVE_EVIDENCE_DIR??'docs/evidence/native'),fixtures=resolve(root,'tests/fixtures');
 await mkdir(scratch,{recursive:true});
 await copyFile(resolve(fixtures,'mixed-text-and-scan.pdf'),resolve(scratch,'mixed-text-and-scan.pdf'));
 await copyFile(resolve(fixtures,'image-heavy.pdf'),resolve(scratch,'image-heavy.pdf'));
@@ -56,7 +56,9 @@ const compressedPath=resolve(scratch,'compressed-output.pdf');await writeFile(co
 const compressedInspection=apple('inspect',compressedPath) as Inspection;
 assert(codecCalls>0,'Use real native codec');
 assert(compressed.bytes.length<heavy.length,'Measured PDF reduction');
-assert.deepEqual(compressedInspection,heavyInspection,'Text, pages and geometry remain');
+// Compression intentionally changes raster identity; retain this check for the
+// unchanged text/dimensions, rather than requiring pixel identity after re-encoding.
+assert.deepEqual(compressedInspection.pages,heavyInspection.pages,'Text, pages and geometry remain');
 const heavyRender=apple('render',heavyPath,'1'),compressedRender=apple('render',compressedPath,'1');
 await copyFile(new URL(heavyRender.uri),resolve(evidence,'apple-compression-before.png'));
 await copyFile(new URL(compressedRender.uri),resolve(evidence,'apple-compression-after.png'));

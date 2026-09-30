@@ -1,0 +1,26 @@
+{
+  "sourceCommit": "74b3accd98872add9d317744470094a2f4336fe8",
+  "cwd": "/Users/shrey/.codex/worktrees/shr47-page-verification/atepdf",
+  "environment": {
+    "ATEPDF_CORPUS_PYTHON": "/Users/shrey/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "EXPO_NO_TELEMETRY": "1",
+    "NEXT_TELEMETRY_DISABLED": "1",
+    "ATEPDF_MATRIX_RENDERER": "/Users/shrey/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override/pdftoppm"
+  },
+  "startedAt": "2026-09-30T11:16:20Z",
+  "commands": [
+    {
+      "argv": [
+        "/Users/shrey/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "--import",
+        "tsx",
+        "tests/compatibility/run.mts",
+        "--output-dir",
+        "/tmp/atepdf-shr47-git-binding-74b3acc/matrix"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 51.356,
+      "log": "/tmp/atepdf-shr47-git-binding-74b3acc/matrix-1.log"
+    }
+  ]
+}

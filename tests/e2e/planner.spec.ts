@@ -188,6 +188,7 @@ test('secret clarification answer is excluded without consuming the pending task
   await expect(page.getByTestId('user-message')).toHaveCount(0);
   await expect(page.getByTestId('assistant-message')).toHaveCount(0);
   await expect(page.getByText('Sensitive value removed',{exact:false})).toHaveCount(0);
+  await expect(page.getByTestId('conversation')).toHaveCount(0);
   await page.getByRole('button',{name:'Try the two sample PDFs'}).click();await expect(page.getByText('Your 2 PDFs are ready.',{exact:false})).toBeVisible();
   await send(page,'Page 2');await expect.poll(()=>sent.length).toBe(6);expect(sent[5].pendingClarification).toBeNull();
 });

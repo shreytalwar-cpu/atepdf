@@ -1,0 +1,2 @@
+BASELINE SAFE: pending workspace checkpoint then reset drains in order; relaunch contains 0 old files.
+BASELINE FAILURE: Cancel during pending import checkpoint completes and retains/persists 1 old file.

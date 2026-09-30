@@ -1,5 +1,5 @@
 import {Platform} from 'react-native';
-import {JobController} from '@core/job-controller';
+import {JobController,releaseInputFiles,type LocalInputFile} from '@core/job-controller';
 import {LocalFileStore} from '@core/local-file-store';
 import {preflight,transform} from '@pdf/engine';
 import type {EngineRequest,Inspection,OCRPage} from '@pdf/types';
@@ -67,17 +67,26 @@ export const createController=()=>new JobController(new LocalFileStore(),{
     progress('Recognising English on your device');return withPDF(bytes,signal,uri=>requireReader().recognizeAsync(uri));
   },
 });
-export async function chooseFiles(){
+export async function chooseFiles(signal?:AbortSignal){
+  signal?.throwIfAborted();
   requireReader();let result:Awaited<ReturnType<typeof DocumentPicker.getDocumentAsync>>;
   try{result=await DocumentPicker.getDocumentAsync({type:'application/pdf',multiple:true,copyToCacheDirectory:true});}
   catch{throw new Error('The selected PDFs could not be copied into local storage. Try again.');}
   if(result.canceled)return [];
-  return result.assets.map(asset=>{
-    const file=new File(asset.uri),size=file.size;
-    return {name:asset.name,size,arrayBuffer:()=>file.arrayBuffer(),release:()=>{if(inside(file,pickerCache))removeTemporary(file);}} as unknown as globalThis.File;
-  });
+  const files:(Omit<LocalInputFile,'size'>&{size:number})[]=[];
+  try{
+    // Register every returned handle before any fallible metadata read. A size
+    // failure on one copy still releases later, unread picker copies.
+    for(const asset of result.assets){
+      files.push({name:asset.name,size:0,arrayBuffer:()=>new File(asset.uri).arrayBuffer(),release:()=>{const file=new File(asset.uri);if(inside(file,pickerCache))removeTemporary(file);}});
+    }
+    for(const [index,input] of files.entries())input.size=new File(result.assets[index].uri).size;
+    if(signal?.aborted){await releaseInputFiles(files);return [];}
+    return files as unknown as globalThis.File[];
+  }catch{await releaseInputFiles(files);throw new Error('The selected PDFs could not be opened. Try again.');}
 }
-export async function sampleFiles(){
+export async function sampleFiles(signal?:AbortSignal){
+  signal?.throwIfAborted();
   requireReader();const modules=[require('../../assets/fixtures/brief.pdf'),require('../../assets/fixtures/appendix.pdf')];
   return Promise.all(modules.map(async(module,index)=>{
     const asset=Asset.fromModule(module);await asset.downloadAsync();if(!asset.localUri)throw new Error('Bundled sample unavailable.');

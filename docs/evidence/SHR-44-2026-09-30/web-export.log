@@ -1,0 +1,26 @@
+Starting Metro Bundler
+
+| (node:67161) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+| (node:67161) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)
+Web Bundled 1036ms index.ts (1090 modules)
+
+› Assets (3):
+assets/approved-8-mark-source-crop.8b708587521942c4118f8e6a3c3f84f8.png (35KB)
+assets/approved-atepdf-wordmark-source-crop.e129a61b59d2f9c2fdcb1f1b2521e212.png (34KB)
+assets/paper.1cb2ca1d4826879d6316a24bfbeecd07.png (688KB)
+
+› web bundles (6):
+_expo/static/css/global-3d19a08aa96887d1b98e0a6848d7afd8.css (24KB)
+_expo/static/css/preview-4a592c39668f775437665576652be491.css (2.5KB)
+_expo/static/css/workspace-9ca8942114a70307784c156bddc23a49.css (1.3KB)
+_expo/static/js/web/index-9007bdbd039683c840f7e87db4b0c7d0.js (2.3MB)
+_expo/static/js/web/index-c1ffcc54cc6ed28228dc1284888bc9a4.js (18KB)
+_expo/static/js/web/pdf-5f017948a7bfe26e31901c106ae623d2.js (549KB)
+
+› Files (2):
+index.html (1.8KB)
+metadata.json (49B)
+
+Exported: dist-web

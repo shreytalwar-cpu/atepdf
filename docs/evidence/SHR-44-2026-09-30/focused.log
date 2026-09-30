@@ -1,0 +1,32 @@
+✔ delayed sample + Cancel: no import, chat or save after invalidation (85.2855ms)
+✔ delayed sample + Start Over: no import, chat or save after invalidation (61.334333ms)
+✔ old picker callback after a new import: newest selection remains authoritative (43.778292ms)
+✔ pending setup completion after reset cannot append chat or restore focus (59.747792ms)
+✔ pending export saved after reset: no stale receipt or error (59.955417ms)
+✔ pending export shared after reset: no stale receipt or error (58.346166ms)
+✔ pending export failure after reset: no stale receipt or error (59.033875ms)
+✔ repeated cancel while sample is pending is idempotent and silent on late rejection (39.949375ms)
+✔ old callback after Undo cannot alter the current result hash or append an import (66.337959ms)
+✔ current result hash/state survive a stale sample after Cancel (48.775125ms)
+✔ current result hash/state survive a stale sample after Start Over (70.83825ms)
+✔ current result hash/state survive a stale sample after new import (49.759208ms)
+✔ current result hash/state survive a stale sample after Undo (67.718625ms)
+✔ current result hash/state survive a stale sample after generation change (45.870458ms)
+✔ new picker owns loading: old finally cannot unlock the replacement (48.27725ms)
+✔ invalidated partial import releases all temporary copies and leaves external original bytes unchanged (39.038583ms)
+✔ generation advance aborts cooperative work and voids old tickets (0.117167ms)
+✔ checkpoint scheduled before reset never runs in the new generation or reports an old error (1.318708ms)
+✔ late receipt from an earlier result is discarded after another result becomes current (35.028292ms)
+✔ non-cooperative engine completion cannot promote after Cancel; lock drains before replacement (55.126084ms)
+✔ pending durable import save + Cancel cannot persist a partial import on relaunch (42.977167ms)
+✔ Cancel during atomic head publication drains and durably withdraws the candidate (52.508917ms)
+✔ pending workspace save completion after reset cannot restore old state on disk (92.03475ms)
+✔ pending workspace open + Cancel cannot hydrate old files, transcript or draft (118.95775ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1411.727209

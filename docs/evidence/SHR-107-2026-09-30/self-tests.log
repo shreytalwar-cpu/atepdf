@@ -1,0 +1,31 @@
+✔ orchestration corpus: closed schema, deterministic disjoint split and multi-turn keys (289.221375ms)
+✔ eval grader catches wrong tool and invented tool even when admission refused (243.244708ms)
+✔ eval grader catches a supported but wrong tool (105.977291ms)
+✔ eval grader catches wrong operation order (98.541292ms)
+✔ eval grader catches reversed file order with an actionable expected/got message (78.351209ms)
+✔ eval grader catches wrong physical page selectors (90.812291ms)
+✔ eval grader penalizes needless clarification (48.329625ms)
+✔ eval grader penalizes missing clarification and wrong choices (42.590166ms)
+✔ eval grader catches malformed and missing proposed plans (44.594708ms)
+✔ eval grader catches stale revision acceptance and stale target acceptance (89.066666ms)
+✔ eval grader catches forbidden provider calls and missing legitimate provider calls (79.5775ms)
+✔ eval grader catches forbidden tool invocation and premature quality execution (41.170041ms)
+✔ eval grader catches document, derived, filename, path and secret canaries in nested outbound data (182.907583ms)
+✔ privacy policy detects absent, stale, revoked and expanded permission and provider mismatch (40.911125ms)
+✔ privacy grader policy is replaceable without changing runner/corpus contracts (39.526584ms)
+✔ eval grader catches allowance bypass and permits safe controls (86.073625ms)
+✔ plan equivalence ignores labels/object key order and removal index order, preserving dependency and input order (104.458958ms)
+✔ protect-last constraints catch encryption before content changes even for unavailable tools (43.519333ms)
+✔ ordered collections and final result refs are not collapsed by normalization (0.312584ms)
+✔ current mocked adapter preserves dynamic follow-up state and rejects missing fixtures (91.332083ms)
+✔ baseline comparison rejects safety increases, selection changes and visible-only gains (51.624916ms)
+✔ runner suppresses held-out keys/details, filters cases, exports dev only and isolates candidate inputs (6469.399334ms)
+✔ a matching consent receipt alone cannot allow content in a local-only scenario (46.042292ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9092.05325

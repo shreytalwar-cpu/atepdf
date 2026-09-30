@@ -1,6 +1,6 @@
 # SHR-52 — Bounded local-reader and Catalyst evidence
 
-Recorded **30 September 2026** for [SHR-52](https://linear.app/shrey-talwar/issue/SHR-52/select-and-prove-a-local-pdf-encryption-engine-and-profile). Decision: [ADR 0013](../../adr/0013-local-pdf-encryption-engine.md), **Approved by Shrey on 30 September 2026**, ENC-1–7; approval changes no recorded proof result.
+Recorded **30 September 2026** for [SHR-52](https://linear.app/shrey-talwar/issue/SHR-52/select-and-prove-a-local-pdf-encryption-engine-and-profile). Decision: [ADR 0017](../../adr/0017-local-pdf-encryption-engine.md), **Approved by Shrey on 30 September 2026**, ENC-1–7; approval changes no recorded proof result.
 
 ## Scope and source
 
@@ -35,7 +35,7 @@ Poppler `pdftoppm` rendered the original using the known fixture user password, 
 
 The standalone read-only PDFKit helper compiled/linked separately for **arm64 and x86_64 Mac Catalyst** with targets `*-apple-ios17.0-macabi`, the macOS 27 SDK and its iOSSupport framework search path. `lipo` combined them. [Recorded architecture/platform stamps](catalyst-build.txt): both slices `MACCATALYST`, minos 17.0, SDK 27.0. The arm64 Catalyst helper ran with the outcomes above. The x86_64 helper was **not run**. Its existence does not establish QPDF, an app build, Intel behavior, sandbox/storage or channel compatibility.
 
-The helper source SHA-256 is `c17a2023517d993360ac4c088e51cdaa2a3f3d2af08b9cdc317701add5a1aa23`; Universal helper SHA-256 `929c17d2bfcb9b9ccd43ff9a5d7b2a9110daa78f439547062ac4b2866873ecbd`. Helper executables/module caches are temporary and are not included in the PR.
+The helper source SHA-256 is `c17a2023517d993360ac4c088e51cdaa2a3f3d2af08b9cdc317701add5a1aa23`; Universal helper SHA-256 `929c17d2bfcb9b9ccd43ff9a5d7b2a9110daa78f439547062ac4b2866873ecbd`. The helper binary hash identifies only that historical linked artifact; it is **not reproducible** across linking/toolchain runs and is not a deterministic build oracle. Helper executables/module caches were not retained and are not included in the PR. The Catalyst JSON platform/architecture annotations come from the existing build stamps and arm64 execution record, not a new probe.
 
 ## Reproduce the bounded reader check
 
@@ -78,3 +78,5 @@ The native macOS helper used `xcrun swiftc main.swift -module-cache-path ./modul
 Primary-source QPDF API/provider/license research and a read-only pinned `v12.4.2/libqpdf/QPDF_encryption.cc` inspection are **documented evidence**. The inspected file SHA-256 is `8b4a371e58a346d3526bf172da59bf26787552cb898673587d19d4ae0f4b58c7`. It is not a compiled library or transformation result. No QPDF/libqpdf/mutool was found in the checked PATH and standard library locations; pikepdf was absent. CMake was not on PATH. ENC-6 approval for the exact dependency set and bounded proof is now recorded in ADR §12; no acquisition/build/install was performed during approval closeout. Additional tools/dependencies still need approval, and proof execution remains for separately assigned work.
 
 The ADR's exact owner-approved bounded proof plan covers QPDF output/authentication, conforming version/Info/XMP, independent Preview/Adobe and automated readers, R4/R5/restricted/signed/malformed fixtures, preservation, password lifetime, cancellation/storage, both native slices and signed channel archives. **All are unverified here.** No PDFKit helper or pypdf-created fixture should be relabelled QPDF proof.
+
+Cross-review fix pass: S52-01/02/G3b/G4/03/04/05/06/07. ADR renumbering changes only the identifier; original reader observations remain historical. Rebased on main 7853973. #101’s owner amends its conflicting password acceptance row under G3b; no runtime support is added here.

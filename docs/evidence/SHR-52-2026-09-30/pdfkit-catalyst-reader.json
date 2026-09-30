@@ -1,42 +1,50 @@
 [
   {
-    "case" : "empty",
-    "encrypted" : true,
-    "lockedAfter" : true,
-    "lockedBefore" : true,
-    "markerMatches" : false,
-    "pages" : 0,
-    "permissionsStatus" : 0,
-    "unlockReturned" : false
+    "platform": "Mac Catalyst",
+    "architecture": "arm64",
+    "case": "empty",
+    "encrypted": true,
+    "lockedAfter": true,
+    "lockedBefore": true,
+    "markerMatches": false,
+    "pages": 0,
+    "permissionsStatus": 0,
+    "unlockReturned": false
   },
   {
-    "case" : "wrong",
-    "encrypted" : true,
-    "lockedAfter" : true,
-    "lockedBefore" : true,
-    "markerMatches" : false,
-    "pages" : 0,
-    "permissionsStatus" : 0,
-    "unlockReturned" : false
+    "platform": "Mac Catalyst",
+    "architecture": "arm64",
+    "case": "wrong",
+    "encrypted": true,
+    "lockedAfter": true,
+    "lockedBefore": true,
+    "markerMatches": false,
+    "pages": 0,
+    "permissionsStatus": 0,
+    "unlockReturned": false
   },
   {
-    "case" : "user",
-    "encrypted" : true,
-    "lockedAfter" : false,
-    "lockedBefore" : true,
-    "markerMatches" : true,
-    "pages" : 1,
-    "permissionsStatus" : 1,
-    "unlockReturned" : true
+    "platform": "Mac Catalyst",
+    "architecture": "arm64",
+    "case": "user",
+    "encrypted": true,
+    "lockedAfter": false,
+    "lockedBefore": true,
+    "markerMatches": true,
+    "pages": 1,
+    "permissionsStatus": 1,
+    "unlockReturned": true
   },
   {
-    "case" : "owner",
-    "encrypted" : true,
-    "lockedAfter" : false,
-    "lockedBefore" : true,
-    "markerMatches" : true,
-    "pages" : 1,
-    "permissionsStatus" : 2,
-    "unlockReturned" : true
+    "platform": "Mac Catalyst",
+    "architecture": "arm64",
+    "case": "owner",
+    "encrypted": true,
+    "lockedAfter": false,
+    "lockedBefore": true,
+    "markerMatches": true,
+    "pages": 1,
+    "permissionsStatus": 2,
+    "unlockReturned": true
   }
 ]

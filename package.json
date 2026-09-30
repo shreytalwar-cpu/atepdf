@@ -25,7 +25,9 @@
     "check:generated": "node scripts/contracts.mjs --check && node scripts/embed-product-knowledge.mjs --check",
     "check:schemas": "node --import tsx scripts/verification/schemas.mts",
     "typecheck:universal": "tsc --noEmit -p apps/universal/tsconfig.json",
-    "typecheck:compatibility": "tsc --noEmit -p tests/compatibility/tsconfig.json"
+    "typecheck:compatibility": "tsc --noEmit -p tests/compatibility/tsconfig.json",
+    "eval:orchestration": "node --import tsx tests/evals/orchestration/run.mts",
+    "test:eval:orchestration": "node --import tsx --test tests/regressions/orchestration-eval.test.ts"
   },
   "dependencies": {
     "@ai-sdk/openai": "4.0.78",

@@ -1,0 +1,6 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {"incremental": false, "types": ["node"], "allowImportingTsExtensions": true},
+  "include": ["*.ts", "*.mts", "../../regressions/orchestration-eval.test.ts"],
+  "exclude": []
+}

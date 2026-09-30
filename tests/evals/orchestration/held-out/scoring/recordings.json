@@ -1,0 +1,424 @@
+{
+  "provenance": "Synthetic scripted responses using current schemas/prompt constraints; no live model observations. Kept separate from grading keys.",
+  "responses": {
+    "O107-005:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "unsupported",
+        "reasonCode": "unavailable_capability",
+        "message": "Rotation is not available in this runtime.",
+        "choices": []
+      }
+    },
+    "O107-006:0": {
+      "toolName": "run_local_pdf_workflow",
+      "input": {
+        "schemaVersion": "1.0",
+        "status": "plan",
+        "reasonCode": null,
+        "steps": [
+          {
+            "id": "s_1",
+            "operation": "compress_pdf",
+            "inputs": [
+              "A"
+            ],
+            "outputRef": "out_stage1",
+            "params": {
+              "targetBytes": 5000000,
+              "preset": "lossless",
+              "batchMode": "single"
+            }
+          }
+        ],
+        "resultRefs": [
+          "out_stage1"
+        ],
+        "clarification": null
+      }
+    },
+    "O107-007:0": {
+      "toolName": "run_local_pdf_workflow",
+      "input": {
+        "schemaVersion": "1.0",
+        "status": "plan",
+        "reasonCode": null,
+        "steps": [
+          {
+            "id": "s_1",
+            "operation": "merge_pdf",
+            "inputs": [
+              "B",
+              "A"
+            ],
+            "outputRef": "out_stage1",
+            "params": {
+              "ordering": "as_provided"
+            }
+          }
+        ],
+        "resultRefs": [
+          "out_stage1"
+        ],
+        "clarification": null
+      }
+    },
+    "O107-010:0": {
+      "toolName": "run_local_pdf_workflow",
+      "input": {
+        "schemaVersion": "1.0",
+        "status": "plan",
+        "reasonCode": null,
+        "steps": [
+          {
+            "id": "s_1",
+            "operation": "select_pages",
+            "inputs": [
+              "B"
+            ],
+            "outputRef": "out_stage1",
+            "params": {
+              "action": "remove",
+              "pages": {
+                "mode": "explicit",
+                "indices": [
+                  2
+                ]
+              }
+            }
+          },
+          {
+            "id": "s_2",
+            "operation": "merge_pdf",
+            "inputs": [
+              "A",
+              "out_stage1"
+            ],
+            "outputRef": "out_stage2",
+            "params": {
+              "ordering": "as_provided"
+            }
+          },
+          {
+            "id": "s_3",
+            "operation": "compress_pdf",
+            "inputs": [
+              "out_stage2"
+            ],
+            "outputRef": "out_stage3",
+            "params": {
+              "targetBytes": 5000000,
+              "preset": "lossless",
+              "batchMode": "single"
+            }
+          }
+        ],
+        "resultRefs": [
+          "out_stage3"
+        ],
+        "clarification": null
+      }
+    },
+    "O107-011:0": {
+      "toolName": "run_local_pdf_workflow",
+      "input": {
+        "schemaVersion": "1.0",
+        "status": "plan",
+        "reasonCode": null,
+        "steps": [
+          {
+            "id": "s_1",
+            "operation": "compress_pdf",
+            "inputs": [
+              "A"
+            ],
+            "outputRef": "out_stage1",
+            "params": {
+              "targetBytes": 5000000,
+              "preset": "lossless",
+              "batchMode": "single"
+            }
+          },
+          {
+            "id": "s_2",
+            "operation": "ocr_pdf",
+            "inputs": [
+              "out_stage1"
+            ],
+            "outputRef": "out_stage2",
+            "params": {
+              "languages": [
+                "eng"
+              ],
+              "existingText": "preserve",
+              "batchMode": "single"
+            }
+          }
+        ],
+        "resultRefs": [
+          "out_stage2"
+        ],
+        "clarification": null
+      }
+    },
+    "O107-016:0": {
+      "toolName": "run_local_pdf_workflow",
+      "input": {
+        "schemaVersion": "1.0",
+        "status": "plan",
+        "reasonCode": null,
+        "steps": [
+          {
+            "id": "s_1",
+            "operation": "merge_pdf",
+            "inputs": [
+              "A",
+              "B"
+            ],
+            "outputRef": "out_stage1",
+            "params": {
+              "ordering": "as_provided"
+            }
+          }
+        ],
+        "resultRefs": [
+          "out_stage1"
+        ],
+        "clarification": null
+      }
+    },
+    "O107-016:1": {
+      "toolName": "run_local_pdf_workflow",
+      "input": {
+        "schemaVersion": "1.0",
+        "status": "plan",
+        "reasonCode": null,
+        "steps": [
+          {
+            "id": "s_1",
+            "operation": "select_pages",
+            "inputs": [
+              "$focus"
+            ],
+            "outputRef": "out_stage1",
+            "params": {
+              "action": "remove",
+              "pages": {
+                "mode": "explicit",
+                "indices": [
+                  6
+                ]
+              }
+            }
+          }
+        ],
+        "resultRefs": [
+          "out_stage1"
+        ],
+        "clarification": null
+      }
+    },
+    "O107-017:0": {
+      "toolName": "run_local_pdf_workflow",
+      "input": {
+        "schemaVersion": "1.0",
+        "status": "plan",
+        "reasonCode": null,
+        "steps": [
+          {
+            "id": "s_1",
+            "operation": "compress_pdf",
+            "inputs": [
+              "A"
+            ],
+            "outputRef": "out_stage1",
+            "params": {
+              "targetBytes": 5000000,
+              "preset": "lossless",
+              "batchMode": "single"
+            }
+          }
+        ],
+        "resultRefs": [
+          "out_stage1"
+        ],
+        "clarification": null
+      }
+    },
+    "O107-023:0": {
+      "toolName": "run_local_pdf_workflow",
+      "input": {
+        "schemaVersion": "1.0",
+        "status": "plan",
+        "reasonCode": null,
+        "steps": [
+          {
+            "id": "s_1",
+            "operation": "merge_pdf",
+            "inputs": [
+              "A",
+              "B"
+            ],
+            "outputRef": "out_stage1",
+            "params": {
+              "ordering": "as_provided"
+            }
+          }
+        ],
+        "resultRefs": [
+          "out_stage1"
+        ],
+        "clarification": null
+      }
+    },
+    "O107-026:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "clarify",
+        "reasonCode": "missing_parameter",
+        "message": "Which page?",
+        "choices": [
+          "Page 1",
+          "Page 2"
+        ]
+      }
+    },
+    "O107-027:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "unsupported",
+        "reasonCode": "content_required",
+        "message": "Refresh the local page selection first.",
+        "choices": []
+      }
+    },
+    "O107-030:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "clarify",
+        "reasonCode": "missing_parameter",
+        "message": "Which page?",
+        "choices": []
+      }
+    },
+    "O107-030:2": {
+      "toolName": "run_local_pdf_workflow",
+      "input": {
+        "schemaVersion": "1.0",
+        "status": "plan",
+        "reasonCode": null,
+        "steps": [
+          {
+            "id": "s_1",
+            "operation": "ocr_pdf",
+            "inputs": [
+              "A"
+            ],
+            "outputRef": "out_stage1",
+            "params": {
+              "languages": [
+                "eng"
+              ],
+              "existingText": "preserve",
+              "batchMode": "single"
+            }
+          }
+        ],
+        "resultRefs": [
+          "out_stage1"
+        ],
+        "clarification": null
+      }
+    },
+    "O107-034:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "unsupported",
+        "reasonCode": "excluded_operation",
+        "message": "That operation is not supported.",
+        "choices": []
+      }
+    },
+    "O107-036:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "unsupported",
+        "reasonCode": "excluded_operation",
+        "message": "The complete workflow is unsupported; no subset will run.",
+        "choices": []
+      }
+    },
+    "O107-039:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "unsupported",
+        "reasonCode": "unavailable_capability",
+        "message": "This runtime supports whole-document English OCR only.",
+        "choices": []
+      }
+    },
+    "O107-041:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "unsupported",
+        "reasonCode": "unavailable_capability",
+        "message": "Ordered image collections are unavailable.",
+        "choices": []
+      }
+    },
+    "O107-043:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "unsupported",
+        "reasonCode": "unavailable_capability",
+        "message": "Content changes require an unlocked stage; Protect is unavailable.",
+        "choices": []
+      }
+    },
+    "O107-050:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "unsupported",
+        "reasonCode": "content_required",
+        "message": "Content transfer is not supported.",
+        "choices": []
+      }
+    },
+    "O107-051:0": {
+      "toolName": "reply_in_chat",
+      "input": {
+        "status": "unsupported",
+        "reasonCode": "content_required",
+        "message": "No document transfer will run.",
+        "choices": []
+      }
+    },
+    "O107-058:0": {
+      "toolName": "run_local_pdf_workflow",
+      "input": {
+        "schemaVersion": "1.0",
+        "status": "plan",
+        "reasonCode": null,
+        "steps": [
+          {
+            "id": "s_1",
+            "operation": "compress_pdf",
+            "inputs": [
+              "B"
+            ],
+            "outputRef": "out_stage1",
+            "params": {
+              "targetBytes": 5000000,
+              "preset": "lossless",
+              "batchMode": "single"
+            }
+          }
+        ],
+        "resultRefs": [
+          "out_stage1"
+        ],
+        "clarification": null
+      }
+    }
+  }
+}

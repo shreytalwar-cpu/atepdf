@@ -1,6 +1,6 @@
 # SHR-52 — Bounded local-reader and Catalyst evidence
 
-Recorded **30 September 2026** for [SHR-52](https://linear.app/shrey-talwar/issue/SHR-52/select-and-prove-a-local-pdf-encryption-engine-and-profile). Decision: [ADR 0013](../../adr/0013-local-pdf-encryption-engine.md), **Proposed**, owner decisions ENC-1–7 pending.
+Recorded **30 September 2026** for [SHR-52](https://linear.app/shrey-talwar/issue/SHR-52/select-and-prove-a-local-pdf-encryption-engine-and-profile). Decision: [ADR 0013](../../adr/0013-local-pdf-encryption-engine.md), **Approved by Shrey on 30 September 2026**, ENC-1–7; approval changes no recorded proof result.
 
 ## Scope and source
 
@@ -23,7 +23,7 @@ Each password case opens a **fresh reader**. Success means one readable page con
 
 Recorded outcomes: [pypdf/Poppler](fixture-readers.json), [PDF.js/pdf-lib](js-readers.json), [native PDFKit](pdfkit-reader.json), [Catalyst PDFKit](pdfkit-catalyst-reader.json).
 
-The dictionary is `/Filter /Standard`, `/V 5`, `/R 6`, `/Length 256`, `/CFM /AESV3` for string/stream crypt filters, `/P 4294967292` (fully permissive), document-open authentication. `/EncryptMetadata` is absent (true by default); **no XMP stream exists**. Poppler reports a **PDF 1.3 header** despite R6. Tolerant-reader success therefore does not prove the proposed PDF 1.7 extension-8 output profile or XMP encryption. No restricted-permission case was present.
+The dictionary is `/Filter /Standard`, `/V 5`, `/R 6`, `/Length 256`, `/CFM /AESV3` for string/stream crypt filters, `/P 4294967292` (fully permissive), document-open authentication. `/EncryptMetadata` is absent (true by default); **no XMP stream exists**. Poppler reports a **PDF 1.3 header** despite R6. Tolerant-reader success therefore does not prove the approved PDF 1.7 extension-8 output profile or XMP encryption. No restricted-permission case was present.
 
 pdf-lib 1.17.1 default load rejects the encrypted document. An `ignoreEncryption:true` load still reports `isEncrypted:true`; the probe deliberately did not save it. Installed TypeScript SaveOptions inspection found no encryption setting. This option supplies no decryption engine.
 
@@ -75,6 +75,6 @@ The native macOS helper used `xcrun swiftc main.swift -module-cache-path ./modul
 
 ## Documented versus missing proof
 
-Primary-source QPDF API/provider/license research and a read-only pinned `v12.4.2/libqpdf/QPDF_encryption.cc` inspection are **documented evidence**. The inspected file SHA-256 is `8b4a371e58a346d3526bf172da59bf26787552cb898673587d19d4ae0f4b58c7`. It is not a compiled library or transformation result. No QPDF/libqpdf/mutool was found in the checked PATH and standard library locations; pikepdf was absent. CMake was not on PATH. Downloading/building/installing the proposed dependency set requires ENC-6 approval.
+Primary-source QPDF API/provider/license research and a read-only pinned `v12.4.2/libqpdf/QPDF_encryption.cc` inspection are **documented evidence**. The inspected file SHA-256 is `8b4a371e58a346d3526bf172da59bf26787552cb898673587d19d4ae0f4b58c7`. It is not a compiled library or transformation result. No QPDF/libqpdf/mutool was found in the checked PATH and standard library locations; pikepdf was absent. CMake was not on PATH. ENC-6 approval for the exact dependency set and bounded proof is now recorded in ADR §12; no acquisition/build/install was performed during approval closeout. Additional tools/dependencies still need approval, and proof execution remains for separately assigned work.
 
-The ADR's exact approval-gated proof plan covers QPDF output/authentication, conforming version/Info/XMP, independent Preview/Adobe and automated readers, R4/R5/restricted/signed/malformed fixtures, preservation, password lifetime, cancellation/storage, both native slices and signed channel archives. **All are unverified here.** No PDFKit helper or pypdf-created fixture should be relabelled QPDF proof.
+The ADR's exact owner-approved bounded proof plan covers QPDF output/authentication, conforming version/Info/XMP, independent Preview/Adobe and automated readers, R4/R5/restricted/signed/malformed fixtures, preservation, password lifetime, cancellation/storage, both native slices and signed channel archives. **All are unverified here.** No PDFKit helper or pypdf-created fixture should be relabelled QPDF proof.

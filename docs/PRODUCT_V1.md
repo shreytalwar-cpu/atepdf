@@ -67,7 +67,7 @@ The two Mac builds should deliver the same core document experience. Purchasing,
 
 V1 excludes editing existing PDF text, inserting text, drawing, signature workflows, form filling, redaction and annotation creation. Preserving existing forms or annotations during an otherwise supported operation is a separate compatibility requirement, not approval to build an editor.
 
-Also excluded: collaboration, cloud workspace sync, enterprise document management, general-purpose document Q&A/RAG, mobile/web product launches, Android completion, a custom agent-management platform, standalone ZIP tooling, and unapproved additional business models. Setapp is not an approved atePDF v1 channel.
+Also excluded: collaboration, cloud workspace sync, enterprise document management, general-purpose document Q&A/RAG, mobile/web product launches, Android completion, a custom agent-management platform, standalone ZIP tooling, and unapproved additional business models. Setapp is not excluded: it is an intended atePDF v1 distribution channel (owner decision ENV-7, 30 September 2026, recorded in `docs/adr/0011-mac-launch-envelope.md`). Its technical and commercial requirements have not been verified, and Setapp acceptance remains pending SHR-91.
 
 Do not add a local LLM, new framework, new engine or new backend platform simply because it appears in an old handoff. A dependency change must solve a demonstrated requirement through a bounded decision.
 

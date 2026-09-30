@@ -49,7 +49,7 @@ Start source for SHR-90: `37e970025eaff9be35a2b8d5fa0291d9c7eef0a5`, latest fetc
 | Catalyst application | `scripts/native/mac-build.sh` in a separately isolated checkout; full Xcode, Python 3, tracked workspace, locally installed **locked** Pods, Node on PATH | Manual compile/build; no launch by default |
 | CocoaPods tools | `scripts/native-tools/Gemfile.lock`, CocoaPods 1.16.2, historical Bundler 2.4.22/Ruby 2.6.10; `apps/universal/ios/Podfile.lock` | Native setup only, not provisioned by Linux CI |
 | Full compatibility/OCR/large files | `tests/compatibility/README.md`, original `playwright.config.ts`, optional Python corpus generation environment | Optional/manual; not each PR |
-| Sonar/quality | No current Sonar configuration, Actions, linter or coverage gate found at dispatch | No service/token provisioned; actionlint validates new workflow |
+| Sonar/quality | No repository Sonar configuration, Actions, linter or coverage gate found at dispatch; live PRs have an existing external SonarCloud automatic check | Preserve existing Sonar service/settings; no new token provisioned; actionlint validates new workflow |
 
 The retained 15-operation catalogue is a historical specification; the current runtime advertises four capabilities. The gate checks their consistency without promoting planned tools into implemented claims. Retained compatibility observations are schema-validated as historical data, not rerun or relabelled current passes. Optional Python corpus regeneration remains visibly skipped unless explicitly provisioned; manifest/hash/reader regressions still run.
 
@@ -59,6 +59,7 @@ SHR-16's fragile assumptions addressed here:
 - It reused installed dependencies/Pods; a dependency symlink failed Metro resolution. Each mode now installs locked packages inside the source snapshot. Native Pods still need separate clean-machine validation.
 - Restricted loopback produced `EPERM`; these tests need ordinary local listening permission, not provider access.
 - Beta unit fixtures import the ignored built gateway; the core lane explicitly builds it before testing.
+- One retained reset assertion required a conversation element even when clearing renders the empty screen. It now verifies the empty screen, zero messages and no sensitive receipt; privacy/continuation assertions remain intact.
 - Default Playwright configuration uses installed Chrome, a fixed port and `reuseExistingServer:true`, and writes tracked historical evidence. PR smoke uses locked Chromium, an owned ephemeral server with no real gateway, and writes within a disposable snapshot.
 - Generator output had internal regular-expression identifier drift in two validators. Regeneration changes identifiers only; validation logic is byte-identical after consistent identifier renaming. This PR does not change schema/product semantics.
 
@@ -67,11 +68,12 @@ SHR-16's fragile assumptions addressed here:
 Recommend these exact GitHub check names, from `.github/workflows/verify.yml`:
 
 - **Shared and quality gates** — clean install; full core and beta units; all three TypeScript configurations; generated checks; schema/catalogue/eval validation; deliberate failure and restoration proof.
+- **SonarCloud Code Analysis** — existing external automatic analysis; preserve service settings. Its check/annotations bind to the PR head; analyzer/service configuration is managed outside this repository.
 - **Safe browser smoke** — fresh Expo export, local engine assets, startup budget, all existing mocked planner cases and the saved merge → remove page → Undo workflow, with independent saved-byte inspection.
 
 Both jobs run on every PR to avoid missing required checks through path filtering. No platform matrix, push duplication or full expensive browser/Apple suite. Concurrency cancels superseded runs. Expensive native acceptance is selected by the changed area and reviewer, not automatically run on every documentation PR. New mandatory coverage should be added when a separately authorized implementation introduces it.
 
-**Owner approval and repository support are still required to configure branch protection/rulesets.** Recommended steps: require the two successful names above on current PR revisions; require conversation resolution; select the intended review count/critical-code ownership policy; forbid auto-merge. Do not bypass unavailable protection. The current read-only API returned HTTP 403 requiring GitHub Pro or a public repository; this task does not change the plan or repository visibility. No protection has been changed.
+**Owner approval and repository support are still required to configure branch protection/rulesets.** Recommended steps: require the two workflow names above and retain the existing SonarCloud check if the owner chooses it as required on current PR revisions; require conversation resolution; select the intended review count/critical-code ownership policy; forbid auto-merge. Do not bypass unavailable protection. The current read-only API returned HTTP 403 requiring GitHub Pro or a public repository; this task does not change the plan or repository visibility. No protection has been changed.
 
 No auto-merge. Implementation PRs may be batch reviewed later. Security, storage, billing, signing and outbound-boundary changes need stronger independent human/appropriate specialist review, with explicit acceptance evidence. No mandatory per-PR cross-model review is introduced. CI never replaces actual Mac acceptance. Reviews and owner release approval remain separate.
 

@@ -184,7 +184,10 @@ test('secret clarification answer is excluded without consuming the pending task
   await send(page,'What can atepdf do?');await expect.poll(()=>sent.length).toBe(5);
   await send(page,canary);await expect.poll(()=>page.getByText('Keep keys and passwords out of chat.',{exact:false}).count()).toBe(3);expect(sent).toHaveLength(5);
   await page.getByRole('button',{name:'Start over'}).click();await page.getByRole('button',{name:'Clear session'}).click();
-  await expect(page.getByTestId('conversation')).not.toContainText('Sensitive value removed');
+  await expect(page.getByRole('heading',{name:'Drop files here'})).toBeVisible();
+  await expect(page.getByTestId('user-message')).toHaveCount(0);
+  await expect(page.getByTestId('assistant-message')).toHaveCount(0);
+  await expect(page.getByText('Sensitive value removed',{exact:false})).toHaveCount(0);
   await page.getByRole('button',{name:'Try the two sample PDFs'}).click();await expect(page.getByText('Your 2 PDFs are ready.',{exact:false})).toBeVisible();
   await send(page,'Page 2');await expect.poll(()=>sent.length).toBe(6);expect(sent[5].pendingClarification).toBeNull();
 });

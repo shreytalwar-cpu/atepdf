@@ -20,7 +20,7 @@ const operationIDs=branches.map((entry:any)=>entry.properties.operation.const);
 assert.equal(new Set(operationIDs).size,operationIDs.length,'Duplicate response operation');
 const ids=new Set<string>();
 for(const entry of registry.operations){
-  assert.deepEqual(Object.keys(entry).sort(),[...fields].sort(),`Malformed catalogue entry ${entry.id}`);
+  assert.deepEqual(Object.keys(entry).sort((a:string,b:string)=>a.localeCompare(b)),[...fields].sort((a:string,b:string)=>a.localeCompare(b)),`Malformed catalogue entry ${entry.id}`);
   assert.match(entry.id,/^[a-z][a-z_]+$/);assert.ok(!ids.has(entry.id),`Duplicate catalogue ID ${entry.id}`);ids.add(entry.id);
   assert.equal(entry.protocolVersion,'1.0');assert.equal(entry.execution,'local');
   assert.equal(typeof entry.implementationStatus,'string');assert.equal(typeof entry.releaseGate,'string');
@@ -33,8 +33,8 @@ for(const entry of registry.operations){
   assert.ok(branch,`Catalogue operation missing from response schema: ${entry.id}`);
   assert.ok(isDeepStrictEqual(entry.parameters,branch.properties.params),`Catalogue/schema parameter drift: ${entry.id}`);
 }
-assert.deepEqual([...ids].sort(),[...operationIDs].sort(),'Catalogue/response operation drift');
-assert.deepEqual([...ids].sort(),[...contracts['planner-request'].properties.capabilities.items.enum].sort(),'Catalogue/request capability drift');
+assert.deepEqual([...ids].sort((a:string,b:string)=>a.localeCompare(b)),[...operationIDs].sort((a:string,b:string)=>a.localeCompare(b)),'Catalogue/response operation drift');
+assert.deepEqual([...ids].sort((a:string,b:string)=>a.localeCompare(b)),[...contracts['planner-request'].properties.capabilities.items.enum].sort((a:string,b:string)=>a.localeCompare(b)),'Catalogue/request capability drift');
 for(const capability of capabilities)assert.ok(ids.has(capability),`Runtime capability absent from catalogue: ${capability}`);
 // The broad retained catalogue is a specification, not an executable-tool claim.
 for(const [file,schemaFile]of [

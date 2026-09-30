@@ -1,6 +1,6 @@
 import {spawnSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
-import {mkdtempSync,readFileSync,writeFileSync,mkdirSync,openSync,closeSync,rmSync,readdirSync} from 'node:fs';
+import {mkdtempSync,readFileSync,writeFileSync,mkdirSync,openSync,closeSync,rmSync,readdirSync,existsSync} from 'node:fs';
 import {dirname,join,resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {tmpdir} from 'node:os';
@@ -122,6 +122,8 @@ try{
   record.passed=true;
 }catch(error){record.error=error.message;process.exitCode=1;console.error(error.message);}
 finally{
+  const browserReport=join(scratch,'.build/verification-browser.json');
+  if(existsSync(browserReport))record.browser=JSON.parse(readFileSync(browserReport,'utf8'));
   record.finishedAt=new Date().toISOString();
   const {browser,...compact}=record;console.log(JSON.stringify({...compact,browserStats:browser?.report?.stats||null},null,2));
   writeFileSync(join(reportDir,'report.json'),JSON.stringify(record,null,2)+'\n');

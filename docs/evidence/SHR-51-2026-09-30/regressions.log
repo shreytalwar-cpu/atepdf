@@ -1,20 +1,20 @@
-✔ SHR-46 verifier supports independently reopened, unchanged saved PDF properties (710.382042ms)
-✔ SHR-46 only specific intentional refusal with unchanged originals and no promotion is safe (0.497834ms)
-✔ SHR-46 generic crashes and unsafe upstream exceptions are failures, never safe refusals (0.528625ms)
-✔ SHR-46 deliberate truncated/corrupt output cannot be called supported (16.746125ms)
-✔ SHR-46 reordered known-good pages produce a fidelity mismatch (38.51425ms)
-✔ SHR-46 missing page and changed crop geometry are distinct verified mismatches (40.183917ms)
-✔ SHR-46 unreadable arbitrary result, absent executor and unrun scenario are not passes (15.335125ms)
-✔ SHR-46 incomplete verification and explicit unresolved coverage remain unverified (0.20575ms)
-✔ SHR-46 schema rejects false support and records missing/unrun executors explicitly (78.683166ms)
-✔ SHR-46 summary keeps refusals/failures in the executed denominator and excludes unrun/absent work (0.578417ms)
-✔ SHR-46 runner refuses to overwrite an existing evidence destination (441.570209ms)
-✔ SHR-45 manifest schema, provenance, hashes and fixture path boundary (142.871208ms)
-﹣ SHR-45 local generator reproduces deterministic outputs when its optional Python environment is available (0.301792ms) # SKIP
-✔ SHR-45 independent reader checks declared counts and digital page order (912.137833ms)
-✔ SHR-45 genuine links, annotations, outline, form fields and tag relation (35.283917ms)
-✔ SHR-45 embedded font, rotated/nonzero boxes, raster pages and encoded JPEG mismatch (9.38875ms)
-✔ SHR-45 encrypted fixture requires the test-only password and damaged PDF is isolated (570.937083ms)
+✔ SHR-46 verifier supports independently reopened, unchanged saved PDF properties (238.233458ms)
+✔ SHR-46 only specific intentional refusal with unchanged originals and no promotion is safe (0.207125ms)
+✔ SHR-46 generic crashes and unsafe upstream exceptions are failures, never safe refusals (0.249834ms)
+✔ SHR-46 deliberate truncated/corrupt output cannot be called supported (6.948917ms)
+✔ SHR-46 reordered known-good pages produce a fidelity mismatch (14.466792ms)
+✔ SHR-46 missing page and changed crop geometry are distinct verified mismatches (15.108375ms)
+✔ SHR-46 unreadable arbitrary result, absent executor and unrun scenario are not passes (4.418917ms)
+✔ SHR-46 incomplete verification and explicit unresolved coverage remain unverified (0.096083ms)
+✔ SHR-46 schema rejects false support and records missing/unrun executors explicitly (24.737375ms)
+✔ SHR-46 summary keeps refusals/failures in the executed denominator and excludes unrun/absent work (0.233583ms)
+✔ SHR-46 runner refuses to overwrite an existing evidence destination (168.177833ms)
+✔ SHR-45 manifest schema, provenance, hashes and fixture path boundary (33.535417ms)
+﹣ SHR-45 local generator reproduces deterministic outputs when its optional Python environment is available (0.112917ms) # SKIP
+✔ SHR-45 independent reader checks declared counts and digital page order (308.246208ms)
+✔ SHR-45 genuine links, annotations, outline, form fields and tag relation (13.10925ms)
+✔ SHR-45 embedded font, rotated/nonzero boxes, raster pages and encoded JPEG mismatch (3.976875ms)
+✔ SHR-45 encrypted fixture requires the test-only password and damaged PDF is isolated (238.771458ms)
 ℹ tests 17
 ℹ suites 0
 ℹ pass 16
@@ -22,4 +22,4 @@
 ℹ cancelled 0
 ℹ skipped 1
 ℹ todo 0
-ℹ duration_ms 2574.172167
+ℹ duration_ms 1232.579208

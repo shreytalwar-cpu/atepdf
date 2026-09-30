@@ -1,12 +1,12 @@
-# ADR 0014 — v1 tool support profiles and output settings (SHR-51)
+# ADR 0015 — v1 tool support profiles and output settings (SHR-51)
 
-**Status:** **Proposed, pending owner approval of TOOLPROF-1 to TOOLPROF-9** (section 13). Nothing here is implemented, and no runtime capability, tool description or public claim changes until each implementing SHR passes its acceptance map (section 9).  **Source:** `origin/main` `ff3e291` (30 September 2026).  **Authority:** `PRODUCT_V1.md` D-12/D-13/D-15, TOOL-01–15, PDF-01–08, UNDERSTAND-02–04, STATE-05/07, BILL-07, UX-02–04, OPEN-07; [SHR-51](https://linear.app/shrey-talwar/issue/SHR-51/approve-v1-tool-support-profiles-and-output-settings) (parent SHR-22); ADR 0004 (no byte caps), ADR 0011 (Mac envelope), ADR 0012 (privacy classes); SHR-45 corpus; SHR-46 matrix. ADR 0013 (SHR-49, PR #95: owner-approved, **not yet merged**) is cited as pending. SHR-52 (encryption engine/profile) is in progress and is **not** decided here.  **Evidence:** [docs/evidence/SHR-51-2026-09-30](../evidence/SHR-51-2026-09-30/README.md).
+**Status:** **Approved** by Shrey Talwar on 30 September 2026 (TOOLPROF-1 to TOOLPROF-9; section 13). This is an approved target support contract, not implemented support. Nothing here is implemented, and no runtime capability, tool description or public claim changes until each implementing SHR passes its acceptance map (section 9).  **Source:** `origin/main` `ff3e291` (30 September 2026), re-validated after merging `7853973` (SHR-49, documentation only; no source change).  **Authority:** `PRODUCT_V1.md` D-12/D-13/D-15, TOOL-01–15, PDF-01–08, UNDERSTAND-02–04, STATE-05/07, BILL-07, UX-02–04, OPEN-07; [SHR-51](https://linear.app/shrey-talwar/issue/SHR-51/approve-v1-tool-support-profiles-and-output-settings) (parent SHR-22); ADR 0004 (no byte caps), ADR 0011 (Mac envelope), ADR 0012 (privacy classes); SHR-45 corpus; SHR-46 matrix. ADR 0013 (SHR-49; CPDF-1–5 approved and merged) governs linked and signed PDFs. SHR-52 (encryption engine/profile) is in progress and is **not** decided here.  **Evidence:** [docs/evidence/SHR-51-2026-09-30](../evidence/SHR-51-2026-09-30/README.md).
 
 This ADR defines the v1 support contract for the 13 approved tools: which inputs each tool supports, which settings it exposes, what it refuses safely, what counts as success, and how that is proved. It adds no features. Where the evidence is thin, it records the value as **pending** and names the SHR that must measure or prove it. It does not supply an attractive default.
 
 ## 1. Rules for reading this ADR
 
-1. **Observed vs proposed.** Section 2 describes what the code does today. Sections 3–8 describe the proposed v1 launch contract. A proposed item is not a support claim until its implementing SHR passes section 9.
+1. **Observed vs approved target.** Section 2 describes what the code does today. Sections 3–8 describe the approved v1 launch contract. An approved item is not a support claim until its implementing SHR passes section 9.
 2. **Mac is the claim platform.** The claims are for the native Mac Catalyst build: PDFKit/CoreGraphics reading, Vision OCR, ImageIO and the shared pdf-lib writer. Web and iPhone behaviour is preserved but is not the basis for these claims. The SHR-46 OCR evidence came from the web Tesseract path, so Vision OCR on the Mac has **no** matrix evidence yet.
 3. **Technical limits are not commercial limits** (BILL-07). Section 6 keeps them apart.
 4. **Pending means pending.** A value marked *pending SHR-78* or *pending SHR-64* has no approved number. Current prototype constants remain as **provisional safety guards**, not published claims.
@@ -58,9 +58,9 @@ These lists show what the OS offers. They are **not** accuracy or support eviden
 
 ### 3.1 Admission
 
-- **Complex PDFs.** Every tool keeps the current complex-PDF refusal until a bounded decision expands it. The first expansion is ADR 0013: simple HTTP/HTTPS URI links during **Merge only**, once SHR-50 verifies it. Refusals stay specific (UX-02 "Unsupported structure").
+- **Complex PDFs.** Every tool keeps the current complex-PDF refusal until a bounded decision expands it. The only approved expansion is ADR 0013 (CPDF-1): simple absolute HTTP/HTTPS URI links during **Merge only**. Public support stays withheld until SHR-50 implements and verifies it (CPDF-5). This ADR does not broaden linked-PDF support beyond ADR 0013. Refusals stay specific (UX-02 "Unsupported structure").
 - **Encrypted PDFs.** Refused by every tool except **Unlock**. When Unlock ships, the refusal offers it: *"This PDF is password-protected. I can unlock it first — you'll enter the password in a secure field."* atePDF never unlocks automatically, never keeps the password (PDF-07) and never guesses.
-- **Signed or certified PDFs, and PDFs with signature fields.** Refused for every content-changing tool, per ADR 0013 CPDF (approved, pending merge). Read-only tools (Extract Text, PDF to Images) are refused today by the shared `AcroForm` guard. Admitting them later needs its own evidence.
+- **Signed or certified PDFs, and PDFs with signature fields.** Refused for every content-changing tool, per ADR 0013 CPDF-4 (approved). atePDF explains possible signature or certification invalidation and asks for an unsigned copy. Read-only tools (Extract Text, PDF to Images) are refused today by the shared `AcroForm` guard. Admitting them later needs its own evidence.
 - **Malformed input.** Damaged structure and encoded/declared image mismatch are refused at admission with a specific message, not a generic failure.
 
 ### 3.2 Page selector grammar (TOOLPROF-5)
@@ -105,19 +105,20 @@ Rendering comparison is a separate check (SHR-48). A page-count match alone is n
 
 ### 3.5 Metadata that atePDF writes on outputs (part of TOOLPROF-6)
 
-| Output kind | Proposed policy |
+| Output kind | Approved policy |
 |---|---|
-| Single-source page operations (Remove, Reorder, Rotate, Compress, OCR, Protect, Unlock) | Carry the source's Info and XMP forward unchanged. Do not add a library producer string. |
-| New documents (Merge, Split parts, Images to PDF) | No source Info or XMP is copied. No library-identifying `Producer`/`Creator` is written. |
+| Single-source transformations (Remove, Reorder, Rotate, Compress, OCR, Protect, Unlock) | Preserve the source's existing Info and XMP. Do not add a library producer string. |
+| Newly constructed documents (Merge, Split parts, Images to PDF) | Do not copy unrelated source metadata. Do not write a library-identifying `Producer`/`Creator`. |
 | Remove Metadata | Writes no Info or XMP at all (section 5.13). |
+| All outputs | Do **not** add `Producer: atePDF`; it has no product value. |
 
 Today, Merge and Remove write the pdf-lib producer string and drop the source title (gap G6).
 
-## 4. Proposed 13-tool support table (TOOLPROF-9)
+## 4. Approved 13-tool support table (TOOLPROF-9)
 
-"Launch claim" is the proposed public statement. It is withheld until the implementing SHR passes section 9 (TOOL-15).
+"Launch claim" is the approved public statement. It is withheld until the implementing SHR passes section 9 (TOOL-15).
 
-| # | Tool | Supported input | Files | Selectors | Exposed settings | Output | Launch claim (proposed) |
+| # | Tool | Supported input | Files | Selectors | Exposed settings | Output | Launch claim (approved; withheld until verified) |
 |---|---|---|---|---|---|---|---|
 | 1 | Merge | Admitted PDFs | 2 to session limit | Whole documents; order explicit | Order (conversational) | 1 PDF | "Combine PDFs in the order you choose. Page sizes and orientations are kept." |
 | 2 | Split | 1 admitted PDF, ≥2 pages | 1 | `each page`, `every N pages`, `ranges` (3.2) | Split mode | Collection of PDFs (a single range yields one file) | "Split a PDF into single pages, equal parts or page ranges, saved as a set of files." |
@@ -127,20 +128,20 @@ Today, Merge and Remove write the pdf-lib producer string and drop the source ti
 | 6 | Compress | 1 admitted PDF | 1 | Whole document | Profile (Lossless / Balanced); optional target size | 1 PDF, or no new result | "Reduce file size without changing quality, or by slightly reducing image quality. Size targets are best effort." |
 | 7 | OCR | 1 admitted PDF with scanned pages | 1 | Whole document (text-empty pages) or explicit pages | None at launch (language fixed; TOOLPROF-1) | 1 PDF | "Make scanned pages searchable in English. The pages look the same; existing text is left as it is." |
 | 8 | Images to PDF | TOOLPROF-3 formats, single-frame | 1 to image limit | Order explicit | Page size (Fit image / A4 / Letter) | 1 PDF | "Turn JPEG, PNG and HEIC images into a PDF, one image per page, in the order you choose." |
-| 9 | PDF to Images | 1 admitted PDF | 1 | Full grammar | Format (PNG/JPEG), resolution (72/150/300 dpi) | Collection of images | "Save pages as PNG or JPEG images at 72, 150 or 300 dpi." |
+| 9 | PDF to Images | 1 admitted PDF | 1 | Full grammar | Format (PNG default / JPEG), resolution (72 / 150 default / 300 dpi, or a stated 72–300 integer) | Ordered collection of images | "Save pages as PNG or JPEG images at 72, 150 or 300 dpi." |
 | 10 | Protect | 1 admitted, unencrypted PDF | 1 | Whole document | Password (secure field only) | 1 encrypted PDF | "Require a password to open a PDF." (profile from SHR-52) |
 | 11 | Unlock | 1 encrypted PDF of a supported profile (SHR-52) | 1 | Whole document | Password (secure field only) | 1 unencrypted PDF | "Remove a password you know from a PDF. atePDF can't recover forgotten passwords." |
 | 12 | Extract Text | 1 admitted PDF | 1 | Full grammar | None (OCR is a separate, visible step) | 1 `.txt` (UTF-8) | "Save a PDF's text as a plain-text file, page by page. Layout and formatting aren't kept." |
-| 13 | Remove Metadata | 1 admitted PDF | 1 | Whole document | None | 1 PDF | "Remove the document properties and XMP metadata listed below. This does not remove content or make a PDF anonymous." |
+| 13 | Remove Metadata | 1 admitted PDF | 1 | Whole document | None | 1 PDF | "Remove the document properties and XMP metadata listed below. Remove Metadata is not anonymisation." |
 
 ## 5. Per-tool profiles
 
 ### 5.1 Merge (existing; stabilise, do not rebuild)
 
-- **Inputs.** 2 to the session file limit (currently 20, provisional). The total output stays within the page limit (currently 100, provisional). Each input is used once; a repeated input is refused, because duplicate-page features are excluded.
+- **Inputs.** 2 to the session file limit (currently 20, provisional). The total output stays within the page limit (currently 100, provisional). Each input is used once. A repeated input is refused, unless a future feature explicitly supports duplication.
 - **Order.** The default is the order added. The user can name an order, or a locally resolved selector can set it ("invoice first", UNDERSTAND-02), with confirmation when uncertain. The receipt states the order used.
 - **Mixed geometry.** Each page keeps its own MediaBox/CropBox, size and `/Rotate`. Nothing is normalised. SHR-46 shows geometry-font merge SUPPORTED.
-- **Linked or complex inputs.** Refused today. After SHR-50, simple HTTP/HTTPS URI links are preserved (ADR 0013); every other structure is still refused.
+- **Linked or complex inputs.** Refused today. ADR 0013 approves preserving simple absolute HTTP/HTTPS URI links during Merge. Public support is withheld until SHR-50 implements and verifies it. Every other structure stays refused (CPDF-2).
 - **Encrypted inputs.** Refused with the Unlock offer (3.1). SHR-46 currently records these as FAILED with the generic message (gap G2).
 - **Verification.** Output page sequence equals the concatenated source identities, boxes and rotation are unchanged, and text is preserved.
 
@@ -159,7 +160,7 @@ Today, Merge and Remove write the pdf-lib producer string and drop the source ti
 
 - **Selectors.** The full grammar. Semantic selectors (for example blank-page candidates, SHR-67) only after local resolution and user confirmation (CONV-05).
 - **Minimum.** At least 1 page must remain. Removing every page is refused before execution.
-- **Complex PDFs.** Refused, including linked PDFs, which stay refused after ADR 0013.
+- **Complex PDFs.** Refused. Linked PDFs stay refused for Remove Pages under ADR 0013 CPDF-2.
 - **Verification.** The remaining pages equal the source minus the selection, in the original order (SHR-47 detects a swapped same-size page).
 
 ### 5.4 Reorder (SHR-56)
@@ -183,10 +184,10 @@ Today, Merge and Remove write the pdf-lib producer string and drop the source ti
 |---|---|---|---|
 | **Lossless** ("without changing quality") | Rewrites the structure with object streams. Images and content are untouched. | Unchanged | None |
 | **Balanced** ("reduce image quality slightly") | Re-encodes eligible images (8-bit DeviceRGB JPEG with no mask, decode array or alternates) as JPEG at **original dimensions**. A re-encoded image is kept only if it is under 95% of its original. Plus Lossless. | Changes image quality | One-line quality confirmation (D-15), as today |
-| Smaller (downsampling) | **Not in the v1 claim.** The schema preset is unimplemented. Adding it later needs SHR-65 evidence and owner approval (TOOLPROF-2 option B). | — | — |
+| Smaller (downsampling) | **Not in v1.** The schema preset is unimplemented. Any future downsampling profile needs separate measured evidence and owner approval. | — | — |
 
 - **Target size.** Best effort. atePDF runs the approved profile once, reports the actual size and says whether the target was met (UX-02). It never escalates to a stronger quality loss without asking again, and never predicts a size in advance.
-- **No benefit.** If the output is not smaller, **no new result is created**: *"This PDF is already about as small as I can make it without lowering quality further. I kept your current file."* (Today a copy is committed; gap G4.)
+- **No benefit (both profiles).** If the output is not smaller, **no new result is created**: *"This PDF is already about as small as I can make it without lowering quality further. I kept your current file."* (Today a copy is committed; gap G4.)
 - **Image-heavy files.** Only eligible JPEG images change. CMYK, grayscale, masked, JPEG 2000, JBIG2 and Flate images are left untouched, and the receipt says so ("Some images were left as they were"). SHR-46 shows image-heavy 7,571,813 → 269,048 bytes.
 - **Malformed images.** An encoded/declared dimension mismatch is refused with a specific message until SHR-65/48 verifies pass-through. The 3 SHR-46 cases are UNVERIFIED.
 - **Wording.** Always "best effort" and actual numbers. Never "guaranteed" or "up to X%".
@@ -194,21 +195,22 @@ Today, Merge and Remove write the pdf-lib producer string and drop the source ti
 ### 5.7 OCR (existing; SHR-64 brings it to profile) — TOOLPROF-1
 
 - **Language.** English only at launch (Vision `en-US`, `.accurate`). This is the only language with any evidence, and that evidence is from Tesseract on web; SHR-64 must add Mac Vision matrix evidence.
-- **Characters.** SHR-64 must replace the **ASCII-only writer**. Today a single "café", "£" or curly apostrophe refuses the whole job. Launch requirement: accented Latin letters and common typographic punctuation (’ “ ” – — € £) embed correctly.
+- **Characters.** SHR-64 must replace the **ASCII-only writer** before launch. Today a single "café", "£" or curly apostrophe refuses the whole job. The writer must be Unicode-capable: accented Latin characters, curly quotes, typographic punctuation (’ “ ” – — € £) and normal UTF-8 text must embed correctly.
 - **Scan-only vs hybrid.**
   - Only pages **with no text layer** are recognised.
-  - Pages with an existing text layer are left untouched and never re-OCR'd.
+  - Pages with an existing text layer are preserved. Digital text is never silently re-OCR'd.
   - Hybrid *documents* (some scanned pages) are supported page by page.
   - A hybrid *page* (a text layer plus a scanned region) is not recognised. This caveat is disclosed.
 - **Overlay.** Invisible text over the page, aligned to word boxes. Appearance must be unchanged: rendering comparison, SHR-48.
 - **Confidence and review.**
-  - Proposed change from all-or-nothing: pages below the reliability floor are left without added text and listed by number. The job commits if at least one page passes, and is refused if none do.
+  - Per-page success replaces today's all-or-nothing behaviour. Pages that pass may be committed. Pages that fail the confidence or reliability checks are left without added text and listed for review. The job is refused only if no page can be safely recognised.
   - The receipt shows per-page status: recognised / low confidence / not recognised.
-  - "Review text" shows the recognised text per page in a selectable, VoiceOver-readable view (MAC-03).
-  - Floor and low-confidence thresholds are **pending SHR-64 calibration**; the current floor is 0.45 average confidence.
+  - A readable review surface ("Review text") shows the recognised text per page in a selectable, VoiceOver-readable view (MAC-03).
+  - Floor and low-confidence thresholds are **pending SHR-64 calibration**; the current floor is 0.45 average confidence. The final OCR page limit is pending SHR-64/SHR-78.
 - **Unsupported.**
   - Other languages and scripts: CJK, Arabic/RTL, Cyrillic, Thai, Devanagari and others. Vision lists them on the host, but overlay placement, encoding and RTL/vertical order are unverified.
-  - Rotated scanned pages and offset crop boxes, until SHR-64 proves placement.
+  - Rotated scanned pages and offset crop boxes, until separately evidenced.
+  - French, German, Spanish, Italian and Portuguese are **not** in the launch promise. They may be added later only after fixture and Mac evidence.
   - Handwriting: no claim.
 - **Resource.** Pages needing OCR per job: currently 15, provisional, **pending SHR-78**. The render budget is the shared decoded-pixel limit.
 
@@ -225,34 +227,36 @@ Today, Merge and Remove write the pdf-lib producer string and drop the source ti
   - No downsampling, and no upsampling of pixels.
   - JPEG bytes are embedded unchanged where the writer supports them.
   - PNG is embedded losslessly.
-  - HEIC has no PDF filter and must be transcoded. Recommendation: high-quality JPEG, disclosed in the receipt ("HEIC photos were converted to JPEG"). The quality value is set by SHR-58 measurement, not by this ADR.
+  - Ordinary photos are not resized.
+  - HEIC has no PDF filter and must be transcoded. HEIC conversion may use high-quality JPEG and must be disclosed on the result ("HEIC photos were converted to JPEG"). The quality value is set by SHR-58 measurement, not by this ADR.
 - **Page size.**
-  - *Fit image* (default): the page has the image's aspect ratio. Its size comes from embedded DPI when that gives 10–4000 pt per side; otherwise the long edge is scaled to 842 pt (A4 long edge).
+  - *Fit image* (default): the page has the image's aspect ratio. Its size comes from embedded DPI when that DPI is usable, meaning it gives 10–4000 pt per side. When usable DPI is unavailable, the image is fitted proportionally with a maximum long edge of 842 pt.
   - *A4* / *Letter*: the image is scaled to fit inside the page, centred, aspect preserved, with no crop and no margins. The page orientation follows the image.
-- **Transparency.** Alpha is preserved as a soft mask and appears over the white page.
+- **Transparency.** Alpha is preserved where applicable, as a soft mask over the white page.
+- **Not in the launch profile.** TIFF, WebP, BMP and GIF.
 - **Ordering.** The order added, or an explicit order the user gives. Natural file-name order is resolved locally, and names are never sent (ADR 0012 C-10).
-- **Decoded-pixel budget.** The current 12,000,000-pixel budget **refuses a standard 12 MP iPhone photo** (4032×3024 = 12,192,768 px) and every 48 MP photo. SHR-78 must set a measured image budget before this tool ships. The proposed requirement is that it admits at least 4032×3024 (gap G7).
+- **Decoded-pixel budget.** The current 12,000,000-pixel budget **refuses a standard 12 MP iPhone photo** (4032×3024 = 12,192,768 px) and every 48 MP photo. SHR-78 must set a measured image budget before this tool ships. **Approved requirement:** the measured envelope must support at least 4032×3024, and a normal 12 MP iPhone photo must not be rejected solely because of the current 12,000,000-pixel prototype constant (gap G7).
 - **Verification.** Page count equals image count, order is correct, each page's aspect ratio equals the oriented image's, and each image is rendered present.
 
 ### 5.9 PDF to Images (SHR-59, collections SHR-54) — TOOLPROF-4
 
 - **Formats.** PNG (default: lossless and sharp for text) or JPEG (on request, "smaller" or "for photos"). The JPEG quality is automatic.
-- **Resolution.** Presets 72, 150 (default) and 300 dpi. A stated integer between 72 and 300 is accepted.
-  - If page area × dpi² exceeds the per-image pixel budget, the assistant does **not** silently lower the resolution. It asks, naming the highest resolution that fits.
+- **Resolution.** Presets 72, 150 (default) and 300 dpi. A user-requested integer from 72 through 300 is also accepted if the implementation stays simple and within measured resource bounds.
+  - The requested resolution is **never silently reduced**. If a page would exceed the technical workload envelope, the assistant explains why and asks the user to choose a lower dpi, naming the highest that fits.
 - **Pages.** The full grammar. The collection is ordered by ascending physical page.
-- **Naming.** `<source stem>-page-<n>.<png|jpg>`, using the physical page number, zero-padded to the digit width of the source page count.
-- **Background.** Opaque white, with no alpha channel. Colour is sRGB. No document text or source metadata is written into image metadata.
+- **Naming.** Deterministic and ordered: `<stem>-page-<n>.<png|jpg>`, using the physical page number, zero-padded to the digit width of the source page count.
+- **Background.** Opaque white where transparency is not meaningful (PDF pages), with no alpha channel. Colour is sRGB. No document text or source metadata is written into image metadata.
 - **Verification.** Image count and names match the selection, pixel dimensions equal page size × dpi (within rounding), each image decodes, and a representative render matches (SHR-48).
 
 ### 5.10 Protect (SHR-60; engine and profile SHR-52; secure input SHR-53)
 
-This section is contract only. The algorithm, handler revision, interoperability and owner-password policy belong to SHR-52.
+This section is contract only. The actual encryption algorithm/profile, handler revision, interoperability and owner-password policy come from SHR-52. Password entry uses secure local input only.
 
 - **Password.** Protect sets an **open password**, entered twice in the dedicated secure field and never in chat or model context (PDF-06, ADR 0012 N-01). Rules:
   - The password must be non-empty and both entries must match.
   - The maximum length is whatever limit the SHR-52 profile has (for AES-256 in PDF 2.0, 127 UTF-8 bytes).
   - No strength scoring is claimed.
-- **Permissions.** v1 exposes no permission-flag settings. The receipt never implies that restrictions are unbreakable (TOOL-10).
+- **Permissions.** Open password only. v1 has no permission or restriction configuration. The receipt never implies that restrictions are unbreakable (TOOL-10).
 - **Refused.** Already-encrypted input (unlock first); signed input (3.1); Protect placed anywhere except the last step of a plan.
 - **Verification.** An independent reader refuses to open the file without the password, opens it with the password, and pages and text match the pre-encryption result.
 
@@ -278,26 +282,27 @@ This section is contract only. The algorithm, handler revision, interoperability
 
 ### 5.13 Remove Metadata (SHR-63) — TOOLPROF-6
 
-- **Guaranteed removed (proposed profile B):**
+- **Guaranteed removed (approved profile B):**
   - The entire document Info dictionary: `Title`, `Author`, `Subject`, `Keywords`, `Creator`, `Producer`, `CreationDate`, `ModDate`, `Trapped` and **any custom key**.
-  - **Every XMP metadata stream**: the catalog `/Metadata` and any `/Metadata` on pages, images, fonts or other objects.
+  - **All XMP streams and copies that can be identified under the approved rewrite**: the catalog `/Metadata` and any `/Metadata` on pages, images, fonts or other objects.
 - **How the output is written.**
   - A full rewrite, with no incremental-update revisions.
   - With no orphaned objects that still hold the removed dictionaries or streams. pdf-lib writes every object in its context, so deleted objects must be removed from the context, not just unreferenced.
-  - atePDF adds no Producer or dates (pdf-lib `updateMetadata:false`).
+  - No newly added Producer, Creator or date metadata (pdf-lib `updateMetadata:false`).
 - **Not removed and not guaranteed** (stated in the receipt and help):
-  - visible and hidden page content;
+  - visible document content;
+  - content streams, including hidden content;
   - annotations, form values, bookmarks and their titles, page labels;
   - embedded files and JavaScript;
-  - **EXIF/GPS inside embedded JPEG images**;
+  - **EXIF/GPS inside embedded images**, unless separately processed;
   - font names, the trailer `/ID`, and application private data (`/PieceInfo`);
   - forensic remnants;
   - Finder/file-system attributes of copies outside atePDF;
-  - personal data anywhere in the document content.
+  - other user or personal data contained in the actual document content.
 
-  **"Remove Metadata" is not redaction, sanitisation or anonymisation** (TOOL-13).
+  The tool says clearly: **"Remove Metadata is not anonymisation."** It is also not redaction or sanitisation (TOOL-13).
 - **Refused.** Signed input (3.1); complex input (shared guard).
-- **Verification.**
+- **Verification.** The output must independently verify that the intended metadata is gone.
   - The saved file's trailer has no `/Info`.
   - No object carries `/Type /Metadata` or `/Subtype /XML`, and a raw-byte scan finds no residual Info keys or `<x:xmpmeta`.
   - Pages, identity and text are unchanged.
@@ -305,10 +310,10 @@ This section is contract only. The algorithm, handler revision, interoperability
 ## 6. Resource envelopes: technical safety vs commercial (TOOLPROF-7)
 
 **Philosophy.**
-1. **Technical limits protect the Mac and the result.** They are measured by SHR-78 on the minimum supported hardware (8 GB Apple Silicon; Intel if ENV-2 acceptance passes). They are expressed in **workload units**: pages, decoded megapixels, OCR pages, files, time. They are **never bytes** (ADR 0004).
-2. **Refuse early and specifically.** When a job is predictably over a limit, the assistant says so before starting, names the limit, and offers a way forward: split the job, choose fewer pages, or use a lower resolution. Deadlines and cancellation are safety nets, not quotas.
+1. **Technical limits protect the Mac and the result.** They are measured by SHR-78 on the minimum supported hardware (8 GB Apple Silicon; Intel if ENV-2 acceptance passes). They are expressed in **workload units**, not raw file bytes (ADR 0004): page count, decoded image pixels/megapixels, OCR page count, image count, file count, processing time, and memory/resource pressure where measurable.
+2. **Refuse early and specifically.** When a job is predictably over a limit, the assistant says so before starting and explains the actual resource limitation. Where possible it offers a practical next step: split the job, choose fewer pages, or use a lower resolution. Deadlines and cancellation are safety nets, not quotas.
 3. **Commercial limits are separate** (BILL-07). Guest allowance and Pro limits (OPEN-02/03) are unknown and not set here. A technical refusal **never** says "upgrade". Pro does **not** raise technical limits. A commercial limit is never disguised as a safety limit.
-4. **Until SHR-78:** current constants stay as provisional guards and are not published. New tools inherit the shared guards plus the tool units below. Every value marked *pending* must be set by measurement and approved before its public claim.
+4. **SHR-78 establishes launch numbers** on the minimum supported Mac. Until then, current prototype values stay provisional, unpublished and safety guards only. New tools inherit the shared guards plus the tool units below. Every value marked *pending* must be set by measurement and approved before its public claim.
 
 | Tool | Workload units | Current provisional guard | Launch value |
 |---|---|---|---|
@@ -318,19 +323,19 @@ This section is contract only. The algorithm, handler revision, interoperability
 | Remove / Reorder / Rotate / Protect / Unlock / Remove Metadata | Pages | 100 | Pending SHR-78 |
 | Compress | Eligible images; total decoded MP re-encoded | 12 MP per image | Pending SHR-78 / SHR-65 |
 | OCR | Pages needing recognition; render MP per page | 15 pages; 12 MP | Pending SHR-78 / SHR-64 |
-| Images to PDF | Images per job; decoded MP per image; total decoded MP | None (tool absent) | Pending SHR-78; must admit ≥ 4032×3024 (G7) |
+| Images to PDF | Images per job; decoded MP per image; total decoded MP | None (tool absent) | Pending SHR-78; **approved minimum:** must support a normal 4032×3024 image (G7) |
 | PDF to Images | Output images; render MP per image; total output bytes vs free disk | Preview only (4096 px max) | Pending SHR-78 / SHR-59 |
 | Extract Text | Pages; OCR sub-limit if chained | — | Pending SHR-78 |
 
 ## 7. Settings philosophy (TOOLPROF-8)
 
-atePDF has **no tool-settings panel** in v1. The Settings sheet (OD-7) holds privacy, retention and account settings, not tool defaults. Choices arise in the conversation, as a clarification or choice chip, **only when the request needs them**.
+atePDF has **no traditional tool-settings panel** in v1. The Settings sheet (OD-7) holds privacy, retention and account settings, not tool defaults. A choice is exposed, as a clarification or choice chip, **only when the user's requested task genuinely requires one**, for example Balanced vs Lossless, PNG vs JPEG, a requested dpi, or A4/Letter/Fit image. Defaults handle ordinary requests. Batch "per file" processing is out of v1.
 
 | Class | Settings |
 |---|---|
-| **Exposed** (asked for, or accepted when the user states them) | Page selection; merge/image order; split mode; rotation angle; compression profile (Lossless/Balanced) and optional target size; image page size (Fit/A4/Letter); export format (PNG/JPEG) and resolution (72/150/300); password (secure field only) |
+| **Exposed** (asked for, or accepted when the user states them) | Page selection; merge/image order; split mode; rotation angle; compression profile (Lossless/Balanced) and optional target size; image page size (Fit/A4/Letter); export format (PNG/JPEG) and resolution (72/150/300, or a stated 72–300 integer); password (secure field only) |
 | **Automatic** (fixed, disclosed in the receipt when relevant) | OCR page choice (text-empty pages) and language (English); output naming; metadata policy (3.5); EXIF orientation; HEIC → JPEG; alpha handling; white render background; JPEG quality values; object streams |
-| **Hidden / internal** (never user-configurable) | Confidence thresholds; pixel, page and file budgets; deadlines; 95% re-encode acceptance; content-admission bounds; verification tolerances |
+| **Hidden / internal** (internal safety thresholds; never user-adjustable) | Confidence thresholds; pixel, page and file budgets; deadlines; 95% re-encode acceptance; content-admission bounds; verification tolerances |
 
 A setting becomes exposed only when an approved decision says so. Unsupported options never appear executable (TOOL-15).
 
@@ -398,79 +403,119 @@ The SHR-45 fixtures are in `tests/fixtures/corpus/manifest.json`. Every implemen
 - Runtime-facing `AI_PRODUCT_KNOWLEDGE.md` changes only when a tool passes its row.
 - Values marked pending are **not** filled in by implementers. They stay behind their provisional guard until SHR-78, SHR-64 or SHR-65 measures them and the owner approves.
 
-## 12. Dependencies and still open
+## 12. Dependencies and still open (validation, not approval)
 
-- **SHR-52:** encryption algorithm/profile, supported Unlock handlers, owner-password-only policy, engine and licensing. Sections 5.10–5.11 are contract only.
-- **ADR 0013 / SHR-49 (PR #95):** approved but not merged. It is cited for links and signed PDFs. If it merges changed, sections 3.1 and 5.1 follow it.
-- **SHR-78:** every *pending* resource value, including the image decode budget (G7).
+- **SHR-52:** the actual encryption algorithm and profile, supported Unlock handlers, owner-password-only policy, engine and licensing. Sections 5.10–5.11 are contract only.
+- **ADR 0013 / SHR-49:** approved (CPDF-1–5) and merged. It governs linked and signed PDFs. Its Merge web-link support stays publicly withheld until SHR-50 implements and verifies it. This ADR does not broaden linked-PDF support beyond it.
+- **SHR-78:** every *pending* resource value, including the image decode budget, which must support at least 4032×3024 (G7).
 - **SHR-47 / SHR-48:** identity/geometry checks and rendering comparison, which are prerequisites for the verification in section 8.
-- **SHR-64 / SHR-65:** OCR thresholds and non-ASCII writer; compression evidence for any future "smaller" profile.
+- **SHR-64:** OCR confidence thresholds, final OCR page limit (with SHR-78), the Unicode-capable writer and Mac Vision evidence.
+- **SHR-65:** compression hardening. Any future downsampling profile needs separate measured evidence and owner approval.
 - **SHR-53:** secure local password handle shared by Protect and Unlock.
-- **ADR numbering:** 0013 is taken by PR #95. If SHR-52 also chooses 0014, the later PR renumbers.
+- **ADR numbering:** 0013 is on `main` (SHR-49) and 0014 is used by SHR-85 (PR #103), so SHR-51 is **0015**. Open PRs #98 (SHR-79) and #99 (SHR-52) still name 0013 and must renumber themselves.
 
-## 13. Owner decisions (pending)
+## 13. Owner decisions (approved 30 September 2026)
 
-Each item gives options and a recommendation. **Nothing is approved** until Shrey records a decision here.
+Shrey Talwar approved TOOLPROF-1 to TOOLPROF-9 on 30 September 2026, in the owner review of PR #101 at head `9204109a815086ca6a1f20932533634b02c2c62e`. The approval renumbered this ADR from 0014 to 0015. Sections 3–9 above record the approved contract. The items below are the approval record.
 
-**TOOLPROF-1 — OCR language and profile.**
-- **A (recommended):** English only at launch. The writer must support accented Latin letters and typographic punctuation. Only text-empty pages are recognised; existing text layers are preserved and never re-OCR'd; hybrid pages are disclosed as unsupported. Per-page confidence: commit the pages that pass, list the pages that fail, refuse only when none pass. Accessible "Review text" view. Rotated scans and non-Latin scripts are refused. Thresholds and page limit pending SHR-64/78.
-- **B:** A, plus French, German, Spanish, Italian and Portuguese. Vision lists these in both `.fast` and `.accurate`, and they are Latin script. Enabled only after SHR-64 adds per-language fixtures and Mac results.
-- **C:** Any Vision-listed language. Not recommended: no evidence, RTL/CJK placement is unverified, and the list varies by macOS version.
-- Also decide: keep all-or-nothing OCR (today's behaviour) instead of per-page partial commit?
+**TOOLPROF-1 — OCR launch profile. APPROVED: option A.**
+- English only, using Mac Vision OCR.
+- Recognise only pages with no existing text layer. Preserve existing text layers, and do not silently re-OCR digital text.
+- A Unicode-capable writer is required before launch: accented Latin characters, curly quotes, typographic punctuation and normal UTF-8 text.
+- Per-page success and review replace today's all-or-nothing behaviour. Pages that pass may be committed. Pages that fail the confidence/reliability checks are listed for review. Refuse only if no page can be safely recognised. Provide a readable review surface.
+- Rotated scans and unsupported/non-Latin OCR remain refused until separately evidenced.
+- Thresholds and final OCR page limits remain pending SHR-64/SHR-78.
+- French, German, Spanish, Italian and Portuguese are **not** in the launch promise. They can be added later after fixture and Mac evidence.
 
-**TOOLPROF-2 — Compression profiles and settings.**
-- **A (recommended):** Two profiles. **Lossless** (no confirmation) and **Balanced** (the current engine, with a quality confirmation). "Compress" means Balanced with confirmation; "without losing quality" means Lossless. Target size is best effort, runs once and is reported honestly, with no silent escalation. No benefit means no new result. Ineligible images are left untouched and reported; malformed images are refused.
-- **B:** A, plus a **Smaller** profile (downsampling) after SHR-65 evidence and a separate approval of its resolution and quality.
-- **C:** Lossless only at launch.
+**TOOLPROF-2 — Compression profiles. APPROVED: option A.**
+- **Lossless:** no quality-changing image recompression and no quality confirmation. If the file does not get smaller, no new result is created.
+- **Balanced:** may re-encode eligible JPEG images, preserves dimensions, and requires explicit quality-change confirmation. Target size remains best effort, with no silent escalation.
+- No stronger "Smaller" profile in v1. Any future downsampling profile needs separate measured evidence and owner approval.
 
-**TOOLPROF-3 — Image input formats and conversion.**
-- **A (recommended):** JPEG, PNG and HEIC/HEIF, single-frame. EXIF orientation applied. No resampling. HEIC → high-quality JPEG, disclosed. Alpha kept over white. Default *Fit image* page (DPI-derived, otherwise long edge 842 pt), with A4/Letter available. The measured decode budget must admit ≥ 4032×3024.
-- **B:** A, plus TIFF (single page), WebP, BMP and static GIF, each needing fixtures.
-- Also decide: the Fit-image fallback page size (842 pt long edge proposed).
+**TOOLPROF-3 — Images to PDF launch formats. APPROVED: option A.**
+- JPEG, PNG and HEIC/HEIF, single-frame only.
+- Respect EXIF orientation. Do not resize ordinary photos. Preserve transparency where applicable.
+- HEIC conversion may use high-quality JPEG and must be disclosed on the result.
+- Fit Image is the default; A4 and Letter remain available.
+- **Fallback sizing approved:** when usable DPI is unavailable, fit the image proportionally with a maximum long edge of 842 pt.
+- The measured resource envelope **must** support at least 4032 × 3024 pixels. A normal 12 MP iPhone photo must not be rejected solely because of the current 12,000,000-pixel prototype constant.
+- TIFF, WebP, BMP and GIF are **not** in the launch profile.
 
-**TOOLPROF-4 — Image export formats and resolution.**
-- **A (recommended):** PNG (default) and JPEG. 72 / **150 (default)** / 300 dpi presets, and a stated integer between 72 and 300 accepted. Over-budget pages ask instead of silently downscaling. Opaque white, sRGB. `<stem>-page-<n>` naming.
-- **B:** JPEG as the default format.
-- **C:** Presets only; no arbitrary dpi.
+**TOOLPROF-4 — PDF to Images. APPROVED: option A.**
+- Formats PNG and JPEG. Default PNG at 150 dpi. Presets 72, 150 and 300 dpi.
+- A user-requested integer dpi from 72 through 300 is allowed if the implementation remains simple and within measured resource bounds.
+- Never silently reduce the requested resolution. If a page would exceed the technical workload envelope, explain it and ask the user to choose a lower dpi.
+- Use an opaque white background where transparency is not meaningful.
+- Deterministic ordered naming: `<stem>-page-<n>`.
 
-**TOOLPROF-5 — Page selector grammar.**
-- **A (recommended):** The section 3.2 grammar: 1-based physical pages; `all`, `odd`, `even`, `first N`, `last N`, lists and inclusive ranges with `end`. Reversed ranges and out-of-range pages are refused. Set tools merge duplicates; Reorder refuses them. Page labels are not interpreted (ask). Semantic selectors resolve locally and are confirmed.
-- **B:** A, plus page-label interpretation. Not recommended for v1: no fixture and no evidence.
+**TOOLPROF-5 — Canonical page selection. APPROVED: option A.**
+- Physical page positions, 1-based: `all`, `odd`, `even`, `first N`, `last N`, lists, inclusive ranges and `N-end`.
+- Reversed ranges are refused. Out-of-range pages are refused.
+- Set-like tools may collapse duplicates. Reorder must refuse duplicate or missing page identities.
+- Printed PDF page labels are **not** interpreted in v1. There is no page-label interpretation in v1.
+- Ambiguous natural-language references trigger clarification.
+- Semantic selectors resolve locally before execution.
 
-**TOOLPROF-6 — Metadata removed, and metadata written on outputs.**
-- **A:** Remove only the Info dictionary and the catalog XMP (the current schema's literal meaning).
-- **B (recommended):** Remove the whole Info dictionary including custom keys and **every** XMP stream. Full rewrite with no residue; no atePDF-added Producer or dates. The published not-removed list in section 5.13 includes JPEG EXIF/GPS, and the tool is "not anonymisation".
-- **Output-metadata policy (3.5):**
-  - Single-source operations carry the source Info/XMP forward.
-  - New documents get no library-identifying Producer.
-  - Confirm, or choose to write `Producer: atePDF` instead.
+**TOOLPROF-6 — Remove Metadata. APPROVED: option B.**
+- Remove the entire PDF Info/properties dictionary: all standard fields and custom Info keys.
+- Remove all XMP streams and copies that can be identified under the approved rewrite.
+- Add no new Producer, Creator or date metadata.
+- The output must independently verify that the intended metadata is gone.
+- The tool must say clearly: **"Remove Metadata is not anonymisation."**
+- The not-removed contract includes:
+  - visible document content;
+  - annotations;
+  - embedded files;
+  - content streams;
+  - EXIF/GPS inside embedded images, unless separately processed;
+  - other user data contained in the actual document content.
 
-**TOOLPROF-7 — Resource-envelope philosophy.**
-- **A (recommended):** The section 6 philosophy.
-  - Workload units, never bytes.
-  - Measured on the minimum Mac by SHR-78.
-  - Early, specific refusals that offer a way forward.
-  - Technical limits never say "upgrade", and Pro never raises them.
-  - Current constants stay as provisional, unpublished guards.
-  - 100 pages and 20 files are **not** treated as researched limits.
-- Also confirm: the Images to PDF budget requirement of ≥ 4032×3024 (G7).
+**Output metadata policy — APPROVED.**
+- Single-source transformations preserve the source's existing Info/XMP, except Remove Metadata.
+- Newly constructed documents do not copy unrelated source metadata and do not add a library-identifying Producer/Creator string.
+- Do **not** add `Producer: atePDF`. There is no product value in it.
 
-**TOOLPROF-8 — Exposed settings vs automatic defaults.**
-- **A (recommended):** The section 7 table. No tool-settings panel. Choices only in the conversation when needed. Hidden thresholds are never user-configurable. Batch "per file" is out of v1.
+**TOOLPROF-7 — Technical resource limits. APPROVED.**
+- Measured in workload units, not raw file bytes: page count, decoded image pixels/megapixels, OCR page count, image count, processing time, and memory/resource pressure where measurable.
+- SHR-78 establishes launch numbers on the minimum supported Mac.
+- Current prototype values stay provisional, unpublished and safety guards only.
+- A technical refusal must explain the actual resource limitation, must offer a practical next step where possible, and must never say "upgrade". Pro must not raise a technical safety ceiling.
+- Images to PDF must support at least a normal 4032×3024 image.
 
-**TOOLPROF-9 — Exact support and refusal claims for each of the 13 tools.**
-- **A (recommended):** Approve the section 4 launch-claim sentences, the section 5 profiles and the section 8 success/refusal definitions. Each claim stays withheld until its SHR passes section 9. Also approve the exclusions:
-  - Split overlap refused and uncovered pages omitted and listed;
-  - repeated Merge input refused;
-  - relative-only Rotate;
-  - complete-permutation Reorder;
-  - explicit (never implicit) OCR for Extract Text;
-  - open-password-only Protect with no permission settings;
-  - known-password Unlock.
+**TOOLPROF-8 — Settings. APPROVED.**
+- No traditional tool-settings panel.
+- Expose a choice only when the user's requested task genuinely requires one, for example Balanced vs Lossless, PNG vs JPEG, a requested dpi, or A4/Letter/Fit image.
+- Defaults handle ordinary requests.
+- Internal safety thresholds are not user-adjustable.
+- Batch "per file" processing remains out of v1.
+
+**TOOLPROF-9 — Per-tool claims, profiles, success and refusal definitions. APPROVED.**
+
+Sections 4, 5 and 8 are approved. Each launch claim stays withheld until its implementing SHR passes section 9. Specific approved constraints:
+
+| Tool | Approved constraint |
+|---|---|
+| Merge | Each input used once. Explicit ordering. A repeated input is refused unless a future feature explicitly supports duplication. |
+| Split | Every page, every N pages, or explicit ranges. Overlapping ranges refused. Uncovered pages omitted and listed. Collection output. |
+| Remove Pages | At least one page remains. |
+| Reorder | Resolves to a complete permutation. Duplicate or missing pages refused. |
+| Rotate | Relative 90/180/270-degree turns only. No "auto-upright" feature in v1. |
+| Compress | Lossless/Balanced only. No benefit creates no new result. |
+| OCR | English-only launch profile. Text-empty pages only. Per-page review. |
+| Images to PDF | JPEG/PNG/HEIC only. |
+| PDF to Images | PNG/JPEG. Ordered collection. |
+| Protect | Open password only. No permission or restriction configuration in v1. Secure local input. The actual encryption algorithm/profile comes from SHR-52. |
+| Unlock | Known password only. No guessing or cracking. |
+| Extract Text | UTF-8 text result. No silent OCR; OCR is offered explicitly for scanned pages. No claim of preserving semantic or layout structure. |
+| Remove Metadata | Approved full Info/XMP profile. Explicitly not anonymisation. |
+
+**Linked PDFs (ADR 0013).** Use the approved Merge simple HTTP/HTTPS-link contract. Public support remains withheld until SHR-50 implements and verifies it. Linked-PDF support is not broadened beyond ADR 0013.
+
+Approval does not implement any tool, change runtime claims, merge this PR or mark SHR-51 Done. SHR-51 stays In Review until PR #101 merges.
 
 ## 14. Consequences
 
-- The 13 tools get bounded, testable contracts, so implementers do not need to guess formats, languages, selectors or wording.
-- Several current behaviours become recorded gaps (G1–G10) to triage, not silent defects. Nothing is fixed here.
-- Launch claims stay narrow: English OCR, three image formats, two compression profiles. Each can widen only through evidence and a new owner decision.
-- Resource numbers remain unpublished until SHR-78. This ADR changes no guard, dependency, test or runtime behaviour.
+- The 13 tools have approved, bounded and testable contracts. Implementing SHRs (54–65) take their rows from sections 4, 5, 8 and 9 as acceptance, and do not guess formats, languages, selectors or wording.
+- Launch claims stay narrow: English OCR, three image input formats, two compression profiles. Each can widen only through evidence and a new owner decision.
+- Current behaviours that conflict with the approved contract are recorded as gaps G1–G10 for triage. Nothing is fixed here.
+- Resource numbers stay unpublished until SHR-78. This ADR changes no guard, dependency, test or runtime behaviour.

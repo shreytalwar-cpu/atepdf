@@ -1,10 +1,10 @@
 # SHR-51 evidence — v1 tool support profiles (30 September 2026)
 
-Supporting evidence for [ADR 0014](../../adr/0014-v1-tool-support-profiles.md). It changes no source, test, guard or dependency.
+Supporting evidence for [ADR 0015](../../adr/0015-v1-tool-support-profiles.md) (approved 30 September 2026, TOOLPROF-1–9). It changes no source, test, guard or dependency.
 
 ## Source
 
-`origin/main` `ff3e291`. Current capability was established by source inspection. File and line references are in ADR 0014 section 2. Observed matrix results come from [SHR-46](../SHR-46-2026-09-30/README.md) and are not re-run here.
+`origin/main` `ff3e291`. Current capability was established by source inspection. File and line references are in ADR 0015 section 2. Observed matrix results come from [SHR-46](../SHR-46-2026-09-30/README.md) and are not re-run here.
 
 ## Platform probe
 
@@ -30,7 +30,7 @@ Limits of this evidence:
 
 ## Regression check (unchanged source)
 
-`node --import tsx --test tests/regressions/pdf-corpus.test.ts tests/regressions/compatibility-matrix.test.ts` (Node 24.19.0): **16 passed, 0 failed, 1 skipped**. The skipped test is the optional byte-regeneration check, which needs `ATEPDF_CORPUS_PYTHON`. The log is in [regressions.log](regressions.log).
+`node --import tsx --test tests/regressions/pdf-corpus.test.ts tests/regressions/compatibility-matrix.test.ts` (Node 24.19.0): **16 passed, 0 failed, 1 skipped**. The result was the same when re-run after merging `origin/main` `7853973`, which adds SHR-49 / ADR 0013 and changes documentation only. The skipped test is the optional byte-regeneration check, which needs `ATEPDF_CORPUS_PYTHON`. The log is in [regressions.log](regressions.log).
 
 ## Derived figure
 

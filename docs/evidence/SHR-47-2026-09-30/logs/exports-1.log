@@ -1,0 +1,3 @@
+COMMAND ["/Users/shrey/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node", "scripts/contracts.mjs"]
+CWD /tmp/atepdf-shr47-final-f7a62d4/mac-source-2
+Canonical contract validators compiled ahead of time; no runtime eval.

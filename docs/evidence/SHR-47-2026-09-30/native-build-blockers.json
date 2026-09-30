@@ -1,0 +1,30 @@
+{
+  "installedPodsProjectSha256": "2b96aa7305c657dbe8e117e8655b134765816681c132f35ef1762cb42033874b",
+  "vaultPresentOnBaselineMain": true,
+  "unchangedBaselinePaths": {
+    "apps/universal/modules/atepdf-pdf/ios/AtepdfPdfModule.swift": true,
+    "apps/universal/modules/atepdf-pdf/ios/AtepdfWorkspaceVault.swift": true,
+    "apps/universal/ios/Podfile": true,
+    "apps/universal/ios/Podfile.lock": true
+  },
+  "installedPodsOmitsExistingVault": true,
+  "installedPodsInputFiles": [
+    "AtepdfPDFEngine.swift",
+    "AtepdfPDFExporter.swift",
+    "AtepdfPdfModule.swift"
+  ],
+  "missingSource": "AtepdfWorkspaceVault.swift",
+  "failure": "AtepdfPdfModule.swift: cannot find AtepdfWorkspaceVault in scope",
+  "policy": "No pod install/project regeneration performed; owner dependencies/session unchanged",
+  "androidConfiguredSDK": {
+    "ANDROID_HOME": {
+      "configured": false,
+      "exists": false
+    },
+    "ANDROID_SDK_ROOT": {
+      "configured": false,
+      "exists": false
+    }
+  },
+  "androidDefaultSDKExists": false
+}

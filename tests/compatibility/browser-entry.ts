@@ -36,7 +36,7 @@ async function runCase(ids:string[],action:'merge'|'remove'|'ocr'|'compress'){
   const originalsAfter=await Promise.all(store.originals.map(ref=>checksum(store.get(ref).bytes)));
   const result=store.focus?store.get(store.focus):null;
   return {
-    admission,error:controller.state.error,stage:controller.state.stage,
+    admission,error:controller.state.error,stage:controller.state.stage,pageVerification:controller.state.pageVerification??null,
     promoted:Boolean(result),
     originalsUnchanged:importedBytesMatch&&JSON.stringify(originalsBefore)===JSON.stringify(originalsAfter),
     output:result?await base64(result.bytes):null,note:result?.meta.note??null,

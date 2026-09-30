@@ -1,0 +1,13 @@
+{
+  "sourceHead": "22f37fc4376eadf5027bab93469ab522594a50da",
+  "command": [
+    "git",
+    "diff",
+    "--check",
+    "29f56ea..HEAD"
+  ],
+  "exitCode": 0,
+  "stdout": "",
+  "stderr": "",
+  "note": "Verbatim raw diagnostics contain trailing spaces. A new evidence-directory-only attribute preserves those bytes; source/code formatting checks remain enabled. The earlier unqualified check flagged raw log indentation only. No runtime/test file changed."
+}

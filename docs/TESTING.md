@@ -44,6 +44,8 @@ The [SHR-45 synthetic corpus](../tests/fixtures/corpus/README.md) indexes reusab
 
 The [SHR-46 service matrix harness](../tests/compatibility/README.md) runs current browser executors and independent saved-output checks with explicit supported/refused/failed/unverified/unrun categories. Its [source-bound observations](evidence/SHR-46-2026-09-30/README.md) preserve every refusal/failure and identify the remaining Mac-app and visual verification gaps.
 
+[SHR-47 structural promotion verification](PAGE_VERIFICATION.md) gates Merge/Remove on reader page fingerprints, physical source ordering and box origins/sizes/rotation. The matrix's v2 receipts distinguish this later production check from historical v1 observations. [SHR-47 evidence](evidence/SHR-47-2026-09-30/README.md) records real-artifact mutations, positive corpus cases, stale/cancellation behavior and platform limits; visual/OCR-placement acceptance remains separate.
+
 | Family | Current boundary | Minimum missing regression evidence |
 |---|---|---|
 | Encrypted | Refuses encryption/locked documents; no password entry | Real password-protected AES and owner-restricted files, malformed encryption; safe refusal |

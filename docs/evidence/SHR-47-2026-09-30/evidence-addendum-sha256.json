@@ -1,0 +1,7 @@
+{
+  "priorEvidenceManifestSha256": "e2d7a48ea743f3454af37836dfab207b67fa5e8f4ef9afb7287d5ca53e2b74db",
+  "files": {
+    ".gitattributes": "a30bf6f59719d2d509a16c969d350909a041781da9f54c3d9559f9a01d156aa8",
+    "diff-check-result.json": "ae8a31d3a1bc94b452cf4a75b6b62dad127f7165403343535e91edd94b342966"
+  }
+}

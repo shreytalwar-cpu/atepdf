@@ -1,0 +1,14 @@
+{
+  "archiveCommit": "f7a62d4c9d9cebb6441a97a39a3dadfd55087196",
+  "testedCommit": "885b41c7d39b70b8ad7a8833bb7019016d9ec62a",
+  "allChangedProductionFilesIdentical": {
+    "apps/universal/modules/atepdf-pdf/android/src/main/java/expo/modules/atepdf/AtepdfPdfEngine.kt": true,
+    "apps/universal/modules/atepdf-pdf/ios/AtepdfPDFEngine.swift": true,
+    "apps/universal/src/platform/runtime.native.ts": true,
+    "packages/core/src/job-controller.ts": true,
+    "packages/core/src/page-verification.ts": true,
+    "packages/web-pdf/src/client.ts": true,
+    "packages/web-pdf/src/page-structure.ts": true,
+    "packages/web-pdf/src/types.ts": true
+  }
+}

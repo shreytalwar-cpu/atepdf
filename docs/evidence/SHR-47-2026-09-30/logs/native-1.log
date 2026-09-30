@@ -1,0 +1,105 @@
+COMMAND ["/Users/shrey/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node", "tests/native/apple/run.mjs"]
+CWD /Users/shrey/.codex/worktrees/shr47-page-verification/atepdf
+CoreGraphics PDF has logged an error. Set environment variable "CG_PDF_VERBOSE" to learn more.
+Apple fixture phase: local OCR
+Apple fixture phase: OCR cancellation
+{
+  "appendixPages" : 1,
+  "briefPages" : 2,
+  "checks" : [
+    "PDF page count and marker order",
+    "CoreGraphics raster",
+    "20 pixel-anchor checks across resolutions, rotations and nonzero crop origin",
+    "rotation and crop geometry",
+    "local-only file URI and symlink boundary",
+    "Catalyst sandbox entitlement type and independent container",
+    "malformed and range failures",
+    "cooperative cancellation",
+    "JPEG dimensions and measured reduction",
+    "OCR phrase and absolute source-title position",
+    "digital text skip",
+    "immutable inputs"
+  ],
+  "codec" : "Apple ImageIO",
+  "elapsedSeconds" : 6.444674015045166,
+  "jpegBytesAfter" : 250456,
+  "jpegBytesBefore" : 463149,
+  "limitations" : [
+    "macOS helper execution; Expo\/iOS integration tested separately",
+    "no physical device or release proof",
+    "CoreGraphics drawing is not interruptible mid-call"
+  ],
+  "ocr" : "Apple Vision English",
+  "ocrPages" : 1,
+  "ocrWords" : 66,
+  "originalHashesUnchanged" : {
+    "appendix.pdf" : "c8d1d72a3f899992b2fba5cd247171712447c4f4fa60cf0c69bd9d811137e7a7",
+    "brief.pdf" : "6e7d2ffe2d9bd72f2de172b1e91648b915952b28face2eec1a88cc88172c6d90",
+    "image-heavy.pdf" : "dea2e9c2d4d3326d974945f556c24b55c08e4d9f6833bbcfbe9b289330e4e773",
+    "mixed-text-and-scan.pdf" : "44972359f06ae6fb05d62450182ab33e2b1d2b2709429907ca9e4a098ea97b9c",
+    "scanned-note.pdf" : "19d8713895b5597021834c41b4190d12735800fd9482008823a2e6a786023874"
+  },
+  "passed" : true,
+  "platform" : "Version 27.0 (Build 26A428)",
+  "preview" : {
+    "height" : 1024,
+    "width" : 724
+  },
+  "reader" : "Apple PDFKit\/CoreGraphics",
+  "syntheticOnly" : true
+}
+{
+  "syntheticOnly": true,
+  "passed": true,
+  "writer": "pdf-lib",
+  "independentReaders": [
+    "Apple PDFKit",
+    "PDF.js"
+  ],
+  "ocr": "Apple Vision",
+  "codec": "Apple ImageIO",
+  "ocrTextSearchPassed": true,
+  "digitalTextUnchanged": true,
+  "ocrRenderIdentical": true,
+  "geometryUnchanged": true,
+  "codecCalls": 1,
+  "compressionBytesBefore": 7571813,
+  "compressionBytesAfter": 1125798,
+  "note": "Optimised 1 JPEG image at original dimensions. Text and vectors retained; review image quality.",
+  "controllerChain": [
+    "import",
+    "merge",
+    "ocr",
+    "compress",
+    "independent validate",
+    "remove physical page2",
+    "undo"
+  ],
+  "controllerChainPages": 4,
+  "originalHashesUnchanged": true,
+  "scope": "Native helper plus shared writer/controller, not iOS UI/device test"
+}
+✔ SHR-47 swapped same-size empty-text scanned pages are rejected before promotion (511.828208ms)
+✔ SHR-47 shifted crop origin with unchanged size is rejected before promotion (555.244959ms)
+✔ SHR-47 wrong retained scanned source page is rejected despite correct count and dimensions (646.259625ms)
+✔ SHR-47 wrong rotation is rejected on an actual PDF artifact (811.078458ms)
+✔ SHR-47 changed digital page order is rejected on an actual PDF artifact (894.906167ms)
+✔ SHR-47 missing page is rejected on an actual PDF artifact (652.67925ms)
+✔ SHR-47 MediaBox origin drift is rejected even with unchanged size (698.827875ms)
+✔ SHR-47 positive corpus merge/removal, saved reopening and Undo preserve source mapping (3965.783042ms)
+✔ SHR-47 reusable mapping allows intentional reorder/rotation without executing later tools (227.871083ms)
+✔ SHR-47 revision change during engine rejects the late actual output (770.659209ms)
+✔ SHR-47 revision change during validation rejects the late actual output (678.219833ms)
+✔ SHR-47 cancellation during real independent validation keeps previous result and staged bytes unpublished (573.044417ms)
+✔ SHR-47 missing independent source/output evidence fails closed rather than counting as verified (791.58325ms)
+✔ SHR-47 source expectations cannot be rewritten by a yielding engine (1039.556792ms)
+✔ SHR-47 empty-text scan identities differ without OCR and geometry includes both origins (185.56475ms)
+✔ SHR-47 matrix v2 cannot treat historical missing production-gate evidence as a pass (92.294708ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 14229.597708

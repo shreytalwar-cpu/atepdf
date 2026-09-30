@@ -1,0 +1,29 @@
+COMMAND ["xcrun", "swiftc", "-target", "arm64-apple-ios16.4-macabi", "-sdk", "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk", "-module-cache-path", "/tmp/atepdf-shr47-final-5e99a99/swift-catalyst/module-cache", "-parse-as-library", "-emit-module", "-module-name", "AtepdfPDFEngine", "apps/universal/modules/atepdf-pdf/ios/AtepdfPDFEngine.swift", "-emit-module-path", "/tmp/atepdf-shr47-final-5e99a99/swift-catalyst/AtepdfPDFEngine.swiftmodule"]
+error: emit-module command failed with exit code 1 (use -v to see invocation)
+<module-includes>:1:9: note: in file included from <module-includes>:1:
+1 | #import "Headers/PDFKit.h"
+  |         `- note: in file included from <module-includes>:1:
+2 | 
+
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/Frameworks/PDFKit.framework/Headers/PDFKit.h:7:9: note: in file included from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/Frameworks/PDFKit.framework/Headers/PDFKit.h:7:
+ 5 | 
+ 6 | // Cross-platform support
+ 7 | #import <PDFKit/PDFKitPlatform.h>
+   |         `- note: in file included from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/Frameworks/PDFKit.framework/Headers/PDFKit.h:7:
+ 8 | 
+ 9 | // All public headers
+
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/Frameworks/PDFKit.framework/Headers/PDFKitPlatform.h:89:9: error: 'UIKit/UIKit.h' file not found
+ 87 | // iOS Headers
+ 88 | #import <Foundation/Foundation.h>
+ 89 | #import <UIKit/UIKit.h>
+    |         `- error: 'UIKit/UIKit.h' file not found
+ 90 | 
+ 91 | #define PDFKIT_PLATFORM_IOS
+
+apps/universal/modules/atepdf-pdf/ios/AtepdfPDFEngine.swift:2:8: error: could not build Objective-C module 'PDFKit'
+  1 | import Foundation
+  2 | import PDFKit
+    |        `- error: could not build Objective-C module 'PDFKit'
+  3 | import CoreGraphics
+  4 | import ImageIO

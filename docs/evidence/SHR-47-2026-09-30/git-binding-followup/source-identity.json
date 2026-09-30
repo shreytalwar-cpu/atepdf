@@ -1,0 +1,33 @@
+{
+  "verifiedSource": "74b3accd98872add9d317744470094a2f4336fe8",
+  "baseline": "29f56ea919e73c12cdbd1c36f5f74cf37622347c",
+  "onlyCodeFollowup": "tests/compatibility/run.mts: fixed /usr/bin/git instead of PATH lookup for source identity",
+  "runnerSha256": "b974723556ca581d1458c308545408560992a1979b8378a31e866158ac8b5b72",
+  "unchangedEarlierSourceFiles": {
+    "apps/universal/modules/atepdf-pdf/android/src/main/java/expo/modules/atepdf/AtepdfPdfEngine.kt": true,
+    "apps/universal/modules/atepdf-pdf/ios/AtepdfPDFEngine.swift": true,
+    "apps/universal/src/platform/runtime.native.ts": true,
+    "docs/PAGE_VERIFICATION.md": true,
+    "docs/TESTING.md": true,
+    "packages/core/src/job-controller.ts": true,
+    "packages/core/src/page-verification.ts": true,
+    "packages/web-pdf/src/client.ts": true,
+    "packages/web-pdf/src/page-structure.ts": true,
+    "packages/web-pdf/src/types.ts": true,
+    "tests/compatibility/README.md": true,
+    "tests/compatibility/browser-entry.ts": true,
+    "tests/compatibility/matrix.schema.v2.json": true,
+    "tests/compatibility/tsconfig.json": true,
+    "tests/helpers/independent-pdf.ts": true,
+    "tests/helpers/synthetic-inspection.ts": true,
+    "tests/native/apple/chain.ts": true,
+    "tests/native/apple/run.mjs": true,
+    "tests/regressions/core-integrity.test.ts": true,
+    "tests/regressions/job-progress.test.ts": true,
+    "tests/regressions/local-workflow.test.ts": true,
+    "tests/regressions/page-verification.test.ts": true,
+    "tests/regressions/workspace-persistence.test.ts": true
+  },
+  "earlierNativeChecksSource": "5e99a99fbe0503c5525f4d1c8aeb636c62533da6",
+  "gitVersion": "git version 2.54.0 (Apple Git-157)"
+}

@@ -1,194 +1,257 @@
 # ADR 0011 — Supported Mac and macOS launch envelope (SHR-34)
 
-**Status:** Proposed, awaiting Shrey's approval. Nothing here is a public compatibility promise until approved and verified.  **Source:** `origin/main` `29f56ea919e73c12cdbd1c36f5f74cf37622347c` (30 September 2026).  **Authority:** `PRODUCT_V1.md` OPEN-01, MAC-01–04, ARCH-01, G-07; [SHR-34](https://linear.app/shrey-talwar/issue/SHR-34/decide-the-supported-mac-and-macos-launch-envelope) (parent SHR-26); SHR-16 baseline; approved SHR-105 design system (OD-6 Mac idiom pending engineering confirmation).  **Evidence:** [docs/evidence/SHR-34-2026-09-30](../evidence/SHR-34-2026-09-30/README.md).
+**Status:** Proposed (revision 2), awaiting Shrey's approval. Nothing here is a public compatibility promise until approved and verified.  **Source:** `origin/main` `29f56ea919e73c12cdbd1c36f5f74cf37622347c` (30 September 2026).  **Authority:** `PRODUCT_V1.md` OPEN-01, MAC-01–04, ARCH-01, G-07; [SHR-34](https://linear.app/shrey-talwar/issue/SHR-34/decide-the-supported-mac-and-macos-launch-envelope) (parent SHR-26); SHR-16 baseline; approved SHR-105 design system (OD-6 Mac idiom pending engineering confirmation); Shrey's revision direction of 30 September 2026.  **Evidence:** [docs/evidence/SHR-34-2026-09-30](../evidence/SHR-34-2026-09-30/README.md).
 
 The existing Expo / React Native / Mac Catalyst architecture stays (ARCH-01). This ADR recommends which Macs and macOS versions v1 supports, and what must be tested before that support is claimed. It changes no project setting.
+
+**Revision 2.** Shrey did not approve revision 1 (macOS 26 minimum, Apple Silicon only). He directed:
+
+- **Keep Intel.** Target Universal (arm64 + x86_64), conditional on real Intel runtime acceptance.
+- **Setapp.** Treat Setapp as an intended channel.
+- **Lowest practical floor.** Choose it from macOS 13.3 or 14 on evidence, and do not raise the floor for newer optional APIs.
+
+This revision applies that direction to the same evidence. Revision 1's candidate table is superseded.
 
 ## 1. Current configuration facts
 
 | Item | Fact (source) |
 |---|---|
 | App target | One `atepdf` target builds iOS/iPadOS and Mac Catalyst (`SUPPORTS_MACCATALYST = YES`). Mac bundle ID `dev.atepdf.fresh.mac` (development). |
-| Deployment target | `IPHONEOS_DEPLOYMENT_TARGET = 16.4`. Catalyst derives its floor from it: the built binary says `MACCATALYST minos 16.4`, and Xcode writes `LSMinimumSystemVersion` **13.3** (macOS Ventura 13.3). |
-| Stale/secondary values | The source `Info.plist` says `LSMinimumSystemVersion 12.0`; Xcode overrides it in the built app. The app target also sets `MACOSX_DEPLOYMENT_TARGET = 13.4`, and the Podfile forces 13.4 on every pod as a workaround for Xcode 27 mapping React Native's 15.1 pod floor to unsupported macOS 10.15. None of these is the effective app floor; 13.3 is. |
-| Idiom | `TARGETED_DEVICE_FAMILY = "1,2"` → Catalyst **iPad idiom**, "scaled to match iPad" (the built app's `UIDeviceFamily` is `[2]`). The whole UI renders at 77%. |
-| Architectures | `ARCHS` is not set. `scripts/native/mac-build.sh` builds `arch=$(uname -m)` with `ONLY_ACTIVE_ARCH=YES`, so every recorded Mac build is **arm64 only**; that is a property of the script, not a deliberate exclusion. No `EXCLUDED_ARCHS`. `UIRequiredDeviceCapabilities = arm64` is an iOS key and does not exclude Intel Macs. |
-| Toolchain | Xcode 27.0 (`27A266a`), macOS SDK 27.0, Node 24.19.0, Expo SDK 57.0.25, React Native 0.86.3 (new architecture, Hermes). No pinned Node/pnpm or CI (SHR-16 finding). |
-| Dependency floors | Expo 57 native modules declare iOS **16.4** (→ macOS 13.3) and set the hard floor. React Native core allows iOS 15.1. |
-| Prebuilt binaries | React, ReactNativeDependencies, Hermes (`hermesvm`) and ExpoModulesJSI all ship `ios-arm64_x86_64-maccatalyst` slices. |
-| Own native code | `atepdf-pdf`: PDFKit, CoreGraphics, ImageIO, Vision (`VNRecognizeTextRequest`, accurate, `en-US`, no revision pinned), UIKit export picker, UniformTypeIdentifiers, CryptoKit AES-GCM, Security (Data Protection Keychain). `atepdf-planner`: URLSession (paired/pinned development planner). No `@available` gates; nothing needs more than iOS 16.4. |
-| Sandbox/entitlements | App Sandbox, user-selected read-write, outgoing network (build settings; the entitlements file is empty). There is no `application-identifier` / `keychain-access-groups`, so in ad-hoc builds the Data Protection Keychain refuses the workspace key (`-34018`) and the app runs session-only (SHR-39 evidence). |
-| Resource bounds in code | Admission 1–100 pages. Native decoded-image budget 12 MP (`AtepdfPDFEngine.pixelLimit`). |
+| Effective floor | `IPHONEOS_DEPLOYMENT_TARGET = 16.4`. The app binary and ExpoModulesJSI are stamped `MACCATALYST minos 16.4` (React and ReactNativeDependencies 14.0, Hermes 15.1). Xcode writes `LSMinimumSystemVersion` **13.3** (macOS Ventura 13.3). The highest stamp sets the floor, so the current app installs on **13.3**. |
+| Non-effective values | The source `Info.plist` says `LSMinimumSystemVersion 12.0`, which Xcode overrides. The app target and, through the Podfile workaround, every pod set `MACOSX_DEPLOYMENT_TARGET = 13.4`. For Catalyst the stamped minimum comes from the iOS deployment target, so **13.4 is not the floor; 13.3 is.** |
+| Idiom | `TARGETED_DEVICE_FAMILY = "1,2"` → Catalyst **iPad idiom** (built `UIDeviceFamily [2]`), UI rendered at 77%. |
+| Architectures | `ARCHS` unset, no `EXCLUDED_ARCHS`. `scripts/native/mac-build.sh` builds only the host architecture (`arch=$(uname -m)`, `ONLY_ACTIVE_ARCH=YES`), so every recorded build is arm64 only. That is a development-script choice, not an exclusion. `UIRequiredDeviceCapabilities = arm64` is an iOS key and does not exclude Intel Macs. |
+| Toolchain | Xcode 27.0 (`27A266a`), macOS SDK 27.0, Node 24.19.0, Expo SDK 57.0.25, React Native 0.86.3 (new architecture, Hermes). No pinned Node/pnpm or CI (SHR-16). |
+| Dependency floors | Expo 57 native modules declare iOS **16.4** (→ macOS 13.3); React Native core allows iOS 15.1. |
+| Prebuilt binaries | React, ReactNativeDependencies, Hermes and ExpoModulesJSI all ship `ios-arm64_x86_64-maccatalyst` slices. |
+| Own native code | `atepdf-pdf`: PDFKit, CoreGraphics, ImageIO, Vision (`VNRecognizeTextRequest`, accurate, `en-US`, no revision pinned), UIKit export picker (`UIDocumentPickerViewController(forExporting:asCopy:)`), UniformTypeIdentifiers, CryptoKit AES-GCM, Security (Data Protection Keychain). `atepdf-planner`: URLSession. **No `@available` gates; nothing needs more than iOS 16.4 / macOS 13.3.** |
+| Sandbox/entitlements | App Sandbox, user-selected read-write, outgoing network. There is no `application-identifier` / `keychain-access-groups`, so in ad-hoc builds the Data Protection Keychain refuses the workspace key (`-34018`) and the app runs session-only (SHR-39). |
+| Resource bounds in code | Admission 1–100 pages; native decoded-image budget 12 MP (`AtepdfPDFEngine.pixelLimit`). |
 
 ## 2. Hardware- and OS-sensitive features
 
 | Feature | Status | Sensitivity |
 |---|---|---|
-| PDF read/render/merge/remove (PDFKit, CoreGraphics, shared JS writer in Hermes) | **Implemented** | Architecture-neutral. Time and memory scale with pages and pixels. |
-| OCR (Vision accurate, English) | **Implemented** (native helper verified; Mac app UI unproven) | On Apple Silicon Vision can use the Neural Engine; on Intel it runs on CPU/GPU (slower, unmeasured). Output can differ between macOS releases because no request revision is pinned, so OCR must be checked on the minimum **and** latest OS. |
+| PDF read/render/merge/remove (PDFKit, CoreGraphics, shared JS writer in Hermes) | **Implemented** | Architecture-neutral; time and memory scale with pages and pixels. |
+| OCR (Vision accurate, English) | **Implemented** (native helper verified; Mac app UI unproven) | Apple Silicon can use the Neural Engine; Intel runs on CPU/GPU (slower, **unmeasured**). There is no pinned request revision, so output can differ by macOS release. Test on the minimum and latest OS **per architecture**. |
 | Compression (ImageIO JPEG re-encode) | **Implemented** | Architecture-neutral; CPU-bound. |
-| Images→PDF, PDF→images | Planned (SHR-51 formats) | ImageIO; HEIC decode is hardware-accelerated on Apple Silicon. |
-| Protect/Unlock encryption | Planned (SHR-52) | Depends on the chosen engine. A native library must ship every architecture we support. |
-| Local understanding | Planned (SHR-66) | Candidate APIs differ by OS: Vision text/segmentation (macOS 15+), `RecognizeDocumentsRequest` (macOS 26+), FoundationModels (macOS 26+, only on Apple Intelligence-eligible Apple Silicon Macs with the feature enabled and the model ready, so it can never be required). |
-| Encrypted workspace + Keychain | **Implemented in source** (SHR-39); actual-app encryption **unverified** | CryptoKit is on every Mac. The Data Protection Keychain needs a team-signed identity (SHR-91) before it can be tested in the real app. |
-| Finder/file access | Import picker and export picker **implemented**; native drag/drop planned (SHR-73) | Sandbox and security-scoped access; OS-version UI differences. |
-| Mac idiom / window behaviour | iPad idiom today; Mac idiom approved direction (OD-6) | Section 7. |
-| Keyboard/focus, VoiceOver | Partial; Mac acceptance not done (SHR-75/76) | Catalyst keyboard, menu and accessibility behaviour varies by macOS release. |
-| Dark/light | Approved (SHR-105 OD-3), not implemented (SHR-106) | Available on every candidate OS. |
-| Local inference | **None implemented.** Planning is a hosted/paired service. | Network, not hardware. |
+| Images→PDF, PDF→images | Planned (SHR-51) | ImageIO. HEIC decode is hardware-accelerated on Apple Silicon and on some Intel Macs; measure on Intel. |
+| Protect/Unlock | Planned (SHR-52) | A native engine must ship **arm64 and x86_64** Catalyst builds under a Universal target. |
+| Local understanding | Planned (SHR-66) | Vision text/segmentation (macOS 15+), `RecognizeDocumentsRequest` (macOS 26+), FoundationModels (macOS 26+, Apple Intelligence-eligible Apple Silicon only). Under this envelope all of these are **optional and availability-gated**; the required v1 path must work on the floor OS and on Intel. |
+| Encrypted workspace + Keychain | **Implemented in source** (SHR-39); real-app encryption **unverified** | CryptoKit and the Data Protection Keychain exist on every candidate OS and both architectures. Real-app testing needs a team-signed identity (SHR-91). |
+| Finder/file access | Import and export pickers **implemented**; drag/drop planned (SHR-73) | Sandbox/security-scoped access; picker UI differs by OS release. |
+| Mac idiom / window behaviour | iPad idiom today; Mac idiom approved direction (OD-6) | Section 8. |
+| Keyboard/focus, VoiceOver | Partial; Mac acceptance not done (SHR-75/76) | Catalyst keyboard, menu and accessibility behaviour varies by release. |
+| Dark/light | Approved (SHR-105 OD-3), not implemented | Available on every candidate OS. |
+| Local inference | **None implemented** | Planning is a hosted/paired service. |
 
-## 3. Candidate envelopes
+## 3. Candidate envelopes (revision 2)
 
-| | **E1 — Dependency floor** | **E2 — Apple's current security window** | **E3 — Current + previous (recommended)** |
-|---|---|---|---|
-| Minimum macOS | 13.3 Ventura | 15.0 Sequoia | **26.0 Tahoe** |
-| CPU | Universal (Apple Silicon + Intel) | Apple Silicon only | **Apple Silicon only** |
-| RAM (engineering assumption) | 8 GB | 8 GB min / 16 GB recommended | **8 GB min / 16 GB recommended** |
-| Free disk | Unmeasured; see section 6 | same | same |
-| Distribution impact | Widest store reach; direct build must be universal; Intel users need separate support copy | Store shows "requires Apple silicon"; direct download must say so | Same as E2; smallest set of OS versions to document |
-| Engineering cost | Universal builds and signing, x86_64 slices for every future native dependency, API gating for 13–27 | Gate macOS 26 APIs (SHR-66); design for pre-Tahoe and Tahoe window chrome | Lowest: no gating for macOS 26 APIs; one generation of window chrome |
-| Testing burden | 5 major OS versions + Intel lane; **no Intel or old-OS hardware exists** | 3 OS versions (min 15 + 27; 26 spot check) | 2 OS versions (26 + 27) |
-| Benefits | Nobody excluded who can install it | Covers every Apple Silicon Mac, including those kept on Sequoia | Test matrix the team can actually cover; newest Vision document APIs available; consistent Catalyst window/menu behaviour |
-| Risks | Unsupported OSes (13/14 no longer get security updates); promises nobody can test; slower Intel OCR | More OS variance for OCR and Catalyst; API gating adds code paths | Excludes Apple Silicon users who stay on 15; needs a 26 test lane before launch |
-| Excluded | Macs that cannot run 13.3 | All Intel Macs; Apple Silicon Macs below 15 | All Intel Macs; Apple Silicon Macs below 26 |
+Both candidates are **Universal (arm64 + x86_64)**, with Apple Silicon as the primary development and performance target and Intel conditional on runtime acceptance (section 5).
 
-E4 ("macOS 27 only") was rejected: it would exclude supported users on 26 for no technical gain.
+| | **Option A — macOS 13.3 Ventura** | **Option B — macOS 14.0 Sonoma (recommended)** |
+|---|---|---|
+| CPU | Universal, Intel conditional | Universal, Intel conditional |
+| RAM / disk | 8 GB / 16 GB internal hypotheses; disk unmeasured | same |
+| Project change needed to enforce | None (today's effective floor); clean up the stale 12.0 / 13.4 values | Raise the **Catalyst** floor to Catalyst 17.0 (macOS 14.0) without raising the iPhone/iPad target (D-02); verify the mechanism first (section 6) |
+| APIs used by current code | All available | All available |
+| Major macOS releases in range | 13, 14, 15, 26, 27 (five) | 14, 15, 26, 27 (four) |
+| Oldest Intel hardware in range | 2017 models: MacBook (12-inch), MacBook Pro, iMac, per Apple's Ventura list (verify) | 2018 MacBook Air/Pro, Mac mini; 2019 iMac; iMac Pro 2017; Mac Pro 2019, per Apple's Sonoma list (verify) |
+| Apple Silicon coverage | Every Apple Silicon Mac | Every Apple Silicon Mac (all can run 14); only users who choose to stay on 13 are excluded |
+| Distribution / signing | No difference: both floors are acceptable to Developer ID and the Mac App Store | same |
+| Setapp | Widest reach; Setapp's own OS requirement must be checked | Very wide; same check |
+| Accessibility / UI | Same frameworks. One more release of VoiceOver, keyboard and picker behaviour to verify. Icon Composer layered icons render only on 26+, so the legacy icon set covers every other release (already required by SHR-105) | Same minus one release |
+| Testing burden | Five releases × two architectures; the weakest Intel hardware (2017 dual-core MacBook) sets the performance floor | Four releases; the Intel floor is 2018-class hardware |
+| Security posture at launch | Apple's usual pattern updates only the current and two previous macOS releases (27, 26, 15); 13 dropped out first (verify) | 14 is also expected to be outside Apple's update window at launch (verify) |
+| Dependency headroom | Equal to the current floor, so the next Expo/React Native minimum-iOS raise would force **dropping** a supported OS after launch | One release of headroom: a future raise to iOS 17 maps to macOS 14 and needs no support withdrawal |
 
-## 4. Apple Silicon only vs Universal
+Rejected: macOS 15.0 or 26.0 minimums. Current code and dependencies do not require them, and SHR-66's newer APIs can be optional (revision-1 rationale withdrawn).
+
+## 4. Minimum macOS recommendation: 14.0 (Option B)
+
+The current stack has **no hard technical difference between 13.3 and 14.0**: the same APIs, dependencies, signing and channels. The choice therefore rests on support and test cost, and on those B is the more practical floor.
+
+1. **Universal makes the macOS floor the Intel hardware floor too.** A 13.3 floor adds the 2017 Intel machines, including the dual-core 12-inch MacBook. They are the slowest hardware for Vision OCR and compression and the likeliest to fail performance acceptance. Supporting them would mean finding and testing that hardware or excluding it after launch.
+2. **One fewer macOS release** to verify for import/export pickers, keyboard, VoiceOver and OCR output on each architecture.
+3. **Dependency headroom.** Expo and React Native periodically raise their minimum iOS; iOS 17 maps to macOS 14. Choosing 13.3 would make the next such raise a user-facing support withdrawal instead of a routine upgrade.
+4. **No Apple Silicon Mac is excluded by hardware.** Every Apple Silicon Mac can run macOS 14. Only owners who choose to stay on 13 lose out.
+5. **Cost of B:** a small, one-time configuration change to enforce a Catalyst-only floor, which must be verified.
+
+**Option A remains viable.** Choose it if reaching Ventura users and 2017 Intel owners matters more than the extra test and support load. It needs no project change, but the weakest 2017 Intel hardware must then pass section 5 acceptance.
+
+## 5. Universal arm64 + x86_64
+
+**Recommendation: target Universal (arm64 + x86_64) for launch.** Apple Silicon is the primary development and performance target. Intel support is **released only after actual Intel runtime acceptance.**
 
 | Question | Answer |
 |---|---|
-| Can the current project compile for Intel? | **Yes.** A bounded Release Catalyst build with `ARCHS=x86_64` succeeded with 0 errors (evidence #3). It was not signed, bundled or run. |
-| Do native dependencies have x86_64 slices? | **Yes today** for all four prebuilt binaries. Future dependencies (SHR-52 encryption engine, any SHR-66 method) would each need them too. |
-| Do OCR/PDF components work in principle? | PDFKit, Vision, ImageIO and CryptoKit exist on Intel Macs. FoundationModels does not run on Intel (Apple Intelligence needs Apple Silicon). |
-| Does performance differ? | Very likely for OCR (no Neural Engine), but **unmeasured**. There is no Intel hardware to measure it on. |
-| Intel Mac available for runtime acceptance? | **No.** Rosetta on the M5 is translation, not Intel acceptance. |
-| Which OS could Intel users run? | Apple announced at WWDC 2025 that macOS 26 Tahoe is the last release for Intel Macs (verify on Apple's compatibility page before any public statement). Under E3, Intel support would mean only the few Intel models that run 26, on exactly one OS release. |
-| Extra QA/release burden | A second architecture lane for every release, universal signing and notarization, x86_64 builds of every native dependency, separate performance budgets, and support for hardware we cannot reproduce issues on. |
+| Does the project compile for Intel? | **Yes.** A bounded Release Catalyst build with `ARCHS=x86_64` succeeded with 0 errors (evidence #3). |
+| Do dependencies have x86_64 slices? | **Yes**, all four prebuilt binaries. Every future native dependency (SHR-52, any SHR-66 engine) must provide one too. |
+| Do OCR/PDF components work in principle? | PDFKit, Vision, ImageIO, CryptoKit and the Keychain exist on Intel Macs. FoundationModels does not (Apple Silicon only), which is fine because it is optional. |
+| Performance | OCR is expected to be slower without the Neural Engine. **Unmeasured**; SHR-78 measures it on real Intel hardware. |
+| Intel Mac available now? | **No.** Rosetta on the M5 is **not** Intel acceptance, and a cross-compile alone is not runtime support. |
+| Intel OS range | Intel Macs top out at macOS 26 (Apple's WWDC 2025 statement that Tahoe is the last Intel release; verify). Under Option B, Intel support covers macOS 14–26 on 2018-or-later Intel hardware. |
+| Extra burden | A universal release build (the development script stays host-only), universal signing and notarization, x86_64 builds for every native dependency, Intel performance budgets, and an Intel test lane every release. The native code portion of the download roughly doubles; SHR-91 measures the final size. |
 
-**Recommendation: Apple Silicon only.** Ship arm64. Keep the ability to compile x86_64 (do not add architecture exclusions that break it) but make no Intel claim. Revisit only with Intel test hardware and an owner decision.
+**Intel acceptance plan.** Before any public statement that Intel Macs are supported, one actual Intel Mac in the envelope must pass the Intel section of the section 9 matrix on a team-signed Universal build:
 
-## 5. Minimum macOS
+- launch;
+- import;
+- representative PDF processing;
+- OCR;
+- save/export/reopen;
+- persistence;
+- basic keyboard/focus;
+- a crash-free smoke session.
 
-**Recommend macOS 26.0 (Tahoe).**
+Preferably the machine is 2018–2020 class with 8 GB, runs the minimum macOS, and repeats the run on macOS 26. Results are recorded against the exact build hash, Mac model and macOS build.
 
-- **APIs actually used** need only iOS 16.4 / macOS 13.3, so the choice is about cost and reach, not a technical blocker.
-- **Security/updates:** at a 2027 launch, 27 is current and 26 is the previous release; both receive Apple updates. 13 and 14 do not.
-- **SHR-66 local understanding** can use `RecognizeDocumentsRequest` and, optionally, FoundationModels (macOS 26+) without extra fallback code for 15. FoundationModels still needs a fallback because of eligibility.
-- **SHR-105 UI:** one generation of Tahoe-era window chrome, layered Icon Composer icons, and consistent Catalyst menus and keyboard behaviour under the Mac idiom.
-- **Accessibility and QA cost:** two OS versions to test with VoiceOver and keyboard, instead of three to five.
-- **Coverage:** every Apple Silicon Mac is eligible for macOS 26 (per Apple's announced compatibility; verify). Users who choose to stay on 15 are excluded.
+**Fallback.** If real Intel testing shows a material incompatibility, unacceptable performance or disproportionate maintenance, Shrey may separately decide to ship Apple Silicon only. The arm64-only build path already works.
 
-**Alternative:** macOS 15.0 (E2) is technically viable. It costs a macOS 15 test lane, gating of macOS 26 APIs in SHR-66, and pre-Tahoe window-chrome checks in SHR-106. Choose it if reaching Sequoia holdouts matters more than those costs.
+## 6. Setapp
 
-**Enforcing the floor** requires a later, separate change. Raising `IPHONEOS_DEPLOYMENT_TARGET` would also raise the preserved iPhone/iPad builds (D-02), so a Catalyst-only floor (for example an SDK-conditional `IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]`) must be verified first. Clean up the stale `Info.plist` 12.0 and the 13.4 values at the same time. **Not changed here.**
+Shrey has said Setapp is an intended distribution channel. **This conflicts with `PRODUCT_V1.md` §4.2**, which currently states that Setapp is not an approved v1 channel. Per `PRODUCT_V1.md` §2, a channel change needs an explicit owner decision recorded with its rationale, so it is listed as **ENV-7** below. `PRODUCT_V1.md` is not edited by this ADR.
 
-## 6. Resource assumptions (engineering only — not public requirements)
+For the envelope:
 
-| Resource | Assumption | Basis | What SHR-78 must measure |
-|---|---|---|---|
-| Minimum RAM | **8 GB** | The smallest Apple Silicon Mac configuration | Peak memory for 100-page import, OCR and compression, and a long session with many results, on an **8 GB Mac (not available today)** |
-| Recommended RAM | **16 GB** | The only test Mac | The same scenarios on the 16 GB M5 as the reference |
-| CPU class | Any Apple Silicon (M1 or later); no class split proposed | No measurements | Cold start, per-operation time and cancellation latency on the slowest available M-series Mac vs the M5 |
-| App size | About 33 MB staged arm64 (measured) | Evidence #1 | Final signed size per channel |
-| Free disk | No number proposed yet. Hypothesis: a job needs about 3× its largest input (encrypted copy + staged output + export), plus retained workspace growth | Controller stages outputs; the workspace keeps encrypted copies (ADR 0010) | Disk used per job and per retained workspace; behaviour at low and full disk (with SHR-40/41) |
+- A **Universal build is the safest compatibility posture for Setapp.** Setapp subscribers can be on Intel Macs, and one build serves both architectures. This is a reason to keep Intel where practical.
+- Apple Silicon only stays a **fallback** if Setapp or runtime constraints later justify it.
+- Setapp's integration, licensing, sandbox, bundle-ID, update-delivery and minimum-OS requirements are **not verified here**. SHR-91 (or a dedicated channel task) must check them against Setapp's current developer documentation before any claim. No Setapp acceptance is claimed.
 
-Public copy until SHR-78 measures: **"A Mac with Apple silicon, macOS 26 or later."** No RAM, disk or speed claim.
+**Enforcing the floor.** Raising `IPHONEOS_DEPLOYMENT_TARGET` would also raise the preserved iPhone/iPad builds (D-02). A Catalyst-only floor (for example an SDK-conditional `IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*] = 17.0`) must be verified in SHR-91 or SHR-106, together with removing the stale 12.0 and 13.4 values. **Not changed here.**
 
-## 7. Catalyst Mac idiom (OD-6 engineering confirmation)
+## 7. Resource assumptions (internal hypotheses — not published)
 
-- **Buildable: yes.** `TARGETED_DEVICE_FAMILY=1,2,6` builds with 0 errors and produces `UIDeviceFamily [6]` (evidence #5).
-- **Launchable: yes.** The ad-hoc staged probe launched, stayed up and quit cleanly (evidence #6).
-- **Visual/interaction check: not done.** Screen access was declined, so text scale, layout, menus, pickers and keyboard behaviour under the Mac idiom are unobserved.
-- **Deployment constraints:** the Mac idiom exists on every candidate OS (macOS 11+). It removes the 77% scaling, so SHR-105's `theme.scale` becomes 1.0. React Native reports the idiom through `Platform` constants (`RCTPlatform.mm` handles `UIUserInterfaceIdiomMac`), and the app's JS does not branch on idiom today. Under the Mac idiom some UIKit controls take AppKit appearance and sizes; this app draws its own controls, and the system surfaces it uses (document pickers, alerts) must be rechecked.
-- **Conclusion:** technically viable within E3 and E2. **No blocker found for SHR-106 or SHR-75.** SHR-106 must make the switch as its first step and verify rendering, text scale, pickers, focus and VoiceOver on an actual build. If a blocker appears, keep `theme.scale = 0.77` and report it.
+| Resource | Hypothesis | What SHR-78 must measure |
+|---|---|---|
+| Minimum RAM | **8 GB** | Peak memory for 100-page import, OCR and compression, and a long session, on an 8 GB Apple Silicon Mac and on the Intel test Mac |
+| Recommended RAM | **16 GB** | The same scenarios on the 16 GB M5 reference |
+| CPU class | Apple Silicon M1+ primary; Intel 2018+ conditional | Cold start, per-operation time and cancellation latency on the slowest available Apple Silicon Mac, the Intel Mac and the M5 |
+| App size | About 33 MB staged arm64 (measured); Universal larger | Final signed Universal size per channel |
+| Free disk | **No number.** Working hypothesis: a job needs about 3× its largest input plus retained workspace growth | Disk per job and per retained workspace; low and full disk behaviour (with SHR-40/41) |
 
-## 8. Test matrix (truthful as of this ADR)
+No RAM, disk or speed claim is published until SHR-78 measures.
+
+## 8. Catalyst Mac idiom (OD-6 engineering confirmation)
+
+**Technically viable; no blocker found.**
+
+- `TARGETED_DEVICE_FAMILY=1,2,6` builds (0 errors, `UIDeviceFamily [6]`) and launches, quitting cleanly (evidence #5/#6).
+- The Mac idiom exists on every candidate OS (macOS 11+). It removes the 77% scaling, so SHR-105's `theme.scale` becomes 1.0.
+- React Native handles `UIUserInterfaceIdiomMac`, and the app's JS does not branch on idiom.
+- **Not visually inspected** (screen access was declined). Visual and interaction acceptance belongs to **SHR-106** (switch first, verify rendering, text scale, pickers) and **SHR-75** (window, keyboard, focus), on the minimum and latest macOS and on Intel. If a blocker appears, keep `theme.scale = 0.77` and report it.
+
+## 9. Test matrix
+
+**Current state.**
 
 Environments:
 - **T1:** MacBook Air M5, 16 GB, macOS 27.0. The only Mac available.
-- **T2:** minimum OS, macOS 26.x. None available.
-- **T3:** 8 GB Apple Silicon Mac. None available.
-- **T4:** Intel Mac. None available.
+- **T2:** Apple Silicon Mac on the minimum macOS.
+- **T3:** 8 GB Apple Silicon Mac.
+- **T4:** Intel Mac.
 
-| Capability | T1 macOS 27 (M5) | T2 macOS 26 | T3 8 GB | T4 Intel |
+| Capability | T1 macOS 27 (M5) | T2 min macOS | T3 8 GB | T4 Intel |
 |---|---|---|---|---|
-| Release Catalyst build | Builds (arm64; iPad idiom and Mac idiom probe) | Untested | Untested | **Compiles only** (x86_64, unsigned, not run) |
-| Native engine helper (PDFKit/Vision/ImageIO) | Helper tests pass (SHR-16) | Untested | Untested | Untested |
-| App launch | Actual app tested (SHR-39; Mac idiom probe) | Untested | Untested | Untested |
-| Import (picker, samples) | Actual app, older source only (28 Sep smoke) | Untested | Untested | Untested |
+| Release Catalyst build | Builds (arm64; iPad idiom and Mac-idiom probe) | Untested | Untested | **Compiles only** (x86_64, unsigned, not run) |
+| Native engine helper | Helper tests pass (SHR-16) | Untested | Untested | Untested |
+| App launch | Actual app tested (SHR-39; Mac-idiom probe) | Untested | Untested | Untested |
+| Import | Actual app, older source only (28 Sep smoke) | Untested | Untested | Untested |
 | Finder drag/drop | Untested | Untested | Untested | Untested |
-| Save/export/reopen | Actual app, older source only (28 Sep smoke, Preview reopen) | Untested | Untested | Untested |
-| Keyboard/focus | Partial: typed commands via accessibility (28 Sep); no keyboard-only journey | Untested | Untested | Untested |
+| Save/export/reopen | Actual app, older source only (28 Sep, Preview reopen) | Untested | Untested | Untested |
+| Keyboard/focus | Partial: typed commands (28 Sep); no keyboard-only journey | Untested | Untested | Untested |
 | VoiceOver | Untested | Untested | Untested | Untested |
-| Encrypted persistence | Helper/harness tests pass; **actual app falls back to session-only** (ad-hoc Keychain `-34018`) | Untested | Untested | Untested |
-| OCR/compression in app UI | Untested (helper only) | Untested | Untested | Untested |
-| Long-running processing, memory | Untested | Untested | Untested | Untested |
-| Cancellation | Browser/unit tests only; Mac app untested | Untested | Untested | Untested |
+| Encrypted persistence | Harness passes; **real app session-only** (ad-hoc Keychain `-34018`) | Untested | Untested | Untested |
+| OCR/PDF processing in app | Untested (helper only) | Untested | Untested | Untested |
+| Cancellation | Browser/unit only | Untested | Untested | Untested |
 | Sleep/wake | Untested | Untested | Untested | Untested |
+| Long session / memory | Untested | Untested | Untested | Untested |
 
-**How import, save/reopen, keyboard and VoiceOver will be checked:**
-- SHR-73, SHR-74 and SHR-76 run the journeys by hand on T1 with a team-signed development build (SHR-91 identities).
-- SHR-78 repeats the core journey and the benchmarks on T2 and T3.
-- Each run records the exact build hash, macOS build and Mac model.
-- Saved outputs are reopened in an independent reader and hash-checked.
-- VoiceOver is run for real with the VoiceOver Utility settings recorded.
-- Browser, iOS-simulator and helper results never count.
+**Required before launch support is claimed.** Every row must pass on the actual atePDF app, with a team-signed build:
 
-T2 can be a macOS 26 virtual machine on T1 (Apple Silicon hosts can virtualize macOS). That needs tooling and an IPSW download, which requires separate approval. T3 needs an 8 GB Mac (a purchase or loan decision).
+| Requirement | Apple Silicon: minimum macOS | Apple Silicon: latest macOS | Apple Silicon 8 GB | Intel (before public Universal support) |
+|---|---|---|---|---|
+| Launch / crash-free smoke session | ✔ | ✔ | ✔ | ✔ |
+| Import (picker + Finder drag/drop) | ✔ | ✔ | — | ✔ (import) |
+| Save/export/reopen (independent reader, hashes) | ✔ | ✔ | — | ✔ |
+| Encrypted persistence (quit/relaunch) | ✔ | ✔ | — | ✔ |
+| Keyboard/focus | ✔ full journey | ✔ full journey | — | ✔ basic |
+| VoiceOver | ✔ | ✔ | — | — |
+| OCR / PDF processing | ✔ | ✔ | ✔ (performance) | ✔ representative + OCR |
+| Cancellation | ✔ | ✔ | ✔ | — |
+| Sleep/wake | ✔ | ✔ | — | — |
+| Long session / memory | ✔ | ✔ | ✔ | — |
 
-## 9. Recommendation
+- "Latest macOS" is 27 for Apple Silicon; Intel's latest is 26, which is recommended for the Intel run if the machine supports it.
+- A minimum-macOS lane can be a macOS VM on an Apple Silicon Mac (separate approval: VM tooling and an IPSW download), but VoiceOver and performance results from a VM must be labelled as such.
+- Rosetta, browser, iOS-simulator and helper results never count. Each run records the build hash, macOS build and Mac model.
+
+## 10. Recommendation (revision 2)
 
 **RECOMMENDED V1 LAUNCH ENVELOPE**
 
-- **Minimum macOS:** 26.0 (Tahoe)
-- **CPU:** Apple Silicon (arm64) only
-- **RAM:** engineering floor 8 GB (unverified; SHR-78)
-- **Recommended RAM:** 16 GB (engineering assumption, not published)
-- **Free disk:** not yet specified; SHR-78 measures. No public disk requirement beyond the store's download size.
-- **Distribution:** arm64-only builds for both the Mac App Store and direct download. Direct-download pages state "Mac with Apple silicon, macOS 26 or later".
-- **Actual tested hardware:** MacBook Air M5 (Mac17,3), 16 GB, macOS 27.0, and only for the items marked tested in section 8.
-- **Build-compatible but unverified:** macOS 26.x on any Apple Silicon Mac; 8 GB Apple Silicon Macs; x86_64 Catalyst (compiles only); the Mac idiom (builds and launches only).
-- **Explicitly unsupported:** Intel Macs; macOS 15.x and earlier (13.3–15.x, even though the current binary installs there until the floor is enforced); Rosetta; non-Mac platforms for v1 acceptance.
+- **Minimum macOS:** 14.0 (Sonoma). Option A, 13.3, is viable at a higher test cost.
+- **CPU:** Universal arm64 + x86_64.
+- **Intel status:** supported for launch **only after** actual Intel runtime acceptance (section 5); otherwise fall back to Apple Silicon only by separate decision.
+- **Apple Silicon:** primary development and performance target.
+- **RAM:** 8 GB minimum, internal hypothesis only.
+- **Recommended RAM:** 16 GB, internal hypothesis only.
+- **Free disk:** no public number until SHR-78 measures.
+- **Distribution:**
+  - Universal builds for the Mac App Store and direct download.
+  - Setapp is intended (pending ENV-7) and prefers Universal; channel requirements are verified in SHR-91.
+- **Actual tested hardware:** MacBook Air M5 (Mac17,3), 16 GB, macOS 27.0, and only for the items marked tested in section 9.
+- **Build-compatible but unverified:**
+  - macOS 14–26 on Apple Silicon;
+  - 8 GB Macs;
+  - x86_64 (compiles only);
+  - the Mac idiom (builds and launches only).
+- **Explicitly unsupported:**
+  - macOS 13.x and earlier (unless Option A is chosen);
+  - Intel Macs that cannot run the minimum macOS;
+  - Rosetta as a substitute for native builds;
+  - non-Mac platforms for v1 acceptance.
 
-**Why:** it is the widest envelope the team can actually test. It stays inside Apple's update window and avoids promising Intel or old-OS support we cannot reproduce. It unblocks SHR-66 on the newest local APIs and keeps SHR-106's Mac idiom and window-chrome work to one generation.
+**Public wording (provisional, not publishable until section 9 passes):** "macOS 14 or later. Mac with Apple silicon or Intel processor." If Intel acceptance does not pass, the wording becomes "Mac with Apple silicon".
 
-## 10. Downstream consequences
+## 11. Downstream consequences
 
 | Issue | Consequence |
 |---|---|
-| SHR-73 Finder import | Test on T1 (27) and T2 (26), arm64, with a team-signed build. Drag/drop and file-provider behaviour are checked on both OS versions. |
-| SHR-74 save/export | Same two OS versions. Include Tahoe-era save panels. Independent reopen on the same Mac. |
-| SHR-75 window/keyboard/focus | Build on the Mac idiom (section 7). Menus and shortcuts are verified on 26 and 27 only. |
-| SHR-78 runtime/performance | Owns the section 6 measurements on T1 plus an 8 GB Mac and the macOS 26 lane. Proposes the RAM/disk numbers for approval. |
-| SHR-91 signing/update | arm64-only artifacts for both channels. A team-signed identity with an application identifier is a prerequisite for testing encrypted persistence at all. Enforce the macOS 26 floor in a Catalyst-only way without raising iOS. |
-| SHR-51 support profiles | Resource envelopes are per Apple Silicon Mac; budgets come from SHR-78. OCR language support is checked on 26 and 27. |
-| SHR-52 encryption | The engine needs an arm64 Mac Catalyst build only. x86_64 is not required. |
-| SHR-66 local understanding | macOS 26 APIs may be used without fallback to 15. FoundationModels is optional and must degrade gracefully when unavailable. |
-| SHR-106 Mac idiom/UI | Switch to the Mac idiom first (`theme.scale` 1.0). Design for Tahoe-era chrome only. Verify on an actual build. |
-| SHR-38/39/41 persistence | Keychain behaviour is verified on team-signed builds on 26 and 27. |
+| SHR-73 Finder import | Verify on the minimum and latest macOS, arm64 and x86_64 (Intel: basic import), with team-signed Universal builds. |
+| SHR-74 save/export | Same OS × architecture coverage; independent reopen and hash checks. |
+| SHR-75 window/keyboard/focus | Build on the Mac idiom. Full keyboard journey on Apple Silicon min/latest; basic check on Intel. |
+| SHR-78 runtime/performance | Owns section 7 measurements on the M5, an 8 GB Apple Silicon Mac and the Intel Mac. Proposes budgets for approval. |
+| SHR-91 signing/update | Universal release build (separate from the host-only dev script), Catalyst-only floor enforcement and stale-value cleanup. A team-signed identity is a prerequisite for encrypted-persistence testing. Includes the Setapp channel requirements (after ENV-7) and a documented arm64-only fallback. |
+| SHR-51 support profiles | Budgets per architecture from SHR-78; OCR language checks on min/latest OS and on Intel. |
+| SHR-52 encryption | The engine must build for arm64 **and** x86_64 Mac Catalyst and pass on the Intel lane. |
+| SHR-66 local understanding | The required v1 path must work on macOS 14 and Intel. macOS 15/26 Vision APIs and FoundationModels are optional, availability-gated or have a fallback, unless SHR-66 proves that impractical. |
+| SHR-106 Mac idiom/UI | Switch to the Mac idiom first (`theme.scale` 1.0). Design for pre-Tahoe and Tahoe window chrome (14–27). Ship the legacy icon set alongside Icon Composer layers. Visual acceptance on min/latest and Intel. |
+| SHR-38/39/41 persistence | Keychain behaviour is verified on team-signed builds on the minimum and latest macOS and on Intel. |
 
-## 11. Unresolved items
+## 12. Still blocking approval or launch
 
-1. No macOS 26 environment, 8 GB Mac or Intel Mac exists for testing.
-2. The Mac idiom has not been visually checked.
-3. Encrypted persistence has not been exercised in the real app (signing).
-4. The Catalyst-only deployment floor setting needs verification.
-5. Apple's Intel/OS compatibility statements must be checked against Apple's pages before public copy.
-6. Launch date is not set; if it slips past macOS 28's release, revisit the floor (26 would then be N-2).
-7. There is no CI/pinned toolchain (SHR-16).
+1. **ENV-7:** Setapp contradicts `PRODUCT_V1.md` §4.2 until you record the channel decision.
+2. **No test hardware or lanes** exist yet for the minimum macOS, an 8 GB Apple Silicon Mac or an Intel Mac. Those are required before launch claims, not before approving this decision.
+3. **The Catalyst-only floor mechanism** for Option B is unverified.
+4. **The Mac idiom** has not been visually checked.
+5. **Encrypted persistence** has not run in the real app (needs signing).
+6. **Apple's Intel and OS support statements** must be checked against Apple's pages before public copy.
+7. **Setapp requirements** are unverified.
+8. **No CI or pinned toolchain** exists (SHR-16).
 
-## 12. OWNER DECISION
+## 13. OWNER DECISION
 
 Pending. Shrey to approve or change each item:
 
 | ID | Decision | Recommendation |
 |---|---|---|
-| ENV-1 | Minimum macOS | **26.0** (alternative: 15.0) |
-| ENV-2 | CPU support | **Apple Silicon only**; no Intel claim |
-| ENV-3 | RAM/disk | 8 GB floor and 16 GB recommended as **internal assumptions only**; no public RAM/disk claim until SHR-78 measures |
-| ENV-4 | Test lanes | Approve a macOS 26 test environment (VM on the M5 or a device) and access to an 8 GB Apple Silicon Mac for SHR-78, each as a separate bounded task |
-| ENV-5 | Mac idiom | Accept "viable, no blocker found; SHR-106 verifies visually first" as the OD-6 engineering confirmation |
-| ENV-6 | Public wording | "A Mac with Apple silicon, macOS 26 or later", once ENV-1/2 are approved and verified |
+| ENV-1 | Minimum macOS | **14.0 Sonoma** (Option B); alternative 13.3 Ventura (Option A, needs no project change, adds 2017 Intel hardware and one more release to test) |
+| ENV-2 | CPU | **Universal arm64 + x86_64** launch target, with Intel support conditional on real Intel runtime acceptance; Apple Silicon only is a separate fallback decision |
+| ENV-3 | RAM/disk | 8 GB minimum and 16 GB recommended stay **internal hypotheses**; no public disk number until SHR-78 measures |
+| ENV-4 | Test coverage | Provide, as separate bounded tasks: a minimum-macOS lane (device or VM), an 8 GB Apple Silicon Mac, and one actual Intel Mac (preferably 2018–2020, 8 GB, able to run macOS 14 and 26) |
+| ENV-5 | Mac idiom | Technically viable, no blocker found; final visual and interaction acceptance deferred to SHR-106/SHR-75 |
+| ENV-6 | Public wording | Provisional until section 9 acceptance passes: "macOS 14 or later. Mac with Apple silicon or Intel processor." (Apple silicon only if Intel acceptance fails) |
+| ENV-7 | Setapp channel | Record Setapp as an intended v1 distribution channel, superseding the `PRODUCT_V1.md` §4.2 exclusion; channel requirements to be verified in SHR-91 |
 
 SHR-34 stays In Review until Shrey records these decisions.

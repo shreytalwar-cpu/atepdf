@@ -1,4 +1,5 @@
 import {test,expect,type Page} from '@playwright/test';
+import {quickPlan,type Request as PlannerRequest} from '../../packages/contracts/src/protocol';
 
 // SHR-40 Privacy & storage in the shared UI. The web build keeps no workspace, so this
 // spec installs a synthetic in-memory stand-in for the Mac vault backend and a fake
@@ -257,4 +258,116 @@ test('B3 a connection response that arrives after Start over adds no message and
   await expect.poll(async()=>(await stored(page)).filter(name=>name.startsWith('blobs/')).length).toBe(0);
   const after={writes:await writes(page),stored:await stored(page)};
   await staleResponseIsInert(page,held,after);
+});
+
+// Cross-review: the same session contract for connection errors after each reset, and a
+// success after expiry (Delete and Start over successes are covered above).
+for(const reset of ['Delete','Start over','Expiry'] as const){
+  test(`B3 a connection error that arrives after ${reset} adds no message and a new connection works`,async({page})=>{
+    await samples(page);
+    if(reset==='Expiry'){const d=await openSettings(page);await d.getByRole('radio',{name:'7 days'}).click();await d.getByRole('button',{name:'Done'}).click();}
+    let release:()=>void=()=>{};const gate=new Promise<void>(resolve=>{release=resolve;});let requests=0;
+    await page.route('**/api/planner/status',async route=>{const first=++requests===1;if(first){await gate;await route.abort('failed');}else await route.fulfill({json:notConnected});});
+    await page.getByRole('button',{name:'OpenAI connection'}).click();await expect.poll(()=>requests).toBe(1);
+    if(reset==='Delete')await deleteNow(page,false);
+    else if(reset==='Start over'){await page.getByRole('button',{name:'Start over'}).click();await page.getByRole('button',{name:'Clear session'}).click();}
+    else{await setClock(page,T0+8*DAY);await page.getByRole('button',{name:'Merge',exact:true}).click();}
+    await expect(page.getByRole('heading',{name:'Drop files here'})).toBeVisible();
+    await expect.poll(async()=>(await stored(page)).filter(name=>name.startsWith('blobs/')).length).toBe(0);
+    const after={writes:await writes(page),stored:await stored(page)};
+    release();await page.waitForTimeout(1000);
+    await expect(page.getByText(/local planner gateway is unavailable/)).toHaveCount(0);
+    expect(await writes(page)).toBe(after.writes);expect(await stored(page)).toEqual(after.stored);
+    await page.getByRole('button',{name:'OpenAI connection'}).click();await expect(page.getByText(CONNECT_PROMPT)).toHaveCount(1);
+    expect(requests).toBe(2);
+  });
+}
+test('B3 a connection response that arrives after expiry adds no message and saves nothing',async({page})=>{
+  await samples(page);const d=await openSettings(page);await d.getByRole('radio',{name:'7 days'}).click();await d.getByRole('button',{name:'Done'}).click();
+  const held=await holdFirstStatus(page);await page.getByRole('button',{name:'OpenAI connection'}).click();await expect.poll(()=>held.state.requests).toBe(1);
+  await setClock(page,T0+8*DAY);await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByRole('heading',{name:'Drop files here'})).toBeVisible();
+  await expect.poll(async()=>(await stored(page)).filter(name=>name.startsWith('blobs/')).length).toBe(0);
+  await staleResponseIsInert(page,held,{writes:await writes(page),stored:await stored(page)});
+});
+
+// Cross-review S40-02: a conversational request's whole lifecycle (setup, planning,
+// choices, local execution, error and finalizer) belongs to the workspace session it
+// was submitted in. The transport here ignores AbortSignal and holds its reply, so
+// nothing depends on cancellation cooperating.
+const CANCELLED='Planning cancelled. No local files changed.';
+const fresh={connected:true,enabled:true,remaining:3,token:'synthetic-fresh-session'};
+const ignoreAbort=(page:Page)=>page.evaluate(()=>{const f=window.fetch;window.fetch=(input,init)=>/\/api\/planner(\/status)?$/.test(String(input))?f(input,{...init,signal:undefined}):f(input,init);});
+const composer=(page:Page)=>page.getByRole('textbox',{name:'Tell atepdf what to do'});
+async function ask(page:Page,text:string){await composer(page).fill(text);await page.getByRole('button',{name:'Send message'}).click();}
+// Every conversation entry that reached the vault, decoded: what a relaunch could restore.
+const persistedText=(page:Page)=>page.evaluate(()=>Object.entries(JSON.parse(sessionStorage.getItem('atepdf-test-vault')||'{}')).filter(([name])=>name.startsWith('manifests/')).map(([,f])=>new TextDecoder().decode(new Uint8Array((f as {data:number[]}).data))).join('\n'));
+async function staleRequestIsInert(page:Page,release:()=>void,settled:()=>Promise<void>,counts:()=>{status:number;plan:number}){
+  const after={writes:await writes(page),stored:await stored(page),...counts()};
+  expect(after.stored.filter(name=>name.startsWith('blobs/'))).toEqual([]);
+  release();await settled();
+  // Give the stale reply, its error path and its finalizer every chance to land.
+  await page.waitForTimeout(1500);
+  await expect(page.getByRole('heading',{name:'Drop files here'})).toBeVisible();
+  await expect(page.getByText(CANCELLED,{exact:true})).toHaveCount(0);
+  await expect(page.getByText(/Your new PDF is ready|OpenAI is not connected yet|AI planning is paused|AI connection is unavailable/)).toHaveCount(0);
+  await expect(page.getByTestId('current-result')).toHaveCount(0);
+  // No checkpoint write, no stored change, no further planner call, and the old
+  // finalizer did not check the connection on behalf of the new session.
+  expect(await writes(page)).toBe(after.writes);expect(await stored(page)).toEqual(after.stored);
+  expect(counts()).toEqual({status:after.status,plan:after.plan});
+  expect(await persistedText(page)).not.toContain(CANCELLED);
+  // The request released its own busy state: the new session is usable.
+  await expect(page.getByText(/Checking local setup|Planning your request|Preparing a plan/)).toHaveCount(0);
+  // Relaunch: the replacement workspace restores zero messages.
+  await page.reload();
+  await expect(page.getByRole('heading',{name:'Drop files here'})).toBeVisible();
+  await expect(page.getByText(CANCELLED,{exact:true})).toHaveCount(0);await expect(page.getByText(/I’ve added|PDFs are ready|Explain these PDFs|Combine these PDFs/)).toHaveCount(0);
+  // A connection check in the new session works, with a fresh synthetic connection.
+  await page.unroute('**/api/planner/status');
+  await page.route('**/api/planner/status',route=>route.fulfill({json:fresh}));
+  await page.getByRole('button',{name:'OpenAI connection'}).click();
+  await expect(page.getByText(/AI planning is ready for up to 3 approved requests/)).toHaveCount(1);
+}
+for(const reply of ['success','error'] as const){
+  test(`S40-02 a planning setup ${reply} that arrives after Delete local data adds no message, saves nothing and stays gone after relaunch`,async({page})=>{
+    await samples(page);await ignoreAbort(page);
+    let release:()=>void=()=>{};const gate=new Promise<void>(resolve=>{release=resolve;});const counts={status:0,plan:0},answered={status:0};
+    await page.route('**/api/planner/status',async route=>{
+      if(++counts.status===1){await gate;if(reply==='error')await route.abort('failed');else await route.fulfill({json:fresh});answered.status++;return;}
+      await route.fulfill({json:fresh});answered.status++;
+    });
+    await page.route('**/api/planner',async route=>{counts.plan++;await route.fulfill({status:500,json:{error:'Unexpected synthetic planner call'}});});
+    await ask(page,'Explain these PDFs');await expect.poll(()=>counts.status).toBe(1);
+    // Start over is deliberately unavailable while a request is being prepared.
+    await expect(page.getByRole('button',{name:'Start over'})).toBeDisabled();
+    await deleteNow(page,true);
+    await staleRequestIsInert(page,release,()=>expect.poll(()=>answered.status).toBe(1),()=>({...counts}));
+  });
+}
+test('S40-02 a plan that arrives after Delete local data creates no result, message or checkpoint',async({page})=>{
+  await samples(page);await ignoreAbort(page);
+  let release:()=>void=()=>{};const gate=new Promise<void>(resolve=>{release=resolve;});const counts={status:0,plan:0};let answered=0;
+  await page.route('**/api/planner/status',route=>{counts.status++;return route.fulfill({json:fresh});});
+  await page.route('**/api/planner',async route=>{counts.plan++;const req=route.request().postDataJSON() as PlannerRequest;await gate;await route.fulfill({json:quickPlan(req,'merge')});answered++;});
+  await ask(page,'Combine these PDFs');await expect.poll(()=>counts.plan).toBe(1);
+  await expect(page.getByText('Preparing a plan before local processing.',{exact:false})).toBeVisible();
+  await deleteNow(page,true);
+  await staleRequestIsInert(page,release,()=>expect.poll(()=>answered).toBe(1),()=>({...counts}));
+});
+test('S40-02 a planning setup reply that arrives after expiry adds no message and saves nothing',async({page})=>{
+  await samples(page);
+  const d=await openSettings(page);await d.getByRole('radio',{name:'7 days'}).click();await d.getByRole('button',{name:'Done'}).click();
+  await ignoreAbort(page);
+  let release:()=>void=()=>{};const gate=new Promise<void>(resolve=>{release=resolve;});const counts={status:0,plan:0};let answered=0;
+  await page.route('**/api/planner/status',async route=>{if(++counts.status===1)await gate;await route.fulfill({json:fresh});answered++;});
+  await page.route('**/api/planner',async route=>{counts.plan++;await route.fulfill({status:500,json:{error:'Unexpected synthetic planner call'}});});
+  await ask(page,'Explain these PDFs');await expect.poll(()=>counts.status).toBe(1);
+  // While the request is prepared the retention period passes; the next draft
+  // checkpoint finds the workspace expired and empties it (no disabled control is used).
+  await setClock(page,T0+8*DAY);
+  await composer(page).fill('a new draft');
+  await expect(page.getByText(/was deleted because it hadn’t changed for 7 days/)).toBeVisible();
+  await expect(page.getByText(/I’ve added|PDFs are ready|Explain these PDFs/)).toHaveCount(0);
+  await expect.poll(async()=>(await stored(page)).filter(name=>name.startsWith('blobs/')).length).toBe(0);
+  await staleRequestIsInert(page,release,()=>expect.poll(()=>answered).toBe(1),()=>({...counts}));
 });

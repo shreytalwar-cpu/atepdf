@@ -112,6 +112,10 @@ function useWorkspace() {
   const nextId = useRef(0), operation = useRef(false);
   const [planning,setPlanning]=useState(false),[connection,setConnection]=useState<Omit<PlannerStatus,'token'>|null>(null);
   const plannerAbort=useRef<AbortController|null>(null),connectionAbort=useRef<AbortController|null>(null);
+  // The planning request that holds the operation lock and its loading/planning state.
+  // Only that request's own finalizer releases them, so a late finalizer can never
+  // clear the state of a newer operation.
+  const planningOwner=useRef<AbortController|null>(null);
   const connectionToken=useRef<string|null>(null);
   const pendingClarification=useRef<PendingClarification|null>(null);
   const clearPending=()=>{pendingClarification.current=null;};
@@ -335,12 +339,14 @@ function useWorkspace() {
     catch (e) { if (current()) say(e instanceof Error ? e.message : 'Files could not be opened.'); }
     finally { setLoading(false); }
   };
-  const executeLocal = async (type: Action, page = 2) => {
+  // current: the workspace session this action belongs to; once it is stale (Start
+  // over, expiry or Delete local data) its result or error adds nothing to the chat.
+  const executeLocal = async (type: Action, page = 2, current = session.ticket()) => {
     const previous = store.focus;
     try {
       await controller.quick(type, page);
-      finish(previous, type === 'remove' ? `I removed page ${page}. Here’s the new copy.` : type === 'merge' ? 'I merged your PDFs in the order added. Here’s your PDF.' : type === 'ocr' ? 'Your searchable copy is ready.' : type === 'chain' ? 'Your merged, searchable and optimised copy is ready.' : 'I checked the optimised copy. Here’s the result.', localResultTitle(type, page));
-    } catch (e) { say(e instanceof Error ? e.message : 'This action could not finish.'); }
+      if (current()) finish(previous, type === 'remove' ? `I removed page ${page}. Here’s the new copy.` : type === 'merge' ? 'I merged your PDFs in the order added. Here’s your PDF.' : type === 'ocr' ? 'Your searchable copy is ready.' : type === 'chain' ? 'Your merged, searchable and optimised copy is ready.' : 'I checked the optimised copy. Here’s the result.', localResultTitle(type, page));
+    } catch (e) { if (current()) say(e instanceof Error ? e.message : 'This action could not finish.'); }
   };
   const execute = async (type: Action, page = 2) => {
     if (operation.current) return;
@@ -360,9 +366,11 @@ function useWorkspace() {
     }
     void execute(type, page);
   };
-  const undoLocal = async () => {
+  const undoLocal = async (current = session.ticket()) => {
+    if (!current()) return;
     if (!store.canUndo) { say('There’s no earlier result to restore yet. Your original files are unchanged.'); return; }
     await controller.undo();
+    if (!current()) return;
     if (controller.state.stage === 'failed' && controller.state.error) { say(controller.state.error); return; }
     append({role: 'assistant', text: 'I restored your previous result. Your original files are unchanged.', artifact: store.get(store.focus!).meta, resultTitle: entriesRef.current.findLast(entry => entry.artifact?.ref === store.focus)?.resultTitle});
   };
@@ -423,22 +431,27 @@ function useWorkspace() {
   };
   const preparePlanning=async(text:string,fallback?:{type:Action|'undo';page:number},continuation?:PendingClarification)=>{
     if(operation.current)return;
-    operation.current=true;setLoading(true);
-    const abort=new AbortController();plannerAbort.current=abort;
+    // One ticket for the whole submission: setup, planning, choices, local execution,
+    // errors and the finalizer. After Start over, expiry or Delete local data it is
+    // stale, so a late reply (even from a transport that ignores abort) writes no
+    // chat, checkpoint or connection state and starts nothing in the new session.
+    const current=session.ticket(),abort=new AbortController();
+    operation.current=true;setLoading(true);plannerAbort.current=abort;planningOwner.current=abort;
     try{
       // One submission owns setup, planning and local execution. Only the
       // positive metadata projection crosses the planner boundary.
       const instruction=privateInstruction(text,store.list);
       const currentRequest=controller.request(instruction);
       const request=continuation?withPendingClarification(currentRequest,continuation):currentRequest;
-      const status=await checkConnection(abort.signal,true);
+      const status=await checkConnection(abort.signal,true,current);
       abort.signal.throwIfAborted();
+      if(!current())return;
       if(!status?.enabled){
         if(fallback){
           setLoading(false);
-          if(fallback.type==='undo')await undoLocal();
+          if(fallback.type==='undo')await undoLocal(current);
           else if((fallback.type==='compress'||fallback.type==='chain')&&store.originals.length){const id=append({role:'assistant',text:'I can re-encode supported JPEG images at their original dimensions. Image quality may change; text and vectors stay intact. Some PDFs may not get smaller. Shall I create a new copy for you to preview?',choice:fallback.type,revision:store.revision});setChoice(id);}
-          else await executeLocal(fallback.type,fallback.page);
+          else await executeLocal(fallback.type,fallback.page,current);
           return;
         }
         const help = /^(?:what (?:can you|can atepdf|do you) do|(?:how )?can you help(?: me)?|help|what (?:are your|are atepdf.?s) capabilities)[?.!]*$/i.test(text.trim());
@@ -449,9 +462,10 @@ function useWorkspace() {
       setLoading(false);setPlanning(true);
       const result=await requestPlan(request,status.token,abort.signal);
       abort.signal.throwIfAborted();
+      if(!current())return;
       if(store.revision!==request.workspaceRevision)throw new Error('Your files changed. Please ask again.');
       // requestPlan validates clarification shape and response binding too.
-      if(result.planner.status==='undo'){await undoLocal();return;}
+      if(result.planner.status==='undo'){await undoLocal(current);return;}
       if(result.planner.status!=='plan'){
         if(result.planner.status==='clarify')pendingClarification.current=pendingFromResponse(request,result.planner);
         say(result.planner.clarification!.question);return;
@@ -463,12 +477,17 @@ function useWorkspace() {
       if(envelope.planner.steps.some(step=>step.operation==='compress_pdf'&&step.params.preset!=='lossless')){
         const id=append({role:'assistant',text:'I can make a smaller copy by optimising its images. Image quality may change; your originals will stay intact.',choice:'execute',revision:store.revision,request,envelope});setChoice(id);return;
       }
-      plannerAbort.current=null;
+      if(plannerAbort.current===abort)plannerAbort.current=null;
       const previous=store.focus;
       await controller.execute(envelope,request);
-      finish(previous,'Your new PDF is ready.',plannedResultTitle(envelope.planner.steps));
-    }catch(e){say(abort.signal.aborted?'Planning cancelled. No local files changed.':e instanceof Error?e.message:'This request could not finish. Your files are unchanged.');}
-    finally{operation.current=false;setLoading(false);setPlanning(false);plannerAbort.current=null;if(plannerAvailable)void refreshConnection();}
+      if(current())finish(previous,'Your new PDF is ready.',plannedResultTitle(envelope.planner.steps));
+    }catch(e){if(current())say(abort.signal.aborted?'Planning cancelled. No local files changed.':e instanceof Error?e.message:'This request could not finish. Your files are unchanged.');}
+    finally{
+      if(planningOwner.current===abort){planningOwner.current=null;operation.current=false;setLoading(false);setPlanning(false);}
+      if(plannerAbort.current===abort)plannerAbort.current=null;
+      // A stale request never checks the connection for the replacement session.
+      if(current()&&plannerAvailable)void refreshConnection(current);
+    }
   };
   const executePlanned=async(entry:Entry)=>{
     if(!entry.envelope||!entry.request||operation.current)return;

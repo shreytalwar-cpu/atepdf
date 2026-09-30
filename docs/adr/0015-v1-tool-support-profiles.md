@@ -422,7 +422,7 @@ The SHR-45 fixtures are in `tests/fixtures/corpus/manifest.json`. Every implemen
 - **SHR-64:** OCR confidence thresholds, final OCR page limit (with SHR-78), the Unicode-capable writer and Mac Vision evidence.
 - **SHR-65:** compression hardening. Any future downsampling profile needs separate measured evidence and owner approval.
 - **SHR-53:** secure local password handle shared by Protect and Unlock.
-- **ADR numbering:** 0013 is on `main` (SHR-49) and 0014 is used by SHR-85 (PR #103), so SHR-51 is **0015**. Open PRs #98 (SHR-79) and #99 (SHR-52) still name 0013 and must renumber themselves.
+- **ADR numbering:** 0013 is on `main` (SHR-49) and 0014 is used by SHR-85 (PR #103), so SHR-51 is **0015**. Under the coordinated scheme, PR #98 (SHR-79) uses **0016**. PR #99 (SHR-52) still names 0013 and must renumber itself; this ADR assigns it no number.
 
 ## 13. Owner decisions (approved 30 September 2026)
 

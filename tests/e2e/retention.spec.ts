@@ -43,6 +43,21 @@ const openSettings=async(page:Page)=>{await page.getByRole('button',{name:'Proce
 
 test.beforeEach(async({page})=>{await install(page);await page.goto('/');await expect(page.getByRole('heading',{name:'Drop files here'})).toBeVisible();});
 
+test('a settings chunk failure preserves the workspace and can retry without reloading',async({page})=>{
+  const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));
+  await samples(page);await page.getByRole('button',{name:'Merge',exact:true}).click();
+  await expect(page.getByTestId('current-context')).toContainText('3 pages');
+  let requests=0;await page.route('**/PrivacyStorage-*.js',route=>++requests===1?route.abort():route.continue());
+  await page.getByRole('button',{name:'Processed on your device',exact:true}).click();
+  await expect(page.getByRole('alert')).toContainText('Your workspace is unchanged');
+  await expect(page.getByTestId('current-context')).toContainText('3 pages');
+  await page.getByRole('button',{name:'Try again',exact:true}).click();
+  await expect(page.getByRole('dialog')).toHaveAccessibleName('Privacy & storage');
+  await page.getByRole('button',{name:'Done',exact:true}).click();
+  await expect(page.getByTestId('current-context')).toContainText('3 pages');
+  expect(requests).toBe(2);expect(errors).toEqual([]);
+});
+
 test('Privacy & storage: approved options, Keep until I delete it by default, keyboard reachable, usage by category',async({page})=>{
   await samples(page);
   // Command-comma opens the settings, as on the Mac.

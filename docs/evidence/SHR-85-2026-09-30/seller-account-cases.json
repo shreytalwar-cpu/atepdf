@@ -1,0 +1,404 @@
+{
+  "schema": "atepdf.seller-account-cases/1",
+  "source": "docs/adr/0014-seller-payments-account-ownership.md section 18",
+  "status": "Partially approved by Shrey on 30 September 2026: SELL-2 to SELL-10 approved (SELL-4 with modification); SELL-1 (legal seller) pending owner facts, awaiting Apple and Setapp responses. Revision 2 (owner-authorized cross-review corrections S85-01 to S85-03): relink/recovery cases R01-R07, unknown cross-channel ownership cases X07-X11 and shared installation lifecycle cases I01-I07 (mapped to ADR 0016 cases); G04-G06, D07, X04 and X06 updated. Policy cases for SHR-86/87/88/89 tests, not evidence that anything is implemented. Independent-verification corrections (30 September 2026): I04/I05 mirror ADR 0016 B1/B2 (S62, S70); R08 added for first link of a never-linked App Store purchase.",
+  "policy": {
+    "account_required": {
+      "guest_use": false,
+      "app_store_purchase": false,
+      "direct_purchase": true,
+      "cross_channel": true,
+      "setapp_build": "no_accounts",
+      "restore_recovery_needing_server_identity": true
+    },
+    "login": "email_one_time_code_required_all_channels",
+    "sign_in_with_apple": "optional_deferred_v1_must_not_depend_on_it",
+    "legal_seller": "pending_SELL-1_awaiting_apple_and_setapp_responses",
+    "device_cap": null,
+    "family_sharing": false,
+    "guest_link_allowance_rule": "keep_lower_remaining",
+    "signup_top_up": false,
+    "entitlement_sources": {
+      "app_store": "apple",
+      "direct": "paddle_billing_mor_approved_subject_to_signup_eligibility",
+      "setapp": "setapp_vendor_api"
+    },
+    "client_self_assertion": "rejected",
+    "store_build_external_purchase_links": false,
+    "cross_channel": {
+      "app_store_to_direct": "account_link",
+      "direct_to_app_store": "account_sign_in",
+      "setapp_to_other": "not_supported",
+      "other_to_setapp": "not_applicable"
+    },
+    "purchase_record_fields": [
+      "channel",
+      "seller_account_ref",
+      "provider",
+      "external_id",
+      "product",
+      "status",
+      "period_end",
+      "verification_revision"
+    ],
+    "installation_identity": "ADR 0016 section 4 (Supabase anonymous guest principal + installation key + session bindings); no separate relay secret",
+    "relink_already_linked_purchase": "current_owner_authorization_or_verified_channel_owner_recovery_only",
+    "insufficient_alone_for_relink_or_recovery": [
+      "receipt_or_screenshot",
+      "order_id",
+      "transaction_id",
+      "forwarded_or_replayed_signed_transaction",
+      "destination_account_email_code"
+    ],
+    "duplicate_purchase": {
+      "known_verified_entitlement": "hard_block_direct_checkout",
+      "unknown_other_channel_ownership": "warn_before_purchase_offer_sign_in_link_restore",
+      "universal_duplicate_prevention_claimed": false
+    },
+    "setapp_bill04_release_gate": "open_owned_by_SHR-91_no_exception_granted"
+  },
+  "cases": [
+    {
+      "id": "G01",
+      "group": "guest_identity",
+      "situation": "New guest, no account, starts work",
+      "expected": "Admitted against guest allowance; no signup prompt"
+    },
+    {
+      "id": "G02",
+      "group": "guest_identity",
+      "situation": "Guest exhausts allowance, then creates an account",
+      "expected": "Still exhausted; no top-up"
+    },
+    {
+      "id": "G03",
+      "group": "guest_identity",
+      "situation": "Guest A (3 left) signs into account whose guest pool has 1 left",
+      "expected": "1 left (lower value kept)"
+    },
+    {
+      "id": "G04",
+      "group": "guest_identity",
+      "situation": "Signed-in user signs out",
+      "expected": "Installation returns, authenticated by its retained guest session, to its original guest subject with its consumed allowance; no account paid authority; no new allowance (ADR 0016 S70)"
+    },
+    {
+      "id": "G05",
+      "group": "guest_identity",
+      "situation": "App deleted and reinstalled, Keychain items present",
+      "expected": "Same installation and guest subject (ADR 0016 S73)"
+    },
+    {
+      "id": "G06",
+      "group": "guest_identity",
+      "situation": "Keychain items removed",
+      "expected": "New installation and guest subject under the global new-guest cap; no purchase lost (ADR 0016 S73)"
+    },
+    {
+      "id": "G07",
+      "group": "guest_identity",
+      "situation": "Client sends `pro=true` without server evidence",
+      "expected": "Rejected; relay admits nothing paid"
+    },
+    {
+      "id": "A01",
+      "group": "app_store",
+      "situation": "App Store purchase, no account",
+      "expected": "Pro in the Store build via verified JWS; no account prompt"
+    },
+    {
+      "id": "A02",
+      "group": "app_store",
+      "situation": "App Store Pro, same Apple Account, second Mac, Restore",
+      "expected": "Pro restored; `AppStore.sync()` only after the button"
+    },
+    {
+      "id": "A03",
+      "group": "app_store",
+      "situation": "App Store Pro, user signs in and links, opens direct build",
+      "expected": "Pro recognised in direct build"
+    },
+    {
+      "id": "A04",
+      "group": "app_store",
+      "situation": "App Store Pro linked; Apple sends `REFUND`/`REVOKE`",
+      "expected": "Pro removed on every build for that account"
+    },
+    {
+      "id": "A05",
+      "group": "app_store",
+      "situation": "App Store build paywall shown",
+      "expected": "No external price, link or call to action"
+    },
+    {
+      "id": "A06",
+      "group": "app_store",
+      "situation": "Store build \"Manage subscription\"",
+      "expected": "Opens App Store subscriptions page, not the unsupported sheet"
+    },
+    {
+      "id": "A07",
+      "group": "app_store",
+      "situation": "Family member's shared transaction presented",
+      "expected": "Not linkable (Family Sharing off)"
+    },
+    {
+      "id": "D01",
+      "group": "direct",
+      "situation": "Direct build, guest taps Upgrade",
+      "expected": "Sign-in by email code required before checkout"
+    },
+    {
+      "id": "D02",
+      "group": "direct",
+      "situation": "Paddle checkout redirect \"success\" but no verified webhook yet",
+      "expected": "No Pro; \"Confirming payment\" state"
+    },
+    {
+      "id": "D03",
+      "group": "direct",
+      "situation": "Forged or replayed webhook (bad signature/timestamp)",
+      "expected": "Rejected; no state change"
+    },
+    {
+      "id": "D04",
+      "group": "direct",
+      "situation": "Out-of-order webhooks (renewal after cancellation)",
+      "expected": "Ledger ends at the correct revision; revoked access not revived"
+    },
+    {
+      "id": "D05",
+      "group": "direct",
+      "situation": "Direct Pro account signs in on Store build",
+      "expected": "Pro recognised; no buy button; no direct link"
+    },
+    {
+      "id": "D06",
+      "group": "direct",
+      "situation": "Direct Pro, new Mac, sign in",
+      "expected": "Pro restored"
+    },
+    {
+      "id": "D07",
+      "group": "direct",
+      "situation": "Direct user loses email access",
+      "expected": "Support-assisted verified channel-owner recovery only: new destination account by email code, fresh owner-bound Paddle proof and a documented support identity/authorization check; receipt, order ID or destination code alone refused; atomic move, notify and audit after authorization; no entitlement copy; no allowance reset"
+    },
+    {
+      "id": "D08",
+      "group": "direct",
+      "situation": "Direct user deletes account",
+      "expected": "Account removed; Paddle renewal cancelled; files untouched; no refund implied"
+    },
+    {
+      "id": "X01",
+      "group": "cross_channel_and_double_subscription",
+      "situation": "Account has direct Pro; user tries direct checkout again",
+      "expected": "Server refuses checkout; shows \"already Pro\""
+    },
+    {
+      "id": "X02",
+      "group": "cross_channel_and_double_subscription",
+      "situation": "Store build signed in to account with direct Pro",
+      "expected": "Buy replaced by \"Pro via direct — manage there\""
+    },
+    {
+      "id": "X03",
+      "group": "cross_channel_and_double_subscription",
+      "situation": "Store build, this Apple Account already subscribed",
+      "expected": "Restore offered, not Buy"
+    },
+    {
+      "id": "X04",
+      "group": "cross_channel_and_double_subscription",
+      "situation": "Offline paywall, or signed out with a prior sign-in hint, status unknown",
+      "expected": "Warning to sign in/restore first; purchase still possible"
+    },
+    {
+      "id": "X05",
+      "group": "cross_channel_and_double_subscription",
+      "situation": "Ledger finds two active paid records on one subject",
+      "expected": "Both shown with each management route"
+    },
+    {
+      "id": "X06",
+      "group": "cross_channel_and_double_subscription",
+      "situation": "App Store transaction already linked to account A; account B tries to link with its own email code and the signed transaction",
+      "expected": "Refused: B's code proves only B; the link stays with A until A authorizes a transfer or verified channel-owner recovery succeeds; no notification-only move"
+    },
+    {
+      "id": "X07",
+      "group": "cross_channel_and_double_subscription",
+      "situation": "New Mac, direct build, online and signed in to a new account; the person has an App Store subscription that was never linked",
+      "expected": "Server reports no known entitlement; paywall warns before checkout and offers sign-in to the account used before or linking from the Store build; checkout still allowed; no hard block"
+    },
+    {
+      "id": "X08",
+      "group": "cross_channel_and_double_subscription",
+      "situation": "Store build, no account signed in; the person has direct Pro on an account not signed in on this Mac",
+      "expected": "Paywall warns 'sign in or restore first' with no direct price, link or other purchase method; StoreKit purchase still possible"
+    },
+    {
+      "id": "X09",
+      "group": "cross_channel_and_double_subscription",
+      "situation": "Account has a verified App Store Pro linked; user opens direct checkout",
+      "expected": "Server refuses checkout (known entitlement); shows 'Pro via App Store — manage there'"
+    },
+    {
+      "id": "X10",
+      "group": "cross_channel_and_double_subscription",
+      "situation": "Setapp member opens the direct or Store build paywall",
+      "expected": "No Setapp-based block or claim; normal guest/paywall with the separate-subscriptions FAQ; Setapp build never shows a paywall"
+    },
+    {
+      "id": "X11",
+      "group": "cross_channel_and_double_subscription",
+      "situation": "App Store purchase after the unknown-ownership warning, with no atePDF account",
+      "expected": "Purchase completes and Pro works in the Store build; no atePDF account required (SELL-3)"
+    },
+    {
+      "id": "R01",
+      "group": "purchase_relink_recovery",
+      "situation": "Account B presents a replayed or forwarded signed App Store transaction or Paddle transaction data for a purchase linked to account A",
+      "expected": "Refused; link unchanged; audit of the refused attempt; A not moved or notified as if moved"
+    },
+    {
+      "id": "R02",
+      "group": "purchase_relink_recovery",
+      "situation": "Attacker controls destination account B and verifies B's email code, then requests relink of A's purchase",
+      "expected": "Refused: destination code proves only B; requires A's authorization or verified channel-owner recovery"
+    },
+    {
+      "id": "R03",
+      "group": "purchase_relink_recovery",
+      "situation": "Lost-email claim using a stolen Paddle order ID or a receipt screenshot",
+      "expected": "Refused without fresh owner-bound Paddle proof and a documented support identity/authorization check"
+    },
+    {
+      "id": "R04",
+      "group": "purchase_relink_recovery",
+      "situation": "Account A, signed in with a fresh email code, authorizes transfer of its purchase to account B; B accepts while signed in",
+      "expected": "Link moves atomically to B; both notified after authorization; audit record; no entitlement copy; neither allowance reset or increased"
+    },
+    {
+      "id": "R05",
+      "group": "purchase_relink_recovery",
+      "situation": "Legitimate owner lost email access and completes verified channel-owner recovery",
+      "expected": "After fresh owner-bound channel proof and the documented support check, purchase moves to the new account atomically; old address notified; audit; no allowance reset; until SHR-87/88 procedures are verified, no recovery relink is performed"
+    },
+    {
+      "id": "R06",
+      "group": "purchase_relink_recovery",
+      "situation": "Two relinks of the same purchase race (one authorized, one not; or two authorized to different accounts)",
+      "expected": "Exactly one authorized link results; the other fails because the purchase is no longer linked to the subject its authorization named; no duplicate entitlement"
+    },
+    {
+      "id": "R07",
+      "group": "purchase_relink_recovery",
+      "situation": "After an authorized transfer, both accounts check entitlement and allowance",
+      "expected": "Pro from that purchase only on the new owner; guest and account allowances unchanged by the move"
+    },
+    {
+      "id": "R08",
+      "group": "purchase_relink_recovery",
+      "situation": "Account B presents a forwarded signed App Store transaction (JWS) for a purchase that has never been linked",
+      "expected": "Refused without a matching appAccountToken or fresh on-device StoreKit proof from the purchasing Apple Account; no link; audit of the refused attempt"
+    },
+    {
+      "id": "S01",
+      "group": "setapp",
+      "situation": "Setapp build launch, active member",
+      "expected": "Vendor API code exchanged server-side; `granted=true`; Pro service level; no paywall"
+    },
+    {
+      "id": "S02",
+      "group": "setapp",
+      "situation": "Setapp build, Setapp allowance reached",
+      "expected": "Reset date shown; no upsell"
+    },
+    {
+      "id": "S03",
+      "group": "setapp",
+      "situation": "Setapp membership ends",
+      "expected": "Server granted=false; hosted AI refused; exported/saved results remain reachable in Finder. This is only a subset of BILL-04, not proof of full recovery; the BILL-04 release gate stays open in SHR-91"
+    },
+    {
+      "id": "S04",
+      "group": "setapp",
+      "situation": "Setapp member opens direct build",
+      "expected": "Setapp access not recognised; normal guest/paywall"
+    },
+    {
+      "id": "S05",
+      "group": "setapp",
+      "situation": "Direct/App Store subscriber opens Setapp build",
+      "expected": "No sign-in offered; Setapp access applies; Help explains separate subscriptions"
+    },
+    {
+      "id": "S06",
+      "group": "setapp",
+      "situation": "Setapp build client claims `granted` without code",
+      "expected": "Rejected"
+    },
+    {
+      "id": "I01",
+      "group": "installation_lifecycle",
+      "situation": "First hosted use on a new installation",
+      "expected": "Anonymous guest principal, installation key and guest subject created once; no registration top-up (ADR 0016 S69)"
+    },
+    {
+      "id": "I02",
+      "group": "installation_lifecycle",
+      "situation": "Guest creates an account by email code (direct purchase path)",
+      "expected": "Separate account user; installation linked with the installation proof; consumed guest usage stays consumed; anonymous user not converted (ADR 0016 S70, S37)"
+    },
+    {
+      "id": "I03",
+      "group": "installation_lifecycle",
+      "situation": "Guest on a second Mac signs into an existing account",
+      "expected": "Linked with account session and installation proof; carry-over rule G03 applied once; no new allowance (ADR 0016 S71)"
+    },
+    {
+      "id": "I04",
+      "group": "installation_lifecycle",
+      "situation": "Sign-out (online, and offline followed by reconnect), then sign-in again",
+      "expected": "Back to the original guest subject without paid authority or new allowance; an offline sign-out keeps the account session sign-out-pending and completes the server sign-out at the next contact before any guest request, and a binding whose session no longer exists counts as revoked, so the guest request is admitted; sign-in with a fresh email code restores account access (ADR 0016 S70)"
+    },
+    {
+      "id": "I05",
+      "group": "installation_lifecycle",
+      "situation": "Remote sign-out of one installation from the session list; then 'sign out everywhere'",
+      "expected": "Old JWT refused at the next request while other sessions work; the signed-out installation cannot re-link with its still-live session (401 session_revoked) and regains account access only through a fresh email code; then all refused; each installation on its own guest subject (ADR 0016 S62, S64)"
+    },
+    {
+      "id": "I06",
+      "group": "installation_lifecycle",
+      "situation": "Account deletion with two linked installations",
+      "expected": "All account sessions refused at once; installation and guest-allowance records survive; account rows deleted; direct renewal cancelled per D08 (ADR 0016 S63, S70)"
+    },
+    {
+      "id": "I07",
+      "group": "installation_lifecycle",
+      "situation": "Reinstall with Keychain intact, reinstall after remote sign-out, and reinstall after Keychain removal",
+      "expected": "Same installation; revoked session falls back to guest; removed Keychain is a new guest under the cap (ADR 0016 S73, S74)"
+    },
+    {
+      "id": "M01",
+      "group": "migration",
+      "situation": "Account inspected after seller change",
+      "expected": "Same `subject` and email; purchase records keep their original `seller_account_ref`"
+    },
+    {
+      "id": "V01",
+      "group": "device_policy",
+      "situation": "User with Pro on 4 Macs, normal use",
+      "expected": "No device limit message"
+    },
+    {
+      "id": "V02",
+      "group": "device_policy",
+      "situation": "Abnormal concurrency on one account",
+      "expected": "Safety/abuse limit message; never \"upgrade\""
+    }
+  ]
+}

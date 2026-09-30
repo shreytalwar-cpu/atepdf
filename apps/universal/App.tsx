@@ -81,7 +81,7 @@ function useWorkspace() {
   const [restoring, setRestoring] = useState(backend !== null), [restoredDraft, setRestoredDraft] = useState<string|null>(null);
   const [notice, setNotice] = useState<WorkspaceNotice|null>(null), [durable, setDurable] = useState(false);
   // ready: restore finished; only then may chat/draft changes be checkpointed.
-  const ready = useRef(backend === null), opened = useRef(false);
+  const ready = useRef(backend === null), opened = useRef(false), openingVault = useRef(false);
   const restoredEntries = useRef<Entry[]|null>(null), draftRef = useRef<string|null>(null);
   // Chat/draft checkpoints; suspended for the whole Start over transaction.
   const runChatSave = useRef<() => Promise<void>>(async () => {}), chatSaveFailed = useRef<() => void>(() => {});
@@ -92,6 +92,7 @@ function useWorkspace() {
   const [entries, setEntries] = useState<Entry[]>([]), [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState<number | null>(null), [privacy, setPrivacy] = useState(false), [choice, setChoice] = useState<number | null>(null);
   const [saving, setSaving] = useState<string | null>(null), [receipts, setReceipts] = useState<Record<string, string>>({});
+  const savingLock = useRef(false), receiptEpoch = useRef(0);
   const nextId = useRef(0), operation = useRef(false), cancelRequested = useRef(false);
   const [planning,setPlanning]=useState(false),[connection,setConnection]=useState<Omit<PlannerStatus,'token'>|null>(null);
   const plannerAbort=useRef<AbortController|null>(null);
@@ -110,7 +111,7 @@ function useWorkspace() {
   const saveFailed = (v: WorkspaceVault) => setNotice({text: v.mode === 'blocked' ? SAVE_PAUSED_NOTICE : SAVE_FAILED_NOTICE});
   // A cleanup notice stays until the vault has verified the old copies are gone.
   const cleanupSettled = (v: WorkspaceVault) => { if (!v.cleanupPending) setNotice(previous => previous?.cleanup ? null : previous); };
-  runChatSave.current = async () => { const v = vault.current, current = session.ticket(); if (!ready.current || !v || v.mode !== 'writable') return; try { await v.save(() => {if(!current()||vault.current!==v)throw new StaleSaveError();return snapshot(controller.durableState(false));},current); if(current())cleanupSettled(v); } catch(error) {if(current())throw error;} };
+  runChatSave.current = async () => { const v = vault.current, current = session.ticket(); if (!ready.current || !v || v.mode !== 'writable') return; try { await v.save(() => {if(!current()||vault.current!==v)throw new StaleSaveError();return snapshot(controller.durableState(false));},current); if(current())cleanupSettled(v); } catch(error) {if(!(error instanceof StaleSaveError))saveFailed(v);if(current())throw error;} };
   chatSaveFailed.current = () => { if (vault.current) saveFailed(vault.current); };
   const saveChat = () => checkpoints.now();
   const noteDraft = (text: string) => {
@@ -127,7 +128,9 @@ function useWorkspace() {
     restoredEntries.current = entriesRef.current;
     const v = new WorkspaceVault(backend, {redact: safeOrdinaryText}); vault.current = v;
     try {
+      openingVault.current = true;
       const outcome = await v.open();
+      openingVault.current = false;
       if(!current()||vault.current!==v)return;
       if (outcome.kind === 'restored') {
         const saved = outcome.checkpoint;
@@ -150,11 +153,11 @@ function useWorkspace() {
         controller.setDurability({save: async (signal) => {
           const owned=session.ticket();
           try {await v.save(()=>{if(!owned()||vault.current!==v)throw new StaleSaveError();return snapshot();},()=>owned()&&!signal?.aborted);if(owned())cleanupSettled(v);}
-          catch(error){if(owned()&&!(error instanceof StaleSaveError))saveFailed(v);throw error;}
+          catch(error){if(!(error instanceof StaleSaveError))saveFailed(v);throw error;}
         },clear:()=>v.clear()});setDurable(true);
       }
     } catch {if(current())setNotice({text:'atePDF can’t open the saved workspace right now. This session won’t be saved.'});}
-    finally { if(current()){ready.current = true; setRestoring(false);} }
+    finally { openingVault.current = false; if(current()){ready.current = true; setRestoring(false);} }
   };
   useEffect(() => { if (opened.current) return; opened.current = true; void openWorkspace(); }, []);
   useEffect(() => {
@@ -187,8 +190,8 @@ function useWorkspace() {
   // dialog, while a running local engine must drain before another job starts.
   const invalidate = () => {
     session.advance();clearPending();plannerAbort.current?.abort();controller.cancel();
-    operation.current=false;setLoading(false);setPlanning(false);setSaving(null);setChoice(null);
-    if(!ready.current){vault.current=null;ready.current=true;setRestoring(false);}
+    operation.current=false;setLoading(false);setPlanning(false);setChoice(null);
+    if(!ready.current){vault.current?.block();ready.current=true;setRestoring(false);setNotice({text:'Restoring was cancelled. New work in this session won’t be saved. Reopen atePDF to restore or clear the saved workspace.',retry:true});}
   };
   const beginImport = () => {if(!resetting.current){cancelRequested.current=false;invalidate();}return session.ticket();};
   const importFiles = async (files: File[], current = beginImport()) => {
@@ -354,7 +357,8 @@ function useWorkspace() {
     catch(e){if(current())say(e instanceof Error?e.message:'The plan could not be applied.');}finally{if(current())operation.current=false;}
   };
   const cancel=()=>{
-    if(resetting.current||cancelRequested.current)return;
+    // Opening the durable head cannot be abandoned into a session-only workspace.
+    if(openingVault.current||resetting.current||cancelRequested.current)return;
     cancelRequested.current=true;
     const pending=loading||planning||state.busy||restoring,wasPlanning=!!plannerAbort.current;
     invalidate();
@@ -374,6 +378,7 @@ function useWorkspace() {
     if(entry.choice==='connect'||entry.choice==='native-link'||entry.choice==='native-pair'||entry.choice==='connection-help')return;
     if(entry.choice==='execute'){void executePlanned(entry);return;}
     if (entry.choice === 'clear') {
+      if(!durable&&vault.current?.mode==='blocked'){say('atePDF can’t clear the saved workspace in this session. Reopen atePDF before clearing it; the saved files are still kept.');return;}
       invalidate();resetting.current=true;setLoading(true);const current=session.ticket();
       // One transaction: chat/draft checkpoints are suspended (and pending draft
       // saves cancelled) until the clear settles. An empty workspace is shown only
@@ -381,7 +386,7 @@ function useWorkspace() {
       // checkpointing resumes, so nothing from before can be saved into it.
       const resetView = () => {
         const empty: Entry[] = []; entriesRef.current = empty; restoredEntries.current = empty; draftRef.current = null;
-        connectionToken.current=null; setPreview(null); setReceipts({}); setEntries(empty); setClearCount(n => n + 1);
+        receiptEpoch.current++; connectionToken.current=null; setPreview(null); setReceipts({}); setEntries(empty); setClearCount(n => n + 1);
       };
       // Session-only (no saved workspace): nothing durable to wait for, so the view
       // is reset immediately, exactly as before persistence existed.
@@ -398,13 +403,14 @@ function useWorkspace() {
     } else if (entry.choice) { append({role: 'user', text: 'Yes, create an optimised copy.'}); void execute(entry.choice); }
   };
   const exportResult = async (artifact: DisplayArtifact) => {
-    if (saving || resetting.current) return;
-    const current=session.ticket(),revision=store.revision,hash=store.get(artifact.ref).meta.checksum;
-    const owns=()=>current()&&store.revision===revision&&store.list.some(f=>f.ref===artifact.ref&&f.checksum===hash);
+    if (savingLock.current || resetting.current) return;
+    const epoch=receiptEpoch.current,hash=store.get(artifact.ref).meta.checksum;
+    const owns=()=>receiptEpoch.current===epoch&&store.list.some(f=>f.ref===artifact.ref&&f.checksum===hash);
+    savingLock.current=true;
     setSaving(artifact.ref);
     try { const outcome = await save(store.get(artifact.ref).bytes); if(!owns())return;setReceipts(previous => ({...previous, [artifact.ref]: outcome === 'shared' ? 'Share sheet closed · check the destination you chose' : outcome === 'saved' ? 'Saved to your device' : outcome === 'cancelled' ? 'Ready · save cancelled' : 'Download started · check your downloads'})); }
     catch (e) { if(owns())setReceipts(previous => ({...previous, [artifact.ref]: safeOrdinaryText(e instanceof Error ? e.message : 'Saving failed. Try again.')})); }
-    finally { if(current())setSaving(null); }
+    finally { savingLock.current=false;setSaving(null); }
   };
   return {controller, state, store, entries, busy, loading, current, currentTitle:currentEntry?.resultTitle, focus, preview, setPreview, privacy, setPrivacy,
     choice, setChoice, saving, receipts, append, say, showHelp, importFiles, pick, action, undo, submit, confirm, exportResult, planning, connection, connectionToken, connect, refreshConnection, cancel, clearPending,

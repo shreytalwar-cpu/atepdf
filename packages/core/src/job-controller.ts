@@ -1,6 +1,6 @@
 import {buildRequest,quickPlan,validateEnvelope,type Request,type Envelope,type Operation} from '@contracts/protocol';
 import {LocalFileStore,type Artifact,type StoreMark} from './local-file-store';
-import {CLEANUP_INCOMPLETE} from './workspace-vault';
+import {CLEANUP_INCOMPLETE,StaleSaveError} from './workspace-vault';
 import type {EngineRequest,EngineResult,Inspection,OCRPage} from '@pdf/types';
 type Services={capabilities?:Operation[];worker:(request:EngineRequest,signal:AbortSignal,progress?:(text:string)=>void)=>Promise<EngineResult|{pages:number}>;inspect:(bytes:Uint8Array,signal:AbortSignal)=>Promise<Inspection>;recognize:(bytes:Uint8Array,inspection:Inspection,signal:AbortSignal,progress:(text:string)=>void)=>Promise<OCRPage[]>};
 // Browser File objects need no cleanup; native picker handles own disposable cache copies.
@@ -37,19 +37,23 @@ export class JobController {
     signal?.throwIfAborted();
     const mark=this.store.mark();change();
     if(!this.#durable)return;
-    this.#persisting=true;this.#pending=mark;
+    this.#persisting=true;this.#pending=mark;let withdrawalConfirmed=false;
     try{
       await this.#durable.save(signal);
       if(signal?.aborted){
         this.store.rollback(mark);this.#pending=null;
         // The first write may already be durable. Withdraw its result with a new
         // checkpoint; never interrupt the atomic head publication midway.
-        try{await this.#durable.save();}
-        catch{throw new CancellationSaveError('The cancelled change was withdrawn in this session, but its saved state could not be confirmed. Reopen atePDF before continuing.');}
+        try{await this.#durable.save();withdrawalConfirmed=true;}
+        catch{throw new CancellationSaveError('The cancelled files were withdrawn in this session, but their saved state could not be confirmed. The cancelled files may reappear after relaunch. Reopen atePDF before continuing.');}
         signal.throwIfAborted();
       }
     }
-    catch(e){if(this.#pending)this.store.rollback(mark);throw e instanceof Error?e:new Error('This change could not be saved.');}
+    catch(e){
+      if(this.#pending)this.store.rollback(mark);
+      if(signal?.aborted&&!withdrawalConfirmed&&!(e instanceof StaleSaveError)&&!(e instanceof CancellationSaveError))throw new CancellationSaveError('The cancelled files are not shown in this session, but their saved state could not be confirmed. The cancelled files may reappear after relaunch. Reopen atePDF before continuing.');
+      throw e instanceof Error?e:new Error('This change could not be saved.');
+    }
     finally{this.#persisting=false;this.#pending=null;}
   }
   /** Store state for a checkpoint. Other writers exclude a commit still awaiting its own save. */

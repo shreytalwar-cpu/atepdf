@@ -259,9 +259,10 @@ export class WorkspaceVault{
       // this attempt are unreferenced and collected after a later checkpoint.
       throw new Error(STORAGE_WRITE_FAILED);
     }
-    // An invalidated save may have written staged copies, but never publish them
-    // as current. Collect only unreferenced app-owned copies under the same lock.
-    if(!current()){await this.#collectAfter(this.#head?.previousGeneration??null);throw new StaleSaveError();}
+    // An invalidated attempt never owns the acknowledged head or its predecessor.
+    // Leave its orphan files for the next successful checkpoint/startup cleanup;
+    // the attempted generation may differ from the durable head after a fault.
+    if(!current())throw new StaleSaveError();
     // 3. Commit point: atomically replace the head, keeping the previous generation.
     const next:WorkspaceHead={format:WORKSPACE_FORMAT,schemaVersion:WORKSPACE_SCHEMA_VERSION,workspaceID:this.#workspaceID,generation,previousGeneration:this.#previous,deletionEpoch:this.#epoch};
     const publication=await this.#commitHead(next,'withdraw');

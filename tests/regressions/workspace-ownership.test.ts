@@ -13,7 +13,7 @@ const inspection={pages:[{width:612,height:792,rotation:0,text:''}]};
 const services={worker:async()=>({pages:1}),inspect:async()=>inspection,recognize:async()=>[]};
 const file=(name='old.pdf',release=()=>{})=>({name,size:1,arrayBuffer:async()=>new Uint8Array([1]).buffer,release}) as unknown as File;
 function reset(w:any){const id=w.append({role:'assistant',text:'clear',choice:'clear',revision:w.store.revision});w.setChoice(id);return id;}
-async function clear(h:any){const id=reset(h.view);await h.flush();h.view.confirm(h.view.entries.find((e:any)=>e.id===id));await h.flush();}
+async function clear(h:any){const id=reset(h.view);await h.flush();h.view.confirm(h.view.entries.find((e:any)=>e.id===id));await h.flush();for(let i=0;i<100&&h.view.busy;i++)await h.flush();}
 async function result(store:LocalFileStore,ref:string,n=1){const artifact=await store.prepare(new Uint8Array([n]),'result.pdf',inspection,false,ref);store.commit([artifact],store.revision);return artifact.meta;}
 
 for(const action of ['Cancel','Start Over'] as const)test(`delayed sample + ${action}: no import, chat or save after invalidation`,async()=>{
@@ -93,9 +93,9 @@ test('checkpoint scheduled before reset never runs in the new generation or repo
   scheduler.now();await scheduler.exclusive(async()=>{});await new Promise(done=>setTimeout(done,0));assert.equal(saves,0);assert.equal(errors,0);scheduler.dispose();
 });
 
-test('late receipt from an earlier result is discarded after another result becomes current',async()=>{
+test('G6 receipt remains bound to its saved result after another result becomes current',async()=>{
   const saving=deferred<string>(),store=new LocalFileStore(),controller=new JobController(store,services);const artifact=await result(store,'out_first');const h=await workspaceHook(controller,{save:()=>saving.promise});
-  try{const pending=h.view.exportResult(artifact);await result(store,'out_next',2);saving.resolve('saved');await pending;await h.flush();assert.deepEqual(h.view.receipts,{});assert.equal(store.focus,'out_next');}finally{h.dispose();}
+  try{const pending=h.view.exportResult(artifact);await result(store,'out_next',2);saving.resolve('saved');await pending;await h.flush();assert.equal(h.view.receipts[artifact.ref],'Saved to your device');assert.equal(store.focus,'out_next');}finally{h.dispose();}
 });
 
 test('non-cooperative engine completion cannot promote after Cancel; lock drains before replacement',async()=>{
@@ -130,9 +130,27 @@ test('pending workspace save completion after reset cannot restore old state on 
   try{const saving=f.vault.save(f.snapshot);await entered.promise;const reset=f.controller.clear();gate.resolve();await saving;await reset;assert.equal(f.store.list.length,0);const reopened=await new WorkspaceVault(new NodeVaultBackend(f.root,f.keychain),{redact:text=>text}).open();assert.equal(reopened.kind,'restored');if(reopened.kind==='restored'){assert.equal(reopened.checkpoint.artifacts.length,0);assert.equal(reopened.checkpoint.history.length,0);}}finally{await rm(f.root,{recursive:true,force:true});}
 });
 
-test('pending workspace open + Cancel cannot hydrate old files, transcript or draft',async()=>{
-  const f=await durableFixture();await f.controller.import([file()]);const gate=deferred<void>(),entered=deferred<void>(),read=f.backend.readOpened.bind(f.backend);
-  f.backend.readOpened=async(name,aad)=>{if(name==='head'){entered.resolve();await gate.promise;}return read(name,aad);};
+test('S44-02 vault open is non-cancellable; subsequent save and Start Over remain durable',async()=>{
+  const f=await durableFixture();await f.controller.import([file()]);const gate=deferred<void>(),entered=deferred<void>(),read=f.backend.readOpened.bind(f.backend);let paused=false;
+  f.backend.readOpened=async(name,aad)=>{if(name==='head'&&!paused){paused=true;entered.resolve();await gate.promise;}return read(name,aad);};
   const fresh=new JobController(new LocalFileStore(),services),h=await workspaceHook(fresh,{backend:f.backend});
-  try{await entered.promise;h.view.cancel();await h.flush();await clear(h);gate.resolve();await h.flush();assert.equal(fresh.store.list.length,0);assert.deepEqual(h.view.entries,[]);assert.equal(h.view.restoring,false);assert.equal(h.view.durable,false);}finally{h.dispose();await rm(f.root,{recursive:true,force:true});}
+  try{await entered.promise;h.view.cancel();await h.flush();assert.equal(h.view.restoring,true);gate.resolve();for(let i=0;i<20&&h.view.restoring;i++)await h.flush();assert.equal(h.view.durable,true);await h.view.importFiles([file('new.pdf')]);await h.flush();assert.equal(fresh.store.list.length,2);await clear(h);const disk=await new WorkspaceVault(new NodeVaultBackend(f.root,f.keychain),{redact:t=>t}).open();assert.equal(disk.kind,'restored');if(disk.kind==='restored')assert.equal(disk.checkpoint.artifacts.length,0);}finally{h.dispose();await rm(f.root,{recursive:true,force:true});}
+});
+
+ test('S44-02 Cancel during controller restore shows a blocked-saving notice and never claims Start Over cleared disk',async()=>{
+  const f=await durableFixture();await f.controller.import([file()]);const gate=deferred<void>(),entered=deferred<void>();
+  const fresh=new JobController(new LocalFileStore(),{...services,inspect:async()=>{entered.resolve();await gate.promise;return inspection;}}),h=await workspaceHook(fresh,{backend:f.backend});
+  try{await entered.promise;h.view.cancel();gate.resolve();await fresh.settle();await h.flush();assert.equal(h.view.durable,false);assert.match(h.view.notice.text,/New work in this session won’t be saved/);await h.view.importFiles([file('new.pdf')]);await h.flush();await clear(h);assert.ok(h.view.entries.some((e:any)=>/can’t clear the saved workspace/.test(e.text)));assert.equal(fresh.store.list.length,1);const disk=await new WorkspaceVault(new NodeVaultBackend(f.root,f.keychain),{redact:t=>t}).open();assert.equal(disk.kind,'restored');if(disk.kind==='restored')assert.deepEqual(disk.checkpoint.artifacts.map(a=>a.name),['old.pdf']);}finally{h.dispose();await rm(f.root,{recursive:true,force:true});}
+});
+
+ test('S44-05 failed withdrawal checkpoint reports uncertainty and the candidate can reappear',async()=>{
+  const f=await durableFixture(),gate=deferred<void>(),entered=deferred<void>();let saves=0;
+  f.controller.setDurability({save:async()=>{if(++saves===2)throw new Error('withdrawal failed');await f.vault.save(f.snapshot);entered.resolve();await gate.promise;},clear:()=>f.vault.clear()});
+  try{const pending=f.controller.import([file('cancelled.pdf')]);await entered.promise;f.controller.cancel();gate.resolve();await pending;assert.equal(f.controller.state.stage,'failed');assert.match(f.controller.state.error!,/cancelled files may reappear after relaunch/);assert.equal(f.store.list.length,0);const disk=await new WorkspaceVault(new NodeVaultBackend(f.root,f.keychain),{redact:t=>t}).open();assert.equal(disk.kind,'restored');if(disk.kind==='restored')assert.deepEqual(disk.checkpoint.artifacts.map(a=>a.name),['cancelled.pdf']);}finally{await rm(f.root,{recursive:true,force:true});}
+});
+
+ test('G6 OS save lock survives Undo, import and reset until the sheet resolves',async()=>{
+  const pendingSave=deferred<string>(),store=new LocalFileStore(),controller=new JobController(store,services);const artifact=await result(store,'out_first');let writes=0;
+  const h=await workspaceHook(controller,{save:()=>{writes++;return pendingSave.promise;}});
+  try{const pending=h.view.exportResult(artifact);await h.flush();await result(store,'out_second',2);h.view.undo();await h.flush();await h.view.importFiles([file('new.pdf')]);await h.flush();await h.view.exportResult(artifact);assert.equal(writes,1);await clear(h);const next=await result(store,'out_new',3);await h.view.exportResult(next);assert.equal(writes,1);assert.equal(h.view.saving,artifact.ref);pendingSave.resolve('saved');await pending;await h.flush();assert.deepEqual(h.view.receipts,{});assert.equal(h.view.saving,null);}finally{h.dispose();}
 });

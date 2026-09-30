@@ -1,10 +1,14 @@
 import {createHash} from 'node:crypto';
 import {LocalFileStore} from '../../../packages/core/src/local-file-store';
 import {JobController} from '../../../packages/core/src/job-controller';
-import {buildRequest,quickPlan,validateEnvelope,type Request as PlannerRequest,type Step,type Envelope} from '../../../packages/contracts/src/protocol';
+import {quickPlan,type Request as PlannerRequest,type Step,type Envelope} from '../../../packages/contracts/src/protocol';
 import {privateInstruction} from '../../../packages/planner/src/privacy';
 import {pendingFromResponse,withPendingClarification,isClarificationAnswer} from '../../../packages/planner/src/clarification';
 import {createGateway} from '../../../packages/planner/src/gateway';
+import {requestPlan} from '../../../packages/planner/src/client';
+import {OutboundDenied} from '../../../packages/planner/src/outbound/gate';
+import {fixture} from '../../helpers/outbound-fixture';
+import {syntheticInspection} from '../../helpers/synthetic-inspection';
 import {planWithOpenAI,MODEL} from '../../../packages/planner/src/provider';
 import type {PendingClarification} from '../../../packages/contracts/src/protocol';
 import type {Inspection,EngineResult} from '../../../packages/web-pdf/src/types';
@@ -21,7 +25,7 @@ function expand(value:any,request:PlannerRequest,context:Context):any{
   if(typeof value==='string'&&context.files.some(file=>file.ref===value))return opaqueRef(value);
   return value;
 }
-const refusal=(error:unknown)=>/stale|Files changed|files changed/i.test(String(error))?'stale':/safe|password|secret|text from|name|checksum|path|instruction|encoded/i.test(String(error))?'privacy':/unavailable/i.test(String(error))?'capability':'schema';
+const refusal=(error:unknown)=>error instanceof OutboundDenied?'privacy':(error as {code?:string})?.code==='planner_unavailable'?'allowance':/stale|Files changed|files changed/i.test(String(error))?'stale':/safe|password|secret|text from|name|checksum|path|instruction|encoded/i.test(String(error))?'privacy':/unavailable/i.test(String(error))?'capability':'schema';
 /** Production request/gateway/SDK/validation/controller with synthetic engines and scripted HTTP only.
  * No prompt-dependent mock model is invented here. Records are fixture responses, not model evidence.
  */
@@ -32,16 +36,16 @@ export function currentAdapter(recordings:Record<string,Recording>):Adapter {
     const reset=async(next:Context)=>{
       context=next;store=new LocalFileStore();
       const entries=await Promise.all(next.files.map(async file=>{
-        const inspection:Inspection={pages:Array.from({length:file.pageCount},(_,i)=>({width:612,height:792,rotation:0,text:file.text??`Synthetic ${file.ref} page ${i+1}`}))};
+        const inspection:Inspection={...syntheticInspection(file.pageCount),pages:Array.from({length:file.pageCount},(_,i)=>({width:612,height:792,rotation:0,text:file.text??`Synthetic ${file.ref} page ${i+1}`}))};
         return store.prepare(encode(inspection),file.name,inspection,next.originalRefs.includes(file.ref),opaqueRef(file.ref));
       }));
       store.hydrate(entries,next.originalRefs.map(opaqueRef),next.history.map(opaqueRef),next.revision-1);
       controller=new JobController(store,{capabilities:next.capabilities as any,inspect:async bytes=>decode(bytes),recognize:async()=>[],worker:async work=>{
         if(work.kind!=='transform')throw new Error('Only synthetic transforms are used in this eval.');
         invoked.push(structuredClone(work.step));
-        let pages=work.inputs.flatMap(input=>input.inspection.pages);
-        if(work.step.operation==='select_pages')pages=pages.filter((_,i)=>!(work.step.params.pages as {indices:number[]}).indices.includes(i+1));
-        return {bytes:encode({pages}),note:'Synthetic eval engine; no PDF fidelity evidence.'} as EngineResult;
+        let pages=work.inputs.flatMap(input=>input.inspection.pages),structure=work.inputs.flatMap(input=>input.inspection.structure!.pages);
+        if(work.step.operation==='select_pages'){const keep=(_:unknown,i:number)=>!(work.step.params.pages as {indices:number[]}).indices.includes(i+1);pages=pages.filter(keep);structure=structure.filter(keep);}
+        return {bytes:encode({pages,structure:{version:1,reader:'synthetic-test-only',pages:structure}}),note:'Synthetic eval engine; no PDF fidelity evidence.'} as EngineResult;
       }});
     };
     await reset(context);
@@ -52,12 +56,6 @@ export function currentAdapter(recordings:Record<string,Recording>):Adapter {
       if(turn.context)await reset(turn.context);
       invoked=[];
       const observation:TurnObservation={status:'rejected',reasonCode:null,rawResponse:null,request:null,accepted:false,rejection:null,providerCalls:0,outbound:[],toolInvocations:[],control:null,qualityConfirmation:false,focus:null,revision:store!.revision,pendingInstruction:null};
-      const makeRequest=(message:string)=>{
-        const request=buildRequest({revision:store!.revision,files:store!.list.map(file=>({ref:file.ref,kind:'pdf',pageCount:file.pageCount,sizeBytes:file.sizeBytes,encrypted:false})),selected:context.selectionRefs.map(opaqueRef),focus:store!.focus,originals:store!.originals},message);
-        request.capabilities=context.capabilities as any;
-        if(!request.capabilities.includes('ocr_pdf'))request.ocrLanguages=[];
-        return request;
-      };
       try{
         if(turn.event==='control'){
           pending=null;observation.status='control';observation.control=turn.action!;
@@ -81,42 +79,39 @@ export function currentAdapter(recordings:Record<string,Recording>):Adapter {
             pending=null;observation.status='control';observation.control='cancel';observation.accepted=true;
           }else{
             const instruction=privateInstruction(turn.message,store!.list);
-            let request=makeRequest(instruction);
+            let request=controller!.request(instruction,pending??undefined);
             const previous=pending;pending=null;
             if(previous&&isClarificationAnswer(turn.message,previous))request=withPendingClarification(request,previous);
             observation.request=request;
             const record=recordings[`${scenario.id}:${index}`];
             // Any missing fixture is a harness error; never substitute a desired answer.
+            const boundary=await fixture(['openai-development']);boundary.authority.hostedAiOn=scenario.consent.hostedCommands;
             const provider=async(projected:PlannerRequest,_key:string,signal:AbortSignal)=>planWithOpenAI(projected,'sk-eval-placeholder-not-a-credential',signal,async(_url,init)=>{
               observation.providerCalls++;
-              observation.outbound.push({kind:'command',recipient:'openai',payload:JSON.parse(String(init?.body))});
+              observation.outbound.push({kind:'command',recipient:'openai-development',payload:JSON.parse(String(init?.body))});
               if(!record){harnessError=new Error('Missing deterministic recording');throw harnessError;}
               const input=expand(record.input,projected,context);
               return Response.json({id:'resp_eval',created_at:1,model:MODEL,status:'completed',error:null,incomplete_details:null,output:[{id:'fc_eval',type:'function_call',status:'completed',call_id:'call_eval',name:record.toolName,arguments:JSON.stringify(input)}]});
-            });
+            },boundary.boundary);
             const config={status:async()=>({connected:true,enabled:scenario.entitlement.mode==='not_integrated'||remaining>0,remaining}),reserve:async()=>{if(scenario.entitlement.mode==='gateway_allowance'&&remaining<=0)throw new Error('blocked');remaining--;return {key:'unused',release:async()=>{}};}};
             const gateway=createGateway(config,async(...args)=>{
               const raw=await provider(args[0],args[1],args[2]);observation.rawResponse=structuredClone(raw);observation.status=raw.status;observation.reasonCode=raw.reasonCode;return raw;
-            },{minIntervalMs:0});
+            },{minIntervalMs:0,...boundary.gatewayOptions});
             const status=await (await gateway(new Request('http://localhost:3211/api/planner/status'))).json();
-            const response=await gateway(new Request('http://localhost:3211/api/planner',{method:'POST',headers:{origin:'http://localhost:3211','content-type':'application/json','x-atepdf-token':status.token},body:JSON.stringify({...request,...turn.requestExtras})}));
-            if(response.status!==200){
-              observation.rejection=response.status===503?'allowance':response.status===400?'privacy':'schema';
-              if(observation.rawResponse===null)observation.status='rejected';
-            }else{
-              const envelope=await response.json();
-              if(turn.afterPlanningRevision!==undefined)store!.revision=turn.afterPlanningRevision;
-              if(store!.revision!==request.workspaceRevision)throw new Error('Files changed. Run the action again.');
-              observation.accepted=true;
+            const signal=new AbortController().signal;
+            const envelope=await requestPlan(request,status.token,signal,()=>({...request,...turn.requestExtras}),{
+              gate:boundary.gate,
+              fetch:async(_url,init)=>gateway(new Request('http://localhost:3211/api/planner',{...init,headers:{...init?.headers,origin:'http://localhost:3211'}})),
+            });
+            if(turn.afterPlanningRevision!==undefined)store!.revision=turn.afterPlanningRevision;
+            observation.accepted=true;
               if(envelope.planner.status==='clarify')pending=pendingFromResponse(request,envelope.planner);
               if(envelope.planner.status==='undo'){await controller!.undo();observation.control='undo';}
               if(envelope.planner.status==='plan'){
-                const plan=validateEnvelope(envelope,request,store!.revision);
-                observation.qualityConfirmation=plan.planner.steps.some(step=>step.operation==='compress_pdf'&&step.params.preset!=='lossless');
-                if(!observation.qualityConfirmation||turn.qualityApproved)await controller!.execute(plan,request);
+                observation.qualityConfirmation=envelope.planner.steps.some(step=>step.operation==='compress_pdf'&&step.params.preset!=='lossless');
+                if(!observation.qualityConfirmation||turn.qualityApproved)await controller!.execute(envelope,request);
                 if(controller!.state.error)throw new Error(controller!.state.error);
               }
-            }
           }
         }
       }catch(error){

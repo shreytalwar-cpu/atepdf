@@ -1,12 +1,12 @@
 import type {Request, Step} from '../../../packages/contracts/src/protocol';
 
-export const CORPUS_VERSION = '1.0.0';
+export const CORPUS_VERSION = '1.1.0';
 export const CATEGORIES = ['single_tool','multi_step','follow_up','ambiguity','clarification','stale_revision','safe_controls','unsupported','local_selectors','collections','protect_last','quality_permission','entitlement','no_work'] as const;
 export type Category = typeof CATEGORIES[number];
 export type LocalFile = {ref:string; name:string; pageCount:number; text?:string; sourceRevision:number; sizeBytes?:number};
 export type Context = {revision:number;files:LocalFile[];selectionRefs:string[];originalRefs:string[];history:string[];capabilities:string[];selectors:{kind:string;refs:string[];pages:number[];revision:number;certain:boolean;evidence?:string}[]};
 export type Scope = {operation:string;purpose:string;recipients:string[];refs:string[];pages:number[];revision:number;categories:string[]};
-/** Eval-only receipt, not the still-open SHR-35 production contract. */
+/** Eval-only receipt, scoring fixture for the approved ADR 0012; never runtime authority. */
 export type Consent = {hostedCommands:boolean;receipt: (Scope & {revoked:boolean}) | null};
 export type Turn = {message:string;event:'submit'|'quick'|'control';action?:string;page?:number;context?:Context;afterPlanningRevision?:number;requestExtras?:Record<string,unknown>;qualityApproved?:boolean};
 export type Scenario = {schemaVersion:'1.0';id:string;family:string;category:Category;description:string;priorConversation?:{role:'user'|'assistant';message:string}[];context:Context;turns:Turn[];consent:Consent;entitlement:{mode:'not_integrated'|'gateway_allowance';remaining:number};canaries:{value:string;kind:'document'|'derived'|'filename'|'path'|'secret'}[];metadata:{requirements:string[];basis:'current_contract'|'approved_target';notes:string}};

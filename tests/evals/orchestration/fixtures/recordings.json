@@ -294,7 +294,7 @@
             ],
             "outputRef": "out_stage1",
             "params": {
-              "targetBytes": 5000000,
+              "targetBytes": null,
               "preset": "lossless",
               "batchMode": "single"
             }
@@ -422,7 +422,7 @@
             ],
             "outputRef": "out_stage1",
             "params": {
-              "targetBytes": 5000000,
+              "targetBytes": null,
               "preset": "lossless",
               "batchMode": "single"
             }
@@ -670,5 +670,6 @@
         "choices": []
       }
     }
-  }
+  },
+  "corpusVersion": "1.1.0"
 }

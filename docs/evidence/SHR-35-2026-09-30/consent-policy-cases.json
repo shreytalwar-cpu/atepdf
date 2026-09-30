@@ -462,13 +462,12 @@
     {
       "id": "D26",
       "kind": "hosted",
-      "change": "instruction contains a Luhn-valid card number",
+      "change": "instruction contains a Luhn-valid 13\u201319-digit card number (owner G3a amendment, 30 September 2026)",
       "expected": {
-        "inlineCheckShown": true,
-        "outboundBytesBeforeConfirm": 0,
-        "afterSendAnyway": {
-          "outcome": "ALLOW"
-        }
+        "outcome": "DENY",
+        "reason": "never_transfer",
+        "outboundBytes": 0,
+        "sendAnywayOverride": false
       }
     },
     {

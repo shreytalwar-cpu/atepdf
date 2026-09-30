@@ -77,7 +77,7 @@ const node=(name,args,options)=>run(name,process.execPath,args,options);
 async function typechecks(){
   for(const [name,config]of [['web','apps/web/tsconfig.json'],['universal','apps/universal/tsconfig.json'],['compatibility','tests/compatibility/tsconfig.json']])
     await node(`typescript-${name}`,['node_modules/typescript/bin/tsc','--noEmit','--incremental','false','-p',config]);
-  if(features.evals){await node('typescript-orchestration',['node_modules/typescript/bin/tsc','--noEmit','--incremental','false','-p','tests/evals/orchestration/tsconfig.json']);await node('orchestration-cli-smoke',['--import','tsx','tests/evals/orchestration/run.mts','--split','dev','--output','.build/orchestration-smoke']);}
+  if(features.evals){await node('typescript-orchestration',['node_modules/typescript/bin/tsc','--noEmit','--incremental','false','-p','tests/evals/orchestration/tsconfig.json']);await node('orchestration-cli-smoke',['--import','tsx','tests/evals/orchestration/run.mts','--set','full','--output-dir','.build/orchestration-smoke']);}
 }
 async function contracts(){await node('generated-contracts',['scripts/contracts.mjs','--check']);await node('generated-knowledge',['scripts/embed-product-knowledge.mjs','--check']);await node('schemas-catalogue-evals',['--import','tsx','scripts/verification/schemas.mts']);}
 try{
@@ -94,7 +94,7 @@ try{
   features.evals=existsSync(join(scratch,'tests/evals/orchestration/tsconfig.json'));
   features.permission=existsSync(join(scratch,'tests/native/planner/permission-main.swift'));
   features.tls=existsSync(join(scratch,'tests/native/planner/tls-main.swift'));
-  await run('frozen-install',pnpmBin,['install','--frozen-lockfile']);
+  await run('frozen-install',pnpmBin,['install','--frozen-lockfile','--store-dir',join(scratch,'pnpm-store')]);
   if(mode==='all'||mode==='core'){
     await contracts();await typechecks();
     const tests=readdirSync(join(scratch,'tests/regressions')).filter(file=>file.endsWith('.test.ts')).sort().map(file=>`tests/regressions/${file}`);
@@ -142,15 +142,17 @@ try{
   if(mode==='native'||mode==='all'){
     if(process.platform!=='darwin')throw new Error('Native checks require macOS with selected Xcode; this is not an optional skip.');
     await contracts();await run('xcode-version','/usr/bin/xcodebuild',['-version']);
+    await run('native-js-export',pnpmBin,['expo:bundles']);
+    await node('swift-workspace-interop',['--import','tsx','tests/native/apple/workspace/run.ts']);
     await node('apple-helper',['tests/native/apple/run.mjs']);
-    record.native={scope:'Host helper and transport compilation, not Mac UI or production signing',
+    record.native={scope:'Host engine/workspace helpers, native bundle and synthetic transport execution; Mac UI and production signing are separate',
       engine:JSON.parse(readFileSync(join(scratch,'docs/evidence/native/apple-engine-tests.json'),'utf8')),
       shared:JSON.parse(readFileSync(join(scratch,'docs/evidence/native/apple-shared-writer-tests.json'),'utf8'))};
     await run('swift-planner-compile','/usr/bin/xcrun',['swiftc','-module-cache-path',join(scratch,'.build/swift-cache'),'-parse-as-library',
       'apps/universal/modules/atepdf-planner/ios/AtepdfPlannerTransport.swift','tests/native/planner/main.swift','-o',join(scratch,'.build/native-planner-tests')]);
     if(features.permission)for(const release of [false,true])await run(`swift-permission-${release?'release':'debug'}-compile`,'/usr/bin/xcrun',['swiftc',...(!release?['-D','DEBUG']:[]),'-module-cache-path',join(scratch,'.build/swift-cache'),'-parse-as-library','apps/universal/modules/atepdf-planner/ios/AtepdfPlannerTransport.swift','tests/native/planner/permission-main.swift','-o',join(scratch,`.build/permission-${release?'release':'debug'}`)]);
     if(features.tls)await run('swift-tls-debug-compile','/usr/bin/xcrun',['swiftc','-D','DEBUG','-module-cache-path',join(scratch,'.build/swift-cache'),'-parse-as-library','apps/universal/modules/atepdf-planner/ios/AtepdfPlannerTransport.swift','tests/native/planner/tls-main.swift','-o',join(scratch,'.build/tls-debug')]);
-    // Fixed-port Swift transport execution remains an explicit isolated manual step.
+    await node('swift-transport-canaries',['tests/native/planner/run.mjs']);
   }
   assertEvidence(record,readFileSync(fileURLToPath(import.meta.url)),readFileSync(join(scratch,'scripts/verification/verify.mjs')),features);
   record.passed=true;

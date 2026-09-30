@@ -14,7 +14,7 @@ function normalizeParams(params:any) {
 }
 export function canonical(value:any):any {
   if(Array.isArray(value))return value.map(canonical);
-  if(value&&typeof value==='object')return Object.fromEntries(Object.keys(value).sort().map(key=>[key,canonical(value[key])]));
+  if(value&&typeof value==='object')return Object.fromEntries(Object.keys(value).sort((a,b)=>a<b?-1:a>b?1:0).map(key=>[key,canonical(value[key])]));
   return value;
 }
 export const equal=(a:unknown,b:unknown)=>JSON.stringify(canonical(a))===JSON.stringify(canonical(b));

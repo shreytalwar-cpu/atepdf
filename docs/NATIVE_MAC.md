@@ -12,6 +12,8 @@ Run `scripts/native/mac-build.sh` with Node.js on PATH and the existing Xcode to
 
 Prerequisites are the tracked Apple workspace and its locked CocoaPods dependencies. If the workspace is missing, restore atepdf source; do not run a clean Expo prebuild over the hand-managed scene/Catalyst configuration. Local Pod tooling is documented in `scripts/native-tools/README.md`.
 
+For isolated acceptance, use `scripts/native/mac-build.sh --synthetic-container` (optionally `--launch`). This explicit compile-time mode builds into `.build/mac-synthetic`, requires the independent `dev.atepdf.synthetic.mac` sandbox, and uses only the `dev.atepdf.synthetic.workspace` Keychain service. Record whether that synthetic container existed before launching. Its storage gate still requires the actual sandbox entitlement and matching container/cache paths. The normal build has no synthetic identity allowance. This mode is for local synthetic fixtures, not distribution or proof of signed Keychain availability.
+
 The script compiles and links the actual Release application in `.build/mac`, then creates a new temporary staging folder. It prints the `.app` path and writes `.build/mac-last-build.json`. Existing staging folders are retained; no nonempty destination is erased. Full build logs remain local under `.build/`.
 
 ## Configuration and storage

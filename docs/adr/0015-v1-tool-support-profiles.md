@@ -1,5 +1,7 @@
 # ADR 0015 — v1 tool support profiles and output settings (SHR-51)
 
+References to ADR 0014 mean the **pending SHR-85 document in PR #103 at `5196f0afaf5edd095886a4e8f7de540d93310eb6`**, [source version](https://github.com/shreytalwar-cpu/atepdf/blob/5196f0afaf5edd095886a4e8f7de540d93310eb6/docs/adr/0014-seller-payments-account-ownership.md). SELL-1 remains unresolved; that ADR is not included on main by this integration.
+
 **Status:** **Approved** by Shrey Talwar on 30 September 2026 (TOOLPROF-1 to TOOLPROF-9; section 13). This is an approved target support contract, not implemented support. Nothing here is implemented, and no runtime capability, tool description or public claim changes until each implementing SHR passes its acceptance map (section 9).  **Source:** `origin/main` `ff3e291` (30 September 2026), re-validated after merging `7853973` (SHR-49, documentation only; no source change).  **Authority:** `PRODUCT_V1.md` D-12/D-13/D-15, TOOL-01–15, PDF-01–08, UNDERSTAND-02–04, STATE-05/07, BILL-07, UX-02–04, OPEN-07; [SHR-51](https://linear.app/shrey-talwar/issue/SHR-51/approve-v1-tool-support-profiles-and-output-settings) (parent SHR-22); ADR 0004 (no byte caps), ADR 0011 (Mac envelope), ADR 0012 (privacy classes); SHR-45 corpus; SHR-46 matrix. ADR 0013 (SHR-49; CPDF-1–5 approved and merged) governs linked and signed PDFs. SHR-52 (encryption engine/profile) is in progress and is **not** decided here.  **Evidence:** [docs/evidence/SHR-51-2026-09-30](../evidence/SHR-51-2026-09-30/README.md).
 
 This ADR defines the v1 support contract for the 13 approved tools: which inputs each tool supports, which settings it exposes, what it refuses safely, what counts as success, and how that is proved. It adds no features. Where the evidence is thin, it records the value as **pending** and names the SHR that must measure or prove it. It does not supply an attractive default.
@@ -261,7 +263,7 @@ This section is contract only. The actual encryption algorithm/profile, handler 
 
 - **Password.** Protect sets an **open password**, entered twice in the dedicated secure field and never in chat or model context (PDF-06, ADR 0012 N-01). Rules:
   - The password must be non-empty and both entries must match.
-  - The maximum length is whatever limit the SHR-52 profile has (for AES-256 in PDF 2.0, 127 UTF-8 bytes).
+  - Printable ASCII 0x20–0x7E only, **1–127 bytes**, with spaces allowed (G3b, owner-approved 30 September 2026; ADR 0017). Do not trim or normalise a password. Both Protect and Unlock specifically refuse non-ASCII input in their secure fields; Unicode password support is deferred.
   - No strength scoring is claimed.
 - **Permissions.** Open password only. v1 has no permission or restriction configuration. The receipt never implies that restrictions are unbreakable (TOOL-10).
 - **Refused.** Already-encrypted input (unlock first); signed input (3.1); Protect placed anywhere except the last step of a plan.
@@ -269,6 +271,7 @@ This section is contract only. The actual encryption algorithm/profile, handler 
 
 ### 5.11 Unlock (SHR-61; profile SHR-52; secure input SHR-53)
 
+- **Password characters.** The same G3b ASCII 0x20–0x7E, spaces allowed, 1–127-byte rule applies to Unlock. Non-ASCII is refused before authentication; no truncation or normalisation.
 - **Known password only.** The password is entered in the secure field. There is no guessing, dictionary, cracking or retry automation. A wrong password produces a specific message and no partial import (PDF-06).
 - **Supported encryption.** The handler/revision list comes from SHR-52. Public-key/certificate security and unknown handlers are refused.
 - **Owner-password-only (permission-restricted) PDFs.** Treatment is decided in SHR-52. The provisional contract is that atePDF does not remove restrictions without the owner password (no undisclosed bypass).
@@ -384,8 +387,8 @@ The SHR-45 fixtures are in `tests/fixtures/corpus/manifest.json`. Every implemen
 | OCR (SHR-64) | raster-note, hybrid-note, blank-noisy-scans, ordinary-brief, geometry-font, boundary-100 | 7 SUPPORTED, 5 SAFELY_REJECTED, 1 FAILED, 1 UNVERIFIED — **Tesseract web only** | **Mac Vision** run; accented-Latin/typographic scan; partial-confidence document; mixed document (recognised, low-confidence, rotated-scan and digital-text pages) keeps every original page in order, adds text only to passing pages and lists per-page status; no-safe-page job refusal; >15-page scan; rotated scan; non-Latin refusal; placement check (SHR-48) |
 | Images to PDF (SHR-58) | `tests/fixtures/image-input.png` only | NOT_IMPLEMENTED | JPEG with EXIF orientation 6/8; HEIC 4032×3024; PNG with alpha; 16-bit PNG; grayscale; CMYK JPEG; animated GIF/multi-page TIFF refusal; truncated image; dimension bomb; RAW/PSD refusal; Intel HEIC decode |
 | PDF to Images (SHR-59, SHR-54) | ordinary-brief, geometry-font, raster-note, image-heavy, boundary-100 | NOT_IMPLEMENTED | 72/150/300 dpi dimensions; over-budget page asks; naming; white background; collection export |
-| Protect (SHR-60, SHR-52, SHR-53) | ordinary-brief; encrypted-aes256 (already-encrypted refusal) | NOT_IMPLEMENTED | Independent open/deny proof; Unicode/127-byte password; signed refusal; last-step rule |
-| Unlock (SHR-61, SHR-52, SHR-53) | encrypted-aes256 (correct and wrong password) | 1 NOT_IMPLEMENTED | Owner-password-only fixture; legacy RC4/AES-128 per SHR-52; public-key refusal; PDF-07 storage check |
+| Protect (SHR-60, SHR-52, SHR-53) | ordinary-brief; encrypted-aes256 (already-encrypted refusal) | NOT_IMPLEMENTED | Independent open/deny proof; printable ASCII with spaces, 1 and 127 bytes; 128-byte and non-ASCII refusal; signed refusal; last-step rule |
+| Unlock (SHR-61, SHR-52, SHR-53) | encrypted-aes256 (correct and wrong password) | 1 NOT_IMPLEMENTED | Owner-password-only fixture; ASCII spaces/1–127 bytes and non-ASCII refusal; legacy RC4/AES-128 per SHR-52; public-key refusal; PDF-07 storage check |
 | Extract Text (SHR-62) | ordinary-brief, ordinary-appendix, hybrid-note, raster-note, geometry-font | NOT_IMPLEMENTED | Multi-column order caveat; non-Latin digital text (UTF-8); ligatures; empty-page markers; OCR offer path |
 | Remove Metadata (SHR-63) | ordinary-brief/appendix (Title, Author, Producer); corpus fixtures (Title, Author) | NOT_IMPLEMENTED | Metadata-rich fixture: all Info keys + custom key, catalog and object XMP, orphaned Info from an incremental update, JPEG with EXIF GPS (documents non-removal); the 5.13 structural oracle (trailer Info, catalog/page/targeted `/Metadata` reachability, no orphans), with any raw-byte scan recorded as a diagnostic only; metadata-looking-text case: a simple admitted PDF whose visible page text contains "/Author", "/Title" and "x:xmpmeta" keeps its pages and text unchanged while its actual Info and XMP are removed; signed refusal |
 

@@ -8,7 +8,7 @@ export function recipient(id:string,endpoints:string[]):RecipientDisclosure{retu
   training:'disabled',dataSharing:'disabled',humanReview:'synthetic policy',relayLogging:'contentless',subprocessors:'synthetic/1',atepdfStorage:'not stored',deletion:'synthetic deletion',retryAndFailover:'no automatic failover',providerUserIdentifier:'none',disclosureVersion:id+'/1',verifiedAt:'2026-09-30T10:00:00Z',verifiedBy:'synthetic fixture',sources:['https://docs.example.test/synthetic'],status:'complete',
 };}
 export async function fixture(route=['provider-a']){
-  const registry=[recipient('atepdf-relay',['https://relay.example.test/transfer']),recipient('provider-a',['https://api.openai.com/v1/responses','https://provider-a.example.test/transfer']),recipient('provider-b',['https://provider-b.example.test/transfer'])];
+  const registry=[recipient('atepdf-relay',['https://relay.example.test/transfer']),recipient('provider-a',['https://api.openai.com/v1/responses','https://provider-a.example.test/transfer']),recipient('provider-b',['https://provider-b.example.test/transfer']),recipient('openai-development',['https://api.openai.com/v1/responses'])];
   const authority:Authority={hostedAiOn:true,registry,ack:await hostedAck(route,registry)};
   const clock={wall:Date.parse('2026-09-30T10:01:00Z'),monotonic:1000};
   const bindings=new Map<string,TransferBinding>();

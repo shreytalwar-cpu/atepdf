@@ -1,3 +1,4 @@
+import {independentPDF} from '../helpers/independent-pdf';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {chmod,copyFile,mkdir,mkdtemp,readFile,readdir,rm,writeFile} from 'node:fs/promises';
@@ -20,11 +21,8 @@ import {NodeVaultBackend,newKeychain,corrupt,type TestKeychain,type Fault} from 
 const T0=Date.parse('2026-09-01T09:00:00.000Z');
 type Clock={t:number};
 const hash=async(bytes:Uint8Array)=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new Uint8Array(bytes)))].map(n=>n.toString(16).padStart(2,'0')).join('');
-async function independent(bytes:Uint8Array):Promise<Inspection>{
-  const {getDocument}=await import('pdfjs-dist/legacy/build/pdf.mjs');
-  const task=getDocument({data:bytes.slice(),useSystemFonts:true,verbosity:0});const doc=await task.promise;
-  try{const pages=[];for(let n=1;n<=doc.numPages;n++){const p=await doc.getPage(n),v=p.getViewport({scale:1}),t=await p.getTextContent();pages.push({text:t.items.map(i=>'str'in i?i.str:'').join(' ').replace(/\s+/g,' ').trim(),width:v.width,height:v.height,rotation:p.rotate});}return {pages};}finally{await task.destroy();}
-}
+// Combined tree uses the real independent structural reader from SHR-47.
+const independent=independentPDF;
 // delay: a slow transform, so a delete can race active work.
 const services=(delay=0)=>({worker:async(r:EngineRequest,signal:AbortSignal)=>{if(r.kind==='inspect')return {pages:(await preflight(r.bytes)).getPageCount()};
   if(delay)await new Promise((resolve,reject)=>{const timer=setTimeout(resolve,delay);signal.addEventListener('abort',()=>{clearTimeout(timer);reject(signal.reason);},{once:true});});
@@ -375,7 +373,7 @@ test('SHR-40 a job already saving its commit settles before Delete local data, w
   try{
     const app=await launch(root,keychain,clock);await populated(app,outside);
     let release:()=>void=()=>{},holding=false;const gate=new Promise<void>(resolve=>{release=resolve;});
-    // Hold the commit's head write, so the job is mid-save (not cancellable) when the delete arrives.
+    // Hold publication: SHR-44 joins the write, then durably withdraws it before Delete.
     const write=app.backend.writeSealed.bind(app.backend);let hold=true;
     app.backend.writeSealed=async(name,plain,associated)=>{if(hold&&name===names.head){hold=false;holding=true;await gate;}return write(name,plain,associated);};
     const running=app.controller.quick('remove',2);
@@ -383,7 +381,8 @@ test('SHR-40 a job already saving its commit settles before Delete local data, w
     const settled=app.controller.settle();
     await new Promise(resolve=>setTimeout(resolve,20));assert.equal(app.controller.state.busy,true);
     release();await settled;await running;
-    assert.equal(app.controller.state.stage,'complete');assert.equal(app.store.history.length,2);
+    assert.equal(app.controller.state.stage,'cancelled');assert.equal(app.store.history.length,1);
+    assert.deepEqual((await launch(root,keychain,clock)).store.history,app.store.history);
     await app.controller.clear(()=>app.vault.deleteAll());assert.equal(app.controller.state.error,null);
     assert.equal(app.store.list.length,0);assert.deepEqual(await blobs(root),[]);
     assert.equal((await launch(root,keychain,clock)).store.list.length,0);

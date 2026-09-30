@@ -4,16 +4,19 @@ import responseValid from '../../contracts/src/generated/response';
 import type {PlannerResponse} from './schema';
 import {validateNonPlanResponse} from './reply';
 import {projectHosted} from './outbound/schema';
-import {productionOutbound,OutboundDenied} from './outbound/gate';
-export type PlannerStatus={connected:boolean;enabled:boolean;remaining:number;token:string;model:string;pairingRequired?:boolean};
+import {productionOutbound,OutboundDenied,REASON_CODES,type Reason} from './outbound/gate';
+export type PlannerStatus={connected:boolean;enabled:boolean;remaining:number;token:string;model:string;gateAvailable?:boolean;gateReason?:string|null;pairingRequired?:boolean};
 export async function plannerStatus(signal?:AbortSignal):Promise<PlannerStatus>{assertLocalPlannerOrigin();const response=await fetch('/api/planner/status',{cache:'no-store',redirect:'error',signal:AbortSignal.any([AbortSignal.timeout(10_000),...(signal?[signal]:[])])});if(!response.ok)throw new Error('The local planner gateway is unavailable. Quick actions still work.');return response.json();}
 export function assertLocalPlannerOrigin(){
   if(typeof location!=='undefined'&&!['localhost','127.0.0.1','[::1]'].includes(location.hostname))throw new OutboundDenied({outcome:'DENY',reason:'recipient_undisclosed'});
 }
-export async function requestPlan(request:PlannerRequest,token:string,signal:AbortSignal,readCurrent:()=>PlannerRequest=()=>request){
+export const LOCAL_ONLY_MESSAGE='AI is unavailable. Use local tools instead. Your existing files and results are still available.';
+export async function requestPlan(request:PlannerRequest,token:string,signal:AbortSignal,readCurrent:()=>PlannerRequest=()=>request,boundary:{gate?:typeof productionOutbound;fetch?:typeof fetch}={}){
   assertLocalPlannerOrigin();
-  const response=await productionOutbound.writeLocalHosted(()=>projectHosted(readCurrent()),body=>fetch('/api/planner',{method:'POST',headers:{'Content-Type':'application/json','X-Atepdf-Token':token},body,signal,cache:'no-store',redirect:'error'}),signal);
+  const response=await (boundary.gate??productionOutbound).writeLocalHosted(()=>projectHosted(readCurrent()),body=>(boundary.fetch??fetch)('/api/planner',{method:'POST',headers:{'Content-Type':'application/json','X-Atepdf-Token':token},body,signal,cache:'no-store',redirect:'error'}),signal);
   // No stream consumer or partial-plan execution path exists.
+  if(response.status===403){const denial=await response.json().catch(()=>({}));throw new OutboundDenied({outcome:'DENY',reason:REASON_CODES.includes(denial.reasonCode)?denial.reasonCode as Reason:'recipient_undisclosed'});}
+  if(response.status===503)throw Object.assign(new Error('AI planning is not enabled. Use local tools instead.'),{code:'planner_unavailable'});
   if(!response.ok)throw new Error('Planning did not finish. No local files changed.');
   const envelope=await response.json();
   signal.throwIfAborted();

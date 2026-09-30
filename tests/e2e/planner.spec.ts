@@ -1,5 +1,9 @@
 import {test,expect,type Page} from '@playwright/test';
-import {quickPlan,type Request as PlannerRequest} from '../../packages/contracts/src/protocol';
+import {quickPlan as localQuickPlan} from '../../packages/contracts/src/protocol';
+import {hostedLocalContext,validateHosted,type HostedPayload as PlannerRequest} from '../../packages/planner/src/outbound/schema';
+// The mocked server receives H on the wire, just like the real gateway. Rebuild
+// its bounded local planning context; never add exact byte sizes to the wire.
+const quickPlan=(wire:PlannerRequest,...args:Parameters<typeof localQuickPlan> extends [unknown,...infer Rest]?Rest:never)=>localQuickPlan(hostedLocalContext(validateHosted(wire)),...args);
 const status={connected:true,enabled:true,remaining:2,token:'test-only-csrf',model:'gpt-6-luna'};
 async function ready(page:import('@playwright/test').Page,getStatus=()=>status){await page.route('**/api/planner/status',route=>route.fulfill({json:getStatus()}));await page.goto('/');await page.getByRole('button',{name:'Try the two sample PDFs'}).click();await expect(page.getByText('Your 2 PDFs are ready.',{exact:false})).toBeVisible();}
 async function send(page:Page,text:string){await page.getByRole('textbox',{name:'Tell atepdf what to do'}).fill(text);await page.getByRole('button',{name:'Send message'}).click();}
@@ -8,6 +12,17 @@ async function noPlanningConsent(page:Page){
   await expect(page.getByRole('button',{name:'Create local copy',exact:true})).toHaveCount(0);
   await expect(page.getByText('To plan this,',{exact:false})).toHaveCount(0);
 }
+test('unavailable recipient disclosure and a late 403 preserve results and explain local-only access',async({page})=>{
+  let sends=0;let available=false;
+  await page.route('**/api/planner',async route=>{sends++;await route.fulfill({status:403,json:{reasonCode:'disclosure_required'}});});
+  await ready(page,()=>({...status,enabled:available,gateAvailable:available,gateReason:available?null:'recipient_undisclosed'}));
+  await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');
+  await send(page,'Please rearrange these documents');await expect(page.getByText(/AI is unavailable. Use local tools instead/)).toHaveCount(1);expect(sends).toBe(0);
+  available=true;await send(page,'Please rearrange these documents');await expect(page.getByText(/AI is unavailable. Use local tools instead/)).toHaveCount(2);expect(sends).toBe(1);
+  await expect(page.getByTestId('result-facts')).toContainText('3 pages');
+  await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('previous-result')).toHaveCount(1);
+  await page.getByRole('button',{name:'Undo',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');expect(sends).toBe(1);
+});
 test('mocked planner transport: Send → redacted complete plan → real local result → follow-up',async({page})=>{
   const sent:PlannerRequest[]=[];const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
   await page.route('**/api/planner',async route=>{const req=route.request().postDataJSON() as PlannerRequest;sent.push(req);await route.fulfill({json:quickPlan(req,'merge')});});
@@ -196,7 +211,7 @@ test('recognized secret in a mocked provider failure is withheld from chat recei
   const canary=['password','=','shr71','-provider-failure'].join('');let calls=0;
   await page.route('**/api/planner',async route=>{calls++;await route.fulfill({status:502,json:{error:`Provider failed: ${canary}`}});});
   await ready(page);await send(page,'Please combine both documents');
-  await expect(page.getByText('Sensitive value removed from chat.')).toBeVisible();
+  await expect(page.getByText('Planning did not finish. No local files changed.')).toBeVisible();
   expect(calls).toBe(1);
   expect((await page.getByTestId('conversation').textContent())?.includes(canary),'recognized secret appeared in an error receipt').toBe(false);
   await page.context().grantPermissions(['clipboard-read','clipboard-write']);

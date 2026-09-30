@@ -31,15 +31,18 @@ if(!config||typeof config!=='object'||Array.isArray(config)||Object.keys(config)
 for(const [k,v] of Object.entries(config))if(k==='toolDescriptions'?(!v||typeof v!=='object'||Array.isArray(v)||Object.values(v).some(x=>typeof x!=='string')):typeof v!=='string')throw new Error(`Invalid candidate configuration ${k}`);
 if(!options.adapter&&Object.keys(config).length)throw new Error('Current baseline is fixed; candidate config requires --adapter');
 const hash=(value:string|Buffer)=>createHash('sha256').update(value).digest('hex');
-const hashFiles=async(paths:string[])=>Object.fromEntries(await Promise.all(paths.sort().map(async path=>[path,hash(await readFile(path))])));
+const hashFiles=async(paths:string[])=>Object.fromEntries(await Promise.all(paths.sort((a,b)=>a.localeCompare(b)).map(async path=>[path,hash(await readFile(path))])));
 const corpusPaths=['split.json','scenario.schema.json','expectation.schema.json','scenarios/inputs.json','scenarios/keys.json','fixtures/recordings.json','held-out/inputs.json','held-out/scoring/keys.json','held-out/scoring/recordings.json'].map(path=>join(ROOT,path));
 const corpusHashes=await hashFiles(corpusPaths);
 const runtimePaths=['packages/contracts/src/protocol.ts','packages/contracts/schemas/planner-response.schema.json','packages/contracts/schemas/planner-request.schema.json','packages/contracts/schemas/gateway-envelope.schema.json','packages/contracts/schemas/operation-registry.json','packages/planner/src/generated/product-knowledge.ts','pnpm-lock.yaml','packages/contracts/src/generated/request.js','packages/contracts/src/generated/response.js','packages/contracts/src/generated/envelope.js','packages/planner/src/provider.ts','packages/planner/src/request.ts','packages/planner/src/privacy.ts','packages/planner/src/schema.ts','packages/planner/src/clarification.ts','packages/planner/src/gateway.ts','packages/planner/src/reply.ts','packages/core/src/job-controller.ts','packages/core/src/local-file-store.ts'];
+runtimePaths.push('packages/core/src/request-context.ts','packages/planner/src/client.ts','packages/planner/src/outbound/gate.ts','packages/planner/src/outbound/schema.ts','packages/planner/src/outbound/constants.ts','packages/planner/src/outbound/sensitive.ts');
 const runtimeHashes=await hashFiles(runtimePaths);
 const harnessHashes=await hashFiles((await readdir(ROOT)).filter(p=>/\.(ts|mts)$/.test(p)).map(p=>join(ROOT,p)));
 function portable(hashes:Record<string,string>){return Object.fromEntries(Object.entries(hashes).map(([path,value])=>[path.startsWith(ROOT)?path.slice(ROOT.length):path,value]));}
 const corpusPortable=portable(corpusHashes),harnessPortable=portable(harnessHashes);
-const report:any={reportVersion:'1.0',corpusVersion:CORPUS_VERSION,splitVersion:'1.0.0',adapter:options.adapter?`candidate:${String(options.adapter)}`:'current-mocked-v1',configuration:config,provenance:{runtimeHead:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),runtimeBaseHead:execFileSync('git',['merge-base','HEAD','origin/main'],{encoding:'utf8'}).trim(),harnessHead:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),node:process.version,corpusHash:hash(JSON.stringify(corpusPortable)),corpusHashes:corpusPortable,runtimeHashes,harnessHashes:harnessPortable},sets:{}};
+// The archive verifier deliberately removes .git; hashes remain authoritative.
+function provenance(...args:string[]):string|null{try{return execFileSync('/usr/bin/git',args,{encoding:'utf8',stdio:['ignore','pipe','ignore'],env:{PATH:'/usr/bin:/bin'}}).trim();}catch{return null;}}
+const report:any={reportVersion:'1.0',corpusVersion:CORPUS_VERSION,splitVersion:'1.0.0',adapter:options.adapter?`candidate:${String(options.adapter)}`:'current-mocked-v1',configuration:config,provenance:{runtimeHead:provenance('rev-parse','HEAD'),runtimeBaseHead:provenance('merge-base','HEAD','origin/main'),harnessHead:provenance('rev-parse','HEAD'),node:process.version,corpusHash:hash(JSON.stringify(corpusPortable)),corpusHashes:corpusPortable,runtimeHashes,harnessHashes:harnessPortable},sets:{}};
 if(options.adapter)report.provenance.adapterHash=hash(await readFile(resolve(String(options.adapter))));
 async function candidate(scenario:Scenario):Promise<Observation>{
   return new Promise((done,reject)=>{
@@ -50,7 +53,8 @@ async function candidate(scenario:Scenario):Promise<Observation>{
     child.stderr.on('data',chunk=>{stderr=(stderr+chunk).slice(0,2000);});
     child.on('error',error=>{clearTimeout(timer);reject(error);});
     child.on('exit',code=>{clearTimeout(timer);if(settled)return;settled=true;if(code!==0){reject(new Error(`Candidate failed (exit ${code}); details suppressed to avoid leaking prompt data`));return;}try{done(JSON.parse(stdout));}catch{reject(new Error('Candidate must emit exactly one observation JSON'));}});
-    child.stdin.end(JSON.stringify({scenario,config}));
+    const {id,priorConversation,context,turns,consent,entitlement}=scenario;
+    child.stdin.end(JSON.stringify({scenario:{id,priorConversation,context,turns,consent,entitlement},config}));
   });
 }
 for(const split of (set==='full'?['dev','held-out']:[set]) as ('dev'|'held-out')[]){
@@ -58,12 +62,15 @@ for(const split of (set==='full'?['dev','held-out']:[set]) as ('dev'|'held-out')
   if(!scenarios.length)continue;
   const adapter=options.adapter?null:currentAdapter(await loadRecordings(split));
   // Candidate process never receives grading keys or recordings. Collect first, load keys second.
-  const observations:Observation[]=[];
-  for(const scenario of scenarios){const observed=adapter?await adapter.evaluate(scenario,{}):await candidate(scenario);validateObservation(observed,scenario);observations.push(observed);}
+  const observations:Observation[]=[],harnessErrors:{id:string;code:string}[]=[];
+  for(const scenario of scenarios){
+    try{const observed=adapter?await adapter.evaluate(scenario,{}):await candidate(scenario);validateObservation(observed,scenario);observations.push(observed);}
+    catch{harnessErrors.push({id:scenario.id,code:'adapter_failure'});observations.push({id:scenario.id,turns:[]});}
+  }
   const keys=await loadKeys(split,scenarios);
   const grades=scenarios.map((scenario,i)=>grade(scenario,keys.get(scenario.id)!,observations[i]));
-  const categoryMetrics=Object.fromEntries(CATEGORIES.map(category=>[category,metrics(grades.filter(g=>g.category===category))]).filter(([,m])=>(m as any).scenarios>0));
-  report.sets[split]={selectionHash:hash(JSON.stringify(scenarios.map(s=>s.id))),metrics:metrics(grades),categories:categoryMetrics,...(split==='dev'||options['held-out-details']?{details:grades}:{})};
+  const categoryMetrics=Object.fromEntries(CATEGORIES.map(category=>[category,metrics(grades.filter(g=>g.category===category),!options.adapter)]).filter(([,m])=>(m as any).scenarios>0));
+  report.sets[split]={selectionHash:hash(JSON.stringify(scenarios.map(s=>s.id))),metrics:metrics(grades,!options.adapter),harnessErrors,...(split==='dev'?{categories:categoryMetrics}:{}),...(split==='dev'||options['held-out-details']?{details:grades}:{})};
 }
 if(!Object.keys(report.sets).length)throw new Error('No scenarios matched; this is not a passing eval');
 if(options.baseline)report.comparison=compare(report,JSON.parse(await readFile(resolve(String(options.baseline)),'utf8')));
@@ -73,7 +80,7 @@ if(options['output-dir']){
   await writeFile(join(dir,'summary.md'),summarize(report),{flag:'wx'});
 }
 process.stdout.write(JSON.stringify(report,null,2)+'\n');
-if(options['fail-on-regression']&&report.comparison&&!report.comparison.accepted)process.exitCode=1;
+if(Object.values(report.sets).some((set:any)=>set.harnessErrors.length)||(options['fail-on-regression']&&report.comparison&&!report.comparison.accepted))process.exitCode=1;
 function validateObservation(value:any,scenario:Scenario):asserts value is Observation{
   if(!value||value.id!==scenario.id||!Array.isArray(value.turns)||value.turns.length!==scenario.turns.length)throw new Error('Invalid candidate observation identity/turn count');
   for(const turn of value.turns){

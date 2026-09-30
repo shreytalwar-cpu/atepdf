@@ -1,5 +1,5 @@
 {
-  "corpusVersion": "1.0.0",
+  "corpusVersion": "1.1.0",
   "scenarios": [
     {
       "schemaVersion": "1.0",
@@ -886,7 +886,7 @@
       },
       "turns": [
         {
-          "message": "Merge with only one selected file.",
+          "message": "Merge this PDF.",
           "event": "submit"
         }
       ],
@@ -1032,7 +1032,7 @@
       },
       "turns": [
         {
-          "message": "Reject a superseded result after planning.",
+          "message": "Compress the current result without quality loss.",
           "event": "submit",
           "afterPlanningRevision": 5
         }
@@ -1202,7 +1202,7 @@
       },
       "turns": [
         {
-          "message": "Cancel pending work from the local UI.",
+          "message": "Cancel",
           "event": "control",
           "action": "cancel"
         }
@@ -1284,7 +1284,7 @@
       },
       "turns": [
         {
-          "message": "Start over from the local workspace control.",
+          "message": "Start over",
           "event": "control",
           "action": "start_over"
         }
@@ -1366,7 +1366,7 @@
       },
       "turns": [
         {
-          "message": "Undo remains local after allowance exhaustion.",
+          "message": "Undo",
           "event": "control",
           "action": "undo"
         }
@@ -1984,7 +1984,7 @@
       },
       "turns": [
         {
-          "message": "Safe local copy is allowed without content-transfer permission.",
+          "message": "Remove page 3.",
           "event": "submit"
         }
       ],
@@ -2190,7 +2190,7 @@
       },
       "turns": [
         {
-          "message": "Hosted command interpretation has not been consented to.",
+          "message": "Merge these PDFs.",
           "event": "submit"
         }
       ],
@@ -2321,7 +2321,7 @@
       },
       "turns": [
         {
-          "message": "Quick Merge must not bypass exhausted new-work allowance.",
+          "message": "Merge",
           "event": "quick",
           "action": "merge"
         }
@@ -2388,7 +2388,7 @@
       },
       "turns": [
         {
-          "message": "Enabled-AI quick Merge must use intentional AI orchestration.",
+          "message": "Merge",
           "event": "quick",
           "action": "merge"
         }
@@ -2455,7 +2455,7 @@
       },
       "turns": [
         {
-          "message": "Open the local capability explanation without processing.",
+          "message": "What can you do?",
           "event": "control",
           "action": "help"
         }
@@ -2501,7 +2501,7 @@
       },
       "turns": [
         {
-          "message": "Missing files must ask for attachment rather than invent refs.",
+          "message": "Merge my PDFs.",
           "event": "submit"
         }
       ],
@@ -2760,7 +2760,7 @@
       },
       "turns": [
         {
-          "message": "Make this searchable using an unavailable OCR capability.",
+          "message": "Make this searchable.",
           "event": "submit"
         }
       ],

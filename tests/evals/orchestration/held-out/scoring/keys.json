@@ -1,5 +1,5 @@
 {
-  "corpusVersion": "1.0.0",
+  "corpusVersion": "1.1.0",
   "keys": [
     {
       "schemaVersion": "1.0",
@@ -47,7 +47,7 @@
                 ],
                 "outputRef": "out_stage1",
                 "params": {
-                  "targetBytes": 5000000,
+                  "targetBytes": null,
                   "preset": "lossless",
                   "batchMode": "single"
                 }
@@ -164,7 +164,7 @@
                 ],
                 "outputRef": "out_stage3",
                 "params": {
-                  "targetBytes": 5000000,
+                  "targetBytes": null,
                   "preset": "lossless",
                   "batchMode": "single"
                 }
@@ -208,7 +208,7 @@
                 ],
                 "outputRef": "out_stage1",
                 "params": {
-                  "targetBytes": 5000000,
+                  "targetBytes": null,
                   "preset": "lossless",
                   "batchMode": "single"
                 }
@@ -347,7 +347,7 @@
                 ],
                 "outputRef": "out_stage1",
                 "params": {
-                  "targetBytes": 5000000,
+                  "targetBytes": null,
                   "preset": "lossless",
                   "batchMode": "single"
                 }
@@ -552,7 +552,7 @@
             "excluded_operation"
           ],
           "clarify": false,
-          "providerCalls": 0,
+          "providerCalls": 1,
           "accepted": true,
           "tools": [],
           "forbiddenTools": [],
@@ -679,7 +679,7 @@
             "content_required"
           ],
           "clarify": false,
-          "providerCalls": 0,
+          "providerCalls": 1,
           "accepted": true,
           "tools": [],
           "forbiddenTools": [],
@@ -697,7 +697,7 @@
             "content_required"
           ],
           "clarify": false,
-          "providerCalls": 0,
+          "providerCalls": 1,
           "accepted": true,
           "tools": [],
           "forbiddenTools": [],
@@ -767,7 +767,7 @@
                 ],
                 "outputRef": "out_stage1",
                 "params": {
-                  "targetBytes": 5000000,
+                  "targetBytes": null,
                   "preset": "lossless",
                   "batchMode": "single"
                 }

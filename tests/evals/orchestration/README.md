@@ -1,6 +1,6 @@
 # atePDF orchestration evals — SHR-107
 
-Version 1.0.0 contains **64 synthetic scenarios: 41 dev and 23 held-out**, across
+Version 1.1.0 contains **64 synthetic scenarios: 41 dev and 23 held-out**, across
 14 categories. This issue builds scenarios, deterministic grading, splitting,
 offline execution, baseline reporting and negative self-tests. It performs no
 planner optimization, model/provider change, PDF-tool implementation or deployment.
@@ -47,8 +47,8 @@ created by the previous adapter response, not by the answer key.
 
 Consent has hosted-instruction permission and an optional eval-only content
 receipt binding operation, purpose, all recipients, refs/pages, content revision
-and data categories, with revocation. This is a replaceable grader input, **not an
-approved SHR-35 implementation contract**. Entitlement fixtures distinguish the
+and data categories, with revocation. This is a replaceable grader input, **not runtime authority;
+ADR 0012 and the injected test-only SHR-36 gate decide admission**. Entitlement fixtures distinguish the
 existing gateway request allowance from the still-unintegrated production billing
 controls. No prices, quotas or commercial policy defaults are invented.
 
@@ -101,8 +101,7 @@ interaction proof. The harness reproduces the current quality-confirmation branc
 and withholds engine execution until the scenario approves quality loss.
 
 All scripted plan/refusal/clarification scores describe deterministic fixtures,
-not empirical language-understanding accuracy. A 100% plan score can coexist with
-routing/consent failures. Tokens, model latency and cost are `null` with an explicit
+not empirical language-understanding accuracy. Planner plan/tool accuracy and clarification precision/recall are `null` / `not_measured (scripted replay)`; fixture counts and admission metrics measure integration only. Tokens, model latency and cost are `null` with an explicit
 unavailable note; wall-clock test durations are not relabelled as provider latency.
 Known source/target gaps remain failures; do not weaken keys to make a baseline green.
 
@@ -216,3 +215,5 @@ a versioned corpus before claiming independent held-out improvement.
 The baseline is under `docs/evidence/SHR-107-2026-09-30`. Its runtime/harness/corpus
 hashes and source heads identify the exact tested inputs; later evidence-only
 commits do not retroactively alter a run.
+
+Closeout repairs: G7 typed unsupported/explanatory requests reach the provider; UI controls remain local. Candidate adapters receive only the request-visible context/turns/consent/entitlement, with no description, category, canaries or author notes. Missing Git refs yield null provenance plus exact content hashes. Held-out keys are never passed to candidates or included in default reports. Per-case harness errors name only the case ID and continue, then fail the command.

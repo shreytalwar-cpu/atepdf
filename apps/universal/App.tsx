@@ -26,6 +26,8 @@ import DropSurface from './src/platform/DropSurface';
 import {nativeComposerComponents,resetComposerInput} from './src/platform/ComposerInput';
 import {JobActivity} from './src/components/JobActivity';
 import {useAnnounce,useMotion} from './src/components/assistant-ui/elements/surfaces';
+import {OutboundDenied} from '@planner/outbound/gate';
+import {LOCAL_ONLY_MESSAGE} from '@planner/client';
 import {privateInstruction,hasRejectedSecretDraft,safeOrdinaryText,SECRET_CHAT_WARNING} from '@planner/privacy';
 import {isClarificationAnswer,pendingFromResponse,withPendingClarification} from '@planner/clarification';
 import {plannerStatus,requestPlan,savePlannerKey,createNativePairing,pairNativePlanner,disconnectNativePlanner,plannerAvailable,type PlannerStatus} from './src/platform/planner';
@@ -112,6 +114,7 @@ function useWorkspace() {
   const [preview, setPreview] = useState<number | null>(null), [privacy, setPrivacy] = useState(false), [choice, setChoice] = useState<number | null>(null);
   const [saving, setSaving] = useState<string | null>(null), [receipts, setReceipts] = useState<Record<string, string>>({});
   const savingLock = useRef(false), receiptEpoch = useRef(0);
+  const renderedClearEpoch=receiptEpoch.current;
   const nextId = useRef(0), operation = useRef(false), cancelRequested = useRef(false);
   const [planning,setPlanning]=useState(false),[connection,setConnection]=useState<Omit<PlannerStatus,'token'>|null>(null);
   const plannerAbort=useRef<AbortController|null>(null),connectionAbort=useRef<AbortController|null>(null);
@@ -149,6 +152,9 @@ function useWorkspace() {
   chatSaveFailed.current = error => { if (error instanceof WorkspaceExpiredError) { runExpiry(async () => ({kind: 'expired', mode: error.mode, cleanupComplete: error.cleanupComplete})); return; } if (vault.current) saveFailed(vault.current); };
   const saveChat = () => checkpoints.now();
   const noteDraft = (text: string) => {
+    // A composer subscription from before Clear/expiry may briefly publish its
+    // old text while the replacement view renders. It owns no new checkpoint.
+    if(renderedClearEpoch!==receiptEpoch.current)return;
     const next = text.trim() ? text : null;
     if (next === draftRef.current) return;
     draftRef.current = next;
@@ -216,6 +222,9 @@ function useWorkspace() {
   // Empty the chat/draft view (and anything built on it) after a durable clear.
   const resetView = () => {
     const empty: Entry[] = []; entriesRef.current = empty; restoredEntries.current = empty; draftRef.current = null;
+    // This reset owns the replacement session. Old picker/planner finalizers are
+    // correctly stale, so they cannot be responsible for releasing its UI flags.
+    planningOwner.current=null;operation.current=false;setLoading(false);setPlanning(false);
     receiptEpoch.current++; connectionToken.current=null; pendingClarification.current=null; setChoice(null); setPreview(null); setReceipts({}); setEntries(empty); setClearCount(n => n + 1);
   };
   // Stop and join active work: planning is aborted, jobs are cancelled (a commit that
@@ -485,16 +494,17 @@ function useWorkspace() {
           return;
         }
         const help = /^(?:what (?:can you|can atepdf|do you) do|(?:how )?can you help(?: me)?|help|what (?:are your|are atepdf.?s) capabilities)[?.!]*$/i.test(text.trim());
-        const reason = !plannerAvailable ? 'AI planning is not available on this device yet.' : status?.connected ? 'AI planning is paused. Open AI connection to check the local request allowance.' : status ? 'OpenAI is not connected yet. You can connect it here for conversational help.' : 'The AI connection is unavailable. Check that atepdf’s local server is running, then try AI connection again.';
+        const reason = status?.gateAvailable===false ? LOCAL_ONLY_MESSAGE : !plannerAvailable ? 'AI planning is not available on this device yet.' : status?.connected ? 'AI planning is paused. Open AI connection to check the local request allowance.' : status ? 'OpenAI is not connected yet. You can connect it here for conversational help.' : 'The AI connection is unavailable. Check that atepdf’s local server is running, then try AI connection again.';
         const id = append({role:'assistant', text: help ? localCapabilityHelp : `${reason} You can still use Merge, Compress${ocrAvailable ? ' or Make searchable' : ''}. Your files are unchanged.`, choice:plannerAvailable?'connection-help':undefined});
         setChoice(id);return;
       }
       setLoading(false);setPlanning(true);
       const result=await requestPlan(request,status.token,abort.signal,()=>{
-        if(store.revision!==request.workspaceRevision)throw new Error('Files changed.');
-        const current=controller.request(privateInstruction(text,store.list));
-        current.requestId=request.requestId;
-        return continuation?withPendingClarification(current,continuation):current;
+        abort.signal.throwIfAborted();
+        if(!current()||store.revision!==request.workspaceRevision)throw new Error('Files changed.');
+        const latest=controller.request(privateInstruction(text,store.list),continuation);
+        latest.requestId=request.requestId;
+        return continuation?withPendingClarification(latest,continuation):latest;
       });
       abort.signal.throwIfAborted();
       if(!current())return;
@@ -516,7 +526,7 @@ function useWorkspace() {
       const previous=store.focus;
       await controller.execute(envelope,request);
       if(current())finish(previous,'Your new PDF is ready.',plannedResultTitle(envelope.planner.steps));
-    }catch(e){if(current())say(abort.signal.aborted?'Planning cancelled. No local files changed.':e instanceof Error?e.message:'This request could not finish. Your files are unchanged.');}
+    }catch(e){if(current())say(e instanceof OutboundDenied?LOCAL_ONLY_MESSAGE:abort.signal.aborted?'Planning cancelled. No local files changed.':e instanceof Error?e.message:'This request could not finish. Your files are unchanged.');}
     finally{
       if(planningOwner.current===abort){planningOwner.current=null;operation.current=false;setLoading(false);setPlanning(false);}
       if(plannerAbort.current===abort)plannerAbort.current=null;
@@ -614,7 +624,7 @@ function Screen(){
   // Restore the inert draft before the composer mounts; the native input reads it once.
   const [composerReady,setComposerReady]=useState(!workspace.restoring);
   useEffect(()=>{if(workspace.restoring)return;if(workspace.restoredDraft)runtime.thread.composer.setText(workspace.restoredDraft);setComposerReady(true);},[workspace.restoring]);
-  useEffect(()=>runtime.thread.composer.subscribe(()=>workspace.noteDraft(runtime.thread.composer.getState().text)),[runtime]);
+  useEffect(()=>runtime.thread.composer.subscribe(()=>workspace.noteDraft(runtime.thread.composer.getState().text)),[runtime,workspace.clearCount]);
   // Start over also removes the unsent draft from the composer.
   useEffect(()=>{if(workspace.clearCount){runtime.thread.composer.setText('');resetComposerInput();}},[workspace.clearCount]);
   return <WorkspaceContext.Provider value={workspace}><AssistantRuntimeProvider runtime={runtime}>

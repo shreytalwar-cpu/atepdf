@@ -3,7 +3,7 @@
   "type": "object",
   "properties": {
     "corpusVersion": {
-      "const": "1.0.0"
+      "const": "1.1.0"
     },
     "keys": {
       "type": "array",

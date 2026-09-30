@@ -11,6 +11,7 @@ import {buildRequest,quickPlan,validateEnvelope,type Request as PlannerRequest} 
 import {validateRequest} from '../../packages/planner/src/request';
 import {privateInstruction,safeOrdinaryText} from '../../packages/planner/src/privacy';
 import {isClarificationAnswer,pendingFromResponse,withPendingClarification} from '../../packages/planner/src/clarification';
+import {fixture,wireRequest} from '../helpers/outbound-fixture';
 import {createGateway} from '../../packages/planner/src/gateway';
 import {preflight,transform} from '../../packages/web-pdf/src/engine';
 import type {Inspection,EngineRequest} from '../../packages/web-pdf/src/types';
@@ -175,11 +176,12 @@ test('SHR-42: planner payload excludes unrelated historical refs, names, OCR, fa
 test('SHR-42: unrelated historical metadata does not reach the gateway provider; out-of-projection plans reject',async()=>{
   const {controller,store}=await seed(2,110);
   const request=controller.request('Remove page 1 from current result');let calls=0,reservations=0;
+  const f=await fixture();
   const gateway=createGateway({status:async()=>({connected:true,enabled:true,remaining:1}),reserve:async()=>{reservations++;return {key:'sk-synthetic-never-network',release:async()=>{}};}},async projected=>{
     calls++;assert.deepEqual(requestRefs(projected),[store.focus]);return quickPlan(projected,'remove',1).planner;
-  },{minIntervalMs:0});
+  },{minIntervalMs:0,...f.gatewayOptions});
   const status=await(await gateway(new Request('http://localhost:3211/api/planner/status'))).json();
-  const response=await gateway(new Request('http://localhost:3211/api/planner',{method:'POST',headers:{origin:'http://localhost:3211','content-type':'application/json','x-atepdf-token':status.token},body:JSON.stringify(request)}));
+  const response=await gateway(new Request('http://localhost:3211/api/planner',{method:'POST',headers:{origin:'http://localhost:3211','content-type':'application/json','x-atepdf-token':status.token},body:JSON.stringify(wireRequest(request))}));
   assert.equal(response.status,200);assert.equal(calls,1);assert.equal(reservations,1);
   const bad=quickPlan(request,'remove',1);bad.planner.steps[0].inputs=[ref(false,1)];
   assert.throws(()=>validateEnvelope(bad,request,store.revision),/Unknown/);

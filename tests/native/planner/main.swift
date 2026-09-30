@@ -34,7 +34,8 @@ import Foundation
       return (try JSONSerialization.jsonObject(with: data) as! [String: Any])["plannerBytes"] as! Int
     }
     let beforeCanaries = try await plannerBytes()
-    for (index, instruction) in ["password: SYNTHETIC_SECRET", "my password SYNTHETIC_SECRET", "ghp_syntheticcredentialvalue", "AKIAABCDEFGHIJKLMNOP", "Bearer synthetic-token-value", "/Users/synthetic/private", "synthetic-client.pdf", String(repeating: "a", count: 64)].enumerated() {
+    try check(!AtepdfPlannerTransport.matchesNone("Synthetic instruction", patterns: ["["]), "malformed policy regex fails closed")
+    for (index, instruction) in ["password: SYNTHETIC_SECRET", "my password SYNTHETIC_SECRET", "ghp_syntheticcredentialvalue", "AKIAABCDEFGHIJKLMNOP", "Bearer synthetic-token-value", "/Users/synthetic/private", "synthetic-client.pdf", "4111 1111 1111 1111", "4222222222222", "4000000000000000006", String(repeating: "a", count: 64)].enumerated() {
       do { _ = try AtepdfPlannerTransport.admittedBody(request(instruction)); throw NSError(domain: "native admission canary index \(index)", code: 1) }
       catch is AtepdfPlannerTransport.Failure {}
       do { _ = try await transport.plan(id: UUID().uuidString, body: request(instruction)); throw NSError(domain: "privacy canary admitted", code: 1) }
@@ -47,6 +48,8 @@ import Foundation
       catch is AtepdfPlannerTransport.Failure {}
     }
     try check(try await plannerBytes() == beforeCanaries, "native blocked payload bytes = 0")
+    do { _ = try await transport.plan(id:UUID().uuidString,body:request("Synthetic privacy denial"));throw NSError(domain:"denial accepted",code:1) }
+    catch AtepdfPlannerTransport.Failure.privacy {}
     var continued = try JSONSerialization.jsonObject(with: Data(request("Merge in the order added").utf8)) as! [String: Any]
     let originalRequestId = continued["requestId"] as! String
     let refs = continued["originalRefs"] as! [String]
@@ -73,6 +76,6 @@ import Foundation
     do { _ = try await transport.plan(id:early,body:request("Merge"));throw NSError(domain:"early cancel failed",code:1) } catch is CancellationError {}
     try await transport.disconnect(id:UUID().uuidString)
     try check(try await transport.status(id:UUID().uuidString).contains("pairingRequired"),"disconnected")
-    print("Native URLSession tests passed: H buckets, 21 privacy canaries with zero outbound bytes, pairing, bounded clarification, product answer, complete plan, redirect/body rejection, cancellation, disconnect. Synthetic loopback gateway only.")
+    print("Native URLSession tests passed: H buckets, 24 privacy canaries with zero outbound bytes, malformed regex refusal, local-only denial, pairing, bounded clarification, product answer, complete plan, redirect/body rejection, cancellation, disconnect. Synthetic loopback gateway only.")
   }
 }

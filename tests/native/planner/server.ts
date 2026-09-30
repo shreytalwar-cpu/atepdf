@@ -29,6 +29,7 @@ createServer(async(req,res)=>{
     if(req.url==='/api/native/planner'){
       plannerBytes+=Buffer.byteLength(await request.clone().text());
       const body=await request.clone().json();
+      if(body.instruction==='Synthetic privacy denial'){res.writeHead(403,{'Content-Type':'application/json'});res.end('{"reasonCode":"disclosure_required"}');return;}
       if(body.instruction==='Synthetic redirect'){res.writeHead(302,{Location:'http://localhost:3212/test/forbidden'});res.end();return;}
       if(body.instruction==='Synthetic oversized response'){res.writeHead(200,{'Content-Type':'application/json'});res.end(' '.repeat(256001));return;}
     }

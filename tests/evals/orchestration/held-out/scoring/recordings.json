@@ -25,7 +25,7 @@
             ],
             "outputRef": "out_stage1",
             "params": {
-              "targetBytes": 5000000,
+              "targetBytes": null,
               "preset": "lossless",
               "batchMode": "single"
             }
@@ -107,7 +107,7 @@
             ],
             "outputRef": "out_stage3",
             "params": {
-              "targetBytes": 5000000,
+              "targetBytes": null,
               "preset": "lossless",
               "batchMode": "single"
             }
@@ -134,7 +134,7 @@
             ],
             "outputRef": "out_stage1",
             "params": {
-              "targetBytes": 5000000,
+              "targetBytes": null,
               "preset": "lossless",
               "batchMode": "single"
             }
@@ -233,7 +233,7 @@
             ],
             "outputRef": "out_stage1",
             "params": {
-              "targetBytes": 5000000,
+              "targetBytes": null,
               "preset": "lossless",
               "batchMode": "single"
             }
@@ -408,7 +408,7 @@
             ],
             "outputRef": "out_stage1",
             "params": {
-              "targetBytes": 5000000,
+              "targetBytes": null,
               "preset": "lossless",
               "batchMode": "single"
             }
@@ -420,5 +420,6 @@
         "clarification": null
       }
     }
-  }
+  },
+  "corpusVersion": "1.1.0"
 }

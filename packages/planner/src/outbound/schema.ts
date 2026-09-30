@@ -1,5 +1,6 @@
 import type {Request as LocalRequest} from '../../../contracts/src/protocol';
 import {validateRequest} from '../request';
+import {hasPaymentCard} from './sensitive';
 import {assertInstructionSafe,hasRejectedSecretDraft} from '../privacy';
 import {CONTENT_CATEGORIES,PRIVACY_POLICY,sizeBucket,type ContentCategory} from './constants';
 
@@ -58,10 +59,10 @@ export function assertClassified(payload:unknown,kind:'hosted'|'content'):void {
     pending.answers.forEach(a=>{keys(a,OUTBOUND_FIELDS.answer);if(typeof a.question!=='string'||typeof a.answer!=='string')throw new Error('unclassified_field');});
   }
 }
-const forbiddenPath=/(?:[a-z][a-z0-9+.-]*:\/\/|(?:file|content|asset|ph):|(?:[a-z]:[\\/])|(?:^|[\s"'([{=:])[~.]?\.?\/\S+|\\\\)/i;
+const forbiddenPath=/(?::\/\/|(?:file|content|asset|ph):|(?:[a-z]:[\\/])|(?:^|[\s"'([{=:])[~.]?\.?\/\S+|\\\\)/i;
 export function hasNeverTransfer(value:unknown,depth=0):boolean {
   if(depth>32)return true;
-  if(typeof value==='string')return hasRejectedSecretDraft(value)||forbiddenPath.test(value);
+  if(typeof value==='string')return hasPaymentCard(value)||hasRejectedSecretDraft(value)||forbiddenPath.test(value);
   if(Array.isArray(value))return value.some(v=>hasNeverTransfer(v,depth+1));
   if(value&&typeof value==='object')return Object.getOwnPropertyNames(value).some(key=>key in OUTBOUND_FIELDS.never||hasNeverTransfer((value as Record<string,unknown>)[key],depth+1));
   return false;
@@ -88,18 +89,21 @@ export function hostedLocalContext(payload:HostedPayload):LocalRequest {
   return {...local,files:payload.files.map(f=>({ref:f.ref,kind:f.kind,pageCount:f.pageCount,sizeBytes:representative[f.sizeBucket],encrypted:false}))};
 }
 export function validateHosted(value:unknown):HostedPayload {
+  let copy:unknown;try{copy=structuredClone(value);}catch{throw new Error('unclassified_field');}
   assertClassified(value,'hosted');
   if(hasNeverTransfer(value))throw new Error('never_transfer');
-  const p=value as HostedPayload;
-  if(p.files.some(f=>!PRIVACY_POLICY.sizeBuckets.includes(f.sizeBucket)))throw new Error('unclassified_field');
+  if(hasNeverTransfer(copy))throw new Error('never_transfer');
+  assertClassified(copy,'hosted');
+  const p=copy as HostedPayload;
+  if(p.files.some(f=>f.encrypted!==false||!PRIVACY_POLICY.sizeBuckets.includes(f.sizeBucket)))throw new Error('unclassified_field');
   try{validateRequest(hostedLocalContext(p));}catch{throw new Error('unclassified_field');}
   const active=new Set([...p.selectionRefs,...(p.focusedResultRef?[p.focusedResultRef]:[])]);
   if(p.files.some(f=>!active.has(f.ref))||p.results?.some(r=>!active.has(r.ref)||!Number.isSafeInteger(r.pageCount)||r.pageCount<0||r.pageCount>100))throw new Error('unclassified_field');
-  return JSON.parse(JSON.stringify(p)) as HostedPayload;
+  return p;
 }
 export function assertHostedText(payload:HostedPayload):void {
   const pending=payload.pendingClarification;
   for(const text of [payload.instruction,...(pending?[pending.originalInstruction,pending.question,...pending.choices,...pending.answers.flatMap(a=>[a.question,a.answer])]:[])]){
-    try{assertInstructionSafe(text);}catch{throw new Error(hasRejectedSecretDraft(text)||forbiddenPath.test(text)?'never_transfer':'unclassified_field');}
+    try{assertInstructionSafe(text,true);}catch{throw new Error(hasRejectedSecretDraft(text)||forbiddenPath.test(text)?'never_transfer':'unclassified_field');}
   }
 }

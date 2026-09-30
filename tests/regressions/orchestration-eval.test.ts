@@ -156,7 +156,8 @@ test('runner suppresses held-out keys/details, filters cases, exports dev only a
   const dir=await mkdtemp(join(tmpdir(),'atepdf-eval-cli-'));
   const run=(...args:string[])=>JSON.parse(execFileSync(process.execPath,['--import','tsx','tests/evals/orchestration/run.mts',...args],{encoding:'utf8',maxBuffer:4_000_000,stdio:['pipe','pipe','pipe']}));
   try{
-    const result=run('--set','held-out');assert.equal(result.provenance.runtimeHead,execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim());assert.equal(result.sets['held-out'].metrics.scenarios,23);assert.equal(result.sets['held-out'].details,undefined);assert.equal(JSON.stringify(result).includes('expected'),false);
+    let head:string|null=null;try{head=execFileSync('/usr/bin/git',['rev-parse','HEAD'],{encoding:'utf8',stdio:['ignore','pipe','ignore']}).trim();}catch{/* A committed-source archive has hashes but no repository metadata. */}
+    const result=run('--set','held-out');assert.equal(result.provenance.runtimeHead,head);assert.equal(result.sets['held-out'].metrics.scenarios,23);assert.equal(result.sets['held-out'].details,undefined);assert.equal(JSON.stringify(result).includes('expected'),false);
     const single=run('--set','dev','--scenario','O107-001','--output-dir',join(dir,'result'));assert.equal(single.sets.dev.metrics.scenarios,1);assert.equal(single.sets.dev.metrics.passed,1);
     assert.match(await readFile(join(dir,'result','summary.md'),'utf8'),/scripted provider responses/);
     const filtered=run('--set','full','--category','collections');assert.equal(filtered.sets.dev.metrics.scenarios,1);assert.equal(filtered.sets['held-out'].metrics.scenarios,1);

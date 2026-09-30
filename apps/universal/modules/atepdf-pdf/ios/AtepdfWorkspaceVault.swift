@@ -17,7 +17,11 @@ public protocol AtepdfWorkspaceKeyStore: AnyObject {
 }
 
 public final class AtepdfKeychainWorkspaceKeyStore: AtepdfWorkspaceKeyStore {
+  #if ATEPDF_SYNTHETIC_CONTAINER
+  public static let defaultService = "dev.atepdf.synthetic.workspace"
+  #else
   public static let defaultService = "dev.atepdf.workspace"
+  #endif
   public static let account = "workspace-key-v1"
   private let service: String
   public init(service: String = AtepdfKeychainWorkspaceKeyStore.defaultService) { self.service = service }

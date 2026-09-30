@@ -32,7 +32,11 @@ enum AtepdfStoragePolicy {
 
   static func catalystIsolated(bundleIdentifier: String?, home: URL, caches: URL,
                                sandboxEntitlement: CFTypeRef?) -> Bool {
+    #if ATEPDF_SYNTHETIC_CONTAINER
+    let identifier = "dev.atepdf.synthetic.mac"
+    #else
     let identifier = "dev.atepdf.fresh.mac"
+    #endif
     guard let sandboxEntitlement,
           CFGetTypeID(sandboxEntitlement) == CFBooleanGetTypeID(), CFEqual(sandboxEntitlement, kCFBooleanTrue),
           bundleIdentifier == identifier, home.isFileURL, caches.isFileURL else { return false }

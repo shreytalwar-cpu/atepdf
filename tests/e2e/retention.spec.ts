@@ -1,5 +1,7 @@
 import {test,expect,type Page} from '@playwright/test';
-import {quickPlan,type Request as PlannerRequest} from '../../packages/contracts/src/protocol';
+import {quickPlan as localQuickPlan} from '../../packages/contracts/src/protocol';
+import {hostedLocalContext,validateHosted,type HostedPayload as PlannerRequest} from '../../packages/planner/src/outbound/schema';
+const quickPlan=(wire:PlannerRequest,action:Parameters<typeof localQuickPlan>[1])=>localQuickPlan(hostedLocalContext(validateHosted(wire)),action);
 
 // SHR-40 Privacy & storage in the shared UI. The web build keeps no workspace, so this
 // spec installs a synthetic in-memory stand-in for the Mac vault backend and a fake
@@ -338,8 +340,9 @@ for(const reply of ['success','error'] as const){
     });
     await page.route('**/api/planner',async route=>{counts.plan++;await route.fulfill({status:500,json:{error:'Unexpected synthetic planner call'}});});
     await ask(page,'Explain these PDFs');await expect.poll(()=>counts.status).toBe(1);
-    // Start over is deliberately unavailable while a request is being prepared.
-    await expect(page.getByRole('button',{name:'Start over'})).toBeDisabled();
+    // SHR-44 allows Start over to cancel asynchronous planner setup; Delete
+    // independently invalidates the same owner and is exercised below.
+    await expect(page.getByRole('button',{name:'Start over'})).toBeEnabled();
     await deleteNow(page,true);
     await staleRequestIsInert(page,release,()=>expect.poll(()=>answered.status).toBe(1),()=>({...counts}));
   });

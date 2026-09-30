@@ -16,6 +16,7 @@ export function createGateway(config:Pick<LocalConfig,'status'|'reserve'> & Part
   const token=randomBytes(32).toString('hex');let running=false,lastStarted=0;const used=new Set<string>();
   const pairing=new NativePairing();
   const json=(body:unknown,status=200)=>Response.json(body,{status,headers:{'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
+  const status=async()=>{const configured=await config.status(),availability=await outbound.availability(recipientRoute);return {...configured,enabled:configured.enabled&&availability.available,gateAvailable:availability.available,gateReason:availability.reasonCode};};
   return async(request:Request)=>{
     const url=new URL(request.url),host=request.headers.get('host')??url.host;
     if(!/^https?:$/.test(url.protocol)||!['localhost','127.0.0.1','[::1]'].includes(url.hostname)||host!==url.host)return json({error:'Local access only.'},403);
@@ -32,11 +33,11 @@ export function createGateway(config:Pick<LocalConfig,'status'|'reserve'> & Part
         catch{return json({error:'Pairing expired or invalid. Create a new code in the browser.'},401);}
       }
       if(!pairing.accepts(request.headers.get('authorization'),url.origin))return json({error:'Pair this app with the browser again.'},401);
-      if(request.method==='GET'&&url.pathname==='/api/native/planner/status')return json({...await config.status(),model:MODEL});
+      if(request.method==='GET'&&url.pathname==='/api/native/planner/status')return json({...await status(),model:MODEL});
       if(request.method==='POST'&&url.pathname==='/api/native/disconnect'){pairing.revoke(request.headers.get('authorization'));return json({disconnected:true});}
       if(request.method!=='POST'||url.pathname!=='/api/native/planner')return json({error:'Not found.'},404);
     }
-    if(request.method==='GET'&&url.pathname==='/api/planner/status')return json({...await config.status(),token,model:MODEL});
+    if(request.method==='GET'&&url.pathname==='/api/planner/status')return json({...await status(),token,model:MODEL});
     if(request.method!=='POST')return json({error:'Method not allowed.'},405);
     if(!native&&(origin!==url.origin||request.headers.get('x-atepdf-token')!==token))return json({error:'Refresh atepdf before planning.'},403);
     if(request.headers.get('content-type')?.split(';')[0]!=='application/json')return json({error:'Expected a plan request.'},415);

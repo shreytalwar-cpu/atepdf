@@ -14,7 +14,7 @@ The gateway accepts only the H wire schema, checks permission before reserving a
 
 Guarded instruction; bounded pending question/choices and up to three clarification answers; opaque request/file refs; selected order and focused ref; active original refs; PDF kind and active page counts; the four approved size buckets; capability names; OCR locale/language; schema and workspace revision. Optional reserved H fields are abstract selector vocabulary and active result status/page-count/outcome enums. Local selector matches and labels are excluded. `previousPlan` is null and `previousActionIds` is empty. Unrelated artifact history, filenames, exact sizes, content hashes and derived text are excluded.
 
-Known full/extensionless display-name aliases resolve locally to refs; ambiguous aliases and local document-text overlap block. Recognized secrets block the whole request. ADR PRIV-5 financial/identifier patterns in H instruction or clarification text require a trusted, exact-payload and route-bound confirmation capability; ordinary email and page/size numbers remain valid H. This is a boundary hook for SHR-37, not an implemented consent interface.
+Known full/extensionless display-name aliases resolve locally to refs; ambiguous aliases and local document-text overlap block. Recognized secrets block the whole request. Luhn-valid 13–19-digit cards are N-08 and never have a Send anyway override. Other ADR PRIV-5 financial/identifier patterns in H instruction or clarification text require a trusted, exact-payload and route-bound confirmation capability; ordinary email and page/size numbers remain valid H. This is a boundary hook for SHR-37, not an implemented consent interface.
 
 ## Content grants and never-transfer data
 
@@ -32,7 +32,9 @@ A failed logical transfer can retry only identical bytes, route, recipient, purp
 
 `relay-contract.ts` reuses classification and recipient checks and validates route, categories, approved purpose, current disclosure versions and exact retry/idempotency identity. It accepts no local grant or content digests. This is reusable validation logic only; SHR-80's service/authentication/storage is not built.
 
-## Verification
+## Historical author verification
+
+The counts and linked JSON below describe the original branch at its recorded hashes, not the integrated closeout candidate. G3a now hard-denies D26 with no override; the historical D26 confirmation result is superseded, not a current pass. New closeout evidence is recorded separately.
 
 - Approved ADR case mapping: **40/40 passed**. Every blocking phase asserts writer bytes equal **0**. P03 checks missing disclosure despite its P prefix; D26/D33/D34 check zero bytes before explicit synthetic confirmation. D06 first requires updated hosted disclosure, then reconsent, preserving ADR check order.
 - SHR-36 focused suite: **58/58**, zero failures/skips. Includes positive H, clarification, active refs/counts/buckets, exact no-content retry, all declared C/N classes, hidden fields/arrays/descriptors, TOCTOU, source/page/recipient/payload changes, retry expansion, cancellation/restore, diagnostics and mocked SDK fetch.
@@ -58,3 +60,5 @@ See [policy-case-results.json](policy-case-results.json) for all 40 test mapping
 - SHR-42 was coordinated while separate: the internal Request/ManifestFile contract and controller selection/history logic are preserved; H projection handles privacy beneath that layer. No other PR was reviewed.
 
 No work on SHR-37/79/80 was started, no runtime product knowledge or historical audits were changed, and no merge is authorized by this evidence.
+
+S36-03 scope clarification: in-process writer counters, fixture grants, SDK equality checks and native transport helpers prove only the exercised boundaries. They do not establish an app-wide traffic inventory, cross-process consent synchronization, a rendered consent UI, authenticated remote relay enforcement, signed Keychain persistence, or production recipient availability. Those remain separately owned acceptance gates.

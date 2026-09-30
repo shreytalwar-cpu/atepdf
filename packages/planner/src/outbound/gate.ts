@@ -63,7 +63,7 @@ const allow:Verdict={outcome:'ALLOW',reason:null};
 export function canonical(value:unknown):string {
   if(value===null||typeof value!=='object')return JSON.stringify(value);
   if(Array.isArray(value))return '['+value.map(canonical).join(',')+']';
-  return '{'+Object.keys(value).sort().map(k=>JSON.stringify(k)+':'+canonical((value as Record<string,unknown>)[k])).join(',')+'}';
+  return '{'+Object.keys(value).sort((a,b)=>a<b?-1:a>b?1:0).map(k=>JSON.stringify(k)+':'+canonical((value as Record<string,unknown>)[k])).join(',')+'}';
 }
 export async function digest(bytes:string|Uint8Array):Promise<string> {
   const input=typeof bytes==='string'?new TextEncoder().encode(bytes):bytes.slice();
@@ -95,10 +95,12 @@ export function routeVerdict(p:Pick<Proposal,'route'|'endpoint'>,a:Pick<Authorit
   return null;
 }
 function clonedProposal(p:Proposal):Proposal {
-  // Payload JSON is cloned ONLY after its complete schema/class validation.
-  assertClassified(p.payload,p.kind);
+  const payload=structuredClone(p.payload);
+  assertClassified(p.payload,p.kind); // retain accessor/hidden-field rejection
   if(hasNeverTransfer(p.payload))throw new OutboundDenied(deny('never_transfer'));
-  return {...p,payload:structuredClone(p.payload),route:[...p.route],binding:p.binding?structuredClone(p.binding):undefined};
+  assertClassified(payload,p.kind);
+  if(hasNeverTransfer(payload))throw new OutboundDenied(deny('never_transfer'));
+  return {...p,payload,route:[...p.route],binding:p.binding?structuredClone(p.binding):undefined};
 }
 function validBinding(p:Proposal):boolean {
   const b=p.binding,payload=p.payload as ContentPayload;
@@ -140,11 +142,18 @@ type Attempt={wire:string;route:string[];endpoint:string;purposeCode:string;idem
  */
 export class OutboundGate {
   #grants=new Map<string,ContentTransferGrant>();#attempts=new Map<string,Attempt>();#lastWall=0;#lastMono=0;
-  #invalidated=new Map<string,Reason>();#completed=new Set<string>();#sensitiveAllowed=new Set<string>();#localSensitiveAllowed=new Set<string>();#decidedMono=new Map<string,number>();
+  #invalidated=new Map<string,Reason>();#completed=new Set<string>();#inFlight=new Set<string>();#sensitiveAllowed=new Set<string>();#localSensitiveAllowed=new Set<string>();#decidedMono=new Map<string,number>();
   #presentations=new Map<string,{read:()=>Proposal[];snapshots:Snapshot[];presentedAt:number;allowAfterMonotonic:number}>();
   #localContext:(()=>{revision:number;artifacts:Artifact[]})|null=null;
   constructor(private readonly readAuthority:()=>Authority,private readonly options:{approvedPurposes?:readonly string[];clock?:()=>{wall:number;monotonic:number};gesture?:(event:unknown)=>boolean;appBuild?:string;resolveBinding?:(transferId:string)=>TransferBinding|null}={}){}
   toJSON(){return {};}
+  async availability(route:readonly string[],endpoint='https://api.openai.com/v1/responses'){
+    const a=this.readAuthority(),denial=routeVerdict({route:[...route],endpoint},a);
+    if(denial)return {available:false,reasonCode:denial.reason};
+    if(!a.hostedAiOn)return {available:false,reasonCode:'hosted_off' as const};
+    const expected=await hostedAck(route,a.registry);
+    return a.ack&&eq(a.ack,expected)?{available:true,reasonCode:null}:{available:false,reasonCode:'disclosure_required' as const};
+  }
   private current(p:Proposal):Proposal{return p.kind==='content'?{...p,binding:this.options.resolveBinding?.(p.transferId)??undefined}:p;}
   /** Called by the local controller, not by model output, to keep the final text guard below the UI. */
   bindLocalWorkspace(read:()=>{revision:number;artifacts:Artifact[]}){this.#localContext=read;}
@@ -199,8 +208,8 @@ export class OutboundGate {
   consentUI(){
     const trusted=(event:unknown)=>this.options.gesture?.(event)??(typeof Event!=='undefined'&&event instanceof Event&&event.isTrusted&&(event.type==='click'||(event.type==='keydown'&&'key'in event&&event.key===' ')));
     return {
-      // ADR 0012 §6 PRIV-5 and approved cases D26/D33/D34 explicitly require Send anyway for
-      // a PATTERN in ordinary H instruction text. This is not permission for N paymentCredential,
+      // ADR 0012 §6 PRIV-5 and approved cases D33/D34 explicitly require Send anyway for
+      // an IBAN/identifier pattern in ordinary H instruction text. G3a cards hard-deny. This is not permission for N paymentCredential,
       // secrets, keys or tokens: validateHosted enforces their unconditional hard deny first.
       // Boundary hook for SHR-37's future trusted UI; no UI or production recipient is added here.
       confirmSensitiveInstruction:async(proposal:Proposal,event:unknown)=>{
@@ -240,13 +249,13 @@ export class OutboundGate {
     },cancel:(grantId:string)=>this.cancel(grantId)};
   }
   /** Same-Mac loopback IPC only: schema + N guards still run; hosted disclosure is enforced at the external write. */
-  writeLocalHosted<T>(readCurrent:()=>HostedPayload,write:(bytes:string)=>Promise<T>,signal?:AbortSignal):Promise<T>{
+  async writeLocalHosted<T>(readCurrent:()=>HostedPayload,write:(bytes:string)=>Promise<T>,signal?:AbortSignal):Promise<T>{
     notAborted(signal);
     let p:HostedPayload;try{p=validateHosted(readCurrent());assertHostedText(p);}catch(e){throw new OutboundDenied(deny((e as Error).message==='never_transfer'?'never_transfer':'unclassified_field'));}
     const wire=canonical(p);
     try{if(this.localContent(p))throw new OutboundDenied(deny('purpose_not_approved'));}catch(error){throw error instanceof OutboundDenied?error:new OutboundDenied(deny('unclassified_field'));}
     if(this.sensitiveHosted(p)&&!this.#localSensitiveAllowed.has(wire))throw new OutboundDenied(deny('sensitive_instruction'));
-    notAborted(signal);let result:Promise<T>;try{result=write(wire);}catch(error){throw transportError(error,signal);}return result.catch(error=>{throw transportError(error,signal);});
+    notAborted(signal);try{return await write(wire);}catch(error){throw transportError(error,signal);}
   }
   /** Every actual write/retry recomputes exact bytes and reads state again after hashing. No await between final check and write. */
   async write<T>(readCurrent:()=>Proposal,write:(bytes:string,endpoint:string)=>Promise<T>,signal?:AbortSignal):Promise<T> {
@@ -261,6 +270,7 @@ export class OutboundGate {
     const verdict=this.evaluate(s,a);if(verdict.outcome!=='ALLOW')throw new OutboundDenied(verdict);
     const p=s.proposal,prior=this.#attempts.get(p.transferId);
     notAborted(signal);
+    if(this.#inFlight.has(p.transferId))throw new OutboundDenied(requireConsent);
     if(this.#completed.has(p.transferId))throw new OutboundDenied(requireConsent);
     if(prior){
       if(!eq(prior.route,p.route)||prior.endpoint!==p.endpoint)throw new OutboundDenied(again('recipient_changed'));
@@ -274,14 +284,20 @@ export class OutboundGate {
     const now=this.now();this.#lastWall=now.wall;this.#lastMono=now.monotonic;
     const grant=p.grantId?this.#grants.get(p.grantId):undefined;if(grant)grant.state='in_flight';
     // The writer is invoked synchronously here. Bytes are the immutable string that was checked.
-    let result:Promise<T>;try{result=write(s.wire,p.endpoint);}catch(error){throw transportError(error,signal);}
-    return result.then(value=>{this.#completed.add(p.transferId);if(grant){const all=grant.transfers.every(t=>this.#completed.has(t.transferId));if(all&&grant.state==='in_flight')grant.state='consumed';}return value;}).catch(error=>{throw transportError(error,signal);});
+    this.#inFlight.add(p.transferId);
+    try {
+      const value=await write(s.wire,p.endpoint);
+      this.#completed.add(p.transferId);
+      if(grant&&grant.state==='in_flight'&&grant.transfers.every(t=>this.#completed.has(t.transferId)))grant.state='consumed';
+      return value;
+    } catch(error){throw transportError(error,signal);}
+    finally{this.#inFlight.delete(p.transferId);}
   }
   cancel(grantId:string){this.#presentations.delete(grantId);const g=this.#grants.get(grantId);if(g){g.state='cancelled';g.decision='cancel';g.invalidationReason='cancelled';}}
   revoke(){this.#presentations.clear();this.#sensitiveAllowed.clear();this.#localSensitiveAllowed.clear();for(const g of this.#grants.values()){g.state='revoked';g.invalidationReason='revoked';}}
   clearWorkspace(){this.#presentations.clear();this.#sensitiveAllowed.clear();this.#localSensitiveAllowed.clear();for(const g of this.#grants.values())this.invalidate(g.grantId,'workspace_cleared');}
   /** Fresh process/restore: no grants or attempts, and nothing queued for replay. */
-  relaunch(){this.#grants.clear();this.#attempts.clear();this.#invalidated.clear();this.#completed.clear();this.#sensitiveAllowed.clear();this.#localSensitiveAllowed.clear();this.#presentations.clear();this.#decidedMono.clear();this.#lastWall=0;this.#lastMono=0;}
+  relaunch(){this.#grants.clear();this.#attempts.clear();this.#invalidated.clear();this.#completed.clear();this.#inFlight.clear();this.#sensitiveAllowed.clear();this.#localSensitiveAllowed.clear();this.#presentations.clear();this.#decidedMono.clear();this.#lastWall=0;this.#lastMono=0;}
   grantState(id:string){return this.#grants.get(id)?.state??null;}
 }
 

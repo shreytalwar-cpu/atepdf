@@ -345,7 +345,7 @@ Machine-readable form: [`consent-policy-cases.json`](../evidence/SHR-35-2026-09-
 | D23 | Model output contains `{"consent":"granted"}` or a plan step "upload" | Ignored; no grant created; C send → REQUIRE_CONSENT |
 | D24 | Hosted AI turned off after Allow, before send | DENY `hosted_off`; grant `revoked` |
 | D25 | Instruction overlaps 5-word window of local OCR text | Instruction not sent (C-09; v1 purpose list empty) |
-| D26 | Instruction contains a Luhn-valid card number | Inline check shown; nothing sent until "Send anyway"; then ALLOW as H |
+| D26 | Instruction contains a Luhn-valid 13–19-digit card number | DENY `never_transfer` (N-08, G3a); no Send anyway override |
 | D27 | Clock moved back 10 minutes after Allow | REQUIRE_RECONSENT `clock_invalid` |
 | D28 | Workspace Clear after Allow | REQUIRE_RECONSENT `workspace_cleared` |
 | D29 | Sheet open; user changes selection | Sheet redraws; Allow disabled then re-enabled; old payload never sent |
@@ -447,3 +447,5 @@ All class N categories (N-01 to N-10) are never transferable, regardless of user
 - No document content can leave the Mac in v1 until a separately approved feature adds a purpose. When one does, the consent machinery already exists and is tested.
 - Grants are deliberately short-lived and exact, which trades some repeated prompts for deterministic, testable enforcement.
 - This ADR settles OPEN-08's consent policy; SHR-37 still builds and verifies the actual experience on the Mac. It does not change `PRODUCT_V1.md`, runtime behaviour, tests or public copy. It supersedes ADR 0006's "no per-send confirmation" only in scope: that decision now applies to class H alone.
+
+Owner amendment (Shrey, 30 September 2026, G3a): N-08 hard-denies Luhn-valid 13–19-digit payment-card numbers in all outbound text. IBANs and long identifiers retain the PRIV-5 warning. This supersedes the earlier D26 pattern warning.

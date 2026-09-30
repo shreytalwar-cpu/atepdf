@@ -41,12 +41,13 @@ private final class RejectPlannerRedirects: NSObject, URLSessionTaskDelegate, @u
 /// Private beta only. Tokens live in this actor, never JS, files or preferences.
 actor AtepdfPlannerTransport {
   enum Failure: LocalizedError {
-    case unavailable, pairing, request, response, connection
+    case unavailable, pairing, request, response, connection, privacy
     var errorDescription: String? {
       switch self {
       case .unavailable: return "AI connection is not available on this device yet. Local quick actions still work."
       case .pairing: return "Pair this app with the atepdf browser again."
       case .request: return "This request cannot be sent safely. Your PDFs stay here."
+      case .privacy: return "AI is unavailable. Use local tools instead. Your existing files and results are still available."
       case .response: return "The planner response could not be accepted. No files changed."
       case .connection: return "The planner connection is unavailable. Keep atepdf running on your Mac and both devices on the same Wi-Fi."
       }
@@ -166,9 +167,25 @@ actor AtepdfPlannerTransport {
       #"(?i)(?:[a-z][a-z0-9+.-]*://|(?:data|file|blob|content|asset|ph):|[a-z]:[\\/]|(?:^|[\s"'(\[{=:])[~.]?\.?/\S+|\\\\)|%[a-f0-9]{2}|\\(?:u[a-f0-9]{4}|x[a-f0-9]{2})|[a-z0-9+/]{80,}={0,2}|[a-f0-9]{64}|\S+\.(?:pdf|png|jpe?g|docx?|xlsx?|csv|txt|json|zip|pptx?|odt|rtf|tiff?)\b"#,
       #"[\x{0000}-\x{0008}\x{000b}\x{000c}\x{000e}-\x{001f}\x{007f}\x{200b}-\x{200f}\x{202a}-\x{202e}\x{2060}-\x{206f}]"#
     ]
-    return !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !text.contains("[Sensitive value removed]") && patterns.allSatisfy { pattern in
+    return !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !text.contains("[Sensitive value removed]") && !hasPaymentCard(text) && matchesNone(text, patterns: patterns)
+  }
+  // A malformed policy expression must deny, never silently skip that rule.
+  static func matchesNone(_ text: String, patterns: [String]) -> Bool {
+    patterns.allSatisfy { pattern in
       guard let expression = try? NSRegularExpression(pattern: pattern) else { return false }
       return expression.firstMatch(in: text, range: NSRange(text.startIndex..., in: text)) == nil
+    }
+  }
+  private static func hasPaymentCard(_ text: String) -> Bool {
+    guard let expression = try? NSRegularExpression(pattern: #"\b\d(?:[ -]?\d){12,18}\b"#) else { return true }
+    return expression.matches(in: text, range: NSRange(text.startIndex..., in: text)).contains { match in
+      guard let range = Range(match.range, in: text) else { return true }
+      let digits = text[range].compactMap { $0.wholeNumberValue }
+      let sum = digits.reversed().enumerated().reduce(0) { total, item in
+        let value = item.offset % 2 == 0 ? item.element : item.element * 2
+        return total + (value > 9 ? value - 9 : value)
+      }
+      return (13...19).contains(digits.count) && sum % 10 == 0
     }
   }
   static func admittedEndpoint(_ endpoint: Endpoint) throws {
@@ -248,6 +265,7 @@ actor AtepdfPlannerTransport {
     let (bytes, response) = try await session.bytes(for: request, delegate: delegate)
     guard let http = response as? HTTPURLResponse, response.url == url else { throw Failure.response }
     if http.statusCode == 401 { throw Failure.pairing }
+    if http.statusCode == 403 { throw Failure.privacy }
     guard http.statusCode == 200, http.mimeType == "application/json", http.expectedContentLength <= 256_000 else { throw Failure.response }
     var data = Data()
     for try await byte in bytes { try Task.checkCancellation(); guard data.count < 256_000 else { throw Failure.response }; data.append(byte) }

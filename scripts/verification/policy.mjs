@@ -4,7 +4,7 @@ export const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 export function childEnvironment(source,path,scratch){
   const env={PATH:path,CI:'true',EXPO_NO_TELEMETRY:'1',NEXT_TELEMETRY_DISABLED:'1'};
   for(const key of ['HOME','USER','LOGNAME','LANG','LC_ALL','TZ','DEVELOPER_DIR'])if(source[key])env[key]=source[key];
-  if(scratch)Object.assign(env,{TMPDIR:join(scratch,'tmp'),TMP:join(scratch,'tmp'),TEMP:join(scratch,'tmp'),XDG_CACHE_HOME:join(scratch,'cache'),NPM_CONFIG_USERCONFIG:join(scratch,'empty.npmrc')});
+  if(scratch)Object.assign(env,{TMPDIR:join(scratch,'tmp'),TMP:join(scratch,'tmp'),TEMP:join(scratch,'tmp'),XDG_CACHE_HOME:join(scratch,'cache'),PLAYWRIGHT_BROWSERS_PATH:join(scratch,'browsers'),NPM_CONFIG_USERCONFIG:join(scratch,'empty.npmrc')});
   return env;
 }
 export function expectedCommands(mode,{evals=false,permission=false,tls=false}={}){
@@ -13,7 +13,7 @@ export function expectedCommands(mode,{evals=false,permission=false,tls=false}={
   const core=[...contracts,...types,'shared-core-regressions','beta-test-gateway-build','beta-unit-tests','syntax-verify','syntax-browser'];
   const browser=[...contracts,'playwright-browser','engine-assets','expo-web-export','web-budget','safe-browser-checks'];
   const failures=[...contracts,...types,...['typescript','schema-drift','stale-validator','stale-knowledge','catalogue','manifest','regression'].map(n=>'reject-'+n),'restored-regression'];
-  const native=[...contracts,'xcode-version','apple-helper','swift-planner-compile',...(permission?['swift-permission-debug-compile','swift-permission-release-compile']:[]),...(tls?['swift-tls-debug-compile']:[])];
+  const native=[...contracts,'xcode-version','native-js-export','swift-workspace-interop','apple-helper','swift-planner-compile',...(permission?['swift-permission-debug-compile','swift-permission-release-compile']:[]),...(tls?['swift-tls-debug-compile']:[]),'swift-transport-canaries'];
   return [...new Set(['export-source','frozen-install',...({all:[...core,...browser,...native],core,browser,failures,native}[mode]??[])])];
 }
 export function assertEvidence(record,running,archived,features){

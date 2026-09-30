@@ -99,24 +99,90 @@ actor AtepdfPlannerTransport {
   static func admittedBody(_ body: String) throws -> Data {
     let data = Data(body.utf8)
     let keys: Set<String> = ["schemaVersion","requestId","workspaceRevision","locale","instruction","files","selectionRefs","focusedResultRef","originalRefs","pendingClarification","previousActionIds","capabilities","previousPlan","ocrLanguages"]
-    let fileKeys: Set<String> = ["ref","kind","pageCount","sizeBytes","encrypted"]
+    let optionalKeys: Set<String> = ["selectorCapabilities","results"]
+    let fileKeys: Set<String> = ["ref","kind","pageCount","sizeBucket","encrypted"]
     guard data.count <= 24_000, let object = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-          Set(object.keys) == keys, let instruction = object["instruction"] as? String, !instruction.isEmpty, instruction.count <= 1000,
+          keys.isSubset(of: Set(object.keys)), Set(object.keys).isSubset(of: keys.union(optionalKeys)), let instruction = object["instruction"] as? String, !instruction.isEmpty, instruction.count <= 1000,
           let files = object["files"] as? [[String: Any]], files.count <= 40, files.allSatisfy({ Set($0.keys) == fileKeys }) else { throw Failure.request }
+    // Independent native pre-write admission, including callers that bypass JS.
+    guard object["schemaVersion"] as? String == "1.0", object["locale"] as? String == "en-IN",
+          let requestID = object["requestId"] as? String, matches(requestID, #"^req_[a-f0-9]{32}$"#),
+          let revision = integer(object["workspaceRevision"]), revision >= 0,
+          let selection = object["selectionRefs"] as? [String], let originals = object["originalRefs"] as? [String],
+          let actions = object["previousActionIds"] as? [String], actions.isEmpty, object["previousPlan"] is NSNull,
+          let capabilities = object["capabilities"] as? [String], capabilities.allSatisfy({ ["merge_pdf","select_pages","ocr_pdf","compress_pdf"].contains($0) }),
+          let languages = object["ocrLanguages"] as? [String], languages.allSatisfy({ $0 == "eng" }),
+          (languages.isEmpty || capabilities.contains("ocr_pdf")) else { throw Failure.request }
+    let focus = object["focusedResultRef"] as? String
+    guard focus != nil || object["focusedResultRef"] is NSNull else { throw Failure.request }
+    let active = Set(selection + (focus.map { [$0] } ?? [])), refs = files.compactMap { $0["ref"] as? String }
+    guard refs.count == files.count, Set(refs).count == refs.count, (selection + originals + (focus.map { [$0] } ?? [])).allSatisfy({ refs.contains($0) }),
+          files.allSatisfy({ file in
+            guard let ref = file["ref"] as? String, matches(ref, #"^(file|out)_[a-f0-9]{32}$"#), active.contains(ref),
+                  file["kind"] as? String == "pdf", let pages = integer(file["pageCount"]), (1...100).contains(pages),
+                  let bucket = file["sizeBucket"] as? String, ["<1MB","1-10MB","10-50MB",">50MB"].contains(bucket),
+                  let encrypted = file["encrypted"] as? NSNumber, CFGetTypeID(encrypted) == CFBooleanGetTypeID(), !encrypted.boolValue else { return false }
+            return true
+          }), safeText(instruction) else { throw Failure.request }
+    if let selectorValue = object["selectorCapabilities"] {
+      guard let selectors = selectorValue as? [String], selectors.count <= 3, selectors.allSatisfy({ ["invoice","scanned_pages","blank_page_candidates"].contains($0) }) else { throw Failure.request }
+    }
+    if let resultValue = object["results"] {
+      guard let results = resultValue as? [[String: Any]], results.count <= 40, results.allSatisfy({ result in
+        guard Set(result.keys) == ["ref","status","pageCount","outcome"], let ref = result["ref"] as? String, active.contains(ref),
+              let pages = integer(result["pageCount"]), (0...100).contains(pages), let status = result["status"] as? String, ["created","failed","cancelled"].contains(status),
+              let outcome = result["outcome"] as? String, ["complete","target_not_met","no_change"].contains(outcome) else { return false }
+        return true
+      }) else { throw Failure.request }
+    }
     if !(object["pendingClarification"] is NSNull) {
       let pendingKeys: Set<String> = ["originalRequestId","workspaceRevision","originalInstruction","question","choices","answers","selectionRefs","focusedResultRef","originalRefs"]
       guard let pending = object["pendingClarification"] as? [String: Any], Set(pending.keys) == pendingKeys,
-            let original = pending["originalInstruction"] as? String, !original.isEmpty, original.count <= 1000,
-            let question = pending["question"] as? String, !question.isEmpty, question.count <= 600,
-            let choices = pending["choices"] as? [String], choices.count <= 6, choices.allSatisfy({ !$0.isEmpty && $0.count <= 100 }),
+            let originalID = pending["originalRequestId"] as? String, matches(originalID, #"^req_[a-f0-9]{32}$"#), originalID != requestID,
+            integer(pending["workspaceRevision"]) == revision, pending["selectionRefs"] as? [String] == selection, pending["originalRefs"] as? [String] == originals,
+            (pending["focusedResultRef"] as? String) == focus, (focus != nil || pending["focusedResultRef"] is NSNull),
+            let original = pending["originalInstruction"] as? String, !original.isEmpty, original.count <= 1000, safeText(original),
+            let question = pending["question"] as? String, !question.isEmpty, question.count <= 600, safeText(question),
+            let choices = pending["choices"] as? [String], choices.count <= 6, choices.allSatisfy({ !$0.isEmpty && $0.count <= 100 && safeText($0) }),
             let answers = pending["answers"] as? [[String: Any]], answers.count <= 3,
             answers.allSatisfy({ answer in
               guard Set(answer.keys) == ["question","answer"], let question = answer["question"] as? String,
                     let text = answer["answer"] as? String else { return false }
-              return !question.isEmpty && question.count <= 600 && !text.isEmpty && text.count <= 1000
+              return !question.isEmpty && question.count <= 600 && !text.isEmpty && text.count <= 1000 && safeText(question) && safeText(text)
             }) else { throw Failure.request }
     }
     return data
+  }
+  private static func integer(_ value: Any?) -> Int? {
+    guard let n = value as? NSNumber, CFGetTypeID(n) != CFBooleanGetTypeID(), n.doubleValue.isFinite,
+          n.doubleValue.rounded() == n.doubleValue, abs(n.doubleValue) <= 9_007_199_254_740_991 else { return nil }
+    return n.intValue
+  }
+  private static func matches(_ text: String, _ pattern: String) -> Bool { text.range(of: pattern, options: .regularExpression) != nil }
+  private static func safeText(_ text: String) -> Bool {
+    // ADR 0012 N values and existing encoded-content/filename exclusions. No exception echoes input.
+    let patterns = [
+      #"(?i)sk-[a-z0-9_-]{12,}|\bAKIA[A-Z0-9]{16}\b|\b(?:ghp_|github_pat_)[a-z0-9_]{12,}|\beyJ[a-z0-9_-]+\.[a-z0-9_-]+\.[a-z0-9_-]+|\b(?:api[_ -]?key|password|passphrase|passcode|secret|access[_ -]?token|refresh[_ -]?token|csrf[_ -]?token|pairing[_ -]?token)\s*["']?\s*(?:[:=]|is\b)\s*["']?\S+|\bmy\s+(?:password|passphrase|passcode|secret)\s+\S+|\bbearer\s+[a-z0-9._-]{12,}"#,
+      #"(?i)(?:[a-z][a-z0-9+.-]*://|(?:data|file|blob|content|asset|ph):|[a-z]:[\\/]|(?:^|[\s"'(\[{=:])[~.]?\.?/\S+|\\\\)|%[a-f0-9]{2}|\\(?:u[a-f0-9]{4}|x[a-f0-9]{2})|[a-z0-9+/]{80,}={0,2}|[a-f0-9]{64}|\S+\.(?:pdf|png|jpe?g|docx?|xlsx?|csv|txt|json|zip|pptx?|odt|rtf|tiff?)\b"#,
+      #"[\x{0000}-\x{0008}\x{000b}\x{000c}\x{000e}-\x{001f}\x{007f}\x{200b}-\x{200f}\x{202a}-\x{202e}\x{2060}-\x{206f}]"#
+    ]
+    return !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !text.contains("[Sensitive value removed]") && patterns.allSatisfy { pattern in
+      guard let expression = try? NSRegularExpression(pattern: pattern) else { return false }
+      return expression.firstMatch(in: text, range: NSRange(text.startIndex..., in: text)) == nil
+    }
+  }
+  static func admittedEndpoint(_ endpoint: Endpoint) throws {
+    // No signed release recipient registry or hosted disclosure exists yet (SHR-79/37).
+    // Debug loopback IPC stays on this Mac. LAN beta is not permission to disclose H/N data.
+    #if DEBUG
+    guard ["localhost","127.0.0.1","::1"].contains(endpoint.url.host ?? ""),
+          endpoint.url.user == nil, endpoint.url.password == nil, endpoint.url.path.isEmpty,
+          endpoint.url.query == nil, endpoint.url.fragment == nil,
+          (endpoint.url.scheme == "http" && [3210,3211,3212].contains(endpoint.url.port ?? 0) && endpoint.fingerprint == nil) ||
+          (endpoint.url.scheme == "https" && endpoint.fingerprint != nil) else { throw Failure.request }
+    #else
+    throw Failure.request
+    #endif
   }
   func pair(id: String, code: String) async throws {
     let (endpoint, safeCode) = try Self.pairedEndpoint(code)
@@ -177,6 +243,8 @@ actor AtepdfPlannerTransport {
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
     if let token { request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization") }
     try Task.checkCancellation()
+    try admittedEndpoint(endpoint)
+    if path == "planner" { guard let body, let text = String(data: body, encoding: .utf8) else { throw Failure.request }; request.httpBody = try admittedBody(text) }
     let (bytes, response) = try await session.bytes(for: request, delegate: delegate)
     guard let http = response as? HTTPURLResponse, response.url == url else { throw Failure.response }
     if http.statusCode == 401 { throw Failure.pairing }

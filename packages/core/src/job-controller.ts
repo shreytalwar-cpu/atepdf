@@ -2,6 +2,7 @@ import {buildRequest,quickPlan,validateEnvelope,type Request,type Envelope,type 
 import {activeRequestContext} from './request-context';
 import {LocalFileStore,type Artifact,type StoreMark} from './local-file-store';
 import {CLEANUP_INCOMPLETE,StaleSaveError} from './workspace-vault';
+import {productionOutbound} from '../../planner/src/outbound/gate';
 import type {EngineRequest,EngineResult,Inspection,OCRPage} from '@pdf/types';
 import {expectationsForStep,verifyPages,type PageVerificationReceipt} from './page-verification';
 type Services={capabilities?:Operation[];worker:(request:EngineRequest,signal:AbortSignal,progress?:(text:string)=>void)=>Promise<EngineResult|{pages:number}>;inspect:(bytes:Uint8Array,signal:AbortSignal)=>Promise<Inspection>;recognize:(bytes:Uint8Array,inspection:Inspection,signal:AbortSignal,progress:(text:string)=>void)=>Promise<OCRPage[]>};
@@ -28,7 +29,7 @@ export class JobController {
   #durable:Durability|null=null;
   #persisting=false;
   #pending:StoreMark|null=null;
-  constructor(readonly store:LocalFileStore,private services:Services){}
+  constructor(readonly store:LocalFileStore,private services:Services){productionOutbound.bindLocalWorkspace(()=>({revision:store.revision,artifacts:store.list}));}
   subscribe=(listener:()=>void)=>{this.#listeners.add(listener);return ()=>{this.#listeners.delete(listener);};};
   snapshot=()=>this.state;
   setDurability(durable:Durability|null){this.#durable=durable;}
@@ -185,6 +186,7 @@ export class JobController {
    */
   clear(operation?:()=>Promise<{cleanupComplete:boolean}>):void|Promise<void>{
     if(this.state.busy)return;
+    productionOutbound.clearWorkspace();
     const durable=operation??this.#durable?.clear;
     if(!durable){this.store.clear();this.update({message:'',error:null,stage:'idle',progress:undefined,pageVerification:undefined});return;}
     // The workspace is emptied only after the new deletion epoch is durable. If

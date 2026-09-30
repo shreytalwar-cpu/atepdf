@@ -1,3 +1,4 @@
+import {fixture} from '../../helpers/outbound-fixture';
 // Isolated loopback TLS harness. No LocalConfig or real provider is constructed.
 import {createServer} from 'node:http';
 import {createServer as createTLSServer} from 'node:https';
@@ -35,7 +36,7 @@ async function negativeCertificate(directory:string,kind:'wrong-host'|'expired',
 async function main(){
   const directory=await mkdtemp(join(tmpdir(),'atepdf-native-tls-')),tls=await prepareBetaTLS(join(directory,'tls'),'127.0.0.1',3444),origin='http://localhost:3212';
   let calls=0;
-  const gateway=createGateway({status:async()=>({connected:true,enabled:true,remaining:100}),reserve:async()=>({key:'synthetic-only',release:async()=>{}})},async request=>{calls++;if(/PRIVATE-CANARY|brief\.pdf|appendix\.pdf/.test(JSON.stringify(request)))throw new Error('Canary rejected.');return quickPlan(request,'merge').planner;},{minIntervalMs:0,nativeEndpoint:tls.endpoint});
+  const gateway=createGateway({status:async()=>({connected:true,enabled:true,remaining:100}),reserve:async()=>({key:'synthetic-only',release:async()=>{}})},async request=>{calls++;if(/PRIVATE-CANARY|brief\.pdf|appendix\.pdf/.test(JSON.stringify(request)))throw new Error('Canary rejected.');return quickPlan(request,'merge').planner;},{minIntervalMs:0,nativeEndpoint:tls.endpoint,...(await fixture()).gatewayOptions});
   const server=createNativeBetaServer({gateway,origin:tls.endpoint.origin,loopbackOrigin:origin,key:tls.key,cert:tls.cert});
   server.listen(3444,'127.0.0.1');await once(server,'listening');
   const negativeRequests={'wrong-host':0,expired:0};

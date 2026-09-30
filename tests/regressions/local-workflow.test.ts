@@ -8,10 +8,20 @@ import {JobController} from '../../packages/core/src/job-controller';
 import {buildRequest,quickPlan,validateEnvelope} from '../../packages/contracts/src/protocol';
 import {savePDF} from '../../apps/web/src/services/export';
 import type {Inspection,EngineRequest} from '../../packages/web-pdf/src/types';
+import {productionOutbound,OutboundDenied} from '../../packages/planner/src/outbound/gate';
+import {projectHosted} from '../../packages/planner/src/outbound/schema';
 const fixture=async(name:string)=>new Uint8Array(await readFile(`tests/fixtures/${name}`));
 import {independentPDF as independent} from '../helpers/independent-pdf';
 const service={worker:async(r:EngineRequest)=>r.kind==='inspect'?{pages:(await preflight(r.bytes)).getPageCount()}:transform(r,()=>{}),inspect:independent,recognize:async()=>[]};
 async function setup(){const store=new LocalFileStore(),controller=new JobController(store,service);await controller.import(await Promise.all(['brief.pdf','appendix.pdf'].map(async n=>new File([await fixture(n)],n))));assert.equal(controller.state.error,null);return {store,controller};}
+test('SHR-36 outbound denial leaves real local PDFs, preview facts, save/reopen, Undo and Clear usable',async()=>{
+  const {store,controller}=await setup();await controller.quick('merge');const focus=store.focus!,before=store.list,request=controller.request('Remove page 2');let outboundBytes=0;
+  await assert.rejects(productionOutbound.write(()=>({kind:'hosted',payload:projectHosted(request),route:['unapproved'],endpoint:'https://unapproved.example.test/transfer',purposeCode:'interpret_instruction',idempotencyKey:request.requestId,transferId:request.requestId}),async body=>{outboundBytes+=body.length;}),OutboundDenied);
+  assert.equal(outboundBytes,0);assert.deepEqual(store.list,before);assert.equal(store.focus,focus);assert.equal(store.get(focus).meta.inspection.pages.length,3);
+  await controller.quick('remove',2);assert.equal(controller.state.error,null);let exported=new Uint8Array();
+  assert.equal(await savePDF(store.get(store.focus!).bytes,async()=>({createWritable:async()=>({write:async data=>{exported=new Uint8Array(data as Uint8Array);},close:async()=>{},abort:async()=>{}})})),'saved');
+  assert.equal((await independent(exported)).pages.length,2);await controller.undo();assert.equal(store.focus,focus);await controller.clear();assert.equal(store.list.length,0);
+});
 test('L01/L02: actual merge, physical-page follow-up, independent text order, immutable originals and undo',async()=>{
   const {store,controller}=await setup();const hashes=store.list.map(f=>f.checksum);
   await controller.quick('merge');assert.equal(controller.state.error,null);const merged=store.focus!;

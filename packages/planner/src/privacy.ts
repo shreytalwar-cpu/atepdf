@@ -1,6 +1,7 @@
 import type {Artifact} from '@core/local-file-store';
+import {PRIVACY_POLICY} from './outbound/constants';
 const escaped = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-const recognizedSecret = /sk-[a-z0-9_-]{12,}|\b(?:api[_ -]?key|password|passphrase|passcode|secret|access[_ -]?token)\s*["']?\s*(?:[:=]|is\b)\s*["']?\S+|\bbearer\s+[a-z0-9._-]{12,}/i;
+const recognizedSecret = /sk-[a-z0-9_-]{12,}|\bAKIA[A-Z0-9]{16}\b|\b(?:ghp_|github_pat_)[a-z0-9_]{12,}|\beyJ[a-z0-9_-]+\.[a-z0-9_-]+\.[a-z0-9_-]+|\b(?:my\s+)?(?:api[_ -]?key|password|passphrase|passcode|secret|access[_ -]?token|refresh[_ -]?token|csrf[_ -]?token|pairing[_ -]?token)\s*["']?\s*(?:[:=]|is\b)\s*["']?\S+|\bmy\s+(?:password|passphrase|passcode|secret)\s+\S+|\bbearer\s+[a-z0-9._-]{12,}/i;
 export const SENSITIVE_DRAFT_MARKER = '[Sensitive value removed]';
 export const SECRET_CHAT_WARNING = 'Keep keys and passwords out of chat. Use a dedicated secure field when requested.';
 export const hasRecognizedSecret = (text: string) => recognizedSecret.test(text);
@@ -20,12 +21,13 @@ export function privateInstruction(raw: string, files: Artifact[]): string {
   const names = new Map<string, Artifact[]>();
   for (const file of files) {
     const name = file.name.normalize('NFC').toLowerCase();
-    if (name) names.set(name, [...(names.get(name) ?? []), file]);
+    for(const alias of new Set([name,name.replace(/\.[^.]+$/,'')]))if(alias)names.set(alias,[...(names.get(alias)??[]),file]);
   }
   for (const [name, matches] of [...names].sort((a, b) => b[0].length - a[0].length)) {
-    if (!new RegExp(escaped(name), 'i').test(text)) continue;
+    const pattern=`(?<![\\p{L}\\p{N}_])${escaped(name)}(?![\\p{L}\\p{N}_])`;
+    if (!new RegExp(pattern, 'iu').test(text)) continue;
     if (matches.length !== 1) throw new Error('More than one file has that name. Refer to its position or the current result.');
-    text = text.replace(new RegExp(escaped(name), 'gi'), matches[0].ref);
+    text = text.replace(new RegExp(pattern, 'giu'), matches[0].ref);
   }
   for (const file of files) {
     if (file.checksum && text.toLowerCase().includes(file.checksum.toLowerCase())) throw new Error('Checksums stay on your device. Use the current result or file order instead.');
@@ -34,7 +36,7 @@ export function privateInstruction(raw: string, files: Artifact[]): string {
     for (const page of file.inspection.pages) {
       const local = (page.text.toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? []).join(' ');
       if(local.length>=8&&words.join(' ').includes(local))throw new Error('This looks like text from your PDF. Describe the operation without quoting document content.');
-      for (let i = 0; i <= words.length - 5; i++) if (local.includes(words.slice(i, i + 5).join(' '))) throw new Error('This looks like text from your PDF. Describe the operation without quoting document content.');
+      for (let i = 0; i <= words.length - PRIVACY_POLICY.overlapWords; i++) if (local.includes(words.slice(i, i + PRIVACY_POLICY.overlapWords).join(' '))) throw new Error('This looks like text from your PDF. Describe the operation without quoting document content.');
     }
   }
   assertInstructionSafe(text,true);

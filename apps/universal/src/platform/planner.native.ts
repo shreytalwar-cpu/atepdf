@@ -1,7 +1,8 @@
 import NativePlanner from '../../modules/atepdf-planner';
 import NativePDF from '../../modules/atepdf-pdf';
 import {validatePlanResult,type PlannerStatus} from '@planner/client';
-import {validateRequest} from '@planner/request';
+import {projectHosted} from '@planner/outbound/schema';
+import {productionOutbound} from '@planner/outbound/gate';
 import type {Request as PlannerRequest} from '@contracts/protocol';
 export type {PlannerStatus};
 export const plannerAvailable=NativePlanner?.available===true&&NativePDF?.storageIsolated===true;
@@ -19,9 +20,8 @@ export async function plannerStatus(signal?:AbortSignal):Promise<PlannerStatus>{
   if(typeof status.connected!=='boolean'||typeof status.enabled!=='boolean'||!Number.isSafeInteger(status.remaining)||status.remaining<0||typeof status.model!=='string')throw new Error('Invalid connection status.');
   return {...status,token:''};
 }
-export async function requestPlan(request:PlannerRequest,_token:string,signal:AbortSignal){
-  const body=JSON.stringify(validateRequest(request));
-  const value=JSON.parse(await call(id=>native().planAsync(id,body),signal));
+export async function requestPlan(request:PlannerRequest,_token:string,signal:AbortSignal,readCurrent:()=>PlannerRequest=()=>request){
+  const value=JSON.parse(await productionOutbound.writeLocalHosted(()=>projectHosted(readCurrent()),body=>call(id=>native().planAsync(id,body),signal),signal));
   signal.throwIfAborted();return validatePlanResult(value,request);
 }
 export async function pairNativePlanner(code:string){await call(id=>native().pairAsync(id,code.trim()));}

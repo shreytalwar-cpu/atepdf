@@ -40,7 +40,7 @@ import Foundation
     try require(try await transport.status(id: UUID().uuidString).contains("\"enabled\":true"), "pinned TLS connection status")
     let a="file_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", b="file_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
     let request: [String: Any] = ["schemaVersion":"1.0","requestId":"req_"+UUID().uuidString.replacingOccurrences(of:"-",with:"").lowercased(),"workspaceRevision":2,"locale":"en-IN","instruction":"Merge the two PDFs",
-      "files":[["ref":a,"kind":"pdf","pageCount":2,"sizeBytes":3000,"encrypted":false],["ref":b,"kind":"pdf","pageCount":1,"sizeBytes":2000,"encrypted":false]],"selectionRefs":[a,b],"focusedResultRef":NSNull(),"originalRefs":[a,b],"pendingClarification":NSNull(),"previousActionIds":[],"previousPlan":NSNull(),"capabilities":["merge_pdf","select_pages","ocr_pdf","compress_pdf"],"ocrLanguages":["eng"]]
+      "files":[["ref":a,"kind":"pdf","pageCount":2,"sizeBucket":"<1MB","encrypted":false],["ref":b,"kind":"pdf","pageCount":1,"sizeBucket":"<1MB","encrypted":false]],"selectionRefs":[a,b],"focusedResultRef":NSNull(),"originalRefs":[a,b],"pendingClarification":NSNull(),"previousActionIds":[],"previousPlan":NSNull(),"capabilities":["merge_pdf","select_pages","ocr_pdf","compress_pdf"],"ocrLanguages":["eng"]]
     let result = try await transport.plan(id: UUID().uuidString, body: String(data: JSONSerialization.data(withJSONObject: request), encoding: .utf8)!)
     try require(result.contains("merge_pdf"), "complete plan over TLS")
     try await transport.disconnect(id: UUID().uuidString)

@@ -1,0 +1,157 @@
+{
+  "schema": "atepdf.recipient-disclosure-drafts/1",
+  "source": "docs/adr/0013-consumer-ai-service.md section 7",
+  "status": "Proposed (SHR-79). Every record is incomplete; under ADR 0012 PRIV-7 the gate denies all production transfer until each unknownField is resolved and the record is verified against live account configuration.",
+  "records": [
+    {
+      "recipientId": "atepdf-relay",
+      "displayName": "atePDF AI",
+      "legalEntity": "UNKNOWN",
+      "role": "relay operator (controller of relay records)",
+      "endpoints": [
+        "UNKNOWN: relay host not registered"
+      ],
+      "plaintextReaders": [
+        "atePDF relay code (memory only)",
+        "Cloudflare (see cloudflare-workers)"
+      ],
+      "dataRegion": "Cloudflare location nearest the user (global edge); Durable Object storage in the US jurisdiction (proposed)",
+      "retention": {
+        "payload": "not stored",
+        "storedState": "subject ID, counters, idempotency state; keyed HMAC of request body <= 15 minutes",
+        "abuseMonitoring": "none",
+        "logs": "contentless lines 7 days; contentless daily aggregates 400 days",
+        "backups": "UNKNOWN: Durable Object recovery window not verified"
+      },
+      "trainingUse": "none",
+      "dataSharingProgramme": "not applicable",
+      "humanReview": "no content retained to review",
+      "relayLogFields": "ADR 0013 section 17",
+      "subprocessors": [
+        "cloudflare-workers",
+        "openai-api"
+      ],
+      "deletion": "subject records deleted on installation/account deletion (policy in SHR-95)",
+      "outageFailover": "no secondary relay host",
+      "endUserIdentifier": "holds inst_/acct_; forwards only HMAC safety_identifier to the provider",
+      "unknownFields": [
+        "legalEntity",
+        "endpoints",
+        "retention.backups"
+      ],
+      "sources": [
+        "docs/adr/0013-consumer-ai-service.md"
+      ],
+      "verifiedAt": "2026-09-30",
+      "verifiedBy": "SHR-79 agent (documentation only; no live account configuration exists)",
+      "status": "incomplete",
+      "disclosureVersion": "draft-atepdf-relay-2026-09-30"
+    },
+    {
+      "recipientId": "cloudflare-workers",
+      "displayName": "Cloudflare",
+      "legalEntity": "Cloudflare, Inc.",
+      "role": "processor hosting the relay; terminates TLS and runs relay code",
+      "endpoints": [
+        "same host as atepdf-relay (Workers custom domain)"
+      ],
+      "plaintextReaders": [
+        "Cloudflare edge infrastructure"
+      ],
+      "dataRegion": "global edge; regional execution requires the Enterprise Data Localization Suite (not proposed); Durable Object jurisdiction US",
+      "retention": {
+        "payload": "none written by atePDF code",
+        "storedState": "only what atePDF code writes",
+        "abuseMonitoring": "UNKNOWN",
+        "logs": "Workers invocation logs disabled (they capture request metadata and headers by default); Workers Logs 7 days on Paid for atePDF's own lines",
+        "backups": "UNKNOWN"
+      },
+      "trainingUse": "none (processor under DPA)",
+      "dataSharingProgramme": "not applicable",
+      "humanReview": "UNKNOWN",
+      "subprocessors": {
+        "listUrl": "https://www.cloudflare.com/gdpr/subprocessors/",
+        "contentsReviewed": false
+      },
+      "deletion": "per Cloudflare customer DPA",
+      "outageFailover": "no failover to another host",
+      "endUserIdentifier": "sees inst_/acct_ in transit",
+      "unknownFields": [
+        "retention.abuseMonitoring",
+        "retention.backups",
+        "humanReview",
+        "subprocessors.contents"
+      ],
+      "sources": [
+        "https://developers.cloudflare.com/workers/platform/pricing/",
+        "https://developers.cloudflare.com/workers/platform/limits/",
+        "https://developers.cloudflare.com/workers/observability/logs/workers-logs/",
+        "https://developers.cloudflare.com/durable-objects/reference/data-location/",
+        "https://developers.cloudflare.com/data-localization/",
+        "https://www.cloudflare.com/cloudflare-customer-dpa/"
+      ],
+      "verifiedAt": "2026-09-30",
+      "verifiedBy": "SHR-79 agent (documentation only; no live account configuration exists)",
+      "status": "incomplete",
+      "disclosureVersion": "draft-cloudflare-workers-2026-09-30"
+    },
+    {
+      "recipientId": "openai-api",
+      "displayName": "OpenAI",
+      "legalEntity": "OpenAI OpCo, LLC (non-EEA customers); OpenAI Ireland Ltd (EEA/Swiss customers)",
+      "role": "model provider (processor of API customer content)",
+      "endpoints": [
+        "UNKNOWN: pinned host of the US data-residency project, fixed when the project exists"
+      ],
+      "plaintextReaders": [
+        "OpenAI",
+        "OpenAI subprocessors per its list"
+      ],
+      "dataRegion": "US data-residency project proposed (AI-4); default region of abuse-monitoring logs UNKNOWN",
+      "retention": {
+        "applicationState": "none with store:false on /v1/responses (default store is true)",
+        "abuseMonitoring": "up to 30 days unless longer retention is required by law (removed only with approved ZDR or Modified Abuse Monitoring)",
+        "promptCache": "in_memory: around 5-10 minutes of inactivity, up to one hour; extended: up to 24 hours; in_memory support for gpt-6.1-sol UNKNOWN",
+        "logs": "abuse-monitoring logs as above",
+        "backups": "UNKNOWN"
+      },
+      "trainingUse": "not used to train or improve models unless the organisation explicitly opts in",
+      "dataSharingProgramme": "off (must be verified at deploy)",
+      "humanReview": "UNKNOWN: not stated for default organisations; classifier-flagged content may be retained and human-reviewed under Safety Retention",
+      "subprocessors": {
+        "listUrl": "https://platform.openai.com/subprocessors",
+        "contentsReviewed": false
+      },
+      "deletion": "no per-request deletion of abuse logs; customer data returned or deleted at contract end (DPA 2.11)",
+      "outageFailover": "none: no other provider, model or region",
+      "endUserIdentifier": "safety_identifier = HMAC-SHA256(PROVIDER_ID_SALT, subjectId) truncated to 32 hex",
+      "unknownFields": [
+        "endpoints",
+        "dataRegion.abuseLogs",
+        "retention.promptCache.in_memory_support",
+        "retention.backups",
+        "humanReview",
+        "subprocessors.contents"
+      ],
+      "sources": [
+        "https://developers.openai.com/api/docs/guides/your-data",
+        "https://developers.openai.com/api/docs/guides/prompt-caching",
+        "https://developers.openai.com/api/docs/pricing",
+        "https://developers.openai.com/api/docs/models/gpt-6.1-sol",
+        "https://developers.openai.com/api/docs/models/gpt-6-luna",
+        "https://developers.openai.com/api/docs/guides/safety-best-practices",
+        "https://cdn.openai.com/pdf/openai-data-processing-addendum.pdf"
+      ],
+      "verifiedAt": "2026-09-30",
+      "verifiedBy": "SHR-79 agent (documentation only; no live account configuration exists)",
+      "status": "incomplete",
+      "disclosureVersion": "draft-openai-api-2026-09-30"
+    }
+  ],
+  "conditional": [
+    {
+      "recipientId": "apple-devicecheck",
+      "status": "not drafted; only if AI-5 adopts DeviceCheck after an on-device test"
+    }
+  ]
+}

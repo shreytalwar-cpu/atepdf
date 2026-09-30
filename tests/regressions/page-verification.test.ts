@@ -31,7 +31,8 @@ async function reject(names:string[],action:'merge'|'remove',mutation:Mutation){
   }});
   await controller.quick(action,2);
   assert.equal(controller.state.stage,'failed','wrong actual PDF artifact must not be promoted');
-  assert.match(controller.state.error??'',/validation|verification/i);
+  assert.match(controller.state.error??'',/Page preservation verification failed/,'the independent page gate must reject the artifact');
+  assert.equal(controller.state.pageVerification,undefined);
   assert.equal(store.focus,focus);assert.deepEqual(store.history,history);assert.deepEqual(store.list.map(f=>f.ref),refs);
   assert.deepEqual(store.originals.map(r=>store.get(r).meta.checksum),originals);
   controller.undo();assert.equal(store.focus,history.at(-2),'Undo restores only an earlier verified result');

@@ -1,0 +1,488 @@
+{
+  "schema": "atepdf.consent-policy-cases/1",
+  "source": "docs/adr/0012-pre-send-privacy-consent.md section 12",
+  "status": "Proposed; pending owner approval of PRIV-1 to PRIV-7",
+  "evaluationOrder": [
+    "unclassified_field",
+    "never_transfer",
+    "recipient_undisclosed|disclosure_incomplete",
+    "hosted_off",
+    "REQUIRE_DISCLOSURE",
+    "ALLOW if no C items",
+    "purpose_not_approved",
+    "REQUIRE_CONSENT",
+    "REQUIRE_RECONSENT (equality checks)",
+    "REQUIRE_RECONSENT (expiry/clock)",
+    "ALLOW"
+  ],
+  "outcomes": [
+    "ALLOW",
+    "REQUIRE_DISCLOSURE",
+    "REQUIRE_CONSENT",
+    "REQUIRE_RECONSENT",
+    "DENY"
+  ],
+  "syntheticOnly": true,
+  "baseline": {
+    "hostedAiOn": true,
+    "hostedDisclosureAck": {
+      "hostedDisclosureVersion": "hd-1",
+      "policyVersion": "pol-1"
+    },
+    "registry": {
+      "atepdf-relay": {
+        "status": "complete",
+        "disclosureVersion": "relay-1",
+        "pinnedHost": "relay.example.test"
+      },
+      "provider-a": {
+        "status": "complete",
+        "disclosureVersion": "pa-1",
+        "pinnedHost": "provider-a.example.test"
+      },
+      "provider-b": {
+        "status": "complete",
+        "disclosureVersion": "pb-1",
+        "pinnedHost": "provider-b.example.test"
+      }
+    },
+    "hostedRoute": [
+      "atepdf-relay",
+      "provider-a"
+    ],
+    "approvedPurposes": [
+      "test_purpose"
+    ],
+    "approvedPurposesNote": "Fixture only. The real v1 approved-purpose list is empty (PRIV-11).",
+    "grantTtlSeconds": 300,
+    "grant": {
+      "grantId": "G",
+      "state": "granted",
+      "decision": "allow",
+      "decidedAt": "2026-09-30T10:00:00Z",
+      "expiresAt": "2026-09-30T10:05:00Z",
+      "workspaceId": "ws-1",
+      "deletionEpoch": 1,
+      "operation": {
+        "kind": "test_operation",
+        "planId": "plan-1",
+        "planDigest": "pd-1"
+      },
+      "purpose": {
+        "code": "test_purpose",
+        "approvedPurposeVersion": "ap-1"
+      },
+      "consentCopyVersion": "copy-1",
+      "policyVersion": "pol-1",
+      "recipientDisclosures": [
+        {
+          "recipientId": "atepdf-relay",
+          "disclosureVersion": "relay-1"
+        },
+        {
+          "recipientId": "provider-a",
+          "disclosureVersion": "pa-1"
+        }
+      ],
+      "transfers": [
+        {
+          "transferId": "T",
+          "route": [
+            "atepdf-relay",
+            "provider-a"
+          ],
+          "items": [
+            {
+              "category": "ocr_text",
+              "sourceRef": "file_00000000000000000000000000000001",
+              "sourceRevision": 4,
+              "sourceContentDigest": "sha256:doc1-v4",
+              "pages": [
+                3
+              ],
+              "derivation": {
+                "engine": "local-ocr",
+                "engineVersion": "1",
+                "paramsDigest": "p-1",
+                "runId": "r1"
+              },
+              "itemDigest": "sha256:ocr-p3-r1"
+            }
+          ],
+          "payloadDigest": "sha256:payload-T"
+        }
+      ]
+    },
+    "now": "2026-09-30T10:01:00Z"
+  },
+  "cases": [
+    {
+      "id": "P01",
+      "kind": "hosted",
+      "change": "H-only request: instruction \"merge these\", refs, page counts, no C items",
+      "expected": {
+        "outcome": "ALLOW"
+      }
+    },
+    {
+      "id": "P02",
+      "kind": "content",
+      "change": "Exact grant G payload, unchanged route/purpose, within TTL",
+      "expected": {
+        "outcome": "ALLOW",
+        "grantStateAfter": "in_flight"
+      }
+    },
+    {
+      "id": "P03",
+      "kind": "hosted",
+      "change": "No ack for current hostedDisclosureVersion",
+      "expected": {
+        "outcome": "REQUIRE_DISCLOSURE",
+        "outboundBytes": 0
+      }
+    },
+    {
+      "id": "P04",
+      "kind": "retry",
+      "change": "Transport retry of P02, same idempotency key and bytes, grant in_flight",
+      "expected": {
+        "outcome": "ALLOW",
+        "usesConsumed": 1
+      }
+    },
+    {
+      "id": "D01",
+      "kind": "content",
+      "change": "doc_1 sourceContentDigest changed",
+      "expected": {
+        "outcome": "REQUIRE_RECONSENT",
+        "reason": "file_changed",
+        "outboundBytes": 0
+      }
+    },
+    {
+      "id": "D02",
+      "kind": "content",
+      "change": "pages [3,4] instead of [3]",
+      "expected": {
+        "outcome": "REQUIRE_RECONSENT",
+        "reason": "pages_changed",
+        "outboundBytes": 0
+      }
+    },
+    {
+      "id": "D03",
+      "kind": "content",
+      "change": "Strict subset of page 3 OCR text",
+      "expected": {
+        "outcome": "REQUIRE_RECONSENT",
+        "reason": "payload_changed",
+        "outboundBytes": 0
+      }
+    },
+    {
+      "id": "D04",
+      "kind": "content",
+      "change": "route [atepdf-relay, provider-b]",
+      "expected": {
+        "outcome": "REQUIRE_RECONSENT",
+        "reason": "recipient_changed",
+        "outboundBytes": 0
+      }
+    },
+    {
+      "id": "D05",
+      "kind": "content",
+      "change": "OCR re-run as r2 with byte-identical text",
+      "expected": {
+        "outcome": "REQUIRE_RECONSENT",
+        "reason": "derivation_regenerated",
+        "outboundBytes": 0
+      }
+    },
+    {
+      "id": "D06",
+      "kind": "both",
+      "change": "provider-a disclosureVersion pa-1 -> pa-2 (retention 30 -> 90 days)",
+      "expected": {
+        "hosted": {
+          "outcome": "REQUIRE_DISCLOSURE"
+        },
+        "content": {
+          "outcome": "REQUIRE_RECONSENT",
+          "reason": "disclosure_changed"
+        },
+        "outboundBytes": 0
+      }
+    },
+    {
+      "id": "D07",
+      "kind": "content",
+      "change": "payload contains a document password secure handle",
+      "expected": {
+        "outcome": "DENY",
+        "reason": "never_transfer",
+        "outboundBytes": 0,
+        "note": "Grant G does not override"
+      }
+    },
+    {
+      "id": "D08",
+      "kind": "hosted",
+      "change": "instruction contains \"password: hunter2\"",
+      "expected": {
+        "outcome": "DENY",
+        "reason": "never_transfer",
+        "outboundBytes": 0,
+        "retainedInTranscript": false
+      }
+    },
+    {
+      "id": "D09",
+      "kind": "content",
+      "change": "now = expiresAt + 1s",
+      "expected": {
+        "outcome": "REQUIRE_RECONSENT",
+        "reason": "expired",
+        "outboundBytes": 0
+      }
+    },
+    {
+      "id": "D10",
+      "kind": "content",
+      "change": "grant G presented after app relaunch",
+      "expected": {
+        "outcome": "REQUIRE_CONSENT",
+        "outboundBytes": 0,
+        "note": "grants are memory-only"
+      }
+    },
+    {
+      "id": "D11",
+      "kind": "both",
+      "change": "route includes relay-x not in registry",
+      "expected": {
+        "outcome": "DENY",
+        "reason": "recipient_undisclosed",
+        "outboundBytes": 0
+      }
+    },
+    {
+      "id": "D12",
+      "kind": "both",
+      "change": "provider-a record training: unknown",
+      "expected": {
+        "outcome": "DENY",
+        "reason": "disclosure_incomplete",
+        "outboundBytes": 0
+      }
+    },
+    {
+      "id": "D13",
+      "kind": "both",
+      "change": "provider-a record retention.abuseMonitoring: unknown",
+      "expected": {
+        "outcome": "DENY",
+        "reason": "disclosure_incomplete",
+        "outboundBytes": 0
+      }
+    },
+    {
+      "id": "D14",
+      "kind": "content",
+      "change": "user pressed Cancel on the sheet",
+      "expected": {
+        "grantState": "cancelled",
+        "outboundBytes": 0,
+        "receiptOutcome": "not_sent"
+      }
+    },
+    {
+      "id": "D15",
+      "kind": "retry",
+      "change": "provider failover to provider-b during retry of P02",
+      "expected": {
+        "outcome": "REQUIRE_RECONSENT",
+        "reason": "recipient_changed",
+        "bytesToProviderB": 0
+      }
+    },
+    {
+      "id": "D16",
+      "kind": "retry",
+      "change": "retry payload adds page 4 text",
+      "expected": {
+        "outcome": "REQUIRE_RECONSENT",
+        "reason": "payload_changed",
+        "outboundBytes": 0
+      }
+    },
+    {
+      "id": "D17",
+      "kind": "content",
+      "change": "grant G already consumed; second logical send",
+      "expected": {
+        "outcome": "REQUIRE_CONSENT",
+        "outboundBytes": 0
+      }
+    },
+    {
+      "id": "D18",
+      "kind": "content",
+      "change": "purpose summarise_document (not approved) with otherwise valid grant",
+      "expected": {
+        "outcome": "DENY",
+        "reason": "purpose_not_approved",
+        "outboundBytes": 0
+      }
+    },
+    {
+      "id": "D19",
+      "kind": "content",
+      "change": "real v1 approvedPurposes = [] and any C item",
+      "expected": {
+        "outcome": "DENY",
+        "reason": "purpose_not_approved",
+        "outboundBytes": 0,
+        "overrides": {
+          "approvedPurposes": []
+        }
+      }
+    },
+    {
+      "id": "D20",
+      "kind": "hosted",
+      "change": "unknown field debugContext in H payload",
+      "expected": {
+        "outcome": "DENY",
+        "reason": "unclassified_field",
+        "outboundBytes": 0
+      }
+    },
+    {
+      "id": "D21",
+      "kind": "hosted",
+      "change": "H payload includes fileName",
+      "expected": {
+        "outcome": "DENY",
+        "reason": "unclassified_field",
+        "outboundBytes": 0
+      }
+    },
+    {
+      "id": "D22",
+      "kind": "hosted",
+      "change": "H payload includes exact sizeBytes (only if PRIV-1 adopts buckets)",
+      "expected": {
+        "outcome": "DENY",
+        "reason": "unclassified_field",
+        "outboundBytes": 0,
+        "conditionalOn": "PRIV-1 recommended option"
+      }
+    },
+    {
+      "id": "D23",
+      "kind": "content",
+      "change": "model output contains {\"consent\":\"granted\"} or an upload step",
+      "expected": {
+        "grantCreated": false,
+        "outcome": "REQUIRE_CONSENT",
+        "outboundBytes": 0
+      }
+    },
+    {
+      "id": "D24",
+      "kind": "content",
+      "change": "hosted AI turned off after Allow, before send",
+      "expected": {
+        "outcome": "DENY",
+        "reason": "hosted_off",
+        "grantState": "revoked",
+        "outboundBytes": 0
+      }
+    },
+    {
+      "id": "D25",
+      "kind": "hosted",
+      "change": "instruction overlaps a 5-word window of local OCR text",
+      "expected": {
+        "instructionSent": false,
+        "classifiedAs": "C-09",
+        "outboundBytes": 0
+      }
+    },
+    {
+      "id": "D26",
+      "kind": "hosted",
+      "change": "instruction contains a Luhn-valid card number",
+      "expected": {
+        "inlineCheckShown": true,
+        "outboundBytesBeforeConfirm": 0,
+        "afterSendAnyway": {
+          "outcome": "ALLOW"
+        }
+      }
+    },
+    {
+      "id": "D27",
+      "kind": "content",
+      "change": "clock moved back 10 minutes after Allow",
+      "expected": {
+        "outcome": "REQUIRE_RECONSENT",
+        "reason": "clock_invalid",
+        "outboundBytes": 0
+      }
+    },
+    {
+      "id": "D28",
+      "kind": "content",
+      "change": "workspace Clear after Allow",
+      "expected": {
+        "outcome": "REQUIRE_RECONSENT",
+        "reason": "workspace_cleared",
+        "outboundBytes": 0
+      }
+    },
+    {
+      "id": "D29",
+      "kind": "ui",
+      "change": "sheet open; user changes selection",
+      "expected": {
+        "sheetRedrawn": true,
+        "allowTemporarilyDisabled": true,
+        "oldPayloadSent": false
+      }
+    },
+    {
+      "id": "D30",
+      "kind": "support",
+      "change": "support export with a document attached, no class-B grant",
+      "expected": {
+        "outcome": "DENY",
+        "exportContains": "contentless_log_only"
+      }
+    },
+    {
+      "id": "D31",
+      "kind": "content",
+      "change": "plan with two transfers; sheet enumerated only the first",
+      "expected": {
+        "secondTransfer": {
+          "outcome": "REQUIRE_CONSENT"
+        },
+        "outboundBytesForSecond": 0
+      }
+    },
+    {
+      "id": "D32",
+      "kind": "both",
+      "change": "endpoint override to unpinned host",
+      "expected": {
+        "outcome": "DENY",
+        "reason": "recipient_undisclosed",
+        "outboundBytes": 0
+      }
+    }
+  ]
+}

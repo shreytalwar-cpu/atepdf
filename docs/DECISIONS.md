@@ -23,6 +23,7 @@ Fresh independent atepdf repository; Attenlo remains read-only reference. No pro
 | 0007 | GPT-6 Luna and complete tool selection | Intentional enabled-AI orchestration reaffirmed by D-04; specific production model/provider remains OPEN-09; development allowance is not v1 commercial quota |
 | 0008 | Development native pairing | One-use expiring pairing and memory-only bearer; not production account auth |
 | 0009 | Explicit private TLS beta companion | Pinned local-network native transport; not a hosted production backend |
+| 0012 | Pre-send privacy and operation-consent contract (SHR-35) — **proposed, pending owner approval of PRIV-1–7** | Outbound fields classed H (hosted instruction/minimal context: disclosure, versioned acknowledgement), C (document/derived content: single-use exact-payload grant plus an approved purpose; v1 purpose list empty) or N (never: passwords, keys, tokens, paths, device IDs). Unknown recipient/retention/training blocks transfer. Narrows 0006's no-per-send-confirmation to class H. Contract for SHR-36/37/79; addresses OPEN-08 once approved; nothing implemented |
 
 ## Superseded direction and current-source gaps
 

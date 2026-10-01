@@ -27,7 +27,7 @@ import {nativeComposerComponents,resetComposerInput} from './src/platform/Compos
 import {JobActivity} from './src/components/JobActivity';
 import {useAnnounce,useMotion} from './src/components/assistant-ui/elements/surfaces';
 import {OutboundDenied} from '@planner/outbound/gate';
-import {LOCAL_ONLY_MESSAGE} from '@planner/client';
+import {LOCAL_ONLY_MESSAGE} from '@planner/messages';
 import {privateInstruction,hasRejectedSecretDraft,safeOrdinaryText,SECRET_CHAT_WARNING} from '@planner/privacy';
 import {isClarificationAnswer,pendingFromResponse,withPendingClarification} from '@planner/clarification';
 import {plannerStatus,requestPlan,savePlannerKey,createNativePairing,pairNativePlanner,disconnectNativePlanner,plannerAvailable,type PlannerStatus} from './src/platform/planner';

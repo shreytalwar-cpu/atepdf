@@ -4,13 +4,17 @@ import type {PlannerResponse} from './schema';
 import {validateNonPlanResponse} from './reply';
 import {projectHosted} from './outbound/schema';
 import {productionOutbound,OutboundDenied,REASON_CODES,type Reason} from './outbound/gate';
-import {TRANSPORT_POLICY,readBoundedJson,TransportDenied,TRANSPORT_REASONS,assertSyntheticLocalWriter,type SyntheticTransport} from './transport';
+import policy from '../../contracts/transport-policy.json';
+import {TransportDenied,TRANSPORT_REASONS} from './transport-errors';
+import {assertSyntheticLocalWriter,type SyntheticTransport} from './transport';
+const TRANSPORT_POLICY=policy;
+import {readBoundedJson} from './response-reader';
+export {LOCAL_ONLY_MESSAGE} from './messages';
 export type PlannerStatus={connected:boolean;enabled:boolean;remaining:number;token:string;model:string;gateAvailable?:boolean;gateReason?:string|null;pairingRequired?:boolean};
 export async function plannerStatus(signal?:AbortSignal):Promise<PlannerStatus>{assertLocalPlannerOrigin();const response=await fetch('/api/planner/status',{cache:'no-store',redirect:'manual',signal:AbortSignal.any([AbortSignal.timeout(10_000),...(signal?[signal]:[])])});const status=await readBoundedJson(response,TRANSPORT_POLICY.controlResponseBytes,signal);if(!response.ok)throw new Error('The local planner gateway is unavailable. Quick actions still work.');return status;}
 export function assertLocalPlannerOrigin(){
   if(typeof location!=='undefined'&&(!['http:','https:'].includes(location.protocol)||!['localhost','127.0.0.1','[::1]'].includes(location.hostname)))throw new OutboundDenied({outcome:'DENY',reason:'recipient_undisclosed'});
 }
-export const LOCAL_ONLY_MESSAGE='AI is unavailable. Use local tools instead. Your existing files and results are still available.';
 export async function requestPlan(request:PlannerRequest,token:string,signal:AbortSignal,readCurrent:()=>PlannerRequest=()=>request,boundary:{gate?:typeof productionOutbound;fetch?:typeof fetch;transport?:SyntheticTransport}={}){
   assertLocalPlannerOrigin();
   if(boundary.fetch)assertSyntheticLocalWriter(boundary.fetch,token,boundary.transport);

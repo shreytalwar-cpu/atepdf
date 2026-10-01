@@ -1,4 +1,4 @@
-import {TransportDenied} from '@planner/transport';
+import {TransportDenied} from '@planner/transport-errors';
 import NativePlanner from '../../modules/atepdf-planner';
 import NativePDF from '../../modules/atepdf-pdf';
 import {validatePlanResult,type PlannerStatus} from '@planner/client';

@@ -1,4 +1,4 @@
-import {TransportDenied,TRANSPORT_REASONS} from '../transport';
+import {TransportDenied,TRANSPORT_REASONS} from '../transport-errors';
 import {PRIVACY_POLICY,sizeBucket,type ContentCategory} from './constants';
 import {assertClassified,assertHostedText,hasNeverTransfer,validateHosted,type HostedPayload,type ContentPayload} from './schema';
 import {sensitiveInstruction} from './sensitive';

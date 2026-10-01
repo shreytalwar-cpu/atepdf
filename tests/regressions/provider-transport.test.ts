@@ -118,7 +118,7 @@ test('provider accepts valid exact-cap JSON and maps invalid/truncated JSON safe
   for(const body of [text.slice(0,-1),'PROTECTED_CANARY'])await assert.rejects(run(async()=>streamBody(body).response),e=>{assert.doesNotMatch(String(e)+JSON.stringify(e),/PROTECTED_CANARY/);assert.equal((e as {code:string}).code,'provider_response_invalid');return true;});
 });
 test('already redirected or mismatched response URL refused, without reading body',async()=>{
-  for(const kind of ['redirected','url']){const f=streamBody('PROTECTED_CANARY');Object.defineProperty(f.response,kind,{value:kind==='redirected'?true:'https://evil.invalid/v1/responses'});await assert.rejects(run(async()=>f.response),code('redirect_not_allowed'));assert.equal(f.stats().received,0);assert.equal(f.stats().cancelled,true);}
+  for(const [kind,value] of [['redirected',true],['url','https://evil.invalid/v1/responses'],['url','https:///invalid']] as const){const f=streamBody('PROTECTED_CANARY');Object.defineProperty(f.response,kind,{value});await assert.rejects(run(async()=>f.response),code('redirect_not_allowed'));assert.equal(f.stats().received,0);assert.equal(f.stats().cancelled,true);}
 });
 test('browser caps success/error/status/pairing responses before parsing and never leaks raw errors',async t=>{
   const req=request(),f=await fixture();const fetcher=t.mock.method(globalThis,'fetch',async()=>streamBody('PROTECTED_CANARY'+' '.repeat(P.plannerResponseBytes*2),{status:500}).response);

@@ -1,20 +1,18 @@
-.inline-preview{margin-top:16px;border:1px solid var(--color-border,#e2e7ee);border-radius:14px;overflow:hidden;min-width:0;background:var(--color-background,#fff);color:var(--color-foreground,#18213b)}
-.inline-preview-header,.inline-toolbar{display:flex;align-items:center;gap:4px;min-height:48px;padding:2px 4px;border-bottom:1px solid var(--color-border,#e2e7ee);font:13px/1.4 system-ui}
-.inline-preview-header strong{flex:1;padding-left:12px;font-size:14px;font-weight:600}
-.inline-preview button{display:flex;align-items:center;justify-content:center;flex-shrink:0;min-width:44px;min-height:44px;padding:8px;border:0;border-radius:9px;background:transparent;color:inherit;font:inherit;cursor:pointer;transition:background-color 140ms ease}
-@media(hover:hover) and (pointer:fine){.inline-preview button:hover:not(:disabled){background:var(--color-accent,#eef4ff)}}
-.inline-preview button:active:not(:disabled){background:var(--color-muted,#f2f4f8)}
-.inline-preview button:disabled{opacity:.35;cursor:default}
-.inline-preview button:focus-visible{outline:3px solid var(--color-primary,#1769df);outline-offset:-3px}
-.inline-toolbar{flex-wrap:wrap;justify-content:center}
-.inline-page-navigation{display:flex;align-items:center;justify-content:space-between;gap:4px;flex:1 0 174px}
-.inline-zoom-controls{display:flex;align-items:center;gap:4px;flex-shrink:0}
-.inline-page-count{font-variant-numeric:tabular-nums;white-space:nowrap;text-align:center}
-.inline-page{position:relative;height:clamp(160px,40dvh,400px);overflow:auto;overscroll-behavior:contain;background:var(--color-muted,#f2f4f8);padding:12px;box-sizing:border-box;scrollbar-gutter:stable}
-.inline-page canvas{display:block;margin:auto;max-width:none;background:#fff;box-shadow:0 2px 12px #18213b18}
-.inline-preview-status{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;pointer-events:none}
-.inline-preview-status p{display:flex;flex-direction:column;align-items:center;gap:12px;margin:0;text-align:center;font:13px/1.5 system-ui;color:var(--color-muted-foreground,#5d6980)}
-.inline-preview-status p[role=alert]{color:var(--color-destructive,#b4233a)}
-.inline-preview-spinner{height:20px;width:20px;border:2px solid var(--color-border,#e2e7ee);border-top-color:var(--color-primary,#1769df);border-radius:50%;animation:preview-spin 800ms linear infinite}
-@keyframes preview-spin{to{transform:rotate(360deg)}}
-@media(prefers-reduced-motion:reduce){.inline-preview button{transition:none}.inline-preview-spinner{animation:none}}
+/* E1 Quick Look (web). Colours are the generated theme variables; pages stay on paper in both appearances. */
+.atepdf-preview{display:flex;flex-direction:column;flex:1;height:100%;min-height:0;color:var(--color-ink);font:13px/18px -apple-system,BlinkMacSystemFont,system-ui,sans-serif}
+.atepdf-preview-well{position:relative;flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;background:var(--color-sunken);padding:24px;box-sizing:border-box;border-top:1px solid var(--color-hairline);border-bottom:1px solid var(--color-hairline)}
+.atepdf-preview-well:focus-visible{outline:2px solid var(--color-accent);outline-offset:-2px}
+.atepdf-preview-well canvas{display:block;margin:auto;max-width:none;background:var(--color-paper);border-radius:3px;box-shadow:0 0 0 1px rgba(0,0,0,.08),0 1px 3px rgba(0,0,0,.12)}
+.atepdf-preview-status{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;pointer-events:none}
+.atepdf-preview-status p{margin:0;text-align:center;color:var(--color-ink-secondary)}
+.atepdf-preview-status p[role=alert]{color:var(--color-danger)}
+.atepdf-preview-toolbar{display:flex;align-items:center;gap:4px;padding:8px 12px;flex-wrap:wrap}
+.atepdf-preview-toolbar button{display:flex;align-items:center;justify-content:center;min-width:28px;height:28px;padding:0 6px;border:0;border-radius:6px;background:transparent;color:var(--color-ink-secondary);font:500 13px/18px -apple-system,BlinkMacSystemFont,system-ui,sans-serif;cursor:default;transition:background-color 120ms cubic-bezier(.2,0,0,1)}
+@media(hover:hover) and (pointer:fine){.atepdf-preview-toolbar button:hover:not(:disabled){background:var(--color-hover);color:var(--color-ink)}}
+.atepdf-preview-toolbar button:active:not(:disabled){background:var(--color-pressed)}
+.atepdf-preview-toolbar button:disabled{opacity:.4}
+.atepdf-preview-toolbar button:focus-visible{outline:2px solid var(--color-accent);outline-offset:2px}
+.atepdf-preview-count{min-width:96px;text-align:center;font-variant-numeric:tabular-nums;color:var(--color-ink)}
+.atepdf-preview-divider{width:1px;height:16px;margin:0 6px;background:var(--color-hairline)}
+.atepdf-preview-spacer{flex:1}
+@media(prefers-reduced-motion:reduce){.atepdf-preview-toolbar button{transition:none}}

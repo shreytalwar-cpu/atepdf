@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "atepdf",
+    "name": "atePDF",
     "slug": "atepdf-local-dev",
     "version": "0.1.0",
     "platforms": ["ios", "web"],
     "orientation": "default",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "dev.atepdf.fresh"
@@ -22,7 +22,7 @@
     },
     "web": {
       "bundler": "metro",
-      "name": "atepdf",
+      "name": "atePDF",
       "output": "single"
     },
     "updates": {

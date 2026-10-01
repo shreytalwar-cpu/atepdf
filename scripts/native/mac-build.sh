@@ -35,7 +35,7 @@ mkdir -p .build
 build_log="$(mktemp "$repo_root/.build/mac-build-XXXXXX")"
 if ! xcodebuild -workspace apps/universal/ios/atepdf.xcworkspace -scheme atepdf \
   -configuration Release -destination "platform=macOS,variant=Mac Catalyst,arch=$(uname -m)" \
-  -derivedDataPath "$derived" "${build_options[@]}" CODE_SIGNING_ALLOWED=NO ONLY_ACTIVE_ARCH=YES \
+  -derivedDataPath "$derived" ${build_options[@]+"${build_options[@]}"} CODE_SIGNING_ALLOWED=NO ONLY_ACTIVE_ARCH=YES \
   -jobs 4 build > "$build_log" 2>&1; then
   echo "Mac application build failed. See $build_log" >&2
   tail -30 "$build_log" >&2

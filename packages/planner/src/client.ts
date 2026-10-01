@@ -16,7 +16,7 @@ export async function requestPlan(request:PlannerRequest,token:string,signal:Abo
   // No stream consumer or partial-plan execution path exists.
   if(response.status===403){const denial=await response.json().catch(()=>({}));throw new OutboundDenied({outcome:'DENY',reason:REASON_CODES.includes(denial.reasonCode)?denial.reasonCode as Reason:'recipient_undisclosed'});}
   if(response.status===503)throw Object.assign(new Error('AI planning is not enabled. Use local tools instead.'),{code:'planner_unavailable'});
-  if(!response.ok)throw new Error('Planning did not finish. No local files changed.');
+  if(!response.ok)throw new Error('atePDF AI didn’t finish this request. No local files changed.');
   const envelope=await response.json();
   signal.throwIfAborted();
   return validatePlanResult(envelope,request,signal);

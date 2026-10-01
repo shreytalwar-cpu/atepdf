@@ -1,62 +1,25 @@
 import {useEffect,useRef,useState} from 'react';
-import {AccessibilityInfo,ActivityIndicator,Image,Keyboard,Pressable,ScrollView,Text,View,useWindowDimensions} from 'react-native';
+import {Image,Pressable,ScrollView,View} from 'react-native';
 import ChevronLeft from 'lucide-react-native/icons/chevron-left';
 import ChevronRight from 'lucide-react-native/icons/chevron-right';
-import FileText from 'lucide-react-native/icons/file-text';
 import Minus from 'lucide-react-native/icons/minus';
 import Plus from 'lucide-react-native/icons/plus';
 import X from 'lucide-react-native/icons/x';
-import type {LucideIcon} from 'lucide-react-native';
 import {File} from 'expo-file-system';
-import {Icon} from '../components/ui/icon';
-import {useThreadViewport} from '../components/assistant-ui/elements/thread.aui';
 import NativePDF from '../../modules/atepdf-pdf';
 import {temporaryPDF,removeTemporary} from './runtime.native';
+import {ActivityGlyph,IconButton,Separator,Txt} from '../ui/primitives';
+import {radius,shadow,useTheme} from '../ui/theme';
 
-function PreviewButton({label,icon,onPress,disabled=false}:{label:string;icon:LucideIcon;onPress:()=>void;disabled?:boolean}){
-  return <Pressable accessibilityRole="button" accessibilityLabel={label} accessibilityState={{disabled}} disabled={disabled} onPress={onPress}
-    className={`min-h-11 min-w-11 items-center justify-center rounded-lg active:bg-accent ${disabled?'opacity-35':''}`}>
-    <Icon as={icon} size={18} className="text-foreground"/>
-  </Pressable>;
-}
-
-export default function Preview({bytes,count,onClose}:{bytes:Uint8Array;count:number;onClose:()=>void}){
-  const {height:windowHeight,fontScale}=useWindowDimensions();
-  const threadViewport=useThreadViewport();
+// E1 Quick Look page view (native). PDFKit renders each page locally at display resolution
+// (the raster-scale fix lives in the engine); the page fits the sheet's well and zoom pans
+// inside it. Read-only: no editing or annotation controls.
+export default function Preview({bytes,count,onClose}:{bytes:Uint8Array;count:number;onClose:()=>void;fill?:boolean}){
+  const {c,scheme}=useTheme();
   const [page,setPage]=useState(1),[image,setImage]=useState<{uri:string;width:number;height:number}|null>(null),[error,setError]=useState(''),[loading,setLoading]=useState(true);
-  const [width,setWidth]=useState(0),[zoom,setZoom]=useState(1),[reducedMotion,setReducedMotion]=useState(true),[keyboardHeight,setKeyboardHeight]=useState(()=>Keyboard.metrics()?.height??0);
+  const [well,setWell]=useState({width:0,height:0}),[zoom,setZoom]=useState(1);
   const rendering=useRef(true);
-  const previewRef=useRef<View>(null);
-  const splitToolbar=fontScale>=1.3&&width<400;
-  const compactToolbar=keyboardHeight>0&&width>=560&&threadViewport.height>0&&threadViewport.height<260;
-  // Reserve the same bounded space while loading and rendering. The actual page
-  // fits inside it initially; zooming pans within the preview, never the chat.
-  const ordinaryViewportHeight=Math.round(Math.max(104,Math.min(320,(windowHeight-keyboardHeight)*.34)));
-  const viewportHeight=compactToolbar?Math.max(104,Math.min(ordinaryViewportHeight,Math.floor(threadViewport.height)-52)):ordinaryViewportHeight;
-  const rasterPadding=compactToolbar?16:24;
-  const fit=image?Math.min(Math.max(1,width-rasterPadding)/image.width,(viewportHeight-rasterPadding)/image.height):1;
-  useEffect(()=>{
-    let active=true;
-    void AccessibilityInfo.isReduceMotionEnabled().then(value=>{if(active)setReducedMotion(value);});
-    const motion=AccessibilityInfo.addEventListener('reduceMotionChanged',setReducedMotion);
-    const shown=Keyboard.addListener('keyboardDidShow',event=>setKeyboardHeight(event.endCoordinates.height));
-    const hidden=Keyboard.addListener('keyboardDidHide',()=>setKeyboardHeight(0));
-    return()=>{active=false;motion.remove();shown.remove();hidden.remove();};
-  },[]);
-  useEffect(()=>{
-    if(!compactToolbar)return;
-    let active=true,secondFrame=0;
-    // keyboardDidShow is after the native keyboard transition. Two layout
-    // frames also let the compact controls/raster commit before measuring.
-    const firstFrame=requestAnimationFrame(()=>{
-      secondFrame=requestAnimationFrame(()=>{
-        previewRef.current?.measureInWindow((_x,y,_width,height)=>{
-          if(active)threadViewport.revealNativeRegion(y,y+height);
-        });
-      });
-    });
-    return()=>{active=false;cancelAnimationFrame(firstFrame);cancelAnimationFrame(secondFrame);};
-  },[compactToolbar,keyboardHeight,threadViewport.height,threadViewport.revealNativeRegion]);
+  const fit=image&&well.width?Math.min((well.width-48)/image.width,(well.height-48)/image.height):1;
   const navigate=(direction:-1|1)=>{
     const next=page+direction;if(rendering.current||next<1||next>count)return;
     // Claim the render slot before React commits the disabled button state.
@@ -67,53 +30,35 @@ export default function Preview({bytes,count,onClose}:{bytes:Uint8Array;count:nu
     void(async()=>{
       if(!NativePDF?.readerAvailable)throw new Error('Native preview is unavailable.');
       file=temporaryPDF(bytes);
-      const result=await NativePDF.renderPageAsync(file.uri,page,1800);rendered=new File(result.uri);
+      const result=await NativePDF.renderPageAsync(file.uri,page,2400);rendered=new File(result.uri);
       if(active)setImage(result);else removeTemporary(rendered);
     })().catch(()=>{if(active)setError('This page could not be previewed. Your PDF is unchanged.');}).finally(()=>{if(file)removeTemporary(file);if(active){rendering.current=false;setLoading(false);}});
     return()=>{active=false;if(rendered)removeTemporary(rendered);};
   },[bytes,page]);
-  return <View ref={previewRef} collapsable={false} accessibilityLabel="Read-only preview" className="overflow-hidden rounded-xl border border-border bg-background">
-    {compactToolbar?<View className="min-h-11 flex-row items-center border-b border-border px-1">
-      <PreviewButton label="Previous page" icon={ChevronLeft} disabled={loading||page===1} onPress={()=>navigate(-1)}/>
-      <Text accessibilityLiveRegion="polite" className="flex-1 text-center text-sm tabular-nums text-foreground">Page {page} of {count}</Text>
-      <PreviewButton label="Next page" icon={ChevronRight} disabled={loading||page>=count} onPress={()=>navigate(1)}/>
-      <View className="mx-1 h-5 w-px bg-border"/>
-      <PreviewButton label="Zoom out" icon={Minus} disabled={loading||zoom<=1} onPress={()=>setZoom(value=>Math.max(1,value-.5))}/>
-      <PreviewButton label="Zoom in" icon={Plus} disabled={loading||zoom>=3} onPress={()=>setZoom(value=>Math.min(3,value+.5))}/>
-      <Pressable accessibilityRole="button" accessibilityLabel="Fit page" disabled={loading} accessibilityState={{disabled:loading}} onPress={()=>setZoom(1)} className="min-h-11 min-w-11 items-center justify-center rounded-lg px-2 active:bg-accent"><Text className="text-sm text-foreground">Fit</Text></Pressable>
-      <PreviewButton label="Close preview" icon={X} onPress={onClose}/>
-    </View>:<>
-    <View className="min-h-12 flex-row items-center justify-between border-b border-border px-2">
-      <Text className="flex-1 pl-2 text-sm font-semibold text-foreground">Read-only preview</Text>
-      <Pressable accessibilityRole="button" accessibilityLabel="Fit page" disabled={loading} accessibilityState={{disabled:loading}} onPress={()=>setZoom(1)} className="min-h-11 min-w-11 items-center justify-center rounded-lg px-2 active:bg-accent"><Text className="text-sm text-foreground">Fit</Text></Pressable>
-      <PreviewButton label="Close preview" icon={X} onPress={onClose}/>
-    </View>
-    <View className={`min-h-12 ${splitToolbar?'':'flex-row items-center'} border-b border-border px-1`}>
-      <View className={`min-h-12 flex-row items-center justify-between ${splitToolbar?'':'flex-1'}`}>
-        <PreviewButton label="Previous page" icon={ChevronLeft} disabled={loading||page===1} onPress={()=>navigate(-1)}/>
-        <Text accessibilityLiveRegion="polite" className="flex-1 text-center text-sm tabular-nums text-foreground">Page {page} of {count}</Text>
-        <PreviewButton label="Next page" icon={ChevronRight} disabled={loading||page>=count} onPress={()=>navigate(1)}/>
-      </View>
-      <View className={`flex-row items-center justify-end ${splitToolbar?'border-t border-border':''}`}>
-        {!splitToolbar&&<View className="mx-1 h-5 w-px bg-border"/>}
-        <PreviewButton label="Zoom out" icon={Minus} disabled={loading||zoom<=1} onPress={()=>setZoom(value=>Math.max(1,value-.5))}/>
-        <PreviewButton label="Zoom in" icon={Plus} disabled={loading||zoom>=3} onPress={()=>setZoom(value=>Math.min(3,value+.5))}/>
-      </View>
-    </View>
-    </>}
-    <View onLayout={event=>setWidth(event.nativeEvent.layout.width)} style={{height:viewportHeight}} className="overflow-hidden bg-muted">
-      {image&&width>0?<ScrollView key={page} style={{flex:1}} minimumZoomScale={1} maximumZoomScale={3} zoomScale={zoom} centerContent pinchGestureEnabled
-        contentInsetAdjustmentBehavior="never" automaticallyAdjustContentInsets={false} nestedScrollEnabled scrollEventThrottle={100}
+  return <View accessibilityLabel="Read-only preview" style={{flex:1,minHeight:0}}>
+    <View onLayout={event=>setWell({width:event.nativeEvent.layout.width,height:event.nativeEvent.layout.height})} style={{flex:1,backgroundColor:c.sunken,borderTopWidth:1,borderBottomWidth:1,borderColor:c.hairline,overflow:'hidden'}}>
+      {image&&well.width>0?<ScrollView key={page} style={{flex:1}} minimumZoomScale={1} maximumZoomScale={3} zoomScale={zoom} centerContent pinchGestureEnabled
+        contentInsetAdjustmentBehavior="never" automaticallyAdjustContentInsets={false} scrollEventThrottle={100}
         onScroll={event=>{const scale=event.nativeEvent.zoomScale;if(Number.isFinite(scale)&&scale>=1&&scale<=3)setZoom(scale);}}>
-        <View style={{width,height:viewportHeight,alignItems:'center',justifyContent:'center'}}>
-          <Image accessibilityLabel={`PDF page ${page}`} source={{uri:image.uri}} resizeMode="contain" style={{width:image.width*fit,height:image.height*fit,backgroundColor:'white'}}/>
+        <View style={{width:well.width,height:well.height,alignItems:'center',justifyContent:'center'}}>
+          <View style={[{borderRadius:radius.thumb,overflow:'hidden',backgroundColor:c.paper},shadow('page',scheme)]}>
+            <Image accessibilityLabel={`PDF page ${page}`} source={{uri:image.uri}} resizeMode="contain" style={{width:image.width*fit,height:image.height*fit,backgroundColor:c.paper}}/>
+          </View>
         </View>
-      </ScrollView>:<View className="flex-1 items-center justify-center gap-3 px-5">
-        {error?<Text accessibilityRole="alert" className="text-center text-sm leading-5 text-destructive">{error}</Text>:<>
-          {reducedMotion?<Icon as={FileText} size={22} className="text-muted-foreground"/>:<ActivityIndicator accessibilityElementsHidden importantForAccessibility="no-hide-descendants"/>}
-          <Text accessibilityLabel="Rendering page" accessibilityLiveRegion="polite" className="text-sm text-muted-foreground">Rendering page…</Text>
-        </>}
+      </ScrollView>:<View style={{flex:1,alignItems:'center',justifyContent:'center',gap:10,padding:24}}>
+        {error?<Txt variant="ui" tone="danger" accessibilityRole="alert" style={{textAlign:'center'}}>{error}</Txt>:<><ActivityGlyph/><Txt variant="ui" tone="secondary" accessibilityLiveRegion="polite">Rendering page…</Txt></>}
       </View>}
+    </View>
+    <View style={{flexDirection:'row',alignItems:'center',gap:4,paddingHorizontal:12,paddingVertical:8}}>
+      <IconButton icon={ChevronLeft} label="Previous page" disabled={loading||page===1} onPress={()=>navigate(-1)}/>
+      <Txt variant="ui" tabular accessibilityLiveRegion="polite" style={{minWidth:96,textAlign:'center'}}>Page {page} of {count}</Txt>
+      <IconButton icon={ChevronRight} label="Next page" disabled={loading||page>=count} onPress={()=>navigate(1)}/>
+      <View style={{height:16,marginHorizontal:6}}><Separator vertical/></View>
+      <IconButton icon={Minus} label="Zoom out" disabled={loading||zoom<=1} onPress={()=>setZoom(value=>Math.max(1,value-.5))}/>
+      <Pressable accessibilityRole="button" accessibilityLabel="Fit page" disabled={loading} onPress={()=>setZoom(1)} style={({pressed})=>({height:28,paddingHorizontal:8,borderRadius:radius.sm,justifyContent:'center',backgroundColor:pressed?c.pressed:'transparent'})}><Txt variant="uiStrong" tone="secondary">Fit</Txt></Pressable>
+      <IconButton icon={Plus} label="Zoom in" disabled={loading||zoom>=3} onPress={()=>setZoom(value=>Math.min(3,value+.5))}/>
+      <View style={{flex:1}}/>
+      <IconButton icon={X} label="Close preview" onPress={onClose}/>
     </View>
   </View>;
 }

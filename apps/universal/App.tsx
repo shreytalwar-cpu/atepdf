@@ -1,745 +1,209 @@
-import React, {createContext, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore} from 'react';
-import {View, Text, Image, Pressable, TextInput, ScrollView, Platform, Keyboard, AppState, useWindowDimensions} from 'react-native';
+import React, {Suspense, lazy, useEffect, useMemo, useState, useSyncExternalStore, type ComponentType} from 'react';
+import {Platform, View, useWindowDimensions} from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
-import ArrowDownToLine from 'lucide-react-native/icons/arrow-down-to-line';
-import Check from 'lucide-react-native/icons/check';
-import FileText from 'lucide-react-native/icons/file-text';
-import FolderOpen from 'lucide-react-native/icons/folder-open';
-import LockKeyhole from 'lucide-react-native/icons/lock-keyhole';
-import Plus from 'lucide-react-native/icons/plus';
-import ScanText from 'lucide-react-native/icons/scan-text';
-import Copy from 'lucide-react-native/icons/copy';
-import Undo2 from 'lucide-react-native/icons/undo-2';
-import SquarePen from 'lucide-react-native/icons/square-pen';
-import SlidersHorizontal from 'lucide-react-native/icons/sliders-horizontal';
-import Eye from 'lucide-react-native/icons/eye';
-import type {LucideIcon} from 'lucide-react-native';
 import {AssistantRuntimeProvider, useExternalStoreRuntime, useAuiState, type ThreadMessageLike} from '@assistant-ui/react-native';
-import * as Clipboard from 'expo-clipboard';
-import {Thread} from './src/components/assistant-ui/elements/thread.aui';
-import {Icon} from './src/components/ui/icon';
-import {releaseInputFiles} from '@core/job-controller';
-import type {LocalFileStore, Artifact} from '@core/local-file-store';
-import {createController, chooseFiles, sampleFiles, save, nativeEngineReady, ocrAvailable} from './src/platform/runtime';
-import Preview from './src/platform/Preview';
+import {Thread, MessageText, CopyMessage} from './src/components/assistant-ui/elements/thread.aui';
+import {useAnnounce} from './src/components/assistant-ui/elements/surfaces';
+import {nativeEngineReady} from './src/platform/runtime';
 import DropSurface from './src/platform/DropSurface';
-import {nativeComposerComponents,resetComposerInput} from './src/platform/ComposerInput';
-import {JobActivity} from './src/components/JobActivity';
-import {useAnnounce,useMotion} from './src/components/assistant-ui/elements/surfaces';
-import {OutboundDenied} from '@planner/outbound/gate';
-import {LOCAL_ONLY_MESSAGE} from '@planner/client';
-import {privateInstruction,hasRejectedSecretDraft,safeOrdinaryText,SECRET_CHAT_WARNING} from '@planner/privacy';
-import {isClarificationAnswer,pendingFromResponse,withPendingClarification} from '@planner/clarification';
-import {plannerStatus,requestPlan,savePlannerKey,createNativePairing,pairNativePlanner,disconnectNativePlanner,plannerAvailable,type PlannerStatus} from './src/platform/planner';
-import {validateEnvelope,type PendingClarification,type Request as PlannerRequest,type Envelope, type Step} from '@contracts/protocol';
-import {WorkspaceVault,WorkspaceExpiredError,StaleSaveError,blockedMessages,expiredMessage,savedArtifacts,CLEANUP_INCOMPLETE,type WorkspaceSnapshot} from '@core/workspace-vault';
-import {CheckpointScheduler,WorkspaceSession} from '@core/workspace-checkpoints';
-import {DAY_MS,RETENTION_DAYS,type PersistedEntry,type RetentionMode} from '@core/workspace-checkpoint';
-import {createWorkspaceBackend,workspaceClock} from './src/platform/workspace';
-import {temporaryFiles} from './src/platform/temporary';
-import type {RetentionImpact,StorageView} from './src/components/PrivacyStorage';
-import {PrivacyStorage} from './src/platform/PrivacyStorage';
+import {ComposerInput, fillComposerInput, focusComposerInput, resetComposerInput} from './src/platform/ComposerInput';
+import {useWorkspace, type Entry} from './src/workspace/useWorkspace';
+import {WorkspaceContext, useApp, useShellState} from './src/ui/context';
+import {EmptyWorkspace, InlineBanner, NoticeIcon} from './src/ui/empty';
+import {isProposal, isStopAcknowledgement} from './src/ui/facts';
+import {ActivityPresenceContext, markRestored, useActivityPresence} from './src/ui/motion';
+import {AddFiles, ComposerActions, ComposerTop, HintRow, Toolbar} from './src/ui/shell';
+import {Txt} from './src/ui/primitives';
+import {layout, radius, useTheme} from './src/ui/theme';
 
-const formatSize = (n: number) => n < 1_000_000 ? `${(n / 1000).toFixed(1)} kB` : `${(n / 1_000_000).toFixed(2)} MB`;
-const pageCount = (count: number) => `${count} ${count === 1 ? 'page' : 'pages'}`;
-const localResultTitle = (type: Action, page = 2) => type === 'merge' ? 'Merged PDF' : type === 'remove' ? `PDF with page ${page} removed` : type === 'ocr' ? 'Searchable PDF' : type === 'chain' ? 'Searchable, optimised PDF' : 'Optimised PDF';
-const localCapabilityHelp = `I can merge PDFs, remove pages${ocrAvailable ? ', make scanned English PDFs searchable' : ''}, and compress supported images inside a PDF. Add PDFs, then use a quick action or type “remove page 2”. Type “undo” to restore the previous result.\n\nThese tasks work without an AI connection. Connecting AI is optional for more flexible requests.`;
-function plannedResultTitle(steps: Step[]) {
-  const last = steps.at(-1);
-  if (last?.operation === 'select_pages') {
-    const pages = (last.params.pages as {indices: number[]}).indices;
-    return pages.length === 1 ? localResultTitle('remove', pages[0]) : `PDF with ${pages.length} pages removed`;
-  }
-  if (steps.some(step => step.operation === 'ocr_pdf') && last?.operation === 'compress_pdf') return localResultTitle('chain');
-  return localResultTitle(last?.operation === 'merge_pdf' ? 'merge' : last?.operation === 'ocr_pdf' ? 'ocr' : 'compress');
+// atePDF (SHR-106): the approved SHR-105 Mac-first shell around the workspace. All document,
+// job, planning, persistence and retention behaviour lives in useWorkspace; this file only
+// presents it and routes commands back to it.
+type ShownEntry = Entry & {tight?: boolean; running?: true};
+const convertEntry = (entry: ShownEntry): ThreadMessageLike => ({id: String(entry.id), role: entry.role, content: [{type: 'text', text: entry.text}], metadata: {custom: {entryId: entry.id, hasArtifact: !!entry.artifact, tight: !!entry.tight}}, ...(entry.running ? {status: {type: 'running' as const}} : {})});
+
+// Everything that needs files (sources, results, proposals, activity, the Files panel) loads
+// right after first paint, outside the startup bundle (web budget). Once loaded, the views render
+// synchronously (no Suspense frame), so a reply and its card always appear in the same commit.
+type Views = typeof import('./src/ui/conversation');
+let views: Views | null = null;
+const viewListeners = new Set<() => void>();
+const loadViews = () => import('./src/ui/conversation').then(module => {if (!views) {views = module; viewListeners.forEach(listener => listener());} return module;});
+const subscribeViews = (listener: () => void) => {viewListeners.add(listener); return () => {viewListeners.delete(listener);};};
+const readViews = () => views;
+function lazyView<P extends object>(pick: (loaded: Views) => ComponentType<P>) {
+  return function LazyView(props: P) {
+    const loaded = useSyncExternalStore(subscribeViews, readViews, readViews);
+    useEffect(() => {if (!loaded) void loadViews();}, [loaded]);
+    return loaded ? React.createElement(pick(loaded), props) : null;
+  };
 }
-type Action = 'merge' | 'ocr' | 'remove' | 'compress' | 'chain';
-const visibleConnection=(status:PlannerStatus)=>{const {token:_,...visible}=status;return visible;};
-type DisplayArtifact=Pick<Artifact,'ref'|'pageCount'|'sizeBytes'|'note'>;
-// request/envelope/revision are live, in-memory only. The durable projection
-// (toPersisted) keeps display facts and never these executable fields.
-type Entry = {id: number; role: 'user' | 'assistant'; text: string; files?: {name: string; size: number; ref?:string}[]; artifact?: DisplayArtifact; resultTitle?: string; choice?: 'compress' | 'chain' | 'clear' | 'execute' | 'connect' | 'native-link' | 'native-pair' | 'connection-help'; revision?: number; request?:PlannerRequest; envelope?:Envelope};
-function Button({children, onPress, disabled=false, primary=false, quiet=false, icon: Glyph, label}: {children?: React.ReactNode; onPress:()=>void; disabled?:boolean; primary?:boolean; quiet?:boolean; icon?:LucideIcon; label?:string}) {
-  return <Pressable accessibilityRole="button" accessibilityLabel={label ?? (typeof children === 'string' ? children : undefined)} disabled={disabled} aria-disabled={disabled} onPress={onPress} className={`atepdf-button min-h-11 flex-row items-center justify-center gap-2 rounded-xl px-3 py-2 active:opacity-70 web:focus-visible:outline-2 web:focus-visible:outline-primary ${primary ? 'atepdf-button-primary bg-primary' : quiet ? 'bg-transparent' : 'border border-border bg-background'} ${disabled ? 'opacity-40' : ''}`}>
-    {Glyph && <Icon as={Glyph} className={`size-4 ${primary ? 'text-primary-foreground' : 'text-foreground'}`}/>}<Text className={`text-sm font-medium ${primary ? 'text-primary-foreground' : 'text-foreground'}`}>{children}</Text>
-  </Pressable>;
-}
-function InlinePreview({store, artifact, onClose}: {store:LocalFileStore; artifact:DisplayArtifact; onClose:()=>void}) {
-  const bytes=useMemo(()=>store.get(artifact.ref).bytes,[store,artifact.ref]);
-  return <Preview bytes={bytes} count={artifact.pageCount} onClose={onClose}/>;
-}
-const toPersisted=(e:Entry):PersistedEntry=>({id:e.id,role:e.role,text:e.text,...(e.files?{files:e.files.map(f=>({name:f.name,size:f.size}))}:{}),...(e.artifact?{artifactRef:e.artifact.ref}:{}),...(e.resultTitle!==undefined?{resultTitle:e.resultTitle}:{}),...(e.choice?{choice:e.choice}:{})});
-// cleanup: shown until removal of old copies is verified, then cleared.
-type WorkspaceNotice={text:string;retry?:boolean;cleanup?:boolean};
-const CLEANUP_PENDING_NOTICE='Some of atePDF’s earlier PDF copies couldn’t be removed from this Mac yet. They stay encrypted and can’t be opened in atePDF; it will keep trying to remove them.';
-const SAVE_FAILED_NOTICE='atePDF couldn’t save the latest changes on this Mac. Your last saved workspace is kept.';
-const SAVE_PAUSED_NOTICE='atePDF couldn’t confirm what was last saved on this Mac, so saving is paused until atePDF opens again.';
-// Start over copy states what each mode actually removes.
-const CLEAR_QUESTION_SESSION='Save any results you want to keep first. Shall I clear this conversation and its local files? Your originals on your device will stay unchanged.';
-// Start over clears this workspace but keeps the Keep workspace setting; Delete local
-// data (Privacy & storage) also resets that setting to Keep until I delete it.
-const CLEAR_QUESTION_SAVED='Save any results you want to keep first. Shall I clear this conversation and atePDF’s saved copies of its PDFs, results and draft on this Mac? Files you added and PDFs you saved elsewhere stay unchanged, and your Keep workspace setting stays as it is.';
-// SHR-40 notices. Removal is only stated once verified; otherwise what remains is said.
-const UNAVAILABLE_NOTICE='atePDF can’t save your workspace on this Mac right now. This session won’t be restored after you quit.';
-const DELETED_STATUS='atePDF’s local data was deleted from this Mac.';
-const DELETE_INCOMPLETE='Your workspace was deleted, but some of atePDF’s encrypted files couldn’t be removed from this Mac yet. They can’t be opened in atePDF; it will keep trying to remove them.';
-const TEMPORARY_INCOMPLETE='Your workspace was deleted, but some temporary files couldn’t be removed yet. atePDF removes them the next time it opens.';
-const QUIT_CLEANUP_INCOMPLETE='atePDF stopped saving this workspace, but some of its earlier encrypted files couldn’t be removed from this Mac yet. They can’t be opened in atePDF; it will keep trying to remove them.';
-const expiredNotice=(mode:RetentionMode,cleanupComplete:boolean)=>`${expiredMessage(mode)}${cleanupComplete?'':' Some of its encrypted files couldn’t be removed yet; atePDF will keep trying.'}`;
-function useWorkspace() {
-  const [controller] = useState(createController);
-  const [backend] = useState(createWorkspaceBackend);
-  const vault = useRef<WorkspaceVault|null>(null);
-  const [session] = useState(() => new WorkspaceSession(()=>controller.cancel()));
-  const resettingRef = useRef(false);
-  const [restoring, setRestoring] = useState(backend !== null), [restoredDraft, setRestoredDraft] = useState<string|null>(null);
-  const [notice, setNotice] = useState<WorkspaceNotice|null>(null), [durable, setDurable] = useState(false);
-  // Retention setting of the open workspace; null while it can't be changed (restoring, blocked, unavailable).
-  const [retention, setRetention] = useState<RetentionMode|null>(null);
-  const [storage, setStorage] = useState<StorageView>({measuring: false, workspace: null, temporary: null});
-  const [deleting, setDeleting] = useState(false), [storageStatus, setStorageStatus] = useState<string|null>(null);
-  // A clear, expiry or deletion transaction is running.
-  const [resetting, setResettingState] = useState(false);
-  const setResetting = (value:boolean) => {resettingRef.current=value;setResettingState(value);};
-  // ready: restore finished; only then may chat/draft changes be checkpointed.
-  const ready = useRef(backend === null), opened = useRef(false), openingVault = useRef(false);
-  const restoredEntries = useRef<Entry[]|null>(null), draftRef = useRef<string|null>(null);
-  // Chat/draft checkpoints; suspended for the whole Start over transaction.
-  const runChatSave = useRef<() => Promise<void>>(async () => {}), chatSaveFailed = useRef<(error: unknown) => void>(() => {});
-  const [checkpoints] = useState(() => new CheckpointScheduler(() => runChatSave.current(), error => chatSaveFailed.current(error)));
-  useEffect(() => () => {session.advance();controller.cancel();checkpoints.dispose();}, [checkpoints, session, controller]);
-  // Picker, sample and drop completions carry a ticket; emptying the workspace voids it.
-  const [clearCount, setClearCount] = useState(0);
-  const state = useSyncExternalStore(controller.subscribe, controller.snapshot, controller.snapshot), store = controller.store;
-  const [entries, setEntries] = useState<Entry[]>([]), [loading, setLoading] = useState(false);
-  const [preview, setPreview] = useState<number | null>(null), [privacy, setPrivacy] = useState(false), [choice, setChoice] = useState<number | null>(null);
-  const [saving, setSaving] = useState<string | null>(null), [receipts, setReceipts] = useState<Record<string, string>>({});
-  const savingLock = useRef(false), receiptEpoch = useRef(0);
-  const renderedClearEpoch=receiptEpoch.current;
-  const nextId = useRef(0), operation = useRef(false), cancelRequested = useRef(false);
-  const [planning,setPlanning]=useState(false),[connection,setConnection]=useState<Omit<PlannerStatus,'token'>|null>(null);
-  const plannerAbort=useRef<AbortController|null>(null),connectionAbort=useRef<AbortController|null>(null);
-  // The planning request that holds the operation lock and its loading/planning state.
-  // Only that request's own finalizer releases them, so a late finalizer can never
-  // clear the state of a newer operation.
-  const planningOwner=useRef<AbortController|null>(null);
-  const connectionToken=useRef<string|null>(null);
-  const pendingClarification=useRef<PendingClarification|null>(null);
-  const clearPending=()=>{pendingClarification.current=null;};
-  // working: a job, import or planning request is active. busy also covers restore and resets.
-  const working = state.busy || loading || planning, busy = working || restoring || resetting;
-  const busyRef = useRef(busy); busyRef.current = busy;
-  const entriesRef = useRef<Entry[]>(entries); entriesRef.current = entries;
-  const currentEntry = entries.findLast(e => e.artifact), current = currentEntry?.id;
-  const focus = store.focus ? store.list.find(f => f.ref === store.focus) : null;
-  const append = (entry: Omit<Entry, 'id'>) => { const id = ++nextId.current; const artifact=entry.artifact?{ref:entry.artifact.ref,pageCount:entry.artifact.pageCount,sizeBytes:entry.artifact.sizeBytes,note:safeOrdinaryText(entry.artifact.note)}:undefined; setEntries(previous => [...previous, {...entry, text:safeOrdinaryText(entry.text), files:entry.files?.map(file=>({...file,name:safeOrdinaryText(file.name)})), artifact, id}]); return id; };
-  const say = (text: string) => append({role: 'assistant', text});
-  // The controller's own commit saves its new state; chat and draft saves use the
-  // last durable store state so they never make an unconfirmed commit durable early.
-  const snapshot = (view: ReturnType<typeof controller.durableState> = controller.durableState(true)): WorkspaceSnapshot => ({...view, bytes: ref => store.get(ref).bytes, conversation: entriesRef.current.map(toPersisted), draft: draftRef.current});
-  const saveFailed = (v: WorkspaceVault) => setNotice({text: v.blockedReason === 'clock' ? blockedMessages.clock : v.mode === 'blocked' ? SAVE_PAUSED_NOTICE : SAVE_FAILED_NOTICE});
-  // A cleanup notice stays until the vault has verified the old copies are gone.
-  const cleanupSettled = (v: WorkspaceVault) => { if (!v.cleanupPending) setNotice(previous => previous?.cleanup ? null : previous); };
-  runChatSave.current = async () => {
-    const v = vault.current, current = session.ticket();
-    if (!ready.current || !v || v.mode !== 'writable') return;
-    try { await v.save(() => {if(!current()||vault.current!==v)throw new StaleSaveError();return snapshot(controller.durableState(false));},current); if(current())cleanupSettled(v); }
-    catch(error) {
-      // Expiry is a durable transition even when the triggering writer is stale.
-      if(error instanceof WorkspaceExpiredError)chatSaveFailed.current(error);
-      else if(!(error instanceof StaleSaveError)&&vault.current===v)saveFailed(v);
-    }
-  };
-  chatSaveFailed.current = error => { if (error instanceof WorkspaceExpiredError) { runExpiry(async () => ({kind: 'expired', mode: error.mode, cleanupComplete: error.cleanupComplete})); return; } if (vault.current) saveFailed(vault.current); };
-  const saveChat = () => checkpoints.now();
-  const noteDraft = (text: string) => {
-    // A composer subscription from before Clear/expiry may briefly publish its
-    // old text while the replacement view renders. It owns no new checkpoint.
-    if(renderedClearEpoch!==receiptEpoch.current)return;
-    const next = text.trim() ? text : null;
-    if (next === draftRef.current) return;
-    draftRef.current = next;
-    // Draft changes are coalesced; only the last completed checkpoint is promised.
-    checkpoints.draft();
-  };
-  // Connect the controller's commits to a writable vault. Called after open and after
-  // Delete local data, which can turn a blocked workspace into a new writable one.
-  const attach = (v: WorkspaceVault) => {
-    if (v.mode !== 'writable') { controller.setDurability(null); setDurable(false); setRetention(null); return; }
-    controller.setDurability({save: async signal => {
-      const owned=session.ticket();
-      try {
-        await v.save(() => {if(!owned()||vault.current!==v)throw new StaleSaveError();return snapshot();},()=>owned()&&!signal?.aborted);
-        if(owned())cleanupSettled(v);
-      } catch(error) {
-        if(error instanceof WorkspaceExpiredError)runExpiry(async () => ({kind:'expired',mode:error.mode,cleanupComplete:error.cleanupComplete}));
-        else if(!(error instanceof StaleSaveError)&&vault.current===v)saveFailed(v);
-        throw error;
-      }
-    },clear:()=>v.clear()});
-    setDurable(true); setRetention(v.retention);
-  };
-  const openWorkspace = async () => {
-    if (!backend) return;
-    const current = session.ticket();
-    ready.current = false; setRestoring(true); setNotice(null); controller.setDurability(null); setDurable(false); setRetention(null);
-    restoredEntries.current = entriesRef.current;
-    const v = new WorkspaceVault(backend, {redact: safeOrdinaryText, now: workspaceClock()}); vault.current = v;
-    try {
-      openingVault.current = true;
-      const outcome = await v.open();
-      openingVault.current = false;
-      if(!current()||vault.current!==v)return;
-      if (outcome.kind === 'restored') {
-        const saved = outcome.checkpoint;
-        try { await controller.restore(savedArtifacts(saved, outcome.bytes), saved.originals, saved.history, saved.revision); }
-        catch { if(!current())return; v.block(); setNotice({text: `${blockedMessages['missing-artifact']} New work in this session won’t be saved.`}); return; }
-        if(!current())return;
-        const restored: Entry[] = saved.conversation.map(p => { const meta = p.artifactRef ? store.get(p.artifactRef).meta : null; return {id: p.id, role: p.role, text: p.text, ...(p.files ? {files: p.files} : {}), ...(meta ? {artifact: {ref: meta.ref, pageCount: meta.pageCount, sizeBytes: meta.sizeBytes, note: safeOrdinaryText(meta.note)}} : {}), ...(p.resultTitle !== undefined ? {resultTitle: p.resultTitle} : {}), ...(p.choice ? {choice: p.choice} : {})}; });
-        nextId.current = restored.reduce((n, e) => Math.max(n, e.id), 0);
-        // A result committed just before quitting may not have its chat card yet.
-        if (store.focus && restored.findLast(e => e.artifact)?.artifact?.ref !== store.focus) { const meta = store.get(store.focus).meta; restored.push({id: ++nextId.current, role: 'assistant', text: 'Here’s your current result.', artifact: {ref: meta.ref, pageCount: meta.pageCount, sizeBytes: meta.sizeBytes, note: safeOrdinaryText(meta.note)}}); }
-        restoredEntries.current = restored; entriesRef.current = restored; setEntries(restored);
-        draftRef.current = saved.draft?.text ?? null; setRestoredDraft(draftRef.current);
-        if (outcome.recoveredPrevious) setNotice({text: 'atePDF couldn’t open your most recent save, so it restored the one before it.'});
-        else if (outcome.cleanupPending) setNotice({text: CLEANUP_PENDING_NOTICE, cleanup: true});
-      } else if (outcome.kind === 'empty') {
-        if (outcome.cleanupPending) setNotice({text: CLEANUP_PENDING_NOTICE, cleanup: true});
-      } else if (outcome.kind === 'expired') setNotice({text: expiredNotice(outcome.retention, !outcome.cleanupPending), cleanup: outcome.cleanupPending});
-      else if (outcome.kind === 'blocked') setNotice({text: `${blockedMessages[outcome.reason]} New work in this session won’t be saved.`, retry: outcome.retryable});
-      else if (outcome.kind === 'unavailable') setNotice({text: UNAVAILABLE_NOTICE});
-      attach(v);
-    } catch {if(current())setNotice({text:'atePDF can’t open the saved workspace right now. This session won’t be saved.'});}
-    finally { openingVault.current = false; if(current()){ready.current = true; setRestoring(false);} }
-  };
-  useEffect(() => { if (opened.current) return; opened.current = true; void openWorkspace(); }, []);
-  useEffect(() => {
-    // Every committed chat change is checkpointed; the restored transcript itself is not a new activity.
-    if (restoring || entries === restoredEntries.current) return;
-    saveChat();
-  }, [entries, restoring]);
-  const canRetryRestore = !!notice?.retry && !entries.length && !store.list.length;
-  const retryRestore = () => { if (canRetryRestore && !busy) void openWorkspace(); };
-  // Empty the chat/draft view (and anything built on it) after a durable clear.
-  const resetView = () => {
-    const empty: Entry[] = []; entriesRef.current = empty; restoredEntries.current = empty; draftRef.current = null;
-    // This reset owns the replacement session. Old picker/planner finalizers are
-    // correctly stale, so they cannot be responsible for releasing its UI flags.
-    planningOwner.current=null;operation.current=false;setLoading(false);setPlanning(false);
-    receiptEpoch.current++; connectionToken.current=null; pendingClarification.current=null; setChoice(null); setPreview(null); setReceipts({}); setEntries(empty); setClearCount(n => n + 1);
-  };
-  // Stop and join active work: planning is aborted, jobs are cancelled (a commit that
-  // is already saving finishes or is withdrawn), and in-flight handlers finish first.
-  const stopWork = async () => {
-    clearPending(); plannerAbort.current?.abort(); connectionAbort.current?.abort(); controller.cancel();
-    await controller.settle();
-    for (let i = 0; operation.current && i < 200; i++) await new Promise(resolve => setTimeout(resolve, 25));
-  };
-  const refreshStorage = async () => {
-    const v = vault.current; if (!backend) return;
-    setStorage(previous => ({...previous, measuring: true}));
-    let workspace: StorageView['workspace'] = null;
-    try { workspace = v ? await v.usage() : null; } catch { /* shown as not measurable, never as zero */ }
-    setStorage({measuring: false, workspace, temporary: temporaryFiles ? temporaryFiles.usage() : 0});
-  };
-  // Retention expiry (ADR 0010): at launch (in the vault), on return to atePDF, before
-  // an action, and when a save finds the period has passed. The whole workspace goes.
-  const expiring = useRef(false), privacyOpen = useRef(false); privacyOpen.current = privacy;
-  type Expiry = {kind: 'current'} | {kind: 'clock'} | {kind: 'expired'; mode: RetentionMode; cleanupComplete: boolean};
-  function runExpiry(work: () => Promise<Expiry>) {
-    if (expiring.current) return; expiring.current = true;
-    session.advance();
-    void checkpoints.exclusive(async () => {
-      setResetting(true);
-      try {
-        await stopWork();
-        const result = await work();
-        if (result.kind === 'clock') { setNotice({text: blockedMessages.clock}); setRetention(null); return; }
-        if (result.kind !== 'expired') return;
-        await controller.clear(async () => ({cleanupComplete: result.cleanupComplete}));
-        resetView(); setNotice({text: expiredNotice(result.mode, result.cleanupComplete), cleanup: !result.cleanupComplete});
-      } finally { setResetting(false); }
-    }).catch(() => { /* another workspace change is running; the next check repeats this */ }).finally(() => { expiring.current = false; if (privacyOpen.current) void refreshStorage(); });
-  }
-  /** True when the workspace is due (or its age unknown), so the requested action must not run. */
-  const expiryDue = () => {
-    const v = vault.current;
-    if (!v || v.mode !== 'writable' || v.expiryState() === 'current') return false;
-    runExpiry(() => v.expireIfDue()); return true;
-  };
-  useEffect(() => {
-    const subscription = AppState.addEventListener('change', next => { if (next === 'active' && !busyRef.current) expiryDue(); });
-    return () => subscription.remove();
-  }, []);
-  const retentionImpact = (mode: RetentionMode): RetentionImpact => {
-    const v = vault.current; if (!v || v.mode !== 'writable' || mode === v.retention) return null;
-    if (mode === 'quit') return {kind: 'quit'};
-    const idle = v.idleIfExpiring(mode, entriesRef.current.length > 0 || store.list.length > 0 || !!draftRef.current);
-    return idle === null ? null : {kind: 'expire', days: RETENTION_DAYS[mode] ?? 0, idleDays: Math.floor(idle / DAY_MS)};
-  };
-  const changeRetention = (mode: RetentionMode) => {
-    const v = vault.current; if (!v || v.mode !== 'writable' || busy) return;
-    setStorageStatus(null);
-    void checkpoints.exclusive(async () => {
-      setResetting(true);
-      try {
-        const change = await v.setRetention(mode, () => snapshot(controller.durableState(false)));
-        if (change.kind === 'expired') {
-          session.advance();
-          await controller.clear(async () => ({cleanupComplete: change.cleanupComplete}));
-          resetView(); setNotice({text: expiredNotice(mode, change.cleanupComplete), cleanup: !change.cleanupComplete});
-        } else if (change.kind === 'cleared' && !change.cleanupComplete) setNotice({text: QUIT_CLEANUP_INCOMPLETE, cleanup: true});
-      } finally { setResetting(false); }
-    }).catch(error => { setStorageStatus(error instanceof Error ? error.message : 'atePDF couldn’t change this setting.'); if (v.mode === 'blocked') saveFailed(v); })
-      .finally(() => { setRetention(v.mode === 'writable' ? v.retention : null); void refreshStorage(); });
-  };
-  // Delete local data: every atePDF-managed workspace file and temporary copy. Active
-  // work is stopped first; external originals and saved PDFs are never touched.
-  const deleteLocalData = () => {
-    const v = vault.current; if (!v || deleting || saving || restoring) return;
-    setDeleting(true); setStorageStatus(null);
-    // From here on, a picker, sample or drop that was still pending is discarded.
-    session.advance();
-    void checkpoints.exclusive(async () => {
-      setResetting(true);
-      try {
-        await stopWork();
-        await controller.clear(() => v.deleteAll());
-        if (controller.state.stage === 'failed' && controller.state.error) return {error: controller.state.error, complete: false};
-        resetView();
-        return {error: null, complete: controller.state.message !== CLEANUP_INCOMPLETE};
-      } finally { setResetting(false); }
-    }).then(result => {
-      if (result.error) { setStorageStatus(result.error); if (v.mode === 'blocked' && v.blockedReason === null) setNotice({text: SAVE_PAUSED_NOTICE}); return; }
-      // Only after the workspace is gone: nothing can be reading these copies now.
-      const temporaryCleared = temporaryFiles ? temporaryFiles.clear() : true;
-      attach(v);
-      setNotice(!result.complete ? {text: DELETE_INCOMPLETE, cleanup: true} : v.mode === 'unavailable' ? {text: UNAVAILABLE_NOTICE} : null);
-      setStorageStatus(!result.complete ? DELETE_INCOMPLETE : !temporaryCleared ? TEMPORARY_INCOMPLETE : DELETED_STATUS);
-    }, error => setStorageStatus(error instanceof Error ? error.message : 'atePDF couldn’t delete its local data.'))
-      .finally(() => { setDeleting(false); void refreshStorage(); });
-  };
-  useEffect(() => { if (privacy) { setStorageStatus(null); void refreshStorage(); } }, [privacy]);
-  useEffect(() => {
-    if (Platform.OS !== 'web') return;
-    // Command-comma opens Privacy & storage, as Settings does in Mac apps.
-    const fn = (e: KeyboardEvent) => { if ((e.metaKey || e.ctrlKey) && e.key === ',') { e.preventDefault(); setPrivacy(true); } };
-    window.addEventListener('keydown', fn); return () => window.removeEventListener('keydown', fn);
-  }, []);
-  const showHelp = () => {
-    if (busy || expiryDue()) return;
-    clearPending();
-    setChoice(null);
-    append({role:'user',text:'What can I do with my PDFs?'});
-    say(localCapabilityHelp);
-  };
-  useEffect(() => {
-    if (Platform.OS !== 'web') return;
-    const fn = (e: BeforeUnloadEvent) => { if (store.list.length || controller.state.busy) { e.preventDefault(); e.returnValue = ''; } };
-    window.addEventListener('beforeunload', fn); return () => window.removeEventListener('beforeunload', fn);
-  }, [store, controller]);
-  const finish = (previous: string | null, text: string, resultTitle: string) => {
-    if (controller.state.error) say(controller.state.error);
-    else if (controller.state.stage === 'cancelled') say(controller.state.message);
-    else if (store.focus && store.focus !== previous) append({role: 'assistant', text, artifact: store.get(store.focus).meta, resultTitle});
-    else say(controller.state.message || 'No new result was created.');
-  };
-  // Admission starts before a picker/fetch and is checked again before import.
-  // A replacement can invalidate a pending selection without waiting for its OS
-  // dialog, while a running local engine must drain before another job starts.
-  const invalidate = () => {
-    session.advance();clearPending();plannerAbort.current?.abort();connectionAbort.current?.abort();controller.cancel();
-    planningOwner.current=null;operation.current=false;setLoading(false);setPlanning(false);setChoice(null);
-    if(!ready.current){vault.current?.block();ready.current=true;setRestoring(false);setNotice({text:'Restoring was cancelled. New work in this session won’t be saved. Reopen atePDF to restore or clear the saved workspace.',retry:true});}
-  };
-  const beginImport = () => {if(!resettingRef.current){cancelRequested.current=false;invalidate();}return session.ticket();};
-  const importFiles = async (files: File[], current = beginImport()) => {
-    if(!current()||resettingRef.current||expiryDue()||!files.length){await releaseInputFiles(files);if(current()&&!resettingRef.current)setLoading(false);return;}
-    setLoading(true);
-    await controller.settle();
-    if(!current()||resettingRef.current){await releaseInputFiles(files);return;}
-    operation.current=true;setChoice(null);clearPending();
-    const originalStart=store.originals.length;
-    const importedEntry=append({role: 'user', text: `I’ve added ${files.length === 1 ? 'a PDF' : `${files.length} PDFs`}.`, files: files.map(f => ({name: f.name, size: f.size}))});
-    try {
-      await controller.import(files);
-      if(!current())return;
-      if (controller.state.error || controller.state.stage === 'cancelled') say(controller.state.error || controller.state.message);
-      else {setEntries(previous=>previous.map(entry=>entry.id===importedEntry?{...entry,files:entry.files?.map((file,i)=>({...file,ref:store.originals[originalStart+i]}))}:entry));say(`Your ${store.originals.length} ${store.originals.length === 1 ? 'PDF is' : 'PDFs are'} ready. ${store.originals.map(r => store.get(r).meta.pageCount).reduce((a, b) => a + b, 0)} pages in total. ${store.focus ? 'Follow-ups still use the current result; Merge uses all originals in the order added.' : 'What would you like to do? Merge uses the order you added them.'}`);}
-    } catch (e) { if(current())say(e instanceof Error ? e.message : 'Files could not be opened.'); }
-    finally { if(current()){operation.current=false;setLoading(false);} }
-  };
-  const pick = async (sample = false) => {
-    if(resettingRef.current||expiryDue())return;
-    const current=beginImport(),signal=session.signal;
-    setLoading(true);
-    try { await importFiles(await (sample ? sampleFiles(signal) : chooseFiles(signal)),current); }
-    catch (e) { if(current())say(e instanceof Error ? e.message : 'Files could not be opened.'); }
-    finally { if(current())setLoading(false); }
-  };
-  const executeLocal = async (type: Action, page = 2, current=session.ticket()) => {
-    const previous = store.focus;
-    try {
-      await controller.quick(type, page);
-      if(!current())return;
-      finish(previous, type === 'remove' ? `I removed page ${page}. Here’s the new copy.` : type === 'merge' ? 'I merged your PDFs in the order added. Here’s your PDF.' : type === 'ocr' ? 'Your searchable copy is ready.' : type === 'chain' ? 'Your merged, searchable and optimised copy is ready.' : 'I checked the optimised copy. Here’s the result.', localResultTitle(type, page));
-    } catch (e) { if(current())say(e instanceof Error ? e.message : 'This action could not finish.'); }
-  };
-  const execute = async (type: Action, page = 2) => {
-    if (operation.current) return;
-    cancelRequested.current=false;operation.current = true;const current=session.ticket();
-    try { await executeLocal(type,page); }
-    finally { if(current())operation.current = false; }
-  };
-  const action = (type: Action, text: string, page = 2) => {
-    if (busy || operation.current || expiryDue()) return;
-    clearPending();
-    setChoice(null); append({role: 'user', text});
-    // Explicit actions already specify the operation. Compile locally through
-    // controller.quick; AI availability and connection checks are irrelevant.
-    if ((type === 'compress' || type === 'chain') && store.originals.length) {
-      const id = append({role: 'assistant', text: 'I can re-encode supported JPEG images at their original dimensions. Image quality may change; text and vectors stay intact. Some PDFs may not get smaller. Shall I create a new copy for you to preview?', choice: type, revision: store.revision});
-      setChoice(id); return;
-    }
-    void execute(type, page);
-  };
-  const undoLocal = async (admitted = session.ticket()) => {
-    if (!admitted()) return;
-    if (!store.canUndo) { say('There’s no earlier result to restore yet. Your original files are unchanged.'); return; }
-    invalidate();const current=session.ticket();
-    await controller.undo();
-    if(!current())return;
-    if (controller.state.stage === 'failed' && controller.state.error) { say(controller.state.error); return; }
-    append({role: 'assistant', text: 'I restored your previous result. Your original files are unchanged.', artifact: store.get(store.focus!).meta, resultTitle: entriesRef.current.findLast(entry => entry.artifact?.ref === store.focus)?.resultTitle});
-  };
-  const undo = () => {
-    if (busy || expiryDue()) return;
-    clearPending();
-    setChoice(null); append({role: 'user', text: 'Undo the last change.'});
-    void undoLocal();
-  };
-  const submit = (draft: string) => {
-    if (busy || operation.current || !draft.trim() || expiryDue()) return;
-    const text = draft.trim();
-    // Reject before either a transcript append or clarification binding.
-    if (hasRejectedSecretDraft(text)) { say(SECRET_CHAT_WARNING); return; }
-    const command = text.replace(/[.!]$/, '').toLowerCase();
-    const pending=pendingClarification.current;
-    if(pending){
-      clearPending();
-      if(/^(?:cancel|never mind|stop)(?:[.!])?$/i.test(text)){setChoice(null);append({role:'user',text});say('Okay. That request is cancelled. Your files are unchanged.');return;}
-      if(isClarificationAnswer(text,pending)){setChoice(null);append({role:'user',text});void preparePlanning(text,undefined,pending);return;}
-    }
-    const remove = command.match(/^remove (?:physical )?page (\d+)(?: from (?:the )?(?:merged )?result)?$/);
-    if(plannerAvailable){
-      const fallback=remove?{type:'remove' as const,page:Number(remove[1])}:['merge', 'merge pdfs', 'merge these pdfs'].includes(command)?{type:'merge' as const,page:2}:['make searchable','ocr'].includes(command)?{type:'ocr' as const,page:2}:command==='compress'?{type:'compress' as const,page:2}:command==='merge, ocr, compress'?{type:'chain' as const,page:2}:command==='undo'?{type:'undo' as const,page:2}:undefined;
-      setChoice(null);append({role:'user',text});void preparePlanning(text,fallback);return;
-    }
-    if (command === 'undo') undo();
-    else if (remove) action('remove', text, Number(remove[1]));
-    else if (['merge', 'merge pdfs', 'merge these pdfs'].includes(command)) action('merge', text);
-    else if (['make searchable', 'ocr'].includes(command)) action('ocr', text);
-    else if (command === 'compress') action('compress', text);
-    else if (command === 'merge, ocr, compress') action('chain', text);
-    else { setChoice(null); append({role:'user',text}); void preparePlanning(text); }
-  };
-  // Connection status completions are bound to the workspace session they started in
-  // (current): one that settles after Start over, expiry or Delete local data changes
-  // no chat, connection state or saved workspace. Aborting is only an optimisation.
-  const checkConnection=async(signal?:AbortSignal,quiet=false,current=session.ticket())=>{
-    if(!plannerAvailable){if(!quiet)say('AI connection is not available on this device yet. Local quick actions still work.');return null;}
-    try{const status=await plannerStatus(signal);signal?.throwIfAborted();if(!current())return null;setConnection(visibleConnection(status));return status;}
-    catch(error){if(signal?.aborted)throw error;if(!quiet&&current())say('The local planner gateway is unavailable. You can still use the quick actions.');return null;}
-  };
-  /** True while the session that requested it (current) is still the active one. */
-  const refreshConnection=async(current=session.ticket())=>{
-    try{const status=visibleConnection(await plannerStatus(session.signal));if(current())setConnection(status);}
-    catch{if(current())setConnection(previous=>previous?{...previous,enabled:false}:null);}
-    return current();
-  };
-  const connect=async()=>{
-    cancelRequested.current=false;
-    const current=session.ticket(),abort=new AbortController();connectionAbort.current?.abort();connectionAbort.current=abort;
-    let status:PlannerStatus|null;
-    try{status=await checkConnection(abort.signal,false,current);}catch{return;}
-    if(!status||!current())return;
-    connectionToken.current=status.token;
-    if(Platform.OS!=='web'){const id=append({role:'assistant',text:status.pairingRequired?'Create a pairing code in atepdf on your Mac, then paste it below. On iPhone or iPad, keep both devices on the same Wi-Fi and use the private beta connection.':'This app is paired with the planner on your Mac.',choice:'native-pair'});setChoice(id);return;}
-    if(!status.connected){const id=append({role:'assistant',text:'Connect OpenAI for optional AI planning. Enter your key in the secure field below. It is saved only by atepdf’s local server and never added to the conversation. Saving makes no OpenAI calls.',choice:'connect'});setChoice(id);return;}
-    const id=append({role:'assistant',text:status.enabled?`AI planning is ready for up to ${status.remaining} approved requests. Tell me what you’d like to do.`:'Your key is saved locally. Paid planning is paused until you approve a request limit in the local setup. Quick actions work now.',choice:'native-link'});setChoice(id);
-  };
-  const preparePlanning=async(text:string,fallback?:{type:Action|'undo';page:number},continuation?:PendingClarification)=>{
-    if(operation.current)return;
-    cancelRequested.current=false;
-    // One ticket for the whole submission: setup, planning, choices, local execution,
-    // errors and the finalizer. After Start over, expiry or Delete local data it is
-    // stale, so a late reply (even from a transport that ignores abort) writes no
-    // chat, checkpoint or connection state and starts nothing in the new session.
-    const current=session.ticket(),abort=new AbortController();
-    operation.current=true;setLoading(true);plannerAbort.current=abort;planningOwner.current=abort;
-    try{
-      // One submission owns setup, planning and local execution. Only the
-      // positive metadata projection crosses the planner boundary.
-      const instruction=privateInstruction(text,store.list);
-      const currentRequest=controller.request(instruction,continuation);
-      const request=continuation?withPendingClarification(currentRequest,continuation):currentRequest;
-      const status=await checkConnection(abort.signal,true,current);
-      abort.signal.throwIfAborted();
-      if(!current())return;
-      if(!status?.enabled){
-        if(fallback){
-          setLoading(false);
-          if(fallback.type==='undo')await undoLocal(current);
-          else if((fallback.type==='compress'||fallback.type==='chain')&&store.originals.length){const id=append({role:'assistant',text:'I can re-encode supported JPEG images at their original dimensions. Image quality may change; text and vectors stay intact. Some PDFs may not get smaller. Shall I create a new copy for you to preview?',choice:fallback.type,revision:store.revision});setChoice(id);}
-          else await executeLocal(fallback.type,fallback.page,current);
-          return;
-        }
-        const help = /^(?:what (?:can you|can atepdf|do you) do|(?:how )?can you help(?: me)?|help|what (?:are your|are atepdf.?s) capabilities)[?.!]*$/i.test(text.trim());
-        const reason = status?.gateAvailable===false ? LOCAL_ONLY_MESSAGE : !plannerAvailable ? 'AI planning is not available on this device yet.' : status?.connected ? 'AI planning is paused. Open AI connection to check the local request allowance.' : status ? 'OpenAI is not connected yet. You can connect it here for conversational help.' : 'The AI connection is unavailable. Check that atepdf’s local server is running, then try AI connection again.';
-        const id = append({role:'assistant', text: help ? localCapabilityHelp : `${reason} You can still use Merge, Compress${ocrAvailable ? ' or Make searchable' : ''}. Your files are unchanged.`, choice:plannerAvailable?'connection-help':undefined});
-        setChoice(id);return;
-      }
-      setLoading(false);setPlanning(true);
-      const result=await requestPlan(request,status.token,abort.signal,()=>{
-        abort.signal.throwIfAborted();
-        if(!current()||store.revision!==request.workspaceRevision)throw new Error('Files changed.');
-        const latest=controller.request(privateInstruction(text,store.list),continuation);
-        latest.requestId=request.requestId;
-        return continuation?withPendingClarification(latest,continuation):latest;
-      });
-      abort.signal.throwIfAborted();
-      if(!current())return;
-      if(store.revision!==request.workspaceRevision)throw new Error('Your files changed. Please ask again.');
-      // requestPlan validates clarification shape and response binding too.
-      if(result.planner.status==='undo'){await undoLocal(current);return;}
-      if(result.planner.status!=='plan'){
-        if(result.planner.status==='clarify')pendingClarification.current=pendingFromResponse(request,result.planner);
-        say(result.planner.clarification!.question);return;
-      }
-      const envelope=validateEnvelope(result,request,store.revision);
-      setPlanning(false);
-      // Retain a choice only when the requested operation can change image
-      // quality. Safe copy-producing plans run after full local validation.
-      if(envelope.planner.steps.some(step=>step.operation==='compress_pdf'&&step.params.preset!=='lossless')){
-        const id=append({role:'assistant',text:'I can make a smaller copy by optimising its images. Image quality may change; your originals will stay intact.',choice:'execute',revision:store.revision,request,envelope});setChoice(id);return;
-      }
-      if(plannerAbort.current===abort)plannerAbort.current=null;
-      const previous=store.focus;
-      await controller.execute(envelope,request);
-      if(current())finish(previous,'Your new PDF is ready.',plannedResultTitle(envelope.planner.steps));
-    }catch(e){if(current())say(e instanceof OutboundDenied?LOCAL_ONLY_MESSAGE:abort.signal.aborted?'Planning cancelled. No local files changed.':e instanceof Error?e.message:'This request could not finish. Your files are unchanged.');}
-    finally{
-      if(planningOwner.current===abort){planningOwner.current=null;operation.current=false;setLoading(false);setPlanning(false);}
-      if(plannerAbort.current===abort)plannerAbort.current=null;
-      // A stale request never checks the connection for the replacement session.
-      if(current()&&plannerAvailable)void refreshConnection(current);
-    }
-  };
-  const executePlanned=async(entry:Entry)=>{
-    if(!entry.envelope||!entry.request||operation.current)return;
-    cancelRequested.current=false;operation.current=true;const previous=store.focus,current=session.ticket();
-    try{await controller.execute(entry.envelope,entry.request);if(current())finish(previous,'Your new copy is ready. I checked it with an independent PDF reader.',plannedResultTitle(entry.envelope.planner.steps));}
-    catch(e){if(current())say(e instanceof Error?e.message:'The plan could not be applied.');}finally{if(current())operation.current=false;}
-  };
-  const cancel=()=>{
-    // Opening the durable head cannot be abandoned into a session-only workspace.
-    if(openingVault.current||resettingRef.current||cancelRequested.current)return;
-    cancelRequested.current=true;
-    const pending=loading||planning||state.busy||restoring,wasPlanning=!!plannerAbort.current;
-    invalidate();
-    if(!pending)return;
-    if(controller.state.busy){
-      say('Cancellation requested. Local work may need to finish before it stops; its late reply will be discarded.');
-      // This is the acknowledgement of this Cancel, with its own new ticket.
-      // Another import/reset makes it stale too; engine replies keep their old ticket.
-      const current=session.ticket();
-      void controller.settle().then(()=>{if(!current())return;if(controller.state.stage==='cancelled')say(controller.state.message);else if(controller.state.stage==='failed'&&controller.state.error)say(controller.state.error);});
-    }else say(wasPlanning?'Planning cancelled. No local files changed.':'Cancelled. Pending replies will be discarded.');
-  };
-  const confirm = (entry: Entry) => {
-    if (choice !== entry.id || resettingRef.current || (busy && entry.choice !== 'clear')) return;
-    setChoice(null);
-    if (entry.revision !== store.revision) { say('Your files changed. Please ask again so I use the current files.'); return; }
-    if(entry.choice==='connect'||entry.choice==='native-link'||entry.choice==='native-pair'||entry.choice==='connection-help')return;
-    if(entry.choice==='execute'){void executePlanned(entry);return;}
-    if (entry.choice === 'clear') {
-      if(!durable&&vault.current?.mode==='blocked'){say('atePDF can’t clear the saved workspace in this session. Reopen atePDF before clearing it; the saved files are still kept.');return;}
-      invalidate();setResetting(true);setLoading(true);const current=session.ticket();
-      // One transaction: chat/draft checkpoints are suspended (and pending draft
-      // saves cancelled) until the clear settles. An empty workspace is shown only
-      // once the new epoch is verified, and the chat/draft view is reset before
-      // checkpointing resumes, so nothing from before can be saved into it.
-      // Session-only (no saved workspace): nothing durable to wait for, so the view
-      // is reset immediately, exactly as before persistence existed.
-      if (!durable) { void (async()=>{try{await controller.settle();if(!current())return;await controller.clear();if(current())resetView();}finally{if(current()){setResetting(false);setLoading(false);}}})(); return; }
-      void checkpoints.exclusive(async () => {
-        await controller.settle();if(!current())return null;
-        await controller.clear();if(!current())return null;
-        if (controller.state.stage === 'failed' && controller.state.error) return controller.state.error;
-        resetView();
-        const writable = vault.current?.mode === 'writable', incomplete = controller.state.message === CLEANUP_INCOMPLETE;
-        setNotice(previous => incomplete ? {text: CLEANUP_INCOMPLETE, cleanup: true} : writable ? null : previous);
-        return null;
-      }).then(error => { if (!current()||!error) return; say(error); if (vault.current?.mode === 'blocked') setNotice({text: SAVE_PAUSED_NOTICE}); }).finally(()=>{if(current()){setResetting(false);setLoading(false);}});
-    } else if (entry.choice) { append({role: 'user', text: 'Yes, create an optimised copy.'}); void execute(entry.choice); }
-  };
-  const exportResult = async (artifact: DisplayArtifact) => {
-    if (savingLock.current || resettingRef.current) return;
-    const epoch=receiptEpoch.current,hash=store.get(artifact.ref).meta.checksum;
-    const owns=()=>receiptEpoch.current===epoch&&store.list.some(f=>f.ref===artifact.ref&&f.checksum===hash);
-    savingLock.current=true;
-    setSaving(artifact.ref);
-    try { const outcome = await save(store.get(artifact.ref).bytes); if(!owns())return;setReceipts(previous => ({...previous, [artifact.ref]: outcome === 'shared' ? 'Share sheet closed · check the destination you chose' : outcome === 'saved' ? 'Saved to your device' : outcome === 'cancelled' ? 'Ready · save cancelled' : 'Download started · check your downloads'})); }
-    catch (e) { if(owns())setReceipts(previous => ({...previous, [artifact.ref]: safeOrdinaryText(e instanceof Error ? e.message : 'Saving failed. Try again.')})); }
-    finally { savingLock.current=false;setSaving(null); }
-  };
-  // The workspace is kept on disk between launches (not Delete when atePDF quits).
-  const keeping = durable && retention !== 'quit';
-  const retentionNote = !backend ? null : restoring ? 'Available once your workspace opens.' : durable ? null
-    : vault.current?.mode === 'blocked' ? 'This can’t be changed until your saved workspace opens. You can still delete it below.'
-    : 'atePDF can’t save your workspace on this Mac right now, so nothing is kept after you quit.';
-  return {controller, state, store, entries, busy, working, loading, current, currentTitle:currentEntry?.resultTitle, focus, preview, setPreview, privacy, setPrivacy,
-    choice, setChoice, saving, receipts, append, say, showHelp, importFiles, pick, action, undo, submit, confirm, exportResult, planning, connection, connectionToken, connect, refreshConnection, cancel, clearPending,
-    session, ticket: () => session.ticket(), restoring, restoredDraft, noteDraft, notice, durable, keeping, canRetryRestore, retryRestore, clearCount,
-    capable: backend !== null, retention, retentionNote, retentionImpact, changeRetention, storage, deleteLocalData, deleting, storageStatus};
+const SourceGroup = lazyView(loaded => loaded.SourceGroup), EntryExtras = lazyView(loaded => loaded.EntryExtras), ProposalCard = lazyView(loaded => loaded.ProposalCard);
+const ActivityRow = lazyView(loaded => loaded.ActivityRow), FilesPanel = lazyView(loaded => loaded.FilesPanel);
+
+function useEntry() {
+  const id = useAuiState(s => s.message.metadata.custom.entryId);
+  const {workspace} = useApp();
+  return workspace.entries.find(entry => entry.id === id);
 }
 
-const WorkspaceContext=createContext<ReturnType<typeof useWorkspace>|null>(null);
-const useWorkspaceContext=()=>{const context=useContext(WorkspaceContext);if(!context)throw new Error('Workspace unavailable');return context;};
-const convertEntry=(entry:Entry):ThreadMessageLike=>({id:String(entry.id),role:entry.role,content:[{type:'text',text:entry.text}],metadata:{custom:{entryId:entry.id,hasArtifact:!!entry.artifact}},...(entry.id===-1?{status:{type:'running' as const}}:{})});
-function Processing(){const w=useWorkspaceContext();return <JobActivity state={w.state} planning={w.planning} loading={w.loading}/>;}
-const threadComponents={Welcome,MessageExtras,Activity:Processing,AddAttachment:AddFiles,Footer,...nativeComposerComponents};
-
-export default function App(){return <SafeAreaProvider style={{height:'100%'}}><Screen/></SafeAreaProvider>;}
-function Screen(){
-  const workspace=useWorkspace(),{entries,busy,controller,state}=workspace;
-  const {width}=useWindowDimensions();
-  const motion=useMotion();
-  const announcement=entries.findLast(entry=>entry.role==='assistant')?.text;
-  useAnnounce(announcement);
-  const messages=useMemo(()=>busy?[...entries,{id:-1,role:'assistant' as const,text:state.busy?state.message:workspace.planning?'Planning your request…':'Checking local setup…'}]:entries,[entries,busy,state.message,state.busy,workspace.planning]);
-  const runtime=useExternalStoreRuntime({messages,convertMessage:convertEntry,isRunning:busy,isSendDisabled:busy||!nativeEngineReady,
-    onNew:async message=>{workspace.submit(message.content.filter(p=>p.type==='text').map(p=>p.text).join('\n'));},
-    onCancel:async()=>{workspace.cancel();},
-  });
-  // Restore the inert draft before the composer mounts; the native input reads it once.
-  const [composerReady,setComposerReady]=useState(!workspace.restoring);
-  useEffect(()=>{if(workspace.restoring)return;if(workspace.restoredDraft)runtime.thread.composer.setText(workspace.restoredDraft);setComposerReady(true);},[workspace.restoring]);
-  useEffect(()=>runtime.thread.composer.subscribe(()=>workspace.noteDraft(runtime.thread.composer.getState().text)),[runtime,workspace.clearCount]);
-  // Start over also removes the unsent draft from the composer.
-  useEffect(()=>{if(workspace.clearCount){runtime.thread.composer.setText('');resetComposerInput();}},[workspace.clearCount]);
-  return <WorkspaceContext.Provider value={workspace}><AssistantRuntimeProvider runtime={runtime}>
-    <SafeAreaView style={{flex:1,backgroundColor:"#fff"}} edges={['top','left','right']}>
-      <DropSurface disabled={busy} onFiles={files=>void workspace.importFiles(files)}>
-        <View className="flex-row items-center justify-between gap-3 px-4 py-2 md:px-8 md:py-4">
-          <View className="flex-row items-center gap-2"><Image source={require('./assets/approved-8-mark-source-crop.png')} resizeMode="contain" style={{width:28,height:37}}/><Image accessibilityLabel="atepdf" source={require('./assets/approved-atepdf-wordmark-source-crop.png')} resizeMode="contain" style={{width:90,height:30}}/></View>
-          <View className="flex-row items-center gap-1">
-            <Pressable accessibilityRole="button" accessibilityLabel="Processed on your device" accessibilityHint={workspace.capable?'Privacy, storage and how long your workspace is kept':undefined} onPress={()=>workspace.setPrivacy(true)} className="atepdf-button min-h-11 min-w-11 flex-row items-center justify-center gap-2 rounded-full bg-[#edf9f4] px-3"><LockKeyhole size={15} color="#26715c"/>{width>=430&&<Text className="text-xs text-[#26715c]">Processed on your device</Text>}</Pressable>
-            {plannerAvailable&&<Pressable accessibilityRole="button" accessibilityLabel={Platform.OS==='web'?'OpenAI connection':'AI connection'} accessibilityHint="Manage optional AI planning" disabled={busy} onPress={()=>void workspace.connect()} className={`atepdf-button size-11 items-center justify-center rounded-full ${busy?'opacity-40':''}`}><SlidersHorizontal size={19} color="#5d6980"/></Pressable>}
-            {(!!entries.length||workspace.loading||workspace.planning)&&<Pressable accessibilityRole="button" accessibilityLabel="Start over" disabled={state.busy||workspace.restoring} onPress={()=>{workspace.cancel();workspace.append({role:'user',text:'Start over.'});const id=workspace.append({role:'assistant',text:workspace.keeping?CLEAR_QUESTION_SAVED:CLEAR_QUESTION_SESSION,choice:'clear',revision:workspace.store.revision});workspace.setChoice(id);}} className={`atepdf-button size-11 items-center justify-center rounded-full ${busy?'opacity-40':''}`}><SquarePen size={19} color="#5d6980"/></Pressable>}
-          </View>
-        </View>
-        {!nativeEngineReady&&<Text className="mx-5 text-xs text-muted-foreground">Native development preview · local PDF processing is not connected yet.</Text>}
-        {!!workspace.notice&&<View className="mx-5 flex-row flex-wrap items-center gap-2"><Text accessibilityLiveRegion="polite" className="flex-shrink text-xs text-muted-foreground">{workspace.notice.text}</Text>{workspace.canRetryRestore&&<Button quiet disabled={busy} onPress={workspace.retryRestore}>Try again</Button>}</View>}
-        {composerReady?<Thread components={threadComponents}/>:<View className="flex-1 items-center justify-center"><Text accessibilityLiveRegion="polite" className="text-sm text-muted-foreground">Restoring your workspace…</Text></View>}
-      </DropSurface>
-      <PrivacyStorage visible={workspace.privacy} onClose={()=>workspace.setPrivacy(false)} motion={motion} capable={workspace.capable}
-        retention={workspace.retention} retentionNote={workspace.retentionNote} busy={workspace.working} exporting={!!workspace.saving} ready={!workspace.restoring} storage={workspace.storage}
-        impact={workspace.retentionImpact} onRetention={workspace.changeRetention} onDelete={workspace.deleteLocalData} deleting={workspace.deleting} status={workspace.storageStatus}>
-        <Text className="text-base leading-6 text-foreground">PDF files, previews and recognised text stay on this device. PDF operations run in local engines.</Text>
-        <Text className="text-sm leading-6 text-muted-foreground">Quick-action buttons run locally without AI planning. When AI is enabled, chat requests send your instruction and anonymous file references, page counts and sizes for planning. Filenames, passwords, paths, checksums and document contents are excluded. Your OpenAI key stays in the local server, outside the app.</Text>
-        <Text className="text-sm leading-6 text-muted-foreground">{workspace.keeping?'Chat, drafts and PDFs are kept encrypted on this Mac so you can continue after reopening atePDF. They are not synced or backed up by atePDF. Start over removes them from atePDF on this Mac; it is not secure erasure.':workspace.durable?'Chat, drafts and PDFs stay in memory only and are gone when you quit atePDF.':'Save before closing. Chat and files stay in this session.'} Saving to a cloud folder or sharing through a chosen provider may transfer the saved file outside atepdf.</Text>
-      </PrivacyStorage>
-    </SafeAreaView>
-  </AssistantRuntimeProvider></WorkspaceContext.Provider>;
-}
-function Welcome(){
-  const {busy,pick}=useWorkspaceContext();const {width,height}=useWindowDimensions();const compact=height<760,short=height<=600;
-  const instruction=<Text className="text-center text-sm text-muted-foreground">Then tell me what you’d like to do.</Text>;
-  return <ScrollView testID="welcome" style={{flex:1}} keyboardShouldPersistTaps="handled" contentContainerStyle={{flexGrow:1,justifyContent:short?'flex-start':'center',paddingHorizontal:20,paddingVertical:12}}>
-    <View className="atepdf-welcome-card w-full max-w-xl self-center items-center gap-3 rounded-[28px] border border-dashed border-[#ccd9ec] bg-[#f8faff] px-6 py-5 sm:py-7">
-      {height>=620&&<Image source={require('./assets/paper.png')} resizeMode="contain" style={{width:compact?144:184,height:compact?84:132}}/>}
-      <Text accessibilityRole="header" className="text-center text-[26px] font-semibold tracking-tight text-foreground">{Platform.OS!=='web'||width<640?'Add your files':'Drop files here'}</Text>
-      {!short&&instruction}
-      <Button primary icon={FolderOpen} disabled={busy} onPress={()=>void pick()}>Choose files</Button>
-      {short&&instruction}
-      <Pressable accessibilityRole="button" disabled={busy||!nativeEngineReady} onPress={()=>void pick(true)} className="atepdf-button min-h-11 items-center justify-center rounded-xl px-3"><Text className="text-sm text-muted-foreground">Try the two sample PDFs</Text></Pressable>
+/** C2 RequestBlock: the user's request, left-aligned; an import turn shows its files instead (C4). */
+function UserMessage() {
+  const entry = useEntry();
+  const {c} = useTheme();
+  if (entry?.files) return <SourceGroup entry={entry}/>;
+  // A plain filled block: a leading chevron read as a collapsed disclosure.
+  return <View style={{flexDirection: 'row', alignItems: 'flex-start', gap: 6}}>
+    <View style={{flexShrink: 1, backgroundColor: c.request, borderRadius: radius.md, paddingVertical: 7, paddingHorizontal: 12}}>
+      <MessageText strong/>
     </View>
-  </ScrollView>;
-}
-function AddFiles(){const {busy,pick}=useWorkspaceContext();return <Pressable accessibilityRole="button" accessibilityLabel="Add files" disabled={busy} onPress={()=>void pick()} className="size-11 items-center justify-center rounded-full active:bg-muted"><Plus size={21} color="#637089"/></Pressable>;}
-function Footer(){
-  const w=useWorkspaceContext();
-  const {width,height,fontScale}=useWindowDimensions();
-  const [keyboardVisible,setKeyboardVisible]=useState(()=>Platform.OS!=='web'&&Keyboard.isVisible());
-  useEffect(()=>{
-    if(Platform.OS==='web')return;
-    const shown=Keyboard.addListener('keyboardDidShow',()=>setKeyboardVisible(true));
-    const hidden=Keyboard.addListener('keyboardDidHide',()=>setKeyboardVisible(false));
-    return()=>{shown.remove();hidden.remove();};
-  },[]);
-  useEffect(()=>{
-    // Rotation can keep the keyboard open without another show event.
-    if(Platform.OS!=='web')setKeyboardVisible(Keyboard.isVisible());
-  },[width,height]);
-  // The thread already moves the composer above the keyboard. Give its
-  // conversation the secondary controls' space in landscape or at larger text.
-  const largeText=Platform.OS!=='web'&&fontScale>=1.3;
-  const scrollActions=largeText&&width<600;
-  if(Platform.OS!=='web'&&keyboardVisible&&(width>height||largeText))return null;
-  const actions=[{title:'Merge',type:'merge',prompt:'Merge my PDFs.',icon:Copy,color:'#aa405e'},{title:'Compress',type:'compress',prompt:'Compress the current PDF.',icon:ArrowDownToLine,color:'#26715c'},{title:'Make searchable',type:'ocr',prompt:'Make this PDF searchable.',icon:ScanText,color:'#7460b0'}].map(item=>{
-    const disabled=w.busy||!nativeEngineReady||(item.type==='ocr'&&!ocrAvailable);
-    return <Pressable key={item.title} accessibilityRole="button" disabled={disabled} aria-disabled={disabled} onPress={()=>w.action(item.type as Action,item.prompt)} className={`atepdf-button min-h-11 ${scrollActions?'flex-none':'flex-1'} ${Platform.OS==='web'?'sm:flex-none':''} flex-row items-center justify-center gap-1.5 rounded-full border border-border px-2 sm:px-4 active:bg-muted ${disabled?'opacity-40':''}`}>
-      <View style={{width:16,height:16,flexShrink:0}}><item.icon size={16} color={item.color}/></View><Text numberOfLines={scrollActions?1:undefined} className={`${scrollActions?'':'flex-shrink'} text-xs text-foreground`}>{item.title}</Text>
-    </Pressable>;
-  });
-  return <View className="gap-2 pb-1">
-    {scrollActions?<ScrollView horizontal style={{flexGrow:0}} showsHorizontalScrollIndicator={false} contentContainerStyle={{gap:8}}>{actions}</ScrollView>:<View className="flex-row justify-center gap-2">{actions}</View>}
-    <View className="min-h-11 flex-row items-center justify-center gap-2"><View className="flex-shrink flex-row items-center gap-1.5">{w.focus&&<FileText size={12} color="#5d6980"/>}<Text testID="current-context" className="flex-shrink text-center text-xs text-muted-foreground">{w.focus?`Current: ${w.currentTitle ?? 'Your PDF'} · ${pageCount(w.focus.pageCount)}`:w.entries.length?`${w.store.originals.length} originals in this chat`:'Your files stay on this device'}</Text></View><Pressable accessibilityRole="button" accessibilityLabel="Help" disabled={w.busy} onPress={w.showHelp} className={`atepdf-button min-h-11 min-w-11 flex-none items-center justify-center rounded-xl px-2 active:bg-muted ${w.busy?'opacity-40':''}`}><Text className="text-xs text-muted-foreground">Help</Text></Pressable></View>
+    <CopyMessage/>
   </View>;
 }
-function MessageExtras(){
-  const id=useAuiState(s=>s.message.metadata.custom.entryId),w=useWorkspaceContext(),entry=w.entries.find(e=>e.id===id);
-  if(id===-1)return null;
-  if(!entry)return null;
-  const artifact=entry.artifact;
-  return <>
-    {entry.files?.map((file,index)=><View key={index} className="max-w-full flex-row items-center gap-3 rounded-2xl border border-border bg-background px-4 py-3"><FileText color="#c45167" size={23}/><View className="min-w-0 flex-shrink"><Text className="text-sm font-medium text-foreground">{file.name}</Text><Text className="mt-1 text-xs text-muted-foreground">{formatSize(file.size)} · Original{file.ref&&w.store.originals.includes(file.ref)?` · ${w.store.originals.indexOf(file.ref)+1}`:''}</Text></View></View>)}
-    {artifact&&<View testID={entry.id===w.current?'current-result':'previous-result'} className={`gap-3 sm:gap-4 rounded-[20px] border bg-background p-4 sm:p-5 ${entry.id===w.current?'border-[#d4dfed]':'border-border'}`}>
-      <View className="flex-row items-center gap-3"><View className={`size-11 items-center justify-center rounded-xl ${entry.id===w.current?'bg-[#eef4ff]':'bg-muted'}`}><FileText size={23} color={entry.id===w.current?'#1769df':'#5d6980'}/></View><View className="min-w-0 flex-1"><Text accessibilityRole="header" className="text-base font-semibold text-foreground">{entry.resultTitle ?? 'Your PDF'}</Text><Text testID={entry.id===w.current?'result-facts':undefined} className="mt-1 text-sm text-muted-foreground">{pageCount(artifact.pageCount)} · {formatSize(artifact.sizeBytes)}</Text><Text className="mt-1 text-xs font-medium text-muted-foreground">{entry.id===w.current?'Current result':'Earlier result'}</Text><Text className="text-xs text-muted-foreground">Result {w.store.list.filter(file=>!file.original).findIndex(file=>file.ref===artifact.ref)+1}</Text></View><Check accessibilityLabel="Validated" size={18} color="#26715c"/></View>
-      {!!artifact.note&&<Text className="text-sm leading-5 text-muted-foreground">{artifact.note}</Text>}
-      <View className="flex-row flex-wrap items-center gap-2"><Button primary={entry.id===w.current} icon={ArrowDownToLine} disabled={!!w.saving} onPress={()=>void w.exportResult(artifact)}>{w.saving===artifact.ref?'Saving…':'Save PDF'}</Button><Button icon={Eye} onPress={()=>w.setPreview(w.preview===entry.id?null:entry.id)}>{w.preview===entry.id?'Hide preview':'Preview'}</Button>{entry.id===w.current&&w.store.canUndo&&<Button quiet icon={Undo2} disabled={w.busy} onPress={w.undo}>Undo</Button>}</View>
-      {!!w.receipts[artifact.ref]&&<Text accessibilityLiveRegion="polite" className="text-xs text-muted-foreground">{w.receipts[artifact.ref]}</Text>}
-      {w.preview===entry.id&&<InlinePreview store={w.store} artifact={artifact} onClose={()=>w.setPreview(null)}/>}
-      {entry.id===w.current&&<Text className="border-t border-border pt-3 text-sm text-muted-foreground">Tell me what you’d like to do next.</Text>}
-    </View>}
-    {entry.choice&&['clear','compress','chain','execute'].includes(entry.choice)&&w.choice===entry.id&&<View className="flex-row flex-wrap gap-2"><Button primary disabled={w.busy} onPress={()=>w.confirm(entry)}>{entry.choice==='clear'?'Clear session':'Create optimised copy'}</Button><Button disabled={w.busy} onPress={()=>{w.setChoice(null);w.append({role:'user',text:'Keep things as they are.'});w.say('Okay. Your current files and result are unchanged.');}}>Keep working</Button></View>}
-    {entry.choice==='connect'&&w.choice===entry.id&&w.connectionToken.current&&<KeyEntry token={w.connectionToken.current}/>}
-    {entry.choice==='native-link'&&w.choice===entry.id&&w.connectionToken.current&&<BrowserPairing token={w.connectionToken.current}/>}
-    {entry.choice==='native-pair'&&w.choice===entry.id&&<NativePairing/>}
-    {plannerAvailable&&entry.choice==='connection-help'&&w.choice===entry.id&&<View className="items-start"><Button icon={SlidersHorizontal} disabled={w.busy} onPress={()=>void w.connect()}>AI connection</Button></View>}
-    {entry.choice&&entry.choice!=='connection-help'&&w.choice!==entry.id&&<Text className="text-xs text-muted-foreground">This question is closed.</Text>}
-  </>;
+
+/** C3 AssistantMessage: text on the window background, an outcome icon when it reports one, then its artifact.
+ * A reply that only follows up an import is quieter, so the import and its summary read as one turn. */
+function AssistantMessage() {
+  const entry = useEntry();
+  const tight = useAuiState(s => !!s.message.metadata.custom.tight);
+  if (!entry) return <MessageText/>;
+  if (isProposal(entry)) return <ProposalCard entry={entry}/>;
+  return <View style={{gap: 8}}>
+    <View style={{flexDirection: 'row', alignItems: 'flex-start', gap: 8}}>
+      <NoticeIcon notice={entry.notice}/>
+      <View style={{flex: 1, minWidth: 0}}><MessageText muted={tight}/></View>
+      {!entry.artifact && <CopyMessage/>}
+    </View>
+    <EntryExtras entry={entry}/>
+  </View>;
 }
 
-function BrowserPairing({token}:{token:string}){
-  const [code,setCode]=useState(''),[busy,setBusy]=useState(false),[message,setMessage]=useState('');
-  const generate=async()=>{setBusy(true);setCode('');setMessage('');try{const pairing=await createNativePairing(token);setCode(pairing.code);setMessage('Valid once, for five minutes. Paste it in your app’s AI connection controls.');}catch{setMessage('A code could not be created. Open connection controls and try again.');}finally{setBusy(false);}};
-  return <View className="gap-3 rounded-2xl border border-border p-4"><Text className="text-sm font-medium text-foreground">Connect an Apple device</Text><Text className="text-sm text-muted-foreground">Pair the native app with this local planner. Your OpenAI key stays on this computer.</Text><Button disabled={busy} onPress={()=>void generate()}>Create pairing code</Button>{!!code&&<><TextInput accessibilityLabel="Native pairing code" value={code} readOnly secureTextEntry className="min-h-11 rounded-xl border border-border px-3 text-foreground"/><Button onPress={()=>{void Clipboard.setStringAsync(code);setMessage('Copied. Paste it in the native app’s AI connection controls.');}}>Copy pairing code</Button></>}{!!message&&<Text accessibilityLiveRegion="polite" className="text-sm text-muted-foreground">{message}</Text>}</View>;
+/** B5 notices: workspace restore, save and cleanup states (copy unchanged), and a development-build note. */
+function Banner() {
+  const {workspace: w} = useApp();
+  const notice = w.notice;
+  return <View style={{gap: 8}}>
+    {!nativeEngineReady && <InlineBanner variant="info" text="Development preview · local PDF processing isn’t connected in this build."/>}
+    {notice && <InlineBanner text={notice.text} variant={notice.retry ? 'danger' : notice.cleanup || /couldn’t|can’t|paused|cancelled/i.test(notice.text) ? 'warning' : 'info'}
+      action={w.canRetryRestore ? {label: 'Try Again', onPress: w.retryRestore, disabled: w.busy} : undefined}/>}
+  </View>;
 }
-function NativePairing(){
-  const w=useWorkspaceContext(),[code,setCode]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState('');
-  const pair=async()=>{const current=w.session.ticket();setBusy(true);setError('');try{await pairNativePlanner(code);if(!current())return;setCode('');await w.refreshConnection(current);if(!current())return;w.setChoice(null);w.say('Connected to the local planner. Tell me what you’d like to do.');}catch{if(!current())return;setCode('');setError('Pairing did not finish. Create a fresh code in the browser and try again.');}finally{setBusy(false);}};
-  const disconnect=async()=>{const current=w.session.ticket();setBusy(true);try{await disconnectNativePlanner();if(!current())return;await w.refreshConnection(current);if(!current())return;w.setChoice(null);w.say('Disconnected. Local quick actions still work.');}finally{setBusy(false);}};
-  return <View className="gap-3 rounded-2xl border border-border p-4">{w.connection?.pairingRequired?<><Text className="text-sm font-medium text-foreground">Pairing code</Text><TextInput accessibilityLabel="Pairing code" secureTextEntry autoComplete="off" autoCorrect={false} autoCapitalize="none" textContentType="none" value={code} onChangeText={setCode} editable={!busy} placeholder="Paste pairing code" className="min-h-12 rounded-xl border border-border px-3 py-2 text-base text-foreground"/><Button primary disabled={busy||!code.trim()} onPress={()=>void pair()}>Connect this app</Button><Text className="text-xs text-muted-foreground">This connection lasts for this app session. Keep atepdf running on your Mac.</Text></>:<Button disabled={busy} onPress={()=>void disconnect()}>Disconnect this app</Button>}{!!error&&<Text className="text-sm text-destructive">{error}</Text>}</View>;
+
+function Composer() {
+  const {workspace: w} = useApp();
+  const count = w.store.originals.length;
+  const placeholder = w.question !== null ? 'Answer, or ask for something else…'
+    : w.focus ? `What next for ${w.currentTitle ?? 'this PDF'}?`
+    : count ? `What should I do with ${count === 1 ? 'this PDF' : `these ${count} PDFs`}?`
+    : 'Describe what you need…';
+  return <ComposerInput placeholder={placeholder}/>;
 }
-function KeyEntry({token}:{token:string}){
-  const w=useWorkspaceContext();const [key,setKey]=useState(''),[saving,setSaving]=useState(false),[error,setError]=useState('');
-  const saveKey=async()=>{
-    if(saving||!key.trim())return;const current=w.session.ticket();setSaving(true);setError('');
-    try{await savePlannerKey(key.trim(),token);if(!current())return;setKey('');w.setChoice(null);void w.refreshConnection(current);w.say('Your key is saved on this computer. Paid planning is paused until you approve a request limit. Local quick actions work as usual.');}
-    catch{setKey('');if(!current())return;setError('The key could not be saved. Check its format or your existing local setup.');}
-    finally{setSaving(false);}
-  };
-  return <View className="gap-3 rounded-2xl border border-border p-4"><Text className="text-sm font-medium text-foreground">OpenAI project key</Text><TextInput accessibilityLabel="OpenAI project key" secureTextEntry autoComplete="off" autoCorrect={false} autoCapitalize="none" textContentType="none" value={key} onChangeText={setKey} editable={!saving} placeholder="Paste your key here" className="min-h-12 rounded-xl border border-border px-3 py-2 text-base text-foreground"/><Text className="text-xs leading-5 text-muted-foreground">Private local setup · no API calls are made. The key is not checked with OpenAI yet.</Text>{!!error&&<Text accessibilityLiveRegion="polite" className="text-sm text-destructive">{error}</Text>}<View className="flex-row flex-wrap gap-2"><Button primary disabled={saving||!key.trim()} onPress={()=>void saveKey()}>{saving?'Saving key…':'Save key on this computer'}</Button><Button disabled={saving} onPress={()=>{setKey('');w.setChoice(null);}}>Keep working</Button></View></View>;
+
+// Sheets load on first use, so their code stays out of the startup bundle (web budget).
+const AllSheets = lazy(() => import('./src/ui/sheets'));
+const ActionPalette = lazy(() => import('./src/ui/palette'));
+function Palette() {const {shell} = useApp(); return shell.palette ? <Suspense fallback={null}><ActionPalette/></Suspense> : null;}
+function Sheets() {
+  const {shell} = useApp();
+  const [needed, setNeeded] = useState(false);
+  const open = shell.settings !== null || shell.startOver || shell.quickLook !== null || shell.onboarding || shell.shortcuts;
+  useEffect(() => {if (open) setNeeded(true);}, [open]);
+  return needed || open ? <Suspense fallback={null}><AllSheets/></Suspense> : null;
+}
+
+const threadComponents = {Welcome: EmptyWorkspace, UserMessage, AssistantMessage, Activity: ActivityRow, AddAttachment: AddFiles, ComposerTop, ComposerActions, Footer: HintRow, Banner, ComposerInput: Composer};
+
+export default function App() {return <SafeAreaProvider style={{height: '100%'}}><Screen/></SafeAreaProvider>;}
+function Screen() {
+  const workspace = useWorkspace(), shell = useShellState();
+  const {entries, busy, state} = workspace;
+  const {c} = useTheme();
+  const {width} = useWindowDimensions();
+  const announcement = entries.findLast(entry => entry.role === 'assistant')?.text;
+  useAnnounce(announcement);
+  // Presence: the activity row bridges only the tick between work ending and its reply landing;
+  // replies are never held (see progress.ts).
+  const presence = useActivityPresence(entries, workspace.working);
+  const settling = presence.phase === 'settling';
+  const messages = useMemo(() => {
+    const visible = settling ? entries.slice(0, presence.cut) : entries;
+    // A Stop acknowledgement is replaced by the row's “Stopping…” and then by the outcome.
+    const shown: ShownEntry[] = visible.filter((entry, index) => !(isStopAcknowledgement(entry) && (index < visible.length - 1 || state.busy)))
+      .map((entry, index, list) => entry.role === 'assistant' && list[index - 1]?.files && !entry.artifact && !entry.notice ? {...entry, tight: true} : entry);
+    // The activity row carries the id its reply will have, so the reply replaces it in the same
+    // list cell (no frame in which a new cell is still empty).
+    const id = settling ? entries[presence.cut]?.id ?? workspace.nextEntryId : workspace.nextEntryId;
+    return busy || settling ? [...shown, {id, role: 'assistant' as const, text: state.busy ? state.message : 'Working…', running: true as const}] : shown;
+  }, [entries, busy, settling, presence.cut, state.message, state.busy, workspace.nextEntryId]);
+  // Until a reply lands, the result on screen stays the current one.
+  const shownCurrent = settling ? entries.slice(0, presence.cut).findLast(entry => entry.artifact)?.id : workspace.current;
+  const runtime = useExternalStoreRuntime({messages, convertMessage: convertEntry, isRunning: busy, isSendDisabled: busy || !nativeEngineReady,
+    onNew: async message => {workspace.submit(message.content.filter(p => p.type === 'text').map(p => p.text).join('\n'));},
+    onCancel: async () => {workspace.cancel();},
+  });
+  // Restore the inert draft before the composer mounts; the native input reads it once.
+  const [composerReady, setComposerReady] = useState(!workspace.restoring);
+  useEffect(() => {if (workspace.restoring) return; if (workspace.restoredDraft) runtime.thread.composer.setText(workspace.restoredDraft); setComposerReady(true);}, [workspace.restoring]);
+  useEffect(() => runtime.thread.composer.subscribe(() => workspace.noteDraft(runtime.thread.composer.getState().text)), [runtime, workspace.clearCount]);
+  // Start over, expiry and Delete Local Data: remove the unsent draft, content-derived
+  // thumbnails and any open preview of the old workspace.
+  useEffect(() => {if (workspace.clearCount) {runtime.thread.composer.setText(''); resetComposerInput(); void loadViews().then(views => views.clearThumbnails()); shell.setQuickLook(null); shell.setOverlayPanel(false);}}, [workspace.clearCount]);
+  // A restored conversation is already there: its turns don't animate in.
+  useEffect(() => {if (!workspace.restoring) markRestored(entries.map(entry => entry.id));}, [workspace.restoring]);
+  useEffect(() => {const timer = setTimeout(() => void loadViews(), 0); return () => clearTimeout(timer);}, []);
+  const composer = useMemo(() => ({fill: (text: string) => {runtime.thread.composer.setText(text); fillComposerInput(text);}, focus: focusComposerInput}), [runtime]);
+  useKeyboardCommands(workspace, shell, composer);
+  useEffect(() => {if (Platform.OS === 'web') document.title = 'atePDF';}, []);
+  const hasFiles = workspace.store.list.length > 0;
+  const docked = layout.panelDocks(width) && hasFiles && shell.filesPanel !== false;
+  const context = useMemo(() => ({workspace, shell, composer}), [workspace, shell, composer]);
+  const activity = useMemo(() => ({phase: presence.phase, current: shownCurrent}), [presence.phase, shownCurrent]);
+  return <WorkspaceContext.Provider value={context}><ActivityPresenceContext.Provider value={activity}><AssistantRuntimeProvider runtime={runtime}>
+    <SafeAreaView style={{flex: 1, backgroundColor: c.window}} edges={['top', 'left', 'right']}>
+      <DropSurface disabled={busy} onFiles={files => void workspace.importFiles(files)}>
+        <Toolbar/>
+        <View style={{flex: 1, flexDirection: 'row', minHeight: 0}}>
+          <View style={{flex: 1, minWidth: 0}}>
+            {composerReady ? <Thread components={threadComponents}/>
+              : <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}><Txt variant="meta" tone="secondary" accessibilityLiveRegion="polite">Restoring your workspace…</Txt></View>}
+          </View>
+          {docked && <FilesPanel/>}
+        </View>
+        {!layout.panelDocks(width) && shell.overlayPanel && hasFiles && <FilesPanel overlay onClose={() => shell.setOverlayPanel(false)}/>}
+      </DropSurface>
+      <Palette/>
+      <Sheets/>
+    </SafeAreaView>
+  </AssistantRuntimeProvider></ActivityPresenceContext.Provider></WorkspaceContext.Provider>;
+}
+
+/** In-window keyboard commands (UX_SPEC 15) for the web host. Text-editing keys are never taken
+ * while the user is editing; ⌘Z undoes a result only outside text fields or in an empty composer.
+ * Native Mac menu-bar commands belong to SHR-75; every command is also in the ⋯ menu. */
+function useKeyboardCommands(w: ReturnType<typeof useWorkspace>, shell: ReturnType<typeof useShellState>, composer: {focus: () => void}) {
+  useEffect(() => {
+    if (Platform.OS !== 'web') return;
+    const handler = (event: KeyboardEvent) => {
+      if (!(event.metaKey || event.ctrlKey)) return;
+      const target = event.target as HTMLElement | null;
+      const editing = !!target && (target.tagName === 'TEXTAREA' || target.tagName === 'INPUT');
+      const composerEmpty = target?.getAttribute('aria-label') === 'Tell atePDF what to do' && !(target as HTMLTextAreaElement).value;
+      const sheet = shell.settings !== null || shell.startOver || shell.quickLook !== null || shell.onboarding || shell.shortcuts;
+      const run = (action: () => void) => {event.preventDefault(); action();};
+      const key = event.key.toLowerCase();
+      if (key === ',') return run(() => shell.openSettings('general'));
+      if (sheet) return;
+      if (key === 'o' && !event.shiftKey) return run(() => {if (!w.busy) void w.pick();});
+      if (key === 'k') return run(() => shell.setPalette(!shell.palette));
+      if (event.code === 'KeyI' && event.altKey) return run(() => {const hasFiles = w.store.list.length > 0; if (!hasFiles) return; if (window.innerWidth >= 1120) shell.setFilesPanel(shell.filesPanel === false); else shell.setOverlayPanel(!shell.overlayPanel);});
+      if (key === '.') return run(() => {if (w.working) w.cancel();});
+      if (key === '/') return run(() => shell.setShortcuts(true));
+      if (key === 'l') return run(composer.focus);
+      if (key === 'backspace' && event.shiftKey) return run(() => {if (!w.state.busy && !w.restoring && w.entries.length) shell.setStartOver(true);});
+      if (key === 's' && !event.shiftKey) return run(() => {const entry = w.entries.find(item => item.id === w.current); if (entry?.artifact && !w.saving) void w.exportResult(entry.artifact);});
+      if (key === 'z' && !event.shiftKey && (!editing || composerEmpty) && w.store.canUndo && !w.busy) return run(w.undo);
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [w, shell, composer]);
 }

@@ -321,7 +321,7 @@ final class AtepdfWorkflowUITests: XCTestCase {
     send("undo");assertPages(3)
     send("Wait for cancellation")
     wait(app.buttons["Cancel"],"exists == true AND enabled == true");tap(app.buttons["Cancel"])
-    wait(app.staticTexts["Planning cancelled. No local files changed."],"exists == true");assertPages(3)
+    wait(app.staticTexts["Cancelled. No files were changed."],"exists == true");assertPages(3)
     let beforeInterruption = try await syntheticEvidence()
     send("Wait for interruption")
     try await waitForSyntheticEvidence(calls: beforeInterruption.calls + 1)

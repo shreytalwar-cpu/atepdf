@@ -387,3 +387,18 @@ All seven were approved by the owner on 30 September 2026, as recommended.
 | OD-7 | Settings as an in-window sheet rather than a separate Settings window | Sheet for v1 (avoids multi-window work, MAC-02) |
 
 Items that stay open under PRODUCT_V1.md (prices, allowance, retention defaults, outage policy, consent wording) are **not** decided here. The design shows where they appear, using placeholders.
+
+## 19. SHR-106 polish amendments (owner review, 1 October 2026)
+
+The owner's review of the first SHR-106 build asked for more brand expression, a black app icon, a motion system and a calmer, Codex-like conversation. These amend the sections above; where they disagree, this section wins.
+
+| Area | Amendment | Supersedes |
+|---|---|---|
+| App icon | **Folio Eight on black** (`brand/icon-folio-eight-black.svg`): black body, flat `brand.irisLight` mark, `brand.fold` flap, faint edge hairline. No gradient, no text. 16 and 32 px drop the fold tint and enlarge the mark slightly. The Ink and Paper masters stay as references. | OD-1 icon treatment, 2.5 |
+| Brand in the product | The mark also appears 16 pt and still at the toolbar's leading edge, and 48 pt in Iris on the empty workspace. The **folded corner** is the product's recurring document cue: on every page thumbnail (Iris flap on results atePDF made, neutral on sources) and on the empty-workspace sheet. | 2.6 |
+| Verified | The Verified tag and the save receipt's check use the Iris accent (`accent.text`), not success green. Shown only on committed results, after SHR-47 verification. On first appearance the current result's edge glints Iris once (900 ms) and settles. | 13 status colours for Verified |
+| Activity | One compact activity row: activity glyph, an operation-aware label ("Combining 3 PDFs…", "Removing 2 pages…", "Making 12 scanned pages searchable…", "Compressing images…", "Checking the result…"), a real count when one exists, where the work happens, Stop, and a 3 pt progress bar. "Planning" and other pipeline words are not shown; while an instruction is with atePDF AI the row says so. | 10.3 label rules, C7 |
+| Progress bar (A17) | Determinate only from a real count (files checked, completed steps, the engine's own "n of N"); indeterminate sweep otherwise; quiet still track for cancelling and under Reduce Motion; replaced by its reply, never held to animate completion. Never a fabricated percentage or time. | — |
+| Presence | Replies are never held. The activity row appears only after 150 ms of work (near-instant work resolves straight into its artifact) and bridges at most 180 ms while a reply lands. Stop and a new request are answered at once. See [INTERACTION_MODEL.md](INTERACTION_MODEL.md). | — |
+| Motion | `Appear` (opacity + 4 pt rise, 12 pt slide for the Files panel, 0.98 scale for sheets, popovers and result cards), using the 10.1 tokens and React Native's Animated only. Each conversation item animates once; restored conversations don't animate. Reduce Motion: 120 ms fades only, loops still. | 10.2 |
+| Conversation density | An import's summary sits 6 pt under its files in secondary text; a Stop acknowledgement is replaced by the row's "Stopping…" and then the outcome; the reply replaces the activity row in place. | UX_SPEC turn spacing |

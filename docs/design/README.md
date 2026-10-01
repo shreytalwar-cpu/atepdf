@@ -7,6 +7,7 @@ This folder is the canonical visual identity and interaction system for the ateP
 | File | What it is |
 |---|---|
 | [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) | Principles, brand (three explored directions; A approved), colour, type, spacing, radii, elevation, motion, icons, light/dark, platform notes, validation, and the **owner decisions** (section 18) |
+| [INTERACTION_MODEL.md](INTERACTION_MODEL.md) | The interaction model (SHR-106 polish, owner direction): ASK → WORK → RESULT → CONTINUE, the four conversation objects, progress, motion and copy rules, and the AppLlama reference ledger |
 | [UX_SPEC.md](UX_SPEC.md) | Every major v1 flow, screen by screen and state by state, plus the keyboard map, accessibility and a state coverage matrix |
 | [COMPONENT_INVENTORY.md](COMPONENT_INVENTORY.md) | Every reusable component with its anatomy, tokens, variants, states, keyboard behaviour and accessibility |
 | [MIGRATION_MAP.md](MIGRATION_MAP.md) | Current UI → keep / modify / replace / remove, superseded constraints, test-selector changes, SHR-106 order of work |

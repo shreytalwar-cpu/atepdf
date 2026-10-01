@@ -13,8 +13,8 @@ import {syntheticInspection} from '../helpers/synthetic-inspection';
 const inspection=syntheticInspection(1);
 const services={worker:async()=>({pages:1}),inspect:async()=>inspection,recognize:async()=>[]};
 const file=(name='old.pdf',release=()=>{})=>({name,size:1,arrayBuffer:async()=>new Uint8Array([1]).buffer,release}) as unknown as File;
-function reset(w:any){const id=w.append({role:'assistant',text:'clear',choice:'clear',revision:w.store.revision});w.setChoice(id);return id;}
-async function clear(h:any){const id=reset(h.view);await h.flush();h.view.confirm(h.view.entries.find((e:any)=>e.id===id));await h.flush();for(let i=0;i<100&&h.view.busy;i++)await h.flush();}
+// Start over is the confirmation sheet's command (SHR-106); it runs the same clear transaction.
+async function clear(h:any){h.view.startOver();await h.flush();for(let i=0;i<100&&h.view.busy;i++)await h.flush();}
 async function result(store:LocalFileStore,ref:string,n=1){const artifact=await store.prepare(new Uint8Array([n]),'result.pdf',inspection,false,ref);store.commit([artifact],store.revision);return artifact.meta;}
 
 for(const action of ['Cancel','Start Over'] as const)test(`delayed sample + ${action}: no import, chat or save after invalidation`,async()=>{
@@ -29,10 +29,10 @@ test('old picker callback after a new import: newest selection remains authorita
   try{const old=h.view.pick();await h.view.importFiles([file('new.pdf')]);picker.resolve([file('old.pdf',()=>released++)]);await old;await h.flush();assert.deepEqual(controller.store.list.map(f=>f.name),['new.pdf']);assert.equal(released,1);}finally{h.dispose();}
 });
 
-test('pending setup completion after reset cannot append chat or restore focus',async()=>{
+test('pending setup completion after reset cannot append chat, set a token or restore focus',async()=>{
   const status=deferred<unknown>(),controller=new JobController(new LocalFileStore(),services);
   const h=await workspaceHook(controller,{plannerStatus:()=>status.promise});
-  try{const pending=h.view.connect();await clear(h);status.resolve({connected:false,enabled:false,remaining:0,token:'test'});await pending;await h.flush();assert.deepEqual(h.view.entries,[]);assert.equal(h.view.choice,null);assert.equal(h.view.connectionToken.current,null);}finally{h.dispose();}
+  try{const pending=h.view.inspectConnection();await clear(h);status.resolve({connected:false,enabled:false,remaining:0,token:'test'});assert.equal(await pending,'stale');await h.flush();assert.deepEqual(h.view.entries,[]);assert.equal(h.view.choice,null);assert.equal(h.view.connection,null);assert.equal(h.view.connectionToken.current,null);}finally{h.dispose();}
 });
 
 for(const outcome of ['saved','shared','failure'])test(`pending export ${outcome} after reset: no stale receipt or error`,async()=>{

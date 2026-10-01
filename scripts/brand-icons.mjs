@@ -1,17 +1,19 @@
-// Renders the approved app icon (OD-1: Folio Eight, Ink) from its SVG master into the Apple
-// asset catalog: the macOS AppIcon sizes for Catalyst plus a full-bleed 1024 for iOS, which
-// masks its own corners. Uses the pinned Playwright Chrome; no new dependency. Development
-// tool only: re-run after changing docs/design/brand/icon-a-folio-eight-ink.svg.
+// Renders the app icon (Folio Eight on black, the owner's SHR-106 polish direction) from its SVG
+// master into the Apple asset catalog: the macOS AppIcon sizes for Catalyst plus a full-bleed
+// 1024 for iOS, which masks its own corners. Uses the pinned Playwright Chrome; no new dependency.
+// Development tool only: re-run after changing docs/design/brand/icon-folio-eight-black.svg.
 import {readFile,writeFile} from 'node:fs/promises';
 import {chromium} from '@playwright/test';
 
-const master=await readFile('docs/design/brand/icon-a-folio-eight-ink.svg','utf8');
+const master=await readFile('docs/design/brand/icon-folio-eight-black.svg','utf8');
 const catalog='apps/universal/ios/atepdf/Images.xcassets/AppIcon.appiconset';
-// iOS: the same layers, full bleed (no transparent margin, no rounded body).
+// iOS: the same layers, full bleed (no transparent margin, no rounded body, no edge hairline).
 const fullBleed=master
-  .replace('<rect x="100" y="100" width="824" height="824" rx="185" fill="url(#bg)"/>','<rect width="1024" height="1024" fill="url(#bg)"/>')
-  .replace(/<rect x="100.5"[^>]*\/>/,'')
+  .replace('<rect x="100" y="100" width="824" height="824" rx="185" fill="#000000"/>','<rect width="1024" height="1024" fill="#000000"/>')
+  .replace(/<rect x="101"[^>]*\/>/,'')
   .replace('translate(212 212) scale(6)','translate(152 152) scale(7.2)');
+// 16 and 32 px: the fold tint drops out and the mark grows slightly so its counters stay open.
+const small=master.replace(/<path id="fold"[^>]*\/>/,'').replace('translate(212 212) scale(6)','translate(182 182) scale(6.6)');
 const mac=[16,32,128,256,512].flatMap(size=>[[size,1],[size,2]]);
 const browser=await chromium.launch({channel:'chrome'});
 try{
@@ -24,11 +26,11 @@ try{
   const images=[];
   for(const [size,scale] of mac){
     const filename=`mac-${size}@${scale}x.png`;
-    await writeFile(`${catalog}/${filename}`,await render(master,size*scale));
+    await writeFile(`${catalog}/${filename}`,await render(size*scale<=32?small:master,size*scale));
     images.push({filename,idiom:'mac',scale:`${scale}x`,size:`${size}x${size}`});
   }
   await writeFile(`${catalog}/App-Icon-1024x1024@1x.png`,await render(fullBleed,1024));
   images.unshift({filename:'App-Icon-1024x1024@1x.png',idiom:'universal',platform:'ios',size:'1024x1024'});
   await writeFile(`${catalog}/Contents.json`,`${JSON.stringify({images,info:{version:1,author:'xcode'}},null,2)}\n`);
 }finally{await browser.close();}
-console.log('App icon rendered from the approved Folio Eight Ink master.');
+console.log('App icon rendered from the Folio Eight black master.');

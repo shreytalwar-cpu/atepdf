@@ -65,6 +65,7 @@ test('no visible activity names the planner, a plan or an execution stage',()=>{
   assert.equal(describeActivity(states[1])!.label,'Still working…');
   assert.equal(describeActivity(states[3])!.mode,'cancelling');assert.equal(describeActivity(states[3])!.label,'Cancelling…');
   assert.equal(describeActivity({state:idle,planning:false,loading:false,stopping:false,slow:false}),null);
+  assert.equal(describeActivity({state:idle,planning:false,loading:true,stopping:false,slow:false,choosing:true}),null,'an open file dialog is not atePDF working');
 });
 
 const run=(start:Presence,steps:Partial<PresenceInput>[])=>steps.reduce((presence,input)=>stepPresence(presence,{working:false,count:2,now:0,newest:null,userAfter:false,...input}),start);

@@ -45,3 +45,38 @@ The `after/` Mac captures were taken from the first polish build. The walkthroug
 - **Undo during the hold:** the previous card briefly offered Undo while the next reply was held. Hidden until the reply appears.
 - **Request block:** the leading chevron was removed.
 - **Examples in short windows:** "Try asking" examples were clipped under the composer in windows shorter than 720 pt. They are shown only when there is room.
+
+## Pass 2: the interaction model (real Mac app, `pass2/`)
+
+These captures follow [INTERACTION_MODEL.md](../../../design/INTERACTION_MODEL.md). They come from the synthetic-container Release build, using sample PDFs only.
+
+| What | File | Notes |
+|---|---|---|
+| Branded empty state, wide, light | `pass2/01-empty-wide-light.jpg` | Folio sheet, 48 pt mark, three "Try asking" sentences |
+| Merged result + Files panel rail | `pass2/02-result-wide-light-small.jpg` | Combine chip → Current, Verified; the Iris rail is now drawn above the selected row |
+| No-benefit compression | `pass2/03-no-benefit-compress-outcome-wide-light.jpg` | "No smaller version was possible. This copy has the same content as your previous PDF." |
+| Quality confirmation | `pass2/04-quality-confirmation-wide-light.jpg` | The one Iris action is Create Copy |
+| Normal window, light and dark | `pass2/05-normal-1026-light.jpg`, `pass2/07-normal-1026-dark.jpg` | 1026 × 725 pt |
+| Settings | `pass2/06-settings-1026-light.jpg` | Appearance tiles |
+| Files overlay, dark | `pass2/08-files-overlay-1026-dark.jpg` | Below 1120 pt the panel overlays |
+| Narrow window, dark | `pass2/09-narrow-640-dark.jpg` | 640 × 640 pt; the result card stacks its actions |
+| File dialog open (final build) | `pass2/12-file-dialog-open-no-activity.jpg` | The toolbar still reads "No files yet", with no activity row or glyph while the person chooses |
+| Icon as Finder and the Dock render it | `pass2/10-finder-dock-icon-of-built-app.png` (final build), `pass2/10b-finder-dock-icon-before-fix.png` (before) | `NSWorkspace.icon(forFile:)` of the built `.app` at 32/64/128 pt on light and dark. The first render exposed a corrupt 128@2x asset (see below). |
+
+**Motion recordings** are real-time, window-only recordings (`screencapture -l <window> -v`) of the actual app. No synthetic delay was added.
+
+| Clip | What it shows |
+|---|---|
+| `pass2/clip-1-fast-remove-then-undo.mp4` | "remove page 2" sent at about 1.0 s. The result is on screen 250 ms later. The work took under 150 ms, so no activity row appeared and nothing was held. Then Undo: the restored card fades in and its Iris edge glints once. |
+| `pass2/clip-2-picker-indeterminate-then-compress.mp4` | The file dialog opened while "Getting ready…" swept, which is wrong because atePDF wasn't working (fixed after this recording). Then Make smaller → quality confirmation → Create Copy → "Compressing images…" → the no-benefit outcome. |
+
+**Not recorded on the Mac:**
+- **Real OCR progress on a scanned page.** The system open panel can't be driven while atePDF is in the background, and I didn't take over the screen.
+- **Reduce Motion.** It's a system setting, which I didn't change.
+- **The Dock itself.** Auto-hide is on.
+
+These are covered by e2e: `ui-states.spec.ts` Reduce Motion, Stop during progress, and H-processing captures.
+
+**Save, independently verified:** a save named `atepdf-polish-save-check.pdf` reported "Saved to your device". The file exists, is a valid PDF 1.7 with 3 pages (Spotlight) and 3,115 bytes, matching Result 4 (3.1 kB). Spotlight found it at `~/Library/Containers/dev.atepdf.synthetic.mac/Data/tmp/dev.atepdf.synthetic.mac-Inbox/`. The folder picked in the save panel ("evidence") couldn't be resolved to a path, so the exact destination behaviour stays **unverified** (SHR-74).
+
+**Defect found and fixed:** the macOS AppIcon `mac-128@2x.png` (also used for 256@1x) had been rendered corrupt by headless Chrome. Finder and the Dock then showed a broken icon on a grey plate at 128 pt. `scripts/brand-icons.mjs` now rasterises each master once at 1024 px, downscales in a canvas, and refuses to write a size that differs from its master. Every size was re-checked (`icon-sizes.png`).

@@ -14,6 +14,8 @@ export type Activity = {
 export type ActivityInput = {
   state: Pick<JobState, 'busy' | 'stage' | 'message' | 'progress'>;
   planning: boolean; loading: boolean; stopping: boolean;
+  /** The system file dialog is open: the person is choosing, atePDF isn't working. */
+  choosing?: boolean;
   /** The AI request has taken longer than the slow threshold. */
   slow: boolean;
 };
@@ -51,7 +53,7 @@ export function engineDetail(message: string): string | undefined {
   return undefined;
 }
 
-export function describeActivity({state, planning, loading, stopping, slow}: ActivityInput): Activity | null {
+export function describeActivity({state, planning, loading, stopping, slow, choosing = false}: ActivityInput): Activity | null {
   if (stopping) return {label: 'Cancelling…', detail: 'Finishing the current step safely.', mode: 'cancelling', where: 'local'};
   if (state.busy) {
     const progress = state.progress;
@@ -82,7 +84,7 @@ export function describeActivity({state, planning, loading, stopping, slow}: Act
   }
   // While the instruction is with atePDF AI, the row says so (SHR-36): that is a transfer, not a stage.
   if (planning) return {label: slow ? 'Still working…' : 'Working…', detail: slow ? 'Waiting for atePDF AI. You can stop; nothing has changed.' : 'Sending your instruction to atePDF AI.', mode: 'indeterminate', where: 'ai'};
-  if (loading) return {label: 'Getting ready…', mode: 'indeterminate', where: null};
+  if (loading && !choosing) return {label: 'Getting ready…', mode: 'indeterminate', where: null};
   return null;
 }
 

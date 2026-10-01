@@ -258,7 +258,7 @@ const stepWords: Record<JobStepStatus, string> = {pending: 'Waiting', active: 'W
 /** C7 ActivityRow. One evolving line and a progress bar, from controller and request state only. */
 export function ActivityRow() {
   const {workspace: w} = useApp();
-  const {state, planning, loading, stopping} = w;
+  const {state, planning, loading, stopping, choosing} = w;
   const [expanded, setExpanded] = useState(false);
   const [slow, setSlow] = useState(false);
   useEffect(() => {
@@ -266,7 +266,7 @@ export function ActivityRow() {
     const timer = setTimeout(() => setSlow(true), 8000);
     return () => clearTimeout(timer);
   }, [planning]);
-  const live = describeActivity({state, planning, loading, stopping, slow});
+  const live = describeActivity({state, planning, loading, stopping, slow, choosing});
   // Near-instant work resolves straight into its artifact: the row appears only once work has
   // run for SHOW_AFTER (presentation only; nothing waits for it).
   const [shown, setShown] = useState(false);

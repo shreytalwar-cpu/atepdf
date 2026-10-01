@@ -94,14 +94,16 @@ function WorkspaceContextButton({onPress}: {onPress: () => void}) {
   const {workspace: w} = useApp();
   const {c} = useTheme();
   const current = target(w);
-  const label = w.restoring ? 'Restoring…' : w.working ? w.state.busy || w.planning ? 'Working…' : 'Getting ready…' : current ? current.title : 'No files yet';
-  const detail = !w.working && current ? current.detail : undefined;
+  // While the system file dialog is open the person is choosing; atePDF isn't working.
+  const working = w.working && !w.choosing;
+  const label = w.restoring ? 'Restoring…' : working ? w.state.busy || w.planning ? 'Working…' : 'Getting ready…' : current ? current.title : 'No files yet';
+  const detail = !working && current ? current.detail : undefined;
   const disabled = !current;
   return <Pressable accessibilityRole="button" disabled={disabled} onPress={onPress}
     accessibilityLabel={current ? `Working on: ${current.title}${current.kind === 'result' ? ', current result' : ''}, ${current.detail}. Show files.` : 'No files yet'}
     style={({pressed}) => ({flexShrink: 1, minWidth: 0, height: 28, paddingHorizontal: 8, borderRadius: radius.sm, flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: pressed ? c.pressed : 'transparent'})}>
-    {w.working ? <ActivityGlyph/> : <Glyph icon={current?.kind === 'result' ? FileText : Files} tone={current ? 'secondary' : 'tertiary'}/>}
-    <Txt variant="uiStrong" tone={current || w.working ? 'primary' : 'tertiary'} numberOfLines={1} ellipsizeMode="middle" style={{flexShrink: 1}}>{label}</Txt>
+    {working ? <ActivityGlyph/> : <Glyph icon={current?.kind === 'result' ? FileText : Files} tone={current ? 'secondary' : 'tertiary'}/>}
+    <Txt variant="uiStrong" tone={current || working ? 'primary' : 'tertiary'} numberOfLines={1} ellipsizeMode="middle" style={{flexShrink: 1}}>{label}</Txt>
     {detail && <Txt variant="meta" tone="secondary" tabular numberOfLines={1}>{detail}</Txt>}
     {!disabled && <Glyph icon={ChevronDown} size={14} tone="tertiary"/>}
   </Pressable>;

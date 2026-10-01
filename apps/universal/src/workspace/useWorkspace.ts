@@ -338,11 +338,17 @@ export function useWorkspace() {
     } catch (e) { if(current())say(e instanceof Error ? e.message : 'Files could not be opened.', 'error'); }
     finally { if(current()){operation.current=false;setLoading(false);} }
   };
+  // choosing: the system file dialog is open (display-only; nothing is being processed yet).
+  const [choosing, setChoosing] = useState(false);
   const pick = async (sample = false) => {
     if(resettingRef.current||expiryDue())return;
     const current=beginImport(),signal=session.signal;
     setLoading(true);
-    try { await importFiles(await (sample ? sampleFiles(signal) : chooseFiles(signal)),current); }
+    try {
+      if (!sample) setChoosing(true);
+      const files = await (sample ? sampleFiles(signal) : chooseFiles(signal)).finally(() => setChoosing(false));
+      await importFiles(files,current);
+    }
     catch (e) { if(current())say(e instanceof Error ? e.message : 'Files could not be opened.', 'error'); }
     finally { if(current())setLoading(false); }
   };
@@ -589,7 +595,7 @@ export function useWorkspace() {
   // stopping: Stop was requested while a local job is still running; it ends when the controller settles.
   // nextEntryId: the id the next conversation entry will get (presentation keys the activity
   // row with it, so the reply replaces the row in place).
-  return {controller, state, store, entries, nextEntryId: nextId.current + 1, busy, working, loading, stopping: cancelRequested.current && state.busy, current, currentTitle:currentEntry?.resultTitle, focus, preview, setPreview, privacy, setPrivacy,
+  return {controller, state, store, entries, nextEntryId: nextId.current + 1, busy, working, loading, choosing, stopping: cancelRequested.current && state.busy, current, currentTitle:currentEntry?.resultTitle, focus, preview, setPreview, privacy, setPrivacy,
     choice, setChoice, saving, receipts, append, say, showHelp, importFiles, pick, action, undo, submit, confirm, keepCurrent, startOver, exportResult, planning, connection, connectionToken, inspectConnection, refreshConnection, cancel, clearPending, question,
     session, ticket: () => session.ticket(), restoring, restoredDraft, noteDraft, notice, durable, keeping, canRetryRestore, retryRestore, clearCount,
     capable: backend !== null, retention, retentionNote, retentionImpact, changeRetention, storage, deleteLocalData, deleting, storageStatus};

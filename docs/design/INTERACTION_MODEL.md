@@ -116,8 +116,10 @@ Import 2 PDFs → "Combine these PDFs" (Current, Verified) → "remove page 2" (
 | 8 | Notee (iOS) · AI Chat Response `oth_7as41` | Suggested follow-up chips above the composer, specific to the content | Teaching the next useful request | Context chips are full sentences sent through `submit()` | Emoji chips; generic "assistant persona" bubbles | Adopt |
 | 9 | CamScanner (iOS) · AI Chat `oth_7dqpi`; MarginNote 4 (iOS) · Chat Empty State `oth_hcnrj` | One capability sentence plus source tiles; a faint "drag here" hint; a model/mode selector | First use | Folio sheet: "Drop PDFs here", one capability sentence, Choose Files…, samples and three examples | "Hi, I'm your AI assistant" persona, mode/model selectors, drag-only affordance | Adapt |
 
-**Checkpoint after implementation:**
-- Patterns 1, 2, 6 and 8 hold up on the real Mac build (see `docs/evidence/SHR-106-2026-10-01/polish/`).
-- Pattern 4's reduction to one row removed the stacked status turns.
-- Pattern 5's outcome wording is in the palette.
-- No adopted pattern added a step.
+**Checkpoint after implementation** (real Mac build, synthetic container; `docs/evidence/SHR-106-2026-10-01/polish/pass2/`):
+- **1, 6 and 8 hold up.** Assistant text sits on the canvas, thumbnails are real with the Iris fold and Current rail, and the context chips teach requests.
+- **2.** The Latest pill is unchanged, and the recordings didn't exercise it.
+- **4.** One row with the current step works. A fast removal resolves straight into its artifact with no row (`clip-1`).
+- **5.** The palette's outcome wording is in place.
+- **A new finding outside the ledger:** the activity row showed "Getting ready…" with a moving bar while the system file dialog was open. It is now hidden while the person is choosing files.
+- No adopted pattern added a step, and none was removed for making atePDF more generic.

@@ -23,6 +23,10 @@ their behaviour (deliberate, listed exceptions in "Behaviour notes").
   relaunch (the ad-hoc synthetic build reports its vault unavailable, shown truthfully in the banner;
   signed-Keychain acceptance stays SHR-40); signed, minimum-macOS, Intel and VoiceOver acceptance.
 
+## Polish passes
+
+The owner polish review and the interaction model are documented in [`polish/README.md`](polish/README.md) (before/after, Mac captures, motion recordings, the icon defect) and [`../../design/INTERACTION_MODEL.md`](../../design/INTERACTION_MODEL.md). The no-terminal dogfood walkthrough is [`DOGFOOD.md`](DOGFOOD.md).
+
 ## Web evidence (bounded harness)
 
 `tests/e2e/ui-states.spec.ts` reaches every listed state in light and dark through real local PDF
@@ -38,11 +42,11 @@ Start Over · Quick Look · palette · onboarding · T 640 · U 1280 · V 1600.
 |---|---|
 | `pnpm typecheck`, `typecheck:universal`, `typecheck:compatibility` | pass |
 | `pnpm check:generated` (now includes the design tokens), `check:schemas` | pass |
-| `pnpm test` (Node regressions) | 329 tests: 327 pass, 1 skipped, 1 fail — S90-01, the host pnpm shim [main: 322 / 320 / 1 / 1, same S90-01] |
-| New regressions | `workspace-presentation.test.ts` (7) + updated ownership harness: 35/35 workspace tests |
-| `pnpm test:e2e` (Next host, Chrome) | 88 tests: 84 pass, 4 fail [main: 77 / 72 / 5] — the 4 fail identically on main (3 provider-error recoveries, delayed-planning scroll); main's compact-submission failure passes here |
-| `ui-states.spec.ts` | 13/13 (both appearances, 640/1280/1600) |
-| `pnpm expo:web` + `scripts/check-web-budget.mjs` | pass, 499,261 / 500,000 gzip bytes |
+| `pnpm test` (Node regressions) | 338 tests: 336 pass, 1 skipped, 1 fail — S90-01, the host pnpm shim [main: 322 / 320 / 1 / 1, same S90-01] |
+| New regressions | `workspace-presentation.test.ts` (7), `activity-presentation.test.ts` (12: labels, real-progress sources, no planning vocabulary, presence without holds, reset/new-request release, step units) |
+| `pnpm test:e2e` (Next host, Chrome) | 93 tests: 89 pass, 4 fail [main `fd74961`: 77 / 72 / 5] — the 4 fail identically on main (3 provider-error recoveries, delayed-planning scroll) |
+| `ui-states.spec.ts` | 18/18 (both appearances, 640/1280/1600, plus motion and fast tasks: no held reply and no empty frame, no Verified before checking, repeated quick work, narrow/wide during work, Reduce Motion, Stop during progress, receipt identity after Undo) |
+| `pnpm expo:web` + `scripts/check-web-budget.mjs` | pass, 495,019 / 500,000 gzip bytes (conversation views load after first paint) |
 | `pnpm expo:bundles` (native JS) | pass (Hermes bundle) |
 | Mac Catalyst Release build (synthetic container, and normal identity for dogfooding) | pass; strict signature and entitlement checks |
 

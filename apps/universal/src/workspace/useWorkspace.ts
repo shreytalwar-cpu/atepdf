@@ -461,7 +461,7 @@ export function useWorkspace() {
           return;
         }
         const help = /^(?:what (?:can you|can atepdf|do you) do|(?:how )?can you help(?: me)?|help|what (?:are your|are atepdf.?s) capabilities)[?.!]*$/i.test(text.trim());
-        const reason = status?.gateAvailable===false ? LOCAL_ONLY_MESSAGE : !plannerAvailable ? 'AI planning is not available on this device yet.' : status?.connected ? 'AI planning is paused. Open AI connection to check the local request allowance.' : status ? 'OpenAI is not connected yet. You can connect it here for conversational help.' : 'The AI connection is unavailable. Check that atepdf’s local server is running, then try AI connection again.';
+        const reason = status?.gateAvailable===false ? LOCAL_ONLY_MESSAGE : !plannerAvailable ? 'atePDF AI isn’t available on this device yet.' : status?.connected ? 'atePDF AI is paused. Open AI connection to check the local request allowance.' : status ? 'OpenAI is not connected yet. You can connect it here for conversational help.' : 'The AI connection is unavailable. Check that atepdf’s local server is running, then try AI connection again.';
         const id = append({role:'assistant', text: help ? localCapabilityHelp : `${reason} You can still use Merge, Compress${ocrAvailable ? ' or Make searchable' : ''}. Your files are unchanged.`, choice:plannerAvailable?'connection-help':undefined, ...(help ? {} : {notice:'unavailable' as const})});
         setChoice(id);return;
       }
@@ -496,7 +496,7 @@ export function useWorkspace() {
       const previous=store.focus;
       await controller.execute(envelope,request);
       if(current())finish(previous,'Your new PDF is ready.',plannedResultTitle(envelope.planner.steps));
-    }catch(e){if(current())say(e instanceof OutboundDenied?LOCAL_ONLY_MESSAGE:abort.signal.aborted?'Planning cancelled. No local files changed.':e instanceof Error?e.message:'This request could not finish. Your files are unchanged.',e instanceof OutboundDenied?'refused':abort.signal.aborted?'cancelled':'error');}
+    }catch(e){if(current())say(e instanceof OutboundDenied?LOCAL_ONLY_MESSAGE:abort.signal.aborted?'Cancelled. No files were changed.':e instanceof Error?e.message:'This request could not finish. Your files are unchanged.',e instanceof OutboundDenied?'refused':abort.signal.aborted?'cancelled':'error');}
     finally{
       if(planningOwner.current===abort){planningOwner.current=null;operation.current=false;setLoading(false);setPlanning(false);}
       if(plannerAbort.current===abort)plannerAbort.current=null;
@@ -508,7 +508,7 @@ export function useWorkspace() {
     if(!entry.envelope||!entry.request||operation.current)return;
     cancelRequested.current=false;operation.current=true;const previous=store.focus,current=session.ticket();
     try{await controller.execute(entry.envelope,entry.request);if(current())finish(previous,'Your new copy is ready. I checked it with an independent PDF reader.',plannedResultTitle(entry.envelope.planner.steps));}
-    catch(e){if(current())say(e instanceof Error?e.message:'The plan could not be applied.','error');}finally{if(current())operation.current=false;}
+    catch(e){if(current())say(e instanceof Error?e.message:'This request could not finish. Your files are unchanged.','error');}finally{if(current())operation.current=false;}
   };
   const cancel=()=>{
     // Opening the durable head cannot be abandoned into a session-only workspace.
@@ -523,7 +523,7 @@ export function useWorkspace() {
       // Another import/reset makes it stale too; engine replies keep their old ticket.
       const current=session.ticket();
       void controller.settle().then(()=>{if(!current())return;if(controller.state.stage==='cancelled')say(controller.state.message,'cancelled');else if(controller.state.stage==='failed'&&controller.state.error)say(controller.state.error,'error');});
-    }else say(wasPlanning?'Planning cancelled. No local files changed.':'Cancelled. Pending replies will be discarded.','cancelled');
+    }else say(wasPlanning?'Cancelled. No files were changed.':'Cancelled. Pending replies will be discarded.','cancelled');
   };
   // Start over (the confirmation sheet's destructive action). Clears the conversation and
   // atePDF's copies; the Keep workspace setting stays. Allowed while planning or importing
@@ -578,7 +578,9 @@ export function useWorkspace() {
     : vault.current?.mode === 'blocked' ? 'This can’t be changed until your saved workspace opens. You can still delete it below.'
     : 'atePDF can’t save your workspace on this Mac right now, so nothing is kept after you quit.';
   // stopping: Stop was requested while a local job is still running; it ends when the controller settles.
-  return {controller, state, store, entries, busy, working, loading, stopping: cancelRequested.current && state.busy, current, currentTitle:currentEntry?.resultTitle, focus, preview, setPreview, privacy, setPrivacy,
+  // nextEntryId: the id the next conversation entry will get (presentation keys the activity
+  // row with it, so the reply replaces the row in place).
+  return {controller, state, store, entries, nextEntryId: nextId.current + 1, busy, working, loading, stopping: cancelRequested.current && state.busy, current, currentTitle:currentEntry?.resultTitle, focus, preview, setPreview, privacy, setPrivacy,
     choice, setChoice, saving, receipts, append, say, showHelp, importFiles, pick, action, undo, submit, confirm, keepCurrent, startOver, exportResult, planning, connection, connectionToken, inspectConnection, refreshConnection, cancel, clearPending, question,
     session, ticket: () => session.ticket(), restoring, restoredDraft, noteDraft, notice, durable, keeping, canRetryRestore, retryRestore, clearCount,
     capable: backend !== null, retention, retentionNote, retentionImpact, changeRetention, storage, deleteLocalData, deleting, storageStatus};

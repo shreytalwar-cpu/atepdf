@@ -19,12 +19,15 @@ remain in force.
 | Appearance, text size, type and elevation helpers | `src/ui/theme/index.ts` |
 | Primitives (A1–A16): Txt, Glyph, Button, IconButton, Keycap, Tag, ActivityGlyph, Disclosure, SegmentedControl, Meter, Card, Row, Section | `src/ui/primitives.tsx`, `src/ui/BrandMark.tsx` |
 | Sheets, popovers, menus, status pill | `src/ui/overlays.tsx` |
-| Shell: toolbar, workspace context, Files panel, composer context row, chips, hint row | `src/ui/shell.tsx`; actions palette `src/ui/palette.tsx` |
-| Conversation artifacts: source group, file row, result card, proposal, choice list, activity row, empty workspace, banners | `src/ui/conversation.tsx`, `src/ui/thumbnails.tsx` |
+| Shell: toolbar, workspace context, composer context row, chips, hint row | `src/ui/shell.tsx`; actions palette `src/ui/palette.tsx` |
+| First paint: empty workspace, banners, outcome icons; shared facts | `src/ui/empty.tsx`, `src/ui/facts.ts` |
+| Conversation views (loaded after first paint): source group, file row, result card, proposal, choice list, activity row, progress bar, Files panel | `src/ui/conversation.tsx`, `src/ui/thumbnails.tsx` |
+| Motion (Appear, one-shot moments, activity presence) and the activity model (labels, real progress, presence timing; unit tested) | `src/ui/motion.tsx`, `src/ui/progress.ts` |
 | Sheets: Settings, Start Over, Quick Look, onboarding shell, shortcuts | `src/ui/sheets.tsx` (loaded on first use) |
 | Thread scroll/follow logic and message roots (assistant-ui derived) | `src/components/assistant-ui/elements/thread.aui.tsx` |
 | Workspace behaviour (the single source of truth) | `src/workspace/useWorkspace.ts` |
 
-Rules: no hard-coded colours outside the generated tokens (the brand mark's own colours excepted);
+Rules: no hard-coded colours outside the generated tokens (the brand mark's and thumbnail fold's own colours excepted);
+no animation library (React Native's Animated only; Reduce Motion becomes short fades); no invented progress;
 suggestion chips and palette actions send a sentence through `submit()` like typed text (D-04);
 only the user's request gets a filled block; one Iris action per region.

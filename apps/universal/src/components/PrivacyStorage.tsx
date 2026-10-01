@@ -127,7 +127,7 @@ export function PrivacyStorage({visible,capable,retention,retentionNote,busy,exp
         <Txt variant="meta" tone="secondary">Sizes of the files atePDF keeps in its own storage on this Mac. Files you added from elsewhere and PDFs you saved aren’t counted.</Txt>
       </View>
       <View style={{gap:8}}>
-        <Section title="Remove atePDF’s data">
+        <Section title="Remove atePDF’s data" destructive>
           {onStartOver&&<><View style={{flexDirection:'row',alignItems:'center',gap:12,paddingVertical:6,paddingHorizontal:14}}>
             <View style={{flex:1}}><Txt variant="ui">Start over</Txt><Txt variant="meta" tone="secondary">Clears this conversation and its copies. Keeps your Keep workspace setting.</Txt></View>
             <Button variant="secondary" label="Start Over…" disabled={!canStartOver} onPress={onStartOver}/>

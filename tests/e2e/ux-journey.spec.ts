@@ -173,7 +173,7 @@ test('scrolling upward during delayed synthetic planning preserves the reading p
   try {
     await send(page, 'Please combine both PDFs in the order I added them.');
     await expect.poll(() => calls).toBe(1);
-    await expect(page.getByTestId('progress-message')).toContainText('Planning');
+    await expect(page.getByTestId('progress-message')).toContainText('Working');
     await scrollToEarlierMessages(page);
     const anchor = page.getByTestId('user-message').first();
     const before = await anchor.boundingBox();

@@ -16,10 +16,11 @@ import {createNativePairing, disconnectNativePlanner, pairNativePlanner, planner
 import {PrivacyStorage} from '../platform/PrivacyStorage';
 import Preview from '../platform/Preview';
 import {BrandMark} from './BrandMark';
-import {facts} from './conversation';
+import {facts} from './facts';
 import {useApp, type SettingsTab} from './context';
 import {Sheet} from './overlays';
 import {Button, Glyph, IconButton, Keycap, Row, Section, SegmentedControl, Separator, Tag, Txt} from './primitives';
+import {colors} from './theme/tokens';
 import {SHORTCUTS} from './shell';
 import {radius, setAppearance, setTextSize, useAppearance, useTextSize, useTheme, type Appearance, type TextSize} from './theme';
 
@@ -61,7 +62,7 @@ export function SettingsSheet() {
   </Sheet>;
 }
 function PaneScroll({children}: {children: React.ReactNode}) {
-  return <ScrollView style={{flex: 1}} contentContainerStyle={{padding: 20, gap: 20}} keyboardShouldPersistTaps="handled">{children}</ScrollView>;
+  return <ScrollView style={{flex: 1}} contentContainerStyle={{paddingHorizontal: 28, paddingVertical: 24, gap: 24}} keyboardShouldPersistTaps="handled">{children}</ScrollView>;
 }
 function SettingRow({label, detail, children}: {label: string; detail?: string; children?: React.ReactNode}) {
   return <View style={{flexDirection: 'row', alignItems: 'center', gap: 12, minHeight: 40, paddingVertical: 6, paddingHorizontal: 14, flexWrap: 'wrap'}}>
@@ -70,14 +71,43 @@ function SettingRow({label, detail, children}: {label: string; detail?: string; 
   </View>;
 }
 
+/** A small window in the given scheme(s): toolbar, a request, a result card with its Iris Save. */
+function AppearanceTile({value, label, selected, onPress}: {value: Appearance; label: string; selected: boolean; onPress: () => void}) {
+  const {c} = useTheme();
+  const half = (scheme: 'light' | 'dark', clip?: 'left' | 'right') => {
+    const p = colors[scheme];
+    return <View style={{position: 'absolute', top: 0, bottom: 0, left: clip === 'right' ? '50%' : 0, right: clip === 'left' ? '50%' : 0, overflow: 'hidden'}}>
+      <View style={{position: 'absolute', top: 0, bottom: 0, left: clip === 'right' ? '-100%' : 0, width: clip ? '200%' : '100%', backgroundColor: p.window, padding: 7, gap: 5}}>
+        <View style={{height: 4, width: '38%', borderRadius: 2, backgroundColor: p.inkTertiary, opacity: 0.5}}/>
+        <View style={{height: 7, width: '52%', borderRadius: 2, backgroundColor: p.request}}/>
+        <View style={{flexDirection: 'row', alignItems: 'center', gap: 4, padding: 4, borderRadius: 3, borderWidth: 1, borderColor: p.accentBorder, backgroundColor: p.raised}}>
+          <View style={{width: 8, height: 10, borderRadius: 1, backgroundColor: p.paper, borderWidth: 1, borderColor: p.hairline}}/>
+          <View style={{flex: 1, height: 3, borderRadius: 2, backgroundColor: p.inkTertiary, opacity: 0.5}}/>
+          <View style={{width: 12, height: 6, borderRadius: 2, backgroundColor: p.accent}}/>
+        </View>
+      </View>
+    </View>;
+  };
+  return <Pressable accessibilityRole="radio" accessibilityLabel={label} accessibilityState={{checked: selected}} aria-checked={selected} onPress={onPress} style={{alignItems: 'center', gap: 6}}>
+    <View style={{width: 92, height: 60, borderRadius: radius.md, borderWidth: selected ? 2 : 1, borderColor: selected ? c.accent : c.hairline, overflow: 'hidden', padding: selected ? 0 : 1}}>
+      {value === 'system' ? <>{half('light', 'left')}{half('dark', 'right')}</> : half(value)}
+    </View>
+    <Txt variant={selected ? 'uiStrong' : 'ui'} tone={selected ? 'primary' : 'secondary'}>{label}</Txt>
+  </Pressable>;
+}
+
 function GeneralPane() {
   const {shell} = useApp();
   const appearance = useAppearance(), size = useTextSize();
   return <>
     <Section title="Appearance">
-      <SettingRow label="Appearance" detail="Follows your Mac unless you choose. Applies for this session.">
-        <SegmentedControl<Appearance> label="Appearance" value={appearance} onChange={setAppearance} options={[{value: 'system', label: 'System'}, {value: 'light', label: 'Light'}, {value: 'dark', label: 'Dark'}]}/>
-      </SettingRow>
+      <View style={{paddingHorizontal: 14, paddingTop: 10, paddingBottom: 8, gap: 10}}>
+        <View accessibilityRole="radiogroup" accessibilityLabel="Appearance" aria-label="Appearance" style={{flexDirection: 'row', gap: 16, flexWrap: 'wrap'}}>
+          {([['system', 'System'], ['light', 'Light'], ['dark', 'Dark']] as [Appearance, string][]).map(([value, label]) =>
+            <AppearanceTile key={value} value={value} label={label} selected={appearance === value} onPress={() => setAppearance(value)}/>)}
+        </View>
+        <Txt variant="meta" tone="secondary">Follows your Mac unless you choose. Applies for this session.</Txt>
+      </View>
       <Separator inset={14}/>
       <SettingRow label="Conversation text size" detail="Controls stay at the standard size.">
         <SegmentedControl<TextSize> label="Conversation text size" value={size} onChange={setTextSize} options={[{value: 'small', label: 'Small'}, {value: 'default', label: 'Default'}, {value: 'large', label: 'Large'}, {value: 'larger', label: 'Larger'}]}/>
@@ -91,7 +121,7 @@ function GeneralPane() {
   </>;
 }
 
-/** Settings ▸ AI: what planning sends, and (in development builds) the local planner connection. */
+/** Settings ▸ AI: what is sent to atePDF AI, and (in development builds) the local planner connection. */
 function AIPane() {
   const {workspace: w} = useApp();
   const [check, setCheck] = useState<'checking' | 'ready' | 'unavailable' | null>(null);
@@ -106,7 +136,7 @@ function AIPane() {
         {plannerAvailable && <Button variant="secondary" label="Check Again" busy={check === 'checking' && 'Checking…'} onPress={inspect}/>}
       </SettingRow>
     </Section>
-    <Section title="What’s sent to plan your requests">
+    <Section title="What’s sent to atePDF AI">
       <View style={{padding: 14, gap: 10}}>
         <View style={{flexDirection: 'row', gap: 8}}><Glyph icon={Cloud}/><Txt variant="ui" style={{flex: 1}}>Your typed instruction and anonymous file facts (page counts, sizes and file references). Suggested actions are sent the same way, as requests.</Txt></View>
         <View style={{flexDirection: 'row', gap: 8}}><Glyph icon={LaptopMinimal} tone="local"/><Txt variant="ui" style={{flex: 1}}>Never sent: file contents, file names, paths, checksums, page text, previews or passwords. PDF work itself always runs on this Mac.</Txt></View>
@@ -195,7 +225,7 @@ function AboutPane() {
     <BrandMark size={64} label="atePDF"/>
     <Txt variant="title1">atePDF</Txt>
     <Txt variant="meta" tone="secondary" tabular>Version {version} · development build</Txt>
-    <Txt variant="ui" tone="secondary" style={{textAlign: 'center', maxWidth: 420}}>Tell atePDF what you need. It plans the steps and works on copies of your PDFs on this Mac.</Txt>
+    <Txt variant="ui" tone="secondary" style={{textAlign: 'center', maxWidth: 420}}>Tell atePDF what you need. It works on copies of your PDFs, here on this Mac.</Txt>
   </View>;
 }
 
@@ -252,7 +282,7 @@ export function OnboardingSheet() {
   const {c} = useTheme();
   const panes = [
     {title: 'Just say what you need.', body: 'Add PDFs, then describe the result: merge, remove pages, compress or make scans searchable. atePDF makes a new file and keeps your originals untouched.', art: <MiniThread/>},
-    {title: 'Your files stay on this Mac.', body: 'PDFs are processed on this Mac. When atePDF AI is connected, your instructions go to it to plan the steps. Files and names don’t.', art: <PrivacyPair/>},
+    {title: 'Your files stay on this Mac.', body: 'PDFs are processed on this Mac. When atePDF AI is connected, your instructions go to it to work out the steps. Files and names don’t.', art: <PrivacyPair/>},
   ];
   const close = () => {shell.setOnboarding(false); setPane(0);};
   const last = pane === panes.length - 1;

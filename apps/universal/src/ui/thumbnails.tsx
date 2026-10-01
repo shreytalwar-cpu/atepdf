@@ -37,7 +37,15 @@ function request(store: LocalFileStore, ref: string, checksum: string, pixels: n
   });
 }
 
-export function PageThumbnail({store, fileRef, checksum, width, height, label}: {store: LocalFileStore; fileRef: string | undefined; checksum?: string; width: number; height: number; label?: string}) {
+// The Folio Eight fold, the mark's only document cue, on every page thumbnail: Iris on a
+// result atePDF made and verified, neutral on a source you added. The cut shows the surface behind.
+const FOLD = {result: '#A9A2FF', source: '#D5D5DD'};
+function Fold({kind, width, surface}: {kind: keyof typeof FOLD; width: number; surface: string}) {
+  const side = Math.max(5, Math.round(width * 0.24));
+  return <View pointerEvents="none" style={{position: 'absolute', top: 0, right: 0, width: 0, height: 0, borderTopWidth: side, borderLeftWidth: side, borderTopColor: surface, borderLeftColor: FOLD[kind]}}/>;
+}
+
+export function PageThumbnail({store, fileRef, checksum, width, height, label, fold, surface}: {store: LocalFileStore; fileRef: string | undefined; checksum?: string; width: number; height: number; label?: string; fold?: 'result' | 'source'; surface?: string}) {
   const {c, scheme} = useTheme();
   const [, force] = useState(0);
   const pixels = Math.ceil(Math.max(width, height) * 3);
@@ -52,9 +60,10 @@ export function PageThumbnail({store, fileRef, checksum, width, height, label}: 
   const frame = {width, height, borderRadius: radius.thumb, overflow: 'hidden' as const, alignItems: 'center' as const, justifyContent: 'center' as const};
   if (!uri || uri === 'failed') {
     // Loading: a plain placeholder (no shimmer). Failed or locked: the file glyph.
-    return <View accessible={!!label} accessibilityLabel={label} style={[frame, {backgroundColor: c.sunken}]}>{uri === 'failed' && <Glyph icon={FileText} size={14} tone="tertiary"/>}</View>;
+    return <View accessible={!!label} accessibilityLabel={label} style={[frame, {backgroundColor: c.sunken}]}>{uri === 'failed' && <Glyph icon={FileText} size={14} tone="tertiary"/>}{fold && <Fold kind={fold} width={width} surface={surface ?? c.raised}/>}</View>;
   }
   return <View accessible={!!label} accessibilityLabel={label} style={[frame, {backgroundColor: c.paper}, shadow('page', scheme)]}>
     <Image source={{uri}} resizeMode="contain" style={{width, height}} accessibilityIgnoresInvertColors/>
+    {fold && <Fold kind={fold} width={width} surface={surface ?? c.raised}/>}
   </View>;
 }

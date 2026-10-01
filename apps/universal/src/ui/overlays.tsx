@@ -6,8 +6,9 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import type {LucideIcon} from 'lucide-react-native';
 import LaptopMinimal from 'lucide-react-native/icons/laptop-minimal';
 import {useMotion} from '../components/assistant-ui/elements/surfaces';
+import {Appear} from './motion';
 import {Glyph, Keycap, Row, Txt} from './primitives';
-import {radius, shadow, useTheme} from './theme';
+import {motion as tokens, radius, shadow, useTheme} from './theme';
 
 type SheetProps = {
   visible: boolean; onClose: () => void; title: string; children: ReactNode;
@@ -32,11 +33,14 @@ export function Sheet({visible, onClose, title, children, width = 420, height, i
   return <Modal visible={visible} transparent animationType={motion ? 'fade' : 'none'} onRequestClose={() => {if (dismissible) onClose();}}
     accessibilityLabel={Platform.OS === 'web' ? title : undefined} supportedOrientations={['portrait', 'landscape']}>
     <View style={{flex: 1, backgroundColor: c.scrim, alignItems: 'center', justifyContent: 'center', padding: 16, paddingTop: 16 + top}}>
-      <View testID={testID} accessibilityViewIsModal role={Platform.OS === 'web' ? undefined : 'dialog'} accessibilityLabel={Platform.OS === 'web' ? undefined : title}
-        style={[{width: maxWidth, maxHeight, ...(height ? {height: maxHeight} : {}), backgroundColor: c.elevated, borderRadius: radius['2xl'], borderWidth: 1, borderColor: c.hairline, overflow: 'hidden'}, shadow('3', scheme)]}>
-        {scroll ? <ScrollView style={{flexGrow: 0, flexShrink: 1}} contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps="handled">{body}</ScrollView> : <View style={{flex: 1}}>{body}</View>}
-        {footer && <View style={{flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-end', alignItems: 'center', gap: 8, paddingHorizontal: 20, paddingVertical: 14, borderTopWidth: 1, borderTopColor: c.hairline}}>{footer}</View>}
-      </View>
+      {/* Present: scale 0.98 → 1 with the fade (DESIGN_SYSTEM 10, duration.sheet). */}
+      <Appear from="scale" duration={tokens['duration.sheet']} style={{maxWidth: '100%'}}>
+        <View testID={testID} accessibilityViewIsModal role={Platform.OS === 'web' ? undefined : 'dialog'} accessibilityLabel={Platform.OS === 'web' ? undefined : title}
+          style={[{width: maxWidth, maxHeight, ...(height ? {height: maxHeight} : {}), backgroundColor: c.elevated, borderRadius: radius['2xl'], borderWidth: 1, borderColor: c.hairline, overflow: 'hidden'}, shadow('3', scheme)]}>
+          {scroll ? <ScrollView style={{flexGrow: 0, flexShrink: 1}} contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps="handled">{body}</ScrollView> : <View style={{flex: 1}}>{body}</View>}
+          {footer && <View style={{flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-end', alignItems: 'center', gap: 8, paddingHorizontal: 20, paddingVertical: 14, borderTopWidth: 1, borderTopColor: c.hairline}}>{footer}</View>}
+        </View>
+      </Appear>
     </View>
   </Modal>;
 }
@@ -66,9 +70,11 @@ export function Popover({visible, anchor, onClose, children, width = 320, align 
   const position = placement === 'below' ? {top: anchor.y + anchor.height + 8} : {bottom: window.height - anchor.y + 8};
   return <Modal visible transparent animationType="none" onRequestClose={onClose} accessibilityLabel={Platform.OS === 'web' ? label : undefined}>
     <Pressable accessibilityLabel="Close" accessible={false} onPress={() => {if (Date.now() - opened.current > 300) onClose();}} style={{position: 'absolute', inset: 0} as never}/>
-    <View accessibilityViewIsModal style={[{position: 'absolute', left, width: w, ...position, backgroundColor: c.elevated, borderRadius: radius.xl, borderWidth: 1, borderColor: c.hairline, padding: 6}, shadow('2', scheme)]}>
-      {children}
-    </View>
+    <Appear from="scale" duration={tokens['duration.fast']} style={{position: 'absolute', left, width: w, ...position}}>
+      <View accessibilityViewIsModal style={[{backgroundColor: c.elevated, borderRadius: radius.xl, borderWidth: 1, borderColor: c.hairline, padding: 6}, shadow('2', scheme)]}>
+        {children}
+      </View>
+    </Appear>
   </Modal>;
 }
 

@@ -104,9 +104,9 @@ test('direct planner cancellation ignores a late complete plan and keeps local q
   await page.route('**/api/planner',async route=>{requests++;const req=route.request().postDataJSON() as PlannerRequest;await gate;await route.fulfill({json:quickPlan(req,'merge')}).catch(()=>{});finished++;});
   await ready(page,()=>({...status,enabled}));await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');enabled=true;
   try{
-    await send(page,'Please combine both documents');await expect(page.getByTestId('progress-message')).toContainText('Planning');
+    await send(page,'Please combine both documents');await expect(page.getByTestId('progress-message')).toContainText('Working');
     await expect.poll(()=>requests).toBe(1);await noPlanningConsent(page);
-    await page.getByRole('button',{name:'Cancel',exact:true}).click();await expect(page.getByText('Planning cancelled. No local files changed.')).toBeVisible();
+    await page.getByRole('button',{name:'Cancel',exact:true}).click();await expect(page.getByText('Cancelled. No files were changed.')).toBeVisible();
     await expect(page.getByTestId('previous-result')).toHaveCount(0);await expect(page.getByTestId('result-facts')).toContainText('3 pages');
     enabled=false;await send(page,'merge');await expect(page.getByTestId('previous-result')).toHaveCount(1);
     release();await expect.poll(()=>finished).toBe(1);await expect(page.getByTestId('progress-message')).toHaveCount(0);
@@ -124,7 +124,7 @@ test('cancelling direct planner setup prevents any later model request',async({p
     await send(page,'Please combine both documents');await started;await page.getByRole('button',{name:'Cancel',exact:true}).click();
     // The local setup request is deliberately still held: Stop must unlock
     // immediately, rather than wait for its network response to arrive.
-    await expect(page.getByText('Planning cancelled. No local files changed.')).toBeVisible({timeout:3_000});
+    await expect(page.getByText('Cancelled. No files were changed.')).toBeVisible({timeout:3_000});
     await expect(page.getByTestId('current-result')).toHaveCount(0);await expect(page.getByTestId('progress-message')).toHaveCount(0,{timeout:3_000});expect(requests).toBe(0);
     // The late setup reply (AI enabled) starts nothing; a later request runs with AI paused.
     release();await expect.poll(()=>finished).toBeGreaterThan(0);await page.waitForTimeout(300);expect(requests).toBe(0);
@@ -222,7 +222,7 @@ test('recognized secret in a mocked provider failure is withheld from chat recei
   const canary=['password','=','shr71','-provider-failure'].join('');let calls=0;
   await page.route('**/api/planner',async route=>{calls++;await route.fulfill({status:502,json:{error:`Provider failed: ${canary}`}});});
   await ready(page);await send(page,'Please combine both documents');
-  await expect(page.getByText('Planning did not finish. No local files changed.')).toBeVisible();
+  await expect(page.getByText('atePDF AI didn’t finish this request. No local files changed.')).toBeVisible();
   expect(calls).toBe(1);
   expect((await page.getByTestId('conversation').textContent())?.includes(canary),'recognized secret appeared in an error receipt').toBe(false);
   await page.context().grantPermissions(['clipboard-read','clipboard-write']);

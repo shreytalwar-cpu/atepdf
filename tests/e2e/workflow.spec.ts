@@ -57,7 +57,7 @@ test('chat clarification, cancellation and discard guard keep committed results 
   await page.getByRole('button',{name:'Make searchable',exact:true}).click();await requested;
   try{
     const activity=page.getByTestId('progress-message');
-    await expect(activity).toContainText('Loading on-device English recognition');
+    await expect(activity).toContainText('Loading text recognition');
     await expect(page.getByTestId('assistant-message').filter({has:activity})).toHaveCount(1);
     await expect(page.getByRole('button',{name:'Cancel',exact:true})).toBeEnabled();
     await expect(page.getByRole('button',{name:'Send message',exact:true})).toHaveCount(0);

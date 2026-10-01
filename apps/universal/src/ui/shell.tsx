@@ -1,7 +1,7 @@
 // Window shell (COMPONENT_INVENTORY B1–B3, D1–D3): toolbar, Files panel and the composer's
 // context row, suggestion chips, hint row and actions palette.
-import {useMemo, useRef, useState} from 'react';
-import {Platform, Pressable, ScrollView, TextInput, View, useWindowDimensions} from 'react-native';
+import {useState} from 'react';
+import {Platform, Pressable, ScrollView, View, useWindowDimensions} from 'react-native';
 import {useAuiState} from '@assistant-ui/react-native';
 import ArrowUpRight from 'lucide-react-native/icons/arrow-up-right';
 import ChevronDown from 'lucide-react-native/icons/chevron-down';
@@ -14,16 +14,14 @@ import PanelRight from 'lucide-react-native/icons/panel-right';
 import Plus from 'lucide-react-native/icons/plus';
 import Search from 'lucide-react-native/icons/search';
 import TriangleAlert from 'lucide-react-native/icons/triangle-alert';
-import X from 'lucide-react-native/icons/x';
 import {SENSITIVE_DRAFT_MARKER, SECRET_CHAT_WARNING} from '@planner/privacy';
-import {revealMessage} from '../components/assistant-ui/elements/thread.aui';
 import {nativeEngineReady, ocrAvailable} from '../platform/runtime';
-import {formatSize, pageCount} from '../workspace/useWorkspace';
-import {facts, FileRow, resultNumber} from './conversation';
+import {pageCount} from '../workspace/useWorkspace';
+import {BrandMark} from './BrandMark';
 import {useApp, type Workspace} from './context';
 import {Menu, Popover, StatusPill, useAnchor} from './overlays';
 import {ActivityGlyph, Glyph, IconButton, Keycap, Row, Txt} from './primitives';
-import {layout, radius, shadow, size, useTheme} from './theme';
+import {layout, radius, useTheme} from './theme';
 
 export const SHORTCUTS = Platform.OS === 'web';
 
@@ -50,6 +48,8 @@ export function Toolbar() {
   const panelShown = docked ? hasFiles && shell.filesPanel !== false : shell.overlayPanel;
   const togglePanel = () => {if (docked) shell.setFilesPanel(!panelShown); else shell.setOverlayPanel(!shell.overlayPanel);};
   return <View accessibilityRole="toolbar" aria-label="Toolbar" style={{height: 52, flexDirection: 'row', alignItems: 'center', gap: 8, paddingLeft: TOOLBAR_LEADING, paddingRight: 12, borderBottomWidth: 1, borderBottomColor: c.hairline, backgroundColor: c.window}}>
+    {/* The Folio Eight, small and still: the window's one brand mark (the title bar is hidden). */}
+    <View accessible={false} importantForAccessibility="no-hide-descendants" style={{paddingRight: 2}}><BrandMark size={16}/></View>
     <WorkspaceContextButton onPress={togglePanel}/>
     <View style={{flex: 1}}/>
     <StatusPill ref={privacyRef} compact={compact} label="On this Mac" accessibilityLabel="Processed on your device" hint="How atePDF handles your files" onPress={() => void measurePrivacy().then(() => setPrivacyOpen(true))}/>
@@ -79,7 +79,7 @@ export function PrivacySummary({onSettings, heading = true}: {onSettings?: () =>
     {heading && <Txt variant="headline">How atePDF handles your files</Txt>}
     {[
       {icon: LaptopMinimal, tone: 'local' as const, text: 'Your PDFs, previews and recognised text are processed on this Mac.'},
-      {icon: Cloud, tone: 'secondary' as const, text: 'When atePDF AI is connected, your typed instruction and anonymous file facts (page counts, sizes) are sent to plan the steps. File contents, names, paths and passwords are not.'},
+      {icon: Cloud, tone: 'secondary' as const, text: 'When atePDF AI is connected, your typed instruction and anonymous file facts (page counts, sizes) are sent to work out the steps. File contents, names, paths and passwords are not.'},
       {icon: ArrowUpRight, tone: 'outbound' as const, text: 'Saving to a cloud folder or sharing through another app may transfer the saved file outside atePDF.'},
     ].map(item => <View key={item.text} style={{flexDirection: 'row', gap: 8}}>
       <View style={{paddingTop: 1}}><Glyph icon={item.icon} tone={item.tone}/></View>
@@ -94,7 +94,7 @@ function WorkspaceContextButton({onPress}: {onPress: () => void}) {
   const {workspace: w} = useApp();
   const {c} = useTheme();
   const current = target(w);
-  const label = w.restoring ? 'Restoring…' : w.working ? w.planning ? 'Planning…' : w.state.busy ? 'Working…' : 'Getting ready…' : current ? current.title : 'No files yet';
+  const label = w.restoring ? 'Restoring…' : w.working ? w.state.busy || w.planning ? 'Working…' : 'Getting ready…' : current ? current.title : 'No files yet';
   const detail = !w.working && current ? current.detail : undefined;
   const disabled = !current;
   return <Pressable accessibilityRole="button" disabled={disabled} onPress={onPress}
@@ -105,54 +105,6 @@ function WorkspaceContextButton({onPress}: {onPress: () => void}) {
     {detail && <Txt variant="meta" tone="secondary" tabular numberOfLines={1}>{detail}</Txt>}
     {!disabled && <Glyph icon={ChevronDown} size={14} tone="tertiary"/>}
   </Pressable>;
-}
-
-/** B3 FilesPanel: results (current first) and sources in merge order. Not a file manager. */
-export function FilesPanel({overlay = false, onClose}: {overlay?: boolean; onClose?: () => void}) {
-  const {workspace: w, shell} = useApp();
-  const {c, scheme} = useTheme();
-  const results = useMemo(() => {
-    const seen = new Set<string>(), list: {ref: string; title: string; entry: number}[] = [];
-    for (const entry of [...w.entries].reverse()) {
-      const ref = entry.artifact?.ref;
-      if (!ref || seen.has(ref) || !w.store.list.some(file => file.ref === ref)) continue;
-      seen.add(ref); list.push({ref, title: entry.resultTitle ?? 'Your PDF', entry: entry.id});
-    }
-    // Current first, then newest first by stable result number (Undo does not reorder them).
-    return list.sort((a, b) => (b.ref === w.store.focus ? 1 : 0) - (a.ref === w.store.focus ? 1 : 0) || resultNumber(w, b.ref) - resultNumber(w, a.ref));
-  }, [w.entries, w.store, w.store.focus, w.state]);
-  const sources = w.store.originals.map(ref => {try {return w.store.get(ref).meta;} catch {return null;}}).filter(meta => meta !== null);
-  const importEntry = (ref: string) => w.entries.find(entry => entry.files?.some(file => file.ref === ref))?.id;
-  const usage = w.storage.workspace;
-  return <View accessibilityRole="summary" aria-label="Files" style={[{width: size['panel.files.default'], backgroundColor: overlay ? c.elevated : c.panel, borderLeftWidth: 1, borderLeftColor: c.hairline},
-    overlay && {position: 'absolute', top: 60, right: 8, bottom: 8, borderRadius: radius.xl, borderWidth: 1, borderColor: c.hairline, overflow: 'hidden', zIndex: 20, ...shadow('3', scheme)}]}>
-    <View style={{height: 36, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14}}>
-      <Txt variant="section" tone="secondary" accessibilityRole="header" style={{flex: 1}}>Files</Txt>
-      {overlay && onClose && <IconButton size="inline" icon={X} label="Close Files panel" onPress={onClose}/>}
-    </View>
-    <ScrollView style={{flex: 1}} contentContainerStyle={{paddingHorizontal: 6, paddingBottom: 12, gap: 12}}>
-      {results.length > 0 && <View style={{gap: 2}}>
-        <Txt variant="section" tone="tertiary" accessibilityRole="header" style={{paddingHorizontal: 8, paddingVertical: 4}}>Results</Txt>
-        {results.map(result => {const meta = w.store.get(result.ref).meta, current = result.ref === w.store.focus; return <FileRow key={result.ref} name={result.title}
-          tag={current ? 'current' : 'earlier'} number={resultNumber(w, result.ref)} detail={facts(meta.pageCount, meta.sizeBytes)} fileRef={result.ref} checksum={meta.checksum}
-          onPress={() => {revealMessage(String(result.entry)); onClose?.();}}
-          onPreview={() => shell.setQuickLook({ref: result.ref, title: result.title})}
-          // Without pointer hover (native), the row keeps one action so its facts stay readable; Save is on the card.
-          onSave={Platform.OS === 'web' ? () => void w.exportResult({ref: meta.ref, pageCount: meta.pageCount, sizeBytes: meta.sizeBytes, note: meta.note}) : undefined} saving={!!w.saving}/>;})}
-      </View>}
-      {sources.length > 0 && <View style={{gap: 2}}>
-        <Txt variant="section" tone="tertiary" accessibilityRole="header" style={{paddingHorizontal: 8, paddingVertical: 4}}>Sources · merge order</Txt>
-        {sources.map((meta, index) => <FileRow key={meta!.ref} name={meta!.name} order={index + 1} total={sources.length} detail={facts(meta!.pageCount, meta!.sizeBytes)}
-          fileRef={meta!.ref} checksum={meta!.checksum} onPress={() => {const id = importEntry(meta!.ref); if (id !== undefined) revealMessage(String(id)); onClose?.();}}
-          onPreview={() => shell.setQuickLook({ref: meta!.ref, title: meta!.name})}/>)}
-      </View>}
-    </ScrollView>
-    <Pressable accessibilityRole="button" accessibilityLabel="Privacy & Storage settings" onPress={() => shell.openSettings('privacy')}
-      style={({pressed}) => ({flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, paddingVertical: 10, borderTopWidth: 1, borderTopColor: c.hairline, backgroundColor: pressed ? c.pressed : 'transparent'})}>
-      <Glyph icon={LaptopMinimal} size={14} tone="local"/>
-      <Txt variant="meta" tone="secondary" tabular>{w.durable ? w.keeping ? 'Kept on this Mac' : 'Until atePDF quits' : 'This session only'}{w.durable && usage && !usage.unopened ? ` · ${formatSize(usage.total)}` : ''}</Txt>
-    </Pressable>
-  </View>;
 }
 
 /** D1 context row: what the next request applies to, or the open question. */
@@ -166,8 +118,8 @@ export function ComposerTop() {
     {question ? <Txt variant="meta" tone="secondary" numberOfLines={1} style={{flexShrink: 1}}>Answering: {question}</Txt> : current && <View
       accessible accessibilityLabel={`Your next request applies to ${current.title}, ${current.detail}`}
       style={{height: 22, flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 6, borderRadius: radius.sm, backgroundColor: c.sunken, maxWidth: '100%'}}>
-      <Glyph icon={current.kind === 'result' ? FileText : Files} size={12} tone="secondary"/>
-      <Txt testID="current-context" variant="meta" tone="primary" numberOfLines={1} ellipsizeMode="middle" style={{flexShrink: 1}}>{current.kind === 'result' ? `${current.title} · ${current.detail}` : `${current.title} · ${current.detail}`}</Txt>
+      <Glyph icon={current.kind === 'result' ? FileText : Files} size={12} tone={current.kind === 'result' ? 'accent' : 'secondary'}/>
+      <Txt testID="current-context" variant="meta" tone="primary" numberOfLines={1} ellipsizeMode="middle" style={{flexShrink: 1}}>{`${current.title} · ${current.detail}`}</Txt>
     </View>}
   </View>;
 }

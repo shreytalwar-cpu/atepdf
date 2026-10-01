@@ -1,4 +1,4 @@
-import React, {Suspense, lazy, useEffect, useMemo, useState} from 'react';
+import React, {Suspense, lazy, useEffect, useMemo, useState, useSyncExternalStore, type ComponentType} from 'react';
 import {Platform, View, useWindowDimensions} from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import ChevronRight from 'lucide-react-native/icons/chevron-right';
@@ -10,16 +10,37 @@ import DropSurface from './src/platform/DropSurface';
 import {ComposerInput, fillComposerInput, focusComposerInput, resetComposerInput} from './src/platform/ComposerInput';
 import {useWorkspace, type Entry} from './src/workspace/useWorkspace';
 import {WorkspaceContext, useApp, useShellState} from './src/ui/context';
-import {ActivityRow, EmptyWorkspace, EntryExtras, InlineBanner, isProposal, NoticeIcon, ProposalCard, SourceGroup} from './src/ui/conversation';
-import {AddFiles, ComposerActions, ComposerTop, FilesPanel, HintRow, Toolbar} from './src/ui/shell';
-import {clearThumbnails} from './src/ui/thumbnails';
+import {EmptyWorkspace, InlineBanner, NoticeIcon} from './src/ui/empty';
+import {isProposal, isStopAcknowledgement} from './src/ui/facts';
+import {ActivityPresenceContext, markRestored, useActivityPresence} from './src/ui/motion';
+import {AddFiles, ComposerActions, ComposerTop, HintRow, Toolbar} from './src/ui/shell';
 import {Glyph, Txt} from './src/ui/primitives';
 import {layout, radius, useTheme} from './src/ui/theme';
 
 // atePDF (SHR-106): the approved SHR-105 Mac-first shell around the workspace. All document,
 // job, planning, persistence and retention behaviour lives in useWorkspace; this file only
 // presents it and routes commands back to it.
-const convertEntry = (entry: Entry): ThreadMessageLike => ({id: String(entry.id), role: entry.role, content: [{type: 'text', text: entry.text}], metadata: {custom: {entryId: entry.id, hasArtifact: !!entry.artifact}}, ...(entry.id === -1 ? {status: {type: 'running' as const}} : {})});
+type ShownEntry = Entry & {tight?: boolean; running?: true};
+const convertEntry = (entry: ShownEntry): ThreadMessageLike => ({id: String(entry.id), role: entry.role, content: [{type: 'text', text: entry.text}], metadata: {custom: {entryId: entry.id, hasArtifact: !!entry.artifact, tight: !!entry.tight}}, ...(entry.running ? {status: {type: 'running' as const}} : {})});
+
+// Everything that needs files (sources, results, proposals, activity, the Files panel) loads
+// right after first paint, outside the startup bundle (web budget). Once loaded, the views render
+// synchronously (no Suspense frame), so a reply and its card always appear in the same commit.
+type Views = typeof import('./src/ui/conversation');
+let views: Views | null = null;
+const viewListeners = new Set<() => void>();
+const loadViews = () => import('./src/ui/conversation').then(module => {if (!views) {views = module; viewListeners.forEach(listener => listener());} return module;});
+const subscribeViews = (listener: () => void) => {viewListeners.add(listener); return () => {viewListeners.delete(listener);};};
+const readViews = () => views;
+function lazyView<P extends object>(pick: (loaded: Views) => ComponentType<P>) {
+  return function LazyView(props: P) {
+    const loaded = useSyncExternalStore(subscribeViews, readViews, readViews);
+    useEffect(() => {if (!loaded) void loadViews();}, [loaded]);
+    return loaded ? React.createElement(pick(loaded), props) : null;
+  };
+}
+const SourceGroup = lazyView(loaded => loaded.SourceGroup), EntryExtras = lazyView(loaded => loaded.EntryExtras), ProposalCard = lazyView(loaded => loaded.ProposalCard);
+const ActivityRow = lazyView(loaded => loaded.ActivityRow), FilesPanel = lazyView(loaded => loaded.FilesPanel);
 
 function useEntry() {
   const id = useAuiState(s => s.message.metadata.custom.entryId);
@@ -41,15 +62,17 @@ function UserMessage() {
   </View>;
 }
 
-/** C3 AssistantMessage: text on the window background, an outcome icon when it reports one, then its artifact. */
+/** C3 AssistantMessage: text on the window background, an outcome icon when it reports one, then its artifact.
+ * A reply that only follows up an import is quieter, so the import and its summary read as one turn. */
 function AssistantMessage() {
   const entry = useEntry();
+  const tight = useAuiState(s => !!s.message.metadata.custom.tight);
   if (!entry) return <MessageText/>;
   if (isProposal(entry)) return <ProposalCard entry={entry}/>;
   return <View style={{gap: 8}}>
     <View style={{flexDirection: 'row', alignItems: 'flex-start', gap: 8}}>
       <NoticeIcon notice={entry.notice}/>
-      <View style={{flex: 1, minWidth: 0}}><MessageText/></View>
+      <View style={{flex: 1, minWidth: 0}}><MessageText muted={tight}/></View>
       {!entry.artifact && <CopyMessage/>}
     </View>
     <EntryExtras entry={entry}/>
@@ -99,7 +122,22 @@ function Screen() {
   const {width} = useWindowDimensions();
   const announcement = entries.findLast(entry => entry.role === 'assistant')?.text;
   useAnnounce(announcement);
-  const messages = useMemo(() => busy ? [...entries, {id: -1, role: 'assistant' as const, text: state.busy ? state.message : workspace.planning ? 'Planning your request…' : 'Checking local setup…'}] : entries, [entries, busy, state.message, state.busy, workspace.planning]);
+  // Presence: after very fast work the activity row stays a moment and the reply is held only
+  // for that remainder, so a turn reads request → working → result (never longer; see progress.ts).
+  const presence = useActivityPresence(entries, workspace.working);
+  const settling = presence.phase === 'settling';
+  const messages = useMemo(() => {
+    const visible = settling ? entries.slice(0, presence.cut) : entries;
+    // A Stop acknowledgement is replaced by the row's “Stopping…” and then by the outcome.
+    const shown: ShownEntry[] = visible.filter((entry, index) => !(isStopAcknowledgement(entry) && (index < visible.length - 1 || state.busy)))
+      .map((entry, index, list) => entry.role === 'assistant' && list[index - 1]?.files && !entry.artifact && !entry.notice ? {...entry, tight: true} : entry);
+    // The activity row carries the id its reply will have, so the reply replaces it in the same
+    // list cell (no frame in which a new cell is still empty).
+    const id = settling ? entries[presence.cut]?.id ?? workspace.nextEntryId : workspace.nextEntryId;
+    return busy || settling ? [...shown, {id, role: 'assistant' as const, text: state.busy ? state.message : 'Working…', running: true as const}] : shown;
+  }, [entries, busy, settling, presence.cut, state.message, state.busy, workspace.nextEntryId]);
+  // While a reply is held, the result on screen stays the current one.
+  const shownCurrent = settling ? entries.slice(0, presence.cut).findLast(entry => entry.artifact)?.id : workspace.current;
   const runtime = useExternalStoreRuntime({messages, convertMessage: convertEntry, isRunning: busy, isSendDisabled: busy || !nativeEngineReady,
     onNew: async message => {workspace.submit(message.content.filter(p => p.type === 'text').map(p => p.text).join('\n'));},
     onCancel: async () => {workspace.cancel();},
@@ -110,14 +148,18 @@ function Screen() {
   useEffect(() => runtime.thread.composer.subscribe(() => workspace.noteDraft(runtime.thread.composer.getState().text)), [runtime, workspace.clearCount]);
   // Start over, expiry and Delete Local Data: remove the unsent draft, content-derived
   // thumbnails and any open preview of the old workspace.
-  useEffect(() => {if (workspace.clearCount) {runtime.thread.composer.setText(''); resetComposerInput(); clearThumbnails(); shell.setQuickLook(null); shell.setOverlayPanel(false);}}, [workspace.clearCount]);
+  useEffect(() => {if (workspace.clearCount) {runtime.thread.composer.setText(''); resetComposerInput(); void loadViews().then(views => views.clearThumbnails()); shell.setQuickLook(null); shell.setOverlayPanel(false);}}, [workspace.clearCount]);
+  // A restored conversation is already there: its turns don't animate in.
+  useEffect(() => {if (!workspace.restoring) markRestored(entries.map(entry => entry.id));}, [workspace.restoring]);
+  useEffect(() => {const timer = setTimeout(() => void loadViews(), 0); return () => clearTimeout(timer);}, []);
   const composer = useMemo(() => ({fill: (text: string) => {runtime.thread.composer.setText(text); fillComposerInput(text);}, focus: focusComposerInput}), [runtime]);
   useKeyboardCommands(workspace, shell, composer);
   useEffect(() => {if (Platform.OS === 'web') document.title = 'atePDF';}, []);
   const hasFiles = workspace.store.list.length > 0;
   const docked = layout.panelDocks(width) && hasFiles && shell.filesPanel !== false;
   const context = useMemo(() => ({workspace, shell, composer}), [workspace, shell, composer]);
-  return <WorkspaceContext.Provider value={context}><AssistantRuntimeProvider runtime={runtime}>
+  const activity = useMemo(() => ({phase: presence.phase, outcome: presence.outcome, current: shownCurrent}), [presence.phase, presence.outcome, shownCurrent]);
+  return <WorkspaceContext.Provider value={context}><ActivityPresenceContext.Provider value={activity}><AssistantRuntimeProvider runtime={runtime}>
     <SafeAreaView style={{flex: 1, backgroundColor: c.window}} edges={['top', 'left', 'right']}>
       <DropSurface disabled={busy} onFiles={files => void workspace.importFiles(files)}>
         <Toolbar/>
@@ -133,7 +175,7 @@ function Screen() {
       <Palette/>
       <Sheets/>
     </SafeAreaView>
-  </AssistantRuntimeProvider></WorkspaceContext.Provider>;
+  </AssistantRuntimeProvider></ActivityPresenceContext.Provider></WorkspaceContext.Provider>;
 }
 
 /** In-window keyboard commands (UX_SPEC 15) for the web host. Text-editing keys are never taken

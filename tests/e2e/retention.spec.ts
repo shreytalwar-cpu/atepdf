@@ -321,7 +321,7 @@ test('B3 a connection response that arrives after expiry adds no message and sav
 // choices, local execution, error and finalizer) belongs to the workspace session it
 // was submitted in. The transport here ignores AbortSignal and holds its reply, so
 // nothing depends on cancellation cooperating.
-const CANCELLED='Planning cancelled. No local files changed.';
+const CANCELLED='Cancelled. No files were changed.';
 const fresh={connected:true,enabled:true,remaining:3,token:'synthetic-fresh-session'};
 const ignoreAbort=(page:Page)=>page.evaluate(()=>{const f=window.fetch;window.fetch=(input,init)=>/\/api\/planner(\/status)?$/.test(String(input))?f(input,{...init,signal:undefined}):f(input,init);});
 const composer=(page:Page)=>page.getByRole('textbox',{name:'Tell atePDF what to do'});
@@ -336,7 +336,7 @@ async function staleRequestIsInert(page:Page,release:()=>void,settled:()=>Promis
   await page.waitForTimeout(1500);
   await expect(emptyWorkspace(page)).toBeVisible();
   await expect(page.getByText(CANCELLED,{exact:true})).toHaveCount(0);
-  await expect(page.getByText(/Your new PDF is ready|OpenAI is not connected yet|AI planning is paused|AI connection is unavailable/)).toHaveCount(0);
+  await expect(page.getByText(/Your new PDF is ready|OpenAI is not connected yet|AI planning is paused|atePDF AI is paused|AI connection is unavailable/)).toHaveCount(0);
   await expect(page.getByTestId('current-result')).toHaveCount(0);
   // No checkpoint write, no stored change, no further planner call, and the old
   // finalizer did not check the connection on behalf of the new session.

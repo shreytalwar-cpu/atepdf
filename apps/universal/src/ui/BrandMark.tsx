@@ -3,8 +3,9 @@ import Svg, {Defs, Mask, Path, Polygon, Rect} from 'react-native-svg';
 import {useTheme} from './theme';
 
 // A16 BrandMark: the approved Folio Eight (OD-1), built from docs/design/brand/mark-a-folio-eight.svg.
-// Used only in onboarding, About and the empty workspace (DESIGN_SYSTEM 2.6); never in the toolbar.
-export function BrandMark({size = 32, tone = 'iris', label}: {size?: 16 | 20 | 32 | 64; tone?: 'iris' | 'mono'; label?: string}) {
+// Used in onboarding, About, the empty workspace and (16 pt, still) the toolbar's leading edge:
+// the owner's SHR-106 polish review asked for more brand presence than DESIGN_SYSTEM 2.6 allowed.
+export function BrandMark({size = 32, tone = 'iris', label}: {size?: 16 | 20 | 32 | 48 | 64; tone?: 'iris' | 'mono'; label?: string}) {
   const {c, scheme} = useTheme();
   const id = `folio${useId().replace(/[^a-zA-Z0-9]/g, '')}`;
   // brand.iris on light, brand.irisLight on dark, or monochrome text.tertiary in UI chrome.

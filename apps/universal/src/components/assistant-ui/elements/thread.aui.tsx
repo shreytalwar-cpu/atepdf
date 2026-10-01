@@ -16,7 +16,6 @@ import {
   useAui,
   useAuiState,
 } from "@assistant-ui/react-native";
-import * as Clipboard from "expo-clipboard";
 import {safeOrdinaryText} from '@planner/privacy';
 import ArrowUpIcon from 'lucide-react-native/icons/arrow-up';
 import ArrowDownIcon from 'lucide-react-native/icons/arrow-down';
@@ -199,7 +198,8 @@ export const useThreadViewport = (): ThreadViewport => {
 };
 
 const copyToClipboard = async (text: string) => {
-  await Clipboard.setStringAsync(safeOrdinaryText(text));
+  // Copy is web-only (CopyMessage); the browser clipboard keeps expo-clipboard out of the startup bundle.
+  await navigator.clipboard.writeText(safeOrdinaryText(text));
 };
 
 export const Thread: FC<ThreadProps> = ({
@@ -536,15 +536,17 @@ const WelcomeSlot: FC = () => {
 };
 
 // Spacing: 16 between turns in a task and 28 between tasks (a request starts a task).
+// A tight reply (an import's summary) sits 6 below its turn, so the two read as one.
 const ThreadMessage: FC = () => {
   const role = useAuiState((s) => s.message.role);
   const index = useAuiState((s) => s.message.index);
-  const top = index === 0 ? 0 : role === "user" ? 28 : 16;
+  const tight = useAuiState((s) => !!s.message.metadata.custom?.tight);
+  const top = index === 0 ? 0 : role === "user" ? 28 : tight ? 6 : 16;
   return role === "user" ? <UserMessage top={top} /> : <AssistantMessage top={top} />;
 };
 
 /** The text of a turn in the conversation text size. Assistant text is a polite live region on web. */
-export const MessageText: FC<{ strong?: boolean }> = ({ strong = false }) => {
+export const MessageText: FC<{ strong?: boolean; muted?: boolean }> = ({ strong = false, muted = false }) => {
   const Part: TextMessagePartComponent = ({ text }) => {
     const { c } = useTheme();
     const textSize = useTextSize(), scale = useTextScale();
@@ -552,7 +554,7 @@ export const MessageText: FC<{ strong?: boolean }> = ({ strong = false }) => {
     return (
       <Text
         className="aui-message-text"
-        style={[typeStyle(strong ? "bodyStrong" : "body", TEXT_SIZES[textSize], scale), { color: c.ink }]}
+        style={[typeStyle(strong ? "bodyStrong" : "body", TEXT_SIZES[textSize], scale), { color: muted ? c.inkSecondary : c.ink }]}
         selectable
         aria-live={Platform.OS === "web" && isAssistant ? "polite" : undefined}
         aria-atomic={isAssistant ? true : undefined}

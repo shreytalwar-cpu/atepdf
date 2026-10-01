@@ -58,7 +58,7 @@ An early bundle-ID lookup accidentally launched an unsigned development copy. No
 
 - Catalyst now uses the **Mac idiom** (`TARGETED_DEVICE_FAMILY = "1,2,6"` for the app target; OD-6, ADR 0011 ENV-5), so the UI renders at 1:1 instead of 77%. iOS builds are unaffected.
 - `AtepdfSceneDelegate` (in `AppDelegate.swift`) subclasses Expo's scene delegate: hidden window title (accessibility title "atePDF"), no title-bar separator, a 640 × 520 minimum size and a `bg.window` background in both appearances. `UIUserInterfaceStyle` is Automatic (dark mode ships at launch, OD-3); the display name is `atePDF` (OD-2).
-- The app icon set is rendered from the approved Folio Eight Ink master by `pnpm design:icons` (macOS 16–512 @1x/@2x plus a full-bleed iOS 1024). An Icon Composer `.icon` layered file is not produced by this tooling.
+- The app icon set is rendered from the Folio Eight black master (`docs/design/brand/icon-folio-eight-black.svg`, the owner's SHR-106 polish direction) by `pnpm design:icons` (macOS 16–512 @1x/@2x plus a full-bleed iOS 1024). An Icon Composer `.icon` layered file is not produced by this tooling.
 - `scripts/native/mac-build.sh` guards its optional build-option array so it runs under macOS's bash 3.2 with `set -u`.
 - Window size restore, native menu-bar commands and ⌘-shortcuts on Catalyst remain SHR-75; every command is reachable in-window.
 

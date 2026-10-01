@@ -27,7 +27,9 @@ async function vault(page:Page){
     (window as unknown as Record<string,unknown>).__ATEPDF_TEST_WORKSPACE__={backend,now:()=>new Date(clock()),temporary:{usage:()=>4096,clear:()=>true}};
   },T0);
 }
-const capture=(page:Page,name:string)=>page.screenshot({path:`${dir}/${name}.png`});
+// Captures wait for finite transitions to finish (the app publishes how many are running), never a sleep.
+const still=(page:Page)=>page.waitForFunction(()=>(window as unknown as {__atepdfAnimations?:number}).__atepdfAnimations===0);
+const capture=async(page:Page,name:string)=>{await still(page);await page.screenshot({path:`${dir}/${name}.png`});};
 
 for(const scheme of ['light','dark'] as const){
   test.describe(`${scheme} appearance`,()=>{
@@ -64,7 +66,7 @@ for(const scheme of ['light','dark'] as const){
       await capture(page,`L-undo-${scheme}`);
     });
 
-    test(`E, G, M, N: clarification, planning, refusal and error (${scheme})`,async({page})=>{
+    test(`E, G, M, N: clarification, working with atePDF AI, refusal and error (${scheme})`,async({page})=>{
       let release:()=>void=()=>{};const gate=new Promise<void>(resolve=>{release=resolve;});
       await page.route('**/api/planner/status',route=>route.fulfill({json:on}));
       await page.route('**/api/planner',async route=>{
@@ -87,9 +89,9 @@ for(const scheme of ['light','dark'] as const){
       await send(page,'Combine both documents');
       await expect(page.getByTestId('progress-message')).toContainText('Sending your instruction to atePDF AI.');
       await expect(page.getByTestId('progress-message')).toContainText('atePDF AI');
-      await capture(page,`G-planning-${scheme}`);
+      await capture(page,`G-working-ai-${scheme}`);
       await page.getByRole('button',{name:'Stop',exact:true}).click();
-      await expect(page.getByText('Planning cancelled. No local files changed.')).toBeVisible();
+      await expect(page.getByText('Cancelled. No files were changed.')).toBeVisible();
       release();
       await send(page,'password=synthetic-state-secret');
       await expect(page.getByText('Keep keys and passwords out of chat.',{exact:false}).last()).toBeVisible();
@@ -115,7 +117,8 @@ for(const scheme of ['light','dark'] as const){
       await page.getByRole('button',{name:'Make searchable',exact:true}).click();await requested;
       try{
         const activity=page.getByTestId('progress-message');
-        await expect(activity).toContainText('Making text searchable');
+        await expect(activity).toContainText(/Making \d+ scanned pages? searchable…|Making scanned pages searchable…/);
+        await expect(activity.getByRole('progressbar')).toBeVisible();
         await expect(activity).toContainText('On this Mac');
         await capture(page,`H-processing-${scheme}`);
         await page.getByRole('button',{name:'Cancel',exact:true}).click();
@@ -187,6 +190,109 @@ for(const [label,width,height] of [['T-narrow-640',640,600],['U-laptop-1280',128
     const column=await page.getByTestId('current-result').boundingBox();
     expect(column!.width).toBeLessThanOrEqual(720);
     if(!docked){await page.getByRole('button',{name:'Files panel'}).click();await expect(page.getByRole('heading',{name:'Results'})).toBeVisible();}
-    await page.screenshot({path:`${dir}/${label}.png`});
+    await still(page);await page.screenshot({path:`${dir}/${label}.png`});
   });
 }
+
+// Motion and fast tasks (SHR-106 polish): timing never races the UI, and nothing waits on sleeps.
+// A page-side observer records what the conversation shows on every DOM change.
+async function recordActivity(page:Page){
+  await page.evaluate(()=>{
+    const log:{t:number;row:boolean;result:number}[]=[];(window as unknown as {__activity:typeof log}).__activity=log;
+    const sample=()=>{const entry={t:performance.now(),row:!!document.querySelector('[data-testid=progress-message],[data-testid=progress-settling]'),result:document.querySelectorAll('[data-testid=current-result]').length};const last=log.at(-1);if(!last||last.row!==entry.row||last.result!==entry.result)log.push(entry);};
+    sample();new MutationObserver(sample).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['data-testid']});
+  });
+}
+const activityLog=(page:Page)=>page.evaluate(()=>(window as unknown as {__activity:{t:number;row:boolean;result:number}[]}).__activity);
+
+test.describe('motion and fast tasks',()=>{
+  test.beforeEach(async({page})=>{await page.setViewportSize({width:1280,height:800});await page.route('**/api/planner/status',route=>route.fulfill({json:off}));});
+
+  test('a quick task reads as request → working → result, with no empty frame between',async({page})=>{
+    await page.emulateMedia({reducedMotion:'no-preference'});
+    await page.goto('/');await samples(page);await expect(page.getByText('Checked on this Mac',{exact:true})).toBeVisible();
+    await recordActivity(page);
+    await page.getByRole('button',{name:'Merge',exact:true}).click();
+    await expect(page.getByTestId('current-result')).toBeVisible();await still(page);
+    const log=await activityLog(page);
+    const shown=log.findIndex(entry=>entry.row),arrived=log.findIndex(entry=>entry.result===1);
+    expect(shown,'the activity row appeared').toBeGreaterThanOrEqual(0);
+    expect(arrived,'the result followed the activity row').toBeGreaterThan(shown);
+    // The row stays at least the minimum visible time; the result is never held for seconds after the work.
+    expect(log[arrived].t-log[shown].t).toBeGreaterThanOrEqual(400);
+    expect(log.slice(shown,arrived+1).every(entry=>entry.row||entry.result),'no frame shows neither the row nor the result').toBe(true);
+    await expect(page.getByTestId('progress-message')).toHaveCount(0);await expect(page.getByTestId('progress-settling')).toHaveCount(0);
+  });
+
+  test('repeated quick operations keep one current result and stable numbering',async({page})=>{
+    await page.emulateMedia({reducedMotion:'no-preference'});
+    await page.goto('/');await samples(page);
+    await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');
+    // Each request is sent the moment the composer accepts it, including while the previous reply settles.
+    for(const request of ['remove page 2','undo','remove page 3']){
+      await expect(page.getByRole('button',{name:'Send message'})).toHaveCount(1);
+      await send(page,request);
+      await expect(page.getByTestId('user-message').last()).toContainText(request);
+    }
+    await expect(page.getByTestId('progress-message')).toHaveCount(0);
+    await expect(page.getByTestId('current-result')).toHaveCount(1);
+    await expect(page.getByTestId('result-facts')).toContainText('2 pages');
+    await expect(page.getByTestId('current-result')).toContainText('Result 3');
+    await expect(page.getByTestId('previous-result')).toHaveCount(3);
+    await still(page);
+  });
+
+  test('a result that arrives after the window narrows and widens lands in the right layout',async({page})=>{
+    let release:()=>void=()=>{};const gate=new Promise<void>(resolve=>{release=resolve;});
+    await page.route('**/api/planner/status',route=>route.fulfill({json:on}));
+    await page.route('**/api/planner',async route=>{const req=route.request().postDataJSON() as PlannerRequest;await gate;await route.fulfill({json:quickPlan(req,'merge')}).catch(()=>{});});
+    await page.goto('/');await samples(page);
+    await send(page,'Combine both documents');
+    await expect(page.getByTestId('progress-message')).toContainText('Working…');
+    await page.setViewportSize({width:700,height:700});
+    await expect(page.getByRole('heading',{name:'Results'})).toHaveCount(0);
+    await page.setViewportSize({width:1400,height:900});
+    await page.setViewportSize({width:900,height:800});
+    release();
+    await expect(page.getByTestId('current-result')).toBeVisible();
+    await expect(page.getByTestId('result-facts')).toContainText('3 pages');
+    await page.setViewportSize({width:1300,height:850});
+    await expect(page.getByRole('heading',{name:'Results'})).toBeVisible();
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+    expect((await page.getByTestId('current-result').boundingBox())!.width).toBeLessThanOrEqual(720);
+  });
+
+  test('Reduce Motion: results fade without movement and the activity glyph is still',async({page})=>{
+    await page.emulateMedia({reducedMotion:'reduce'});
+    await page.goto('/');await samples(page);
+    await recordActivity(page);
+    await page.getByRole('button',{name:'Merge',exact:true}).click();
+    await expect(page.getByTestId('current-result')).toBeVisible();
+    // No translate or scale is ever applied to the result's entrance under Reduce Motion.
+    expect(await page.getByTestId('current-result').evaluate(card=>getComputedStyle(card.parentElement!).transform)).toBe('none');
+    await still(page);
+    const log=await activityLog(page);
+    expect(log.some(entry=>entry.row),'the row is shown (not a flash) with Reduce Motion too').toBe(true);
+    await send(page,'remove page 2');
+    const pulse=page.getByTestId('activity-pulse').first();
+    if(await pulse.count())await expect(pulse).toHaveCSS('opacity','1');
+    await expect(page.getByTestId('result-facts')).toContainText('2 pages');
+  });
+
+  test('Stop during progress answers at once and commits nothing',async({page})=>{
+    let releaseWorker:()=>void=()=>{};const held=new Promise<void>(resolve=>{releaseWorker=resolve;});let arrived:()=>void=()=>{};const requested=new Promise<void>(resolve=>{arrived=resolve;});
+    await page.goto('/');
+    await page.getByLabel('Choose PDF files').setInputFiles(['tests/fixtures/mixed-text-and-scan.pdf']);
+    await expect(page.getByText('Your 1 PDF is ready.',{exact:false})).toBeVisible();
+    await page.route('**/eng.traineddata.gz',async route=>{arrived();await held;await route.continue().catch(()=>{});});
+    await page.getByRole('button',{name:'Make searchable',exact:true}).click();await requested;
+    try{
+      await expect(page.getByTestId('progress-message').getByRole('progressbar')).toBeVisible();
+      await page.getByRole('button',{name:'Stop',exact:true}).click();
+      await expect(page.getByTestId('progress-message')).toContainText('Stopping…');
+    }finally{releaseWorker();}
+    await expect(page.getByText('Cancelled. No new result was committed.')).toBeVisible();
+    await expect(page.getByTestId('progress-settling')).toHaveCount(0);
+    await expect(page.getByTestId('current-result')).toHaveCount(0);
+  });
+});

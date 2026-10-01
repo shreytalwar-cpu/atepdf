@@ -84,10 +84,10 @@ export const IconButton = React.forwardRef<View, IconButtonProps>(function IconB
 });
 
 /** A3 Keycap: an inline shortcut hint. Decorative; the control's own label carries the shortcut. */
-export function Keycap({children}: {children: string}) {
+export function Keycap({children, onAccent = false}: {children: string; onAccent?: boolean}) {
   const {c} = useTheme();
-  return <View accessible={false} importantForAccessibility="no-hide-descendants" style={{minWidth: 16, paddingHorizontal: 4, height: 16, borderRadius: radius.xs, borderWidth: 1, borderColor: c.hairline, alignItems: 'center', justifyContent: 'center'}}>
-    <Txt variant="kbd" tone="tertiary">{children}</Txt>
+  return <View accessible={false} importantForAccessibility="no-hide-descendants" style={{minWidth: 16, paddingHorizontal: 4, height: 16, borderRadius: radius.xs, borderWidth: 1, borderColor: onAccent ? 'rgba(255,255,255,0.35)' : c.hairline, alignItems: 'center', justifyContent: 'center'}}>
+    <Txt variant="kbd" tone={onAccent ? 'onAccent' : 'tertiary'}>{children}</Txt>
   </View>;
 }
 
@@ -97,9 +97,10 @@ const TAG_TEXT: Record<TagKind, string> = {current: 'Current', earlier: 'Earlier
 export function Tag({kind, label}: {kind: TagKind; label?: string}) {
   const {c} = useTheme();
   const fill = kind === 'current' ? c.accentSubtle : kind === 'earlier' || kind === 'undone' || kind === 'restored' ? c.sunken : kind === 'unsupported' ? c.dangerBg : kind === 'quality' ? c.warningBg : 'transparent';
-  const tone: Tone = kind === 'current' ? 'accent' : kind === 'verified' ? 'success' : kind === 'unsupported' ? 'danger' : kind === 'quality' ? 'warning' : 'secondary';
+  // Verified carries the brand accent (SHR-106 polish): it is atePDF's own check, shown only after SHR-47 passes.
+  const tone: Tone = kind === 'current' || kind === 'verified' ? 'accent' : kind === 'unsupported' ? 'danger' : kind === 'quality' ? 'warning' : 'secondary';
   return <View style={{height: 18, paddingHorizontal: fill === 'transparent' ? 0 : 6, borderRadius: radius.xs, backgroundColor: fill, flexDirection: 'row', alignItems: 'center', gap: 3}}>
-    {kind === 'verified' && <Glyph icon={Check} size={12} tone="success"/>}
+    {kind === 'verified' && <Glyph icon={Check} size={12} tone="accent"/>}
     {kind === 'locked' && <Glyph icon={LockKeyhole} size={12} tone="secondary"/>}
     <Txt variant="caption" tone={tone}>{label ?? TAG_TEXT[kind]}</Txt>
   </View>;
@@ -186,11 +187,11 @@ export const Row = React.forwardRef<View, Omit<PressableProps, 'style' | 'childr
 });
 
 /** E4 SettingsSection: a section label and a grouped container. */
-export function Section({title, children, labelId}: {title: string; children: ReactNode; labelId?: string}) {
+export function Section({title, children, labelId, destructive = false}: {title: string; children: ReactNode; labelId?: string; destructive?: boolean}) {
   const {c} = useTheme();
-  return <View style={{gap: 6}}>
-    <Txt variant="section" tone="secondary" accessibilityRole="header" nativeID={labelId}>{title}</Txt>
-    <View style={{backgroundColor: c.raised, borderWidth: 1, borderColor: c.hairline, borderRadius: radius.lg, paddingVertical: 4}}>{children}</View>
+  return <View style={{gap: 8}}>
+    <Txt variant="section" tone={destructive ? 'danger' : 'secondary'} accessibilityRole="header" nativeID={labelId} style={{paddingHorizontal: 2}}>{title}</Txt>
+    <View style={{backgroundColor: c.raised, borderWidth: 1, borderColor: destructive ? c.dangerBg : c.hairline, borderRadius: radius.lg, paddingVertical: 4}}>{children}</View>
   </View>;
 }
 

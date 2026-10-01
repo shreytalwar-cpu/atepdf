@@ -12,7 +12,9 @@ export async function releaseInputFiles(files:LocalInputFile[]){
   await Promise.allSettled(files.map(file=>Promise.resolve().then(()=>file.release?.())));
 }
 export type JobStepStatus='pending'|'active'|'validating'|'complete'|'cancelled'|'failed';
-export type JobProgress={kind:'import'|'transform';currentStep:number|null;steps:{label:string;operation?:Operation;status:JobStepStatus}[]};
+// units: what a step works on, when known before it runs (files merged, pages removed, scanned
+// pages to recognise). Display-only facts from the accepted recipe and stored inspections.
+export type JobProgress={kind:'import'|'transform';currentStep:number|null;steps:{label:string;operation?:Operation;status:JobStepStatus;units?:number}[]};
 // Durable workspace hooks (ADR 0010). Without them the controller keeps its
 // existing in-memory session behavior.
 export type Durability={save:(signal?:AbortSignal)=>Promise<void>;clear:()=>Promise<{cleanupComplete:boolean}>};
@@ -20,6 +22,13 @@ export type SavedArtifact={meta:Artifact;bytes:Uint8Array};
 export type JobState={busy:boolean;message:string;error:string|null;stage:'idle'|'importing'|'executing'|'validating'|'complete'|'cancelled'|'failed';progress?:JobProgress;pageVerification?:PageVerificationReceipt};
 class CancellationSaveError extends Error{}
 const operationLabels:Record<Operation,string>={merge_pdf:'Merge PDFs',select_pages:'Remove pages',ocr_pdf:'Make searchable',compress_pdf:'Compress PDF'};
+type Step=Envelope['planner']['steps'][number];
+function stepUnits(step:Step,files:Map<string,Artifact>):{units?:number}{
+  if(step.operation==='merge_pdf')return {units:step.inputs.length};
+  if(step.operation==='select_pages')return {units:(step.params.pages as {indices:number[]}).indices.length};
+  const input=step.operation==='ocr_pdf'?files.get(step.inputs[0]):undefined;
+  return input?{units:input.inspection.pages.filter(page=>!page.text.trim()).length}:{};
+}
 const normalize=(s:string)=>s.replace(/\s+/g,'').toLowerCase();
 export class JobController {
   state:JobState={busy:false,message:'',error:null,stage:'idle'};
@@ -172,7 +181,7 @@ export class JobController {
       const artifact=await this.store.prepare(result.bytes,'atepdf-result.pdf',result.inspection,false,ref,note);
       signal.throwIfAborted();await this.durably(()=>this.store.commit([artifact],request.workspaceRevision),signal);
       }finally{stage.clear();}
-    },{kind:'transform',currentStep:null,steps:envelope.planner.steps.map(step=>({label:operationLabels[step.operation],operation:step.operation,status:'pending'}))});
+    },{kind:'transform',currentStep:null,steps:envelope.planner.steps.map(step=>({label:operationLabels[step.operation],operation:step.operation,status:'pending',...stepUnits(step,local)}))});
   }
   undo():void|Promise<void>{
     if(this.state.busy)return;

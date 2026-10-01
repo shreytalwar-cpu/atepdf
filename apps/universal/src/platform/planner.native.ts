@@ -1,3 +1,4 @@
+import {TransportDenied} from '@planner/transport';
 import NativePlanner from '../../modules/atepdf-planner';
 import NativePDF from '../../modules/atepdf-pdf';
 import {validatePlanResult,type PlannerStatus} from '@planner/client';
@@ -16,15 +17,17 @@ async function call<T>(work:(id:string)=>Promise<T>,signal?:AbortSignal):Promise
   });
 }
 export async function plannerStatus(signal?:AbortSignal):Promise<PlannerStatus>{
-  const status=JSON.parse(await call(id=>native().statusAsync(id),signal));
+  const status=safeJSON(await call(id=>native().statusAsync(id),signal));
   if(typeof status.connected!=='boolean'||typeof status.enabled!=='boolean'||!Number.isSafeInteger(status.remaining)||status.remaining<0||typeof status.model!=='string')throw new Error('Invalid connection status.');
   return {...status,token:''};
 }
 export async function requestPlan(request:PlannerRequest,_token:string,signal:AbortSignal,readCurrent:()=>PlannerRequest=()=>request){
-  const value=JSON.parse(await productionOutbound.writeLocalHosted(()=>projectHosted(readCurrent()),body=>call(id=>native().planAsync(id,body),signal),signal));
+  const value=safeJSON(await productionOutbound.writeLocalHosted(()=>projectHosted(readCurrent()),body=>call(id=>native().planAsync(id,body),signal),signal));
   signal.throwIfAborted();return validatePlanResult(value,request,signal);
 }
 export async function pairNativePlanner(code:string){await call(id=>native().pairAsync(id,code.trim()));}
 export async function disconnectNativePlanner(){await call(id=>native().disconnectAsync(id));}
 export async function savePlannerKey(_key:string,_token:string):Promise<void>{throw new Error('Provider keys belong in the local browser setup.');}
 export async function createNativePairing(_token:string):Promise<{code:string;expiresAt:number}>{throw new Error('Create a pairing code in the browser.');}
+
+function safeJSON(text:string){try{return JSON.parse(text);}catch{throw new TransportDenied('provider_response_invalid');}}

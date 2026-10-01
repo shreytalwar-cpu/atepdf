@@ -5,16 +5,20 @@ import cases from '../../docs/evidence/SHR-35-2026-09-30/consent-policy-cases.js
 import {buildRequest,quickPlan} from '../../packages/contracts/src/protocol';
 import {projectHosted,OUTBOUND_FIELDS,type HostedPayload} from '../../packages/planner/src/outbound/schema';
 import {PRIVACY_POLICY,CONTENT_CATEGORIES,sizeBucket} from '../../packages/planner/src/outbound/constants';
-import {OutboundGate,OutboundDenied,canonical,hostedAck,type Proposal,type TransferBinding,type Verdict} from '../../packages/planner/src/outbound/gate';
+import {OutboundGate,OutboundDenied,productionOutbound,canonical,hostedAck,type Proposal,type TransferBinding,type Verdict} from '../../packages/planner/src/outbound/gate';
 import {validateRelayContract,type RelayContract} from '../../packages/planner/src/outbound/relay-contract';
 import {sensitiveInstruction} from '../../packages/planner/src/outbound/sensitive';
 import {outboundDiagnostic} from '../../packages/planner/src/outbound/diagnostics';
 import {privateInstruction} from '../../packages/planner/src/privacy';
-import {planWithOpenAI,MODEL} from '../../packages/planner/src/provider';
+import {planWithOpenAI as actualPlanWithOpenAI,MODEL} from '../../packages/planner/src/provider';
 import {createGateway} from '../../packages/planner/src/gateway';
 import {requestPlan} from '../../packages/planner/src/client';
 import {fixture} from '../helpers/outbound-fixture';
 import type {Artifact} from '../../packages/core/src/local-file-store';
+import {createSyntheticTransport,SYNTHETIC_PROVIDER_KEY,TRANSPORT_POLICY} from '../../packages/planner/src/transport';
+async function planWithOpenAI(...args:Parameters<typeof actualPlanWithOpenAI>){
+  const fetcher=args[3]!;return actualPlanWithOpenAI(args[0],SYNTHETIC_PROVIDER_KEY,args[2],fetcher,{gate:productionOutbound,route:['openai-development'],...args[4],transport:createSyntheticTransport({mode:'test',endpoint:TRANSPORT_POLICY.providerEndpoint,fetcher})});
+}
 const ref='file_00000000000000000000000000000001',other='file_00000000000000000000000000000002';
 const bytes=(s:string)=>new TextEncoder().encode(s);
 const localRequest=()=>buildRequest({revision:4,files:[{ref,kind:'pdf',pageCount:5,sizeBytes:23_456_789,encrypted:false}],selected:[ref],focus:null,originals:[ref]},'Merge these');
@@ -157,7 +161,7 @@ test('production provider cannot silently inherit OPENAI_BASE_URL or run before 
 test('real SDK fetch boundary sends a positive H envelope with buckets, pinned route and contentless error receipts',async()=>{
   const f=await fixture(),req=localRequest();let sent=0;
   const response=await planWithOpenAI(req,'sk-synthetic-never-network',new AbortController().signal,async(url,init)=>{
-    sent++;assert.equal(String(url),'https://api.openai.com/v1/responses');assert.equal(init!.redirect,'error');const body=JSON.parse(String(init!.body));
+    sent++;assert.equal(String(url),'https://api.openai.com/v1/responses');assert.equal(init!.redirect,'manual');const body=JSON.parse(String(init!.body));
     const h=JSON.parse(body.input[1].content[0].text);assert.equal(h.files[0].sizeBucket,'10-50MB');assert.equal(h.files[0].sizeBytes,undefined);assert.doesNotMatch(JSON.stringify(h),/23456789|checksum|name|sourceContentDigest/);
     return Response.json({id:'resp_synthetic',created_at:1,model:MODEL,status:'completed',error:null,incomplete_details:null,output:[{id:'fc_synthetic',type:'function_call',status:'completed',call_id:'call_synthetic',name:'undo_last_change',arguments:'{}'}],usage:{input_tokens:1,output_tokens:1,total_tokens:2,input_tokens_details:{cached_tokens:0},output_tokens_details:{reasoning_tokens:0}}});
   },f.boundary);assert.equal(response.status,'undo');assert.equal(sent,1);

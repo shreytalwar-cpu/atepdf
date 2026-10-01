@@ -56,7 +56,7 @@ const record={commit,parents,mode,startedAt:new Date().toISOString(),node:proces
   workflowCommit:process.env.GITHUB_WORKFLOW_SHA||null,prHead:process.env.VERIFY_PR_HEAD_SHA||null,
   runID:process.env.GITHUB_RUN_ID||null,executables:{node:process.execPath,git:gitBin,pnpm:pnpmBin,tar:tarBin},files:{},commands:[],passed:false};
 const env=childEnvironment(process.env,toolPath,scratch);
-const features={evals:false,permission:false,tls:false};
+const features={evals:false,permission:false,tls:false,transportPolicy:false};
 async function run(name,command,args,{cwd=scratch,timeout=600_000,expectFailure=false,diagnostic}={}){
   console.log(`Verification: ${name}`);
   const log=join(reportDir,`${record.commands.length+1}-${name}.log`);
@@ -93,6 +93,7 @@ try{
     'scripts/verification/playwright.config.mts','scripts/contracts.mjs','scripts/embed-product-knowledge.mjs',
     '.github/workflows/verify.yml'])record.files[path]=sha256(readFileSync(join(scratch,path)));
   if(sha256(readFileSync(fileURLToPath(import.meta.url)))!==record.files['scripts/verification/verify.mjs'])throw new Error('Running verification harness differs from committed archive');
+  features.transportPolicy=existsSync(join(scratch,'packages/contracts/transport-policy.json'));
   features.evals=existsSync(join(scratch,'tests/evals/orchestration/tsconfig.json'));
   features.permission=existsSync(join(scratch,'tests/native/planner/permission-main.swift'));
   features.tls=existsSync(join(scratch,'tests/native/planner/tls-main.swift'));
@@ -138,6 +139,7 @@ try{
       ['--import','tsx','scripts/verification/schemas.mts'],'manifest.json');
     await mutate('reject-regression','tests/regressions/commerce.test.ts',s=>s+"\ntest('SHR-90 deliberate failure',()=>assert.fail('SHR90_SENTINEL'));\n",
       ['--import','tsx','--test','tests/regressions/commerce.test.ts'],'SHR90_SENTINEL');
+    if(features.transportPolicy)await mutate('reject-transport-policy','packages/contracts/transport-policy.json',s=>{const value=JSON.parse(s);value.plannerResponseBytes++;return JSON.stringify(value);},['scripts/contracts.mjs','--check'],'Generated transport policy is stale');
     await contracts();await typechecks();
     await node('restored-regression',['--import','tsx','--test','tests/regressions/commerce.test.ts']);
   }

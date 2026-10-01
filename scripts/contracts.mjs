@@ -1,3 +1,4 @@
+import './transport-policy.mjs';
 import {readFile,mkdir,writeFile} from 'node:fs/promises';
 import Ajv2020 from 'ajv/dist/2020.js';
 import standaloneCode from 'ajv/dist/standalone/index.js';

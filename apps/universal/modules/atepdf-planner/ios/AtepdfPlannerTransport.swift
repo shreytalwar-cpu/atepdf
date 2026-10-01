@@ -2,6 +2,14 @@ import Foundation
 import CryptoKit
 import Security
 
+// BEGIN GENERATED TRANSPORT POLICY
+// From packages/contracts/transport-policy.json; node scripts/contracts.mjs.
+private enum PlannerTransportPolicy {
+  static let plannerResponseBytes = 524288
+  static let controlResponseBytes = 8192
+}
+// END GENERATED TRANSPORT POLICY
+
 private final class RejectPlannerRedirects: NSObject, URLSessionTaskDelegate, @unchecked Sendable {
   let endpoint: AtepdfPlannerTransport.Endpoint
   init(endpoint: AtepdfPlannerTransport.Endpoint) { self.endpoint = endpoint }
@@ -41,13 +49,28 @@ private final class RejectPlannerRedirects: NSObject, URLSessionTaskDelegate, @u
 /// Private beta only. Tokens live in this actor, never JS, files or preferences.
 actor AtepdfPlannerTransport {
   enum Failure: LocalizedError {
-    case unavailable, pairing, request, response, connection, privacy
+    case unavailable, pairing, request, response, connection, privacy, destination, redirect, tooLarge, truncated, invalid
+    var reasonCode: String? {
+      switch self {
+      case .destination: return "destination_not_allowed"
+      case .redirect: return "redirect_not_allowed"
+      case .tooLarge: return "response_too_large"
+      case .truncated: return "response_truncated"
+      case .invalid: return "provider_response_invalid"
+      default: return nil
+      }
+    }
     var errorDescription: String? {
       switch self {
       case .unavailable: return "AI connection is not available on this device yet. Local quick actions still work."
       case .pairing: return "Pair this app with the atepdf browser again."
       case .request: return "This request cannot be sent safely. Your PDFs stay here."
       case .privacy: return "AI is unavailable. Use local tools instead. Your existing files and results are still available."
+      case .destination: return "AI destination is not approved. No files changed."
+      case .redirect: return "AI connection redirected. No files changed."
+      case .tooLarge: return "AI response exceeded the supported size. No files changed."
+      case .truncated: return "AI response was interrupted. No files changed."
+      case .invalid: return "AI response could not be accepted. No files changed."
       case .response: return "The planner response could not be accepted. No files changed."
       case .connection: return "The planner connection is unavailable. Keep atepdf running on your Mac and both devices on the same Wi-Fi."
       }
@@ -196,9 +219,10 @@ actor AtepdfPlannerTransport {
           endpoint.url.user == nil, endpoint.url.password == nil, endpoint.url.path.isEmpty,
           endpoint.url.query == nil, endpoint.url.fragment == nil,
           (endpoint.url.scheme == "http" && [3210,3211,3212].contains(endpoint.url.port ?? 0) && endpoint.fingerprint == nil) ||
-          (endpoint.url.scheme == "https" && endpoint.fingerprint != nil) else { throw Failure.request }
+          (endpoint.url.scheme == "https" && (1024...65535).contains(endpoint.url.port ?? 0) &&
+           endpoint.fingerprint?.count == 64 && endpoint.fingerprint?.allSatisfy({ "0123456789abcdef".contains($0) }) == true) else { throw Failure.destination }
     #else
-    throw Failure.request
+    throw Failure.destination
     #endif
   }
   func pair(id: String, code: String) async throws {
@@ -258,18 +282,26 @@ actor AtepdfPlannerTransport {
     var request = URLRequest(url: url)
     request.httpMethod = body == nil ? "GET" : "POST"; request.httpBody = body
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-    if let token { request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization") }
     try Task.checkCancellation()
     try admittedEndpoint(endpoint)
+    if let token { request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization") }
     if path == "planner" { guard let body, let text = String(data: body, encoding: .utf8) else { throw Failure.request }; request.httpBody = try admittedBody(text) }
     let (bytes, response) = try await session.bytes(for: request, delegate: delegate)
-    guard let http = response as? HTTPURLResponse, response.url == url else { throw Failure.response }
+    guard let http = response as? HTTPURLResponse, response.url == url else { throw Failure.redirect }
+    if (300...399).contains(http.statusCode) { throw Failure.redirect }
+    let limit = path == "planner" ? PlannerTransportPolicy.plannerResponseBytes : PlannerTransportPolicy.controlResponseBytes
+    guard http.expectedContentLength <= limit else { throw Failure.tooLarge }
+    guard http.mimeType == "application/json" else { throw Failure.invalid }
+    var data = Data()
+    do {
+      for try await byte in bytes { try Task.checkCancellation(); guard data.count < limit else { throw Failure.tooLarge }; data.append(byte) }
+    } catch is CancellationError { throw CancellationError() }
+    catch let failure as Failure { throw failure }
+    catch { throw Failure.truncated }
+    if http.expectedContentLength >= 0 && http.value(forHTTPHeaderField: "Content-Encoding") == nil && data.count != http.expectedContentLength { throw Failure.truncated }
     if http.statusCode == 401 { throw Failure.pairing }
     if http.statusCode == 403 { throw Failure.privacy }
-    guard http.statusCode == 200, http.mimeType == "application/json", http.expectedContentLength <= 256_000 else { throw Failure.response }
-    var data = Data()
-    for try await byte in bytes { try Task.checkCancellation(); guard data.count < 256_000 else { throw Failure.response }; data.append(byte) }
-    guard let text = String(data: data, encoding: .utf8) else { throw Failure.response }
+    guard http.statusCode == 200, let text = String(data: data, encoding: .utf8) else { throw Failure.invalid }
     return text
   }
 }

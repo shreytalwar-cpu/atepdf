@@ -1,3 +1,4 @@
+import {TransportDenied,TRANSPORT_REASONS} from '../transport';
 import {PRIVACY_POLICY,sizeBucket,type ContentCategory} from './constants';
 import {assertClassified,assertHostedText,hasNeverTransfer,validateHosted,type HostedPayload,type ContentPayload} from './schema';
 import {sensitiveInstruction} from './sensitive';
@@ -18,6 +19,7 @@ export class OutboundDenied extends Error {
 const notAborted=(signal?:AbortSignal)=>{if(signal?.aborted)throw new DOMException('Planning cancelled. No local files changed.','AbortError');};
 function transportError(error:unknown,signal?:AbortSignal){
   if(error instanceof OutboundDenied)return error;
+  if(error instanceof TransportDenied&&TRANSPORT_REASONS.includes(error.code))return new TransportDenied(error.code,error.statusCode);
   if(signal?.aborted)return new DOMException('Planning cancelled. No local files changed.','AbortError');
   const statusCode=error&&typeof error==='object'&&'statusCode'in error&&typeof error.statusCode==='number'?error.statusCode:undefined;
   return Object.assign(new Error('outbound_transport_failed'),{statusCode});

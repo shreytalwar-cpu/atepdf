@@ -1,0 +1,36 @@
+{
+  "sourceMain": "fd74961b0e282503bb9986e40f07633687c2f673",
+  "redRegressionCommit": "efc779b",
+  "network": "intercepted or synthetic loopback only",
+  "realCredentials": false,
+  "unboundWriter": {
+    "before": {
+      "authorizationBytes": 34,
+      "payloadBytes": 16647,
+      "metadataBytes": 36,
+      "exit": 1
+    },
+    "after": {
+      "authorizationBytes": 0,
+      "payloadBytes": 0,
+      "metadataBytes": 0,
+      "reason": "destination_not_allowed",
+      "exit": 0
+    }
+  },
+  "oversizedProvider": {
+    "before": {
+      "readBytes": 2097152,
+      "cancelled": false,
+      "accepted": true,
+      "exit": 1
+    },
+    "after": {
+      "readBytes": 1114112,
+      "cancelled": true,
+      "accepted": false,
+      "reason": "response_too_large",
+      "exit": 0
+    }
+  }
+}

@@ -68,6 +68,30 @@ import Foundation
     for instruction in ["Synthetic redirect","Synthetic oversized response"] {
       do { _ = try await transport.plan(id:UUID().uuidString,body:request(instruction));throw NSError(domain:"unsafe response accepted",code:1) } catch is AtepdfPlannerTransport.Failure {}
     }
+    // SHR-70: admitted origin stays unchanged; every redirected target gets zero bytes.
+    for (instruction, expected) in [("SHR70 redirect same", "redirect_not_allowed"), ("SHR70 redirect cross", "redirect_not_allowed"), ("SHR70 over length", "response_too_large"), ("SHR70 over missing", "response_too_large"), ("SHR70 over chunked", "response_too_large"), ("SHR70 over error", "response_too_large"), ("SHR70 truncated", "response_truncated")] {
+      do { _ = try await transport.plan(id: UUID().uuidString, body: request(instruction)); throw NSError(domain: "SHR70 unsafe response accepted", code: 1) }
+      catch let error as AtepdfPlannerTransport.Failure {
+        try check(error.reasonCode == expected, "SHR70 specific security reason: \(expected)")
+        try check(!error.localizedDescription.contains("synthetic"), "SHR70 error excludes raw response")
+      }
+    }
+    let transportPolicy = try JSONSerialization.jsonObject(with: Data(contentsOf: URL(fileURLWithPath: "packages/contracts/transport-policy.json"))) as! [String: Any]
+    let exact = try await transport.plan(id: UUID().uuidString, body: request("SHR70 exact"))
+    try check(exact.utf8.count == transportPolicy["plannerResponseBytes"] as? Int, "SHR70 exact boundary accepted")
+    let (redirectData, _) = try await URLSession.shared.data(from: URL(string: "http://localhost:3212/test/evidence")!)
+    let redirectEvidence = try JSONSerialization.jsonObject(with: redirectData) as! [String: Any]
+    try check(redirectEvidence["redirectBytes"] as? Int == 0 && redirectEvidence["redirectRequests"] as? Int == 0, "SHR70 redirect target Authorization and body bytes = 0")
+    // Every malformed pairing destination is tested through the actual pair call.
+    let beforeDestination = redirectEvidence["pairingBytes"] as! Int
+    for origin in ["http://127.0.0.1:3212", "https://api.openai.com:3212", "https://evilopenai.com:3212", "https://127.0.0.1:443", "https://user@127.0.0.1:3212", "https://127.0.0.1:3212/path", "https://127.0.0.1:3212?query", "https://127.0.0.1.attacker.invalid:3212", "https://127.0.0.1:3212#fragment", "http://[broken"] {
+      let record: [String: Any] = ["v":1, "origin":origin, "fingerprint":String(repeating:"a",count:64), "code":"atepdf-local:3212:" + String(repeating:"a",count:64), "expiresAt":Date().timeIntervalSince1970 * 1000 + 60000]
+      let encoded = try JSONSerialization.data(withJSONObject:record).base64EncodedString().replacingOccurrences(of:"+",with:"-").replacingOccurrences(of:"/",with:"_").replacingOccurrences(of:"=",with:"")
+      do { try await transport.pair(id:UUID().uuidString,code:"atepdf-beta:" + encoded);throw NSError(domain:"SHR70 destination accepted",code:1) }
+      catch is AtepdfPlannerTransport.Failure {}
+    }
+    let (afterData, _) = try await URLSession.shared.data(from: URL(string:"http://localhost:3212/test/evidence")!)
+    try check((try JSONSerialization.jsonObject(with:afterData) as! [String:Any])["pairingBytes"] as? Int == beforeDestination, "SHR70 rejected destinations write zero pairing payload")
     let id=UUID().uuidString,body=request("Wait for cancellation")
     let pending=Task { try await transport.plan(id:id,body:body) }
     try await Task.sleep(nanoseconds:200_000_000);await transport.cancel(id:id)
@@ -76,6 +100,6 @@ import Foundation
     do { _ = try await transport.plan(id:early,body:request("Merge"));throw NSError(domain:"early cancel failed",code:1) } catch is CancellationError {}
     try await transport.disconnect(id:UUID().uuidString)
     try check(try await transport.status(id:UUID().uuidString).contains("pairingRequired"),"disconnected")
-    print("Native URLSession tests passed: H buckets, 24 privacy canaries with zero outbound bytes, malformed regex refusal, local-only denial, pairing, bounded clarification, product answer, complete plan, redirect/body rejection, cancellation, disconnect. Synthetic loopback gateway only.")
+    print("SHR-70 native destination/redirect zero-write, exact-byte, +1, chunked, error and truncation cases passed. Native URLSession tests passed: H buckets, 24 privacy canaries with zero outbound bytes, malformed regex refusal, local-only denial, pairing, bounded clarification, product answer, complete plan, redirect/body rejection, cancellation, disconnect. Synthetic loopback gateway only.")
   }
 }

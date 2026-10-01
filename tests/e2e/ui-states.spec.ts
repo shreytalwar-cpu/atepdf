@@ -62,6 +62,9 @@ for(const scheme of ['light','dark'] as const){
       await send(page,'remove page 2');await expect(page.getByTestId('result-facts')).toContainText('2 pages');
       await current.getByRole('button',{name:'Undo',exact:true}).click();
       await expect(current.getByText('Restored',{exact:true})).toBeVisible();
+      // The receipt stays with the PDF that was saved: the restored Result 1 carries it, Result 2 doesn't.
+      await expect(current.getByText('Saved to your device',{exact:true})).toBeVisible();
+      await expect(page.getByTestId('previous-result').filter({hasText:'Result 2'}).getByText('Saved to your device')).toHaveCount(0);
       await expect(page.getByTestId('previous-result')).toHaveCount(2);
       await capture(page,`L-undo-${scheme}`);
     });
@@ -71,10 +74,10 @@ for(const scheme of ['light','dark'] as const){
       await page.route('**/api/planner/status',route=>route.fulfill({json:on}));
       await page.route('**/api/planner',async route=>{
         const req=route.request().postDataJSON() as PlannerRequest;
-        if(/^merge/i.test(req.instruction)){await route.fulfill({json:quickPlan(req,'merge')});return;}
+        if(/^(merge|combine these pdfs)/i.test(req.instruction)){await route.fulfill({json:quickPlan(req,'merge')});return;}
         if(req.pendingClarification){await route.fulfill({json:quickPlan(req,'remove',2)});return;}
         if(/^Remove a page/.test(req.instruction)){await route.fulfill({json:{schemaVersion:'1.0',requestId:req.requestId,workspaceRevision:req.workspaceRevision,planner:{schemaVersion:'1.0',status:'clarify',reasonCode:'missing_parameter',steps:[],resultRefs:[],clarification:{question:'Which page should I remove?',choices:['Page 1','Page 2','Page 3']}}}});return;}
-        if(/^Combine/.test(req.instruction)){await gate;await route.fulfill({json:quickPlan(req,'merge')}).catch(()=>{});return;}
+        if(/^Combine both/.test(req.instruction)){await gate;await route.fulfill({json:quickPlan(req,'merge')}).catch(()=>{});return;}
         await route.fulfill({status:503,json:{error:'Synthetic provider failure'}});
       });
       await page.goto('/');await samples(page);
@@ -122,7 +125,7 @@ for(const scheme of ['light','dark'] as const){
         await expect(activity).toContainText('On this Mac');
         await capture(page,`H-processing-${scheme}`);
         await page.getByRole('button',{name:'Cancel',exact:true}).click();
-        await expect(page.getByText(/Cancelled\. No new result was committed\.|Stopping…/).first()).toBeVisible();
+        await expect(page.getByText(/Cancelled\. No new result was committed\.|Cancelling…/).first()).toBeVisible();
         await capture(page,`I-cancelling-${scheme}`);
       }finally{releaseWorker();}
       await expect(page.getByText('Cancelled. No new result was committed.')).toBeVisible();
@@ -169,7 +172,7 @@ for(const scheme of ['light','dark'] as const){
       await page.getByRole('button',{name:'Close preview'}).click();
       await page.getByRole('button',{name:'More actions'}).click();
       await expect(page.getByRole('textbox',{name:'Search actions'})).toBeFocused();
-      await expect(page.getByRole('button',{name:'Compress images'})).toBeVisible();
+      await expect(page.getByRole('button',{name:'Make smaller (compress images)'})).toBeVisible();
       await capture(page,`palette-${scheme}`);
       await page.keyboard.press('Escape');
       await page.getByRole('button',{name:'More',exact:true}).click();await page.getByRole('menuitem',{name:'Introduction'}).click();
@@ -198,17 +201,19 @@ for(const [label,width,height] of [['T-narrow-640',640,600],['U-laptop-1280',128
 // A page-side observer records what the conversation shows on every DOM change.
 async function recordActivity(page:Page){
   await page.evaluate(()=>{
-    const log:{t:number;row:boolean;result:number}[]=[];(window as unknown as {__activity:typeof log}).__activity=log;
-    const sample=()=>{const entry={t:performance.now(),row:!!document.querySelector('[data-testid=progress-message],[data-testid=progress-settling]'),result:document.querySelectorAll('[data-testid=current-result]').length};const last=log.at(-1);if(!last||last.row!==entry.row||last.result!==entry.result)log.push(entry);};
+    const log:{t:number;row:boolean;checking:boolean;result:number;verified:number}[]=[];(window as unknown as {__activity:typeof log}).__activity=log;
+    const sample=()=>{const row=document.querySelector('[data-testid=progress-message],[data-testid=progress-settling]');const cards=[...document.querySelectorAll('[data-testid=current-result]')];
+      const entry={t:performance.now(),row:!!row,checking:!!row&&(row as HTMLElement).innerText.includes('Checking the result'),result:cards.length,verified:cards.filter(card=>(card as HTMLElement).innerText.includes('Verified')).length};
+      const last=log.at(-1);if(!last||last.row!==entry.row||last.checking!==entry.checking||last.result!==entry.result||last.verified!==entry.verified)log.push(entry);};
     sample();new MutationObserver(sample).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['data-testid']});
   });
 }
-const activityLog=(page:Page)=>page.evaluate(()=>(window as unknown as {__activity:{t:number;row:boolean;result:number}[]}).__activity);
+const activityLog=(page:Page)=>page.evaluate(()=>(window as unknown as {__activity:{t:number;row:boolean;checking:boolean;result:number;verified:number}[]}).__activity);
 
 test.describe('motion and fast tasks',()=>{
   test.beforeEach(async({page})=>{await page.setViewportSize({width:1280,height:800});await page.route('**/api/planner/status',route=>route.fulfill({json:off}));});
 
-  test('a quick task reads as request → working → result, with no empty frame between',async({page})=>{
+  test('a quick task resolves into its result without being held, with no empty frame and no early Verified',async({page})=>{
     await page.emulateMedia({reducedMotion:'no-preference'});
     await page.goto('/');await samples(page);await expect(page.getByText('Checked on this Mac',{exact:true})).toBeVisible();
     await recordActivity(page);
@@ -216,11 +221,13 @@ test.describe('motion and fast tasks',()=>{
     await expect(page.getByTestId('current-result')).toBeVisible();await still(page);
     const log=await activityLog(page);
     const shown=log.findIndex(entry=>entry.row),arrived=log.findIndex(entry=>entry.result===1);
-    expect(shown,'the activity row appeared').toBeGreaterThanOrEqual(0);
-    expect(arrived,'the result followed the activity row').toBeGreaterThan(shown);
-    // The row stays at least the minimum visible time; the result is never held for seconds after the work.
-    expect(log[arrived].t-log[shown].t).toBeGreaterThanOrEqual(400);
-    expect(log.slice(shown,arrived+1).every(entry=>entry.row||entry.result),'no frame shows neither the row nor the result').toBe(true);
+    expect(arrived,'the result arrived').toBeGreaterThanOrEqual(0);
+    // Very fast work may resolve straight into its artifact; when the row did appear, the result
+    // replaced it in the same frame (no frame shows neither, and nothing is held after the work).
+    if(shown>=0&&shown<arrived)expect(log.slice(shown,arrived+1).every(entry=>entry.row||entry.result),'no frame shows neither the row nor the result').toBe(true);
+    // No result (and so no Verified tag) is shown while the result is still being checked.
+    expect(log.filter(entry=>entry.checking).every(entry=>entry.result===0&&entry.verified===0)).toBe(true);
+    expect(log.at(-1)!.verified).toBe(1);
     await expect(page.getByTestId('progress-message')).toHaveCount(0);await expect(page.getByTestId('progress-settling')).toHaveCount(0);
   });
 
@@ -272,7 +279,10 @@ test.describe('motion and fast tasks',()=>{
     expect(await page.getByTestId('current-result').evaluate(card=>getComputedStyle(card.parentElement!).transform)).toBe('none');
     await still(page);
     const log=await activityLog(page);
-    expect(log.some(entry=>entry.row),'the row is shown (not a flash) with Reduce Motion too').toBe(true);
+    // Same contract as with motion: nothing is held, and no frame shows neither the row nor the result.
+    const shown=log.findIndex(entry=>entry.row),arrived=log.findIndex(entry=>entry.result===1);
+    expect(arrived).toBeGreaterThanOrEqual(0);
+    if(shown>=0&&shown<arrived)expect(log.slice(shown,arrived+1).every(entry=>entry.row||entry.result)).toBe(true);
     await send(page,'remove page 2');
     const pulse=page.getByTestId('activity-pulse').first();
     if(await pulse.count())await expect(pulse).toHaveCSS('opacity','1');
@@ -289,7 +299,7 @@ test.describe('motion and fast tasks',()=>{
     try{
       await expect(page.getByTestId('progress-message').getByRole('progressbar')).toBeVisible();
       await page.getByRole('button',{name:'Stop',exact:true}).click();
-      await expect(page.getByTestId('progress-message')).toContainText('Stopping…');
+      await expect(page.getByTestId('progress-message')).toContainText('Cancelling…');
     }finally{releaseWorker();}
     await expect(page.getByText('Cancelled. No new result was committed.')).toBeVisible();
     await expect(page.getByTestId('progress-settling')).toHaveCount(0);

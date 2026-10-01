@@ -21,10 +21,11 @@ export type ActivityInput = {
 const plural = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
 
 /** Operation-aware labels. Units come from the accepted recipe (files, pages) or stored inspections. */
-export function stepLabel(operation: Operation | undefined, units?: number) {
+const list = (items: number[]) => items.length === 1 ? String(items[0]) : `${items.slice(0, -1).join(', ')} and ${items.at(-1)}`;
+export function stepLabel(operation: Operation | undefined, units?: number, pages?: number[]) {
   switch (operation) {
     case 'merge_pdf': return units ? `Combining ${plural(units, 'PDF')}…` : 'Combining PDFs…';
-    case 'select_pages': return units ? `Removing ${plural(units, 'page')}…` : 'Removing pages…';
+    case 'select_pages': return pages?.length && pages.length <= 4 ? `Removing ${pages.length === 1 ? 'page' : 'pages'} ${list(pages)}…` : units ? `Removing ${plural(units, 'page')}…` : 'Removing pages…';
     case 'ocr_pdf': return units === 0 ? 'Checking for scanned pages…' : units ? `Making ${plural(units, 'scanned page')} searchable…` : 'Making scanned pages searchable…';
     case 'compress_pdf': return 'Compressing images…';
     default: return 'Working…';
@@ -51,7 +52,7 @@ export function engineDetail(message: string): string | undefined {
 }
 
 export function describeActivity({state, planning, loading, stopping, slow}: ActivityInput): Activity | null {
-  if (stopping) return {label: 'Stopping…', detail: 'Finishing the current step safely.', mode: 'cancelling', where: 'local'};
+  if (stopping) return {label: 'Cancelling…', detail: 'Finishing the current step safely.', mode: 'cancelling', where: 'local'};
   if (state.busy) {
     const progress = state.progress;
     if (progress?.kind === 'import') {
@@ -71,7 +72,7 @@ export function describeActivity({state, planning, loading, stopping, slow}: Act
     // Completed steps, plus the engine's count within the current step when it reports one.
     const value = verifying ? undefined : multi ? (index! + (counted ? counted.done / counted.total : 0)) / total : counted ? counted.done / counted.total : undefined;
     return {
-      label: verifying ? 'Checking the result…' : stepLabel(step?.operation, step?.units),
+      label: verifying ? 'Checking the result…' : stepLabel(step?.operation, step?.units, step?.pages),
       detail: active ? engineDetail(state.message) : undefined,
       mode: verifying ? 'verifying' : value === undefined ? 'indeterminate' : 'determinate',
       ...(value === undefined ? {} : {value}),
@@ -85,40 +86,36 @@ export function describeActivity({state, planning, loading, stopping, slow}: Act
   return null;
 }
 
-// Presence: how long the activity row stays and when the turn's reply is revealed.
-// A very fast task still reads as request → working → result: the row stays at least
-// MIN_VISIBLE, and a successful one gets SETTLE to complete its bar. The reply is held only
-// for that remainder (a few hundred milliseconds), never longer, and a new request releases it.
-// Stop is answered at once.
-export const MIN_VISIBLE = 450, SETTLE = 180;
+// Presence (owner direction, INTERACTION_MODEL 5–7): fast work stays fast. A reply is never
+// held for an animation or a minimum duration. The only wait is for the reply that lands a tick
+// after the work ends (at most REPLY_GRACE), so no frame shows neither the activity nor its
+// outcome. The activity row itself appears only once work has run for SHOW_AFTER, so
+// near-instant work resolves straight into its artifact.
+export const SHOW_AFTER = 150, REPLY_GRACE = 180;
 export type Outcome = 'complete' | 'failed' | 'cancelled' | 'other';
 export type Presence = {phase: 'idle' | 'active' | 'settling'; shownAt: number; lastCount: number; cut: number; until: number; outcome: Outcome | null};
 export const IDLE: Presence = {phase: 'idle', shownAt: 0, lastCount: 0, cut: 0, until: 0, outcome: null};
 export type PresenceInput = {
-  working: boolean; count: number; now: number; reduced: boolean;
+  working: boolean; count: number; now: number;
   /** Outcome of the newest entry after the held position (null when there is none yet). */
   newest: Outcome | null;
   /** A new request was made after the held position. */
   userAfter: boolean;
 };
 
-export function stepPresence(previous: Presence, {working, count, now, reduced, newest, userAfter}: PresenceInput): Presence {
+export function stepPresence(previous: Presence, {working, count, now, newest, userAfter}: PresenceInput): Presence {
   if (working) return previous.phase === 'active' ? {...previous, lastCount: count}
-    // Work that resumes while settling (a request that planned, then runs) is one activity.
+    // Work that resumes while waiting for a reply (a request that was interpreted, then runs) is one activity.
     : {phase: 'active', shownAt: previous.phase === 'settling' ? previous.shownAt : now, lastCount: count, cut: 0, until: 0, outcome: null};
   if (previous.phase === 'active') {
-    // Stop is answered at once.
-    if (newest === 'cancelled') return IDLE;
-    // The reply often lands a tick after the work ends: wait up to SETTLE for it rather than
-    // leaving a frame with neither the row nor the reply.
-    const until = Math.max(previous.shownAt + MIN_VISIBLE, newest === null || (newest === 'complete' && !reduced) ? now + SETTLE : now);
-    return until > now ? {phase: 'settling', shownAt: previous.shownAt, lastCount: previous.lastCount, cut: previous.lastCount, until, outcome: newest} : IDLE;
+    // The reply is already here (or the work was stopped): show it now.
+    if (newest !== null) return IDLE;
+    return {phase: 'settling', shownAt: previous.shownAt, lastCount: previous.lastCount, cut: previous.lastCount, until: now + REPLY_GRACE, outcome: null};
   }
   if (previous.phase === 'settling') {
-    if (userAfter || newest === 'cancelled') return IDLE;
-    // The reply can land a moment after the job ends; a result still gets its settle.
-    const until = newest === 'complete' && previous.outcome !== 'complete' && !reduced ? Math.max(previous.until, now + SETTLE) : previous.until;
-    return now >= until ? IDLE : {...previous, until, outcome: newest ?? previous.outcome};
+    // The reply landed, a new request was made, the conversation was reset, or the grace ran out.
+    if (newest !== null || userAfter || count < previous.cut || now >= previous.until) return IDLE;
+    return previous;
   }
   return previous;
 }

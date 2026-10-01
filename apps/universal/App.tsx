@@ -121,8 +121,8 @@ function Screen() {
   const {width} = useWindowDimensions();
   const announcement = entries.findLast(entry => entry.role === 'assistant')?.text;
   useAnnounce(announcement);
-  // Presence: after very fast work the activity row stays a moment and the reply is held only
-  // for that remainder, so a turn reads request → working → result (never longer; see progress.ts).
+  // Presence: the activity row bridges only the tick between work ending and its reply landing;
+  // replies are never held (see progress.ts).
   const presence = useActivityPresence(entries, workspace.working);
   const settling = presence.phase === 'settling';
   const messages = useMemo(() => {
@@ -135,7 +135,7 @@ function Screen() {
     const id = settling ? entries[presence.cut]?.id ?? workspace.nextEntryId : workspace.nextEntryId;
     return busy || settling ? [...shown, {id, role: 'assistant' as const, text: state.busy ? state.message : 'Working…', running: true as const}] : shown;
   }, [entries, busy, settling, presence.cut, state.message, state.busy, workspace.nextEntryId]);
-  // While a reply is held, the result on screen stays the current one.
+  // Until a reply lands, the result on screen stays the current one.
   const shownCurrent = settling ? entries.slice(0, presence.cut).findLast(entry => entry.artifact)?.id : workspace.current;
   const runtime = useExternalStoreRuntime({messages, convertMessage: convertEntry, isRunning: busy, isSendDisabled: busy || !nativeEngineReady,
     onNew: async message => {workspace.submit(message.content.filter(p => p.type === 'text').map(p => p.text).join('\n'));},
@@ -157,7 +157,7 @@ function Screen() {
   const hasFiles = workspace.store.list.length > 0;
   const docked = layout.panelDocks(width) && hasFiles && shell.filesPanel !== false;
   const context = useMemo(() => ({workspace, shell, composer}), [workspace, shell, composer]);
-  const activity = useMemo(() => ({phase: presence.phase, outcome: presence.outcome, current: shownCurrent}), [presence.phase, presence.outcome, shownCurrent]);
+  const activity = useMemo(() => ({phase: presence.phase, current: shownCurrent}), [presence.phase, shownCurrent]);
   return <WorkspaceContext.Provider value={context}><ActivityPresenceContext.Provider value={activity}><AssistantRuntimeProvider runtime={runtime}>
     <SafeAreaView style={{flex: 1, backgroundColor: c.window}} edges={['top', 'left', 'right']}>
       <DropSurface disabled={busy} onFiles={files => void workspace.importFiles(files)}>

@@ -305,7 +305,12 @@ export function useWorkspace() {
   const finish = (previous: string | null, text: string, resultTitle: string) => {
     if (controller.state.error) say(controller.state.error, 'error');
     else if (controller.state.stage === 'cancelled') say(controller.state.message, 'cancelled');
-    else if (store.focus && store.focus !== previous) append({role: 'assistant', text, artifact: store.get(store.focus).meta, resultTitle});
+    else if (store.focus && store.focus !== previous) {
+      // Compression that found nothing to gain keeps the same content; say so instead of
+      // presenting it as a successful optimisation (the engine's note states the same).
+      const meta = store.get(store.focus).meta, noBenefit = /^No useful reduction found/.test(meta.note);
+      append({role: 'assistant', text: noBenefit ? 'No smaller version was possible. This copy has the same content as your previous PDF.' : text, artifact: meta, resultTitle});
+    }
     else say(controller.state.message || 'No new result was created.');
   };
   // Admission starts before a picker/fetch and is checked again before import.
@@ -395,15 +400,19 @@ export function useWorkspace() {
       if(isClarificationAnswer(text,pending)){setChoice(null);append({role:'user',text});void preparePlanning(text,undefined,pending);return;}
     }
     const remove = command.match(/^remove (?:physical )?page (\d+)(?: from (?:the )?(?:merged )?result)?$/);
+    // The sentences quick actions and examples send also run locally without an AI connection.
+    const merge = ['merge', 'merge pdfs', 'merge these pdfs', 'combine these pdfs', 'combine pdfs', 'combine these into one pdf'].includes(command);
+    const ocr = ['make searchable', 'ocr', 'make scanned pages searchable', 'make the scanned pages searchable'].includes(command);
+    const compress = ['compress', 'make this pdf smaller', 'make this smaller', 'make smaller'].includes(command);
     if(plannerAvailable){
-      const fallback=remove?{type:'remove' as const,page:Number(remove[1])}:['merge', 'merge pdfs', 'merge these pdfs'].includes(command)?{type:'merge' as const,page:2}:['make searchable','ocr'].includes(command)?{type:'ocr' as const,page:2}:command==='compress'?{type:'compress' as const,page:2}:command==='merge, ocr, compress'?{type:'chain' as const,page:2}:command==='undo'?{type:'undo' as const,page:2}:undefined;
+      const fallback=remove?{type:'remove' as const,page:Number(remove[1])}:merge?{type:'merge' as const,page:2}:ocr?{type:'ocr' as const,page:2}:compress?{type:'compress' as const,page:2}:command==='merge, ocr, compress'?{type:'chain' as const,page:2}:command==='undo'?{type:'undo' as const,page:2}:undefined;
       setChoice(null);append({role:'user',text});void preparePlanning(text,fallback);return;
     }
     if (command === 'undo') undo();
     else if (remove) action('remove', text, Number(remove[1]));
-    else if (['merge', 'merge pdfs', 'merge these pdfs'].includes(command)) action('merge', text);
-    else if (['make searchable', 'ocr'].includes(command)) action('ocr', text);
-    else if (command === 'compress') action('compress', text);
+    else if (merge) action('merge', text);
+    else if (ocr) action('ocr', text);
+    else if (compress) action('compress', text);
     else if (command === 'merge, ocr, compress') action('chain', text);
     else { setChoice(null); append({role:'user',text}); void preparePlanning(text); }
   };

@@ -34,7 +34,7 @@ export function EmptyWorkspace() {
   const {workspace: w, composer} = useApp();
   const {c, scheme} = useTheme();
   const {height, width} = useWindowDimensions();
-  const examples = ['Merge these into one PDF', 'Remove page 2', ...(ocrAvailable ? ['Make the scanned pages searchable'] : []), 'Make this PDF smaller'].slice(0, 3);
+  const examples = ['Combine these into one PDF', 'Remove page 2', ...(ocrAvailable ? ['Make scanned pages searchable'] : []), 'Make this PDF smaller'].slice(0, 3);
   const tall = height >= 600;
   // Examples need room above the composer; in shorter windows the sheet stands alone.
   const roomy = height >= 720;

@@ -23,7 +23,7 @@ import {useApp} from './context';
 import {facts, resultNumber} from './facts';
 import {Appear, easing, nativeDriver, track, useActivityPresenceState, useFresh, useMoment} from './motion';
 import {ActivityGlyph, Button, Card, Disclosure, Glyph, IconButton, Keycap, Row, Tag, Txt} from './primitives';
-import {describeActivity, type Activity} from './progress';
+import {describeActivity, SHOW_AFTER, type Activity} from './progress';
 import {PageThumbnail} from './thumbnails';
 import {motion, radius, shadow, size, useTheme} from './theme';
 
@@ -200,8 +200,16 @@ export function ChoiceList({entry}: {entry: Entry}) {
 
 /** Actions that follow an assistant turn: result, proposal, clarification, or AI settings. */
 export function EntryExtras({entry}: {entry: Entry}) {
-  const {workspace: w, shell} = useApp();
+  const {workspace: w, shell, composer} = useApp();
   if (entry.artifact) return <ResultCard entry={entry} artifact={entry.artifact}/>;
+  // Recovery for a request that failed: put it back in the message field to change and resend.
+  // Nothing is resent automatically (the files or permission may have changed since).
+  if (entry.notice === 'error' && w.entries.at(-1)?.id === entry.id) {
+    const index = w.entries.findIndex(item => item.id === entry.id), request = w.entries[index - 1];
+    if (request?.role === 'user' && !request.files) return <View style={{alignItems: 'flex-start'}}>
+      <Button variant="secondary" label="Edit Request" accessibilityHint="Puts your request back in the message field" disabled={w.busy} onPress={() => composer.fill(request.text)}/>
+    </View>;
+  }
   if (entry.choices?.length) return <ChoiceList entry={entry}/>;
   if (entry.choice === 'connection-help' && w.choice === entry.id) return <View style={{alignItems: 'flex-start'}}>
     <Button variant="secondary" icon={Settings2} label="AI Settings…" accessibilityLabel="AI connection" disabled={w.busy} onPress={() => shell.openSettings('ai')}/>
@@ -250,7 +258,6 @@ const stepWords: Record<JobStepStatus, string> = {pending: 'Waiting', active: 'W
 /** C7 ActivityRow. One evolving line and a progress bar, from controller and request state only. */
 export function ActivityRow() {
   const {workspace: w} = useApp();
-  const presence = useActivityPresenceState();
   const {state, planning, loading, stopping} = w;
   const [expanded, setExpanded] = useState(false);
   const [slow, setSlow] = useState(false);
@@ -260,17 +267,19 @@ export function ActivityRow() {
     return () => clearTimeout(timer);
   }, [planning]);
   const live = describeActivity({state, planning, loading, stopping, slow});
-  // Once the work ends, the row shows how it ended until its reply takes this place: through
-  // the held moment after very fast work, and the one frame the list takes to swap the cell.
-  const last = useRef<Activity | null>(null), ended = useRef<typeof presence.outcome>(null);
-  if (live) {last.current = live; ended.current = null;}
-  if (!live && presence.phase === 'settling') ended.current = presence.outcome;
+  // Near-instant work resolves straight into its artifact: the row appears only once work has
+  // run for SHOW_AFTER (presentation only; nothing waits for it).
+  const [shown, setShown] = useState(false);
+  useEffect(() => {const timer = setTimeout(() => setShown(true), SHOW_AFTER); return () => clearTimeout(timer);}, []);
+  // Once work ends, the row keeps its last state for the moment until its reply takes this place.
+  const last = useRef<Activity | null>(null);
+  if (live) last.current = live;
   const settling = !live;
   const activity = live ?? last.current;
-  const announcement = live ? `${live.label}${live.count ? `. ${live.count}` : ''}` : undefined;
+  const announcement = live && shown ? `${live.label}${live.count ? `. ${live.count}` : ''}` : undefined;
   useAnnounce(announcement);
-  if (!activity) return null;
-  const bar: BarState = settling ? ended.current === 'complete' ? 'complete' : ended.current === 'failed' ? 'failed' : activity.mode : activity.mode;
+  if (!activity || !shown) return null;
+  const bar: BarState = activity.mode;
   const progress = state.busy ? state.progress : undefined;
   const multiple = live && progress?.kind === 'transform' && progress.steps.length > 1;
   return <View testID={settling ? 'progress-settling' : 'progress-message'} style={{gap: 8}}>

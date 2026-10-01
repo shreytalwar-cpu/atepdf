@@ -13,8 +13,9 @@ export async function releaseInputFiles(files:LocalInputFile[]){
 }
 export type JobStepStatus='pending'|'active'|'validating'|'complete'|'cancelled'|'failed';
 // units: what a step works on, when known before it runs (files merged, pages removed, scanned
-// pages to recognise). Display-only facts from the accepted recipe and stored inspections.
-export type JobProgress={kind:'import'|'transform';currentStep:number|null;steps:{label:string;operation?:Operation;status:JobStepStatus;units?:number}[]};
+// pages to recognise); pages: the physical pages a removal names. Display-only facts from the
+// accepted recipe and stored inspections.
+export type JobProgress={kind:'import'|'transform';currentStep:number|null;steps:{label:string;operation?:Operation;status:JobStepStatus;units?:number;pages?:number[]}[]};
 // Durable workspace hooks (ADR 0010). Without them the controller keeps its
 // existing in-memory session behavior.
 export type Durability={save:(signal?:AbortSignal)=>Promise<void>;clear:()=>Promise<{cleanupComplete:boolean}>};
@@ -23,9 +24,9 @@ export type JobState={busy:boolean;message:string;error:string|null;stage:'idle'
 class CancellationSaveError extends Error{}
 const operationLabels:Record<Operation,string>={merge_pdf:'Merge PDFs',select_pages:'Remove pages',ocr_pdf:'Make searchable',compress_pdf:'Compress PDF'};
 type Step=Envelope['planner']['steps'][number];
-function stepUnits(step:Step,files:Map<string,Artifact>):{units?:number}{
+function stepUnits(step:Step,files:Map<string,Artifact>):{units?:number;pages?:number[]}{
   if(step.operation==='merge_pdf')return {units:step.inputs.length};
-  if(step.operation==='select_pages')return {units:(step.params.pages as {indices:number[]}).indices.length};
+  if(step.operation==='select_pages'){const pages=[...(step.params.pages as {indices:number[]}).indices];return {units:pages.length,pages};}
   const input=step.operation==='ocr_pdf'?files.get(step.inputs[0]):undefined;
   return input?{units:input.inspection.pages.filter(page=>!page.text.trim()).length}:{};
 }

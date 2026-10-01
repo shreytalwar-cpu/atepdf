@@ -130,10 +130,11 @@ export function suggestions(w: Workspace): Suggestion[] {
   const originals = w.store.originals.length, current = !!w.focus;
   if (!originals && !current) return [];
   const list: Suggestion[] = [];
-  if (originals >= 2 && !current) list.push({name: 'Merge', label: `Merge ${originals} PDFs in this order`, request: 'Merge these PDFs'});
+  // Each chip is a sentence the user could have typed (D-04): it teaches the request it sends.
+  if (originals >= 2 && !current) list.push({name: 'Merge', label: `Combine ${originals} PDFs`, request: 'Combine these PDFs'});
   if (current || originals === 1) {
-    list.push({name: 'Compress', label: 'Compress', request: 'Compress'});
-    if (ocrAvailable) list.push({name: 'Make searchable', label: 'Make searchable', request: 'Make searchable'});
+    list.push({name: 'Compress', label: 'Make smaller', request: 'Make this PDF smaller'});
+    if (ocrAvailable) list.push({name: 'Make searchable', label: 'Make searchable', request: 'Make scanned pages searchable'});
     list.push({name: 'Remove pages…', label: 'Remove pages…', fill: 'Remove page '});
   }
   return list.slice(0, 3);
@@ -142,10 +143,10 @@ export function allActions(w: Workspace): Suggestion[] {
   const originals = w.store.originals.length, current = !!w.focus;
   const single = current || originals === 1;
   return [
-    {name: 'Merge', label: 'Merge PDFs in order', request: 'Merge these PDFs', disabled: originals < 2 ? 'Needs 2 or more PDFs' : undefined},
+    {name: 'Merge', label: 'Combine PDFs in order', request: 'Combine these PDFs', disabled: originals < 2 ? 'Needs 2 or more PDFs' : undefined},
     {name: 'Remove pages…', label: 'Remove pages…', fill: 'Remove page ', disabled: !single ? 'Needs one PDF or a current result' : undefined},
-    {name: 'Compress', label: 'Compress images', request: 'Compress', disabled: !single ? 'Needs one PDF or a current result' : undefined},
-    {name: 'Make searchable', label: 'Make scanned pages searchable', request: 'Make searchable', disabled: !ocrAvailable ? 'Not available in this build' : !single ? 'Needs one PDF or a current result' : undefined},
+    {name: 'Compress', label: 'Make smaller (compress images)', request: 'Make this PDF smaller', disabled: !single ? 'Needs one PDF or a current result' : undefined},
+    {name: 'Make searchable', label: 'Make scanned pages searchable', request: 'Make scanned pages searchable', disabled: !ocrAvailable ? 'Not available in this build' : !single ? 'Needs one PDF or a current result' : undefined},
   ];
 }
 

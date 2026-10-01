@@ -4,7 +4,7 @@
 import React, {createContext, useContext, useEffect, useRef, useState, type ReactNode} from 'react';
 import {Animated, Easing, Platform, type StyleProp, type ViewStyle} from 'react-native';
 import {useMotion} from '../components/assistant-ui/elements/surfaces';
-import {IDLE, outcomeOf, stepPresence, type Outcome, type Presence} from './progress';
+import {IDLE, outcomeOf, stepPresence, type Presence} from './progress';
 import {motion} from './theme';
 
 export const easing = {standard: Easing.bezier(0.2, 0, 0, 1), enter: Easing.bezier(0, 0, 0, 1), exit: Easing.bezier(0.3, 0, 1, 1)};
@@ -71,21 +71,20 @@ export function useMoment(trigger: boolean, duration: number, delay = 0) {
   return value;
 }
 
-// Activity presence for the conversation: the activity row stays a moment after very fast
-// work so it reads as request → working → result; the reply is held only for that remainder.
-/** current: the result shown as current (the held reply's result is not on screen yet). */
-export type ActivityPresence = {phase: Presence['phase']; outcome: Outcome | null; current?: number};
-export const ActivityPresenceContext = createContext<ActivityPresence>({phase: 'idle', outcome: null});
+// Activity presence for the conversation (see progress.ts): replies are never held; the
+// activity row only bridges the tick between the work ending and its reply landing.
+/** current: the result shown as current (a reply that hasn't landed yet isn't on screen). */
+export type ActivityPresence = {phase: Presence['phase']; current?: number};
+export const ActivityPresenceContext = createContext<ActivityPresence>({phase: 'idle'});
 export const useActivityPresenceState = () => useContext(ActivityPresenceContext);
 
 type PresenceEntry = {role: string; artifact?: unknown; notice?: string};
 export function useActivityPresence(entries: PresenceEntry[], working: boolean): Presence {
-  const moving = useMotion();
   const state = useRef<Presence>(IDLE);
   const [, rerender] = useState(0);
   const base = state.current.phase === 'settling' ? state.current.cut : state.current.phase === 'active' ? state.current.lastCount : entries.length;
   const after = entries.slice(base);
-  const next = stepPresence(state.current, {working, count: entries.length, now: Date.now(), reduced: !moving,
+  const next = stepPresence(state.current, {working, count: entries.length, now: Date.now(),
     newest: outcomeOf(after.findLast(entry => entry.role === 'assistant')), userAfter: after.some(entry => entry.role === 'user')});
   state.current = next;
   useEffect(() => {

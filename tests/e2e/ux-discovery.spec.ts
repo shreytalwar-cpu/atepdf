@@ -65,7 +65,7 @@ test('compact suggestion chips keep readable labels, at most two plus Actions',a
   await samples(page);
   const merge=page.getByRole('button',{name:'Merge',exact:true});
   await expect(merge).toBeInViewport({ratio:1});
-  await expect(merge.getByText('Merge 2 PDFs in this order',{exact:true})).toHaveCSS('font-size','12px');
+  await expect(merge.getByText('Combine 2 PDFs',{exact:true})).toHaveCSS('font-size','12px');
   await expect(page.getByRole('button',{name:'More actions',exact:true})).toBeVisible();
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });

@@ -90,11 +90,11 @@ test('AI-enabled quick action is planned like typed text, and a product question
   const sent:PlannerRequest[]=[];
   await page.route('**/api/planner',async route=>{
     const req=route.request().postDataJSON() as PlannerRequest;sent.push(req);
-    if(/^Merge these PDFs/.test(req.instruction)){await route.fulfill({json:quickPlan(req,'merge')});return;}
+    if(/^Combine these PDFs/.test(req.instruction)){await route.fulfill({json:quickPlan(req,'merge')});return;}
     await route.fulfill({json:{schemaVersion:'1.0',requestId:req.requestId,workspaceRevision:req.workspaceRevision,planner:{schemaVersion:'1.0',status:'answer',reasonCode:'product_information',steps:[],resultRefs:[],clarification:{question:'I can merge, remove pages, make scanned PDFs searchable, compress and save a new copy. Your originals stay unchanged.',choices:[]}}}});
   });
   await ready(page);await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');
-  expect(sent).toHaveLength(1);expect(sent[0].instruction).toMatch(/^Merge these PDFs/);
+  expect(sent).toHaveLength(1);expect(sent[0].instruction).toMatch(/^Combine these PDFs/);
   await send(page,'What can atepdf do?');await expect(page.getByText('I can merge, remove pages, make scanned PDFs searchable, compress and save a new copy.',{exact:false})).toBeVisible();
   expect(sent).toHaveLength(2);expect(sent[1].instruction).toBe('What can atepdf do?');await expect(page.getByTestId('current-result')).toHaveCount(1);await expect(page.getByTestId('previous-result')).toHaveCount(0);
 });

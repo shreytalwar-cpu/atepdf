@@ -29,7 +29,7 @@ for (const mode of ['healthy', 'disabled', 'unavailable', 'provider failure'] as
     await samples(page);
     await page.getByRole('button', {name:'Merge', exact:true}).click();
     // The chip's request is in the transcript exactly as if it had been typed.
-    await expect(page.getByTestId('user-message').last()).toContainText('Merge these PDFs');
+    await expect(page.getByTestId('user-message').last()).toContainText('Combine these PDFs');
     if (mode === 'provider failure') {
       await expect(page.getByTestId('assistant-message').last()).toContainText(/Planning|finish|failed|unavailable/i);
       await expect(page.getByTestId('current-result')).toHaveCount(0);
@@ -39,7 +39,7 @@ for (const mode of ['healthy', 'disabled', 'unavailable', 'provider failure'] as
     await expect(page.getByTestId('result-facts')).toContainText('3 pages');
     expect(statusCalls).toBeGreaterThan(0);
     expect(modelCalls).toBe(mode === 'healthy' ? 1 : 0);
-    if (mode === 'healthy') expect(instructions[0]).toMatch(/^Merge these PDFs/);
+    if (mode === 'healthy') expect(instructions[0]).toMatch(/^Combine these PDFs/);
     await page.getByRole('button', {name:'Make searchable', exact:true}).click();
     await expect(page.getByTestId('previous-result')).toHaveCount(1);
     expect(modelCalls).toBe(mode === 'healthy' ? 2 : 0);

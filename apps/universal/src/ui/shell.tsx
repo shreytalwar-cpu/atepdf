@@ -118,7 +118,8 @@ export function FilesPanel({overlay = false, onClose}: {overlay?: boolean; onClo
       if (!ref || seen.has(ref) || !w.store.list.some(file => file.ref === ref)) continue;
       seen.add(ref); list.push({ref, title: entry.resultTitle ?? 'Your PDF', entry: entry.id});
     }
-    return list.sort((a, b) => (b.ref === w.store.focus ? 1 : 0) - (a.ref === w.store.focus ? 1 : 0));
+    // Current first, then newest first by stable result number (Undo does not reorder them).
+    return list.sort((a, b) => (b.ref === w.store.focus ? 1 : 0) - (a.ref === w.store.focus ? 1 : 0) || resultNumber(w, b.ref) - resultNumber(w, a.ref));
   }, [w.entries, w.store, w.store.focus, w.state]);
   const sources = w.store.originals.map(ref => {try {return w.store.get(ref).meta;} catch {return null;}}).filter(meta => meta !== null);
   const importEntry = (ref: string) => w.entries.find(entry => entry.files?.some(file => file.ref === ref))?.id;
@@ -149,7 +150,7 @@ export function FilesPanel({overlay = false, onClose}: {overlay?: boolean; onClo
     <Pressable accessibilityRole="button" accessibilityLabel="Privacy & Storage settings" onPress={() => shell.openSettings('privacy')}
       style={({pressed}) => ({flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, paddingVertical: 10, borderTopWidth: 1, borderTopColor: c.hairline, backgroundColor: pressed ? c.pressed : 'transparent'})}>
       <Glyph icon={LaptopMinimal} size={14} tone="local"/>
-      <Txt variant="meta" tone="secondary" tabular>{w.durable ? w.keeping ? 'Kept on this Mac' : 'Until atePDF quits' : 'This session only'}{usage && !usage.unopened ? ` · ${formatSize(usage.total)}` : ''}</Txt>
+      <Txt variant="meta" tone="secondary" tabular>{w.durable ? w.keeping ? 'Kept on this Mac' : 'Until atePDF quits' : 'This session only'}{w.durable && usage && !usage.unopened ? ` · ${formatSize(usage.total)}` : ''}</Txt>
     </Pressable>
   </View>;
 }

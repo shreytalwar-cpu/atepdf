@@ -32,7 +32,19 @@ confirmation · G planning · H processing · I cancelling · J result · K save
 refusal/error · O Privacy & Storage · P Delete Local Data · Q retention warning and expiry banner ·
 Start Over · Quick Look · palette · onboarding · T 640 · U 1280 · V 1600.
 
-<!-- TESTS -->
+## Tests (branch head, this host; main `fd74961` baseline in brackets)
+
+| Check | Result |
+|---|---|
+| `pnpm typecheck`, `typecheck:universal`, `typecheck:compatibility` | pass |
+| `pnpm check:generated` (now includes the design tokens), `check:schemas` | pass |
+| `pnpm test` (Node regressions) | 329 tests: 327 pass, 1 skipped, 1 fail — S90-01, the host pnpm shim [main: 322 / 320 / 1 / 1, same S90-01] |
+| New regressions | `workspace-presentation.test.ts` (7) + updated ownership harness: 35/35 workspace tests |
+| `pnpm test:e2e` (Next host, Chrome) | 88 tests: 84 pass, 4 fail [main: 77 / 72 / 5] — the 4 fail identically on main (3 provider-error recoveries, delayed-planning scroll); main's compact-submission failure passes here |
+| `ui-states.spec.ts` | 13/13 (both appearances, 640/1280/1600) |
+| `pnpm expo:web` + `scripts/check-web-budget.mjs` | pass, 499,261 / 500,000 gzip bytes |
+| `pnpm expo:bundles` (native JS) | pass (Hermes bundle) |
+| Mac Catalyst Release build (synthetic container, and normal identity for dogfooding) | pass; strict signature and entitlement checks |
 
 ## Surfaces
 

@@ -1,4 +1,5 @@
 import {test,expect,type Page} from '@playwright/test';
+import transportPolicy from '../../packages/contracts/transport-policy.json';
 import {quickPlan as localQuickPlan} from '../../packages/contracts/src/protocol';
 import {hostedLocalContext,validateHosted,type HostedPayload as PlannerRequest} from '../../packages/planner/src/outbound/schema';
 // The mocked server receives H on the wire, just like the real gateway. Rebuild
@@ -122,11 +123,13 @@ test('cancelling direct planner setup prevents any later model request',async({p
   }finally{release();}
 });
 
-for(const invalid of ['incomplete','stale','truncated JSON'] as const){
+for(const invalid of ['incomplete','stale','truncated JSON','oversized','destination rejected'] as const){
   test(`direct planner ${invalid} response never changes a committed result`,async({page})=>{
     let requests=0;
     await page.route('**/api/planner',async route=>{
       requests++;const req=route.request().postDataJSON() as PlannerRequest;
+      if(invalid==='oversized'){await route.fulfill({contentType:'application/json',body:'PROTECTED_CANARY'+' '.repeat(transportPolicy.plannerResponseBytes)});return;}
+      if(invalid==='destination rejected'){await route.fulfill({status:502,json:{error:'PROTECTED_CANARY',reasonCode:'destination_not_allowed'}});return;}
       if(invalid==='truncated JSON'){await route.fulfill({contentType:'application/json',body:'{"schemaVersion":"1.0","planner":{"status":"plan","steps":['});return;}
       const envelope=quickPlan(req,'merge');
       if(invalid==='stale')envelope.workspaceRevision++;
@@ -136,9 +139,12 @@ for(const invalid of ['incomplete','stale','truncated JSON'] as const){
     let enabled=false;await ready(page,()=>({...status,enabled}));await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');enabled=true;
     await send(page,'Please combine both documents');await expect.poll(()=>requests).toBe(1);
     const failure=page.getByTestId('assistant-message').last();
-    await expect(failure).toContainText(invalid==='stale'?'Files changed.':invalid==='incomplete'?'Incomplete or invalid plan.':/JSON|Planning.*failed|Planning.*finish/i);
+    await expect(failure).toContainText(invalid==='stale'?'Files changed.':invalid==='incomplete'?'Incomplete or invalid plan.':invalid==='oversized'?'AI response exceeded the supported size. No files changed.':invalid==='destination rejected'?'AI destination is not approved. No files changed.':'AI response could not be accepted. No files changed.');
+    await expect(page.locator('body')).not.toContainText('PROTECTED_CANARY');
     await noPlanningConsent(page);await expect(page.getByTestId('progress-message')).toHaveCount(0);
     await expect(page.getByTestId('previous-result')).toHaveCount(0);await expect(page.getByTestId('result-facts')).toContainText('3 pages');
+    enabled=false;await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('previous-result')).toHaveCount(1);
+    await page.getByRole('button',{name:'Undo',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');expect(requests).toBe(1);
   });
 }
 

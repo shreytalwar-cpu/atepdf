@@ -1,0 +1,8 @@
+{
+  "version": "atepdf.transport/1",
+  "providerEndpoint": "https://api.openai.com/v1/responses",
+  "providerBaseUrl": "https://api.openai.com/v1",
+  "providerResponseBytes": 1048576,
+  "plannerResponseBytes": 524288,
+  "controlResponseBytes": 8192
+}

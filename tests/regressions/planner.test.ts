@@ -14,7 +14,8 @@ import {isClarificationAnswer,pendingFromResponse,withPendingClarification} from
 import {validateNonPlanResponse} from '../../packages/planner/src/reply';
 import type {Artifact} from '../../packages/core/src/local-file-store';
 import {fixture,wireRequest} from '../helpers/outbound-fixture';
-async function planWithOpenAI(...args:Parameters<typeof actualPlanWithOpenAI>){return actualPlanWithOpenAI(args[0],args[1],args[2],args[3],(await fixture()).boundary);}
+import {createSyntheticTransport,SYNTHETIC_PROVIDER_KEY,TRANSPORT_POLICY} from '../../packages/planner/src/transport';
+async function planWithOpenAI(...args:Parameters<typeof actualPlanWithOpenAI>){const fetcher=args[3]!;return actualPlanWithOpenAI(args[0],SYNTHETIC_PROVIDER_KEY,args[2],fetcher,{...(await fixture()).boundary,transport:createSyntheticTransport({mode:'test',endpoint:TRANSPORT_POLICY.providerEndpoint,fetcher})});}
 const files=[{ref:'file_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',kind:'pdf' as const,pageCount:2,sizeBytes:3000,encrypted:false as const},{ref:'file_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',kind:'pdf' as const,pageCount:1,sizeBytes:2000,encrypted:false as const}];
 const request=()=>buildRequest({revision:2,files,selected:files.map(f=>f.ref),focus:null,originals:files.map(f=>f.ref)},'Combine the two PDFs in the order added.');
 const clarify=(question:string,choices:string[]=[])=>( {schemaVersion:'1.0' as const,status:'clarify' as const,reasonCode:'ambiguous_reference' as const,steps:[],resultRefs:[],clarification:{question,choices}} );

@@ -9,13 +9,18 @@ import {NativePairing} from './native-pairing';
 import {packBetaPairing,validateNativeEndpoint,type NativeEndpoint} from './native-beta';
 import {validateHosted,hostedLocalContext,type HostedPayload} from './outbound/schema';
 import {productionOutbound,OutboundDenied,type OutboundGate} from './outbound/gate';
+import {TRANSPORT_POLICY,TransportDenied} from './transport';
 const LIMIT=24_000;
 
 export function createGateway(config:Pick<LocalConfig,'status'|'reserve'> & Partial<Pick<LocalConfig,'saveKey'>>,provider=planWithOpenAI,{timeoutMs=30_000,minIntervalMs=1500,nativeEndpoint,outbound=productionOutbound,recipientRoute=['openai-development']}:{timeoutMs?:number;minIntervalMs?:number;nativeEndpoint?:NativeEndpoint;outbound?:OutboundGate;recipientRoute?:string[]}={}){
   if(nativeEndpoint)validateNativeEndpoint(nativeEndpoint);
   const token=randomBytes(32).toString('hex');let running=false,lastStarted=0;const used=new Set<string>();
   const pairing=new NativePairing();
-  const json=(body:unknown,status=200)=>Response.json(body,{status,headers:{'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
+  const json=(body:unknown,status=200)=>{
+    const text=JSON.stringify(body);
+    if(Buffer.byteLength(text)>TRANSPORT_POLICY.plannerResponseBytes)throw new TransportDenied('response_too_large',status);
+    return new Response(text,{status,headers:{'Content-Type':'application/json','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
+  };
   const status=async()=>{const configured=await config.status(),availability=await outbound.availability(recipientRoute);return {...configured,enabled:configured.enabled&&availability.available,gateAvailable:availability.available,gateReason:availability.reasonCode};};
   return async(request:Request)=>{
     const url=new URL(request.url),host=request.headers.get('host')??url.host;
@@ -70,7 +75,7 @@ export function createGateway(config:Pick<LocalConfig,'status'|'reserve'> & Part
     running=true;used.add(parsed.requestId);lastStarted=Date.now();let release:(()=>Promise<void>)|undefined;
     try{
       request.signal.throwIfAborted();
-      const proposal=()=>({kind:'hosted' as const,payload:validateHosted(hostedPayload),route:[...recipientRoute],endpoint:'https://api.openai.com/v1/responses',purposeCode:'interpret_instruction',idempotencyKey:parsed.requestId,transferId:`dispatch_${parsed.requestId}`});
+      const proposal=()=>({kind:'hosted' as const,payload:validateHosted(hostedPayload),route:[...recipientRoute],endpoint:TRANSPORT_POLICY.providerEndpoint,purposeCode:'interpret_instruction',idempotencyKey:parsed.requestId,transferId:`dispatch_${parsed.requestId}`});
       const permission=await outbound.check(proposal());if(permission.outcome!=='ALLOW')throw new OutboundDenied(permission);
       const reservation=await config.reserve();release=reservation.release;
       const signal=AbortSignal.any([request.signal,AbortSignal.timeout(timeoutMs)]);
@@ -78,6 +83,7 @@ export function createGateway(config:Pick<LocalConfig,'status'|'reserve'> & Part
       const planner=await outbound.write(proposal,()=>provider(parsed,reservation.key,signal,undefined,{gate:outbound,route:recipientRoute,hostedPayload}),signal);signal.throwIfAborted();
       const result=bindResponse(planner,parsed);return json(result);
     }catch(error){
+      if(error instanceof TransportDenied)return json({error:error.message,reasonCode:error.code},502);
       if(error instanceof OutboundDenied)return json({error:'Outbound request blocked. No local files changed.',reasonCode:error.verdict.reason,outcome:error.verdict.outcome},403);
       const code=error&&typeof error==='object'&&'statusCode' in error?error.statusCode:null;
       const message=code===401?'OpenAI did not accept this key. Check the local connection.':code===403?'This OpenAI project does not have permission for the planner.':code===429?'OpenAI could not accept this request. Check the project quota or try later.':code===404?'The planner model is unavailable for this project.':'Planning did not finish. No local files changed. Try a quick action.';

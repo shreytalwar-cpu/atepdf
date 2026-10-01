@@ -7,12 +7,12 @@ export function childEnvironment(source,path,scratch){
   if(scratch)Object.assign(env,{TMPDIR:join(scratch,'tmp'),TMP:join(scratch,'tmp'),TEMP:join(scratch,'tmp'),XDG_CACHE_HOME:join(scratch,'cache'),PLAYWRIGHT_BROWSERS_PATH:join(scratch,'browsers'),NPM_CONFIG_USERCONFIG:join(scratch,'empty.npmrc')});
   return env;
 }
-export function expectedCommands(mode,{evals=false,permission=false,tls=false}={}){
+export function expectedCommands(mode,{evals=false,permission=false,tls=false,transportPolicy=false}={}){
   const contracts=['generated-contracts','generated-knowledge','schemas-catalogue-evals'];
   const types=['typescript-web','typescript-universal','typescript-compatibility',...(evals?['typescript-orchestration','orchestration-cli-smoke']:[])];
   const core=[...contracts,...types,'shared-core-regressions','beta-test-gateway-build','beta-unit-tests','syntax-verify','syntax-browser'];
   const browser=[...contracts,'playwright-browser','engine-assets','expo-web-export','web-budget','safe-browser-checks'];
-  const failures=[...contracts,...types,...['typescript','schema-drift','stale-validator','stale-knowledge','catalogue','manifest','regression'].map(n=>'reject-'+n),'restored-regression'];
+  const failures=[...contracts,...types,...['typescript','schema-drift','stale-validator','stale-knowledge','catalogue','manifest','regression'].map(n=>'reject-'+n),...(transportPolicy?['reject-transport-policy']:[]),'restored-regression'];
   const native=[...contracts,'xcode-version','native-js-export','swift-workspace-interop','apple-helper','swift-planner-compile',...(permission?['swift-permission-debug-compile','swift-permission-release-compile']:[]),...(tls?['swift-tls-debug-compile']:[]),'swift-transport-canaries'];
   return [...new Set(['export-source','frozen-install',...({all:[...core,...browser,...native],core,browser,failures,native}[mode]??[])])];
 }

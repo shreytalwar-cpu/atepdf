@@ -1,3 +1,4 @@
+import {createSyntheticTransport,SYNTHETIC_PROVIDER_KEY,SYNTHETIC_LOCAL_TOKEN,TRANSPORT_POLICY} from '../../../packages/planner/src/transport';
 import {createHash} from 'node:crypto';
 import {LocalFileStore} from '../../../packages/core/src/local-file-store';
 import {JobController} from '../../../packages/core/src/job-controller';
@@ -86,22 +87,25 @@ export function currentAdapter(recordings:Record<string,Recording>):Adapter {
             const record=recordings[`${scenario.id}:${index}`];
             // Any missing fixture is a harness error; never substitute a desired answer.
             const boundary=await fixture(['openai-development']);boundary.authority.hostedAiOn=scenario.consent.hostedCommands;
-            const provider=async(projected:PlannerRequest,_key:string,signal:AbortSignal)=>planWithOpenAI(projected,'sk-eval-placeholder-not-a-credential',signal,async(_url,init)=>{
+            const provider=async(projected:PlannerRequest,_key:string,signal:AbortSignal)=>{
+              const fetcher:typeof fetch=async(_url,init)=>{
               observation.providerCalls++;
               observation.outbound.push({kind:'command',recipient:'openai-development',payload:JSON.parse(String(init?.body))});
               if(!record){harnessError=new Error('Missing deterministic recording');throw harnessError;}
               const input=expand(record.input,projected,context);
               return Response.json({id:'resp_eval',created_at:1,model:MODEL,status:'completed',error:null,incomplete_details:null,output:[{id:'fc_eval',type:'function_call',status:'completed',call_id:'call_eval',name:record.toolName,arguments:JSON.stringify(input)}]});
-            },boundary.boundary);
+              };
+              return planWithOpenAI(projected,SYNTHETIC_PROVIDER_KEY,signal,fetcher,{...boundary.boundary,transport:createSyntheticTransport({mode:'test',endpoint:TRANSPORT_POLICY.providerEndpoint,fetcher})});
+            };
             const config={status:async()=>({connected:true,enabled:scenario.entitlement.mode==='not_integrated'||remaining>0,remaining}),reserve:async()=>{if(scenario.entitlement.mode==='gateway_allowance'&&remaining<=0)throw new Error('blocked');remaining--;return {key:'unused',release:async()=>{}};}};
             const gateway=createGateway(config,async(...args)=>{
               const raw=await provider(args[0],args[1],args[2]);observation.rawResponse=structuredClone(raw);observation.status=raw.status;observation.reasonCode=raw.reasonCode;return raw;
             },{minIntervalMs:0,...boundary.gatewayOptions});
             const status=await (await gateway(new Request('http://localhost:3211/api/planner/status'))).json();
             const signal=new AbortController().signal;
-            const envelope=await requestPlan(request,status.token,signal,()=>({...request,...turn.requestExtras}),{
-              gate:boundary.gate,
-              fetch:async(_url,init)=>gateway(new Request('http://localhost:3211/api/planner',{...init,headers:{...init?.headers,origin:'http://localhost:3211'}})),
+            const localFetcher:typeof fetch=async(_url,init)=>{const headers=new Headers(init?.headers);headers.set('origin','http://localhost:3211');headers.set('x-atepdf-token',status.token);return gateway(new Request('http://localhost:3211/api/planner',{...init,headers}));};
+            const envelope=await requestPlan(request,SYNTHETIC_LOCAL_TOKEN,signal,()=>({...request,...turn.requestExtras}),{
+              gate:boundary.gate,fetch:localFetcher,transport:createSyntheticTransport({mode:'test',role:'local',endpoint:'http://localhost:3211/api/planner',fetcher:localFetcher}),
             });
             if(turn.afterPlanningRevision!==undefined)store!.revision=turn.afterPlanningRevision;
             observation.accepted=true;

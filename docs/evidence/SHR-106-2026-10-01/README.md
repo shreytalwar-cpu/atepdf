@@ -60,7 +60,7 @@ Start Over · Quick Look · palette · onboarding · T 640 · U 1280 · V 1600.
 | D1–D3 composer, chips, palette | `thread.aui.tsx`, `src/ui/shell.tsx`, `palette.tsx` | Chips and palette send a sentence through `submit()` (D-04) |
 | E1 Quick Look | `src/ui/sheets.tsx`, `src/platform/Preview.*` | Existing renderers inside a sheet |
 | E3 Start Over, E4 Settings, E5 onboarding shell, E8 shortcuts | `src/ui/sheets.tsx`, `src/components/PrivacyStorage.tsx` | Settings: General, Privacy & Storage (SHR-40 behaviour and wording), AI (incl. development connection), About |
-| App icon, name, appearance, window | `ios/atepdf/**` | Folio Eight Ink icon set, `atePDF`, Automatic appearance, Mac idiom, 640 × 520 minimum |
+| App icon, name, appearance, window | `ios/atepdf/**` | Folio Eight black icon set (polish pass), `atePDF`, Automatic appearance, Mac idiom, 640 × 520 minimum |
 
 ## Legacy UI removed
 

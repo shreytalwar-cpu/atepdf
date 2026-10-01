@@ -94,7 +94,10 @@ export function ResultCard({entry, artifact}: {entry: Entry; artifact: DisplayAr
   const {workspace: w, shell} = useApp();
   const {c} = useTheme();
   const {width} = useWindowDimensions();
-  const current = entry.id === useActivityPresenceState().current;
+  const presentation = useActivityPresenceState();
+  const current = entry.id === presentation.current;
+  // While the next reply is held for a moment, its Undo isn't offered on the card before it.
+  const canUndo = w.store.canUndo && presentation.phase !== 'settling';
   const title = entry.resultTitle ?? 'Your PDF';
   const receipt = w.receipts[artifact.ref];
   const checksum = (() => {try {return w.store.get(artifact.ref).meta.checksum;} catch {return undefined;}})();
@@ -138,9 +141,9 @@ export function ResultCard({entry, artifact}: {entry: Entry; artifact: DisplayAr
         </View>
       </View>
       {!!artifact.note && <Txt variant="meta" tone="secondary">{artifact.note}</Txt>}
-      {(w.store.canUndo || !!receipt) && <View style={{flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 8, borderTopWidth: 1, borderTopColor: c.hairline, marginHorizontal: -14, paddingHorizontal: 14, paddingTop: 8, marginBottom: -4}}>
+      {(canUndo || !!receipt) && <View style={{flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 8, borderTopWidth: 1, borderTopColor: c.hairline, marginHorizontal: -14, paddingHorizontal: 14, paddingTop: 8, marginBottom: -4}}>
         {receipt ? <Receipt text={receipt}/> : <View/>}
-        {w.store.canUndo && <Button variant="plain" icon={Undo2} label="Undo" disabled={w.busy} onPress={w.undo} trailing={Platform.OS === 'web' ? <Keycap>⌘Z</Keycap> : undefined}/>}
+        {canUndo && <Button variant="plain" icon={Undo2} label="Undo" disabled={w.busy} onPress={w.undo} trailing={Platform.OS === 'web' ? <Keycap>⌘Z</Keycap> : undefined}/>}
       </View>}
     </Card>
   </Appear>;
@@ -234,7 +237,7 @@ export function ProgressBar({state, value}: {state: BarState; value?: number}) {
   const percent = target === null ? undefined : Math.round(target * 100);
   return <View accessibilityRole="progressbar" accessibilityValue={percent === undefined ? undefined : {min: 0, max: 100, now: percent}} aria-busy={target === null}
     onLayout={(event: LayoutChangeEvent) => setTrack(event.nativeEvent.layout.width)}
-    style={{height: 3, borderRadius: radius.full, backgroundColor: c.sunken, overflow: 'hidden'}}>
+    style={{height: 3, borderRadius: radius.full, backgroundColor: c.pressed, overflow: 'hidden'}}>
     {target !== null ? <Animated.View style={{height: 3, width: '100%', backgroundColor: color, borderRadius: radius.full, transformOrigin: 'left', transform: [{scaleX: fill}]} as never}/>
       : sweeping ? <Animated.View style={{height: 3, width: segment, backgroundColor: color, borderRadius: radius.full, transform: [{translateX: sweep.interpolate({inputRange: [0, 1], outputRange: [-segment, track_]})}]}}/>
       // Reduce Motion, cancelling, or before layout: a still, quiet track says “in progress” with the label.
@@ -330,14 +333,14 @@ export function FilesPanel({overlay = false, onClose}: {overlay?: boolean; onClo
         {results.length > 0 && <View style={{gap: 2}}>
           {heading('Results', results.length)}
           {results.map(result => {const meta = w.store.get(result.ref).meta, current = result.ref === w.store.focus; return <View key={result.ref}>
-            {/* The current result carries the Iris rail: the one the next request applies to. */}
-            {current && <View pointerEvents="none" style={{position: 'absolute', left: 0, top: 10, bottom: 10, width: 2, borderRadius: 1, backgroundColor: c.accent}}/>}
             <FileRow name={result.title} tag={current ? 'current' : 'earlier'} showTag={false} number={resultNumber(w, result.ref)} detail={facts(meta.pageCount, meta.sizeBytes)} fileRef={result.ref} checksum={meta.checksum}
               selected={current} fold="result" surface={current ? c.selected : surface}
               onPress={() => {revealMessage(String(result.entry)); onClose?.();}}
               onPreview={() => shell.setQuickLook({ref: result.ref, title: result.title})}
               // Without pointer hover (native), the row keeps one action so its facts stay readable; Save is on the card.
               onSave={Platform.OS === 'web' ? () => void w.exportResult({ref: meta.ref, pageCount: meta.pageCount, sizeBytes: meta.sizeBytes, note: meta.note}) : undefined} saving={!!w.saving}/>
+            {/* The current result carries the Iris rail (drawn over its row): the one the next request applies to. */}
+            {current && <View pointerEvents="none" style={{position: 'absolute', left: 0, top: 10, bottom: 10, width: 2, borderRadius: 1, backgroundColor: c.accent, zIndex: 1}}/>}
           </View>;})}
         </View>}
         {sources.length > 0 && <View style={{gap: 2}}>

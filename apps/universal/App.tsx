@@ -1,7 +1,6 @@
 import React, {Suspense, lazy, useEffect, useMemo, useState, useSyncExternalStore, type ComponentType} from 'react';
 import {Platform, View, useWindowDimensions} from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
-import ChevronRight from 'lucide-react-native/icons/chevron-right';
 import {AssistantRuntimeProvider, useExternalStoreRuntime, useAuiState, type ThreadMessageLike} from '@assistant-ui/react-native';
 import {Thread, MessageText, CopyMessage} from './src/components/assistant-ui/elements/thread.aui';
 import {useAnnounce} from './src/components/assistant-ui/elements/surfaces';
@@ -14,7 +13,7 @@ import {EmptyWorkspace, InlineBanner, NoticeIcon} from './src/ui/empty';
 import {isProposal, isStopAcknowledgement} from './src/ui/facts';
 import {ActivityPresenceContext, markRestored, useActivityPresence} from './src/ui/motion';
 import {AddFiles, ComposerActions, ComposerTop, HintRow, Toolbar} from './src/ui/shell';
-import {Glyph, Txt} from './src/ui/primitives';
+import {Txt} from './src/ui/primitives';
 import {layout, radius, useTheme} from './src/ui/theme';
 
 // atePDF (SHR-106): the approved SHR-105 Mac-first shell around the workspace. All document,
@@ -53,10 +52,10 @@ function UserMessage() {
   const entry = useEntry();
   const {c} = useTheme();
   if (entry?.files) return <SourceGroup entry={entry}/>;
+  // A plain filled block: a leading chevron read as a collapsed disclosure.
   return <View style={{flexDirection: 'row', alignItems: 'flex-start', gap: 6}}>
-    <View style={{flexShrink: 1, flexDirection: 'row', alignItems: 'flex-start', gap: 6, backgroundColor: c.request, borderRadius: radius.md, paddingVertical: 8, paddingLeft: 8, paddingRight: 12}}>
-      <View style={{paddingTop: 3}}><Glyph icon={ChevronRight} size={14} tone="tertiary"/></View>
-      <View style={{flexShrink: 1}}><MessageText strong/></View>
+    <View style={{flexShrink: 1, backgroundColor: c.request, borderRadius: radius.md, paddingVertical: 7, paddingHorizontal: 12}}>
+      <MessageText strong/>
     </View>
     <CopyMessage/>
   </View>;

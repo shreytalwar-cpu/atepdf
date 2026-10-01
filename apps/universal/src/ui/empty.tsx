@@ -36,6 +36,8 @@ export function EmptyWorkspace() {
   const {height, width} = useWindowDimensions();
   const examples = ['Merge these into one PDF', 'Remove page 2', ...(ocrAvailable ? ['Make the scanned pages searchable'] : []), 'Make this PDF smaller'].slice(0, 3);
   const tall = height >= 600;
+  // Examples need room above the composer; in shorter windows the sheet stands alone.
+  const roomy = height >= 720;
   // Scrolls when the window is short or text is large, so its actions are never under the composer.
   return <ScrollView testID="welcome" style={{flex: 1}} contentContainerStyle={{flexGrow: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: tall ? 24 : 12, paddingHorizontal: 16, gap: 24}}>
     <Appear id="welcome" from="scale" duration={240} style={{width: '100%', maxWidth: 440}}>
@@ -52,7 +54,7 @@ export function EmptyWorkspace() {
         </View>
       </View>
     </Appear>
-    {tall && <Appear id="welcome-examples" delay={60} style={{width: '100%', maxWidth: 440, gap: 2}}>
+    {roomy && <Appear id="welcome-examples" delay={60} style={{width: '100%', maxWidth: 440, gap: 2}}>
       <Txt variant="section" tone="tertiary" style={{paddingHorizontal: 8, paddingBottom: 4}}>Try asking</Txt>
       {examples.map(example => <Row key={example} accessibilityRole="button" accessibilityLabel={`Use example: ${example}`} accessibilityHint="Puts this request in the message field" onPress={() => composer.fill(example)}>
         <Txt variant="ui" tone="secondary" style={{flex: 1}}>{example}</Txt><Glyph icon={CornerDownLeft} size={14} tone="tertiary"/>

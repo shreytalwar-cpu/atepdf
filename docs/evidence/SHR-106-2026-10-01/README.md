@@ -43,7 +43,7 @@ Start Over · Quick Look · palette · onboarding · T 640 · U 1280 · V 1600.
 | `pnpm typecheck`, `typecheck:universal`, `typecheck:compatibility` | pass |
 | `pnpm check:generated` (now includes the design tokens), `check:schemas` | pass |
 | `pnpm test` (Node regressions) | 338 tests: 336 pass, 1 skipped, 1 fail — S90-01, the host pnpm shim [main: 322 / 320 / 1 / 1, same S90-01] |
-| New regressions | `workspace-presentation.test.ts` (7), `activity-presentation.test.ts` (12: labels, real-progress sources, no planning vocabulary, presence without holds, reset/new-request release, step units) |
+| New regressions | `workspace-presentation.test.ts` (7), `activity-presentation.test.ts` (9: labels, real-progress sources, no planning vocabulary, presence without holds, reset/new-request release, step units) |
 | `pnpm test:e2e` (Next host, Chrome) | 93 tests: 89 pass, 4 fail [main `fd74961`: 77 / 72 / 5] — the 4 fail identically on main (3 provider-error recoveries, delayed-planning scroll) |
 | `ui-states.spec.ts` | 18/18 (both appearances, 640/1280/1600, plus motion and fast tasks: no held reply and no empty frame, no Verified before checking, repeated quick work, narrow/wide during work, Reduce Motion, Stop during progress, receipt identity after Undo) |
 | `pnpm expo:web` + `scripts/check-web-budget.mjs` | pass, 495,019 / 500,000 gzip bytes (conversation views load after first paint) |

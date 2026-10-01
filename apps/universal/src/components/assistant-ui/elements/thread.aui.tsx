@@ -1,34 +1,18 @@
 // Derived from assistant-ui native thread, MIT, commit 5b23b2df762737246990e6a7bccebdbac0ca0959.
 // See docs/upstream/assistant-ui.md for local-only slots and omitted transports.
+// SHR-106: the scroll-intent logic (follow a new submission, keep the reading position,
+// Latest) is unchanged; message, composer and footer rendering follow the atePDF design
+// system. Voice, edit, reload, branch and suggestion primitives are not rendered (v1 has
+// no regenerate or edit: those would bypass the controller's history).
 import {
-  groupedIconButtonHitSlop,
-  iconButtonClassName,
-  iconButtonHitSlop,
-} from "@/components/assistant-ui/elements/icon-button";
-import {
-  ShimmerLabel,
-  useAnnounce,
-  useHydrated,
-  webLiveRegion,
-} from "@/components/assistant-ui/elements/surfaces";
-import { TypingIndicator } from "@/components/assistant-ui/elements/typing-indicator";
-import { Icon } from "@/components/ui/icon";
-import { cn } from "@/lib/utils";
-import {
-  ActionBarPrimitive,
   AuiIf,
   type AssistantState,
-  BranchPickerPrimitive,
+  ActionBarPrimitive,
   ComposerPrimitive,
-  ErrorPrimitive,
   MessagePrimitive,
-  SuggestionPrimitive,
   ThreadPrimitive,
   type TextMessagePartComponent,
   type ThreadMessage,
-  type ToolCallMessagePartComponent,
-  type GroupByContext,
-  groupPartByType,
   useAui,
   useAuiState,
 } from "@assistant-ui/react-native";
@@ -36,15 +20,8 @@ import * as Clipboard from "expo-clipboard";
 import {safeOrdinaryText} from '@planner/privacy';
 import ArrowUpIcon from 'lucide-react-native/icons/arrow-up';
 import ArrowDownIcon from 'lucide-react-native/icons/arrow-down';
-import AudioLinesIcon from 'lucide-react-native/icons/audio-lines';
 import CheckIcon from 'lucide-react-native/icons/check';
-import ChevronLeftIcon from 'lucide-react-native/icons/chevron-left';
-import ChevronRightIcon from 'lucide-react-native/icons/chevron-right';
 import CopyIcon from 'lucide-react-native/icons/copy';
-import PencilIcon from 'lucide-react-native/icons/pencil';
-import MicIcon from 'lucide-react-native/icons/mic';
-import PhoneIcon from 'lucide-react-native/icons/phone';
-import RefreshCwIcon from 'lucide-react-native/icons/refresh-cw';
 import {
   type ComponentRef,
   type ComponentType,
@@ -70,11 +47,12 @@ import {
   Pressable,
   Text,
   View,
-  type ViewProps,
+  useWindowDimensions,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { withUniwind } from "uniwind";
-
+import {Glyph, Txt} from '@/ui/primitives';
+import {radius, shadow, typeStyle, useTextSize, useTheme, TEXT_SIZES} from '@/ui/theme';
 
 // Uniwind's native resolver treats the scoped @assistant-ui/react-native path as
 // React Native internals. Map classes at our template boundary so those
@@ -83,44 +61,32 @@ const StyledThreadRoot = Platform.OS === "web" ? ThreadPrimitive.Root : withUniw
 const StyledMessagesFlatList = Platform.OS === "web" ? ThreadPrimitive.MessagesFlatList : withUniwind(ThreadPrimitive.MessagesFlatList);
 const StyledMessageRoot = Platform.OS === "web" ? MessagePrimitive.Root : withUniwind(MessagePrimitive.Root);
 const StyledComposerRoot = Platform.OS === "web" ? ComposerPrimitive.Root : withUniwind(ComposerPrimitive.Root);
-const StyledComposerInput = Platform.OS === "web" ? ComposerPrimitive.Input : withUniwind(ComposerPrimitive.Input);
 const StyledComposerSend = Platform.OS === "web" ? ComposerPrimitive.Send : withUniwind(ComposerPrimitive.Send);
 const StyledComposerCancel = Platform.OS === "web" ? ComposerPrimitive.Cancel : withUniwind(ComposerPrimitive.Cancel);
 const StyledActionCopy = Platform.OS === "web" ? ActionBarPrimitive.Copy : withUniwind(ActionBarPrimitive.Copy);
-const StyledActionReload = Platform.OS === "web" ? ActionBarPrimitive.Reload : withUniwind(ActionBarPrimitive.Reload);
-const StyledActionEdit = Platform.OS === "web" ? ActionBarPrimitive.Edit : withUniwind(ActionBarPrimitive.Edit);
-const StyledErrorRoot = Platform.OS === "web" ? ErrorPrimitive.Root : withUniwind(ErrorPrimitive.Root);
-const StyledErrorMessage = Platform.OS === "web" ? ErrorPrimitive.Message : withUniwind(ErrorPrimitive.Message);
-const StyledSuggestionTrigger = Platform.OS === "web" ? SuggestionPrimitive.Trigger : withUniwind(SuggestionPrimitive.Trigger);
-const StyledSuggestionTitle = Platform.OS === "web" ? SuggestionPrimitive.Title : withUniwind(SuggestionPrimitive.Title);
-const StyledSuggestionDescription = Platform.OS === "web" ? SuggestionPrimitive.Description : withUniwind(SuggestionPrimitive.Description);
-const StyledBranchPrevious = Platform.OS === "web" ? BranchPickerPrimitive.Previous : withUniwind(BranchPickerPrimitive.Previous);
-const StyledBranchNext = Platform.OS === "web" ? BranchPickerPrimitive.Next : withUniwind(BranchPickerPrimitive.Next);
 
 const isNewChatView = (s: AssistantState) =>
   s.thread.messages.length === 0 &&
   (!s.thread.isLoading || s.threads.isLoading);
 
-const isHistoryLoadingView = (s: AssistantState) =>
-  s.thread.messages.length === 0 &&
-  s.thread.isLoading &&
-  !s.thread.isDisabled &&
-  !s.threads.isLoading;
-
-export type ThreadGroupPart = MessagePrimitive.GroupedParts.GroupPart;
-
 export type ThreadComponents = {
+  /** The assistant turn's body (text, outcome, artifacts); the thread supplies the root and Copy. */
   AssistantMessage?: ComponentType | undefined;
-  MessageExtras?: ComponentType | undefined;
+  /** The user turn's body (a request block, or the files an import added). */
+  UserMessage?: ComponentType | undefined;
   /** Local job activity, replacing the generic typing state for a running turn. */
   Activity?: ComponentType | undefined;
   AddAttachment?: ComponentType | undefined;
+  /** Above the input inside the composer: what the next request applies to. */
+  ComposerTop?: ComponentType | undefined;
+  /** Beside Send inside the composer: suggestion chips and the actions palette. */
+  ComposerActions?: ComponentType | undefined;
+  /** Below the composer: the hint row. */
   Footer?: ComponentType | undefined;
+  /** Above the conversation: workspace notices. */
+  Banner?: ComponentType | undefined;
   Welcome?: ComponentType | undefined;
-  ToolFallback?: ToolCallMessagePartComponent | undefined;
-  /** Renders tool calls that carry a nested conversation and have no registered UI; without it they render like any other tool call. */
-  TaskGroup?: ComponentType<{ group: ThreadGroupPart }> | undefined;
-  /** Replaces the text input of both the new message composer and the edit composer; read `composer.type` to tell them apart. */
+  /** Replaces the text input of the composer. */
   ComposerInput?: ComponentType | undefined;
   /** Overlays the message list, which keeps a gutter free along its left edge for it; it reads the list through `useThreadViewport`. Mounting or unmounting it remounts the list. */
   Rail?: ComponentType | undefined;
@@ -196,6 +162,10 @@ const ThreadViewportContext = createContext<ThreadViewportStore>({
   scrollToMessage: () => {},
   revealNativeRegion: () => {},
 });
+
+// The thread's viewport commands for controls outside the list (the Files panel reveals a turn).
+let activeViewport: ThreadViewportStore | null = null;
+export const revealMessage = (id: string) => activeViewport?.scrollToMessage(id);
 
 const createViewportStore = () => {
   const listeners = new Set<() => void>();
@@ -455,41 +425,39 @@ export const Thread: FC<ThreadProps> = ({
     viewportRef.current?.measureInWindow((_x, y) => setViewportTop(y));
   };
 
+  const { width } = useWindowDimensions();
+  const gutter = width < 760 ? 16 : 24;
+  // One centred column (at most 720 wide) for the thread, composer and hint row.
+  const column = { width: "100%" as const, maxWidth: 720 + gutter * 2, alignSelf: "center" as const, paddingHorizontal: gutter };
+  useEffect(() => {activeViewport = viewport; return () => {if (activeViewport === viewport) activeViewport = null;};}, [viewport]);
+
   return (
     <ThreadComponentsContext.Provider value={components}>
       <ThreadViewportContext.Provider value={viewport}>
-        <StyledThreadRoot className="aui-root aui-thread-root bg-background flex-1">
+        <StyledThreadRoot className="aui-root aui-thread-root flex-1">
           <KeyboardAvoidingView
             className="flex-1"
-            behavior={Platform.OS === "ios" ? "padding" : undefined}
+            behavior={Platform.OS === "ios" && !Platform.isMacCatalyst ? "padding" : undefined}
             keyboardVerticalOffset={viewportTop - insets.bottom}
           >
             <View
               ref={viewportRef}
               onLayout={measureViewport}
-              className={cn(
-                "aui-thread-viewport mx-auto w-full max-w-[48rem] min-h-0 flex-1",
-                isEmpty && "justify-center",
-              )}
+              className="aui-thread-viewport min-h-0 w-full flex-1"
             >
+              <View style={[column, { paddingTop: 12 }]}><HostSlot name="Banner" /></View>
               <AuiIf condition={isNewChatView}>
                 <WelcomeSlot />
               </AuiIf>
-              <AuiIf condition={isHistoryLoadingView}>
-                <ThreadHistorySkeleton />
-              </AuiIf>
               <AuiIf condition={(s) => s.thread.messages.length > 0}>
-                {history?.isLoadingMore && <HistoryEdge />}
                 <StyledMessagesFlatList
                   // Viewability props cannot change once a FlatList is mounted.
                   key={Rail ? "tracked" : "plain"}
                   ref={listRef}
                   className="aui-message-group flex-1"
-                  contentContainerClassName={cn(
-                    "gap-6 px-4 pt-6 pb-6",
-                    Rail && "pl-10",
-                  )}
+                  contentContainerStyle={[column, { paddingTop: 12, paddingBottom: 20 }]}
                   testID="conversation"
+                  accessibilityLabel="Conversation"
                   // One owner follows measured content/keyboard changes. The
                   // default handler can mistake a shrinking job row for a
                   // deliberate upward scroll, leaving a fast result hidden.
@@ -497,7 +465,7 @@ export const Thread: FC<ThreadProps> = ({
                   scrollToBottomOnRunStart={false}
                   scrollToBottomOnInitialize={false}
                   scrollToBottomOnThreadSwitch={false}
-                  showsVerticalScrollIndicator={false}
+                  showsVerticalScrollIndicator={Platform.OS !== "web"}
                   keyboardDismissMode="interactive"
                   keyboardShouldPersistTaps="handled"
                   onContentSizeChange={onListContentSizeChange}
@@ -505,9 +473,9 @@ export const Thread: FC<ThreadProps> = ({
                   onScroll={onListScroll}
                   onScrollBeginDrag={()=>{followSubmission.current=false;}}
                   onTouchStart={()=>{followSubmission.current=false;}}
+                  onScrollToIndexFailed={onScrollToIndexFailed}
                   {...(Rail
                     ? {
-                        onScrollToIndexFailed,
                         onViewableItemsChanged,
                         viewabilityConfig: MESSAGE_VIEWABILITY,
                       }
@@ -522,22 +490,12 @@ export const Thread: FC<ThreadProps> = ({
                 </StyledMessagesFlatList>
               </AuiIf>
               <View
-                className="aui-thread-viewport-footer gap-3 px-4"
-                style={{ paddingBottom: insets.bottom + 8 }}
+                className="aui-thread-viewport-footer"
+                style={[column, { gap: 6, paddingBottom: insets.bottom + 12 }]}
               >
-                {awayFromEnd&&!isEmpty&&<Pressable
-                  accessibilityRole="button" accessibilityLabel="Latest message"
-                  onPress={scrollToLatest}
-                  className="atepdf-button absolute -top-14 right-5 z-10 size-11 items-center justify-center rounded-full border border-border bg-background"
-                  style={{boxShadow:'0 3px 12px #18213b12'}}
-                ><Icon as={ArrowDownIcon} className="size-4 text-foreground"/></Pressable>}
+                {awayFromEnd && !isEmpty && <LatestButton onPress={scrollToLatest} />}
                 <Composer />
                 <HostSlot name="Footer" />
-                <AuiIf
-                  condition={(s) => isNewChatView(s) && s.composer.isEmpty}
-                >
-                  <ThreadSuggestions />
-                </AuiIf>
               </View>
               {Rail && (
                 <View
@@ -555,223 +513,109 @@ export const Thread: FC<ThreadProps> = ({
   );
 };
 
-const WelcomeSlot: FC = () => {
-  const { Welcome = ThreadWelcome } = useContext(ThreadComponentsContext);
-  return <Welcome />;
+/** C16 LatestButton: appears when the newest content is out of view. */
+const LatestButton: FC<{ onPress: () => void }> = ({ onPress }) => {
+  const { c, scheme } = useTheme();
+  return (
+    <View pointerEvents="box-none" style={{ position: "absolute", top: -40, left: 0, right: 0, alignItems: "center", zIndex: 10 }}>
+      <Pressable
+        accessibilityRole="button" accessibilityLabel="Latest message"
+        onPress={onPress}
+        style={({ pressed }) => [{ height: 28, paddingHorizontal: 12, flexDirection: "row", alignItems: "center", gap: 6, borderRadius: radius.full, borderWidth: 1, borderColor: c.hairline, backgroundColor: pressed ? c.elevated : c.raised }, shadow("2", scheme)]}
+      >
+        <Glyph icon={ArrowDownIcon} size={14} tone="primary" />
+        <Txt variant="uiStrong">Latest</Txt>
+      </Pressable>
+    </View>
+  );
 };
 
+const WelcomeSlot: FC = () => {
+  const { Welcome } = useContext(ThreadComponentsContext);
+  return Welcome ? <Welcome /> : null;
+};
+
+// Spacing: 16 between turns in a task and 28 between tasks (a request starts a task).
 const ThreadMessage: FC = () => {
   const role = useAuiState((s) => s.message.role);
-  const isEditing = useAuiState((s) => s.message.composer.isEditing);
-  const isSpoken = useAuiState((s) => s.message.metadata.modality === "voice");
-  const { AssistantMessage: CustomAssistantMessage } = useContext(
-    ThreadComponentsContext,
-  );
-
-  if (isEditing) return <EditComposer />;
-  if (isSpoken) return <SpokenMessage />;
-  if (role === "user") return <UserMessage />;
-  const Assistant = CustomAssistantMessage ?? AssistantMessage;
-  return <Assistant />;
+  const index = useAuiState((s) => s.message.index);
+  const top = index === 0 ? 0 : role === "user" ? 28 : 16;
+  return role === "user" ? <UserMessage top={top} /> : <AssistantMessage top={top} />;
 };
 
-type VoiceRunPosition = "single" | "start" | "middle" | "end";
+/** The text of a turn in the conversation text size. Assistant text is a polite live region on web. */
+export const MessageText: FC<{ strong?: boolean }> = ({ strong = false }) => {
+  const Part: TextMessagePartComponent = ({ text }) => {
+    const { c } = useTheme();
+    const textSize = useTextSize();
+    const isAssistant = useAuiState((s) => s.message.role === "assistant");
+    return (
+      <Text
+        className="aui-message-text"
+        style={[typeStyle(strong ? "bodyStrong" : "body", TEXT_SIZES[textSize]), { color: c.ink }]}
+        selectable
+        aria-live={Platform.OS === "web" && isAssistant ? "polite" : undefined}
+        aria-atomic={isAssistant ? true : undefined}
+      >
+        {text}
+      </Text>
+    );
+  };
+  return <MessagePrimitive.Parts components={{ Text: Part }} />;
+};
 
-const useVoiceRunPosition = (): VoiceRunPosition =>
-  useAuiState((s) => {
-    const before =
-      s.thread.messages[s.message.index - 1]?.metadata.modality === "voice";
-    const after =
-      s.thread.messages[s.message.index + 1]?.metadata.modality === "voice";
-    if (before) return after ? "middle" : "end";
-    return after ? "start" : "single";
-  });
 
-const SpokenText: TextMessagePartComponent = ({ text }) => (
-  <Text
-    className="aui-spoken-message-text text-foreground text-sm leading-relaxed"
-    selectable
-  >
-    {text}
-  </Text>
+/** Copies a turn's text to the local clipboard only. Revealed on hover on the web (and to keyboard
+ * focus). Native message text is selectable, so the always-visible icon is omitted there. */
+export const CopyMessage: FC = () => Platform.OS !== "web" ? null : (
+  <AuiIf condition={(s) => !(s.message.role === "assistant" && s.message.status?.type === "running")}>
+    <StyledActionCopy
+      copyToClipboard={copyToClipboard}
+      className="atepdf-hover-reveal"
+      style={{ width: 24, height: 24, borderRadius: radius.sm, alignItems: "center", justifyContent: "center" }}
+      accessibilityLabel="Copy"
+    >
+      {({ isCopied }) => <Glyph icon={isCopied ? CheckIcon : CopyIcon} size={14} tone="tertiary" />}
+    </StyledActionCopy>
+  </AuiIf>
 );
 
-const SpokenMessage: FC = () => {
-  const role = useAuiState((s) => s.message.role);
-  const position = useVoiceRunPosition();
-  const isSpeaking = useAuiState(
-    (s) =>
-      s.message.role === "assistant" && s.message.status?.type === "running",
-  );
-  const opensExchange = position === "start" || position === "single";
-
+const AssistantMessage: FC<{ top: number }> = ({ top }) => {
+  const { Activity, AssistantMessage: Body } = useContext(ThreadComponentsContext);
+  const running = useAuiState((s) => s.message.status?.type === "running");
   return (
-    <StyledMessageRoot
-      className={cn(
-        "aui-spoken-message bg-muted/40 mx-2 px-3 py-1.5",
-        `aui-spoken-message-${position}`,
-        position === "single" && "rounded-xl py-2",
-        position === "start" && "rounded-t-xl pt-2",
-        position === "middle" && "-mt-6",
-        position === "end" && "-mt-6 rounded-b-xl pb-2",
-      )}
-    >
-      {opensExchange && (
-        <View className="aui-spoken-exchange-header mb-1.5 flex-row items-center gap-1.5">
-          <Icon as={PhoneIcon} className="text-muted-foreground size-3" />
-          <Text className="text-muted-foreground text-xs">
-            Voice conversation
-          </Text>
-        </View>
-      )}
-      <View className="aui-spoken-message-content flex-row items-start gap-2">
-        <View
-          className="mt-1 shrink-0"
-          accessible
-          accessibilityLabel={role === "user" ? "You said" : "Assistant said"}
-        >
-          <Icon
-            as={role === "user" ? MicIcon : AudioLinesIcon}
-            className="text-muted-foreground size-3.5"
-          />
-        </View>
-        <View className="min-w-0 flex-1 flex-row items-center">
-          <View className="min-w-0 flex-1">
-            <MessagePrimitive.Parts components={{ Text: SpokenText }} />
-            {isSpeaking && (
-              <TypingIndicator
-                variant="bare"
-                announce={false}
-                className="aui-spoken-message-indicator ms-1"
-                accessibilityLabel="Assistant is speaking"
-              />
-            )}
-          </View>
-          <SpokenActionBar />
-        </View>
-      </View>
+    <StyledMessageRoot testID="assistant-message" className="aui-assistant-message-root atepdf-hover-group" style={{ marginTop: top }}>
+      {running && Activity ? <Activity /> : Body ? <Body /> : <MessageText />}
     </StyledMessageRoot>
   );
 };
 
-const SpokenActionBar: FC = () => (
-  <AuiIf
-    condition={(s) =>
-      !(s.message.role === "assistant" && s.message.status?.type === "running")
-    }
-  >
-    <View className="aui-spoken-action-bar flex-row gap-1">
-      <StyledActionCopy
-        copyToClipboard={copyToClipboard}
-        className={cn(iconButtonClassName, "size-6")}
-        hitSlop={groupedIconButtonHitSlop}
-        accessibilityLabel="Copy"
-      >
-        {({ isCopied }) => (
-          <Icon
-            as={isCopied ? CheckIcon : CopyIcon}
-            className="text-muted-foreground size-3.5"
-          />
-        )}
-      </StyledActionCopy>
-    </View>
-  </AuiIf>
-);
-
-// The edge sits above the list rather than inside it as a header: the list
-// keeps its first visible row anchored, so a header inserted above that row
-// would land outside the viewport instead of pushing into it.
-const HistoryEdge: FC = () => {
-  useAnnounce("Loading earlier messages");
-
+const UserMessage: FC<{ top: number }> = ({ top }) => {
+  const { UserMessage: Body } = useContext(ThreadComponentsContext);
   return (
-    <View
-      className="aui-thread-history-edge items-center pb-4"
-      accessibilityLiveRegion={webLiveRegion}
-    >
-      <ShimmerLabel className="text-muted-foreground text-[13px]">
-        Loading earlier messages
-      </ShimmerLabel>
-    </View>
+    <StyledMessageRoot testID="user-message" className="aui-user-message-root atepdf-hover-group" style={{ marginTop: top }}>
+      {Body ? <Body /> : <MessageText strong />}
+    </StyledMessageRoot>
   );
 };
 
-const ThreadHistorySkeleton: FC = () => (
-  <View
-    className="aui-thread-history-skeleton gap-6 px-4 pt-4"
-    accessible
-    accessibilityRole="progressbar"
-    accessibilityLabel="Loading conversation"
-  >
-    <View className="bg-muted ml-auto h-9 w-2/5 rounded-xl" />
-    <View className="gap-2">
-      <View className="bg-muted h-4 w-11/12 rounded" />
-      <View className="bg-muted h-4 w-4/5 rounded" />
-      <View className="bg-muted h-4 w-3/5 rounded" />
-    </View>
-    <View className="bg-muted ml-auto h-9 w-1/3 rounded-xl" />
-    <View className="gap-2">
-      <View className="bg-muted h-4 w-10/12 rounded" />
-      <View className="bg-muted h-4 w-2/3 rounded" />
-    </View>
-  </View>
-);
-
-const ThreadWelcome: FC = () => (
-  <View className="aui-thread-welcome-root mb-6 items-center px-4">
-    <Text className="aui-thread-welcome-message text-foreground text-center text-2xl font-medium tracking-tight">
-      How can I help you today?
-    </Text>
-  </View>
-);
-
-const ThreadSuggestions: FC = () => (
-  <View className="aui-thread-welcome-suggestions w-full flex-row flex-wrap items-center justify-center gap-2">
-    <ThreadPrimitive.Suggestions>
-      {() => <ThreadSuggestionItem />}
-    </ThreadPrimitive.Suggestions>
-  </View>
-);
-
-const ThreadSuggestionItem: FC = () => (
-  <StyledSuggestionTrigger
-    send
-    className="aui-thread-welcome-suggestion border-border/60 active:bg-muted flex-row items-center gap-1.5 rounded-full border px-3.5 py-1.5"
-  >
-    <StyledSuggestionTitle className="aui-thread-welcome-suggestion-text-1 text-foreground text-sm" />
-    <AuiIf condition={(s) => !!s.suggestion.label}>
-      <StyledSuggestionDescription className="aui-thread-welcome-suggestion-text-2 text-muted-foreground text-sm" />
-    </AuiIf>
-  </StyledSuggestionTrigger>
-);
-
-// The placeholder color is a class to prop mapping that reads the CSSOM, so it applies from the first render after hydration.
-const DefaultComposerInput: FC = () => {
-  const hydrated = useHydrated();
-
-  return (
-    <StyledComposerInput
-      placeholder="Tell atepdf what to do…"
-      placeholderTextColorClassName={
-        hydrated ? "accent-muted-foreground" : undefined
-      }
-      className="aui-composer-input text-foreground web:resize-none web:outline-none max-h-40 min-h-12 px-3 py-2 text-base leading-6"
-      multiline
-      accessibilityLabel="Tell atepdf what to do"
-    />
-  );
+const HostSlot: FC<{name: "AddAttachment" | "Footer" | "ComposerTop" | "ComposerActions" | "Banner"}> = ({name}) => {
+  const Component = useContext(ThreadComponentsContext)[name];
+  return Component ? <Component /> : null;
 };
 
+/** D1 Composer: context row, input, action row. The input stays uncontrolled on native. */
 const Composer: FC = () => {
-  const { ComposerInput = DefaultComposerInput } = useContext(
-    ThreadComponentsContext,
-  );
-
+  const { ComposerInput } = useContext(ThreadComponentsContext);
+  const { c, scheme } = useTheme();
   return (
     <StyledComposerRoot className="aui-composer-root w-full">
-      <View className="aui-composer-shell border-border dark:border-muted-foreground/15 bg-card gap-1 rounded-[28px] border p-2">
-
-        <ComposerInput />
+      <View
+        className="aui-composer-shell"
+        style={[{ backgroundColor: c.raised, borderWidth: 1, borderColor: c.hairline, borderRadius: radius.xl, paddingBottom: 8 }, shadow("2", scheme)]}
+      >
+        <HostSlot name="ComposerTop" />
+        {ComposerInput ? <ComposerInput /> : null}
         <ComposerAction />
       </View>
     </StyledComposerRoot>
@@ -779,6 +623,7 @@ const Composer: FC = () => {
 };
 
 const ComposerAction: FC = () => {
+  const { c } = useTheme();
   const canSend = useAuiState((s) => s.composer.canSend);
   // The stop control only cancels the send while no run it could stop is going.
   const isSending = useAuiState(
@@ -788,224 +633,39 @@ const ComposerAction: FC = () => {
   );
 
   return (
-    <View className="aui-composer-action-wrapper flex-row items-center justify-between">
+    <View className="aui-composer-action-wrapper" style={{ flexDirection: "row", alignItems: "center", gap: 6, paddingHorizontal: 8, minHeight: 28 }}>
       <HostSlot name="AddAttachment" />
-      <View className="flex-row items-center gap-1.5">
-        <AuiIf
-          condition={(s) =>
-            s.composer.submission === undefined &&
-            (!s.thread.isRunning || s.thread.voice !== undefined)
-          }
-        >
-          <StyledComposerSend
-            className="aui-composer-send bg-primary active:bg-primary/90 size-11 items-center justify-center rounded-full disabled:opacity-40"
-            style={Platform.OS === "web" ? undefined : { opacity: canSend ? 1 : 0.4 }}
-            hitSlop={iconButtonHitSlop}
-            accessibilityLabel="Send message"
-          >
-            <Icon
-              as={ArrowUpIcon}
-              className="aui-composer-send-icon text-primary-foreground size-4"
-            />
-          </StyledComposerSend>
-        </AuiIf>
-        <AuiIf
-          condition={(s) =>
-            s.composer.submission !== undefined ||
-            (s.thread.isRunning && s.thread.voice === undefined)
-          }
-        >
-          <StyledComposerCancel
-            className="aui-composer-cancel bg-foreground active:opacity-80 size-11 items-center justify-center rounded-full"
-            hitSlop={iconButtonHitSlop}
-            accessibilityLabel={
-              isSending ? "Cancel sending" : "Cancel"
-            }
-          >
-            <View className="aui-composer-cancel-icon bg-primary-foreground size-3 rounded-[2px]" />
-          </StyledComposerCancel>
-        </AuiIf>
-      </View>
-    </View>
-  );
-};
-
-const MessageError: FC = () => (
-  <StyledErrorRoot className="aui-message-error-root border-destructive bg-destructive/10 dark:bg-destructive/5 mt-2 rounded-md border p-3">
-    <StyledErrorMessage
-      className="aui-message-error-message text-destructive text-sm"
-      numberOfLines={2}
-    />
-  </StyledErrorRoot>
-);
-
-const UserText: TextMessagePartComponent = ({ text }) => {
-  const isAssistant=useAuiState(s=>s.message.role==='assistant');
-  return (
-  <Text
-    className="aui-user-message-text text-foreground text-base leading-6"
-    selectable
-    aria-live={Platform.OS==='web'&&isAssistant?'polite':undefined}
-    aria-atomic={isAssistant?true:undefined}
-  >
-    {text}
-  </Text>
-);};
-
-const AssistantIndicator: FC = () => {
-  const isRunning = useAuiState((s) => s.message.status?.type === "running");
-  if (!isRunning) return null;
-
-  return (
-    <TypingIndicator
-      variant="bare"
-      announce={false}
-      className="aui-assistant-message-indicator py-2"
-      accessibilityLabel="Assistant is working"
-    />
-  );
-};
-
-const AssistantMessage: FC = () => {
-  const {Activity}=useContext(ThreadComponentsContext);
-  const running=useAuiState(s=>s.message.status?.type==='running');
-  const hasArtifact=useAuiState(s=>s.message.metadata.custom.hasArtifact===true);
-  return (
-  <StyledMessageRoot testID="assistant-message" className="aui-assistant-message-root">
-    <View className="aui-assistant-message-content px-2 gap-3">
-      {running&&Activity?<Activity/>:<><MessagePrimitive.Parts components={{ Text: UserText }} /><HostSlot name="MessageExtras" /><AssistantIndicator /></>}
-      <MessageError />
-    </View>
-    {!running&&!hasArtifact&&<View className="aui-assistant-message-footer ms-2 flex-row items-center pt-1.5">
-      <AssistantActionBar />
-    </View>}
-  </StyledMessageRoot>
-);};
-
-const HostSlot: FC<{name: "MessageExtras" | "AddAttachment" | "Footer"}> = ({name}) => {
-  const Component = useContext(ThreadComponentsContext)[name];
-  return Component ? <Component /> : null;
-};
-
-const AssistantActionBar: FC = () => (
-  <AuiIf
-    condition={(s) =>
-      !(s.message.role === "assistant" && s.message.status?.type === "running")
-    }
-  >
-    <View className="aui-assistant-action-bar-root -ms-1 flex-row gap-1">
-      <StyledActionCopy
-        copyToClipboard={copyToClipboard}
-        className={iconButtonClassName}
-        hitSlop={groupedIconButtonHitSlop}
-        accessibilityLabel="Copy"
+      <View style={{ flex: 1, minWidth: 0 }}><HostSlot name="ComposerActions" /></View>
+      <AuiIf
+        condition={(s) =>
+          s.composer.submission === undefined &&
+          (!s.thread.isRunning || s.thread.voice !== undefined)
+        }
       >
-        {({ isCopied }) => (
-          <Icon
-            as={isCopied ? CheckIcon : CopyIcon}
-            className="text-muted-foreground size-4"
-          />
-        )}
-      </StyledActionCopy>
-      <AuiIf condition={(s) => s.thread.capabilities.reload}>
-      <StyledActionReload
-        className={iconButtonClassName}
-        hitSlop={groupedIconButtonHitSlop}
-        accessibilityLabel="Refresh"
-      >
-        <Icon as={RefreshCwIcon} className="text-muted-foreground size-4" />
-      </StyledActionReload>
+        <StyledComposerSend
+          className="aui-composer-send"
+          style={{ width: 28, height: 28, borderRadius: radius.sm, alignItems: "center", justifyContent: "center", backgroundColor: canSend ? c.accent : c.hover }}
+          accessibilityLabel="Send message"
+        >
+          <Glyph icon={ArrowUpIcon} tone={canSend ? "onAccent" : "disabled"} />
+        </StyledComposerSend>
       </AuiIf>
-    </View>
-  </AuiIf>
-);
-
-const UserMessage: FC = () => (
-  <StyledMessageRoot testID="user-message" className="aui-user-message-root items-end gap-y-2 px-2">
-    <HostSlot name="MessageExtras" />
-    <View className="aui-user-message-content bg-muted max-w-[85%] rounded-xl px-4 py-2">
-      <MessagePrimitive.Parts components={{ Text: UserText }} />
-    </View>
-    <View className="aui-user-message-footer -me-1 flex-row items-center justify-end">
-      <BranchPicker />
-      <UserActionBar />
-    </View>
-  </StyledMessageRoot>
-);
-
-const UserActionBar: FC = () => (
-  <AuiIf condition={(s) => !s.thread.isRunning && s.thread.capabilities.edit}>
-    <StyledActionEdit
-      className={cn(iconButtonClassName, "aui-user-action-edit")}
-      hitSlop={groupedIconButtonHitSlop}
-      accessibilityLabel="Edit"
-    >
-      <Icon as={PencilIcon} className="text-muted-foreground size-4" />
-    </StyledActionEdit>
-  </AuiIf>
-);
-
-const DefaultEditComposerInput: FC = () => (
-  <StyledComposerInput
-    className="aui-edit-composer-input text-foreground web:resize-none web:outline-none min-h-14 px-4 pt-3 pb-1 text-base"
-    multiline
-    autoFocus
-  />
-);
-
-const EditComposer: FC = () => {
-  const { ComposerInput = DefaultEditComposerInput } = useContext(
-    ThreadComponentsContext,
-  );
-
-  return (
-    <StyledMessageRoot className="aui-edit-composer-wrapper px-2">
-      <StyledComposerRoot className="aui-edit-composer-root border-border/60 dark:border-muted-foreground/15 bg-card ms-auto w-full max-w-[85%] rounded-3xl border">
-        <ComposerInput />
-        <View className="aui-edit-composer-footer mx-2.5 mb-2.5 flex-row items-center gap-1.5 self-end">
-          <StyledComposerCancel className="active:bg-accent h-8 justify-center rounded-full px-3.5">
-            <Text className="text-foreground text-sm font-medium">Cancel</Text>
-          </StyledComposerCancel>
-          <StyledComposerSend className="bg-primary active:bg-primary/90 h-8 justify-center rounded-full px-3.5">
-            <Text className="text-primary-foreground text-sm font-medium">
-              Update
-            </Text>
-          </StyledComposerSend>
-        </View>
-      </StyledComposerRoot>
-    </StyledMessageRoot>
-  );
-};
-
-const BranchPicker: FC<ViewProps> = ({ className, ...rest }) => {
-  const branchCount = useAuiState((s) => s.message.branchCount);
-  if (branchCount <= 1) return null;
-
-  return (
-    <View
-      className={cn(
-        "aui-branch-picker-root -ms-2 me-2 flex-row items-center",
-        className,
-      )}
-      {...rest}
-    >
-      <StyledBranchPrevious
-        className={cn(iconButtonClassName, "disabled:opacity-35")}
-        hitSlop={groupedIconButtonHitSlop}
-        accessibilityLabel="Previous"
+      <AuiIf
+        condition={(s) =>
+          s.composer.submission !== undefined ||
+          (s.thread.isRunning && s.thread.voice === undefined)
+        }
       >
-        <Icon as={ChevronLeftIcon} className="text-muted-foreground size-4" />
-      </StyledBranchPrevious>
-      <Text className="aui-branch-picker-state text-muted-foreground text-xs font-medium">
-        <BranchPickerPrimitive.Number /> / <BranchPickerPrimitive.Count />
-      </Text>
-      <StyledBranchNext
-        className={cn(iconButtonClassName, "disabled:opacity-35")}
-        hitSlop={groupedIconButtonHitSlop}
-        accessibilityLabel="Next"
-      >
-        <Icon as={ChevronRightIcon} className="text-muted-foreground size-4" />
-      </StyledBranchNext>
+        <StyledComposerCancel
+          className="aui-composer-cancel"
+          style={{ width: 28, height: 28, borderRadius: radius.sm, alignItems: "center", justifyContent: "center", backgroundColor: c.raised, borderWidth: 1, borderColor: c.strong }}
+          accessibilityLabel={
+            isSending ? "Cancel sending" : "Cancel"
+          }
+        >
+          <View style={{ width: 8, height: 8, borderRadius: 1.5, backgroundColor: c.ink }} />
+        </StyledComposerCancel>
+      </AuiIf>
     </View>
   );
 };

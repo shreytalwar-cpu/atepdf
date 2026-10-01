@@ -1,29 +1,8 @@
-import { cn } from "@/lib/utils";
-import {
-  type FC,
-  useEffect,
-  useRef,
-  useState,
-  useSyncExternalStore,
-} from "react";
-import {
-  AccessibilityInfo,
-  Animated,
-  Platform,
-  Text,
-  type TextProps,
-  type TextStyle,
-} from "react-native";
-
-export const paper = "bg-background border border-border/60 dark:bg-card";
-
-export const field = "bg-foreground/5 dark:bg-foreground/10";
-
-export const inkButton = "bg-foreground active:opacity-90";
-
-export const mono = "text-[11px] tracking-tight";
-
-export const textButtonHitSlop = { top: 12, bottom: 12 };
+// Derived from assistant-ui native surfaces, MIT, commit 5b23b2df762737246990e6a7bccebdbac0ca0959.
+// SHR-106 keeps only the announcement and reduce-motion helpers; shimmer, pulse and the
+// template surface classes are replaced by the atePDF design system (no shimmer, principle 5).
+import { useEffect, useRef, useSyncExternalStore } from "react";
+import { AccessibilityInfo, Platform } from "react-native";
 
 // Live regions only exist on Android and the web; announceForAccessibility covers iOS and Android and is a no-op on the web.
 export const webLiveRegion =
@@ -41,22 +20,6 @@ export const useAnnounce = (
     }
     announced.current = message;
   }, [message]);
-};
-
-const subscribeHydration = () => () => {};
-const getHydrated = () => true;
-const getServerHydrated = () => false;
-
-// Uniwind resolves class to prop mappings and CSS variables through the CSSOM, which a static web export renders without, and React hydration never patches the resulting attribute or style mismatch. A value that comes from the CSSOM therefore applies from the first render after hydration; a client-only render is hydrated from its first render.
-export const useHydrated = () =>
-  useSyncExternalStore(subscribeHydration, getHydrated, getServerHydrated);
-
-export const monoStyle: TextStyle = {
-  fontFamily: Platform.select({
-    ios: "Menlo",
-    android: "monospace",
-    default: "monospace",
-  }),
 };
 
 let reduceMotion: boolean | undefined;
@@ -100,50 +63,3 @@ const getMotion = () => reduceMotion === false;
 
 export const useMotion = () =>
   useSyncExternalStore(subscribeMotion, getMotion, getMotion);
-
-export const usePulse = (active: boolean, low = 0.45) => {
-  const [opacity] = useState(() => new Animated.Value(1));
-  const motion = useMotion();
-
-  useEffect(() => {
-    if (!active || !motion) {
-      opacity.setValue(1);
-      return;
-    }
-    const useNativeDriver = Platform.OS !== "web";
-    const animation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(opacity, {
-          toValue: low,
-          duration: 700,
-          useNativeDriver,
-          isInteraction: false,
-        }),
-        Animated.timing(opacity, {
-          toValue: 1,
-          duration: 700,
-          useNativeDriver,
-          isInteraction: false,
-        }),
-      ]),
-    );
-    animation.start();
-    return () => animation.stop();
-  }, [active, low, motion, opacity]);
-
-  return opacity;
-};
-
-export const ShimmerLabel: FC<TextProps & { active?: boolean }> = ({
-  active = true,
-  className,
-  ...props
-}) => {
-  const opacity = usePulse(active);
-
-  return (
-    <Animated.View style={{ opacity }}>
-      <Text className={cn("aui-shimmer-label", className)} {...props} />
-    </Animated.View>
-  );
-};

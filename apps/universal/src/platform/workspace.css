@@ -1,25 +1,30 @@
-/* React Native Web's unlayered styles outrank Tailwind's base layer. Keep the
-   keyboard indicator outside that layer so removing the input outline is safe. */
-.aui-composer-shell:focus-within {outline:2px solid var(--color-primary,#1769df);outline-offset:2px}
+/* Web-only interaction states for the atePDF design system (DESIGN_SYSTEM 8–10). Colours are the
+   generated theme variables. React Native Web's unlayered styles outrank Tailwind's base layer,
+   so these stay outside it. */
 
-/* Keep room for the conversation when short browser windows also use larger
-   text. Only chrome spacing and icon-only controls are bounded; text scales. */
-@media (max-height:600px) {
-  .atepdf-welcome-card {padding:12px 16px;gap:8px}
-  .atepdf-welcome-card [role=button] {min-height:44px;padding:8px 12px}
-  /* Keep a wrapped result title and its actions together above the composer. */
-  .aui-message-group [data-testid=current-result],
-  .aui-message-group [data-testid=previous-result] {padding-block:12px;row-gap:8px}
-  .atepdf-workspace > :first-child {padding:8px 16px;gap:8px}
-  .atepdf-workspace > :first-child [role=button] {min-height:44px;min-width:44px;height:auto}
-  .atepdf-workspace > :first-child [aria-label="OpenAI connection"],
-  .atepdf-workspace > :first-child [aria-label="Start over"] {width:44px;height:44px}
-  .aui-composer-shell {padding:8px;gap:4px}
-  .aui-composer-input {min-height:48px;max-height:96px;padding:8px 12px}
-  .aui-composer-action-wrapper [role=button] {width:44px;height:44px;min-width:44px;min-height:44px}
-  .aui-thread-viewport-footer {gap:8px;padding-inline:16px}
-  .aui-thread-viewport-footer [aria-label="Latest message"] {width:44px;height:44px;top:-56px;right:20px}
-  .aui-thread-viewport-footer > :has([data-testid=current-context]) {gap:4px;padding-bottom:0}
-  .aui-thread-viewport-footer > :has([data-testid=current-context]) [role=button] {min-height:44px;padding:8px 12px}
-  .aui-thread-viewport-footer > :has([data-testid=current-context]) > :last-child {min-height:44px;gap:6px}
-}
+/* Keyboard focus: 2 pt Iris ring, 2 pt offset, only for keyboard focus. */
+[role=button]:focus-visible,[role=radio]:focus-visible,[role=tab]:focus-visible,[role=menuitem]:focus-visible,[role=link]:focus-visible,button:focus-visible{outline:2px solid var(--color-accent);outline-offset:2px}
+[role=button]:focus:not(:focus-visible),[role=radio]:focus:not(:focus-visible){outline:none}
+
+/* Composer focus: a quieter ring, since it is focused most of the time (D1). */
+.aui-composer-shell{transition:border-color 120ms cubic-bezier(.2,0,0,1),box-shadow 120ms cubic-bezier(.2,0,0,1)}
+.aui-composer-shell:focus-within{border-color:var(--color-accent-border)!important;outline:2px solid color-mix(in srgb,var(--color-accent) 40%,transparent);outline-offset:2px}
+.aui-composer-input{outline:none}
+
+/* Hover-revealed row actions (Copy on a turn); always present for keyboard focus. */
+.atepdf-hover-reveal{opacity:0;transition:opacity 120ms cubic-bezier(.2,0,0,1)}
+.atepdf-hover-group:hover .atepdf-hover-reveal,.atepdf-hover-reveal:focus-visible,.atepdf-hover-reveal:focus-within{opacity:1}
+@media (hover:none){.atepdf-hover-reveal{opacity:1}}
+
+/* B4 DropOverlay: the only dashed border in the product. */
+.atepdf-drop{position:absolute;inset:12px;z-index:30;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  border:1.5px dashed var(--color-accent);border-radius:12px;background:var(--color-dropzone);backdrop-filter:blur(1px);color:var(--color-accent-text);
+  font:400 12px/16px -apple-system,BlinkMacSystemFont,system-ui,sans-serif}
+.atepdf-drop strong{font:600 15px/20px -apple-system,BlinkMacSystemFont,system-ui,sans-serif;color:var(--color-ink)}
+.atepdf-drop span{color:var(--color-ink-secondary)}
+.atepdf-drop-blocked{border-color:var(--color-strong);color:var(--color-danger)}
+
+@media (prefers-reduced-motion:reduce){.aui-composer-shell,.atepdf-hover-reveal{transition:none}}
+
+/* Short windows: the composer's maximum height becomes 120 (UX_SPEC S2.1). */
+@media (max-height:600px){.aui-composer-input{max-height:120px!important}}

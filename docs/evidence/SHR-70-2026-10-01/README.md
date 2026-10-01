@@ -68,7 +68,7 @@ Response cases include all three caps at -1/exact/+1, valid exact-cap provider J
 
 Focused command: `node --import tsx --test tests/regressions/provider-transport*.test.ts tests/regressions/outbound-privacy.test.ts tests/regressions/planner.test.ts tests/regressions/orchestration-eval.test.ts` — **179 passed, zero failures**. Historical response script — **one passed** after the fix.
 
-Native command: `node tests/native/planner/run.mjs` — DEBUG transport, release zero-write and pinned TLS execution **passed**, synthetic fixtures only. TypeScript web/universal/orchestration and generated-policy checks passed. Exact committed clean-core/browser/failure-injection and PR/Sonar results are recorded in `verification.json` after execution. No new dependency or gate suppression is introduced.
+Native command: `node tests/native/planner/run.mjs` — DEBUG transport, release zero-write and pinned TLS execution **passed**, synthetic fixtures only. TypeScript web/universal/orchestration and generated-policy checks passed. Source-bound clean core (397 passed, one existing optional Python fixture skipped), browser (45 passed), eight intentional failure-injection refusals plus restored checks, and Sonar results are recorded in `verification.json`. Native suites and all four TypeScript targets passed. The final PR checks bind the later evidence-only head. The clean export totals 2,191,088 raw / 499,266 computed gzip startup bytes, under the unchanged 2,500,000 / 500,000 byte limits. Initial budget and old parser-error assertion failures were corrected without suppressions or weakened gates. No new dependency is introduced.
 
 ## Limits of this evidence
 

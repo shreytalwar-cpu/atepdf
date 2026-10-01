@@ -1,0 +1,488 @@
+{
+  "task": "SHR-70",
+  "baseMain": "fd74961b0e282503bb9986e40f07633687c2f673",
+  "validatedImplementationHead": "c4955b7bd4981d7eeb430d86f26a2a7e5ffaf713",
+  "pr": "https://github.com/shreytalwar-cpu/atepdf/pull/108",
+  "runtime": {
+    "node": "24.19.0",
+    "pnpm": "11.19.0"
+  },
+  "credentials": "synthetic sentinel only",
+  "providerNetwork": "intercepted and owned loopback fixtures only",
+  "cleanVerification": [
+    {
+      "mode": "core",
+      "sourceHead": "c4955b7bd4981d7eeb430d86f26a2a7e5ffaf713",
+      "archiveSha256": "65b7f3196c3cd3973ecfe36647e3df24077f46a2311cdd666acb151c27e2991a",
+      "command": "node scripts/verification/verify.mjs core",
+      "passed": true,
+      "finishedAt": "2026-10-01T07:46:41.401Z",
+      "steps": [
+        {
+          "name": "export-source",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "frozen-install",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "199c36d94a0f48ea4b5e1ec01f7eca1ad4cc6d484ec87683eb8d50ee0a8b2b98"
+        },
+        {
+          "name": "generated-contracts",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "6ded571549326cbf3b886348f358eb44f214555ea3a68f0c11b9d3fc27910d5f"
+        },
+        {
+          "name": "generated-knowledge",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "schemas-catalogue-evals",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "b0acd960cb0dd160dbfc27de8b789187523da740634b3157e1513495bec7714e"
+        },
+        {
+          "name": "typescript-web",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "typescript-universal",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "typescript-compatibility",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "typescript-orchestration",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "orchestration-cli-smoke",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "33cba947adeb2f4414d0c3c76b0193a27c4da43de03ab9f459a3f6455dfc7014"
+        },
+        {
+          "name": "shared-core-regressions",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "e31b47f84caf78fc08c4b1b7a76cf995c921b10d29e7d9ca1d3b327d3c3abb0e"
+        },
+        {
+          "name": "beta-test-gateway-build",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "beta-unit-tests",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "b5983eaa93e91d1b7d9e3d3a5d929ed3edc9c187501612da4956b8dafa9ed22f"
+        },
+        {
+          "name": "syntax-verify",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "syntax-browser",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "mode": "failures",
+      "sourceHead": "c4955b7bd4981d7eeb430d86f26a2a7e5ffaf713",
+      "archiveSha256": "65b7f3196c3cd3973ecfe36647e3df24077f46a2311cdd666acb151c27e2991a",
+      "command": "node scripts/verification/verify.mjs failures",
+      "passed": true,
+      "finishedAt": "2026-10-01T07:45:51.337Z",
+      "steps": [
+        {
+          "name": "export-source",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "frozen-install",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "b3516666b87346462a3e3607a04ad88dc015dc9a3b4da9feca8c1b3236c9ab5c"
+        },
+        {
+          "name": "generated-contracts",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "6ded571549326cbf3b886348f358eb44f214555ea3a68f0c11b9d3fc27910d5f"
+        },
+        {
+          "name": "generated-knowledge",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "schemas-catalogue-evals",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "b0acd960cb0dd160dbfc27de8b789187523da740634b3157e1513495bec7714e"
+        },
+        {
+          "name": "typescript-web",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "typescript-universal",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "typescript-compatibility",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "typescript-orchestration",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "orchestration-cli-smoke",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "33cba947adeb2f4414d0c3c76b0193a27c4da43de03ab9f459a3f6455dfc7014"
+        },
+        {
+          "name": "mutation-reject-typescript"
+        },
+        {
+          "name": "reject-typescript",
+          "exitCode": 1,
+          "expectFailure": true,
+          "logSha256": "6cef82553f1c58c28fd4cd12a5ba51c3a123c3d4fa85af573fd761b5c1a33b3d"
+        },
+        {
+          "name": "mutation-reject-schema-drift"
+        },
+        {
+          "name": "reject-schema-drift",
+          "exitCode": 1,
+          "expectFailure": true,
+          "logSha256": "6b1472df602a737fc92559d706f57b2f84131ce691dd0dc86e4f86158d55c47e"
+        },
+        {
+          "name": "mutation-reject-stale-validator"
+        },
+        {
+          "name": "reject-stale-validator",
+          "exitCode": 1,
+          "expectFailure": true,
+          "logSha256": "6b1472df602a737fc92559d706f57b2f84131ce691dd0dc86e4f86158d55c47e"
+        },
+        {
+          "name": "mutation-reject-stale-knowledge"
+        },
+        {
+          "name": "reject-stale-knowledge",
+          "exitCode": 1,
+          "expectFailure": true,
+          "logSha256": "4113a5296b31066603c073feb6583b77ae98e3bedf7ca64427929b1289a85566"
+        },
+        {
+          "name": "mutation-reject-catalogue"
+        },
+        {
+          "name": "reject-catalogue",
+          "exitCode": 1,
+          "expectFailure": true,
+          "logSha256": "e6c2e965737b688aab7bb25d33942672876aa3533f420af726a26fc6044152b3"
+        },
+        {
+          "name": "mutation-reject-manifest"
+        },
+        {
+          "name": "reject-manifest",
+          "exitCode": 1,
+          "expectFailure": true,
+          "logSha256": "f3aa888dca7ef5ae4d660d92a6c33a135dddddcdc6b1ae5371de71879e5645a7"
+        },
+        {
+          "name": "mutation-reject-regression"
+        },
+        {
+          "name": "reject-regression",
+          "exitCode": 1,
+          "expectFailure": true,
+          "logSha256": "eeb84284f518432145af3da5eabcdc5d2c69087bd36f05da896846ab18818b31"
+        },
+        {
+          "name": "mutation-reject-transport-policy"
+        },
+        {
+          "name": "reject-transport-policy",
+          "exitCode": 1,
+          "expectFailure": true,
+          "logSha256": "7b8e082f83ae1cdde65872b794f930e78f2cf4f56822356e597215028cf5c120"
+        },
+        {
+          "name": "generated-contracts",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "6ded571549326cbf3b886348f358eb44f214555ea3a68f0c11b9d3fc27910d5f"
+        },
+        {
+          "name": "generated-knowledge",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "schemas-catalogue-evals",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "b0acd960cb0dd160dbfc27de8b789187523da740634b3157e1513495bec7714e"
+        },
+        {
+          "name": "typescript-web",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "typescript-universal",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "typescript-compatibility",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "typescript-orchestration",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "orchestration-cli-smoke",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "33cba947adeb2f4414d0c3c76b0193a27c4da43de03ab9f459a3f6455dfc7014"
+        },
+        {
+          "name": "restored-regression",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "3b4865a83c11e518e7c1190861fe7baef7a538d3a1b1909d5e2d27f65e9056d8"
+        }
+      ]
+    },
+    {
+      "mode": "browser",
+      "sourceHead": "9242c100d5bb5b4c84f2f2624c276e2535356051",
+      "archiveSha256": "fec77ea2d6d4b24133610d61a2cf5eebc2b14e5796ffdbe94a5c214446243ec3",
+      "command": "node scripts/verification/verify.mjs browser",
+      "passed": true,
+      "finishedAt": "2026-10-01T07:52:39.092Z",
+      "steps": [
+        {
+          "name": "export-source",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "frozen-install",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "c217bc1baedccdb388688d6cfdb03a104b21d542ee2750f29d2e8a4f146c82d9"
+        },
+        {
+          "name": "generated-contracts",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "6ded571549326cbf3b886348f358eb44f214555ea3a68f0c11b9d3fc27910d5f"
+        },
+        {
+          "name": "generated-knowledge",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "schemas-catalogue-evals",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "b0acd960cb0dd160dbfc27de8b789187523da740634b3157e1513495bec7714e"
+        },
+        {
+          "name": "playwright-browser",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "002827eba0ff09c2b820c8242cfbe84d647c816f3e9003695ae72f3d6966b140"
+        },
+        {
+          "name": "engine-assets",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "bb45f55b6f2793e42616ec57bc43b27f5cbe3c5a503b3bc0f211a0e22547ac3f"
+        },
+        {
+          "name": "expo-web-export",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "21cea2d9ec444bb0fb164232509a2da89779d42c50c442d20cf7d8d3e23e4f4c"
+        },
+        {
+          "name": "web-budget",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "c840ad8c693845a11a264347e6932cbc14b85209215d2ca95abbbc0be5bca549"
+        },
+        {
+          "name": "safe-browser-checks",
+          "exitCode": 0,
+          "expectFailure": false,
+          "logSha256": "2803c58d48e886218953c5b936062ae1eb8f19e0dd2fb6377f0beafcb6e33676"
+        }
+      ],
+      "stats": {
+        "startTime": "2026-10-01T07:51:01.386Z",
+        "duration": 97668.951,
+        "expected": 45,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ],
+  "tests": {
+    "focused": {
+      "command": "node --import tsx --test tests/regressions/provider-transport*.test.ts tests/regressions/outbound-privacy.test.ts tests/regressions/planner.test.ts tests/regressions/orchestration-eval.test.ts",
+      "passed": 179,
+      "failed": 0
+    },
+    "sharedCore": {
+      "passed": 397,
+      "failed": 0,
+      "skipped": 1,
+      "skipReason": "Existing optional SHR-45 Python deterministic generator environment absent; not a transport test."
+    },
+    "betaGateway": {
+      "passed": 16,
+      "failed": 0
+    },
+    "native": {
+      "command": "node tests/native/planner/run.mjs",
+      "sourceHead": "c4955b7bd4981d7eeb430d86f26a2a7e5ffaf713",
+      "passed": true,
+      "suites": [
+        "DEBUG destination and response attack tests",
+        "release default-deny zero-write",
+        "pinned TLS hostname expiry pin and pairing tests"
+      ]
+    },
+    "responseReproduction": {
+      "command": "node --import tsx docs/evidence/SHR-70-2026-10-01/response-reproduction.mts",
+      "passed": 1,
+      "readBytes": 1114112,
+      "cancelled": true,
+      "accepted": false,
+      "reasonCode": "response_too_large"
+    },
+    "browser": {
+      "passed": 45,
+      "failed": 0,
+      "skipped": 0,
+      "sourceHead": "9242c100d5bb5b4c84f2f2624c276e2535356051",
+      "covers": [
+        "safe truncated JSON refusal",
+        "oversized response refusal and canary exclusion",
+        "rejected destination reason and canary exclusion",
+        "local Merge and Undo after each refusal",
+        "preview save independent reopen",
+        "deletion settings retention ownership"
+      ]
+    }
+  },
+  "sonar": {
+    "sourceHead": "c4955b7bd4981d7eeb430d86f26a2a7e5ffaf713",
+    "qualityGate": "OK",
+    "openIssues": 0,
+    "unreviewedHotspots": 0,
+    "url": "https://sonarcloud.io/dashboard?id=shreytalwar-cpu_atepdf&pullRequest=108",
+    "thresholdsChanged": false,
+    "issuesSuppressed": false
+  },
+  "limitations": [
+    "Synthetic transport evidence, not production provider or signed Mac GUI acceptance.",
+    "Platform HTTP TLS decompression buffering is outside application read control.",
+    "Independent human security review remains required.",
+    "Production hosted routes remain privacy-denied."
+  ],
+  "startupBudget": {
+    "passed": true,
+    "limits": {
+      "bytes": 2500000,
+      "gzipBytes": 500000
+    },
+    "totals": {
+      "bytes": 2191088,
+      "gzipBytes": 499266
+    },
+    "scripts": [
+      {
+        "path": "_expo/static/js/web/index-cfdf5f0118fb25019afd28a42f0596e4.js",
+        "bytes": 2191088,
+        "gzipBytes": 499266,
+        "sha256": "4173aab208f4c5961eda6047bd9ebc226d8bc58ea3760308d07a934cb47c3358"
+      }
+    ]
+  },
+  "resolvedVerificationFindings": [
+    {
+      "sourceHead": "708676e56dafe84f6d801a76810611dc2b94c333",
+      "command": "node scripts/verification/verify.mjs browser",
+      "passed": false,
+      "reason": "Initial script gzip total 501347 exceeded the unchanged 500000 byte budget.",
+      "fix": "Load the planner transport before requests while keeping startup imports lightweight."
+    },
+    {
+      "sourceHead": "c4955b7bd4981d7eeb430d86f26a2a7e5ffaf713",
+      "command": "node scripts/verification/verify.mjs browser",
+      "passed": false,
+      "reason": "Existing truncated JSON assertion expected a raw parser error rather than the new content-safe refusal. 42 tests passed, one failed.",
+      "fix": "Assert the exact safe error and local result preservation; add oversized and destination refusal cases."
+    }
+  ],
+  "evidenceHeadNote": "This record binds implementation and browser test source heads. The final documentation-only head is recorded in PR #108 and the Linear review handoff; CI checks that exact head."
+}

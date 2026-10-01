@@ -52,7 +52,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { withUniwind } from "uniwind";
 import {Glyph, Txt} from '@/ui/primitives';
-import {radius, shadow, typeStyle, useTextSize, useTheme, TEXT_SIZES} from '@/ui/theme';
+import {radius, shadow, typeStyle, useTextScale, useTextSize, useTheme, TEXT_SIZES} from '@/ui/theme';
 
 // Uniwind's native resolver treats the scoped @assistant-ui/react-native path as
 // React Native internals. Map classes at our template boundary so those
@@ -547,12 +547,12 @@ const ThreadMessage: FC = () => {
 export const MessageText: FC<{ strong?: boolean }> = ({ strong = false }) => {
   const Part: TextMessagePartComponent = ({ text }) => {
     const { c } = useTheme();
-    const textSize = useTextSize();
+    const textSize = useTextSize(), scale = useTextScale();
     const isAssistant = useAuiState((s) => s.message.role === "assistant");
     return (
       <Text
         className="aui-message-text"
-        style={[typeStyle(strong ? "bodyStrong" : "body", TEXT_SIZES[textSize]), { color: c.ink }]}
+        style={[typeStyle(strong ? "bodyStrong" : "body", TEXT_SIZES[textSize], scale), { color: c.ink }]}
         selectable
         aria-live={Platform.OS === "web" && isAssistant ? "polite" : undefined}
         aria-atomic={isAssistant ? true : undefined}

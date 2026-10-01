@@ -48,10 +48,18 @@ The final corrected chat artifact passed visible preview pages 1/2, Zoom, pannin
 
 The preceding visual check caught a real native raster-scale defect: CoreGraphics did not upscale page content into the larger bitmap. The engine now scales the bitmap explicitly before its logical page transform. The corrected app shows the full-width header and expected page layout. Twenty pixel-anchor cases plus source-coordinate OCR and the shared-writer chain passed independently. Earlier evidence is retained in `mac-polish-smoke.json`, `mac-catalyst-pre-raster-fix.json` and `docs/evidence/design/mac-before-raster-fix.png`.
 
-All focus timing paths, OCR/compression Mac UI, resizing, and a runtime scene-disconnect cancellation test remain unproven. Native engine fixture tests cover PDFKit/Vision operations separately. Catalyst currently uses the iPad idiom.
+All focus timing paths, OCR/compression Mac UI, resizing, and a runtime scene-disconnect cancellation test remain unproven. Native engine fixture tests cover PDFKit/Vision operations separately. Catalyst used the iPad idiom until SHR-106 (see below).
 
 Automatic approval review rejected clearing the active synthetic chat with Start over for an app reimport check. The chat was preserved, and the saved PDF was reopened read-only in Preview instead.
 
 An early bundle-ID lookup accidentally launched an unsigned development copy. No pre-launch cache baseline existed, so past startup cleanup cannot be asserted harmless; the bounded audit and resulting fail-closed fix are recorded in `docs/evidence/native/mac-unsigned-launch-audit.json`.
+
+## SHR-106 window and idiom
+
+- Catalyst now uses the **Mac idiom** (`TARGETED_DEVICE_FAMILY = "1,2,6"` for the app target; OD-6, ADR 0011 ENV-5), so the UI renders at 1:1 instead of 77%. iOS builds are unaffected.
+- `AtepdfSceneDelegate` (in `AppDelegate.swift`) subclasses Expo's scene delegate: hidden window title (accessibility title "atePDF"), no title-bar separator, a 640 × 520 minimum size and a `bg.window` background in both appearances. `UIUserInterfaceStyle` is Automatic (dark mode ships at launch, OD-3); the display name is `atePDF` (OD-2).
+- The app icon set is rendered from the approved Folio Eight Ink master by `pnpm design:icons` (macOS 16–512 @1x/@2x plus a full-bleed iOS 1024). An Icon Composer `.icon` layered file is not produced by this tooling.
+- `scripts/native/mac-build.sh` guards its optional build-option array so it runs under macOS's bash 3.2 with `set -u`.
+- Window size restore, native menu-bar commands and ⌘-shortcuts on Catalyst remain SHR-75; every command is reachable in-window.
 
 Primary references: [Apple Mac Catalyst](https://developer.apple.com/documentation/uikit/mac-catalyst), [Apple App Sandbox](https://developer.apple.com/documentation/xcode/configuring-the-macos-app-sandbox), [React Native macOS setup](https://microsoft.github.io/react-native-macos/docs/getting-started), [assistant-ui React Native](https://www.assistant-ui.com/docs/react-native).

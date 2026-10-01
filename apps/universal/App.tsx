@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {Suspense, lazy, useEffect, useMemo, useState} from 'react';
 import {Platform, View, useWindowDimensions} from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import ChevronRight from 'lucide-react-native/icons/chevron-right';
@@ -11,8 +11,7 @@ import {ComposerInput, fillComposerInput, focusComposerInput, resetComposerInput
 import {useWorkspace, type Entry} from './src/workspace/useWorkspace';
 import {WorkspaceContext, useApp, useShellState} from './src/ui/context';
 import {ActivityRow, EmptyWorkspace, EntryExtras, InlineBanner, isProposal, NoticeIcon, ProposalCard, SourceGroup} from './src/ui/conversation';
-import {ActionPalette, AddFiles, ComposerActions, ComposerTop, FilesPanel, HintRow, Toolbar} from './src/ui/shell';
-import {OnboardingSheet, QuickLookSheet, SettingsSheet, ShortcutsSheet, StartOverSheet} from './src/ui/sheets';
+import {AddFiles, ComposerActions, ComposerTop, FilesPanel, HintRow, Toolbar} from './src/ui/shell';
 import {clearThumbnails} from './src/ui/thumbnails';
 import {Glyph, Txt} from './src/ui/primitives';
 import {layout, radius, useTheme} from './src/ui/theme';
@@ -78,6 +77,18 @@ function Composer() {
   return <ComposerInput placeholder={placeholder}/>;
 }
 
+// Sheets load on first use, so their code stays out of the startup bundle (web budget).
+const AllSheets = lazy(() => import('./src/ui/sheets'));
+const ActionPalette = lazy(() => import('./src/ui/palette'));
+function Palette() {const {shell} = useApp(); return shell.palette ? <Suspense fallback={null}><ActionPalette/></Suspense> : null;}
+function Sheets() {
+  const {shell} = useApp();
+  const [needed, setNeeded] = useState(false);
+  const open = shell.settings !== null || shell.startOver || shell.quickLook !== null || shell.onboarding || shell.shortcuts;
+  useEffect(() => {if (open) setNeeded(true);}, [open]);
+  return needed || open ? <Suspense fallback={null}><AllSheets/></Suspense> : null;
+}
+
 const threadComponents = {Welcome: EmptyWorkspace, UserMessage, AssistantMessage, Activity: ActivityRow, AddAttachment: AddFiles, ComposerTop, ComposerActions, Footer: HintRow, Banner, ComposerInput: Composer};
 
 export default function App() {return <SafeAreaProvider style={{height: '100%'}}><Screen/></SafeAreaProvider>;}
@@ -119,12 +130,8 @@ function Screen() {
         </View>
         {!layout.panelDocks(width) && shell.overlayPanel && hasFiles && <FilesPanel overlay onClose={() => shell.setOverlayPanel(false)}/>}
       </DropSurface>
-      <ActionPalette/>
-      <SettingsSheet/>
-      <StartOverSheet/>
-      <QuickLookSheet/>
-      <OnboardingSheet/>
-      <ShortcutsSheet/>
+      <Palette/>
+      <Sheets/>
     </SafeAreaView>
   </AssistantRuntimeProvider></WorkspaceContext.Provider>;
 }

@@ -57,12 +57,15 @@ export function useAnchor<T extends View>(): [RefObject<T | null>, LayoutRectang
 export function Popover({visible, anchor, onClose, children, width = 320, align = 'end', label, placement = 'below'}: {visible: boolean; anchor: LayoutRectangle | null; onClose: () => void; children: ReactNode; width?: number; align?: 'start' | 'end' | 'center'; label: string; placement?: 'below' | 'above'}) {
   const {c, scheme} = useTheme();
   const window = useWindowDimensions();
+  // The click that opened a popover must not also land on its backdrop and close it.
+  const opened = useRef(0);
+  useEffect(() => {if (visible) opened.current = Date.now();}, [visible]);
   if (!visible || !anchor) return null;
   const w = Math.min(width, window.width - 16);
   const left = Math.max(8, Math.min(window.width - w - 8, align === 'end' ? anchor.x + anchor.width - w : align === 'center' ? anchor.x + anchor.width / 2 - w / 2 : anchor.x));
   const position = placement === 'below' ? {top: anchor.y + anchor.height + 8} : {bottom: window.height - anchor.y + 8};
   return <Modal visible transparent animationType="none" onRequestClose={onClose} accessibilityLabel={Platform.OS === 'web' ? label : undefined}>
-    <Pressable accessibilityLabel="Close" accessible={false} onPress={onClose} style={{position: 'absolute', inset: 0} as never}/>
+    <Pressable accessibilityLabel="Close" accessible={false} onPress={() => {if (Date.now() - opened.current > 300) onClose();}} style={{position: 'absolute', inset: 0} as never}/>
     <View accessibilityViewIsModal style={[{position: 'absolute', left, width: w, ...position, backgroundColor: c.elevated, borderRadius: radius.xl, borderWidth: 1, borderColor: c.hairline, padding: 6}, shadow('2', scheme)]}>
       {children}
     </View>

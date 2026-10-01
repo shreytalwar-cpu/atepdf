@@ -29,6 +29,8 @@ import {PageThumbnail} from './thumbnails';
 import {radius, size, useTheme} from './theme';
 
 export const facts = (pages: number, bytes: number) => `${pageCount(pages)} · ${formatSize(bytes)}`;
+/** SHR-42: a result's stable number among this workspace's results (unchanged by Undo). */
+export const resultNumber = (w: {store: {list: {ref: string; original: boolean}[]}}, ref: string) => w.store.list.filter(file => !file.original).findIndex(file => file.ref === ref) + 1;
 
 /** The assistant text of a turn, with the OutcomeNotice icon when it reports an outcome (C11). */
 export function NoticeIcon({notice}: {notice?: Notice}) {
@@ -68,19 +70,19 @@ export function SourceGroup({entry}: {entry: Entry}) {
 }
 
 /** C5 FileRow: order number, real thumbnail, middle-truncated name, facts, tags and row actions. */
-export function FileRow({name, order, total, detail, fileRef, checksum, tag, busy = false, selected = false, onPress, onPreview, onSave, heading = false, saving = false}: {
-  name: string; order?: number; total?: number; detail: string; fileRef?: string; checksum?: string; tag?: 'current' | 'earlier'; busy?: boolean; selected?: boolean;
+export function FileRow({name, order, total, detail, fileRef, checksum, tag, number, busy = false, selected = false, onPress, onPreview, onSave, heading = false, saving = false}: {
+  name: string; order?: number; total?: number; detail: string; number?: number; fileRef?: string; checksum?: string; tag?: 'current' | 'earlier'; busy?: boolean; selected?: boolean;
   onPress?: () => void; onPreview?: () => void; onSave?: () => void; heading?: boolean; saving?: boolean;
 }) {
   const {workspace: w} = useApp();
   const label = [name, order ? `source ${order} of ${total}` : tag === 'current' ? 'current result' : tag === 'earlier' ? 'earlier result' : null, detail].filter(Boolean).join(', ');
   return <Row className="atepdf-hover-group" height={44} selected={selected} onPress={onPress} disabled={!onPress} accessible={!!onPress} accessibilityRole={onPress ? 'button' : undefined} accessibilityLabel={onPress ? label : undefined}>
-    {order !== undefined && <Txt variant="meta" tone="tertiary" tabular style={{width: 14, textAlign: 'right'}}>{order}</Txt>}
+    {order !== undefined && <Txt testID="source-order" variant="meta" tone="tertiary" tabular style={{width: 14, textAlign: 'right'}}>{order}</Txt>}
     {busy ? <View style={{width: size['thumb.row'].width, height: size['thumb.row'].height, alignItems: 'center', justifyContent: 'center'}}><ActivityGlyph/></View>
       : <PageThumbnail store={w.store} fileRef={fileRef} checksum={checksum} width={size['thumb.row'].width} height={size['thumb.row'].height}/>}
     <View style={{flex: 1, minWidth: 0}} accessible={!onPress} accessibilityLabel={!onPress ? label : undefined}>
       <Txt variant="ui" numberOfLines={1} ellipsizeMode="middle" accessibilityRole={heading ? 'header' : undefined}>{name}</Txt>
-      <Txt variant="meta" tone="secondary" tabular numberOfLines={1}>{detail}</Txt>
+      <Txt variant="meta" tone="secondary" tabular numberOfLines={1}>{number ? <Txt variant="meta" tone="tertiary">{`Result ${number}`}</Txt> : null}{number ? ' · ' : ''}{detail}</Txt>
     </View>
     {tag && <Tag kind={tag}/>}
     {(onPreview || onSave) && <View className="atepdf-hover-reveal" style={{flexDirection: 'row', gap: 2}}>
@@ -102,7 +104,7 @@ export function ResultCard({entry, artifact}: {entry: Entry; artifact: DisplayAr
   const openPreview = () => shell.setQuickLook({ref: artifact.ref, title});
   if (!current) {
     return <View testID="previous-result" style={{gap: 4}}>
-      <FileRow heading name={title} tag="earlier" detail={facts(artifact.pageCount, artifact.sizeBytes)} fileRef={artifact.ref} checksum={checksum}
+      <FileRow heading name={title} tag="earlier" number={resultNumber(w, artifact.ref)} detail={facts(artifact.pageCount, artifact.sizeBytes)} fileRef={artifact.ref} checksum={checksum}
         onPreview={openPreview} onSave={() => void w.exportResult(artifact)} saving={!!w.saving}/>
       {!!receipt && <Receipt text={receipt}/>}
     </View>;
@@ -118,6 +120,7 @@ export function ResultCard({entry, artifact}: {entry: Entry; artifact: DisplayAr
           <Txt variant="headline" accessibilityRole="header" numberOfLines={2}>{title}</Txt>
           <View style={{flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: 8, rowGap: 2}}>
             <Txt testID="result-facts" variant="meta" tone="secondary" tabular>{facts(artifact.pageCount, artifact.sizeBytes)}</Txt>
+            {resultNumber(w, artifact.ref) > 0 && <Txt variant="meta" tone="tertiary" tabular>{`Result ${resultNumber(w, artifact.ref)}`}</Txt>}
             <Tag kind="current"/>
             {/* Only committed results reach the card, after independent verification (SHR-47). */}
             <Tag kind="verified"/>
@@ -131,7 +134,7 @@ export function ResultCard({entry, artifact}: {entry: Entry; artifact: DisplayAr
       </View>
     </View>
     {!!artifact.note && <Txt variant="meta" tone="secondary">{artifact.note}</Txt>}
-    {(w.store.canUndo || !!receipt) && <View style={{flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 8, borderTopWidth: 1, borderTopColor: 'transparent'}}>
+    {(w.store.canUndo || !!receipt) && <View style={{flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 8}}>
       {receipt ? <Receipt text={receipt}/> : <View/>}
       {w.store.canUndo && <Button variant="plain" icon={Undo2} label="Undo" disabled={w.busy} onPress={w.undo} trailing={Platform.OS === 'web' ? <Keycap>⌘Z</Keycap> : undefined}/>}
     </View>}
@@ -216,7 +219,8 @@ export function ActivityRow() {
   const progress = state.busy ? state.progress : undefined;
   const step = progress?.currentStep == null ? undefined : progress.steps[progress.currentStep];
   const multiple = (progress?.steps.length ?? 0) > 1;
-  const count = multiple && progress?.currentStep != null ? `${progress.kind === 'import' ? 'PDF' : 'Step'} ${progress.currentStep + 1} of ${progress.steps.length}` : undefined;
+  // Import progress already names the file count in its message; only plans show a step count.
+  const count = multiple && progress?.kind !== 'import' && progress?.currentStep != null ? `Step ${progress.currentStep + 1} of ${progress.steps.length}` : undefined;
   const local = state.busy;
   const title = stopping ? 'Stopping…'
     : state.busy ? state.stage === 'complete' ? 'Finishing' : state.stage === 'validating' ? 'Verifying the result' : progress?.kind === 'import' ? `Checking ${progress.steps.length === 1 ? 'your PDF' : `${progress.steps.length} PDFs`}` : step?.operation ? operationTitles[step.operation] : 'Working on this Mac'

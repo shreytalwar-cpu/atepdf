@@ -7,7 +7,7 @@ import Check from 'lucide-react-native/icons/check';
 import ChevronRight from 'lucide-react-native/icons/chevron-right';
 import LockKeyhole from 'lucide-react-native/icons/lock-keyhole';
 import {useMotion} from '../components/assistant-ui/elements/surfaces';
-import {motion, numeric, radius, shadow, type Palette, typeStyle, useTextSize, useTheme, TEXT_SIZES, type TypeRole} from './theme';
+import {motion, numeric, radius, shadow, type Palette, typeStyle, useTextScale, useTextSize, useTheme, TEXT_SIZES, type TypeRole} from './theme';
 
 export type Tone = 'primary' | 'secondary' | 'tertiary' | 'disabled' | 'onAccent' | 'accent' | 'success' | 'warning' | 'danger' | 'local' | 'outbound';
 export const toneColor = (c: Palette, tone: Tone) => ({
@@ -19,8 +19,8 @@ type TxtProps = TextProps & {variant?: TypeRole; tone?: Tone; tabular?: boolean;
 /** Text in one of the type roles. Conversation roles follow Settings ▸ General ▸ Text size. */
 export function Txt({variant = 'ui', tone = 'primary', tabular = false, style, ...props}: TxtProps) {
   const {c} = useTheme();
-  const size = useTextSize();
-  return <Text {...props} style={[typeStyle(variant, TEXT_SIZES[size]), {color: toneColor(c, tone)}, tabular && numeric, style]}/>;
+  const size = useTextSize(), scale = useTextScale();
+  return <Text {...props} style={[typeStyle(variant, TEXT_SIZES[size], scale), {color: toneColor(c, tone)}, tabular && numeric, style]}/>;
 }
 
 /** A Lucide icon in the single approved style: 1.75 stroke, 14/16/20 pt. Decorative by default. */
@@ -50,7 +50,7 @@ export const Button = React.forwardRef<View, ButtonProps>(function Button({label
   const inactive = !!disabled || !!busy;
   const paint = ({pressed, hovered: webHovered}: Interaction & {hovered?: boolean}): ViewStyle => {
     const hover = (webHovered || hovered) && !inactive;
-    const base: ViewStyle = {height: size === 'lg' ? 32 : 28, paddingHorizontal: size === 'lg' ? 12 : 10, borderRadius: radius.sm, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6};
+    const base: ViewStyle = {minHeight: size === 'lg' ? 32 : 28, paddingHorizontal: size === 'lg' ? 12 : 10, borderRadius: radius.sm, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6};
     if (disabled && !busy) return {...base, backgroundColor: variant === 'plain' || variant === 'destructivePlain' ? 'transparent' : c.hover};
     switch (variant) {
       case 'primary': return {...base, backgroundColor: pressed ? c.accentPressed : hover ? c.accentHover : c.accent};
@@ -194,5 +194,3 @@ export function Section({title, children, labelId}: {title: string; children: Re
   </View>;
 }
 
-/** Keeps a live polite announcement for screen readers without moving focus. */
-export function useLatest<T>(value: T) {const ref = useRef(value); ref.current = value; return ref;}

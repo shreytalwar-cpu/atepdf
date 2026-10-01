@@ -1,4 +1,5 @@
 import {test,expect,type Page} from '@playwright/test';
+import {composer,help,samples} from './ui';
 
 async function localOnly(page:Page,baseURL:string|undefined,enabled=false) {
   if (!baseURL) throw new Error('This browser test needs the local atepdf base URL.');
@@ -30,40 +31,41 @@ test('initial Choose files stays fully visible in a short window at 200% text si
   await expect(choose).toBeInViewport({ratio:1});
   await expect.poll(async()=>{
     const [button,welcome]=await Promise.all([choose.boundingBox(),page.getByTestId('welcome').boundingBox()]);
-    return !!button&&!!welcome&&button.height>=44&&button.y>=welcome.y&&button.y+button.height<=welcome.y+welcome.height;
+    return !!button&&!!welcome&&button.height>=28&&button.y>=welcome.y&&button.y+button.height<=welcome.y+welcome.height;
   }).toBe(true);
-  await expect(page.getByText('Choose files',{exact:true})).toHaveCSS('font-size','28px');
-  await expect(page.getByText('Then tell me what you’d like to do.',{exact:true})).toBeAttached();
-  await expect(page.getByRole('textbox',{name:'Tell atepdf what to do'})).toHaveCSS('font-size','32px');
+  // The browser text size scales control text (13 pt) and conversation text (14 pt).
+  await expect(choose.getByText('Choose Files…',{exact:true})).toHaveCSS('font-size','26px');
+  await expect(page.getByText('Then tell atePDF what you need.',{exact:false})).toBeAttached();
+  await expect(composer(page)).toHaveCSS('font-size','28px');
   expect(blocked).toEqual([]);
 });
 
-for(const enabled of [false,true]) test(`visible Help explains local tasks in chat with AI ${enabled?'enabled':'disconnected'}, without a provider request`,async({page,baseURL})=>{
+for(const enabled of [false,true]) test(`Help explains local tasks in chat with AI ${enabled?'enabled':'disconnected'}, without a provider request`,async({page,baseURL})=>{
   const blocked=await localOnly(page,baseURL,enabled);
   await page.setViewportSize({width:390,height:844});
   await page.goto('/');
-  const help=page.getByRole('button',{name:'Help',exact:true});
-  await expect(help).toBeInViewport({ratio:1});
-  await help.click();
+  await expect(page.getByRole('button',{name:'More',exact:true})).toBeInViewport({ratio:1});
+  await help(page);
   await expect(page.getByTestId('user-message').last()).toContainText('What can I do with my PDFs?');
   const answer=page.getByTestId('assistant-message').last();
   await expect(answer).toContainText('I can merge PDFs, remove pages');
   await expect(answer).toContainText('These tasks work without an AI connection. Connecting AI is optional');
   await expect(answer).toContainText('Type “undo” to restore the previous result.');
   await expect(answer.getByRole('button',{name:'AI connection',exact:true})).toHaveCount(0);
-  await expect(page.getByRole('textbox',{name:'Tell atepdf what to do'})).toBeEnabled();
+  await expect(composer(page)).toBeEnabled();
   expect(blocked).toEqual([]);
 });
 
-test('compact quick actions retain readable labels and full-size icons',async({page,baseURL})=>{
+test('compact suggestion chips keep readable labels, at most two plus Actions',async({page,baseURL})=>{
   await localOnly(page,baseURL);
   await page.setViewportSize({width:320,height:568});
   await page.goto('/');
-  for(const name of ['Merge','Compress','Make searchable']) {
-    const action=page.getByRole('button',{name,exact:true});
-    await expect(action).toBeInViewport({ratio:1});
-    await expect(action.getByText(name,{exact:true})).toHaveCSS('font-size','12px');
-    const icon=await action.locator('svg').boundingBox();
-    expect(icon).not.toBeNull();expect(icon!.width).toBeGreaterThanOrEqual(16);expect(icon!.height).toBeGreaterThanOrEqual(16);
-  }
+  // No files: nothing can run, so no suggestions are offered.
+  await expect(page.getByRole('button',{name:'Merge',exact:true})).toHaveCount(0);
+  await samples(page);
+  const merge=page.getByRole('button',{name:'Merge',exact:true});
+  await expect(merge).toBeInViewport({ratio:1});
+  await expect(merge.getByText('Merge 2 PDFs in this order',{exact:true})).toHaveCSS('font-size','12px');
+  await expect(page.getByRole('button',{name:'More actions',exact:true})).toBeVisible();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });

@@ -1,6 +1,7 @@
 import {test, expect, type Locator, type Page} from '@playwright/test';
 import {readFile} from 'node:fs/promises';
 import {quickPlan, type Request as PlannerRequest} from '../../packages/contracts/src/protocol';
+import {composer} from './ui';
 
 const disconnected = {connected:false, enabled:false, remaining:0, token:'test-only-csrf', model:'gpt-6-luna'};
 const connected = {...disconnected, connected:true, enabled:true, remaining:2};
@@ -21,12 +22,14 @@ async function ready(page:Page) {
 }
 
 async function send(page:Page, instruction:string) {
-  await page.getByRole('textbox', {name:'Tell atepdf what to do'}).fill(instruction);
+  await composer(page).fill(instruction);
   await page.getByRole('button', {name:'Send message', exact:true}).click();
 }
 
+// A typed merge takes the same request path as the Merge suggestion chip (D-04), which is
+// offered only before a result exists.
 async function merged(page:Page) {
-  await page.getByRole('button', {name:'Merge', exact:true}).click();
+  await send(page, 'merge');
   await expect(page.getByTestId('result-facts')).toContainText('3 pages');
 }
 
@@ -43,7 +46,7 @@ async function savedBytes(page:Page) {
 async function insideConversation(page:Page, control:Locator) {
   const [viewport, input, box] = await Promise.all([
     page.getByTestId('conversation').boundingBox(),
-    page.getByRole('textbox', {name:'Tell atepdf what to do'}).boundingBox(),
+    composer(page).boundingBox(),
     control.boundingBox(),
   ]);
   if (!viewport || !input || !box) return false;
@@ -91,27 +94,27 @@ test('result titles, current status and Undo reflect the actual output history',
   await merged(page);
   const current = page.getByTestId('current-result');
   await expect(current.getByRole('heading', {name:'Merged PDF', exact:true})).toBeVisible();
-  await expect(current.getByText('Current result', {exact:true})).toBeVisible();
+  await expect(current.getByText('Current', {exact:true})).toBeVisible();
   await expect(current.getByRole('button', {name:'Undo', exact:true})).toHaveCount(0);
 
   await send(page, 'Remove physical page 2 from the merged result.');
   await expect(page.getByTestId('result-facts')).toContainText('2 pages');
   await expect(current.getByRole('heading', {name:'PDF with page 2 removed', exact:true})).toBeVisible();
-  await expect(current.getByText('Current result', {exact:true})).toBeVisible();
+  await expect(current.getByText('Current', {exact:true})).toBeVisible();
   const previous = page.getByTestId('previous-result');
   await expect(previous).toHaveCount(1);
   await expect(previous.getByRole('heading')).toHaveText('Merged PDF');
-  await expect(previous.getByText('Earlier result', {exact:true})).toHaveCount(1);
+  await expect(previous.getByText('Earlier', {exact:true})).toHaveCount(1);
   await expect(previous).toContainText('3 pages');
   await expect(previous.getByRole('button', {name:'Undo', exact:true})).toHaveCount(0);
 
   await current.getByRole('button', {name:'Undo', exact:true}).click();
   await expect(page.getByTestId('result-facts')).toContainText('3 pages');
   await expect(current.getByRole('heading')).toHaveText('Merged PDF');
-  await expect(current.getByText('Current result', {exact:true})).toHaveCount(1);
+  await expect(current.getByText('Current', {exact:true})).toHaveCount(1);
   await expect(previous).toHaveCount(2);
   await expect(previous.getByRole('heading')).toHaveText(['Merged PDF', 'PDF with page 2 removed']);
-  await expect(previous.getByText('Earlier result', {exact:true})).toHaveCount(2);
+  await expect(previous.getByText('Earlier', {exact:true})).toHaveCount(2);
   await expect(current.getByRole('button', {name:'Undo', exact:true})).toHaveCount(0);
 });
 
@@ -144,8 +147,9 @@ test('disconnected product help explains local actions and offers inline AI conn
   await expect(page.getByTestId('result-facts')).toContainText('3 pages');
   await expect(page.getByTestId('previous-result')).toHaveCount(0);
   expect(plannerRequests).toEqual([]);
+  // The connection controls live in Settings ▸ AI (development builds), not in the chat.
   await reply.getByRole('button', {name:'AI connection', exact:true}).click();
-  await expect(page.getByRole('textbox', {name:'OpenAI project key'})).toBeVisible();
+  await expect(page.getByRole('dialog', {name:'Settings'}).getByRole('textbox', {name:'OpenAI project key'})).toBeVisible();
   expect(plannerRequests).toEqual([]);
 });
 
@@ -169,7 +173,7 @@ test('scrolling upward during delayed synthetic planning preserves the reading p
   try {
     await send(page, 'Please combine both PDFs in the order I added them.');
     await expect.poll(() => calls).toBe(1);
-    await expect(page.getByTestId('progress-message')).toContainText('Planning your request');
+    await expect(page.getByTestId('progress-message')).toContainText('Planning');
     await scrollToEarlierMessages(page);
     const anchor = page.getByTestId('user-message').first();
     const before = await anchor.boundingBox();

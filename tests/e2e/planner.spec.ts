@@ -1,12 +1,19 @@
 import {test,expect,type Page} from '@playwright/test';
 import {quickPlan as localQuickPlan} from '../../packages/contracts/src/protocol';
 import {hostedLocalContext,validateHosted,type HostedPayload as PlannerRequest} from '../../packages/planner/src/outbound/schema';
+import {closeSettings,composer,emptyWorkspace,openSettings,startOver} from './ui';
 // The mocked server receives H on the wire, just like the real gateway. Rebuild
 // its bounded local planning context; never add exact byte sizes to the wire.
 const quickPlan=(wire:PlannerRequest,...args:Parameters<typeof localQuickPlan> extends [unknown,...infer Rest]?Rest:never)=>localQuickPlan(hostedLocalContext(validateHosted(wire)),...args);
 const status={connected:true,enabled:true,remaining:2,token:'test-only-csrf',model:'gpt-6-luna'};
-async function ready(page:import('@playwright/test').Page,getStatus=()=>status){await page.route('**/api/planner/status',route=>route.fulfill({json:getStatus()}));await page.goto('/');await page.getByRole('button',{name:'Try the two sample PDFs'}).click();await expect(page.getByText('Your 2 PDFs are ready.',{exact:false})).toBeVisible();}
-async function send(page:Page,text:string){await page.getByRole('textbox',{name:'Tell atepdf what to do'}).fill(text);await page.getByRole('button',{name:'Send message'}).click();}
+// Suggestion chips are planned like typed text (D-04). Where a test only needs an existing
+// merged result before its real subject, it makes that result with AI paused (localMerge).
+let paused=false;
+test.beforeEach(()=>{paused=false;});
+const live=(getStatus:()=>typeof status)=>()=>paused?{...getStatus(),enabled:false}:getStatus();
+async function localMerge(page:Page){paused=true;try{await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');}finally{paused=false;}}
+async function ready(page:import('@playwright/test').Page,getStatus=()=>status as typeof status){const current=live(getStatus);await page.route('**/api/planner/status',route=>route.fulfill({json:current()}));await page.goto('/');await page.getByRole('button',{name:'Try with sample PDFs'}).click();await expect(page.getByText('Your 2 PDFs are ready.',{exact:false})).toBeVisible();}
+async function send(page:Page,text:string){await composer(page).fill(text);await page.getByRole('button',{name:'Send message'}).click();}
 async function noPlanningConsent(page:Page){
   await expect(page.getByRole('button',{name:'Plan this request',exact:true})).toHaveCount(0);
   await expect(page.getByRole('button',{name:'Create local copy',exact:true})).toHaveCount(0);
@@ -20,7 +27,7 @@ test('unavailable recipient disclosure and a late 403 preserve results and expla
   await send(page,'Please rearrange these documents');await expect(page.getByText(/AI is unavailable. Use local tools instead/)).toHaveCount(1);expect(sends).toBe(0);
   available=true;await send(page,'Please rearrange these documents');await expect(page.getByText(/AI is unavailable. Use local tools instead/)).toHaveCount(2);expect(sends).toBe(1);
   await expect(page.getByTestId('result-facts')).toContainText('3 pages');
-  await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('previous-result')).toHaveCount(1);
+  available=false;await send(page,'merge');await expect(page.getByTestId('previous-result')).toHaveCount(1);
   await page.getByRole('button',{name:'Undo',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');expect(sends).toBe(1);
 });
 test('mocked planner transport: Send → redacted complete plan → real local result → follow-up',async({page})=>{
@@ -30,9 +37,9 @@ test('mocked planner transport: Send → redacted complete plan → real local r
   await expect(page.getByTestId('result-facts')).toContainText('3 pages');
   await noPlanningConsent(page);await expect(page.getByRole('button',{name:'Keep working',exact:true})).toHaveCount(0);
   expect(sent).toHaveLength(1);expect(JSON.stringify(sent)).not.toMatch(/brief\.pdf|appendix\.pdf|checksum|inspection|bytes|password/);expect(sent[0].instruction).toContain(sent[0].files[0].ref);
-  await page.getByRole('button',{name:'OpenAI connection'}).click();
-  await expect(page.getByText('Your key is saved locally. Paid planning is paused',{exact:false})).toBeVisible();
-  await page.getByRole('textbox',{name:'Tell atepdf what to do'}).fill('remove page 2');await page.getByRole('textbox',{name:'Tell atepdf what to do'}).press('Enter');await expect(page.getByTestId('result-facts')).toContainText('2 pages');expect(sent).toHaveLength(1);expect(errors).toEqual([]);
+  const settings=await openSettings(page,'AI');
+  await expect(settings.getByText('Paid planning is paused',{exact:false})).toBeVisible();await closeSettings(page);
+  await composer(page).fill('remove page 2');await composer(page).press('Enter');await expect(page.getByTestId('result-facts')).toContainText('2 pages');expect(sent).toHaveLength(1);expect(errors).toEqual([]);
 });
 test('clarification reply carries the original bounded task into a second model request',async({page})=>{
   const sent:PlannerRequest[]=[];
@@ -44,8 +51,8 @@ test('clarification reply carries the original bounded task into a second model 
     await route.fulfill({json:quickPlan(req,'remove',2)});
   });
   await ready(page);
-  await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');
-  await send(page,'Remove a page from the current result.');await expect(page.getByText('Which page should I remove?')).toBeVisible();
+  await localMerge(page);
+  await send(page,'Remove a page from the current result.');await expect(page.getByText('Which page should I remove?',{exact:true})).toBeVisible();
   await send(page,'Page 2');await expect.poll(()=>sent.length).toBe(2);
   expect(sent[1].pendingClarification).toMatchObject({originalInstruction:'Remove a page from the current result.',question:'Which page should I remove?',choices:['Page 1','Page 2'],workspaceRevision:sent[0].workspaceRevision});
   await expect(page.getByTestId('result-facts')).toContainText('2 pages');
@@ -57,8 +64,8 @@ test('a new unrelated request cannot complete an old clarification',async({page}
     const req=route.request().postDataJSON() as PlannerRequest;sent.push(req);
     await route.fulfill({json:{schemaVersion:'1.0',requestId:req.requestId,workspaceRevision:req.workspaceRevision,planner:req.instruction==='Remove a page from the current result.'?{schemaVersion:'1.0',status:'clarify',reasonCode:'missing_parameter',steps:[],resultRefs:[],clarification:{question:'Which page should I remove?',choices:['Page 1','Page 2']}}:{schemaVersion:'1.0',status:'answer',reasonCode:'product_information',steps:[],resultRefs:[],clarification:{question:'I can work with your PDFs on this device.',choices:[]}}}});
   });
-  await ready(page);await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');
-  await send(page,'Remove a page from the current result.');await expect(page.getByText('Which page should I remove?')).toBeVisible();
+  await ready(page);await localMerge(page);
+  await send(page,'Remove a page from the current result.');await expect(page.getByText('Which page should I remove?',{exact:true})).toBeVisible();
   await send(page,'What can atepdf do?');await expect(page.getByText('I can work with your PDFs on this device.')).toBeVisible();
   await send(page,'Page 2');await expect.poll(()=>sent.length).toBe(3);
   expect(sent.map(req=>req.pendingClarification)).toEqual([null,null,null]);
@@ -70,24 +77,26 @@ test('cancel and Start over clear a pending clarification',async({page})=>{
     const req=route.request().postDataJSON() as PlannerRequest;sent.push(req);
     await route.fulfill({json:{schemaVersion:'1.0',requestId:req.requestId,workspaceRevision:req.workspaceRevision,planner:{schemaVersion:'1.0',status:'clarify',reasonCode:'missing_parameter',steps:[],resultRefs:[],clarification:{question:'Which page should I remove?',choices:['Page 1','Page 2']}}}});
   });
-  await ready(page);await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');
-  await send(page,'Remove a page from the current result.');await expect(page.getByText('Which page should I remove?')).toBeVisible();
+  await ready(page);await localMerge(page);
+  await send(page,'Remove a page from the current result.');await expect(page.getByText('Which page should I remove?',{exact:true})).toBeVisible();
   await send(page,'cancel');await expect(page.getByText('Okay. That request is cancelled. Your files are unchanged.')).toBeVisible();
   await send(page,'Page 2');await expect.poll(()=>sent.length).toBe(2);expect(sent[1].pendingClarification).toBeNull();
-  await page.getByRole('button',{name:'Start over'}).click();await page.getByRole('button',{name:'Clear session'}).click();
+  await startOver(page);
   await expect(page.getByTestId('current-result')).toHaveCount(0);
-  await page.getByRole('button',{name:'Try the two sample PDFs'}).click();await expect(page.getByText('Your 2 PDFs are ready.',{exact:false})).toBeVisible();
+  await page.getByRole('button',{name:'Try with sample PDFs'}).click();await expect(page.getByText('Your 2 PDFs are ready.',{exact:false})).toBeVisible();
   await send(page,'Page 2');await expect.poll(()=>sent.length).toBe(3);expect(sent[2].pendingClarification).toBeNull();
 });
-test('AI-enabled quick PDF action stays local, while a product question uses the planner without changing files',async({page})=>{
+test('AI-enabled quick action is planned like typed text, and a product question uses the planner without changing files',async({page})=>{
   const sent:PlannerRequest[]=[];
   await page.route('**/api/planner',async route=>{
     const req=route.request().postDataJSON() as PlannerRequest;sent.push(req);
+    if(/^Merge these PDFs/.test(req.instruction)){await route.fulfill({json:quickPlan(req,'merge')});return;}
     await route.fulfill({json:{schemaVersion:'1.0',requestId:req.requestId,workspaceRevision:req.workspaceRevision,planner:{schemaVersion:'1.0',status:'answer',reasonCode:'product_information',steps:[],resultRefs:[],clarification:{question:'I can merge, remove pages, make scanned PDFs searchable, compress and save a new copy. Your originals stay unchanged.',choices:[]}}}});
   });
   await ready(page);await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');
+  expect(sent).toHaveLength(1);expect(sent[0].instruction).toMatch(/^Merge these PDFs/);
   await send(page,'What can atepdf do?');await expect(page.getByText('I can merge, remove pages, make scanned PDFs searchable, compress and save a new copy.',{exact:false})).toBeVisible();
-  expect(sent).toHaveLength(1);expect(sent[0].instruction).toBe('What can atepdf do?');await expect(page.getByTestId('current-result')).toHaveCount(1);await expect(page.getByTestId('previous-result')).toHaveCount(0);
+  expect(sent).toHaveLength(2);expect(sent[1].instruction).toBe('What can atepdf do?');await expect(page.getByTestId('current-result')).toHaveCount(1);await expect(page.getByTestId('previous-result')).toHaveCount(0);
 });
 test('direct planner cancellation ignores a late complete plan and keeps local quick actions usable',async({page})=>{
   let requests=0,finished=0,release!:()=>void;const gate=new Promise<void>(resolve=>{release=resolve;});
@@ -95,11 +104,11 @@ test('direct planner cancellation ignores a late complete plan and keeps local q
   await page.route('**/api/planner',async route=>{requests++;const req=route.request().postDataJSON() as PlannerRequest;await gate;await route.fulfill({json:quickPlan(req,'merge')}).catch(()=>{});finished++;});
   await ready(page,()=>({...status,enabled}));await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');enabled=true;
   try{
-    await send(page,'Please combine both documents');await expect(page.getByTestId('progress-message')).toContainText('Planning your request');
+    await send(page,'Please combine both documents');await expect(page.getByTestId('progress-message')).toContainText('Planning');
     await expect.poll(()=>requests).toBe(1);await noPlanningConsent(page);
     await page.getByRole('button',{name:'Cancel',exact:true}).click();await expect(page.getByText('Planning cancelled. No local files changed.')).toBeVisible();
     await expect(page.getByTestId('previous-result')).toHaveCount(0);await expect(page.getByTestId('result-facts')).toContainText('3 pages');
-    enabled=false;await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('previous-result')).toHaveCount(1);
+    enabled=false;await send(page,'merge');await expect(page.getByTestId('previous-result')).toHaveCount(1);
     release();await expect.poll(()=>finished).toBe(1);await expect(page.getByTestId('progress-message')).toHaveCount(0);
     await expect(page.getByTestId('previous-result')).toHaveCount(1);await expect(page.getByTestId('result-facts')).toContainText('3 pages');expect(requests).toBe(1);
   }finally{release();}
@@ -117,8 +126,10 @@ test('cancelling direct planner setup prevents any later model request',async({p
     // immediately, rather than wait for its network response to arrive.
     await expect(page.getByText('Planning cancelled. No local files changed.')).toBeVisible({timeout:3_000});
     await expect(page.getByTestId('current-result')).toHaveCount(0);await expect(page.getByTestId('progress-message')).toHaveCount(0,{timeout:3_000});expect(requests).toBe(0);
+    // The late setup reply (AI enabled) starts nothing; a later request runs with AI paused.
+    release();await expect.poll(()=>finished).toBeGreaterThan(0);await page.waitForTimeout(300);expect(requests).toBe(0);
+    await page.unroute('**/api/planner/status');await page.route('**/api/planner/status',route=>route.fulfill({json:{...status,enabled:false}}));
     await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');expect(requests).toBe(0);
-    release();await expect.poll(()=>finished).toBeGreaterThan(0);expect(requests).toBe(0);
   }finally{release();}
 });
 
@@ -146,15 +157,15 @@ test('direct balanced-compression plan retains its image-quality choice before l
   let requests=0;
   await page.route('**/api/planner',async route=>{requests++;await route.fulfill({json:quickPlan(route.request().postDataJSON() as PlannerRequest,'compress')});});
   let enabled=false;await ready(page,()=>({...status,enabled}));await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');enabled=true;
-  await send(page,'Please optimize this document');await expect(page.getByRole('button',{name:'Create optimised copy',exact:true})).toBeVisible();
+  await send(page,'Please optimize this document');await expect(page.getByRole('button',{name:'Create Copy',exact:true})).toBeVisible();
   await noPlanningConsent(page);await expect(page.getByTestId('previous-result')).toHaveCount(0);await expect(page.getByTestId('result-facts')).toContainText('3 pages');
-  await page.getByRole('button',{name:'Create optimised copy',exact:true}).click();await expect(page.getByTestId('previous-result')).toHaveCount(1);await expect(page.getByTestId('result-facts')).toContainText('3 pages');expect(requests).toBe(1);
+  await page.getByRole('button',{name:'Create Copy',exact:true}).click();await expect(page.getByTestId('previous-result')).toHaveCount(1);await expect(page.getByTestId('result-facts')).toContainText('3 pages');expect(requests).toBe(1);
 });
 test('privacy rejection happens before transport, unknown instruction with no key stays honest',async({page})=>{
   await page.route('**/api/planner/status',route=>route.fulfill({json:{...status,connected:false,enabled:false,remaining:0}}));
   const posted:string[]=[];page.on('request',r=>{if(r.method()==='POST')posted.push(r.url());});await page.goto('/');
-  await page.getByRole('textbox',{name:'Tell atepdf what to do'}).fill('Use password=synthetic-canary-secret');await page.getByRole('button',{name:'Send message'}).click();await expect(page.getByText('Keep keys and passwords out of chat.',{exact:false})).toBeVisible();expect(posted).toEqual([]);
-  await page.getByRole('button',{name:'OpenAI connection'}).click();await expect(page.getByText('Connect OpenAI for optional AI planning.',{exact:false})).toBeVisible();await expect(page.getByRole('button',{name:'Plan this request'})).toHaveCount(0);expect(posted).toEqual([]);
+  await composer(page).fill('Use password=synthetic-canary-secret');await page.getByRole('button',{name:'Send message'}).click();await expect(page.getByText('Keep keys and passwords out of chat.',{exact:false})).toBeVisible();expect(posted).toEqual([]);
+  const settings=await openSettings(page,'AI');await expect(settings.getByRole('textbox',{name:'OpenAI project key'})).toBeVisible();await expect(page.getByRole('button',{name:'Plan this request'})).toHaveCount(0);expect(posted).toEqual([]);
 });
 
 test('recognized secret is stopped before ordinary transcript retention',async({page})=>{
@@ -162,8 +173,8 @@ test('recognized secret is stopped before ordinary transcript retention',async({
   const posted:string[]=[];
   page.on('request',request=>{if(request.method()==='POST'&&request.url().includes('/api/planner'))posted.push(request.url());});
   await ready(page);
-  await page.getByRole('textbox',{name:'Tell atepdf what to do'}).fill(`Use ${canary} to unlock the PDF`);
-  expect((await page.getByRole('textbox',{name:'Tell atepdf what to do'}).inputValue()).includes(canary),'recognized secret retained in draft').toBe(false);
+  await composer(page).fill(`Use ${canary} to unlock the PDF`);
+  expect((await composer(page).inputValue()).includes(canary),'recognized secret retained in draft').toBe(false);
   await page.getByRole('button',{name:'Send message'}).click();
   await expect(page.getByText('Keep keys and passwords out of chat.',{exact:false})).toBeVisible();
   expect((await page.getByTestId('conversation').textContent())?.includes(canary), 'recognized secret retained in transcript').toBe(false);
@@ -180,10 +191,10 @@ test('secret clarification answer is excluded without consuming the pending task
     await route.fulfill({json:{schemaVersion:'1.0',requestId:req.requestId,workspaceRevision:req.workspaceRevision,planner}});
   });
   await ready(page);
-  await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('result-facts')).toContainText('3 pages');
-  await send(page,'Remove a page from the current result.');await expect(page.getByText('Which page should I remove?')).toBeVisible();
-  await page.getByRole('textbox',{name:'Tell atepdf what to do'}).fill(canary);
-  expect((await page.getByRole('textbox',{name:'Tell atepdf what to do'}).inputValue()).includes(canary),'recognized secret retained in clarification draft').toBe(false);
+  await localMerge(page);
+  await send(page,'Remove a page from the current result.');await expect(page.getByText('Which page should I remove?',{exact:true})).toBeVisible();
+  await composer(page).fill(canary);
+  expect((await composer(page).inputValue()).includes(canary),'recognized secret retained in clarification draft').toBe(false);
   await page.getByRole('button',{name:'Send message'}).click();
   await expect(page.getByText('Keep keys and passwords out of chat.',{exact:false})).toBeVisible();
   expect(sent).toHaveLength(1);
@@ -198,13 +209,13 @@ test('secret clarification answer is excluded without consuming the pending task
   await send(page,'Page 2');await expect.poll(()=>sent.length).toBe(4);expect(sent[3].pendingClarification).toBeNull();
   await send(page,'What can atepdf do?');await expect.poll(()=>sent.length).toBe(5);
   await send(page,canary);await expect.poll(()=>page.getByText('Keep keys and passwords out of chat.',{exact:false}).count()).toBe(3);expect(sent).toHaveLength(5);
-  await page.getByRole('button',{name:'Start over'}).click();await page.getByRole('button',{name:'Clear session'}).click();
-  await expect(page.getByRole('heading',{name:'Drop files here'})).toBeVisible();
+  await startOver(page);
+  await expect(emptyWorkspace(page)).toBeVisible();
   await expect(page.getByTestId('user-message')).toHaveCount(0);
   await expect(page.getByTestId('assistant-message')).toHaveCount(0);
   await expect(page.getByText('Sensitive value removed',{exact:false})).toHaveCount(0);
   await expect(page.getByTestId('conversation')).toHaveCount(0);
-  await page.getByRole('button',{name:'Try the two sample PDFs'}).click();await expect(page.getByText('Your 2 PDFs are ready.',{exact:false})).toBeVisible();
+  await page.getByRole('button',{name:'Try with sample PDFs'}).click();await expect(page.getByText('Your 2 PDFs are ready.',{exact:false})).toBeVisible();
   await send(page,'Page 2');await expect.poll(()=>sent.length).toBe(6);expect(sent[5].pendingClarification).toBeNull();
 });
 test('recognized secret in a mocked provider failure is withheld from chat receipts',async({page})=>{
@@ -224,15 +235,15 @@ test('masked local key setup keeps the key outside chat and model transport',asy
   await page.route('**/api/planner/status',route=>route.fulfill({json:{...status,connected:false,enabled:false,remaining:0}}));
   await page.route('**/api/planner/key',async route=>{saved.push(route.request().postDataJSON().key);expect(route.request().headers()['x-atepdf-token']).toBe(status.token);await route.fulfill({json:{saved:true,enabled:false}});});
   page.on('request',r=>{if(r.method()==='POST'&&r.url().endsWith('/api/planner'))modelPosts.push(r.url());});
-  await page.goto('/');await page.getByRole('button',{name:'OpenAI connection'}).click();const input=page.getByRole('textbox',{name:'OpenAI project key'});await expect(input).toHaveAttribute('type','password');await input.fill(canary);await page.getByRole('button',{name:'Save key on this computer'}).click();await expect(page.getByText('Your key is saved on this computer.',{exact:false})).toBeVisible();await expect(input).toHaveCount(0);expect(saved).toEqual([canary]);expect(modelPosts).toEqual([]);await expect(page.getByTestId('conversation')).not.toContainText(canary);
+  await page.goto('/');await openSettings(page,'AI');const input=page.getByRole('textbox',{name:'OpenAI project key'});await expect(input).toHaveAttribute('type','password');await input.fill(canary);await page.getByRole('button',{name:'Save key on this computer'}).click();await expect(page.getByText('Your key is saved on this computer.',{exact:false})).toBeVisible();await expect(input).toHaveValue('');expect(saved).toEqual([canary]);expect(modelPosts).toEqual([]);await expect(page.locator('body')).not.toContainText(canary);await expect(page.getByTestId('conversation')).toHaveCount(0);
 });
 test('native pairing code stays in a masked setup control and makes no model request',async({page})=>{
   const code='atepdf-local:3211:'+'a'.repeat(64);let issued=0,modelCalls=0;
   await page.route('**/api/planner/status',route=>route.fulfill({json:status}));
   await page.route('**/api/planner/pairing',async route=>{issued++;expect(route.request().headers()['x-atepdf-token']).toBe(status.token);expect(route.request().postDataJSON()).toEqual({});await route.fulfill({json:{code,expiresAt:Date.now()+300_000}});});
   await page.route('**/api/planner',async route=>{modelCalls++;await route.abort();});
-  await page.goto('/');await page.getByRole('button',{name:'OpenAI connection'}).click();await page.getByRole('button',{name:'Create pairing code'}).click();
-  const field=page.getByRole('textbox',{name:'Native pairing code'});await expect(field).toHaveAttribute('type','password');await expect(field).toHaveValue(code);await expect(page.getByTestId('conversation')).not.toContainText(code);expect(issued).toBe(1);expect(modelCalls).toBe(0);
+  await page.goto('/');await openSettings(page,'AI');await page.getByRole('button',{name:'Create pairing code'}).click();
+  const field=page.getByRole('textbox',{name:'Native pairing code'});await expect(field).toHaveAttribute('type','password');await expect(field).toHaveValue(code);await expect(page.locator('body')).not.toContainText(code);await expect(page.getByTestId('conversation')).toHaveCount(0);expect(issued).toBe(1);expect(modelCalls).toBe(0);
 });
 
 
@@ -244,11 +255,11 @@ test('SHR-42: imports invalidate captured clarification before sending, and file
     await route.fulfill({json:{schemaVersion:'1.0',requestId:req.requestId,workspaceRevision:req.workspaceRevision,planner:{schemaVersion:'1.0',status:'unsupported',reasonCode:'excluded_operation',steps:[],resultRefs:[],clarification:{question:'This PDF must keep at least one page.',choices:[]}}}});
   });
   await ready(page);
-  await send(page,'Remove page 1 from one of the files');await expect(page.getByText('Which PDF should I use?')).toBeVisible();
+  await send(page,'Remove page 1 from one of the files');await expect(page.getByText('Which PDF should I use?',{exact:true})).toBeVisible();
   const originalSecond=sent[0].selectionRefs[1];
   await page.locator('input[type=file]').setInputFiles(['tests/fixtures/brief.pdf']);
   await expect(page.getByText('Your 3 PDFs are ready.',{exact:false})).toBeVisible();
-  await expect(page.getByText('Original · 3',{exact:false})).toBeVisible();
+  await expect(page.getByTestId('conversation').getByTestId('source-order').filter({hasText:/^3$/})).toHaveCount(1);
   await expect(page.getByTestId('clarification-question')).toHaveCount(0);
   expect(sent).toHaveLength(1);expect(sent[0].selectionRefs).toHaveLength(2);
   await send(page,'Remove page 1 from file 2');await expect.poll(()=>sent.length).toBe(2);
@@ -263,8 +274,8 @@ test('SHR-42: imports invalidate captured clarification before sending, and file
 test('SHR-42: visible result numbers stay stable through Undo and a new commit',async({page})=>{
   await ready(page,()=>({...status,enabled:false}));
   await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('current-result').getByText('Result 1',{exact:true})).toBeVisible();
-  await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('current-result').getByText('Result 2',{exact:true})).toBeVisible();
+  await send(page,'merge');await expect(page.getByTestId('current-result').getByText('Result 2',{exact:true})).toBeVisible();
   await page.getByRole('button',{name:'Undo',exact:true}).last().click();await expect(page.getByTestId('current-result').getByText('Result 1',{exact:true})).toBeVisible();
   await expect(page.getByTestId('previous-result').getByText('Result 2',{exact:true})).toBeVisible();
-  await page.getByRole('button',{name:'Merge',exact:true}).click();await expect(page.getByTestId('current-result').getByText('Result 3',{exact:true})).toBeVisible();
+  await send(page,'merge');await expect(page.getByTestId('current-result').getByText('Result 3',{exact:true})).toBeVisible();
 });

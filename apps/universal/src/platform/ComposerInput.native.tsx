@@ -2,7 +2,7 @@ import {useEffect,useRef} from 'react';
 import {Platform,TextInput} from 'react-native';
 import {useAui,useAuiEvent} from '@assistant-ui/react-native';
 import {hasRecognizedSecret,SENSITIVE_DRAFT_MARKER} from '@planner/privacy';
-import {typeStyle,useTextSize,useTheme,TEXT_SIZES} from '../ui/theme';
+import {typeStyle,useTextScale,useTextSize,useTheme,TEXT_SIZES} from '../ui/theme';
 
 /** Public assistant-ui input slot for this app's new-message native composer.
  * UIKit owns the draft/caret. Mirroring delayed store snapshots back through a
@@ -17,7 +17,7 @@ export function fillComposerInput(text:string){inputs.forEach(input=>input.fill(
 export function focusComposerInput(){inputs.forEach(input=>input.focus());}
 function NativeComposerInput({placeholder}:{placeholder:string}){
   const aui=useAui(),input=useRef<TextInput>(null);
-  const {c}=useTheme(),size=useTextSize();
+  const {c}=useTheme(),size=useTextSize(),scale=useTextScale();
   const initial=useRef(aui.composer.getState().text);
   useAuiEvent('composer.send',()=>{input.current?.clear();});
   useEffect(()=>{
@@ -36,7 +36,7 @@ function NativeComposerInput({placeholder}:{placeholder:string}){
     {...(Platform.OS==='ios'&&Platform.isMacCatalyst?{submitBehavior:'submit' as const,onSubmitEditing:()=>{if(aui.composer.getState().canSend)aui.composer.send();}}:{})}
     placeholder={placeholder} placeholderTextColor={c.inkTertiary} selectionColor={c.accent} keyboardAppearance="default"
     className="aui-composer-input"
-    style={[typeStyle('body',TEXT_SIZES[size]),{color:c.ink,minHeight:44,maxHeight:200,paddingHorizontal:12,paddingTop:10,paddingBottom:6}]}
+    style={[typeStyle('body',TEXT_SIZES[size],scale),{color:c.ink,minHeight:44,maxHeight:200*scale,paddingHorizontal:12,paddingTop:10,paddingBottom:6}]}
     multiline accessibilityLabel="Tell atePDF what to do"/>;
 }
 

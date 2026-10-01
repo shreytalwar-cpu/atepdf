@@ -95,7 +95,7 @@ function GeneralPane() {
 function AIPane() {
   const {workspace: w} = useApp();
   const [check, setCheck] = useState<'checking' | 'ready' | 'unavailable' | null>(null);
-  const inspect = () => {setCheck('checking'); void w.inspectConnection().then(result => {if (result !== 'stale') setCheck(result);});};
+  const inspect = () => {setCheck('checking'); void w.inspectConnection().then(result => setCheck(result === 'stale' ? null : result));};
   useEffect(() => {if (plannerAvailable) inspect();}, []);
   const connection = w.connection;
   const status = !plannerAvailable ? 'Not available on this device' : check === 'checking' ? 'Checking…' : check === 'unavailable' ? 'Unavailable' : !connection ? 'Not checked' : connection.enabled ? `Connected · up to ${connection.remaining} approved requests` : connection.connected ? 'Paused' : 'Not connected';
@@ -301,4 +301,9 @@ export function ShortcutsSheet() {
     {!SHORTCUTS && <Txt variant="meta" tone="secondary">Mac menu-bar commands and more shortcuts are coming. Every command is also in the ⋯ menu.</Txt>}
     <View style={{gap: 2}}>{rows.map(([label, key]) => <Row key={label} disabled><Txt variant="ui" style={{flex: 1}}>{label}</Txt><Keycap>{key}</Keycap></Row>)}</View>
   </Sheet>;
+}
+
+/** Every sheet, mounted together; loaded on first use (see Sheets in App.tsx). */
+export default function AllSheets() {
+  return <><SettingsSheet/><StartOverSheet/><QuickLookSheet/><OnboardingSheet/><ShortcutsSheet/></>;
 }

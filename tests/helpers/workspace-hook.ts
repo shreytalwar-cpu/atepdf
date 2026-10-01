@@ -9,7 +9,7 @@ import type {WorkspaceVaultBackend} from '../../packages/core/src/workspace-vaul
 // Run the actual workspace hook (src/workspace/useWorkspace.ts) with deterministic React state/effect slots.
 // Engines, OS dialogs and setup transport are injected; no UI renderer or provider
 // is used. Effects and renders are flushed, so this also exercises chat checkpoints.
-export async function workspaceHook(controller:JobController, options:{sampleFiles?:()=>Promise<File[]>;chooseFiles?:()=>Promise<File[]>;save?:(bytes:Uint8Array)=>Promise<string>;plannerStatus?:()=>Promise<unknown>;backend?:WorkspaceVaultBackend;plannerAvailable?:boolean}={}){
+export async function workspaceHook(controller:JobController, options:{sampleFiles?:()=>Promise<File[]>;chooseFiles?:()=>Promise<File[]>;save?:(bytes:Uint8Array)=>Promise<string>;plannerStatus?:()=>Promise<unknown>;requestPlan?:(...args:unknown[])=>Promise<unknown>;backend?:WorkspaceVaultBackend;plannerAvailable?:boolean}={}){
   let cursor=0,queued=false,disposed=false,view:any;
   const slots:any[]=[],effects:(()=>void)[]=[],cleanups:(()=>void)[]=[];
   const hooks={
@@ -20,10 +20,10 @@ export async function workspaceHook(controller:JobController, options:{sampleFil
     useSyncExternalStore:(_subscribe:any,snapshot:()=>any)=>snapshot(),
     useEffect:(fn:()=>void|(()=>void),deps?:any[])=>{const index=cursor++,prior=slots[index];if(!deps||!prior||deps.some((x,i)=>x!==prior[i])){slots[index]=deps;effects.push(()=>{cleanups[index]?.();const cleanup=fn();cleanups[index]=typeof cleanup==='function'?cleanup:()=>{};});}},
   };
-  const env={hooks,createController:()=>controller,createWorkspaceBackend:()=>options.backend??null,sampleFiles:options.sampleFiles??(async()=>[]),chooseFiles:options.chooseFiles??(async()=>[]),save:options.save??(async()=> 'saved'),plannerStatus:options.plannerStatus??(async()=>({connected:false,enabled:false,remaining:0,token:''})),plannerAvailable:options.plannerAvailable??true};
+  const env={hooks,createController:()=>controller,createWorkspaceBackend:()=>options.backend??null,sampleFiles:options.sampleFiles??(async()=>[]),chooseFiles:options.chooseFiles??(async()=>[]),save:options.save??(async()=> 'saved'),plannerStatus:options.plannerStatus??(async()=>({connected:false,enabled:false,remaining:0,token:''})),plannerAvailable:options.plannerAvailable??true,requestPlan:options.requestPlan??(()=>{throw new Error('Unexpected provider call');})};
   (globalThis as any).__atepdfHook=env;
   const runtimeSource=`const e=globalThis.__atepdfHook; export const createController=e.createController,chooseFiles=e.chooseFiles,sampleFiles=e.sampleFiles,save=e.save,nativeEngineReady=true,ocrAvailable=true;`;
-  const plannerSource=`const e=globalThis.__atepdfHook; export const plannerStatus=(...a)=>e.plannerStatus(...a),plannerAvailable=e.plannerAvailable; export const requestPlan=()=>{throw new Error('Unexpected provider call')}; export const savePlannerKey=()=>{},createNativePairing=()=>{},pairNativePlanner=()=>{},disconnectNativePlanner=()=>{};`;
+  const plannerSource=`const e=globalThis.__atepdfHook; export const plannerStatus=(...a)=>e.plannerStatus(...a),plannerAvailable=e.plannerAvailable; export const requestPlan=(...a)=>e.requestPlan(...a); export const savePlannerKey=()=>{},createNativePairing=()=>{},pairNativePlanner=()=>{},disconnectNativePlanner=()=>{};`;
   const app=resolve('apps/universal/src/workspace/useWorkspace.ts');
   const output=await build({stdin:{contents:`export {useWorkspace} from ${JSON.stringify(app)};`,resolveDir:process.cwd(),loader:'ts'},bundle:true,write:false,format:'cjs',platform:'node',tsconfig:'apps/universal/tsconfig.json',plugins:[{name:'workspace-hook',setup(build){
     build.onResolve({filter:/^react$/},()=>({path:'react',namespace:'hook'}));

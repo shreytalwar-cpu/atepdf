@@ -38,6 +38,17 @@ The exported web interface can be served by the owned beta host, older standalon
 
 `packages/commerce` is a disconnected synthetic domain experiment. It is not part of active purchase or entitlement enforcement. Android source is preserved but integration is unfinished and deferred.
 
+The optional `packages/commerce/src/longplay-access.ts` provider probe remains in
+that disconnected experiment. A host may inject an already identified, scoped
+Longplay Customer SDK client to check one configured access Feature. It sends no
+PDF, instruction, receipt or arbitrary Customer ID. This only returns a fresh
+online observation: it has no signed lease, monotonic account revision,
+paid-through date, renewal status, channel provenance or workflow reservation,
+and therefore cannot be passed to `reduceVerifiedObservation`. It does not enable
+commerce, authorize document transfer, replace StoreKit/Setapp, or select the
+seller/direct-payment proposal in PR #103. Account ownership, channel approval,
+ledger and SDK usage terms must be resolved before runtime integration.
+
 ## Boundaries needing decisions or verification
 
 - Session retention and repeated full-buffer copies limit practical capacity; long histories also conflict with planner/protocol file-count bounds.
